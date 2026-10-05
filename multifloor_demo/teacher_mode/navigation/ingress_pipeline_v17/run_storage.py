@@ -1,7 +1,7 @@
 """Explicit owned external run storage; immutable canonical paths from creation."""
 import json, os, re, stat
 from pathlib import Path
-EXTERNAL_ROOT=Path('/var/tmp/go2_teacher_parallel_20261005')
+EXTERNAL_ROOT=Path(os.environ.get('TEACHER_RUN_STORAGE_ROOT','/var/tmp/go2_teacher_portable_'+str(os.getuid())))
 SCHEMA='teacher_owned_run_storage/v1'
 def capacity(path):
     s=os.statvfs(path)
@@ -18,7 +18,7 @@ def owned_root(path,create=False):
     return path
 
 def create_run(project_root,name,requested=None):
-    project_root=Path(project_root).resolve();alias=project_root/'runs'/name
+    project_root=Path(project_root).resolve();(project_root/'runs').mkdir(parents=True,exist_ok=True);alias=project_root/'runs'/name
     if not re.fullmatch(r'[A-Za-z0-9_-]+',name):raise RuntimeError('Invalid unique run name')
     if os.path.lexists(alias):raise RuntimeError('Refuse existing project run or alias')
     external=requested is not None

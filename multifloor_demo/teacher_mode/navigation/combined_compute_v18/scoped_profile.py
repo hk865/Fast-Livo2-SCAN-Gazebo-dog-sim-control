@@ -18,6 +18,7 @@ HERE = Path(__file__).resolve().parent
 NAV = HERE.parent
 ROOT = HERE.parents[1]
 DEMO = ROOT.parent
+PORTABLE_REPO=DEMO.parent
 SLAM_WS = Path(__file__).resolve().parent/'slam_ws'
 FROZEN_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 SCHEMA = 'teacher_navigation_scope/v1'
@@ -93,7 +94,7 @@ def verify_scope(path, raw=None):
     old = _cache.get(str(path))
     if old is None or old[0] != digest or old[1] != fingerprints:
         reviewed_profile=EXPERIMENTS[data['experiment']]
-        mandatory=[reviewed_profile,ROOT/'runs/acceptance.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
+        mandatory=[reviewed_profile,PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
             ROOT/'policy/contract.json',ROOT/'simulation/build/libteacher_actuator.so']
         mandatory+=list(Path(__file__).parent.glob('*.py'))
         if data['experiment']in DYNAMIC_EXPERIMENTS:
@@ -109,7 +110,7 @@ def verify_scope(path, raw=None):
         profile = json.loads((run/'navigation_profile.json').read_text())
         if profile != json.loads(reviewed_profile.read_text()):
             raise RuntimeError('Scoped profile differs from reviewed finite experiment')
-        actual_global=json.loads((ROOT/'runs/acceptance.json').read_text())
+        actual_global=json.loads((PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json').read_text())
         if data.get('global_levels_preserved')!=actual_global['levels']:
             raise RuntimeError('Experimental receipt must preserve the actual overall acceptance levels')
         asset = json.loads((run/'asset_manifest.json').read_text())
@@ -217,7 +218,7 @@ def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False, dynamic_d
                 'configuration':str(run/'navigation_fastlivo.yaml'),
                 'outputs':['/demo/slam/body_odom','/cloud_registered_full'],
                 'navigation_started':False}
-    acceptance = json.loads((ROOT/'runs/acceptance.json').read_text())
+    acceptance = json.loads((PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json').read_text())
     if camera['rate_hz']<10:
         raise RuntimeError('Generate this navigation run with --camera-rate 10; 2Hz cannot meet 300ms SLAM gate')
     candidates = acceptance.get('history', {}).get('all_runs', [])
@@ -260,7 +261,7 @@ def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False, dynamic_d
     files += [run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','navigation_fastlivo.yaml',
                               'navigation_camera.yaml','navigation_scenario.json','navigation_profile.json')]
     files += [ROOT/'policy/worker.py', ROOT/'policy/observation.py', ROOT/'policy/contract.json',
-              ROOT/'simulation/build/libteacher_actuator.so', ROOT/'runs/acceptance.json']
+              ROOT/'simulation/build/libteacher_actuator.so', PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json']
     files += [DEMO/'navigation'/n for n in ('controller.py','control_core.py','trajectory_contract.py','goal_regions.py','event_archive.py')]
     files += [DEMO/'slam'/n for n in ('odom_adapter.py','self_echo_filter.py','geometry.py','map_archive.py')]
     files += [DEMO/'camera_mode/slam/fastlivo.yaml', DEMO/'camera_mode/slam/camera.yaml']

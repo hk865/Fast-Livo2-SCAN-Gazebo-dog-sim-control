@@ -8,6 +8,7 @@ import hashlib,json,math
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent;NAV=HERE.parent;ROOT=NAV.parent;DEMO=ROOT.parent
+PORTABLE_REPO=DEMO.parent
 SLAM_WS=HERE/'slam_ws'
 SCHEMA='teacher_closed_loop_navigation_scope/v1'
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
@@ -42,10 +43,10 @@ def runtime_files():
         DEMO/'camera_mode/slam/fastlivo.yaml',DEMO/'camera_mode/slam/camera.yaml',
         SLAM_WS/'install/fast_livo2_core/lib/libfast_livo2_core.so',
         SLAM_WS/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',
-        DEMO/'navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node',
+        PORTABLE_REPO/'.local/scan_ws/install/scan_planner/lib/scan_planner/scan_planner_node',
         ROOT/'policy/worker.py',ROOT/'policy/observation.py',ROOT/'policy/contract.json',
         ROOT/'simulation/prepare.py',ROOT/'simulation/teacher_actuator.cpp',ROOT/'simulation/build/libteacher_actuator.so',
-        ROOT/'scripts/capture.py',ROOT/'runs/acceptance.json',
+        ROOT/'scripts/capture.py',PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json',
         ROOT/'test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py',
         ROOT/'test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py']
 
@@ -84,7 +85,7 @@ def verify_scope(path,raw=None):
             or a['exclusive_writer']!='teacher_sim::TeacherActuator' or a['physics_step_s']!=.005 or a['decimation']!=4
             or a['world_sha256']!=sha(run/'world.sdf')):raise RuntimeError('Wrong bounded scene or executor')
         if json.loads((run/'navigation_profile.json').read_text())!=p:raise RuntimeError('Profile differs')
-        if sha(ROOT/'runs/acceptance.json')!=d['historical_acceptance_sha256']:raise RuntimeError('Historical acceptance changed')
+        if sha(PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json')!=d['historical_acceptance_sha256']:raise RuntimeError('Historical acceptance changed')
         CACHE[str(path)]=(digest,fp)
     return {'path':str(path),'sha256':digest,'run_dir':str(run),'profile':p,'controller_kind':'teacher',
         'experimental':True,'experiment':p['experiment'],'navigation_is_verified':False,
@@ -148,7 +149,7 @@ def prepare(run,profile):
     d={'schema':SCHEMA,'allowed':True,'status':'experimental_unverified','navigation_is_verified':False,
         'navigation_ground_truth_used':False,'controller_kind':'teacher','checkpoint_sha256':FROZEN_SHA,
         'review_basis':'explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation',
-        'run_dir':str(run),'profile':profile,'references':refs,'historical_acceptance_sha256':sha(ROOT/'runs/acceptance.json'),
+        'run_dir':str(run),'profile':profile,'references':refs,'historical_acceptance_sha256':sha(PORTABLE_REPO/'provenance/HISTORICAL_ACCEPTANCE.json'),
         'runtime':{'required_owned_roles':['worker','bridge','capture','navigation_stack','gazebo'],'expected_launch_children':11},
         'prospective_gates':{'route_xy_max_m':.20,'route_xy_rms_m':.08,'heading_max_rad':.2,
             'COM_speed_MAE_floor_mps':.05,'COM_speed_MAE_reference_fraction':.25,

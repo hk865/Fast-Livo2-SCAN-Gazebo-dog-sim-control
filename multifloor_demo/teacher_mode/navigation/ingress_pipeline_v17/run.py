@@ -34,14 +34,17 @@ HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
 DEMO=ROOT.parent
 SYSTEM_PYTHON=Path('/usr/bin/python3')
-DEFAULT_CPU_PYTHON=Path('/home/hyh001/IsaacLab/_isaac_sim/kit/python/bin/python3')
+PORTABLE_REPO=HERE.parents[3]
+sys.path.insert(0,str(PORTABLE_REPO/'tools'))
+from portable_common import model_path, cpu_python
+DEFAULT_CPU_PYTHON=cpu_python()
 ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
-SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
+SLAM_UNDERLAY=PORTABLE_REPO/'.local/underlay_ws/install/setup.bash'
 SLAM_WORKSPACE=HERE/'slam_ws'
 SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
-SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
+SCAN_OVERLAY=PORTABLE_REPO/'.local/scan_ws/install/setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
-CHECKPOINT=Path('/home/hyh001/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt')
+CHECKPOINT=model_path()
 MODEL_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 REQUIRED_ROLES=('worker','bridge','capture','navigation_stack','gazebo')
 EXPECTED_CHILDREN=11
@@ -154,8 +157,8 @@ def prepare(run,args):
     actual_com=[float(v)for v in asset['base_inertial_pose'].split()][:3]
     if len(p['cascade']['base_com_offset'])!=3 or any(abs(float(a)-b)>1e-9 for a,b in zip(p['cascade']['base_com_offset'],actual_com)):
         raise RuntimeError('Controller COM differs from unchanged physical asset')
-    run_command([str(SYSTEM_PYTHON),'-B',str(ROOT/'tests/cloud_transport_probe_20261004/prepare_transport.py'),
-                 '--run',str(run),'--profile','shm_64m'],run/'cloud_transport_prepare.log')
+    from portable_transport import prepare as prepare_portable_transport
+    prepare_portable_transport(run)
     scope=module(HERE/'pid_scope.py','closed_loop_prepare_'+uuid.uuid4().hex)
     receipt=scope.prepare(run,p)
     ramp_contract=None

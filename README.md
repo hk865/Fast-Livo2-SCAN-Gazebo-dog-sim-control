@@ -34,7 +34,7 @@ Teacher CPU单线程、50 Hz；执行器物理200 Hz；300 ms新鲜度保护与�
 
 ## 新环境复现状态
 
-当前提交首先保存源码和报告；新目录构建及有限数值预检正在单独验证，旧预检不能授权新目录运行。最终迁移说明与构建结果将追加至 `tools/PORTABILITY_CHANGES.md`。完整原始数据删除后不能精确回放或重新独立验收旧实验，源码用于重新运行新的实验。
+新目录已从源码构建SDK、ROS依赖、SCAN、执行器及V12/V18/V17；150次有限数值检查通过，V18 prepare-only已运行成功（没有启动ROS/Gazebo）。V17保持队列语义预检阻断。操作命令见[构建与运行说明](tools/README.md)，实际验证范围见[迁移说明](tools/PORTABILITY_CHANGES.md)与[验证收据](tools/PORTABILITY_VALIDATION.json)。新目录尚未重跑实际仿真，不继承历史导航PASS。完整原始数据删除后不能精确回放或重新独立验收旧实验，源码用于重新运行新的实验。
 
 无需 ROS、torch 即可检查场景资产与配置：
 
@@ -44,4 +44,4 @@ python3 -B tools/prepare_offline.py --variant v18 \
   --output /tmp/go2_teacher_source_preview
 ```
 
-输出目录必须不存在。`PASS_SOURCE_ASSETS_ONLY` 仅表示源码/资产预检，不授权真实运行，也不表示运动、Sim2Sim或导航通过。实际仿真入口必须等待本机源码构建与新数值预检完成。
+输出目录必须不存在。`PASS_SOURCE_ASSETS_ONLY` 仅表示源码/资产预检，不授权真实运行，也不表示运动、Sim2Sim或导航通过。实际仿真需按tools说明完成当前主机的新构建和数值预检，再显式选择执行；准备成功不等于实际仿真通过。

@@ -1,0 +1,272 @@
+{
+  "schema": "portable_export_local_validation/v1",
+  "recorded_at_local": "2026-10-06 01:11:29",
+  "host_scope": "Ubuntu24.04/ROSJazzy/GazeboHarmonic local source rebuild; no new simulation",
+  "historical_pass_inherited": false,
+  "model_weights_committed": false,
+  "source_build": {
+    "status": "PASS_SOURCE_BUILD_ONLY",
+    "jobs": 2,
+    "load_limit": 2,
+    "build_script_sha256": "7c9a60d255e0f0017409fd4ad4564acc62964a5ae74195ca28bb4c87056dfd90",
+    "receipt_sha256": "a5f92d8de17f61f88e45c7d74305664b09ea1b418037b7f98a9493daa0cb1c73",
+    "variant_core_library_sha256": {
+      "v12": "926ddaf6bd0751f6c72b50e214095c5ae2d15f6d093465dfa7f9d01a3d5a17de",
+      "v18": "32b347e120e687d148311d3503e6a2cadc0f9ee198dca53a3c4482d35dcb0298",
+      "v17": "215b00fc3d0867d09000907071f1b40565d0b4121b44602b4a2a356bc4bbb1f5"
+    },
+    "sanitized_project_search_variables": [
+      "AMENT_PREFIX_PATH",
+      "CMAKE_PREFIX_PATH",
+      "COLCON_PREFIX_PATH",
+      "LD_LIBRARY_PATH",
+      "PYTHONPATH",
+      "ROS_PACKAGE_PATH",
+      "PKG_CONFIG_PATH",
+      "CPATH",
+      "CPLUS_INCLUDE_PATH",
+      "LIBRARY_PATH"
+    ],
+    "actual_source_copy_proof_count": 9,
+    "actual_CMakeCache_original_workspace_path_hits": [],
+    "actual_CMakeCache_files_checked": 16
+  },
+  "finite_arithmetic": {
+    "process_runs": 150,
+    "variants": [
+      "fresh_V12",
+      "fresh_V18",
+      "fresh_V17"
+    ],
+    "all_byte_identical": true,
+    "receipt_sha256": "702edf38af6ac2229d494055684465576ff65a38c2c5f0564b584299bd8f2b88",
+    "scope": "Fresh same-host finite StateEstimation and patch components, not full trajectory, benchmark or navigation"
+  },
+  "FP_team_private_loader": {
+    "receipt_sha256": "09a0ef12d2c60e19806a7319cde183676a1942ed06c399a0d957a50909a24885",
+    "all_FP_valid": true,
+    "observed_v18_LIO_team": 4,
+    "observed_v18_VIO_team": 1,
+    "all_observed_outputs_byte_identical": true
+  },
+  "gates": {
+    "v18": "PASS_LOCAL_BUILD_FINITE_CHECKS_EXPERIMENTAL",
+    "v18_gate_sha256": "f478e295b2fc751b41b91372d716c8fc63de7b0477ade48521cab4ac68436cc0",
+    "v17": "BLOCKED_QUEUE_SEMANTICS_REQUIRED",
+    "v17_runtime_authorized": false
+  },
+  "V18_prepare_only": {
+    "run": "/home/hyh001/projects/1.Project/Fast-Livo2-SCAN-Gazebo-dog-sim-control/multifloor_demo/teacher_mode/runs/20261006_011007_closed_loop_cascade_clock_hold_portable_frozen_6610",
+    "status": "prepared_unverified",
+    "ROS_started": false,
+    "Gazebo_started": false,
+    "runtime_plan_sha256": "62fda6d1c0221232e8996acf535ec8ee2f4b69721fdde0d2f026aff35a3a324e",
+    "navigation_scope_sha256": "b17a775cd40198f46a723e8cdafe45798714e82177f1105d72b6514a0df24a02"
+  },
+  "negative_reader_checks": {
+    "schema": "portable_gate_reader_checks/v1",
+    "all_expected": true,
+    "cases": [
+      {
+        "case": "valid",
+        "rejected": false,
+        "error": null
+      },
+      {
+        "case": "missing_bindings",
+        "rejected": true,
+        "error": "Missing local source/artifact bindings"
+      },
+      {
+        "case": "missing_artifacts",
+        "rejected": true,
+        "error": "Missing local source/artifact bindings"
+      },
+      {
+        "case": "wrong_variant",
+        "rejected": true,
+        "error": "Local experimental preflight identity/scope differs"
+      },
+      {
+        "case": "missing_controller",
+        "rejected": true,
+        "error": "Missing mandatory reviewed candidate/producer source bindings"
+      },
+      {
+        "case": "missing_build",
+        "rejected": true,
+        "error": "Private binaries or mandatory fresh finite/FP/build evidence are not bound"
+      },
+      {
+        "case": "missing_state_output",
+        "rejected": true,
+        "error": "Finite state output binding missing"
+      },
+      {
+        "case": "claims_historic_pass",
+        "rejected": true,
+        "error": "Local experimental preflight identity/scope differs"
+      },
+      {
+        "case": "no_FP_receipt",
+        "rejected": true,
+        "error": "Private binaries or mandatory fresh finite/FP/build evidence are not bound"
+      },
+      {
+        "case": "modified_profile",
+        "rejected": true,
+        "error": "Profile must exactly equal one frozen candidate profile"
+      }
+    ]
+  },
+  "optimization_rejections": [
+    {
+      "entry": "check_env.py",
+      "returncode": 1,
+      "optimization_rejected": true
+    },
+    {
+      "entry": "prepare_offline.py",
+      "returncode": 1,
+      "optimization_rejected": true
+    },
+    {
+      "entry": "build_local.py",
+      "returncode": 1,
+      "optimization_rejected": true
+    },
+    {
+      "entry": "local_preflight.py",
+      "returncode": 1,
+      "optimization_rejected": true
+    },
+    {
+      "entry": "run_local.py",
+      "returncode": 1,
+      "optimization_rejected": true
+    }
+  ],
+  "math_and_protection_source_comparison": {
+    "v18": {
+      "files": 40,
+      "all_original_bytes_unchanged": true,
+      "per_file": {
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/preprocess.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/runner.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/visual_point.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/voxel_map.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/utils.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/vio.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/src/frame.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/runner.hpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/color.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/types.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/utils.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/frame.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/common_lib.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/visual_point.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/vio.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/preprocess.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/boundary_timing.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/feature.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/slam_ws/src/fast_livo2_ros/src/main.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/controller.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/clock_hold.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/cascade_core.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/pid_core.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/publication_ledger.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/route.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/sensor_gate.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/shared_controller.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/terrain_provider.py": true,
+        "multifloor_demo/teacher_mode/navigation/combined_compute_v18/transition_gate.py": true
+      }
+    },
+    "v17": {
+      "files": 41,
+      "all_original_bytes_unchanged": true,
+      "per_file": {
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/preprocess.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/runner.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/visual_point.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/voxel_map.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/utils.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/vio.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/frame.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/runner.hpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/color.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/types.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/utils.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/frame.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/common_lib.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/visual_point.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/vio.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/preprocess.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/ordered_ingress.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/boundary_timing.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/feature.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_ros/src/main.cpp": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/controller.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/clock_hold.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/cascade_core.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/pid_core.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/publication_ledger.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/route.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/sensor_gate.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/shared_controller.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/terrain_provider.py": true,
+        "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/transition_gate.py": true
+      }
+    }
+  },
+  "path_gate_locator_source_changes": [
+    "multifloor_demo/teacher_mode/simulation/prepare.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/pid_scope.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/combined_preflight.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/stack.launch.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/run_storage.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/run.py",
+    "multifloor_demo/teacher_mode/navigation/combined_compute_v18/scoped_profile.py",
+    "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/pid_scope.py",
+    "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/stack.launch.py",
+    "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/run_storage.py",
+    "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/run.py",
+    "multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/scoped_profile.py",
+    "multifloor_demo/teacher_mode/policy/worker.py"
+  ],
+  "retained_failures": [
+    "Initial source build underlay traj_utils/bspline ordering failure",
+    "Source-copy provenance check rejected generated vikit .so before explicit generated-product exclusion",
+    "V17 portable queue semantic gate not rerun; runtime BLOCKED",
+    "Historical aggregation replay not bitexact; no historical full-estimator acceptance inherited"
+  ],
+  "not_verified": [
+    "another_machine",
+    "new_Gazebo_motion",
+    "new_navigation",
+    "new_performance_benchmark",
+    "physical_robot"
+  ]
+}

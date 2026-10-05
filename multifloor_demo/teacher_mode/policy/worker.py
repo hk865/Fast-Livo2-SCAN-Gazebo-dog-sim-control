@@ -7,7 +7,10 @@ import torch
 from observation import TerrainHeightMap, build_observation
 
 ROOT=Path(__file__).resolve().parents[1]
-CHECKPOINT=Path('/home/hyh001/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt')
+PORTABLE_REPO=Path(os.environ.get('TEACHER_REPO_ROOT',str(Path(__file__).resolve().parents[3])))
+sys.path.insert(0,str(PORTABLE_REPO/'tools'))
+from portable_common import model_path
+CHECKPOINT=model_path()
 SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 QDEFAULT=np.array([-.1,.8,-1.5,.1,.8,-1.5,-.1,1.,-1.5,.1,1.,-1.5])
 COMMANDS={'stand':[0,0,0],'forward':[.3,0,0],'backward':[-.3,0,0],

@@ -20,7 +20,7 @@ def generate_launch_description():
     run_dir=LaunchConfiguration('run_dir')
     def start(context):
         run=Path(run_dir.perform(context)).resolve();receipt=verify_scope(run/'navigation_scope.json')
-        expected=(demo/'navigation/ros2_ws/install/scan_planner').resolve()
+        expected=(demo.parent/'.local/scan_ws/install/scan_planner').resolve()
         if Path(get_package_prefix('scan_planner')).resolve()!=expected:
             raise RuntimeError('Source existing isolated SCAN overlay; package mismatch')
         profile=receipt['profile'];ros=['--ros-args','-p','use_sim_time:=true']

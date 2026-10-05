@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """No ROS/torch: generate bounded source/assets preview, never runtime permission."""
 from pathlib import Path
+if not __debug__:
+ raise RuntimeError("Optimized Python (-O/PYTHONOPTIMIZE) is forbidden for portable validation")
 import argparse,hashlib,json,subprocess,sys,xml.etree.ElementTree as ET
 sys.dont_write_bytecode=True
 from portable_common import REPO,MODEL_SHA,resolve_tree_assets,sha,NAMES
@@ -20,10 +22,12 @@ def main():
  assert cfg['pose_cloud_timeout_s']==.3 and cfg['navigation_ground_truth_used']is False
  assert cfg['sensor_sampling']['vertical_lines']==64 and cfg['sensor_sampling']['horizontal_samples']==480
  # The complete profile owns the32 region route; smoke/prefix uses same route but a limited horizon.
- goals=cfg.get('goals',cfg.get('waypoints',cfg.get('region_goals')))
+ goals=cfg.get('route_world_points')
  policy=json.loads((TEACHER/'policy/contract.json').read_text())
  expected=[f'{leg}_{part}_joint'for leg in('rf','lf','rh','lh')for part in('hip','upper_leg','lower_leg')]
- assert policy['joint_names']==expected
+ assert policy['gazebo_joint_names']==expected
+ assert len(goals)==32
+ assert float(world.getroot().findtext('world/physics/max_step_size'))==.005
  model={'status':'EXTERNAL_NOT_CHECKED','expected_sha256':MODEL_SHA}
  if a.model:
   model={'status':'HASH_VERIFIED_ONLY','path':str(a.model.resolve()),'sha256':sha(a.model)};assert model['sha256']==MODEL_SHA
