@@ -1,0 +1,32 @@
+{
+  "schema": "v11_publication_ledger_prospective_preflight/v1",
+  "status": "PASS_LIMITED_PRODUCTION_AST",
+  "simulation_started": false,
+  "ROS_started": false,
+  "tests_command": "python3 -B -m unittest -v clock_hold_tests pure_tests publication_ledger_tests",
+  "tests_run": 41,
+  "test_output_sha256": "fdf0529b0847fed072094b14fe2ae3758f748a971fe8889cbd999c2b38b26f91",
+  "proof": {
+    "schema": "v11_actual_publication_observer_source_equivalence/v1",
+    "rule": "Remove complete inclusive lines from PUBLICATION_OBSERVER_BEGIN name through matching PUBLICATION_OBSERVER_END name, retaining every other byte in order",
+    "baseline_version": "lidar_sampling_v9",
+    "files": {
+      "controller.py": {
+        "baseline_sha256": "a2500ef645fca32e8f20ed74c35ba403f3844a190caa6a2afea9154ea2883bed",
+        "producer_sha256": "a201504df355bb23afd6dd0f1314fc57a2baf47f48c3a3a306673edd297865cc",
+        "observer_removed_sha256": "a2500ef645fca32e8f20ed74c35ba403f3844a190caa6a2afea9154ea2883bed",
+        "observer_removed_byte_identical_baseline": true
+      },
+      "clock_hold.py": {
+        "baseline_sha256": "3503750c26381557f2aa379949910296f814c132e6741ae00189e9bca0e0c8f7",
+        "producer_sha256": "a347c67ee3a634703b8e120b8ee3d4fdb5b387fe6d29e159e26185d7f624c9b3",
+        "observer_removed_sha256": "3503750c26381557f2aa379949910296f814c132e6741ae00189e9bca0e0c8f7",
+        "observer_removed_byte_identical_baseline": true
+      }
+    }
+  },
+  "source_equivalence_sha256": "c4f8ed14ce7beac70b1d21629eaed88bbd36609c9bf1b1ca128e5b9fa1a6a343",
+  "publication_contract_sha256": "76c05199f1728396700f1cfc20ad57fe3502cbe5217d677432ad37397402a006",
+  "all_python_syntax_compiled_in_memory": true,
+  "scope": "Read-only tracing only; no motion/navigation acceptance; all actual zero/nonzero publications observed; original maths restored exactly by blockremoval"
+}

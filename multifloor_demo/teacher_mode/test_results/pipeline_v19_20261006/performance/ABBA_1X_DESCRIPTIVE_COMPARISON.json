@@ -1,0 +1,238 @@
+{
+  "schema": "V19_SLAM_only_ABBA_descriptive_comparison/v1",
+  "order": [
+    "A1_serial_1x",
+    "B1_staged_1x",
+    "B2_staged_1x",
+    "A2_serial_1x"
+  ],
+  "all_four_runtime_clean": true,
+  "all_four_strict_lifecycle_pass": true,
+  "all_four_sensor_headers_complete": true,
+  "same_corpus_manifest": true,
+  "same_mode_independent_process_count": {
+    "serial": 2,
+    "staged": 2
+  },
+  "min32_stats_gate_met": false,
+  "new_physics_started": false,
+  "body_identity_at_receiver": "UNVERIFIED",
+  "exact_full_frontend_same_math": "NOT_IMPLEMENTED",
+  "same_cross_topic_order": false,
+  "rows": [
+    {
+      "label": "A1_serial_1x",
+      "mode": "serial",
+      "strict_counters": {
+        "accepted": 27537,
+        "delivered": 27537,
+        "committed": 27537,
+        "canceled": 0,
+        "closed_rejections": 0,
+        "rejected_capacity": 0,
+        "peak_pending": 1,
+        "peak_bytes": 12595781
+      },
+      "sensor_counts": {
+        "imu": 12002,
+        "lidar": 1819,
+        "image": 1819
+      },
+      "odom_Hz": 30.305180979418026,
+      "odom_count": 1709,
+      "observer_age_ms": {
+        "status": "available",
+        "count": 1709,
+        "unit": "ms",
+        "minimum": 15.000001,
+        "median": 30.0,
+        "mean": 28.818022713282623,
+        "p95": 35.000001,
+        "p99": 40.000001,
+        "maximum": 45.0
+      },
+      "boundary_mean_wall_ms": {
+        "LIO_StateEst": 9.702975219426564,
+        "LIO_residual_query": 1.9965164863752205,
+        "Process2": 0.44797037248968363,
+        "map_update": 0.5454839256875366,
+        "VIO_processFrame": 1.81395350058548,
+        "handleLIO": 12.15263349339934,
+        "handleVIO": 2.5457497875619155
+      },
+      "boundary_mean_owner_CPU_ms": {
+        "LIO_StateEst": 8.349803384435342,
+        "LIO_residual_query": 1.738486623995295,
+        "Process2": 0.44706926024759286,
+        "map_update": 0.5445836775892335,
+        "VIO_processFrame": 1.81180431206089,
+        "handleLIO": 10.874424113311331,
+        "handleVIO": 2.5420724160704458
+      },
+      "mapper_sampled_CPU_seconds": 43.129999999999995,
+      "actual_sensor_order_sha256": "b9efa091a4f288072c5ff08d4ec80eb4cd697bb1e8f5af76328ee509deae2b6d"
+    },
+    {
+      "label": "B1_staged_1x",
+      "mode": "staged",
+      "strict_counters": {
+        "accepted": 31940,
+        "delivered": 31940,
+        "committed": 31940,
+        "canceled": 0,
+        "closed_rejections": 0,
+        "rejected_capacity": 0,
+        "peak_pending": 13,
+        "peak_bytes": 20649923
+      },
+      "sensor_counts": {
+        "imu": 12002,
+        "lidar": 1819,
+        "image": 1819
+      },
+      "odom_Hz": 30.305180979418026,
+      "odom_count": 1709,
+      "observer_age_ms": {
+        "status": "available",
+        "count": 1709,
+        "unit": "ms",
+        "minimum": 15.000001,
+        "median": 30.0,
+        "mean": 28.782914462843767,
+        "p95": 35.000001,
+        "p99": 40.000001,
+        "maximum": 40.000001
+      },
+      "boundary_mean_wall_ms": {
+        "LIO_StateEst": 9.53803538267993,
+        "LIO_residual_query": 1.945724346176413,
+        "Process2": 0.44773679147180195,
+        "map_update": 0.5419029455822119,
+        "VIO_processFrame": 1.837994044496487,
+        "handleLIO": 12.003383451045105,
+        "handleVIO": 2.591938701706109
+      },
+      "boundary_mean_owner_CPU_ms": {
+        "LIO_StateEst": 8.336945516091282,
+        "LIO_residual_query": 1.7206332616858988,
+        "Process2": 0.4467738159559835,
+        "map_update": 0.5407832750146284,
+        "VIO_processFrame": 1.834073019906323,
+        "handleLIO": 10.867929491199119,
+        "handleVIO": 2.5863893858007705
+      },
+      "mapper_sampled_CPU_seconds": 40.03,
+      "actual_sensor_order_sha256": "b2fae134d6710438d67046b9c344a1bcc90f5942bea3ded186e4df1acdbdb976"
+    },
+    {
+      "label": "B2_staged_1x",
+      "mode": "staged",
+      "strict_counters": {
+        "accepted": 31946,
+        "delivered": 31946,
+        "committed": 31946,
+        "canceled": 0,
+        "closed_rejections": 0,
+        "rejected_capacity": 0,
+        "peak_pending": 13,
+        "peak_bytes": 20649883
+      },
+      "sensor_counts": {
+        "imu": 12002,
+        "lidar": 1819,
+        "image": 1819
+      },
+      "odom_Hz": 30.305180979418026,
+      "odom_count": 1709,
+      "observer_age_ms": {
+        "status": "available",
+        "count": 1709,
+        "unit": "ms",
+        "minimum": 15.000001,
+        "median": 30.0,
+        "mean": 29.060854778818022,
+        "p95": 35.000001,
+        "p99": 40.000001,
+        "maximum": 40.000001
+      },
+      "boundary_mean_wall_ms": {
+        "LIO_StateEst": 9.804850710942072,
+        "LIO_residual_query": 2.0267147678291537,
+        "Process2": 0.450309574690509,
+        "map_update": 0.5380331925102398,
+        "VIO_processFrame": 1.822561555620609,
+        "handleLIO": 12.225615128712873,
+        "handleVIO": 2.5608994639515688
+      },
+      "boundary_mean_owner_CPU_ms": {
+        "LIO_StateEst": 8.596352357519018,
+        "LIO_residual_query": 1.805037386559561,
+        "Process2": 0.4493347667125172,
+        "map_update": 0.536895154476302,
+        "VIO_processFrame": 1.8200911405152225,
+        "handleLIO": 11.082539116611661,
+        "handleVIO": 2.5559845283434233
+      },
+      "mapper_sampled_CPU_seconds": 40.27,
+      "actual_sensor_order_sha256": "d99db12454a3257befe021d33a30cf2b205789c19e203895a64dd712ea432f81"
+    },
+    {
+      "label": "A2_serial_1x",
+      "mode": "serial",
+      "strict_counters": {
+        "accepted": 27548,
+        "delivered": 27548,
+        "committed": 27548,
+        "canceled": 0,
+        "closed_rejections": 0,
+        "rejected_capacity": 0,
+        "peak_pending": 1,
+        "peak_bytes": 12595781
+      },
+      "sensor_counts": {
+        "imu": 12002,
+        "lidar": 1819,
+        "image": 1819
+      },
+      "odom_Hz": 30.305180979418026,
+      "odom_count": 1709,
+      "observer_age_ms": {
+        "status": "available",
+        "count": 1709,
+        "unit": "ms",
+        "minimum": 15.000001,
+        "median": 30.0,
+        "mean": 28.753657587478056,
+        "p95": 35.000001,
+        "p99": 40.0,
+        "maximum": 40.000001
+      },
+      "boundary_mean_wall_ms": {
+        "LIO_StateEst": 9.69882620889409,
+        "LIO_residual_query": 1.969646310054773,
+        "Process2": 0.44465719642365886,
+        "map_update": 0.5422412229373903,
+        "VIO_processFrame": 1.7985741978922716,
+        "handleLIO": 12.13888494609461,
+        "handleVIO": 2.53441323059989
+      },
+      "boundary_mean_owner_CPU_ms": {
+        "LIO_StateEst": 8.337316674663546,
+        "LIO_residual_query": 1.7154182719092332,
+        "Process2": 0.44392091884456675,
+        "map_update": 0.5414030362785255,
+        "VIO_processFrame": 1.7955787845433255,
+        "handleLIO": 10.853669440594059,
+        "handleVIO": 2.528774719867914
+      },
+      "mapper_sampled_CPU_seconds": 43.12,
+      "actual_sensor_order_sha256": "f7a1393b22966cb4ac9d0d242bc51fda968029eb06c8cd355c7fc9d337ae61af"
+    }
+  ],
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/A1_serial_1x/DESCRIPTIVE_SUMMARY.json": "1cdc4d78e5573ff1f50c1a6219c2f7cde164110905abe24c498aea5f85e0ff36",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/B1_staged_1x/DESCRIPTIVE_SUMMARY.json": "472f9c73d60b819fe3d4d033eb524aa24d5e2c21593659074564aac5f3360321",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/B2_staged_1x/DESCRIPTIVE_SUMMARY.json": "cf5a0afad53dd9a2e38347c49884e3e593a11ebdaade8d81446b7eab5128275e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/A2_serial_1x/DESCRIPTIVE_SUMMARY.json": "5ba38cfad7b287846bfc7173f92574f47a1e34765124f974540729059c1b4107"
+  }
+}

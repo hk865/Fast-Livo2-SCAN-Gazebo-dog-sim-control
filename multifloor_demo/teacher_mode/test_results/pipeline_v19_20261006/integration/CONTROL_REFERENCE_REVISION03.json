@@ -1,0 +1,32 @@
+{
+  "schema": "teacher_control_reference_revision03_review/v1",
+  "reviewed": true,
+  "cause_run": "20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5",
+  "correction": "During external align, cascade turn yaw is the same frozen heading as the Teacher gate. Drive uses checked SCAN tangent; hold and parking keep existing targets.",
+  "original46_geometry_or_safety_thresholds_changed": false,
+  "CPP_estimator_or_Teacher_model_changed": false,
+  "reviewed_source_sha256": {
+    "cascade_core.py": "ba139551805511fbf04b2fbc52fcc8feb9ea9bd60c0fa18251e7d7a37c93e9c9",
+    "controller.py": "f0e848191e7fb6e109c41cad54475613a439f4c2015a16d9159120fd7a87ee57",
+    "heading_reference_tests.py": "d785ca41837d01e6a82a19523a34eba5f4642ed367990abc65a0ca455a91d1a3",
+    "pipeline_preflight.py": "1119c138cd6410996163c33d066071a5a25d5e5980404204c190eed83bf8e4ff"
+  },
+  "baseline_archived_source_sha256": {
+    "cascade_core.py": "dccb1c8fc8ceeae1dc1aaabda8c39ada9a3fdb171e823a1ae09cc272e9461cc7",
+    "controller.py": "671c76fc207f59c5e67fbd396247b93ebdfa0bbfc05de296fd778720746c3719"
+  },
+  "regression": {
+    "total": 52,
+    "passed": 51,
+    "failed": 1,
+    "log": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/integration/REVISION03_CONTROL_REGRESSION.log",
+    "log_sha256": "271467be6c12c5cf7c6a7bf8c0833c722d7b2c86a123b0b875e0c9268c3c163e",
+    "failed_test": "publication_ledger_tests.Checks.test_strip_observer_restores_original_V9_production_bytes",
+    "disposition": "Retained legacy identity failure: V19 mission integration and explicit heading-reference correction are reviewed source changes, so whole V9 controller bytes are not expected. This is not a numerical PASS. New finite heading/default equivalence regressions and 9 actual publication-logic tests passed."
+  },
+  "actual_revision03_navigation_verified": false,
+  "limits": [
+    "Finite failure input replay does not prove physical completion or full publication chronology.",
+    "Old V18 control identity claim is replaced by this explicit reviewed revision; original failures remain."
+  ]
+}

@@ -1,0 +1,647 @@
+{
+  "schema": "go2_pipeline_v19_stage_performance_reader/v1",
+  "status": "passed_limited_trace_and_lifecycle",
+  "mode": "staged",
+  "image_copy_opt": 0,
+  "checks": {
+    "whole_lifecycle_no_cancel_reject_missing": {
+      "status": "passed",
+      "passed": true,
+      "final_counters": {
+        "schema": "staged_input_pipeline_v19/v1",
+        "mode": "staged",
+        "image_copy_opt": 0,
+        "count_limit": 512,
+        "byte_limit": 67108864,
+        "trace_schema": "pipeline_v19_events/v1",
+        "trace_columns": 23,
+        "normal_completed": true,
+        "context_valid_at_drain": true,
+        "accepted": 31946,
+        "delivered": 31946,
+        "committed": 31946,
+        "pending": 0,
+        "inflight": 0,
+        "ready": 0,
+        "bytes": 0,
+        "peak_pending": 13,
+        "peak_bytes": 20649883,
+        "canceled": 0,
+        "rejected_capacity": 0,
+        "closed_rejections": 0,
+        "failure": "",
+        "uncommitted_packets": [],
+        "rejected_packet": null
+      },
+      "cleanup_exemption_applied": false
+    },
+    "contiguous_committed_global_admission_order": {
+      "status": "passed",
+      "passed": true
+    },
+    "all_sensor_kinds_observed": {
+      "status": "passed",
+      "passed": true,
+      "counts": {
+        "0": 16306,
+        "1": 12002,
+        "3": 1819,
+        "2": 1819
+      }
+    },
+    "integer_clock_causality_and_decoder_NA": {
+      "status": "passed",
+      "passed": true
+    },
+    "actual_mode_thread_partition": {
+      "status": "passed",
+      "passed": true,
+      "receive_tids": [
+        1856127
+      ],
+      "owner_tids": [
+        1856104
+      ],
+      "decoder_tids": {
+        "2": [
+          1856125
+        ],
+        "3": [
+          1856126
+        ]
+      }
+    },
+    "charged_raw_decode_ready_owner_reservation_bounds": {
+      "status": "passed",
+      "passed": true,
+      "definition": "Reservation slots charged through acknowledgement; not whole process/DDS/map RSS"
+    },
+    "original_normal_context_valid_drain_lifecycle": {
+      "status": "passed",
+      "passed": true,
+      "expected_events": [
+        "start",
+        "receiver_cancel_begin",
+        "receiver_joined",
+        "admission_close",
+        "decoders_joined",
+        "owner_drain_begin",
+        "owner_drain_complete"
+      ],
+      "observed_events": [
+        "start",
+        "receiver_cancel_begin",
+        "receiver_joined",
+        "admission_close",
+        "decoders_joined",
+        "owner_drain_begin",
+        "owner_drain_complete"
+      ],
+      "inflight_definition": "Producer counts Decoding plus Owner, not only decoder work"
+    }
+  },
+  "metrics": {
+    "timer": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 0.000189,
+        "median": 0.001126,
+        "mean": 0.0012358583956825707,
+        "p95": 0.00258,
+        "p99": 0.003603600000000006,
+        "maximum": 0.494898
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_thread_CPU": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 0.002861,
+        "median": 0.235848,
+        "mean": 2.981707521648473,
+        "p95": 12.83192425,
+        "p99": 16.203408850000002,
+        "maximum": 25.910324
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 0.000199,
+        "median": 0.000322,
+        "mean": 0.00039627989697044034,
+        "p95": 0.000776,
+        "p99": 0.001205800000000003,
+        "maximum": 0.045581
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 9.4e-05,
+        "median": 0.000195,
+        "mean": 0.0002467930823009935,
+        "p95": 0.00055,
+        "p99": 0.0008318500000000021,
+        "maximum": 0.045447
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 0.000173,
+        "median": 0.000725,
+        "mean": 0.0008072218201888875,
+        "p95": 0.001741,
+        "p99": 0.002578,
+        "maximum": 0.007526
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 16306,
+        "unit": "ms",
+        "minimum": 0.0037,
+        "median": 0.23731649999999999,
+        "mean": 2.983339659941126,
+        "p95": 12.833899500000001,
+        "p99": 16.205864150000007,
+        "maximum": 25.911464
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 16306,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 1.0992886054213173,
+        "p95": 6.0,
+        "p99": 8.0,
+        "maximum": 11
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 16306,
+        "unit": "bytes",
+        "minimum": 312,
+        "median": 312.0,
+        "mean": 312,
+        "p95": 312.0,
+        "p99": 312.0,
+        "maximum": 312
+      },
+      "source_header_rate": {
+        "unique_stamps": 0,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": null,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "imu": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.000183,
+        "median": 0.000791,
+        "mean": 0.0011755909015164138,
+        "p95": 0.002631,
+        "p99": 0.0034139899999999996,
+        "maximum": 0.492213
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_thread_CPU": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001956,
+        "median": 0.6166245,
+        "mean": 4.022408096817197,
+        "p95": 13.78249559999998,
+        "p99": 16.970748599999997,
+        "maximum": 22.780897
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001154,
+        "median": 0.003029,
+        "mean": 0.003555766622229628,
+        "p95": 0.007123749999999995,
+        "p99": 0.011307709999999993,
+        "maximum": 0.135067
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001034,
+        "median": 0.002905,
+        "mean": 0.003391791618063656,
+        "p95": 0.006762599999999991,
+        "p99": 0.010427439999999987,
+        "maximum": 0.13494
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.000178,
+        "median": 0.0005835,
+        "mean": 0.0007067516247292118,
+        "p95": 0.001745,
+        "p99": 0.00232799,
+        "maximum": 0.04142
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.005882,
+        "median": 0.6193915,
+        "mean": 4.027139454340944,
+        "p95": 13.789544499999984,
+        "p99": 16.97319432,
+        "maximum": 22.788886
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 12002,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 1.0,
+        "mean": 1.7131311448091984,
+        "p95": 6.0,
+        "p99": 7.989999999999782,
+        "maximum": 12
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 12002,
+        "unit": "bytes",
+        "minimum": 999,
+        "median": 999.0,
+        "mean": 999,
+        "p95": 999.0,
+        "p99": 999.0,
+        "maximum": 999
+      },
+      "source_header_rate": {
+        "unique_stamps": 12002,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 200.0,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "lidar": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000364,
+        "median": 0.00108,
+        "mean": 0.0012172677295217151,
+        "p95": 0.0021441,
+        "p99": 0.003015299999999999,
+        "maximum": 0.00779
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.003728,
+        "median": 0.013672,
+        "mean": 0.04549662286970863,
+        "p95": 0.17294569999999984,
+        "p99": 0.2888837799999991,
+        "maximum": 1.29459
+      },
+      "decode_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.368752,
+        "median": 0.437682,
+        "mean": 0.4771910439802089,
+        "p95": 0.6092050999999999,
+        "p99": 0.8021223199999998,
+        "maximum": 1.556196
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.368065,
+        "median": 0.435539,
+        "mean": 0.4754284617921935,
+        "p95": 0.6053157,
+        "p99": 0.7989875399999999,
+        "maximum": 1.555634
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 2.7e-05,
+        "median": 0.000154,
+        "mean": 0.0001513111599780099,
+        "p95": 0.0002750999999999999,
+        "p99": 0.00036963999999999986,
+        "maximum": 0.000659
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.002672,
+        "median": 0.138325,
+        "mean": 0.1478996410115448,
+        "p95": 0.2457124,
+        "p99": 0.32610887999999943,
+        "maximum": 4.012731
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.002104,
+        "median": 0.004418,
+        "mean": 0.004748140186915888,
+        "p95": 0.0070853,
+        "p99": 0.010543639999999988,
+        "maximum": 0.031751
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.001991,
+        "median": 0.004277,
+        "mean": 0.00455883837273227,
+        "p95": 0.006816999999999997,
+        "p99": 0.008846139999999997,
+        "maximum": 0.030479
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000341,
+        "median": 0.000785,
+        "mean": 0.0008665612974161627,
+        "p95": 0.0014388999999999993,
+        "p99": 0.00205082,
+        "maximum": 0.004082
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.400659,
+        "median": 0.644267,
+        "mean": 0.6774256734469489,
+        "p95": 0.9275102,
+        "p99": 1.2949532199999998,
+        "maximum": 4.975924
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 1819,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0,
+        "mean": 0.308411214953271,
+        "p95": 1.0,
+        "p99": 2.0,
+        "maximum": 4
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 1819,
+        "unit": "bytes",
+        "minimum": 8039026,
+        "median": 8046642,
+        "mean": 8046481.252336449,
+        "p95": 8053714.0,
+        "p99": 8055890.0,
+        "maximum": 8057522
+      },
+      "source_header_rate": {
+        "unique_stamps": 1819,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.307576894223555,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "image": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000355,
+        "median": 0.001233,
+        "mean": 0.0014428724573941727,
+        "p95": 0.002400899999999999,
+        "p99": 0.003355799999999988,
+        "maximum": 0.174979
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.003507,
+        "median": 0.01383,
+        "mean": 0.05089348213304013,
+        "p95": 0.20144199999999984,
+        "p99": 0.3857097,
+        "maximum": 0.800297
+      },
+      "decode_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.112285,
+        "median": 0.151617,
+        "mean": 0.1701275244639912,
+        "p95": 0.24903029999999987,
+        "p99": 0.34084947999999976,
+        "maximum": 0.797488
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.099201,
+        "median": 0.149176,
+        "mean": 0.1671780148433205,
+        "p95": 0.24465639999999997,
+        "p99": 0.33105718,
+        "maximum": 0.796633
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 2.6e-05,
+        "median": 0.000148,
+        "mean": 0.0001626355140186916,
+        "p95": 0.0003120999999999999,
+        "p99": 0.0004176399999999999,
+        "maximum": 0.007158
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.001386,
+        "median": 0.124875,
+        "mean": 0.32029012919186367,
+        "p95": 1.3421517999999981,
+        "p99": 5.474672339999996,
+        "maximum": 9.772277
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.031008,
+        "median": 0.076589,
+        "mean": 0.08061439582188015,
+        "p95": 0.1200746,
+        "p99": 0.13320705999999982,
+        "maximum": 0.500563
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.030873,
+        "median": 0.076456,
+        "mean": 0.08033140351841671,
+        "p95": 0.1192092,
+        "p99": 0.1330410799999998,
+        "maximum": 0.500356
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000323,
+        "median": 0.000847,
+        "mean": 0.0009052484881803189,
+        "p95": 0.0015850999999999999,
+        "p99": 0.002309839999999996,
+        "maximum": 0.006026
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.178907,
+        "median": 0.423753,
+        "mean": 0.6241492847718527,
+        "p95": 1.6187648999999937,
+        "p99": 5.75013934,
+        "maximum": 10.087652
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 1819,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 1,
+        "mean": 0.6162726772952172,
+        "p95": 2.0,
+        "p99": 3.0,
+        "maximum": 5
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 1819,
+        "unit": "bytes",
+        "minimum": 12595781,
+        "median": 12595781,
+        "mean": 12595781,
+        "p95": 12595781.0,
+        "p99": 12595781.0,
+        "maximum": 12595781
+      },
+      "source_header_rate": {
+        "unique_stamps": 1819,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.307576894223555,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    }
+  },
+  "whole_message_body_identity_proven": false,
+  "estimator_math_equivalence_proven": false,
+  "runtime_source_binding_checked_by_this_reader": false,
+  "actual_navigation_or_Sim2Sim_PASS": false,
+  "interpretation": {
+    "queue_stage": "All modes use charged reservation slots; serial/rx_decode claim inline. Their measured claim intervals are not asynchronous queue-wait evidence.",
+    "receive_CPU": "Metadata and conservative budget interval only, excludes queue lock/decode/owner; allocation before receipt interval is not measured.",
+    "owner_interval": "Original callback only; excludes acknowledgement, trace formatting and full estimator/map processing.",
+    "wall_minus_CPU": "Never labeled communication; no subtraction is computed.",
+    "parent_child_intervals": "receipt_to_commit contains stage intervals; do not add it to them. This is not old kind300 spin_some/preprocess timing.",
+    "source_age": "No current ROS clock/source-head trace here, so source age is unavailable, not zero.",
+    "missing_stage": "IMU/timer decoder fields zero are N/A. Missing actual input or failed causality does not become zero latency."
+  },
+  "input_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/B2_staged_1x/fastlivo_debug/pipeline_v19_events.csv": "09b2431b44758bd979e7b1100ca19ba09622e1f91a6891577acb7c009d4537ef",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/B2_staged_1x/fastlivo_debug/pipeline_v19_lifecycle.csv": "04f64a97c1fef8ca23cc228621eeaba07c06a47b280e78dcd694c01e313a6252",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/B2_staged_1x/fastlivo_debug/pipeline_v19_summary.json": "f289bc6206450201ac581a04012436475a310de3c9298ae3c8b10f96480c3815"
+  }
+}

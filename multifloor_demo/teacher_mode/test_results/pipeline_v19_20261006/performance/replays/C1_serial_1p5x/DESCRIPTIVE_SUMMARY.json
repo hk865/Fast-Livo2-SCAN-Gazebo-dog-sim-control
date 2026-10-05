@@ -1,0 +1,1428 @@
+{
+  "schema": "V19_descriptive_SLAM_only_replay_summary/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x",
+  "mode": "serial",
+  "rate": 1.5,
+  "stage_status": "passed_limited_trace_and_lifecycle",
+  "headers": {
+    "schema": "V19_bag_to_actual_admission_headers/v1",
+    "same_sensor_header_multiset": true,
+    "same_captured_record_sensor_order": false,
+    "expected_sensor_count": 15640,
+    "observed_sensor_count": 15640,
+    "expected_order_sha256": "8173ac58641e56945ee4b1a2a95ca8bd0d1342f6223e5aa3a236315098eeb2b3",
+    "observed_order_sha256": "79df828ca40027533a0596e3f0f2d50126ed27ab904afa4c8293e3bc93b4a0af",
+    "body_bytes_at_receiver_proven": false,
+    "original_capture_mapper_order_proven": false,
+    "exact_full_frontend_math": "UNVERIFIED",
+    "bag_input_CDR_index_sha256": "ee80584f4d3cab942c9b0034795c1e51e4bf6fbab3ace2d02d059f88e6549180"
+  },
+  "strict_final_counters": {
+    "schema": "staged_input_pipeline_v19/v1",
+    "mode": "serial",
+    "image_copy_opt": 0,
+    "count_limit": 512,
+    "byte_limit": 67108864,
+    "trace_schema": "pipeline_v19_events/v1",
+    "trace_columns": 23,
+    "normal_completed": true,
+    "context_valid_at_drain": true,
+    "accepted": 21737,
+    "delivered": 21737,
+    "committed": 21737,
+    "pending": 0,
+    "inflight": 0,
+    "ready": 0,
+    "bytes": 0,
+    "peak_pending": 1,
+    "peak_bytes": 12595781,
+    "canceled": 0,
+    "rejected_capacity": 0,
+    "closed_rejections": 0,
+    "failure": "",
+    "uncommitted_packets": [],
+    "rejected_packet": null
+  },
+  "ingress_metrics": {
+    "timer": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.000186,
+        "median": 0.000421,
+        "mean": 0.000597585533869116,
+        "p95": 0.001243,
+        "p99": 0.0015271199999999999,
+        "maximum": 0.071971
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_thread_CPU": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.000186,
+        "median": 0.000537,
+        "mean": 0.0007311223552566836,
+        "p95": 0.00156,
+        "p99": 0.0020967599999999996,
+        "maximum": 0.007787
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.00021,
+        "median": 0.000325,
+        "mean": 0.00040770559291454815,
+        "p95": 0.0007251999999999997,
+        "p99": 0.00092004,
+        "maximum": 0.022544
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.000102,
+        "median": 0.000201,
+        "mean": 0.00027385320649499754,
+        "p95": 0.00057,
+        "p99": 0.00074704,
+        "maximum": 0.003344
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.000168,
+        "median": 0.000333,
+        "mean": 0.0005020273905199279,
+        "p95": 0.0011392,
+        "p99": 0.0013701599999999998,
+        "maximum": 0.006089
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 6097,
+        "unit": "ms",
+        "minimum": 0.0006,
+        "median": 0.001296,
+        "mean": 0.0017364134820403478,
+        "p95": 0.003297,
+        "p99": 0.0043809999999999995,
+        "maximum": 0.074654
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 6097,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "maximum": 0
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 6097,
+        "unit": "bytes",
+        "minimum": 312,
+        "median": 312,
+        "mean": 312,
+        "p95": 312.0,
+        "p99": 312.0,
+        "maximum": 312
+      },
+      "source_header_rate": {
+        "unique_stamps": 0,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": null,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "imu": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.000176,
+        "median": 0.000254,
+        "mean": 0.0003128586068988502,
+        "p95": 0.000467,
+        "p99": 0.0009449199999999983,
+        "maximum": 0.168914
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_thread_CPU": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.000176,
+        "median": 0.000237,
+        "mean": 0.0002849817530411598,
+        "p95": 0.000456,
+        "p99": 0.001231,
+        "maximum": 0.009004
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001212,
+        "median": 0.0035104999999999997,
+        "mean": 0.0058253566905515745,
+        "p95": 0.02486095,
+        "p99": 0.03755748999999999,
+        "maximum": 2.214567
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001094,
+        "median": 0.003388,
+        "mean": 0.005495310198300283,
+        "p95": 0.02459544999999988,
+        "p99": 0.03732796,
+        "maximum": 0.058872
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.000162,
+        "median": 0.000214,
+        "mean": 0.00024391659723379438,
+        "p95": 0.0003659499999999989,
+        "p99": 0.000752,
+        "maximum": 0.004419
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 12002,
+        "unit": "ms",
+        "minimum": 0.001701,
+        "median": 0.004028,
+        "mean": 0.006423197050491584,
+        "p95": 0.025507649999999993,
+        "p99": 0.03834747999999999,
+        "maximum": 2.215057
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 12002,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "maximum": 0
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 12002,
+        "unit": "bytes",
+        "minimum": 999,
+        "median": 999.0,
+        "mean": 999,
+        "p95": 999.0,
+        "p99": 999.0,
+        "maximum": 999
+      },
+      "source_header_rate": {
+        "unique_stamps": 12002,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 200.0,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "lidar": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000328,
+        "median": 0.000539,
+        "mean": 0.000610436503573392,
+        "p95": 0.0010404999999999995,
+        "p99": 0.001693119999999999,
+        "maximum": 0.01113
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000212,
+        "median": 0.000416,
+        "mean": 0.0005011176470588235,
+        "p95": 0.0010332,
+        "p99": 0.0014540199999999994,
+        "maximum": 0.002384
+      },
+      "decode_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.287221,
+        "median": 0.360016,
+        "mean": 0.41828745904343045,
+        "p95": 1.2826254999999978,
+        "p99": 1.48230836,
+        "maximum": 1.690138
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.286884,
+        "median": 0.358508,
+        "mean": 0.4163533238042881,
+        "p95": 1.2824227999999978,
+        "p99": 1.4820308,
+        "maximum": 1.641608
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 2.8e-05,
+        "median": 5.6e-05,
+        "mean": 6.46888400219901e-05,
+        "p95": 0.00012619999999999981,
+        "p99": 0.00021373999999999954,
+        "maximum": 0.000496
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000133,
+        "median": 0.000391,
+        "mean": 0.0004461913139087411,
+        "p95": 0.000845,
+        "p99": 0.0011973999999999986,
+        "maximum": 0.003314
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.002771,
+        "median": 0.004945,
+        "mean": 0.004978688290269379,
+        "p95": 0.006464199999999999,
+        "p99": 0.007911919999999996,
+        "maximum": 0.033389
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.002637,
+        "median": 0.004816,
+        "mean": 0.004809285871357889,
+        "p95": 0.0062948,
+        "p99": 0.007553239999999995,
+        "maximum": 0.012449
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000266,
+        "median": 0.000459,
+        "mean": 0.0005071203958218802,
+        "p95": 0.0008221999999999998,
+        "p99": 0.0011718599999999985,
+        "maximum": 0.002513
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.291821,
+        "median": 0.366545,
+        "mean": 0.4249634672897196,
+        "p95": 1.289804099999998,
+        "p99": 1.4915797800000001,
+        "maximum": 1.697834
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 1819,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "maximum": 0
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 1819,
+        "unit": "bytes",
+        "minimum": 8039026,
+        "median": 8046642,
+        "mean": 8046481.252336449,
+        "p95": 8053714.0,
+        "p99": 8055890.0,
+        "maximum": 8057522
+      },
+      "source_header_rate": {
+        "unique_stamps": 1819,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.307576894223555,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "image": {
+      "receipt_to_reservation_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000307,
+        "median": 0.000589,
+        "mean": 0.0006525557998900495,
+        "p95": 0.0010601999999999999,
+        "p99": 0.001597239999999998,
+        "maximum": 0.006408
+      },
+      "reservation_to_decoder_claim_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000277,
+        "median": 0.000775,
+        "mean": 0.000850592083562397,
+        "p95": 0.0013111,
+        "p99": 0.0018784599999999998,
+        "maximum": 0.03364
+      },
+      "decode_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.065781,
+        "median": 0.147079,
+        "mean": 0.1633397971412864,
+        "p95": 0.2607943999999999,
+        "p99": 0.5846476999999997,
+        "maximum": 2.50492
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.065557,
+        "median": 0.146458,
+        "mean": 0.1610329752611325,
+        "p95": 0.25470049999999994,
+        "p99": 0.5176794599999994,
+        "maximum": 0.815254
+      },
+      "decode_end_to_ready_marker_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 2.6e-05,
+        "median": 4.5e-05,
+        "mean": 5.6556349642660804e-05,
+        "p95": 0.00014209999999999993,
+        "p99": 0.00020263999999999986,
+        "maximum": 0.001886
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000167,
+        "median": 0.000543,
+        "mean": 0.000575170973062122,
+        "p95": 0.0008933999999999997,
+        "p99": 0.0011797399999999994,
+        "maximum": 0.003228
+      },
+      "owner_callback_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.017694,
+        "median": 0.031393,
+        "mean": 0.03357045574491479,
+        "p95": 0.05512279999999999,
+        "p99": 0.07058074,
+        "maximum": 0.337939
+      },
+      "owner_callback_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.017573,
+        "median": 0.031209,
+        "mean": 0.03330652666300165,
+        "p95": 0.05422549999999999,
+        "p99": 0.07014001999999994,
+        "maximum": 0.337812
+      },
+      "pre_admission_metadata_budget_thread_CPU": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.000252,
+        "median": 0.00049,
+        "mean": 0.000528565145684442,
+        "p95": 0.0008340999999999999,
+        "p99": 0.00119664,
+        "maximum": 0.002732
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 1819,
+        "unit": "ms",
+        "minimum": 0.089786,
+        "median": 0.182576,
+        "mean": 0.19915432600329852,
+        "p95": 0.30523819999999996,
+        "p99": 0.6157001399999997,
+        "maximum": 2.561542
+      },
+      "pending_after_commit": {
+        "status": "available",
+        "count": 1819,
+        "unit": "packets",
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0.0,
+        "p99": 0.0,
+        "maximum": 0
+      },
+      "reserved_bytes": {
+        "status": "available",
+        "count": 1819,
+        "unit": "bytes",
+        "minimum": 12595781,
+        "median": 12595781,
+        "mean": 12595781,
+        "p95": 12595781.0,
+        "p99": 12595781.0,
+        "maximum": 12595781
+      },
+      "source_header_rate": {
+        "unique_stamps": 1819,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.307576894223555,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    }
+  },
+  "boundary": {
+    "producer": "kind300/v1,17-boundary sums in completed ~1s owner windows",
+    "rows": 44,
+    "boundaries": {
+      "Process2": {
+        "calls_in_completed_windows": 3605,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.441671305963939,
+        "mean_owner_thread_CPU_ms_per_call": 0.4401580374479889,
+        "mean_process_CPU_ms_per_call": 0.47103554785020807,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.004839126582278481,
+          "median": 0.4683914732352941,
+          "mean": 0.4418174248044417,
+          "p95": 0.47549081653846154,
+          "p99": 0.47655504371998375,
+          "maximum": 0.47720108791208793
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.004837746835443037,
+          "median": 0.4675739944444444,
+          "mean": 0.44030836462181483,
+          "p95": 0.47354830735042736,
+          "p99": 0.47491074078511847,
+          "maximum": 0.4754602637362637
+        }
+      },
+      "undistort": {
+        "calls_in_completed_windows": 3388,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.46798720926800474,
+        "mean_owner_thread_CPU_ms_per_call": 0.4664247443919717,
+        "mean_process_CPU_ms_per_call": 0.49924425059031874,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.46000930107526883,
+          "median": 0.4674653369047619,
+          "mean": 0.4680742114488247,
+          "p95": 0.4741314561321395,
+          "p99": 0.4775836258441558,
+          "maximum": 0.47882345454545455
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.4579010769230769,
+          "median": 0.4662981838235294,
+          "mean": 0.46651816545647146,
+          "p95": 0.47233033568118626,
+          "p99": 0.47603495954545455,
+          "maximum": 0.4773834090909091
+        }
+      },
+      "deskew_points": {
+        "calls_in_completed_windows": 1694,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.7588364492325856,
+        "mean_owner_thread_CPU_ms_per_call": 0.7565029332939788,
+        "mean_process_CPU_ms_per_call": 0.797474909090909,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.747755304347826,
+          "median": 0.7596546178571428,
+          "mean": 0.7591591594023628,
+          "p95": 0.7682227302367288,
+          "p99": 0.7700692845898004,
+          "maximum": 0.7711284545454545
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.7472697391304348,
+          "median": 0.7569939043927648,
+          "mean": 0.7568447783910621,
+          "p95": 0.7664866009538951,
+          "p99": 0.7693390044919786,
+          "maximum": 0.7700325454545454
+        }
+      },
+      "LIO_residual_query": {
+        "calls_in_completed_windows": 5792,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 2.031365510877072,
+        "mean_owner_thread_CPU_ms_per_call": 1.771157122237569,
+        "mean_process_CPU_ms_per_call": 2.9510474135013816,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 1.4381009076923077,
+          "median": 1.9351151828096653,
+          "mean": 2.012715177795963,
+          "p95": 2.737534796992767,
+          "p99": 2.7783759928751173,
+          "maximum": 2.8042958466666668
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 1.2101141923076923,
+          "median": 1.7190384500000002,
+          "mean": 1.7510001151831138,
+          "p95": 2.2824767996984403,
+          "p99": 2.318189311127027,
+          "maximum": 2.33161056
+        }
+      },
+      "LIO_StateEst": {
+        "calls_in_completed_windows": 1693,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 11.212785094506792,
+        "mean_owner_thread_CPU_ms_per_call": 9.669911996455996,
+        "mean_process_CPU_ms_per_call": 14.822679463673952,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 7.013789955555556,
+          "median": 10.013523736666667,
+          "mean": 11.443781040317106,
+          "p95": 17.95686824857143,
+          "p99": 18.47620772882353,
+          "maximum": 18.586467588235294
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 5.838509733333334,
+          "median": 8.824361417777778,
+          "mean": 9.858596359312193,
+          "p95": 14.998453163235293,
+          "p99": 15.305949246470588,
+          "maximum": 15.309822382352941
+        }
+      },
+      "map_update": {
+        "calls_in_completed_windows": 1693,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.5476655073833432,
+        "mean_owner_thread_CPU_ms_per_call": 0.5463112634376847,
+        "mean_process_CPU_ms_per_call": 0.565762676314235,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.35267808695652175,
+          "median": 0.5185662351778656,
+          "mean": 0.5731988187107633,
+          "p95": 0.7831478455882352,
+          "p99": 1.4631877132352935,
+          "maximum": 1.8945475
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.35213108695652173,
+          "median": 0.5166381086956522,
+          "mean": 0.5718100616601695,
+          "p95": 0.7831944338235294,
+          "p99": 1.4608400214973258,
+          "maximum": 1.890668681818182
+        }
+      },
+      "VIO_processFrame": {
+        "calls_in_completed_windows": 1693,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 1.7682656898995865,
+        "mean_owner_thread_CPU_ms_per_call": 1.7612013360897816,
+        "mean_process_CPU_ms_per_call": 1.8452537979917307,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.9815189047619047,
+          "median": 1.9235930826592518,
+          "mean": 1.7737566876685174,
+          "p95": 2.15865341394958,
+          "p99": 2.185288770937997,
+          "maximum": 2.1866345945945946
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.9794551428571429,
+          "median": 1.908069195652174,
+          "mean": 1.7669207799562139,
+          "p95": 2.1589174626050425,
+          "p99": 2.185325664689984,
+          "maximum": 2.1865249729729728
+        }
+      },
+      "output_conversion_publish": {
+        "calls_in_completed_windows": 11851,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.17290362087587546,
+        "mean_owner_thread_CPU_ms_per_call": 0.17232893274829128,
+        "mean_process_CPU_ms_per_call": 0.18099170432874864,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.16324553312302836,
+          "median": 0.17306734417952313,
+          "mean": 0.1733953738490308,
+          "p95": 0.18382758536322424,
+          "p99": 0.1852137391524768,
+          "maximum": 0.18568458823529413
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 40,
+          "unit": "ms",
+          "minimum": 0.1631392239747634,
+          "median": 0.17236220706521738,
+          "mean": 0.1728277465542325,
+          "p95": 0.18370470204002654,
+          "p99": 0.1849174040634675,
+          "maximum": 0.18568732352941178
+        }
+      },
+      "owner_loop_spin_or_commit": {
+        "calls_in_completed_windows": 34228,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.14609882701297183,
+        "mean_owner_thread_CPU_ms_per_call": 0.11394143747808812,
+        "mean_process_CPU_ms_per_call": 0.13454821710295664,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 44,
+          "unit": "ms",
+          "minimum": 0.09209964341085272,
+          "median": 0.15314849154056553,
+          "mean": 0.1738968713079388,
+          "p95": 0.2599817644387755,
+          "p99": 0.26613981314935065,
+          "maximum": 0.2691281991341991
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 44,
+          "unit": "ms",
+          "minimum": 0.05353223950177936,
+          "median": 0.1262530380254196,
+          "mean": 0.15398444475857168,
+          "p95": 0.2595481607397959,
+          "p99": 0.26579193584821426,
+          "maximum": 0.268765
+        }
+      },
+      "old_lidar_callback": {
+        "calls_in_completed_windows": 1819,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.004174279824079165,
+        "mean_owner_thread_CPU_ms_per_call": 0.004132415063221551,
+        "mean_process_CPU_ms_per_call": 0.004227250137438153,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.0037925652173913045,
+          "median": 0.0041586888888888885,
+          "mean": 0.004175872869134066,
+          "p95": 0.004572878048780488,
+          "p99": 0.004686900579710144,
+          "maximum": 0.00474745652173913
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.003789021739130435,
+          "median": 0.004135577777777778,
+          "mean": 0.004134893388169175,
+          "p95": 0.004437955555555555,
+          "p99": 0.004518678842881452,
+          "maximum": 0.004569658536585366
+        }
+      },
+      "imu_callback": {
+        "calls_in_completed_windows": 11897,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.0051231789526771454,
+        "mean_owner_thread_CPU_ms_per_call": 0.00492845877111877,
+        "mean_process_CPU_ms_per_call": 0.006408657056400774,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 43,
+          "unit": "ms",
+          "minimum": 0.002288342372881356,
+          "median": 0.0025654545454545457,
+          "mean": 0.005399087692934315,
+          "p95": 0.014635040097402597,
+          "p99": 0.014837330660886541,
+          "maximum": 0.014904758928571429
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 43,
+          "unit": "ms",
+          "minimum": 0.0022801389830508475,
+          "median": 0.00255891059602649,
+          "mean": 0.005225697299910119,
+          "p95": 0.014519503383210992,
+          "p99": 0.014822659285714286,
+          "maximum": 0.014929808035714287
+        }
+      },
+      "image_callback": {
+        "calls_in_completed_windows": 1819,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.03232302803738318,
+        "mean_owner_thread_CPU_ms_per_call": 0.03223081858163826,
+        "mean_process_CPU_ms_per_call": 0.05665058823529412,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.029008555555555555,
+          "median": 0.03187817391304348,
+          "mean": 0.032421146821977526,
+          "p95": 0.03741345652173913,
+          "p99": 0.03839713285509326,
+          "maximum": 0.03850505882352941
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.02904048888888889,
+          "median": 0.03183897777777778,
+          "mean": 0.03227257895610677,
+          "p95": 0.036386934782608696,
+          "p99": 0.037948783881230116,
+          "maximum": 0.038280219512195124
+        }
+      },
+      "old_callback_preprocess": {
+        "calls_in_completed_windows": 1819,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.00038908521165475536,
+        "mean_owner_thread_CPU_ms_per_call": 0.00037007036833424956,
+        "mean_process_CPU_ms_per_call": 0.00036114018691588785,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.00036106666666666664,
+          "median": 0.00037204347826086956,
+          "mean": 0.0003888478330875217,
+          "p95": 0.0005373333333333333,
+          "p99": 0.0006436177777777779,
+          "maximum": 0.0006854222222222223
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 41,
+          "unit": "ms",
+          "minimum": 0.000356,
+          "median": 0.0003675652173913044,
+          "mean": 0.0003700870307066225,
+          "p95": 0.0003866222222222222,
+          "p99": 0.0004013866666666667,
+          "maximum": 0.0004100888888888889
+        }
+      },
+      "sync_packages": {
+        "calls_in_completed_windows": 34228,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 0.020233529040551597,
+        "mean_owner_thread_CPU_ms_per_call": 0.02018536925908613,
+        "mean_process_CPU_ms_per_call": 0.020973840802851466,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 44,
+          "unit": "ms",
+          "minimum": 0.0003511516873889876,
+          "median": 0.024038061159558137,
+          "mean": 0.037538515475176004,
+          "p95": 0.08541461100127552,
+          "p99": 0.08825631005681818,
+          "maximum": 0.08946486147186147
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 44,
+          "unit": "ms",
+          "minimum": 0.0003485484902309059,
+          "median": 0.023960764694783747,
+          "mean": 0.03743825116364753,
+          "p95": 0.08544273985331634,
+          "p99": 0.08827889599025975,
+          "maximum": 0.08948560606060606
+        }
+      },
+      "handleLIO": {
+        "calls_in_completed_windows": 1802,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 13.578081362375139,
+        "mean_owner_thread_CPU_ms_per_call": 12.11854947391787,
+        "mean_process_CPU_ms_per_call": 17.12551490899001,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.010555478260869566,
+          "median": 13.11953549951691,
+          "mean": 13.87241513341439,
+          "p95": 21.70203919571428,
+          "p99": 22.296897311470588,
+          "maximum": 22.41306117647059
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.01057441304347826,
+          "median": 11.89787469227053,
+          "mean": 12.36645667018407,
+          "p95": 18.747099658974356,
+          "p99": 19.131175217941177,
+          "maximum": 19.13472652941176
+        }
+      },
+      "handleVIO": {
+        "calls_in_completed_windows": 1802,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 2.4875368684794674,
+        "mean_owner_thread_CPU_ms_per_call": 2.4778464289678137,
+        "mean_process_CPU_ms_per_call": 2.6004874073251942,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.02570291304347826,
+          "median": 2.7902352004550055,
+          "mean": 2.5033563038457984,
+          "p95": 3.049138898235294,
+          "p99": 3.0798245652702705,
+          "maximum": 3.080240864864865
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 42,
+          "unit": "ms",
+          "minimum": 0.025705239130434782,
+          "median": 2.769862686046512,
+          "mean": 2.4938622317935897,
+          "p95": 3.0489457326890754,
+          "p99": 3.0794306823290936,
+          "maximum": 3.079604864864865
+        }
+      },
+      "map_build": {
+        "calls_in_completed_windows": 1,
+        "invalid": 0,
+        "mean_wall_ms_per_call": 5.615259,
+        "mean_owner_thread_CPU_ms_per_call": 5.61545,
+        "mean_process_CPU_ms_per_call": 5.785278,
+        "window_mean_wall_ms_per_call": {
+          "status": "available",
+          "count": 1,
+          "unit": "ms",
+          "minimum": 5.615259,
+          "median": 5.615259,
+          "mean": 5.615259,
+          "p95": 5.615259,
+          "p99": 5.615259,
+          "maximum": 5.615259
+        },
+        "window_mean_owner_thread_CPU_ms_per_call": {
+          "status": "available",
+          "count": 1,
+          "unit": "ms",
+          "minimum": 5.61545,
+          "median": 5.61545,
+          "mean": 5.61545,
+          "p95": 5.61545,
+          "p99": 5.61545,
+          "maximum": 5.61545
+        }
+      }
+    },
+    "tail_after_last_completed_window_not_flushed": true,
+    "parent_child": "query within StateEst within handleLIO; Process2 contains undistort/deskew; handleVIO contains processFrame; do not add nested intervals",
+    "stage8": "serial spin_some includes inline admission/decode; staged owner commit excludes decoder work, so this is a moved-work interval, not whole-chain speed",
+    "stage12": "predecode now occurs outside old callback; absent interval is N/A, not zero compute",
+    "process_CPU": "CPU consumed by every process thread during a boundary, may include overlapping decoder/logger work; not exclusive stage cost",
+    "wall_minus_CPU_is_communication": false,
+    "source_sha256": {
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/fastlivo_diagnostics/index.csv": "c7e1387881a7069ecc49b9d7767d8c7af98cdcc70d614dbdef3c0638fc7a28bc",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/fastlivo_diagnostics/writer_stats.json": "f936727c494d5399f7036dd6f578cb40ed9eacdb5951e66ea3c07715bc221b21"
+    }
+  },
+  "odometry": {
+    "pose_count": 1709,
+    "first_source_ns": 3634999999,
+    "last_source_ns": 59994999999,
+    "source_Hz": 30.305180979418026,
+    "backward_transitions": 0,
+    "source_gap_ms": {
+      "status": "available",
+      "count": 1708,
+      "unit": "ms",
+      "minimum": 29.999999,
+      "median": 34.999999,
+      "mean": 32.997658079625296,
+      "p95": 35.000001,
+      "p99": 35.000001,
+      "maximum": 35.000001
+    },
+    "latest_observer_clock_minus_pose_header_ms": {
+      "status": "available",
+      "count": 1709,
+      "unit": "ms",
+      "minimum": 15.000001,
+      "median": 40.000001,
+      "mean": 373.7214750245758,
+      "p95": 1890.999999999999,
+      "p99": 2389.2000010000006,
+      "maximum": 2535.000001
+    },
+    "negative_observer_age_count": 0,
+    "age_limitation": "Includes observer DDS scheduling; latest received observer clock is not an estimator clock snapshot nor truth pose. Negative values are preserved."
+  },
+  "sampled_mapper_threads": {
+    "1861917": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 31.04,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 73.52088987320306,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 65985,
+      "involuntary_context_switch_delta": 9872
+    },
+    "1861919": {
+      "name": "fastlivo_ma-ust",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        4
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861920": {
+      "name": "fastlivo_ma-ust",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        0
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861922": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 8,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861923": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        4
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861924": {
+      "name": "dds.shm.wdog",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 42,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861939": {
+      "name": "dds.ev.0",
+      "sampled_CPU_seconds": 0.17,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.4026595128364858,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 11913,
+      "involuntary_context_switch_delta": 18
+    },
+    "1861940": {
+      "name": "dds.udp.57664",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 131,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861941": {
+      "name": "dds.udp.57665",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        4
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861942": {
+      "name": "dds.shm.57665",
+      "sampled_CPU_seconds": 0.96,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 2.273841954841332,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 30389,
+      "involuntary_context_switch_delta": 329
+    },
+    "1861943": {
+      "name": "dds.asyn.0.0",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 3,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861944": {
+      "name": "dds.udp.7002",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        4
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861945": {
+      "name": "dds.shm.7002",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 133,
+      "involuntary_context_switch_delta": 3
+    },
+    "1861946": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        2,
+        6
+      ],
+      "voluntary_context_switch_delta": 4,
+      "involuntary_context_switch_delta": 0
+    },
+    "1861947": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.37,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.8763765867617633,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 11976,
+      "involuntary_context_switch_delta": 50
+    },
+    "1861948": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.35,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.8290048793692356,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 27865,
+      "involuntary_context_switch_delta": 14
+    },
+    "1861949": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.0,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.0,
+      "observed_CPU_ids": [
+        0
+      ],
+      "voluntary_context_switch_delta": 0,
+      "involuntary_context_switch_delta": 0
+    },
+    "1862021": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.12,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.2842302443551665,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 1810,
+      "involuntary_context_switch_delta": 26000
+    },
+    "1862022": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.13,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.30791609805143033,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 1810,
+      "involuntary_context_switch_delta": 26305
+    },
+    "1862023": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 0.12,
+      "sampled_wall_seconds": 42.21929312,
+      "one_CPU_utilization_percent": 0.2842302443551665,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 1811,
+      "involuntary_context_switch_delta": 23916
+    },
+    "1862100": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 2.5,
+      "sampled_wall_seconds": 37.201943869,
+      "one_CPU_utilization_percent": 6.720078952872203,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 18094,
+      "involuntary_context_switch_delta": 378
+    },
+    "1862101": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 2.43,
+      "sampled_wall_seconds": 37.201943869,
+      "one_CPU_utilization_percent": 6.531916742191782,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 18335,
+      "involuntary_context_switch_delta": 358
+    },
+    "1862102": {
+      "name": "fastlivo_mappin",
+      "sampled_CPU_seconds": 2.63,
+      "sampled_wall_seconds": 37.201943869,
+      "one_CPU_utilization_percent": 7.0695230584215585,
+      "observed_CPU_ids": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "voluntary_context_switch_delta": 18014,
+      "involuntary_context_switch_delta": 438
+    }
+  },
+  "same_estimator_output_or_timer_order": "UNVERIFIED",
+  "general_statistical_speed_PASS": false,
+  "actual_navigation_or_Sim2Sim_PASS": false,
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/PLAN.json": "e9295177ce5d4684067a4c45b5e1905db2f415b74057bf0b15442a1ae4bfba1e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/RUNTIME.json": "43239140d3d998ac23df98fd523557d360d199dd06f869b41ab6b127d11bbb85",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/LOADED_BINARY.json": "ba8e16b1ed053e725de3b758316292e592bbb2ae1d8179f5d34a4a6192931fdb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/STAGE_RECEIPT.json": "52696448c8000f16c8c4e7309464c31d3db388b5ad073e6c8c157c605b0b8a14",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/INPUT_HEADER_MATCH.json": "7340e4679dd847d811e75378488348b4c35577938eaa3acaac42e9ac142c2199",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/OBSERVER_RECEIPT.json": "ffd238d2457726a6e3fb4db4ccca69f84904ca0e64bd2c30768130008f78e0c8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/PROCESS_SAMPLES.json": "d914dcb624b8502d4075526a62cfae80dbdcb0b181da5b3f77e1a0013f6023f3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/performance/replays/C1_serial_1p5x/shadow_poses.jsonl": "2be8ffa5298a847e83018154071e1af15d70a5aea7f004a7f98cb5dd6dc66b9b"
+  },
+  "reader_sha256": "fb1daf36af0063ea641800c2188ed0e588fe48b5c384cecfdb972261b70ced91"
+}

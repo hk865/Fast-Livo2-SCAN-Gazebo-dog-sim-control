@@ -1,0 +1,68 @@
+{
+  "schema": "teacher_original46_first_failure_causal_window/v1",
+  "run_id": "20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+  "first_observed_failed_publication": {
+    "record": {
+      "sequence": 6109,
+      "trigger": "control",
+      "state_before": "failed",
+      "state_after": "failed",
+      "publish_ros_clock_ns": 223475000000,
+      "publish_started_monotonic_wall_ns": 469358632119218,
+      "monotonic_wall_ns": 469358632167626,
+      "command_before": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_after": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "source": {
+      "source_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_command_publications.jsonl",
+      "source_offset": 7847713,
+      "source_length": 1238,
+      "source_line": 6109,
+      "source_line_sha256": "371aa188b2f3b99d80dd17697dcb4b54a33d30d2d89ae91e68deed835388ad7c"
+    }
+  },
+  "first_sampled_failed_nav_status": {
+    "sim_time": 223.615,
+    "message": "Teacher 等待实际SLAM机身速度和IMU角速确认停车，保持零速度",
+    "waypoint_index": 8,
+    "goal_activated_ros_clock_ns": 133450000000,
+    "source": {
+      "source_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_status.jsonl",
+      "source_offset": 100709945,
+      "source_length": 77237,
+      "source_line": 1372,
+      "source_line_sha256": "3b2957435c5c2c7d31f8c5a4847c28655274ccb1a623a12aa9781e5201c531c6"
+    }
+  },
+  "goal_activated_sim_s": 133.45,
+  "first_failed_publication_elapsed_sim_s": 90.025,
+  "declared_goal_deadline_sim_s": 90.0,
+  "timeout_condition_met": true,
+  "original_timeout_precedes_stale_and_tilt_checks_in_control": true,
+  "failure_message_overwritten_by_pre_turn_or_settle": true,
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e"
+  },
+  "physical_cleanup_boundary": 469368.57797065,
+  "last_cleanup_status": {
+    "state": "stopped",
+    "sim_time": 230.67,
+    "wall": 469369.325336592,
+    "message": "原始IMU超时，停车"
+  },
+  "navigation_first_failure_reason": "Original per-goal 90s deadline exceeded; failed state is preserved while its message is overwritten by wrapper waiting-stop text.",
+  "limits": [
+    "First observed failed command publication is not claimed to be an exact timestamp of the earlier Python state assignment.",
+    "300ms protections and the original 90s deadline are unchanged."
+  ]
+}

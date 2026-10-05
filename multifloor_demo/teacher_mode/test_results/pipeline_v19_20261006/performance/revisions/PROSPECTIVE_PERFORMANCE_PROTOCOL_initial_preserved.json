@@ -1,0 +1,64 @@
+{
+  "schema": "go2_pipeline_v19_prospective_performance/v1",
+  "state": "prepared_protocol_not_actual_result",
+  "modes": ["serial", "rx_decode", "staged"],
+  "algorithm_scope": "V18 mathematics; admission/decode/ordered single-owner engineering only",
+  "capture": {
+    "topics": {
+      "/demo/slam/lidar_filtered": "sensor_msgs/msg/PointCloud2",
+      "/demo/teacher/slam/imu": "sensor_msgs/msg/Imu",
+      "/demo/teacher/slam/image": "sensor_msgs/msg/Image",
+      "/clock": "rosgraph_msgs/msg/Clock"
+    },
+    "start": "Before the first physics/sensor message and stationary IMU initialization",
+    "initial_duration_s": 30,
+    "optional_duration_s": 60,
+    "one_physics_instance_only": true,
+    "raw_total_budget_bytes": 6442450944,
+    "record_order_is_production_callback_order": false,
+    "old_deleted_raw_used": false,
+    "recording_run_is_not_uninstrumented_performance_baseline": true
+  },
+  "matching": {
+    "identity": ["topic", "type", "source_ns", "serialized_bytes", "cdr_sha256"],
+    "initial_state": "Fresh equivalent estimator/map initialization, same frozen calibration/parameters and complete initialization prefix",
+    "exact_cross_topic_order": "Require production direct-feed harness with a fixed admission schedule and explicit timer schedule; otherwise report actual order SHA and UNVERIFIED exact-order causality",
+    "bag_order": "Bag recorder read order is separately hashed; do not label it the original executor callback order",
+    "full_frontend_replay": "Requires actual images and all inputs from initialization plus original calibration; kernel Hessian/state summaries alone are insufficient",
+    "failed_or_dropped_input": "Never replace, coalesce, relabel, skip, or refresh source timestamps to obtain PASS"
+  },
+  "benchmark": {
+    "independent_process_batches_per_scene_per_mode": 32,
+    "warmup_iterations_per_batch": 10,
+    "measured_iterations_per_batch": 30,
+    "order": "Alternating ABBA and BAAB blocks; every mode gets 32 independent processes per scene",
+    "pairwise": [["serial", "rx_decode"], ["serial", "staged"]],
+    "same_CPU_affinity_and_FP_modes": true,
+    "record_frequency_external_load_and_thread_teams": true,
+    "metrics": ["wall", "calling_thread_CPU", "per_decoder_thread_CPU", "process_CPU", "queue_age", "queue_bytes", "unique_source_update_Hz"],
+    "wall_minus_thread_CPU_is_communication": false,
+    "nested_boundaries_may_be_added": false,
+    "numeric_gate": "Complete state/covariance/residual/accepted measurement ordering and required output non-wall payload byte equality; any narrower fixture must disclose its scope",
+    "performance_gate": "Report median/p95/p99/max and all trials. Do not infer whole-chain speedup from one kernel; require independent evidence before claiming a 10% median improvement without p95 regression"
+  },
+  "headroom": {
+    "fixed_corpus_multipliers": [0.5, 1.0, 1.25, 1.5],
+    "multiplier_changes": "Wall release schedule only; original ROS acquisition headers and message body unchanged",
+    "not_simulation_speed_claim": true,
+    "stable": "No growing backlog or source lag, no loss/cancel/rejection, and complete input delivery; source-age interpretation must use the same explicit simulated clock replay",
+    "timer_schedule": "Freeze and replay the same timer events for exact finite comparison. Native wall timers during accelerated ROSbag playback invalidate an exact same-event claim"
+  },
+  "pipeline_gate": {
+    "whole_lifecycle": "accepted == delivered == committed == trace_rows; rejected == canceled == missing == 0; no failure",
+    "normal_stop": "Quiesce ingress before ROS context invalidation; finish inflight decode; original owner drains by global admission sequence; close only with zero pending",
+    "emergency_stop": "Record failures/canceled identities and fail the strict lifecycle gate; no cleanup exemption"
+  },
+  "actual_validation": [
+    "New 60 s strict lifecycle and original prefix source/motion/guard gates",
+    "Independent 210 s route prefix",
+    "Full original 32-region route, 5 s parking, and both 12 m ramps",
+    "Subsequent 46-goal task requires its own source scope and unchanged protective gates"
+  ],
+  "unchanged_protection": {"source_timeout_s": 0.3, "single_actuator": true, "navigation_input": "actual SLAM/IMU/cloud; simulator truth only offline evaluation", "CPU_actor": "single thread"},
+  "known_limit": "Protocol and finite reader tests are not actual V19 performance, numeric, lifecycle, navigation or Sim2Sim PASS"
+}

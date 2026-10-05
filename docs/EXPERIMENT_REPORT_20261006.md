@@ -4,6 +4,12 @@
 
 **当前已实现冻结Teacher的Gazebo执行与有限运动闭环，并以实际SLAM/IMU/点云和SCAN完成两轮指定静态32区域三层坡道路线。严格跨引擎Sim2Sim、全传感器Actor和真机部署仍未通过或未验证。** 本仓库发布源码、配置、验收器和保留摘要；原始实验数据按用户授权清理后，本文是当时独立验收的历史记录，不能仅凭摘要或SHA重新独立审核原实验。见[证据保留边界](EVIDENCE_RETENTION.md)、[精简证据索引](../evidence/INDEX.md)与[最终证据库存](../evidence/EVIDENCE_MANIFEST.json)。
 
+## 2026-10-06追加：V19流水线与原46区域
+
+上文及下方1–6节是清理前历史报告，不回填旧通过与失败。清理后新增V19多线程流水线、100次有限数学检查及实际ROS正常排空验证；同包1x四轮和1.5x单对照均已完成，有限容量探测表明积压下降。之后完成60秒实际前缀，并尝试原46任务：1次启动失败、2次实际运动均8/46失败。最终旧朝向参考冲突已修复，剩余SCAN微小起始段切线104次触发转向门、第9区90秒超时，不能记原46通过。
+
+[追加最终报告与所有边界](../multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/README.md)、[故障报告](../multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)。新raw仍在原工作区；本仓库精简V19清单另列，不属于旧EVIDENCE_MANIFEST或旧351.5 GiB删除范围。静态32区域历史通过保留，严格Sim2Sim、全感知Actor、当前完整46动态任务及真机均没有获得新通过。
+
 ## 1. 模型、控制链与来源
 
 | 项目 | 本次实际契约 |

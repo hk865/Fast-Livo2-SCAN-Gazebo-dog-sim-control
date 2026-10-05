@@ -1,0 +1,25 @@
+{
+  "schema": "V19_logged_sync_reproduction_and_source_binding/v1",
+  "same_output_as_original_comparison": true,
+  "reader_sha256": "411d92fec488867795e141e1809434ed80e1a644da3f8198d22142fffa57b502",
+  "comparison_sha256": "978d0d6513cb9b32c94ce93d03cbc3696191a7293f529c66c3bc73b2cc612d32",
+  "source_cpp": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp",
+  "source_cpp_sha256": "58e371ae72661f58890581fb25b38736920df4c70ce14215feb35961e1e877c0",
+  "exact_function": "LIVMapper::sync_packages",
+  "branches": [
+    "LIVO, previousflag WAIT/VIO builds LIO at img_capture_time",
+    "next previousflag LIO creates VIO, no DEMO_SYNC emission"
+  ],
+  "line_ranges": {
+    "available_buffer_times": "1443-1444",
+    "acceptance_gate": "1463-1466",
+    "select_current_group_IMU": "1474-1482",
+    "logged_complete_exact": "1490-1494",
+    "successful_LIO_return_true": "1548-1554"
+  },
+  "complete_expression": "static_cast<int>(imu_newest_time >= img_capture_time)",
+  "actual_all_replay_require_complete_imu": false,
+  "parameter_unchanged_from_capture": true,
+  "packets_lost_claimed": false,
+  "after_LIO_return_recompute_same_group_claimed": false
+}

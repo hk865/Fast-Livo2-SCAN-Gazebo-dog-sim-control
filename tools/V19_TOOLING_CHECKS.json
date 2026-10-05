@@ -1,0 +1,54 @@
+{
+  "schema": "portable_v19_tooling_smoke/v1",
+  "status": "PASS_CODE_AND_BLOCKED_ENTRY_ONLY",
+  "checks": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "tools/build_local.py",
+        "--help"
+      ],
+      "returncode": 0,
+      "output": "usage: build_local.py [-h]\n                      [--variants {v12,v18,v17,v19} [{v12,v18,v17,v19} ...]]\n                      [--ros-setup ROS_SETUP]\n\noptions:\n  -h, --help            show this help message and exit\n  --variants {v12,v18,v17,v19} [{v12,v18,v17,v19} ...]\n  --ros-setup ROS_SETUP\n",
+      "passed": true
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "tools/run_local.py",
+        "--variant",
+        "v19",
+        "--profile",
+        "pipeline_staged_600",
+        "--model",
+        "/nonexistent/v19_test_model.pt",
+        "--cpu-python",
+        "/nonexistent/v19_cpu"
+      ],
+      "returncode": 1,
+      "output": "Traceback (most recent call last):\n  File \"/home/hyh001/projects/1.Project/Fast-Livo2-SCAN-Gazebo-dog-sim-control/tools/run_local.py\", line 23, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/hyh001/projects/1.Project/Fast-Livo2-SCAN-Gazebo-dog-sim-control/tools/run_local.py\", line 12, in main\n    raise RuntimeError('PORTABLE_V19_RUNTIME_BLOCKED: source build support does not authorize prepare or execute. Fresh portable queue lifecycle, production packet semantics and a new local runtime gate are required; original-machine PASS hashes are not inherited.')\nRuntimeError: PORTABLE_V19_RUNTIME_BLOCKED: source build support does not authorize prepare or execute. Fresh portable queue lifecycle, production packet semantics and a new local runtime gate are required; original-machine PASS hashes are not inherited.\n",
+      "passed": true
+    },
+    {
+      "argv": [
+        "python3",
+        "-O",
+        "tools/build_local.py",
+        "--help"
+      ],
+      "returncode": 1,
+      "output": "Traceback (most recent call last):\n  File \"/home/hyh001/projects/1.Project/Fast-Livo2-SCAN-Gazebo-dog-sim-control/tools/build_local.py\", line 5, in <module>\n    raise RuntimeError(\"Optimized Python (-O/PYTHONOPTIMIZE) is forbidden for portable validation\")\nRuntimeError: Optimized Python (-O/PYTHONOPTIMIZE) is forbidden for portable validation\n",
+      "passed": true
+    }
+  ],
+  "script_sha256": {
+    "build_local.py": "5cd38c280c8cdbb62faaabe6331f7a1b6c3fe99d5ca511c13ac8c45f29ef3c74",
+    "run_local.py": "54a4d66dfa4411a0d5b0c49a4564a79e3d887c06d5683fec932c09f0fc0b5347"
+  },
+  "source_build_run": false,
+  "ROS_started": false,
+  "simulation_started": false,
+  "portable_runtime_allowed": false
+}

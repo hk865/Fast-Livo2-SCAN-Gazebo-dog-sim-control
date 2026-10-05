@@ -1,0 +1,88 @@
+{
+  "schema": "teacher_mission46_real_ros_construct_close/v1",
+  "passed": true,
+  "domain": 210,
+  "spun": false,
+  "simulator_started": false,
+  "actor_started": false,
+  "source_run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022027_closed_loop_cascade_clock_hold_v19_original46_r1_5a18",
+  "source_run_modified": false,
+  "temporary_scope_hashes_rebound_to_current_sources": true,
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46.py": "ad70fdf29d2af465df48e6b12be39b42031e4c2cc8234a4e58d3a082a85b9e90",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_profile.py": "5b4626a6a104aad12d90236f8e13339f27d1c955b82457d734d0e7c474b2ef29",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_contract.py": "c4f3649a4a4ca39f9e3e73e57a58d901359821475faac5fbc3163e3b1b15d0c4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime.py": "cecd87b3fb33e5b25772370d22104620504891e63d8b66ffdbc1ecba6bcd3eb6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime_evidence.py": "99daa86f451c3962b82cbfff9ada0f1e7a8f69e02c46313ca5f5c3164cbe9552",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_obstacle_runtime.py": "5c0d302ba172b8c31b1dd76c5d0b4a8e724ca3c3a08576bbd265b24997cc2ef8"
+  },
+  "attribute_audit": {
+    "mission46_runtime.py_Node_attribute_collisions": [],
+    "mission46_obstacle_runtime.py_Node_attribute_collisions": []
+  },
+  "fixtures": [
+    {
+      "context_shutdown_first": false,
+      "coordinator_constructed": true,
+      "obstacle_constructed": true,
+      "subscription_topics": [
+        "/clock",
+        "/demo/slam/body_odom",
+        "/livox/imu",
+        "/demo/teacher/navigation/sensor_health",
+        "/demo/navigation/status",
+        "/demo/control/safety",
+        "/demo/slam/map_status",
+        "/demo/obstacle/state"
+      ],
+      "publisher_topics": [
+        "/parameter_events",
+        "/demo/navigation/request",
+        "/demo/teacher/navigation/anchor",
+        "/demo/navigation/stop",
+        "/demo/obstacle/enable",
+        "/demo/mission/state",
+        "/demo/teacher/mission46/state",
+        "/demo/teacher/mission46/control",
+        "/demo/teacher/navigation/request_status",
+        "/demo/teacher/mission46/terrain_request"
+      ],
+      "closed_without_exception": true,
+      "state_stage": "failed",
+      "terminal_receipt_sha256": "d807c1251b2b7fa0b2c64146c27849fe8a6e8e97094b43dfdbe4598904db3098",
+      "unexpected_command_publisher": false
+    },
+    {
+      "context_shutdown_first": true,
+      "coordinator_constructed": true,
+      "obstacle_constructed": true,
+      "subscription_topics": [
+        "/clock",
+        "/demo/slam/body_odom",
+        "/livox/imu",
+        "/demo/teacher/navigation/sensor_health",
+        "/demo/navigation/status",
+        "/demo/control/safety",
+        "/demo/slam/map_status",
+        "/demo/obstacle/state"
+      ],
+      "publisher_topics": [
+        "/parameter_events",
+        "/demo/navigation/request",
+        "/demo/teacher/navigation/anchor",
+        "/demo/navigation/stop",
+        "/demo/obstacle/enable",
+        "/demo/mission/state",
+        "/demo/teacher/mission46/state",
+        "/demo/teacher/mission46/control",
+        "/demo/teacher/navigation/request_status",
+        "/demo/teacher/mission46/terrain_request"
+      ],
+      "closed_without_exception": true,
+      "state_stage": "failed",
+      "terminal_receipt_sha256": "4a6360461bad16c83789b6cbe8bd236daf679c2d8aa6d378b14c9e61b1a9fe5f",
+      "unexpected_command_publisher": false
+    }
+  ],
+  "limitation": "Real ROS construction/close covers API lifecycle only; no sensor initialization, actual movement or navigation has been verified."
+}

@@ -1,0 +1,500 @@
+{
+  "schema": "V19_actual_prefix_independent_timing_lifecycle/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+  "status": "PASS_LIMITED_TIMING_LIFECYCLE",
+  "checks": {
+    "whole_lifecycle_no_cancel_reject_missing": {
+      "status": "passed",
+      "passed": true,
+      "final_counters": {
+        "schema": "staged_input_pipeline_v19/v1",
+        "mode": "staged",
+        "image_copy_opt": 0,
+        "count_limit": 512,
+        "byte_limit": 67108864,
+        "trace_schema": "pipeline_v19_events/v1",
+        "trace_columns": 23,
+        "normal_completed": true,
+        "context_valid_at_drain": true,
+        "accepted": 139102,
+        "delivered": 139102,
+        "committed": 139102,
+        "pending": 0,
+        "inflight": 0,
+        "ready": 0,
+        "bytes": 0,
+        "peak_pending": 20,
+        "peak_bytes": 20650155,
+        "canceled": 0,
+        "rejected_capacity": 0,
+        "closed_rejections": 0,
+        "failure": "",
+        "uncommitted_packets": [],
+        "rejected_packet": null
+      },
+      "cleanup_exemption_applied": false
+    },
+    "contiguous_committed_global_admission_order": {
+      "status": "passed",
+      "passed": true
+    },
+    "all_sensor_kinds_observed": {
+      "status": "passed",
+      "passed": true,
+      "counts": {
+        "0": 78988,
+        "1": 46134,
+        "3": 6990,
+        "2": 6990
+      }
+    },
+    "integer_clock_causality_and_decoder_NA": {
+      "status": "passed",
+      "passed": true
+    },
+    "actual_mode_thread_partition": {
+      "status": "passed",
+      "passed": true,
+      "receive_tids": [
+        1903618
+      ],
+      "owner_tids": [
+        1903389
+      ],
+      "decoder_tids": {
+        "2": [
+          1903616
+        ],
+        "3": [
+          1903617
+        ]
+      }
+    },
+    "charged_raw_decode_ready_owner_reservation_bounds": {
+      "status": "passed",
+      "passed": true,
+      "definition": "Reservation slots charged through acknowledgement; not whole process/DDS/map RSS"
+    },
+    "original_normal_context_valid_drain_lifecycle": {
+      "status": "passed",
+      "passed": true,
+      "expected_events": [
+        "start",
+        "receiver_cancel_begin",
+        "receiver_joined",
+        "admission_close",
+        "decoders_joined",
+        "owner_drain_begin",
+        "owner_drain_complete"
+      ],
+      "observed_events": [
+        "start",
+        "receiver_cancel_begin",
+        "receiver_joined",
+        "admission_close",
+        "decoders_joined",
+        "owner_drain_begin",
+        "owner_drain_complete"
+      ],
+      "inflight_definition": "Producer counts Decoding plus Owner, not only decoder work"
+    },
+    "same_actual_run_frozen_core_and_source_witness": {
+      "status": "passed",
+      "passed": true,
+      "source_snapshots": [
+        {
+          "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/controller.py",
+          "snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/controller.py",
+          "within_run_sources": true,
+          "actual_sha256": "f0e848191e7fb6e109c41cad54475613a439f4c2015a16d9159120fd7a87ee57",
+          "expected_sha256": "f0e848191e7fb6e109c41cad54475613a439f4c2015a16d9159120fd7a87ee57",
+          "matched": true
+        },
+        {
+          "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/run.py",
+          "snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/run.py",
+          "within_run_sources": true,
+          "actual_sha256": "a2853d11662de24db22723b055bb1d46a17525d6e76a1e68d244e55c838cbbd9",
+          "expected_sha256": "a2853d11662de24db22723b055bb1d46a17525d6e76a1e68d244e55c838cbbd9",
+          "matched": true
+        },
+        {
+          "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/stack.launch.py",
+          "snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/stack.launch.py",
+          "within_run_sources": true,
+          "actual_sha256": "7108093ecab8f26cc13820f629021ec6ba7a54e623088f5b513fa32fe8a555cf",
+          "expected_sha256": "7108093ecab8f26cc13820f629021ec6ba7a54e623088f5b513fa32fe8a555cf",
+          "matched": true
+        },
+        {
+          "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/runner.cpp",
+          "snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/runner.cpp",
+          "within_run_sources": true,
+          "actual_sha256": "a021276b5d18a09c7da6d245c80934970c3559bf56815b7e2b9a0b5017e6a6f9",
+          "expected_sha256": "a021276b5d18a09c7da6d245c80934970c3559bf56815b7e2b9a0b5017e6a6f9",
+          "matched": true
+        },
+        {
+          "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp",
+          "snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/sources/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp",
+          "within_run_sources": true,
+          "actual_sha256": "58e371ae72661f58890581fb25b38736920df4c70ce14215feb35961e1e877c0",
+          "expected_sha256": "58e371ae72661f58890581fb25b38736920df4c70ce14215feb35961e1e877c0",
+          "matched": true
+        }
+      ],
+      "live_runtime_library_not_rehashed": true
+    },
+    "runtime_and_normal_context_drain_stop_original": {
+      "status": "passed",
+      "passed": true
+    },
+    "actual_SLAM_pose_clock_and_original_300ms_age": {
+      "status": "passed",
+      "passed": true,
+      "pose_count": 6879,
+      "original_clock_age_checked": true,
+      "complete_navigation_source_chain_gate_checked_here": false
+    },
+    "navigation_source_declarations_privilege_and_TTL_unchanged": {
+      "status": "passed",
+      "passed": true,
+      "declarations_are_not_complete_source_or_actuator_proof": true
+    }
+  },
+  "metrics": {
+    "imu": {
+      "decode_wall": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "decode_thread_CPU": {
+        "status": "unavailable",
+        "count": 0,
+        "reason": "Not traversed/observed; missing is not zero",
+        "unit": "ms"
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 46134,
+        "unit": "ms",
+        "minimum": 0.001646,
+        "median": 0.245714,
+        "mean": 2.8623064972037975,
+        "p95": 12.216741799999998,
+        "p99": 16.064283829999997,
+        "maximum": 32.710716
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 46134,
+        "unit": "ms",
+        "minimum": 0.006126,
+        "median": 0.2540565,
+        "mean": 2.869751080396237,
+        "p95": 12.22459,
+        "p99": 16.072285389999998,
+        "maximum": 32.716872
+      },
+      "source_header_rate": {
+        "unique_stamps": 46134,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 200.0,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "lidar": {
+      "decode_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.375464,
+        "median": 0.446087,
+        "mean": 0.47221433333333335,
+        "p95": 0.6042200999999999,
+        "p99": 0.6348933299999999,
+        "maximum": 1.460594
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.37474,
+        "median": 0.4450195,
+        "mean": 0.4709434771101574,
+        "p95": 0.60287615,
+        "p99": 0.633004,
+        "maximum": 1.460073
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.001784,
+        "median": 0.1284315,
+        "mean": 0.13230063404864092,
+        "p95": 0.24385809999999988,
+        "p99": 0.25520588,
+        "maximum": 9.546531
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.407286,
+        "median": 0.6292625000000001,
+        "mean": 0.637661821316166,
+        "p95": 0.83229015,
+        "p99": 0.9481012999999994,
+        "maximum": 10.315027
+      },
+      "source_header_rate": {
+        "unique_stamps": 6990,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.303950049863417,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    },
+    "image": {
+      "decode_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.128016,
+        "median": 0.166964,
+        "mean": 0.18207627010014307,
+        "p95": 0.2594351,
+        "p99": 0.32746707999999997,
+        "maximum": 1.755523
+      },
+      "decode_thread_CPU": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.122369,
+        "median": 0.164343,
+        "mean": 0.17682107153075824,
+        "p95": 0.25336095000000003,
+        "p99": 0.3055437699999998,
+        "maximum": 0.530631
+      },
+      "ready_marker_to_owner_pop_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.001384,
+        "median": 0.1283915,
+        "mean": 0.16531675708154506,
+        "p95": 0.24701354999999997,
+        "p99": 0.9821281499999994,
+        "maximum": 15.599905
+      },
+      "receipt_to_commit_wall": {
+        "status": "available",
+        "count": 6990,
+        "unit": "ms",
+        "minimum": 0.223296,
+        "median": 0.42417150000000003,
+        "mean": 0.45772756652360513,
+        "p95": 0.5816573999999999,
+        "p99": 1.461113979999995,
+        "maximum": 15.934206
+      },
+      "source_header_rate": {
+        "unique_stamps": 6990,
+        "duplicates": 0,
+        "backward_transitions": 0,
+        "Hz": 30.303950049863417,
+        "definition": "Distinct original source headers, not nominal frequency; timer has no source header"
+      }
+    }
+  },
+  "actual_pose": {
+    "count": 6879,
+    "first_stamp_ns": 3665000000,
+    "last_stamp_ns": 230639999999,
+    "source_header_Hz": 30.302896794934696,
+    "callback_clock_minus_header_ms": {
+      "status": "available",
+      "count": 6879,
+      "unit": "ms",
+      "minimum": 5.0,
+      "median": 25.0,
+      "mean": 22.943742302805642,
+      "p95": 30.000000999999997,
+      "p99": 35.000001000000005,
+      "maximum": 50.0
+    },
+    "source_gap_ms": {
+      "status": "available",
+      "count": 6878,
+      "unit": "ms",
+      "minimum": 29.999999,
+      "median": 34.999999,
+      "mean": 33.000145390956675,
+      "p95": 35.000001,
+      "p99": 35.000001,
+      "maximum": 35.000001
+    }
+  },
+  "logged_sync": {
+    "rows": 6989,
+    "complete0": 305,
+    "target_exceeds_owner_latest_IMU_more_than_1us": 0,
+    "maximum_uncovered_interval_ms": 2.000000165480742e-06,
+    "interpretation": "Only current LIO group target coverage in owner buffer, not packet-loss count or alternating VIO phase. Nanosecond floating threshold cases separated."
+  },
+  "actual_navigation_full32_or46_PASS": false,
+  "Sim2Sim_PASS": false,
+  "real_robot_tested": false,
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/run_result.json": "7ca998bd0a417cc0ac71cf64a18114b145112e4efc10a951d980e7449b05c755",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/runtime_manifest.json": "307ca9032052754a16be67d24d96775c0acd976c51cad6e37b17e98e96a84cd3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_profile.json": "87adb6bd6ff2b35694206d12d60b2fd2d238d5a86721d59e114ddbfd0e6985e5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/slam_loaded_binary.json": "fa8d60764024fb8d11f989068fd6af622fc19067aee307d8dac5dda536db0148",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_source_snapshots.json": "9cd0fd9bc353d65b4bce1728be21647cf84131085719b7de15331241c442cbd6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/pipeline_normal_stop.json": "301dcc59f517ecb5f3c97b1c3aa2e54d5a0e7aeefc13bf7e97c860e125b35e3f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_slam_poses.jsonl": "d005ada8c2c652b158114505328df87a960d08dceb97d616161af7389db9f39a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_stack.log": "0dca5c803136491b743cef3d4c8bc5155766a7c723dcd91a67fae998a9357a25",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/fastlivo_debug/pipeline_v19_summary.json": "788c6ed69275f809819ea697c48c95b7803e725842158bc0b8a31f780a574168",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/fastlivo_debug/pipeline_v19_lifecycle.csv": "87c81e0ca8cdede3ccac8aa6452e61b09e9e5518e4b221e6cba7e752c2d9a2dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/fastlivo_debug/pipeline_v19_events.csv": "a613e460f904e1c70b65d475fea21f6c6c1ba86e1d6d43d93858bcf95b05f86d"
+  },
+  "reader_sha256": "24211f847bfffb32872e1813f0a26d9ab4cb099d69624eb1cd82fd87d192889a",
+  "original_navigation_and_publication_guards_evaluated_by_separate_original_gate": true,
+  "existing_owned_resource_sample_descriptive": {
+    "schema": "owned_top_level_ps_lifetime_CPU_resource_observation/v1",
+    "source_sha256": "36ecdcb2c0ac6447c1e952621b9400768ef30c57ba410619721fbf423c8cf787",
+    "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/owned_resources.jsonl",
+    "sample_count": 154,
+    "sample_wall_span_s": 315.0341670670314,
+    "excluded_first_wall_s": 20,
+    "logical_cpus": [
+      20
+    ],
+    "CPU_unit": "ps %CPU process lifetime average, percent of one logical CPU; not an instantaneous CPU sample",
+    "roles": {
+      "worker": {
+        "pid": 1903332,
+        "start_ticks": 46905144,
+        "ps_lifetime_CPU_percent": {
+          "count": 144,
+          "median": 41.5,
+          "min": 36.2,
+          "max": 41.8,
+          "last": 41.8
+        },
+        "RSS_KiB": {
+          "count": 144,
+          "median": 805386.0,
+          "min": 568312,
+          "max": 923756,
+          "last": 923756
+        }
+      },
+      "bridge": {
+        "pid": 1903349,
+        "start_ticks": 46905250,
+        "ps_lifetime_CPU_percent": {
+          "count": 144,
+          "median": 12.4,
+          "min": 11.6,
+          "max": 12.4,
+          "last": 12.4
+        },
+        "RSS_KiB": {
+          "count": 144,
+          "median": 133196.0,
+          "min": 133176,
+          "max": 135948,
+          "last": 133196
+        }
+      },
+      "capture": {
+        "pid": 1903350,
+        "start_ticks": 46905250,
+        "ps_lifetime_CPU_percent": {
+          "count": 144,
+          "median": 9.9,
+          "min": 9.1,
+          "max": 11.7,
+          "last": 9.1
+        },
+        "RSS_KiB": {
+          "count": 144,
+          "median": 156676.0,
+          "min": 152112,
+          "max": 156924,
+          "last": 156924
+        }
+      },
+      "navigation_stack": {
+        "pid": 1903351,
+        "start_ticks": 46905250,
+        "ps_lifetime_CPU_percent": {
+          "count": 144,
+          "median": 1.3,
+          "min": 1.2,
+          "max": 2.2,
+          "last": 1.4
+        },
+        "RSS_KiB": {
+          "count": 144,
+          "median": 60144.0,
+          "min": 60144,
+          "max": 60144,
+          "last": 60144
+        }
+      },
+      "gazebo": {
+        "pid": 1903514,
+        "start_ticks": 46905302,
+        "ps_lifetime_CPU_percent": {
+          "count": 144,
+          "median": 47.849999999999994,
+          "min": 47.6,
+          "max": 48.6,
+          "last": 47.6
+        },
+        "RSS_KiB": {
+          "count": 144,
+          "median": 955056.0,
+          "min": 955056,
+          "max": 957756,
+          "last": 957756
+        }
+      }
+    },
+    "gpu_utilization_percent": {
+      "count": 154,
+      "median": 13.0,
+      "min": 5.0,
+      "max": 23.0,
+      "last": 12.0
+    },
+    "gpu_used_MiB": {
+      "count": 154,
+      "median": 1059.0,
+      "min": 904.0,
+      "max": 1097.0,
+      "last": 1059.0
+    },
+    "MemAvailable_KiB": {
+      "count": 154,
+      "median": 49063888.0,
+      "min": 48455032,
+      "max": 51565080,
+      "last": 48477816
+    },
+    "limitations": [
+      "Only five top-level owned process IDs were included by the original ps sampler; navigation launch children such as the actual SLAM process are not included.",
+      "The gazebo PID changes executable from ruby to gz within the same owned identity, not a separate CPU process.",
+      "No per-thread CPU or core-stage attribution is inferred from these top-level process percentages.",
+      "Wall minus thread CPU is not labeled communication."
+    ]
+  }
+}

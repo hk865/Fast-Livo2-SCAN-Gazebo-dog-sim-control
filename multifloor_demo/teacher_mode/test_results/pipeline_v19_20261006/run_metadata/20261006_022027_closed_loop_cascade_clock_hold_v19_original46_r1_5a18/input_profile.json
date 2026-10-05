@@ -1,0 +1,3551 @@
+{
+  "schema_version": 1,
+  "experiment": "teacher_original46_actual_SLAM_SCAN_pipeline_v19",
+  "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+  "max_speed_mps": 0.2,
+  "max_yaw_rate_radps": 0.6,
+  "goal_timeout_sim_s": 90.0,
+  "pose_cloud_timeout_s": 0.3,
+  "sensor_warmup_sim_s": 2.0,
+  "interface_version": "navigation_v4_latest_clock_measured_transition",
+  "warmup_history": {
+    "imu": {
+      "min_samples": 600,
+      "min_span_sim_s": 2.9
+    },
+    "body_odom": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "cloud": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "raw_lidar": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "image": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "camera_info": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    }
+  },
+  "request_startup_timeout_sim_s": 90.0,
+  "request_startup_timeout_wall_s": 600.0,
+  "teacher_transition": {
+    "stop_window_sim_s": 0.3,
+    "stop_min_pose_samples": 3,
+    "stop_pose_gap_max_s": 0.2,
+    "gyro_pose_pair_max_s": 0.15,
+    "stop_planar_speed_mps": 0.03,
+    "stop_slam_yaw_rate_radps": 0.05,
+    "stop_body_gyro_radps": 0.05,
+    "turn_complete_rad": 0.1,
+    "drive_heading_max_rad": 0.2
+  },
+  "recovery_fresh_pose_samples": 2,
+  "recovery_min_pose_span_sim_s": 0.1,
+  "navigation_ground_truth_used": false,
+  "policy_observations": "Teacher CPU single-thread: 232 privileged simulator-state/height dimensions and 15 command/previous-action dimensions; actual SLAM/IMU/SCAN only for navigation",
+  "excluded": [
+    "real_robot",
+    "true_stairs",
+    "fully_sensor_replaced_actor"
+  ],
+  "max_lateral_speed_mps": 0.2,
+  "arrival_stop_policy": "after_measured_dwell",
+  "clear_guard_gap_max_sim_s": 0.3,
+  "pid": {
+    "position_kp": 0.6,
+    "position_ki": 0.08,
+    "position_kd": 0.12,
+    "yaw_kp": 1.1,
+    "yaw_ki": 0.04,
+    "yaw_kd": 0.15,
+    "position_integral_limit": 0.4,
+    "yaw_integral_limit": 0.3,
+    "derivative_filter_tau_s": 0.2,
+    "header_gap_max_s": 0.3,
+    "slew_acceleration": [
+      0.3,
+      0.3,
+      0.25
+    ],
+    "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+    "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+  },
+  "selector": "original_46_region_mission_v19",
+  "route_height_delta_m": 2.4,
+  "return_to_origin": true,
+  "expected_asset": {
+    "terrain": "ramp_up",
+    "spawn": [
+      0.0,
+      0.0,
+      0.3,
+      0.0
+    ]
+  },
+  "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+  "spawn": [
+    0.0,
+    0.0,
+    0.3,
+    0.0
+  ],
+  "duration_s": 1500.0,
+  "overview_pose": [
+    8,
+    -1,
+    2.5,
+    0,
+    0.45,
+    1.5707963267948966
+  ],
+  "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+  "controller_kind": "teacher",
+  "protocol_case_id": "ramp12_up_full",
+  "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+  "controller_selector": "lidar_sampling_v12",
+  "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
+  "cascade": {
+    "desired_speed": 0.2,
+    "command_limits": [
+      0.6,
+      0.2,
+      0.6
+    ],
+    "external_heading_gate": true,
+    "base_com_offset": [
+      0.05523092034548942,
+      -0.001869001919385796,
+      0.006095299184261034
+    ],
+    "maximum_gyro_pair_gap_s": 0.02,
+    "goal_z_tolerance_m": 0.1,
+    "gains": {
+      "cross_kp": 0.8,
+      "cross_kd": 0.2,
+      "yaw_kp": 1.3,
+      "yaw_kd": 0.15,
+      "velocity_kp_x": 0.6,
+      "velocity_ki_x": 0.5,
+      "velocity_kp_y": 0.4,
+      "velocity_ki_y": 0.3,
+      "rate_kp": 0.3,
+      "rate_ki": 0.2
+    },
+    "command_slew_per_s": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "feedback_expected_hz": 30,
+    "feedback_ttl_sim_and_wall_s": 0.3,
+    "navigation_ground_truth_used": false,
+    "controller_source_file": "cascade_command_source.json",
+    "actual_navigation_verified": false
+  },
+  "pid_parent_profile": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+    "unchanged_fields": [
+      "warmup_history",
+      "teacher_transition",
+      "pose_cloud_timeout_s",
+      "pid",
+      "expected_asset",
+      "spawn",
+      "route_height_delta_m",
+      "terrain_target_manifest",
+      "arrival_radius_m",
+      "arrival_height_half_span_m",
+      "arrival_control_radius_m",
+      "dwell_sim_s"
+    ],
+    "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+  },
+  "registered_route_fence": {
+    "horizontal_radius_m": 0.45,
+    "height_error_m": 0.3,
+    "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+  },
+  "scene_initial_support_z": 0.0,
+  "scene_xy_anchor_uncertainty_m": 0.15,
+  "prospective_change": "V19 pipeline mode staged; original V18 arithmetic/control/route guards retained; normal context-valid drain required; fresh bounded experiment only",
+  "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+  "slam_imu_online_estimation": {
+    "gravity_est_en": true,
+    "ba_bg_est_en": true
+  },
+  "slam_visual_measurement_covariance": 1000,
+  "diagnostic_scope": {
+    "baseline_version": "closed_loop_multifloor_v7",
+    "route_controller_gates_unchanged": true,
+    "finite_horizon_s": 1500.0,
+    "detail_window_sim_s": [
+      115,
+      118
+    ],
+    "navigation_outcome_is_not_full_route_pass": true,
+    "purpose": "prospective independent combined LIO row scheduling and ordered VIO patch computation; same observation/controller/route",
+    "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
+    "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
+  },
+  "sensor_sampling": {
+    "vertical_lines": 64,
+    "horizontal_samples": 480,
+    "lidar_hz": 30,
+    "camera_hz": 30,
+    "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+    "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+    "control_wall_tick_s": 0.05
+  },
+  "control_clock_contract": {
+    "schema": "teacher_control_clock_exact_zero_hold/v1",
+    "same_clock_policy": "exact_zero_before_math_and_native_geometry",
+    "freshness_sim_and_wall_s": 0.3,
+    "continuous_stale_fail_wall_s": 8.0,
+    "backward_clock_policy": "latch_failure",
+    "resume_policy": "actual_clock_advance_and_fresh_original_sources_and_native_geometry",
+    "short_hold_integral_and_dwell": "frozen",
+    "long_hold_integral_and_dwell": "protect_reset",
+    "source_receipt_refresh_permitted": false
+  },
+  "profile_version": "pipeline_v19_staged",
+  "software_multicore": {
+    "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
+    "lio_translation_unit": "voxel_map.cpp",
+    "lio_compile_definitions": [
+      "MP_EN",
+      "MP_PROC_NUM=4"
+    ],
+    "vio_translation_unit": "vio.cpp",
+    "VIO_explicit_parallel_loop_enabled": false,
+    "VIO_global_reduction_enabled": false,
+    "teacher_cpu_threads": 1,
+    "estimator_arithmetic_or_plane_association_changed": false,
+    "VIO_patch_team": 1
+  },
+  "boundary_timing": true,
+  "vio_patch_parallel": {
+    "threads": 1,
+    "serial_below_patch_count": 64,
+    "reduction": "original_index_order_float_error_and_int_count",
+    "offline_preflight_required": true,
+    "runtime_acceptance_inherited": false
+  },
+  "lio_jacobian_parallelism": {
+    "threads": 4,
+    "parallel_min_rows": 256,
+    "row_operation_order": "original_V12",
+    "floating_reduction_changed": false
+  },
+  "combined_compute_contract": {
+    "lio_jacobian_threads": 4,
+    "vio_patch_threads": 1,
+    "vio_patch_min_points": 64,
+    "actual_runtime_acceptance_inherited": false
+  },
+  "pipeline": {
+    "schema": "pipeline_v19_contract/v1",
+    "mode": "staged",
+    "image_copy_opt": 0,
+    "max_items": 512,
+    "reserved_bytes": 67108864
+  },
+  "raw_storage_budget": {
+    "max_run_bytes": 128849018880,
+    "minimum_start_available_bytes": 161061273600,
+    "minimum_runtime_available_bytes": 32212254720
+  },
+  "mission46_required": true,
+  "original_scenario_sha256": "6111db95f08adba2a16c086d74e85c5135823ac1e2b7380f8c882538fd441804",
+  "original_mission_definition_sha256": "655fc83b20140a1aed575926e92e42447af91ca63c299aab3e26e99d03a73e30",
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "expected_region_count": 46,
+  "expected_stage_region_counts": {
+    "exploration": 18,
+    "return_origin": 14,
+    "navigation_f1_f3": 14
+  },
+  "max_simulation_duration_s": 1500.0,
+  "raw_budget_bytes": 128849018880,
+  "minimum_available_storage_bytes": 161061273600,
+  "raw_budget_is_limit_not_permission_to_drop_evidence": true,
+  "original_scenario": {
+    "world": "multifloor_demo",
+    "geometry": "three physical platforms connected by 10% ramps; not stair climbing",
+    "floor_elevations": [
+      0,
+      1.2,
+      2.4
+    ],
+    "spawn": {
+      "x": 0,
+      "y": 0,
+      "z": 0.3,
+      "yaw": 0
+    },
+    "nominal_standing_body_height": 0.3,
+    "frame": "camera_init",
+    "coordinates": "relative world-axis displacements from spawn; mission freezes sensor-derived heading and rotates these vectors into camera_init",
+    "exploration": [
+      [
+        0,
+        -1,
+        0
+      ],
+      [
+        1,
+        -1,
+        0
+      ],
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        0
+      ],
+      [
+        5,
+        2,
+        0.3
+      ],
+      [
+        8,
+        2,
+        0.6
+      ],
+      [
+        11,
+        2,
+        0.9
+      ],
+      [
+        14,
+        2,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        14,
+        7,
+        1.2
+      ],
+      [
+        11,
+        7,
+        1.5
+      ],
+      [
+        8,
+        7,
+        1.8
+      ],
+      [
+        5,
+        7,
+        2.1
+      ],
+      [
+        2,
+        7,
+        2.4
+      ],
+      [
+        0,
+        7,
+        2.4
+      ]
+    ],
+    "return_origin": [
+      [
+        2,
+        7,
+        2.4
+      ],
+      [
+        5,
+        7,
+        2.1
+      ],
+      [
+        8,
+        7,
+        1.8
+      ],
+      [
+        11,
+        7,
+        1.5
+      ],
+      [
+        14,
+        7,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        14,
+        2,
+        1.2
+      ],
+      [
+        11,
+        2,
+        0.9
+      ],
+      [
+        8,
+        2,
+        0.6
+      ],
+      [
+        5,
+        2,
+        0.3
+      ],
+      [
+        2,
+        2,
+        0
+      ],
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "navigation_f1_f3": [
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        0
+      ],
+      [
+        5,
+        2,
+        0.3
+      ],
+      [
+        8,
+        2,
+        0.6
+      ],
+      [
+        11,
+        2,
+        0.9
+      ],
+      [
+        14,
+        2,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        14,
+        7,
+        1.2
+      ],
+      [
+        11,
+        7,
+        1.5
+      ],
+      [
+        8,
+        7,
+        1.8
+      ],
+      [
+        5,
+        7,
+        2.1
+      ],
+      [
+        2,
+        7,
+        2.4
+      ],
+      [
+        0,
+        7,
+        2.4
+      ]
+    ],
+    "dynamic_obstacle": {
+      "entity": "moving_obstacle",
+      "initial": [
+        1,
+        4,
+        0.6
+      ],
+      "crossing_plane_x": 1,
+      "route_y": 2,
+      "surface_z": 0,
+      "size": [
+        0.5,
+        0.5,
+        1.2
+      ],
+      "activation_navigation_waypoint_index": 1,
+      "activation_condition": "current matching NAV request is running at index 1, after the northward approach actually reached its first waypoint"
+    },
+    "sensors": {
+      "imu": {
+        "frame": "imu_link",
+        "body_xyz": [
+          0,
+          0,
+          0
+        ],
+        "body_rpy": [
+          0,
+          0,
+          0
+        ],
+        "rate": 1000,
+        "topic": "/livox/imu",
+        "orientation_reference": {
+          "description": "Gazebo IMU CUSTOM/world identity",
+          "world_quaternion": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "body_imu_quaternion": [
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "lidar": {
+        "frame": "velodyne",
+        "body_xyz": [
+          0.2,
+          0,
+          0.1177
+        ],
+        "body_rpy": [
+          0,
+          0,
+          0
+        ],
+        "rate": 30,
+        "topic": "/livox/lidar",
+        "samples": [
+          480,
+          64
+        ]
+      },
+      "camera": {
+        "frame": "demo_camera_optical_frame",
+        "body_xyz": [
+          0.28,
+          0,
+          0.1
+        ],
+        "body_rpy": [
+          -1.5707963267948966,
+          0,
+          -1.5707963267948966
+        ],
+        "rate": 30,
+        "topic": "/camera/image_color",
+        "width": 640,
+        "height": 480,
+        "hfov": 1.3962634015954636,
+        "fx": 381.3611496301472,
+        "fy": 381.3611496301472,
+        "cx": 320,
+        "cy": 240
+      }
+    },
+    "frame_id": "camera_init",
+    "floor_heights": [
+      0,
+      1.2,
+      2.4
+    ],
+    "body_clearance": 0.3,
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "slam_origin_in_world": [
+      0,
+      0,
+      0.3
+    ],
+    "waypoint_semantics": "world-axis displacement anchored at first healthy SLAM body pose after fixed heading conversion; z is body elevation change, not absolute ground",
+    "ground_waypoints": [
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        0
+      ],
+      [
+        5,
+        2,
+        0.3
+      ],
+      [
+        8,
+        2,
+        0.6
+      ],
+      [
+        11,
+        2,
+        0.9
+      ],
+      [
+        14,
+        2,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        14,
+        7,
+        1.2
+      ],
+      [
+        11,
+        7,
+        1.5
+      ],
+      [
+        8,
+        7,
+        1.8
+      ],
+      [
+        5,
+        7,
+        2.1
+      ],
+      [
+        2,
+        7,
+        2.4
+      ],
+      [
+        0,
+        7,
+        2.4
+      ]
+    ],
+    "waypoint_reference": "relative_world_axes",
+    "simulation": {
+      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
+      "kind": "gazebo_physics",
+      "terrain": "ramps"
+    },
+    "goal_region_profile": {
+      "schema_version": 2,
+      "name": "three_platform_body_arrival_v2",
+      "dwell_sim_s": 0.4,
+      "max_gap_sim_s": 0.2,
+      "flat_radius_m": 0.35,
+      "flat_height_half_span_m": 0.1,
+      "ramp_half_extents_m": [
+        0.35,
+        0.3,
+        0.1
+      ],
+      "origin_radius_m": 0.22,
+      "description": "Preregistered body-position volumes; SCAN plans to unchanged centers. Surface IDs are metadata, not measured contacts.",
+      "control_band": {
+        "flat_radius_m": 0.25,
+        "flat_height_half_span_m": 0.1,
+        "ramp_half_extents_m": [
+          0.25,
+          0.2,
+          0.07
+        ],
+        "origin_radius_m": 0.17
+      }
+    },
+    "route_goals": {
+      "exploration": [
+        {
+          "goal_id": "exploration:0",
+          "center": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:1",
+          "center": [
+            1.0,
+            -1.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:2",
+          "center": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:3",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:4",
+          "center": [
+            0.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:5",
+          "center": [
+            2.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:6",
+          "center": [
+            5.0,
+            2.0,
+            0.3
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:7",
+          "center": [
+            8.0,
+            2.0,
+            0.6
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:8",
+          "center": [
+            11.0,
+            2.0,
+            0.9
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:9",
+          "center": [
+            14.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:10",
+          "center": [
+            16.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:11",
+          "center": [
+            16.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:12",
+          "center": [
+            14.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:13",
+          "center": [
+            11.0,
+            7.0,
+            1.5
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:14",
+          "center": [
+            8.0,
+            7.0,
+            1.8
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:15",
+          "center": [
+            5.0,
+            7.0,
+            2.1
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:16",
+          "center": [
+            2.0,
+            7.0,
+            2.4
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "exploration:17",
+          "center": [
+            0.0,
+            7.0,
+            2.4
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_3",
+          "legacy": false
+        }
+      ],
+      "return_origin": [
+        {
+          "goal_id": "return_origin:0",
+          "center": [
+            2.0,
+            7.0,
+            2.4
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:1",
+          "center": [
+            5.0,
+            7.0,
+            2.1
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:2",
+          "center": [
+            8.0,
+            7.0,
+            1.8
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:3",
+          "center": [
+            11.0,
+            7.0,
+            1.5
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:4",
+          "center": [
+            14.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:5",
+          "center": [
+            16.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:6",
+          "center": [
+            16.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:7",
+          "center": [
+            14.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:8",
+          "center": [
+            11.0,
+            2.0,
+            0.9
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:9",
+          "center": [
+            8.0,
+            2.0,
+            0.6
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:10",
+          "center": [
+            5.0,
+            2.0,
+            0.3
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:11",
+          "center": [
+            2.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:12",
+          "center": [
+            0.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "return_origin:13",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "sphere",
+            "dwell_sim_s": 0.4,
+            "radius_m": 0.22,
+            "control_band": {
+              "type": "sphere",
+              "dwell_sim_s": 0.4,
+              "radius_m": 0.17
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "origin",
+          "legacy": false
+        }
+      ],
+      "navigation_f1_f3": [
+        {
+          "goal_id": "navigation_f1_f3:0",
+          "center": [
+            0.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:1",
+          "center": [
+            2.0,
+            2.0,
+            0.0
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:2",
+          "center": [
+            5.0,
+            2.0,
+            0.3
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:3",
+          "center": [
+            8.0,
+            2.0,
+            0.6
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:4",
+          "center": [
+            11.0,
+            2.0,
+            0.9
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:5",
+          "center": [
+            14.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                -0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  -0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_12",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:6",
+          "center": [
+            16.0,
+            2.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:7",
+          "center": [
+            16.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_2",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:8",
+          "center": [
+            14.0,
+            7.0,
+            1.2
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:9",
+          "center": [
+            11.0,
+            7.0,
+            1.5
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:10",
+          "center": [
+            8.0,
+            7.0,
+            1.8
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:11",
+          "center": [
+            5.0,
+            7.0,
+            2.1
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:12",
+          "center": [
+            2.0,
+            7.0,
+            2.4
+          ],
+          "arrival": {
+            "type": "oriented_box",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9950371902099893,
+                0.0,
+                -0.09950371902099893
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.09950371902099893,
+                0.0,
+                0.9950371902099893
+              ]
+            ],
+            "half_extents_m": [
+              0.35,
+              0.3,
+              0.1
+            ],
+            "control_band": {
+              "type": "oriented_box",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9950371902099893,
+                  0.0,
+                  -0.09950371902099893
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.09950371902099893,
+                  0.0,
+                  0.9950371902099893
+                ]
+              ],
+              "half_extents_m": [
+                0.25,
+                0.2,
+                0.07
+              ]
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "ramp_23",
+          "legacy": false
+        },
+        {
+          "goal_id": "navigation_f1_f3:13",
+          "center": [
+            0.0,
+            7.0,
+            2.4
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                1.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_3",
+          "legacy": false
+        }
+      ]
+    },
+    "mode": "teacher_original_mission46",
+    "require_dynamic_obstacle": true,
+    "stage_timeout_s": 1500.0
+  },
+  "requires_original_origin_initialization_receipt": true,
+  "requires_current_run_rgb_save": true,
+  "requires_original_dynamic_obstacle": true,
+  "requires_bidirectional_layer_switches": true,
+  "mission46_required_source_files": [
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_profile.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_contract.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime_evidence.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_obstacle_runtime.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/map_archive.py"
+  ],
+  "navigation_is_verified": false,
+  "status": "SOURCE_PREPARED_UNVERIFIED",
+  "mission46_runtime_interfaces": [
+    "multi_request_controller",
+    "whole_mission_worker",
+    "current_rgb_map_save",
+    "original_dynamic_obstacle",
+    "bidirectional_terrain_provider"
+  ],
+  "mission46_final_hold_sim_s": 5.0,
+  "mission46_source_timeout_s": 0.3
+}

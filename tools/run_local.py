@@ -7,7 +7,9 @@ import argparse,os,subprocess,sys
 from portable_common import REPO,NAMES,model_path,MODEL_SHA,sha
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--variant',choices=['v18','v17'],required=True);p.add_argument('--profile',required=True);p.add_argument('--model',type=Path,required=True);p.add_argument('--cpu-python',type=Path,required=True);p.add_argument('--label',default='portable');p.add_argument('--domain',type=int,default=86);p.add_argument('--storage-root',type=Path);p.add_argument('--execute',action='store_true');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--variant',choices=['v18','v17','v19'],required=True);p.add_argument('--profile',required=True);p.add_argument('--model',type=Path,required=True);p.add_argument('--cpu-python',type=Path,required=True);p.add_argument('--label',default='portable');p.add_argument('--domain',type=int,default=86);p.add_argument('--storage-root',type=Path);p.add_argument('--execute',action='store_true');a=p.parse_args()
+ if a.variant=='v19':
+  raise RuntimeError('PORTABLE_V19_RUNTIME_BLOCKED: source build support does not authorize prepare or execute. Fresh portable queue lifecycle, production packet semantics and a new local runtime gate are required; original-machine PASS hashes are not inherited.')
  model=a.model.expanduser().resolve();cpu=a.cpu_python.expanduser().resolve()
  if sha(model)!=MODEL_SHA:raise RuntimeError('Frozen Teacher SHA256 differs')
  env={**os.environ,'TEACHER_REPO_ROOT':str(REPO),'TEACHER_MODEL_CHECKPOINT':str(model),'TEACHER_CPU_PYTHON':str(cpu),'PYTHONDONTWRITEBYTECODE':'1'}

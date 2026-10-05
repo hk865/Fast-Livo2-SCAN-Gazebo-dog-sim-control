@@ -7,6 +7,14 @@
 - [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除351.5 GiB原始数据，见[清理总计](maintenance/CLEANUP_SUMMARY.json)及[首批删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
 - [原 Teacher 开发说明](multifloor_demo/teacher_mode/README.md)。旧路径与旧 PASS 均为历史记录；新机器必须重新构建和预检。
 
+## 2026-10-06 V19最新实测
+
+多线程接收/点云解码/图像解码流水线已在原工作区实现并实测；IMU→LIO→VIO共享状态仍由唯一owner顺序执行。同包1.5x单次容量对照的最大位姿滞后2.535 s→50 ms，1x ABBA未见明显时效改善，不能宣称所有场景同幅提速。
+
+原46任务启动失败1次，运动尝试2次，最终 **8/46失败**。修复内外朝向参考冲突后，SCAN微小起始段的切线仍104次跳变触发转向门，第9区90 s超时；139,102条输入全部正常提交，0取消。较长任务源时间30.303 Hz、墙钟22.338 Hz，整套系统尚未持续满实时。
+
+[本轮最终报告](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/README.md)、[失败因果与曲线](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)。本轮新raw留在原工作区，Git只保存精简证据。V19在新目录提供源码和构建入口，便携运行仍阻断，不能用原机gate绕过重新验证。
+
 ## 已有实验结果
 
 | 范围 | 历史结论 |

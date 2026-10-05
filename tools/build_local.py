@@ -18,7 +18,7 @@ def copied_source(source,target):
  if actual!=expected:raise RuntimeError('Private source copy differs from repository; remove/recreate only .local workspace explicitly: '+str(target))
  return {'repository_source':str(source),'copied_source':str(target),'source_file_sha256':actual,'excluded_generated_suffixes':['.so','.o','.a','.pyc'],'excluded_generated_directory':'__pycache__'}
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--variants',nargs='+',choices=['v12','v18','v17'],default=['v12','v18','v17']);ap.add_argument('--ros-setup',type=Path,default=Path('/opt/ros/jazzy/setup.bash'));a=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('--variants',nargs='+',choices=['v12','v18','v17','v19'],default=['v12','v18','v17']);ap.add_argument('--ros-setup',type=Path,default=Path('/opt/ros/jazzy/setup.bash'));a=ap.parse_args()
  if not a.ros_setup.is_file():raise RuntimeError('ROS Jazzy setup missing; install declared dependencies first')
  LOCAL.mkdir(exist_ok=True);logs=LOCAL/'build_logs';logs.mkdir(exist_ok=True)
  clean_env={k:v for k,v in os.environ.items()if k not in ('AMENT_PREFIX_PATH','CMAKE_PREFIX_PATH','COLCON_PREFIX_PATH','LD_LIBRARY_PATH','PYTHONPATH','ROS_PACKAGE_PATH','PKG_CONFIG_PATH','CPATH','CPLUS_INCLUDE_PATH','LIBRARY_PATH')}
@@ -48,14 +48,16 @@ def main():
  plugin=TEACHER/'simulation/build'
  receipt['steps'].append(run(['cmake','-S',str(plugin.parent),'-B',str(plugin),'-DCMAKE_BUILD_TYPE=Release'],logs/'actuator_configure.log',env))
  receipt['steps'].append(run(['cmake','--build',str(plugin),'--parallel','2','--','-l2'],logs/'actuator_build.log',env))
- names={'v12':'lidar_sampling_v12','v18':'combined_compute_v18','v17':'ingress_pipeline_v17'}
+ names={'v12':'lidar_sampling_v12','v18':'combined_compute_v18','v17':'ingress_pipeline_v17','v19':'pipeline_v19'}
  for v in a.variants:
-  ws=TEACHER/'navigation'/names[v]/'slam_ws';source_before={str(x.relative_to(REPO)):sha(x)for x in(ws/'src').rglob('*')if x.is_file()and x.suffix not in('.so','.o','.a','.pyc')and '__pycache__'not in x.parts};extra=['-DV16_VIO_PATCH_THREADS=1','-DV16_VIO_PATCH_MIN_POINTS=64']if v=='v18'else[]
+  ws=TEACHER/'navigation'/names[v]/'slam_ws';source_before={str(x.relative_to(REPO)):sha(x)for x in(ws/'src').rglob('*')if x.is_file()and x.suffix not in('.so','.o','.a','.pyc')and '__pycache__'not in x.parts};extra=['-DV16_VIO_PATCH_THREADS=1','-DV16_VIO_PATCH_MIN_POINTS=64']if v in ('v18','v19')else[]
+  if not source_before:raise RuntimeError('Exported source workspace is absent or empty: '+str(ws))
   colcon(ws,v,under/'install/setup.bash',extra)
   files=[ws/'install/fast_livo2_core/lib/libfast_livo2_core.so',ws/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',ws/'build/fast_livo2_core/CMakeCache.txt',ws/'build/fast_livo2_core/compile_commands.json',ws/'build/fast_livo2_ros/CMakeCache.txt',ws/'build/fast_livo2_ros/compile_commands.json']
   source_after={str(x.relative_to(REPO)):sha(x)for x in(ws/'src').rglob('*')if x.is_file()and x.suffix not in('.so','.o','.a','.pyc')and '__pycache__'not in x.parts}
   if source_before!=source_after:raise RuntimeError('Source changed while building '+v)
   receipt['variants'][v]={'workspace':str(ws),'source_sha256':source_after,'artifacts_sha256':{str(p):sha(p)for p in files},'compile_commands':json.loads((ws/'build/fast_livo2_core/compile_commands.json').read_text())}
+  if v=='v19':receipt['variants'][v].update(portable_runtime_status='BLOCKED_FRESH_QUEUE_AND_PACKET_SEMANTICS_REQUIRED',runtime_allowed=False,historical_core_gate_inherited=False,lio_threads=4,vio_patch_threads=1)
  receipt['native_plugin_sha256']=sha(plugin/'libteacher_actuator.so');receipt['status']='PASS_SOURCE_BUILD_ONLY';receipt['actual_simulation_verified']=False
  (LOCAL/'SOURCE_BUILD_RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n');print('PASS_SOURCE_BUILD_ONLY; finite local preflight still required')
 if __name__=='__main__':main()

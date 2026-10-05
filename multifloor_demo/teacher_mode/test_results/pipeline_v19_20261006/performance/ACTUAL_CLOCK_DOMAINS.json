@@ -1,0 +1,60 @@
+{
+  "schema": "actual_SLAM_pose_source_and_wall_clock_domains/v1",
+  "scope": "Same consecutive actual pose receipt endpoints in each run; this is neither startup-to-shutdown whole-run RTF nor a navigation PASS.",
+  "wall_time_field": "received_monotonic_wall original float seconds; no received_wall_ns field exists in these original rows",
+  "formulae": {
+    "header_simulation_Hz": "(pose_count - 1) * 1e9 / (last_stamp_ns - first_stamp_ns)",
+    "wall_output_Hz": "(pose_count - 1) / (last_received_monotonic_wall - first_received_monotonic_wall)",
+    "pose_window_RTF": "((last_stamp_ns - first_stamp_ns) / 1e9) / (last_received_monotonic_wall - first_received_monotonic_wall)"
+  },
+  "runs": {
+    "original46_r3": {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+      "pose_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_slam_poses.jsonl",
+      "pose_source_sha256": "d005ada8c2c652b158114505328df87a960d08dceb97d616161af7389db9f39a",
+      "pose_count": 6879,
+      "first_stamp_ns": 3665000000,
+      "last_stamp_ns": 230639999999,
+      "first_received_monotonic_wall_s": 469060.671409197,
+      "last_received_monotonic_wall_s": 469368.573053747,
+      "header_simulation_span_s": 226.974999999,
+      "received_wall_span_s": 307.90164455003105,
+      "header_simulation_Hz": 30.302896794934696,
+      "wall_output_Hz": 22.338302252498657,
+      "pose_window_RTF": 0.7371672221195907,
+      "header_strictly_increasing": true,
+      "received_wall_strictly_increasing": true,
+      "header_backward_or_duplicate_transitions": 0,
+      "received_wall_backward_or_duplicate_transitions": 0,
+      "clock_domain_measurement_status": "VERIFIED_SAME_POSE_ENDPOINT_WINDOW"
+    },
+    "actual60s_prefix": {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_021833_closed_loop_cascade_clock_hold_v19_prefix_r1_9eaf",
+      "pose_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_021833_closed_loop_cascade_clock_hold_v19_prefix_r1_9eaf/navigation_slam_poses.jsonl",
+      "pose_source_sha256": "60bc3cadc47d8e5c9c5dbf0f9099b8d47ddf968753cc8426baf35e86ee6a45d0",
+      "pose_count": 1709,
+      "first_stamp_ns": 3634999999,
+      "last_stamp_ns": 59994999999,
+      "first_received_monotonic_wall_s": 467485.497568094,
+      "last_received_monotonic_wall_s": 467542.97973038,
+      "header_simulation_span_s": 56.36,
+      "received_wall_span_s": 57.482162286003586,
+      "header_simulation_Hz": 30.305180979418026,
+      "wall_output_Hz": 29.713565601478486,
+      "pose_window_RTF": 0.9804780780441027,
+      "header_strictly_increasing": true,
+      "received_wall_strictly_increasing": true,
+      "header_backward_or_duplicate_transitions": 0,
+      "received_wall_backward_or_duplicate_transitions": 0,
+      "clock_domain_measurement_status": "VERIFIED_SAME_POSE_ENDPOINT_WINDOW"
+    }
+  },
+  "interpretation": [
+    "Header simulation frequency and wall output frequency are different quantities.",
+    "A 30Hz header simulation result alone does not prove real-time 30Hz wall throughput.",
+    "Pose window RTF includes simulation execution and callback scheduling under actual workload; it cannot attribute lag exclusively to SLAM, CPU, GPU, communication, or the controller.",
+    "Do not subtract independent absolute clock domains to estimate latency; original callback_ros_clock_ns minus stamp_ns is a separate same-domain simulation-age metric."
+  ],
+  "navigation_PASS": false,
+  "Sim2Sim_PASS": false
+}

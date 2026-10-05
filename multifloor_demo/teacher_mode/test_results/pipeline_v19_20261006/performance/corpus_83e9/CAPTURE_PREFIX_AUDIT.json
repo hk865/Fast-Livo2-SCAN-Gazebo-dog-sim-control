@@ -1,0 +1,94 @@
+{
+  "schema": "go2_pipeline_v19_capture_prefix_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9",
+  "status": "passed_captured_input_prefix_only",
+  "checks": {
+    "capture_original_ready_before_physics_and_clean_exit": {
+      "status": "passed",
+      "passed": true
+    },
+    "actual_simulation_only_no_truth_navigation_bound": {
+      "status": "passed",
+      "passed": true
+    },
+    "all_complete_CDR_records_indexed_and_budget": {
+      "status": "passed",
+      "passed": true
+    },
+    "original_clock_5ms_grid_no_internal_gap": {
+      "status": "passed",
+      "passed": true,
+      "first_clock_ns": 10000000,
+      "last_clock_ns": 60010000000,
+      "limit": "Complete within observed clock interval; does not invent an earlier unpublished/uncaptured first clock"
+    },
+    "original_IMU_5ms_grid_no_internal_gap": {
+      "status": "passed",
+      "passed": true
+    },
+    "lidar_and_RGB_original_source_stamp_sequences_identical": {
+      "status": "passed",
+      "passed": true
+    },
+    "sensor_headers_within_final_source_clock": {
+      "status": "passed",
+      "passed": true
+    },
+    "contains_600_IMU_initialization_prefix": {
+      "status": "passed",
+      "passed": true,
+      "IMU_count_through_3s": 600,
+      "qualification": "Prefix coverage; stationary estimator acceptance and exact original callback order require production replay/trace"
+    }
+  },
+  "source_bindings_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/sensor_capture_setup.json": "d869db6fa6f3948e02d9319926a3efd8d8ee3195fb4e7da8cec0762f68c06697",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/sensor_capture_lifecycle.json": "b2b76557d89f46656845c3346cfbbf1572ccecaf3cb50eedaf2062e01c15b13b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/source_manifest.json": "6b7673607e37b86c273dc7b42787ffe33fda8d73750f0124d3e34de385d9a78b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/navigation_slam_contract.json": "5d00636af5896551c657aa2b342f35465168691a8868cbf8e32c83e406809a1c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/navigation_fastlivo.yaml": "535f7e71443193c99d3b9bb8f760dbab1f69e799b5b6f9636db64f3965a96dd5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/navigation_camera.yaml": "86d0a0cdc1a799c71b1be89fe2e063ba7316c0805c33b4e01f5ef966c16cb142",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/navigation_profile.json": "75f4b440843c8cd7f3b8f122bfd30a3edf3f36a568d2a1ae8c54fedda0bac556",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/runtime_manifest.json": "75e7a2a29d298c3598d0f6db40aca5cdd8d3dd4cebc5ba8ae1ae1b4b67b8698d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_012735_closed_loop_cascade_clock_hold_v19_corpus_capture_83e9/slam_loaded_binary.json": "75011722b5b3d868399637fb1756d9d4cc1f5b28762ded3437254196eac99336"
+  },
+  "index_manifest_sha256": "d3060f1dba91fb90a8e0babca7b2e0c1271cfd0b3c5001f8ac61be79f7b54fa4",
+  "topic_headers": {
+    "/demo/slam/lidar_filtered": {
+      "first_ns": 10000000,
+      "last_ns": 59995000000,
+      "count": 1819,
+      "minimum_gap_ns": 25000000,
+      "maximum_gap_ns": 35000000,
+      "duplicate_or_backward": 0
+    },
+    "/demo/teacher/slam/imu": {
+      "first_ns": 5000000,
+      "last_ns": 60010000000,
+      "count": 12002,
+      "minimum_gap_ns": 5000000,
+      "maximum_gap_ns": 5000000,
+      "duplicate_or_backward": 0
+    },
+    "/demo/teacher/slam/image": {
+      "first_ns": 10000000,
+      "last_ns": 59995000000,
+      "count": 1819,
+      "minimum_gap_ns": 25000000,
+      "maximum_gap_ns": 35000000,
+      "duplicate_or_backward": 0
+    },
+    "/clock": {
+      "first_ns": 10000000,
+      "last_ns": 60010000000,
+      "count": 12001,
+      "minimum_gap_ns": 5000000,
+      "maximum_gap_ns": 5000000,
+      "duplicate_or_backward": 0
+    }
+  },
+  "bag_recorder_order_is_original_production_order": false,
+  "original_estimator_initial_state_reconstructed": false,
+  "actual_V19_speedup_or_navigation_PASS": false,
+  "capture_overhead": "MCAP recording + compression coexisted with V18; not an uninstrumented performance baseline"
+}

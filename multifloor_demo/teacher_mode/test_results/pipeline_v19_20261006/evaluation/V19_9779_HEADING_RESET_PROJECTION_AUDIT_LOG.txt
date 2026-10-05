@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/audit_heading_reset_observations.py", line 38, in <module>
+    p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();main(a.run.resolve(),a.output)
+                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/audit_heading_reset_observations.py", line 22, in main
+    hash_ok=digest(p)==json.loads(p.with_suffix('.json').read_text())['array_sha256']and hashlib.sha256(a['samples'].astype('<f8').tobytes()).hexdigest()==receipt['source_samples_float64_sha256']and np.array_equal(points,np.asarray(receipt['points_xyz']))
+                                                                                                                                                                                                                                        ~~~~~~~^^^^^^^^^^^^^^
+KeyError: 'points_xyz'

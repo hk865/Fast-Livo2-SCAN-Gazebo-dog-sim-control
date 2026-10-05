@@ -656,6 +656,25 @@ def closed_loop_terrain_metadata_receipt(directory, common, clock_hold, ramp):
 
 
 def closed_loop_receipt_view(directory):
+    mission_scope = read_json(directory / 'navigation_scope.json')
+    mission_state = read_json(directory / 'mission46_status.json')
+    mission_profile = mission_scope.get('profile')
+    if ((mission_profile if isinstance(mission_profile, dict) else {}).get('mission46_required') is True
+            or mission_state.get('schema') == 'teacher_original_mission46_state/v1'):
+        failed = next((r for r in mission46_final_evaluations(directory) if r['status'] == 'failed'), None)
+        return {'schema': 'teacher_closed_loop_dashboard_selection/v1',
+                'status': 'failed' if failed else 'unverified',
+                'counts': failed['counts'] if failed else {'passed': 0, 'failed': 0, 'unverified': 1, 'total': 1},
+                'selection_kind': 'mission46_independent_failure' if failed else 'mission46_independent_pending',
+                'selected_receipt_filename': failed['filename'] if failed else None,
+                'selected_receipt_sha256': failed['sha256'] if failed else None,
+                'selected_validation_summary': failed['raw'] if failed else {'checks': {'mission46_independent_acceptance_pending': {
+                    'status': 'unverified', 'passed': None,
+                    'reason': 'Original46 requires its own 18+14+14 mission evaluation; no V18/common result is inherited'}}},
+                'display_note': ('本轮独立失败收据及全部来源哈希已核对；其余未验证项保持未验证。'
+                                 if failed else '原始 46 区域任务须独立验收；阶段完成与运行时收据不代表完整导航通过。'),
+                'navigation_ground_truth_used': False,
+                'historical_results_are_not_this_run_acceptance': True}
     common = closed_loop_receipt(directory, 'summary_closed_loop_cascade_independent.json',
         'independent_actual_SLAM_SCAN_cascade_navigation/v1')
     ramp = closed_loop_receipt(directory, 'summary_closed_loop_ramp_independent.json',
@@ -720,6 +739,247 @@ def closed_loop_receipt_view(directory):
             'navigation_ground_truth_used': False,
             'historical_results_are_not_this_run_acceptance': True,
             'shutdown_status_is_not_independent_acceptance': True}
+
+
+MISSION46_PHASES = (('exploration', '探索', 18, 'exploring'),
+                    ('return_origin', '返航', 14, 'returning'),
+                    ('navigation_f1_f3', '导航', 14, 'navigating'))
+MISSION46_RUNTIME_RECEIPTS = {
+    'initialization': ('mission46_initialization_receipt.json', 'teacher_original_origin_initialization/v1',
+        {'spawn_matches_original', 'exclusive_teacher_actuator', 'physical_standing',
+         'stationary_imu_initialization', 'actual_slam_ready'}),
+    'rgb_save': ('mission46_rgb_save_receipt.json', 'teacher_mission46_rgb_save/v1',
+        {'actual_saved_rgb_file', 'current_run_rgb_provenance', 'fresh_sensor_evidence', 'not_capacity_truncated'}),
+    'dynamic': ('mission46_dynamic_receipt.json', 'teacher_mission46_dynamic_obstacle/v1',
+        {'actual_entity_motion', 'actual_slam_scene_trigger', 'fresh_scan_pre_roll', 'obstacle_stop', 'clearance', 'recovery'}),
+    'parking': ('mission46_final_parking_receipt.json', 'teacher_mission46_final_parking/v1',
+        {'first_five_seconds', 'actual_slam_hold_drift', 'native_motion_limits', 'source_freshness',
+         'continuous_teacher_control', 'no_protection'}),
+}
+MISSION46_FINAL_SCHEMA = 'independent_original46_SLAM_SCAN_mission/v1'
+MISSION46_FINAL_SOURCES = frozenset(('navigation_scope.json', 'source_manifest.json',
+    'navigation_source_snapshots.json', 'navigation_profile.json', 'runtime_manifest.json',
+    'worker_result.json', 'mission46_status.json', 'navigation_anchor.json'))
+MISSION46_FINAL_CHECKS = frozenset(('original46_profile_and_archived_sources', 'whole_mission_terminal',
+    'runtime_and_owned_cleanup', 'frozen_Teacher_CPU_sole_actuator', 'actual_loaded_SLAM_binary',
+    'actual_SLAM_navigation_source', 'three_original_phase_requests',
+    'exploration_original_regions_and_actual_dwell', 'return_origin_original_regions_and_actual_dwell',
+    'navigation_f1_f3_original_regions_and_actual_dwell', 'actual_original_origin_standing_initialization',
+    'three_causal_privileged_terrain_switches', 'actual_current_run_saved_RGB',
+    'original_dynamic_stop_clear_recovery', 'final_first5s_SLAM_and_physical_hold',
+    'native_physical_and_actuator_safety', 'pipeline_complete_ordered_context_valid_drain',
+    'full_200Hz_native_actuator_trace_replay', 'full_publication_PI_and_all_SCAN_geometry_replay'))
+
+
+def mission46_final_receipt(directory, filename):
+    """Recognize source-bound independent failures; this viewer never certifies PASS.
+
+    The independent evaluator performs replay. SHA reads use the stat-sensitive
+    source cache, so unchanged final sources are not reread on each UI poll.
+    """
+    path = directory / filename
+    def receipt_identity():
+        st = path.stat()
+        return (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns)
+    try:
+        before = receipt_identity()
+    except OSError:
+        return {}
+    raw = read_json(path)
+    if not raw:
+        return {}
+    errors, digest = [], None
+    checks = raw.get('checks')
+    try:
+        run_matches = (isinstance(raw.get('run'), str) and Path(raw['run']).is_absolute()
+                       and Path(raw['run']).resolve() == directory.resolve())
+    except (OSError, ValueError, TypeError, RuntimeError):
+        run_matches = False
+    if raw.get('schema') != MISSION46_FINAL_SCHEMA or raw.get('run_id') != directory.name or not run_matches:
+        errors.append('Independent schema or selected run/run_id identity differs')
+    if (raw.get('simulation_only') is not True or raw.get('navigation_ground_truth_used') is not False
+            or raw.get('real_robot_verified') is not False):
+        errors.append('Explicit simulation and actual-SLAM navigation declarations are missing')
+    counts = {'passed': 0, 'failed': 0, 'unverified': 0, 'total': len(checks) if isinstance(checks, dict) else 0}
+    valid_checks = isinstance(checks, dict) and MISSION46_FINAL_CHECKS.issubset(checks)
+    if valid_checks:
+        for name, check in checks.items():
+            if not isinstance(name, str) or not isinstance(check, dict):
+                valid_checks = False
+                break
+            status, passed = check.get('status'), check.get('passed')
+            if not ((status == 'passed' and passed is True) or (status == 'failed' and passed is False)
+                    or (status == 'unverified' and passed is None)):
+                valid_checks = False
+                break
+            counts[status] += 1
+    if not valid_checks:
+        errors.append('Independent checks are missing or do not have consistent three-state results')
+    if raw.get('status') == 'failed' and (raw.get('passed') is not False or not counts['failed']):
+        errors.append('Claimed failure has no explicit failed independent check')
+    elif raw.get('status') not in ('failed', 'passed', 'unverified'):
+        errors.append('Independent status is unsupported')
+    bindings = raw.get('source_bindings')
+    if not isinstance(bindings, dict) or not MISSION46_FINAL_SOURCES.issubset(bindings):
+        errors.append('Mandatory final source bindings are missing')
+    else:
+        for name, expected in bindings.items():
+            try:
+                rel = Path(name)
+                evidence = (directory / rel).resolve()
+                if (not isinstance(name, str) or rel.is_absolute() or '..' in rel.parts
+                        or not evidence.is_relative_to(directory.resolve())
+                        or not isinstance(expected, str) or re.fullmatch(r'[0-9a-f]{64}', expected) is None
+                        or not recording_read_allowed(evidence) or source_file_sha256(evidence) != expected):
+                    raise ValueError('Final source path or bytes differ')
+            except (OSError, ValueError, TypeError, RuntimeError):
+                errors.append('Final source is missing, foreign or hash-mismatched: ' + str(name))
+    try:
+        digest = source_file_sha256(path)
+        if receipt_identity() != before:
+            raise OSError('Final receipt changed during display validation')
+    except (OSError, ValueError, TypeError, RuntimeError):
+        errors.append('Final receipt SHA could not be verified')
+    failed = not errors and raw.get('status') == 'failed' and raw.get('passed') is False and counts['failed'] > 0
+    return {'filename': filename, 'raw': raw, 'reported_status': raw.get('status'), 'sha256': digest,
+            'status': 'failed' if failed else 'unverified', 'valid_for_selected_run': not errors,
+            'validation_errors': errors, 'counts': counts, 'formal_acceptance': False,
+            'failure_evidence_verified': failed, 'formal_pass_allowed': False,
+            'reason': ('Independent failure and all bound source bytes are verified; unverified checks remain unverified'
+                       if failed else '; '.join(errors) or 'PASS is not certified by this limited final-failure reader')}
+
+
+def mission46_final_evaluations(directory):
+    return [r for filename in ('summary_mission46_independent.json', 'mission46_final_evaluation.json',
+            'mission46_independent_evaluation.json') if (r := mission46_final_receipt(directory, filename))]
+
+
+def mission46_runtime_receipt(directory, filename, schema, required):
+    raw = read_json(directory / filename)
+    if not raw:
+        return {}
+    errors = []
+    if raw.get('schema') != schema or raw.get('run_id') != directory.name:
+        errors.append('Runtime receipt schema or selected run identity differs')
+    if raw.get('navigation_ground_truth_used', raw.get('ground_truth_used')) is not False:
+        errors.append('Actual-navigation source declaration is missing')
+    checks = raw.get('checks')
+    if (not isinstance(checks, dict) or not required.issubset(checks)
+            or any(not isinstance(c, dict) or c.get('status') != 'passed' or c.get('passed') is not True
+                   for c in checks.values()) or raw.get('passed') is not True
+            or raw.get('binding_verified') is not True):
+        errors.append('Runtime checks are missing or not all reported passing')
+    try:
+        evidence = Path(raw['source_evidence_file']).resolve()
+        if (not evidence.is_relative_to(directory.resolve()) or not recording_read_allowed(evidence)
+                or evidence.stat().st_size > 64 * 1024 * 1024
+                or source_file_sha256(evidence) != raw['source_evidence_sha256']):
+            raise ValueError('Evidence path or bytes differ')
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError):
+        errors.append('Runtime evidence is missing, foreign or hash-mismatched')
+    return {'filename': filename, 'raw': raw, 'source_binding_valid': not errors,
+            'status': 'passed' if not errors else 'unverified', 'validation_errors': errors,
+            'scope': 'runtime-reported checks and exact evidence bytes; no independent numerical replay',
+            'formal_mission_acceptance': False}
+
+
+def mission46_view(directory):
+    scope = read_json(directory / 'navigation_scope.json')
+    state = read_json(directory / 'mission46_status.json')
+    profile = scope.get('profile')
+    if not ((profile if isinstance(profile, dict) else {}).get('mission46_required') is True
+            or state.get('schema') == 'teacher_original_mission46_state/v1'):
+        return {}
+    valid = (state.get('schema') == 'teacher_original_mission46_state/v1'
+             and state.get('run_id') == directory.name and state.get('navigation_ground_truth_used') is False
+             and state.get('expected_region_count') == 46)
+    control = read_json(directory / 'mission46_control.json')
+    control_valid = (control.get('schema') == 'teacher_mission46_control/v1'
+                     and control.get('run_id') == directory.name
+                     and control.get('navigation_ground_truth_used') is False and type(control.get('hold')) is bool)
+    completed = state.get('completed_stages', []) if valid else []
+    if not isinstance(completed, list):
+        completed = []
+    request = read_json(directory / 'navigation_request.json')
+    nav = read_json(directory / 'navigation_status.json')
+    if not nav:
+        nav = state.get('navigation') if valid and isinstance(state.get('navigation'), dict) else {}
+    bound_arrivals = []
+    arrival_source_bound = False
+    rid = nav.get('request_id')
+    goals = request.get('goals')
+    try:
+        goal_hash = hashlib.sha256(json.dumps(goals, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+        arrival_source_bound = (valid and isinstance(rid, str) and rid.startswith(directory.name + ':')
+            and request.get('schema_version') == 2 and request.get('request_id') == rid
+            and request.get('frame_id') == 'camera_init' and nav.get('frame_id') == 'camera_init'
+            and nav.get('mode') == 'teacher' and nav.get('controller_kind') == 'teacher'
+            and nav.get('navigation_ground_truth_used') is False
+            and nav.get('goals_definitions') == goals and isinstance(goals, list) and bool(goals)
+            and nav.get('goals_definition_sha256') == goal_hash
+            and state.get('current_goals_sha256') == goal_hash
+            and state.get('current_request') in (None, rid))
+        if arrival_source_bound:
+            definitions = {g['goal_id']: g for g in goals}
+            for r in nav.get('region_arrivals', []):
+                if not isinstance(r, dict) or r.get('goal_id') not in definitions:
+                    continue
+                definition = definitions[r['goal_id']].get('arrival') or {}
+                stamp, begin, dwell, gap = [r.get(k) for k in ('stamp_ns', 'start_stamp_ns', 'dwell_ns', 'max_observation_gap_ns')]
+                if (r.get('request_id') == rid and r.get('goals_definition_sha256') == goal_hash
+                        and all(type(x) is int for x in (stamp, begin, dwell, gap))
+                        and 0 <= begin <= stamp and dwell == stamp-begin
+                        and dwell >= round(float(definition['dwell_sim_s'])*1e9) and 0 < gap <= 200000000
+                        and r.get('region_inside') is True and r.get('control_region_inside') is True
+                        and r.get('protected') is False and r.get('reason') == 'arrived'
+                        and vector(r.get('raw_position')) is not None):
+                    bound_arrivals.append(r)
+    except (ValueError, KeyError, TypeError, OverflowError):
+        arrival_source_bound = False
+        bound_arrivals = []
+    phases = []
+    for name, label, total, stage in MISSION46_PHASES:
+        arrived = total if stage in completed else 0
+        if (stage not in completed and isinstance(rid, str) and f':{name}:' in rid
+                and arrival_source_bound):
+            arrived = min(total, len({r.get('goal_id') for r in bound_arrivals
+                if isinstance(r, dict) and r.get('request_id') == rid
+                and isinstance(r.get('goal_id'), str) and r['goal_id'].startswith(name + ':')}))
+        phases.append({'name': name, 'label': label, 'expected': total, 'recorded_arrivals': arrived})
+    receipts = {key: mission46_runtime_receipt(directory, *contract)
+                for key, contract in MISSION46_RUNTIME_RECEIPTS.items()}
+    finals = mission46_final_evaluations(directory)
+    final_failure = next((r for r in finals if r['status'] == 'failed'), None)
+    return {'schema': 'teacher_mission46_dashboard/v1', 'expected_region_count': 46,
+            'phases': phases, 'recorded_arrivals': sum(p['recorded_arrivals'] for p in phases),
+            'completed_stage_arrivals': sum(p['expected'] for p in phases
+                if next(item[3] for item in MISSION46_PHASES if item[0] == p['name']) in completed),
+            'arrival_source_bound': arrival_source_bound,
+            'arrival_source': 'navigation_status.json bound to original request and goals hash',
+            'stage': state.get('adapter_stage', state.get('stage', 'waiting_record')) if valid else 'waiting_valid_record',
+            'state': state if valid else {}, 'state_valid_for_selected_run': valid,
+            'state_validation_errors': [] if valid else ['No matching original46 state/source declaration for selected run'],
+            'functional_sequence_completed': valid and state.get('functional_sequence_completed') is True,
+            'control': control if control_valid else {}, 'control_valid_for_selected_run': control_valid,
+            'runtime_receipts': receipts, 'final_evaluations': finals,
+            'independent_status': 'failed' if final_failure else 'unverified',
+            'selected_independent_failure': final_failure or {}, 'historical_acceptance_inherited': False,
+            'navigation_is_certified': False,
+            'display_note': '18 探索 + 14 返航 + 14 导航。到达数与 completed 是运行时功能记录，不代表完整独立验收；不继承 V18。动态障碍仅有服务 ACK，无独立 pose/info 观察。'}
+
+
+def pipeline_view(directory):
+    profile = read_json(directory / 'navigation_scope.json').get('profile') or {}
+    if not isinstance(profile, dict):
+        profile = {}
+    summary = read_json(directory / 'fastlivo_debug/pipeline_v19_summary.json')
+    contract = profile.get('pipeline') or {}
+    if contract.get('schema') != 'pipeline_v19_contract/v1' and summary.get('schema') != 'staged_input_pipeline_v19/v1':
+        return {}
+    return {'schema': 'teacher_pipeline_v19_dashboard/v1', 'contract': contract, 'summary': summary,
+            'summary_schema_valid': summary.get('schema') == 'staged_input_pipeline_v19/v1',
+            'navigation_acceptance': False,
+            'display_note': '所选运行的输入流水线与排空记录；正常退出不认证运动或导航。'}
 
 
 # The historical page is kept unchanged on disk. This additive read-only
@@ -825,9 +1085,74 @@ CLOSED_LOOP_PAGE_SCRIPT = r'''
 '''
 
 
+MISSION46_PAGE_SCRIPT = r'''
+<script>
+(() => {
+ const previousShow=show;
+ const baseTitle=$('mainTitle').textContent,baseSubtitle=$('mainSubtitle').textContent;
+ let previousWasMission=false;
+ const make=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+ const panel=(id,title)=>{let p=$(id);if(!p){p=make('section',undefined,'panel tests');p.id=id;$('legacyPanel').before(p);}p.hidden=false;p.replaceChildren();p.append(make('h2',title));return p;};
+ const nativeNote=data=>{
+  const t=data.telemetry||{};
+  if(t.display_mode==='bounded_recent_window'){
+   $('pathCaption').textContent+=` · 原始 native 曲线仅显示有界最近窗口；较早历史未展开（页面跳过 ${t.display_skipped_bytes||0} 字节，原日志保留）。`;
+   $('runInfo').textContent+=` · 最新样本：${t.latest_source||'原日志'}；曲线末帧 ${fmt(t.archive_latest_t,2)} s。`;
+  }
+ };
+ const missionCaption=data=>{
+  const m=data.mission46;
+  if(m&&Object.keys(m).length)$('navigationCaption').textContent+=` · Teacher46 ${m.stage}，已记录到达 ${m.recorded_arrivals}/46（18+14+14）；${m.independent_status==='failed'?'本轮独立结果 FAILED，未验证项保留':'整体独立验收未完成'}。`;
+ };
+ const previousNavigationPlot=navigationPlot;
+ navigationPlot=()=>{previousNavigationPlot();if(current)missionCaption(current);};
+ show=data=>{
+  const hasMission=!!Object.keys(data.mission46||{}).length;
+  if(previousWasMission&&!hasMission){$('mainTitle').textContent=baseTitle;$('mainSubtitle').textContent=baseSubtitle;}
+  previousWasMission=hasMission;
+  previousShow(data);nativeNote(data);
+  const pipeline=data.pipeline_v19||{};
+  if(Object.keys(pipeline).length){
+   const p=panel('pipelineV19Panel','本轮 V19 输入流水线'),s=pipeline.summary||{},c=pipeline.contract||{};
+   p.append(make('p',`模式 ${s.mode||c.mode||'等待记录'} · 图像复制选项 ${s.image_copy_opt??c.image_copy_opt??'—'} · accepted / delivered / committed：${s.accepted??'—'} / ${s.delivered??'—'} / ${s.committed??'—'} · pending ${s.pending??'—'}`));
+   p.append(make('p',`${s.normal_completed===true?'正常排空记录已写入':s.failure?'流水线失败：'+s.failure:'等待最终排空记录'}。${pipeline.display_note}`,'caption'));
+  }else if($('pipelineV19Panel'))$('pipelineV19Panel').hidden=true;
+  const m=data.mission46||{};
+  if(!Object.keys(m).length){if($('mission46Panel'))$('mission46Panel').hidden=true;return;}
+  const p=panel('mission46Panel','本轮 Teacher46 · 原始多层任务');
+  p.append(make('p',`阶段：${m.stage} · 有效区域回执 ${m.recorded_arrivals}/46 · ${m.phases.map(x=>`${x.label} ${x.recorded_arrivals}/${x.expected}`).join(' · ')} · 整阶段完成 ${m.completed_stage_arrivals}/46`));
+  const failure=m.independent_status==='failed'&&m.selected_independent_failure?.failure_evidence_verified===true?m.selected_independent_failure:null;
+  p.append(make('p',failure?'本轮独立结果 FAILED；未执行阶段和完整控制回放仍按原收据保持未验证。':m.functional_sequence_completed?'功能状态 completed 已记录；完整独立验收仍未完成。':'功能序列尚未完成；不以历史 V18 的通过替代。','caption'));
+  const c=m.control||{};
+  p.append(make('p',m.control_valid_for_selected_run?`最后协调记录：${c.hold?'速度暂停/停车保持':'允许当前路线'} · ${c.reason||''} · sim ${fmt((c.sim_ns||0)/1e9,2)} s`:'尚无绑定本轮的有效协调记录。'));
+  const table=make('table'),head=make('tr');for(const x of ['运行时证据（不认证整体）','本轮来源','依据'])head.append(make('th',x));table.append(head);
+  for(const [key,label]of [['initialization','初始化'],['rgb_save','当前 RGB 地图保存'],['dynamic','动态障碍停车恢复'],['parking','最终首次 5 秒停车']]){
+   const r=m.runtime_receipts[key]||{},tr=make('tr');tr.append(make('td',label));tr.append(make('td',r.source_binding_valid?'来源哈希已核对，运行时报告通过':'尚无核对后的运行时证据'));
+   tr.append(make('td',r.filename?(r.validation_errors||[]).join('; ')||`${r.filename}；未独立重算数值`:'等待本轮收据'));table.append(tr);
+  }
+  p.append(table);p.append(make('p',m.display_note,'caption'));
+  for(const r of m.final_evaluations||[]){const d=make('details'),s=make('summary',`${r.filename} · ${r.failure_evidence_verified?'已核对本轮独立 FAILED':'未认证的最终验收记录'}`);d.append(s,make('p',`${r.reason} · final receipt SHA256 ${r.sha256||'未验证'}`,'caption'),make('pre',JSON.stringify(r.raw,null,2)));p.append(d);}
+  if(!m.state_valid_for_selected_run)p.append(make('p',(m.state_validation_errors||[]).join('; '),'caption'));
+  $('mainTitle').textContent='Teacher46 · 实际 SLAM / SCAN 多层任务';
+  $('mainSubtitle').textContent='18 探索 + 14 返航 + 14 导航 · CPU Teacher · 本轮功能记录与独立验收分开';
+  $('acceptanceStatus').textContent=failure?'46 任务独立结果：FAILED':'46 任务独立验收未完成';$('acceptanceStatus').className=failure?'badge fail':'badge';
+  showLevels({});$('currentValidation').hidden=true;
+  $('legacyTitle').textContent='本轮 46 任务整体独立验收';
+  $('pidCorrectionNote').hidden=false;$('pidCorrectionNote').textContent=m.display_note;
+  showTests(failure?failure.raw:{checks:{mission46_independent_acceptance_pending:{status:'unverified',passed:null,reason:'最终独立验收尚未完成；阶段 completed、运行时收据与旧 V18 结果均不升级整体通过。'}}});
+  if($('closedLoopReceipts'))$('closedLoopReceipts').hidden=true;
+  missionCaption(data);
+  let raw={};try{raw=JSON.parse($('raw').textContent);}catch(e){}
+  $('raw').textContent=JSON.stringify({...raw,pipeline_v19:pipeline,mission46:m},null,2);
+ };
+})();
+</script>
+'''
+
+
 def dashboard_page():
     page = (ROOT / 'web/index.html').read_text(encoding='utf-8')
-    return page.replace('</body>', CLOSED_LOOP_PAGE_SCRIPT + '\n</body>').encode('utf-8')
+    return page.replace('</body>', CLOSED_LOOP_PAGE_SCRIPT + MISSION46_PAGE_SCRIPT + '\n</body>').encode('utf-8')
 
 
 def safe_json(value):
@@ -842,11 +1167,13 @@ def safe_json(value):
 
 
 class Telemetry:
+    CHUNK_BYTES = 8 * 1024 * 1024
+
     def __init__(self):
         self.lock = threading.Lock()
         self.entries = {}
 
-    def read(self, path):
+    def read(self, path, latest_window=False):
         with self.lock:
             try:
                 if not recording_read_allowed(path):
@@ -861,15 +1188,30 @@ class Telemetry:
             if entry is None or entry['identity'] != identity or stat.st_size < entry['offset']:
                 entry = {'identity': identity, 'offset': 0, 'partial': b'',
                          'rows': deque(maxlen=6000), 'trajectory': [], 'records': 0,
-                         'invalid_records': 0, 'latest': None}
+                         'invalid_records': 0, 'latest': None, 'display_skipped_bytes': 0}
                 self.entries[key] = entry
                 # Bound memory when the user browses many archived runs.
                 while len(self.entries) > 6:
                     self.entries.pop(next(iter(self.entries)))
             try:
+                read_budget = self.CHUNK_BYTES
                 with path.open('rb') as stream:
+                    if latest_window and stat.st_size - entry['offset'] > self.CHUNK_BYTES:
+                        # Display only a bounded recent window. Never scan the
+                        # complete native archive just to catch a live plot up.
+                        target = stat.st_size - self.CHUNK_BYTES
+                        entry['display_skipped_bytes'] += target - entry['offset']
+                        entry.update(offset=target, partial=b'', latest=None, trajectory=[])
+                        entry['rows'].clear()
+                        stream.seek(target)
+                        # A seek may begin inside a JSON line; do not report
+                        # that deliberately omitted fragment as invalid data.
+                        fragment = stream.readline(self.CHUNK_BYTES)
+                        read_budget -= len(fragment)
+                        entry['display_skipped_bytes'] += len(fragment)
+                        entry['offset'] = stream.tell()
                     stream.seek(entry['offset'])
-                    chunk = stream.read(8 * 1024 * 1024)
+                    chunk = stream.read(read_budget)
                     entry['offset'] = stream.tell()
             except OSError:
                 chunk = b''
@@ -908,7 +1250,10 @@ class Telemetry:
             return {'rows': displayed, 'trajectory': entry['trajectory'], 'latest': entry['latest'],
                     'records': entry['records'], 'invalid_records': entry['invalid_records'],
                 'age_s': None if entry['offset'] < stat.st_size else max(0., time.time() - stat.st_mtime),
-                    'loading': entry['offset'] < stat.st_size}
+                    'loading': entry['offset'] < stat.st_size,
+                    'display_mode': 'bounded_recent_window' if latest_window else 'archive_backfill',
+                    'display_skipped_bytes': entry['display_skipped_bytes'],
+                    'display_chunk_limit_bytes': self.CHUNK_BYTES}
 
 
 class Dashboard:
@@ -1001,12 +1346,22 @@ class Dashboard:
                     'telemetry': {'rows': [], 'trajectory': [], 'latest': None}, 'frame': {'available': False},
                     'acceptance': read_json(self.runs / 'acceptance.json')}
         state_path = directory / 'state.json'
+        state = read_json(state_path)
         frame = self.frame(directory)
         vehicle_frame = self.frame(directory / 'vehicle_rgb')
         try:
             state_age = max(0., time.time() - state_path.stat().st_mtime)
         except OSError:
             state_age = None
+        pipeline = pipeline_view(directory)
+        native = self.telemetry.read(directory / 'telemetry.jsonl', latest_window=bool(pipeline))
+        latest_state = normalize(state)
+        native['archive_latest_t'] = (native.get('latest') or {}).get('t')
+        if (pipeline and latest_state is not None
+                and (native.get('latest') is None or latest_state['t'] >= native['latest']['t'])):
+            native.update(latest=latest_state, age_s=state_age, latest_source='atomic state.json exact native sample')
+        else:
+            native['latest_source'] = 'original telemetry.jsonl exact native sample'
         original_functional = read_json(directory / 'summary_functional.json')
         reproduced = read_json(directory / 'summary_functional.reproduced.json')
         correction = read_json(directory / 'provenance_correction.json')
@@ -1023,7 +1378,7 @@ class Dashboard:
                 'display_note': 'Parking status uses separately archived clarification; original full-ramp receipt retained'}
         pid_display, pid_original, pid_correction = pid_receipt_view(directory)
         return {'available': True, 'run_id': directory.name, 'selected': run,
-                'state': read_json(state_path), 'state_age_s': state_age,
+                'state': state, 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
                 'step_functional': reproduced if corrected else original_functional,
                 'step_functional_original': original_functional,
@@ -1035,6 +1390,8 @@ class Dashboard:
                 'full_ramp_stop_addendum': stop_addendum,
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
                 'closed_loop_result': closed_loop_receipt_view(directory),
+                'pipeline_v19': pipeline,
+                'mission46': mission46_view(directory),
                 'pid_navigation': pid_display,
                 'pid_navigation_original': pid_original,
                 'pid_navigation_correction': pid_correction,
@@ -1051,7 +1408,7 @@ class Dashboard:
                 'step_plot': (directory / 'step_functional.png').is_file(),
                 'acceptance': read_json(self.runs / 'acceptance.json'),
                 'current_validation': read_json(self.runs.parent / 'current_status.json'),
-                'telemetry': self.telemetry.read(directory / 'telemetry.jsonl'),
+                'telemetry': native,
                 'frame': {'available': frame is not None,
                           'age_s': max(0., time.time() - frame.stat().st_mtime) if frame else None,
                           'filename': frame.name if frame else None},

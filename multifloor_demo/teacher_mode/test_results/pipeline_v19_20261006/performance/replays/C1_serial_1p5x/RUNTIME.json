@@ -1,0 +1,88 @@
+{
+  "schema": "V19_standalone_SLAM_replay_runtime/v1",
+  "error": null,
+  "scope": "SLAM-only input bag replay; no physics/Teacher/controller/navigation",
+  "owned_processes": {
+    "camera_parameters": {
+      "pid": 1861875,
+      "state": "R",
+      "ppid": 1861865,
+      "pgid": 1861875,
+      "session": 1861875,
+      "start_ticks": 46673649
+    },
+    "observer": {
+      "pid": 1861899,
+      "state": "R",
+      "ppid": 1861865,
+      "pgid": 1861899,
+      "session": 1861899,
+      "start_ticks": 46673699
+    },
+    "mapping": {
+      "pid": 1861917,
+      "state": "R",
+      "ppid": 1861865,
+      "pgid": 1861917,
+      "session": 1861917,
+      "start_ticks": 46673730
+    },
+    "player": {
+      "pid": 1862025,
+      "state": "R",
+      "ppid": 1861865,
+      "pgid": 1862025,
+      "session": 1862025,
+      "start_ticks": 46673790
+    }
+  },
+  "cleanup": {
+    "mapping": {
+      "returncode": 0,
+      "sent_signals": [
+        10
+      ],
+      "remaining_owned_members": []
+    },
+    "player": {
+      "returncode": 0,
+      "sent_signals": [],
+      "remaining_owned_members": []
+    },
+    "observer": {
+      "returncode": 0,
+      "sent_signals": [
+        2
+      ],
+      "remaining_owned_members": []
+    },
+    "camera_parameters": {
+      "returncode": 0,
+      "sent_signals": [
+        2
+      ],
+      "remaining_owned_members": []
+    }
+  },
+  "loaded_binary": {
+    "schema": "V19_shadow_loaded_binary/v1",
+    "identity": {
+      "pid": 1861917,
+      "state": "R",
+      "ppid": 1861865,
+      "pgid": 1861917,
+      "session": 1861917,
+      "start_ticks": 46673730
+    },
+    "before_playback": true,
+    "actual_executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+    "actual_executable_sha256": "eedadd1a3e91eb9856b99bb55208bf51fea81de546579ab0d55ff3c91daf7a87",
+    "actual_core_paths": [
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so"
+    ],
+    "actual_core_sha256": "f06e68d0dcbcab9f840077c372d0cda2e128f9935c4fe968987784e2124e00d8",
+    "maps_sha256": "cce83fff006858368937d63dde69b3dd9026833603d58628918e7ae7cc47dea3"
+  },
+  "all_owned_processes_clean": true,
+  "physics_or_Teacher_or_controller_started": false
+}

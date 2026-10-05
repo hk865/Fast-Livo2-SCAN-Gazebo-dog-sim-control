@@ -1,0 +1,123 @@
+{
+  "terrain": "ramp_up",
+  "sensors": true,
+  "camera_only": false,
+  "render_engine": "ogre2",
+  "spawn": [
+    1.2,
+    2,
+    0.4,
+    0
+  ],
+  "physics_step_s": 0.005,
+  "decimation": 4,
+  "policy_hz": 50,
+  "real_time_factor": 1.0,
+  "exclusive_writer": "teacher_sim::TeacherActuator",
+  "disabled": [
+    "CHAMP",
+    "body_stabilizer",
+    "ros2_control",
+    "JointTrajectoryController"
+  ],
+  "joint_mapping": {
+    "FR": "rf",
+    "FL": "lf",
+    "RR": "rh",
+    "RL": "lh"
+  },
+  "joint_names": [
+    "rf_hip_joint",
+    "rf_upper_leg_joint",
+    "rf_lower_leg_joint",
+    "lf_hip_joint",
+    "lf_upper_leg_joint",
+    "lf_lower_leg_joint",
+    "rh_hip_joint",
+    "rh_upper_leg_joint",
+    "rh_lower_leg_joint",
+    "lh_hip_joint",
+    "lh_upper_leg_joint",
+    "lh_lower_leg_joint"
+  ],
+  "default_q": [
+    -0.1,
+    0.8,
+    -1.5,
+    0.1,
+    0.8,
+    -1.5,
+    -0.1,
+    1.0,
+    -1.5,
+    0.1,
+    1.0,
+    -1.5
+  ],
+  "hard_lower": [
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227
+  ],
+  "hard_upper": [
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776
+  ],
+  "friction_baseline": 0.7,
+  "model_mass_kg": 16.512,
+  "base_inertial_pose": "0.055230920345489418 -0.0018690019193857959 0.0060952991842610337 0 0 0",
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_converted.sdf": "bc31d84d25cca05a58da367fb950d4385a6215f5d6dda2149f611a2f6b195924",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/three_floors.sdf": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161"
+  },
+  "world_sha256": "6b3a101ee38b01d721a2b5df10e7b71585e26f11816b067cac30bb523f2fb495",
+  "true_stairs": false,
+  "sensor_contract_sha256": "a829e85688b3e73224fb0449a1c152360ae181d1e62919323209841e8553d2b4",
+  "sensor_bridge_sha256": "392b90b684057966dd8d1e41196a57013115ac6bf5d870c7d0fb67a1a3fedbcf",
+  "spawn_override": true,
+  "scenario_label": "v19_prefix_r1",
+  "sensor_sampling_override": {
+    "schema": "teacher_sensor_sampling_trial/v1",
+    "settings": {
+      "vertical_lines": 64,
+      "horizontal_samples": 480,
+      "lidar_hz": 30,
+      "camera_hz": 30,
+      "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+      "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+      "control_wall_tick_s": 0.05
+    },
+    "before_world_sha256": "8e3460cff297a261cbedc7f860b842b810911f2a02a2ed23878f21ed13dbfd4b",
+    "after_world_sha256": "6b3a101ee38b01d721a2b5df10e7b71585e26f11816b067cac30bb523f2fb495",
+    "before_sensor_contract_sha256": "1d96b513ac76b434c6a8e6bb95d0151d304c62871d6b1ba94a7942d07246c502",
+    "after_sensor_contract_sha256": "a829e85688b3e73224fb0449a1c152360ae181d1e62919323209841e8553d2b4",
+    "only_allowed_sensor_leaves_changed": true,
+    "unchanged_physics_step_s": 0.005,
+    "unchanged_native_PD_hz": 200,
+    "unchanged_Actor_hz": 50,
+    "unchanged_camera_K_D_geometry": true,
+    "unchanged_lidar_fov_noise_extrinsics": true,
+    "navigation_ground_truth_used": false,
+    "actual_rates_verified": false,
+    "nominal_30_is_not_measured_30": true
+  }
+}

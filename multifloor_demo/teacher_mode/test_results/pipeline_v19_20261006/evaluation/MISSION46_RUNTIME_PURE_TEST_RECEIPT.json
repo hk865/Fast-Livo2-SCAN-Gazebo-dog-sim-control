@@ -1,0 +1,66 @@
+{
+  "schema": "teacher_mission46_runtime_finite_preflight/v1",
+  "status": "FINITE_TESTS_PASSED_ACTUAL_MISSION_UNVERIFIED",
+  "tests": {
+    "original_pure_state_geometry_stages": 38,
+    "runtime_source_negative_lifecycle": 29
+  },
+  "ros_initialized": false,
+  "gazebo_started": false,
+  "real_mission_pass_claimed": false,
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46.py": "ad70fdf29d2af465df48e6b12be39b42031e4c2cc8234a4e58d3a082a85b9e90",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_profile.py": "5b4626a6a104aad12d90236f8e13339f27d1c955b82457d734d0e7c474b2ef29",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_contract.py": "c4f3649a4a4ca39f9e3e73e57a58d901359821475faac5fbc3163e3b1b15d0c4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime.py": "a3dff1ec6224af92962c04d8e085c5653635c024b97d03aba0f4965c5535e66b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime_evidence.py": "99daa86f451c3962b82cbfff9ada0f1e7a8f69e02c46313ca5f5c3164cbe9552",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_obstacle_runtime.py": "5c0d302ba172b8c31b1dd76c5d0b4a8e724ca3c3a08576bbd265b24997cc2ef8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_tests.py": "d6cec1e6be9dc79589ff17117fa3a2c17bd9c07aff26b1aaa6be70cd09eb5515",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/mission46_runtime_tests.py": "003a11f0b8683271e531b6393b05a789d2df373b291016cf270a9bc1edf71cc2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/profiles/pipeline_staged_original46.json": "13da3d82577cf9a9eb332375b35ab7c5ce2121732eaf7762fe4895bb5bb06653"
+  },
+  "limitations": [
+    "Synthetic files test verifier logic; no actual standing, SLAM initialization, RGB save, dynamic obstacle, terrain switch or 46-region completion has been verified.",
+    "Native state is retained only for Actor privileged observations, initial/final physical safety and offline guard audit; navigation uses actual SLAM/IMU/SCAN.",
+    "Dynamic execution requires actual SetEntityPose service acknowledgements; independent simulator pose/info observer is not supplied.",
+    "Terminal coordinator/obstacle keep spinning and maintaining hold heartbeat until owned cleanup."
+  ],
+  "runtime_protocol": {
+    "status": "mission46_status.json",
+    "terrain_request": "mission46_terrain_request.json",
+    "terrain_ack": "mission46_terrain_ack.json",
+    "control": "mission46_control.json",
+    "terminal_success": {
+      "stage": "completed",
+      "functional_sequence_completed": true
+    },
+    "terminal_failure": {
+      "stage": "failed"
+    },
+    "freshness_sim_and_wall_s": 0.3,
+    "required_source_fields": [
+      "run_id",
+      "sim_ns",
+      "monotonic_wall",
+      "navigation_ground_truth_used"
+    ]
+  },
+  "snapshot_budget": {
+    "native_ring_rows": 1000,
+    "status_ring_rows": 1000,
+    "pose_rows": 3000,
+    "raw_imu_rows": 4000,
+    "executor_snapshot": "filtered tuple references to append-only immutable records; verification runs in pool; complete original source files retained"
+  },
+  "numeric_gates_unchanged": true,
+  "profile_duration_sim_max_s": 1500,
+  "regions": [
+    18,
+    14,
+    14
+  ],
+  "original_dwell_s": 0.4,
+  "logs": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/MISSION46_FINAL_PURE_TEST_LOG.txt": "0836fa730a4c8e6281684c9c15441ffde31263edfbd1480460b220fc00203f76"
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "schema": "independent_original46_SLAM_SCAN_mission/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5",
+  "run_id": "20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5",
+  "status": "failed",
+  "passed": false,
+  "checks": {
+    "original46_profile_and_archived_sources": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "archived_source_count": 179,
+        "run_local_reference_hashes_verified": true,
+        "current_pure_modules_match_archives": true
+      }
+    },
+    "whole_mission_terminal": {
+      "status": "failed",
+      "passed": false,
+      "stage": "failed",
+      "message": "导航失败：当前航点超过仿真时间限制，停车",
+      "completed_phase_regions": 0
+    },
+    "runtime_and_owned_cleanup": {
+      "status": "passed",
+      "passed": true,
+      "error": null,
+      "owned_clean": true,
+      "worker_samples": 12236
+    },
+    "frozen_Teacher_CPU_sole_actuator": {
+      "status": "passed",
+      "passed": true,
+      "model_SHA": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+      "Actor_privileged_dimensions": 232
+    },
+    "actual_loaded_SLAM_binary": {
+      "status": "passed",
+      "passed": true,
+      "actual_core_SHA": "f06e68d0dcbcab9f840077c372d0cda2e128f9935c4fe968987784e2124e00d8",
+      "actual_executable_SHA": "eedadd1a3e91eb9856b99bb55208bf51fea81de546579ab0d55ff3c91daf7a87"
+    },
+    "actual_SLAM_navigation_source": {
+      "status": "passed",
+      "passed": true,
+      "SLAM_pose_count": 7304,
+      "navigation_ground_truth_used": false
+    },
+    "three_original_phase_requests": {
+      "status": "failed",
+      "passed": false,
+      "errors": [],
+      "phase_request_files": [
+        "exploration_1.json"
+      ],
+      "phase_geometry_preserved": true,
+      "phase_region_checks": {
+        "exploration": {
+          "status": "failed",
+          "passed": false,
+          "completed_regions": 8,
+          "required_regions": 18,
+          "actual_source_dwell_errors": [],
+          "max_source_gap_ns": 35000001,
+          "request_id": "20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5:exploration:1",
+          "final_state": "stopped"
+        },
+        "return_origin": {
+          "status": "unverified",
+          "passed": null,
+          "reason": "Phase not executed",
+          "expected_regions": 14
+        },
+        "navigation_f1_f3": {
+          "status": "unverified",
+          "passed": null,
+          "reason": "Phase not executed",
+          "expected_regions": 14
+        }
+      },
+      "partial_arrival_counts": {
+        "exploration": 8
+      }
+    },
+    "exploration_original_regions_and_actual_dwell": {
+      "status": "failed",
+      "passed": false,
+      "completed_regions": 8,
+      "required_regions": 18,
+      "actual_source_dwell_errors": [],
+      "max_source_gap_ns": 35000001,
+      "request_id": "20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5:exploration:1",
+      "final_state": "stopped"
+    },
+    "return_origin_original_regions_and_actual_dwell": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Phase not executed",
+      "expected_regions": 14
+    },
+    "navigation_f1_f3_original_regions_and_actual_dwell": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Phase not executed",
+      "expected_regions": 14
+    },
+    "actual_original_origin_standing_initialization": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "actual_imu_samples": 640,
+        "actual_SLAM_samples": 96,
+        "native_safety_records": 159,
+        "hidden_bias_state_inspected": false
+      }
+    },
+    "three_causal_privileged_terrain_switches": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5/mission46_terrain_evidence_1.json'"
+    },
+    "actual_current_run_saved_RGB": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5/mission46_rgb_save_receipt.json'"
+    },
+    "original_dynamic_stop_clear_recovery": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5/mission46_dynamic_receipt.json'"
+    },
+    "final_first5s_SLAM_and_physical_hold": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5/mission46_final_parking_receipt.json'"
+    },
+    "native_physical_and_actuator_safety": {
+      "status": "passed",
+      "passed": true,
+      "samples": 12236,
+      "errors": [],
+      "max_abs_qd_radps": 12.495881018495009,
+      "max_abs_torque_Nm": 15.530013815521126,
+      "max_abs_roll_rad": 0.03597218698638658,
+      "max_abs_pitch_rad": 0.10441182414279697,
+      "min_clearance_m": 0.25811393395034
+    },
+    "pipeline_complete_ordered_context_valid_drain": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "actual_trace_commits": 146251,
+        "summary": {
+          "schema": "staged_input_pipeline_v19/v1",
+          "mode": "staged",
+          "image_copy_opt": 0,
+          "count_limit": 512,
+          "byte_limit": 67108864,
+          "trace_schema": "pipeline_v19_events/v1",
+          "trace_columns": 23,
+          "normal_completed": true,
+          "context_valid_at_drain": true,
+          "accepted": 146251,
+          "delivered": 146251,
+          "committed": 146251,
+          "pending": 0,
+          "inflight": 0,
+          "ready": 0,
+          "bytes": 0,
+          "peak_pending": 20,
+          "peak_bytes": 20651809,
+          "canceled": 0,
+          "rejected_capacity": 0,
+          "closed_rejections": 0,
+          "failure": "",
+          "uncommitted_packets": [],
+          "rejected_packet": null
+        },
+        "receiver_TIDs": [
+          1883268
+        ],
+        "owner_TIDs": [
+          1883028
+        ],
+        "decoder_TIDs": {
+          "0": [
+            0
+          ],
+          "1": [
+            0
+          ],
+          "3": [
+            1883267
+          ],
+          "2": [
+            1883266
+          ]
+        },
+        "cleanup_exemption": false
+      }
+    },
+    "full_200Hz_native_actuator_trace_replay": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Only original50Hz policy/native snapshots checked here; strict200Hz actuator trace has not been replayed"
+    },
+    "full_publication_PI_and_all_SCAN_geometry_replay": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Full source/ACK/PI/publication/geometry replay not completed by this mission reader; original numerical gates retained"
+    }
+  },
+  "simulation_only": true,
+  "navigation_ground_truth_used": false,
+  "actor_privileged_dimensions": 232,
+  "real_robot_verified": false,
+  "evaluator_sha256": "0650fff361a54c4b3fad1f491df76a2e36f8d73d3c581d9b6477bef3a91473d7",
+  "source_bindings": {
+    "navigation_scope.json": "9f229eb592a45c97d6412eb9abafc59eae3511477af61eb95349f8d642f34403",
+    "source_manifest.json": "b632cef7373273e890e5cf1198cf2d5781913e4cbdb1e1db24f5b17047f60281",
+    "navigation_source_snapshots.json": "d46d6ddb9267e6e529c43900e81e352159280dc5fbccb8c9cb1f4e0e33961758",
+    "navigation_profile.json": "13da3d82577cf9a9eb332375b35ab7c5ce2121732eaf7762fe4895bb5bb06653",
+    "runtime_manifest.json": "c80f8b6ae1e13c23cf24adfdef497665db7479e3f9ab02c65ab453385613dcb1",
+    "worker_result.json": "c6aada23b1e545e82620f19f860e8e7491878cd53ac471cb0c13e48b127f5a8a",
+    "mission46_status.json": "da1a2c095f213105cffd41fbea1b07c2843145d6391fd05f7447b6876a220936",
+    "navigation_anchor.json": "2fdcb6851a47b1c8386390bc31b154ee2e92e7c67744ac49fb707f5157111376"
+  },
+  "limitations": [
+    "Functional46 receipt recomputation; complete command-publication/PI and SCAN trajectory geometry replay is not yet added to this reader, so overall formal control/navigation acceptance remains separately unverified.",
+    "Dynamic entity evidence uses actual SetEntityPose execution ACKs, not an independent pose/info observer.",
+    "Native position is used only for Actor privilege and offline physical safety, never navigation."
+  ],
+  "formal_control_math_and_all_path_guard_replay_complete": false
+}
