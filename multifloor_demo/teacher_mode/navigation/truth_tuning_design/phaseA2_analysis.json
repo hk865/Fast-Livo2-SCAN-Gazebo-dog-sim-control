@@ -1,0 +1,719 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-05T00:04:04.649679+08:00",
+  "status": "all9_A2_actual_independently_read_no_final_multiscene_winner",
+  "source_receipts": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/phase_A2_architecture_frequency_results.jsonl",
+  "receipt_sha256": "ecd961eb309faad087d6f526e44a3550a9319f95ec806395284d55f036d5cd04",
+  "freeze_sha256": "f050e2014638a65e05f9dfe5197d703946a024914e07ec59ea27e1b399226b0b",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235036_truth_pid_flat_line_legacy_position_10hz_4144",
+      "design": "legacy_position",
+      "feedback_hz": 10,
+      "status": "passed",
+      "score": 40.549879682588134,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "route_RMS_m": 0.008162639741159564,
+      "route_max_m": 0.02000760634618981,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.2995474857649337,
+      "velocity_actual_mean_projection_mps": 0.2405383951882974,
+      "velocity_MAE_mps": 0.059009090576636246,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.2999633396794984,
+        "body_COM_vx_mean": 0.24263571845717113,
+        "response_ratio": 0.8088845747497675,
+        "command_total_variation_per_sim_s": 0.07282022890598264
+      },
+      "parking": {
+        "window_s": [
+          30.025000000000002,
+          35.025000000000006
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.0025153785587037247,
+        "yaw_drift_rad": 0.03681104549614566,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 30.0,
+      "normalized_score_terms": {
+        "RMS_route": 0.10203299676449454,
+        "speed_MAE": 0.7879764428794829,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.05030757117407449,
+        "parking_yaw": 0.36811045496145656
+      },
+      "score_recomputed": 40.549879682588134,
+      "input_sha256": {
+        "summary_truth_pid.json": "026c07adf1e7fa22a6ed2a2803eb462462fbeabd73bfbcbc9b8a69526da9816c",
+        "truth_profile.json": "fef36ab669a7c1d56cb9120e32e594fe1e5e760671b8a42d96d8af9405e627f8",
+        "telemetry.jsonl": "780a36bcca989f3531683108de8df36ce393c0e0e664bcf71375bc2d61658fb2",
+        "control.jsonl": "34486198a7b871c9a5cc7f23ad6b834c9162317aee5a40c43c1b5ad6c15651d8",
+        "runtime_manifest.json": "3f9db66933fb7d22a7a6792a98a0ba8137a99f4928fbb9d6b6f518b888dcf2c9"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235118_truth_pid_flat_line_legacy_position_25hz_30d1",
+      "design": "legacy_position",
+      "feedback_hz": 25,
+      "status": "passed",
+      "score": 41.21885768474875,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.03999999999999915,
+        0.0400000000000027
+      ],
+      "route_RMS_m": 0.00810851258975953,
+      "route_max_m": 0.01977986848631974,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.29930474422909426,
+      "velocity_actual_mean_projection_mps": 0.23906433643438843,
+      "velocity_MAE_mps": 0.06024040779470589,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.2999533990597552,
+        "body_COM_vx_mean": 0.24211709806472892,
+        "response_ratio": 0.8071823784083726,
+        "command_total_variation_per_sim_s": 0.08084548990379978
+      },
+      "parking": {
+        "window_s": [
+          30.545,
+          35.545
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.0056838264005197375,
+        "yaw_drift_rad": 0.024829878824943984,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 30.52,
+      "normalized_score_terms": {
+        "RMS_route": 0.10135640737199411,
+        "speed_MAE": 0.8050712052675862,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.11367652801039474,
+        "parking_yaw": 0.24829878824943982
+      },
+      "score_recomputed": 41.21885768474875,
+      "input_sha256": {
+        "summary_truth_pid.json": "e2544c76cdccbd81c76d565eb3f5e75f0fe321f1f2b3684d8cc37ebf243d08ef",
+        "truth_profile.json": "3550b4a9f175f7b6f644cfee7e9358025be7cd7ba95f8162c19d2ab85c949868",
+        "telemetry.jsonl": "c0d4d8fac5a7a3e6a4b7d607e4ade8c1076ca22d604d9603d630b964245302b9",
+        "control.jsonl": "43e05f08d694af985e9ac457e5f875895f95599b49b22b6ee2446f481586949e",
+        "runtime_manifest.json": "d0344c1a69b689875f5bf859a24689a54cb9c2d5634e1f2403c9b0678fd574d5"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235200_truth_pid_flat_line_legacy_position_50hz_1471",
+      "design": "legacy_position",
+      "feedback_hz": 50,
+      "status": "passed",
+      "score": 32.93464336946463,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.019999999999998685,
+        0.020000000000003126
+      ],
+      "route_RMS_m": 0.008609550873828139,
+      "route_max_m": 0.023568481019962895,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.29941501909636437,
+      "velocity_actual_mean_projection_mps": 0.23895544980524266,
+      "velocity_MAE_mps": 0.06045956929112173,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.2999429926886021,
+        "body_COM_vx_mean": 0.24217132096888558,
+        "response_ratio": 0.807391160560652,
+        "command_total_variation_per_sim_s": 0.08341906960127791
+      },
+      "parking": {
+        "window_s": [
+          31.325,
+          36.325
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.008541174102840698,
+        "yaw_drift_rad": 0.07924999431230165,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 31.299999999999997,
+      "normalized_score_terms": {
+        "RMS_route": 0.10761938592285174,
+        "speed_MAE": 0.8077025591246415,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.17082348205681394,
+        "parking_yaw": 0.7924999431230164
+      },
+      "score_recomputed": 32.93464336946463,
+      "input_sha256": {
+        "summary_truth_pid.json": "0dae173ee272690b508c80bd22d9232cd7cd6887be0417e81d2343361d257535",
+        "truth_profile.json": "170bda3c07bda75dfaa083596b3ea73e24fdaa18e3cd663db2371e17927998df",
+        "telemetry.jsonl": "d0cf5f755cc1ca5c57f0d49820a0f0d358a433e2e2b1667c86a47df3b5381325",
+        "control.jsonl": "aa96c89ffe9244301031ea53c7370236a0ab41e159b6d9a0c9a5430330ddfeb4",
+        "runtime_manifest.json": "2d2c34f1c2757a7a795fbb07335e8db6a8654cb69ae690c50c6da59c8cbd74ef"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235243_truth_pid_flat_line_path_pd_10hz_a142",
+      "design": "path_pd",
+      "feedback_hz": 10,
+      "status": "passed",
+      "score": 42.5681218324382,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "route_RMS_m": 0.0061664390304619395,
+      "route_max_m": 0.01875112523196576,
+      "heading_max_rad": 0.031742523570860576,
+      "velocity_ref_mean_mps": 0.29974681291333166,
+      "velocity_actual_mean_projection_mps": 0.24358316889190326,
+      "velocity_MAE_mps": 0.056163644021428365,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.29999247749519814,
+        "body_COM_vx_mean": 0.2427506318728225,
+        "response_ratio": 0.8091890633381236,
+        "command_total_variation_per_sim_s": 0.09987416088354902
+      },
+      "parking": {
+        "window_s": [
+          29.725,
+          34.725
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.003559062147294838,
+        "yaw_drift_rad": 0.0292720295563722,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 29.7,
+      "normalized_score_terms": {
+        "RMS_route": 0.07708048788077425,
+        "speed_MAE": 0.7494811167539244,
+        "heading_max": 0.15871261785430288,
+        "parking_XY": 0.07118124294589676,
+        "parking_yaw": 0.292720295563722
+      },
+      "score_recomputed": 42.5681218324382,
+      "input_sha256": {
+        "summary_truth_pid.json": "b1ac57ac95ab13dd2369d3f19b9e4954c3081749f31f828eed57323a6b0bd793",
+        "truth_profile.json": "8a693459524c5a40a50fce439051a4ef95e2fd13b9fe57d67769eae6d2002f3d",
+        "telemetry.jsonl": "675d9208f6fa26fab8544547637a59f51cd4ae843d8f84c3634151611f65ca8c",
+        "control.jsonl": "7678050b6e41989b82a4b5fdc5401ac3c31153509568b50c168427ba645ac7cd",
+        "runtime_manifest.json": "e07c039b20ba45c88d6db0cea7b53e8534c2d0450640e1bfe544d53b59a1c888"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235325_truth_pid_flat_line_path_pd_25hz_ca5e",
+      "design": "path_pd",
+      "feedback_hz": 25,
+      "status": "passed",
+      "score": 39.35199671042179,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.03999999999999915,
+        0.0400000000000027
+      ],
+      "route_RMS_m": 0.007400049985500247,
+      "route_max_m": 0.02655914069053933,
+      "heading_max_rad": 0.03180255446528924,
+      "velocity_ref_mean_mps": 0.29970197678981225,
+      "velocity_actual_mean_projection_mps": 0.24168832903895404,
+      "velocity_MAE_mps": 0.0580136477508582,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.2999963200166114,
+        "body_COM_vx_mean": 0.24099279257162917,
+        "response_ratio": 0.8033191625760107,
+        "command_total_variation_per_sim_s": 0.11649061940488865
+      },
+      "parking": {
+        "window_s": [
+          29.425,
+          34.425
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.004384220938893436,
+        "yaw_drift_rad": 0.042768481450633264,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 29.4,
+      "normalized_score_terms": {
+        "RMS_route": 0.09250062481875308,
+        "speed_MAE": 0.7742844858383363,
+        "heading_max": 0.1590127723264462,
+        "parking_XY": 0.08768441877786873,
+        "parking_yaw": 0.4276848145063326
+      },
+      "score_recomputed": 39.35199671042179,
+      "input_sha256": {
+        "summary_truth_pid.json": "d3dc3b23ba4150dc3ffb0af395fcb0d24c1756459fc80479649f8f10eb7b632d",
+        "truth_profile.json": "8e5e3381869eaaadc67a0629917e90622bc12b73cf961358c4c502d24781d009",
+        "telemetry.jsonl": "50b3beab4c92564d8b780423c2e860f96a5eebef86842ce798f9e6e5e31c216d",
+        "control.jsonl": "83720e1fc6d99b106c587b0fff7b7f3abede6596bf07d92ea1f791e903b19968",
+        "runtime_manifest.json": "82571f77a9e7bc54865eb165e5a6dc04d518b66801921e57f6bdbcb01f303bab"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235406_truth_pid_flat_line_path_pd_50hz_92aa",
+      "design": "path_pd",
+      "feedback_hz": 50,
+      "status": "passed",
+      "score": 38.49115192133778,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.019999999999998685,
+        0.020000000000003126
+      ],
+      "route_RMS_m": 0.007422543746298354,
+      "route_max_m": 0.02218548876192683,
+      "heading_max_rad": 0.03182151304248608,
+      "velocity_ref_mean_mps": 0.29973490508672385,
+      "velocity_actual_mean_projection_mps": 0.24083327303164934,
+      "velocity_MAE_mps": 0.05890163205507455,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.29999995777109695,
+        "body_COM_vx_mean": 0.2403784279924544,
+        "response_ratio": 0.8012615394295008,
+        "command_total_variation_per_sim_s": 0.1206987095123498
+      },
+      "parking": {
+        "window_s": [
+          29.685000000000002,
+          34.685
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.007916893850932312,
+        "yaw_drift_rad": 0.04017227445655096,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 29.66,
+      "normalized_score_terms": {
+        "RMS_route": 0.09278179682872942,
+        "speed_MAE": 0.7860496866460346,
+        "heading_max": 0.15910756521243039,
+        "parking_XY": 0.15833787701864624,
+        "parking_yaw": 0.40172274456550955
+      },
+      "score_recomputed": 38.49115192133778,
+      "input_sha256": {
+        "summary_truth_pid.json": "12defe9085a4580552fe6edd2e637f502a4bacc7aeb3a4ff461216af309f325d",
+        "truth_profile.json": "3d507ec15bab6f0af572b8cbe2c852be9f97ecfebbfe1083fb31b5d0a513be05",
+        "telemetry.jsonl": "e331ce5be6777eecd9a6f712c4c12422a2ad76572aa7985d99403549e392f5e0",
+        "control.jsonl": "1a4cb92c315579330c7a4fedc12544245e8fde118b4daed8c92f8fea0b8e9101",
+        "runtime_manifest.json": "d10eb31ac4f56d1b5167613adcf33f5297c1963134849acfcb1f46f915b537d6"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235449_truth_pid_flat_line_cascade_pi_10hz_2d99",
+      "design": "cascade_pi",
+      "feedback_hz": 10,
+      "status": "passed",
+      "score": 38.241911693663305,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "route_RMS_m": 0.0059644176208116595,
+      "route_max_m": 0.014218256235603133,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.2996752155757507,
+      "velocity_actual_mean_projection_mps": 0.2956093692396889,
+      "velocity_MAE_mps": 0.014554717251358276,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.35462258221854775,
+        "body_COM_vx_mean": 0.29492253924916606,
+        "response_ratio": 0.8316518857995637,
+        "command_total_variation_per_sim_s": 0.3455091716181648
+      },
+      "parking": {
+        "window_s": [
+          24.525000000000002,
+          29.525000000000002
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.017880204885979488,
+        "yaw_drift_rad": 0.08308284012859325,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 24.5,
+      "normalized_score_terms": {
+        "RMS_route": 0.07455522026014574,
+        "speed_MAE": 0.1942732197375087,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.35760409771958973,
+        "parking_yaw": 0.8308284012859325
+      },
+      "score_recomputed": 38.241911693663305,
+      "input_sha256": {
+        "summary_truth_pid.json": "d53a21e9e35743650cd8a203af9c1e5b8470e1a9f8b4d3ef8baf9cf1bd119b8a",
+        "truth_profile.json": "af20caa8ae38eb9263fa5702745d38d7955b1ed3f42e6e337c2e89ac07cd77e2",
+        "telemetry.jsonl": "e7c6503a76951033b88d9588aff8a255982ebec06a6ad4b069095d008f93d91a",
+        "control.jsonl": "6e7bb43a388c7fec1de92930368cb99a58bef01bd5102df79b4131ce3c29b9e0",
+        "runtime_manifest.json": "6765af2fa8d57406d0bfdc4edb7bab949b0416adb217d8c040fd19a0bb3ec878"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235526_truth_pid_flat_line_cascade_pi_25hz_d132",
+      "design": "cascade_pi",
+      "feedback_hz": 25,
+      "status": "passed",
+      "score": 51.061126694331136,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.03999999999999915,
+        0.0400000000000027
+      ],
+      "route_RMS_m": 0.005486393740767085,
+      "route_max_m": 0.011878851433044457,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.2996953717825158,
+      "velocity_actual_mean_projection_mps": 0.2955910871035468,
+      "velocity_MAE_mps": 0.015790250023612624,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.35573876668909626,
+        "body_COM_vx_mean": 0.2945393829665357,
+        "response_ratio": 0.8279653795054426,
+        "command_total_variation_per_sim_s": 0.3951057999891206
+      },
+      "parking": {
+        "window_s": [
+          25.025000000000002,
+          30.025000000000002
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.009672870217650254,
+        "yaw_drift_rad": 0.03279779123657501,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 25.0,
+      "normalized_score_terms": {
+        "RMS_route": 0.06857992175958856,
+        "speed_MAE": 0.21075066898358855,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.19345740435300507,
+        "parking_yaw": 0.3279779123657501
+      },
+      "score_recomputed": 51.061126694331136,
+      "input_sha256": {
+        "summary_truth_pid.json": "8a0f76ad3a4b9112cecdf8839edbff7c0fd9a892c9a5adea02459d908e3dabcd",
+        "truth_profile.json": "2d2964879ff050856bb293eb358a43577a772792524739d6a768f96a306e1d0e",
+        "telemetry.jsonl": "4c9e1afbc4b69cde40d75a70ecdd9cf8801909672d1997e41abafbdafd49edaf",
+        "control.jsonl": "41e36b4c54fd37d7d016d273bea5bb6839d7970fae5a71b1aeafd615a967d7fc",
+        "runtime_manifest.json": "7c76e1559cbd2c783c5bcf945b723b4cf1bdca08821591d0a453fadb5bbb9f80"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235603_truth_pid_flat_line_cascade_pi_50hz_5f87",
+      "design": "cascade_pi",
+      "feedback_hz": 50,
+      "status": "passed",
+      "score": 39.050779115558534,
+      "actual_immutable_source_freeze_match": {
+        "core.py": true,
+        "worker.py": true,
+        "run.py": true,
+        "evaluate.py": true,
+        "protocol.json": true
+      },
+      "all_checks_passed": true,
+      "source_intervals_s_minmax": [
+        0.019999999999998685,
+        0.020000000000003126
+      ],
+      "route_RMS_m": 0.005617931065935533,
+      "route_max_m": 0.012847951782746336,
+      "heading_max_rad": 0.03153421936985151,
+      "velocity_ref_mean_mps": 0.2997613042742318,
+      "velocity_actual_mean_projection_mps": 0.2957057477591381,
+      "velocity_MAE_mps": 0.015719712715360015,
+      "steady_5_20s": {
+        "Actor_command_vx_mean": 0.3561905095398005,
+        "body_COM_vx_mean": 0.29480086962958685,
+        "response_ratio": 0.8276494228059885,
+        "command_total_variation_per_sim_s": 0.4152991671076271
+      },
+      "parking": {
+        "window_s": [
+          24.905,
+          29.905
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.014680000024446367,
+        "yaw_drift_rad": 0.08295100667428162,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "completed_elapsed_s": 24.88,
+      "normalized_score_terms": {
+        "RMS_route": 0.07022413832419416,
+        "speed_MAE": 0.20976306803067668,
+        "heading_max": 0.15767109684925756,
+        "parking_XY": 0.2936000004889273,
+        "parking_yaw": 0.8295100667428162
+      },
+      "score_recomputed": 39.050779115558534,
+      "input_sha256": {
+        "summary_truth_pid.json": "04afe78517e60b0901d2698f1d4782e4cea4c52bee60fcb2d2970d2ad994adf3",
+        "truth_profile.json": "273709533ce779b7c730397be98c0ef8feeaa56ab644dd467a20116fbfee3ffd",
+        "telemetry.jsonl": "ee3ee038ad2cdae770c308b3e79ec44f608f6a342d7c47e4fe1f5edf31cae4c8",
+        "control.jsonl": "d34c92f8308c6d6fdbfbd548d0263c5da61bb820fbc16eb8a13a8809e2dc7cdb",
+        "runtime_manifest.json": "e97dc77187d0c3fb93100615d53617ee08a6a88d8b66fe0b59d9807e5c61d8ef"
+      }
+    }
+  ],
+  "by_design_frequency": {
+    "legacy_position": {
+      "feedback_hz": [
+        10,
+        25,
+        50
+      ],
+      "velocity_actual_mean": [
+        0.2405383951882974,
+        0.23906433643438843,
+        0.23895544980524266
+      ],
+      "velocity_MAE": [
+        0.059009090576636246,
+        0.06024040779470589,
+        0.06045956929112173
+      ],
+      "route_RMS": [
+        0.008162639741159564,
+        0.00810851258975953,
+        0.008609550873828139
+      ],
+      "parking_yaw": [
+        0.03681104549614566,
+        0.024829878824943984,
+        0.07924999431230165
+      ]
+    },
+    "path_pd": {
+      "feedback_hz": [
+        10,
+        25,
+        50
+      ],
+      "velocity_actual_mean": [
+        0.24358316889190326,
+        0.24168832903895404,
+        0.24083327303164934
+      ],
+      "velocity_MAE": [
+        0.056163644021428365,
+        0.0580136477508582,
+        0.05890163205507455
+      ],
+      "route_RMS": [
+        0.0061664390304619395,
+        0.007400049985500247,
+        0.007422543746298354
+      ],
+      "parking_yaw": [
+        0.0292720295563722,
+        0.042768481450633264,
+        0.04017227445655096
+      ]
+    },
+    "cascade_pi": {
+      "feedback_hz": [
+        10,
+        25,
+        50
+      ],
+      "velocity_actual_mean": [
+        0.2956093692396889,
+        0.2955910871035468,
+        0.2957057477591381
+      ],
+      "velocity_MAE": [
+        0.014554717251358276,
+        0.015790250023612624,
+        0.015719712715360015
+      ],
+      "route_RMS": [
+        0.0059644176208116595,
+        0.005486393740767085,
+        0.005617931065935533
+      ],
+      "parking_yaw": [
+        0.08308284012859325,
+        0.03279779123657501,
+        0.08295100667428162
+      ]
+    }
+  },
+  "screen_rank": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235526_truth_pid_flat_line_cascade_pi_25hz_d132",
+      "design": "cascade_pi",
+      "feedback_hz": 25,
+      "score": 51.061126694331136
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235243_truth_pid_flat_line_path_pd_10hz_a142",
+      "design": "path_pd",
+      "feedback_hz": 10,
+      "score": 42.5681218324382
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235118_truth_pid_flat_line_legacy_position_25hz_30d1",
+      "design": "legacy_position",
+      "feedback_hz": 25,
+      "score": 41.21885768474875
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235036_truth_pid_flat_line_legacy_position_10hz_4144",
+      "design": "legacy_position",
+      "feedback_hz": 10,
+      "score": 40.549879682588134
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235325_truth_pid_flat_line_path_pd_25hz_ca5e",
+      "design": "path_pd",
+      "feedback_hz": 25,
+      "score": 39.35199671042179
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235603_truth_pid_flat_line_cascade_pi_50hz_5f87",
+      "design": "cascade_pi",
+      "feedback_hz": 50,
+      "score": 39.050779115558534
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235406_truth_pid_flat_line_path_pd_50hz_92aa",
+      "design": "path_pd",
+      "feedback_hz": 50,
+      "score": 38.49115192133778
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235449_truth_pid_flat_line_cascade_pi_10hz_2d99",
+      "design": "cascade_pi",
+      "feedback_hz": 10,
+      "score": 38.241911693663305
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_235200_truth_pid_flat_line_legacy_position_50hz_1471",
+      "design": "legacy_position",
+      "feedback_hz": 50,
+      "score": 32.93464336946463
+    }
+  ],
+  "selection_direction": "maximize",
+  "not_global_optimal": true,
+  "causal_conclusions": [
+    "A2all9passedoriginalprotocolwithactualsamefrozencore/worker/runner/evaluator/protocolhashes; A1failuresuntouched.",
+    "25Hzlegacyterminalfailurewasrelaylimitcycleatr12. Newr12entry/r14retentionallowsstopwithoutborderrestarts; noformalgoal/parkingthresholdrelaxation. ActualA2legacy25completion30.52sversusA1uncompleted70s.",
+    "VelocityPIimproved.3m/sactualtrackingfrom~.24to~.2956m/sbyraisingActorcommandwithintrainingheadroom~.355. Frequency10→50Hzalonehaslittleeffectonmeansteadyvelocity.",
+    "Within-cascade25Hzsinglescreenscoreleadisdominatedbyparkingyawdriftbetterthan10/50Hz. Actualsteadyvelocitydiffbetweencascadefrequenciesis0.000115m/s;MAE10Hzisactuallylowest. Scoredoesnotprove25Hzbandwidthoptimal.",
+    "Straight.3m/sdefaultinitialconditionhascentimeterpathtrackingatallratesandfewcommanddisturbances. Higherfrequencybenefitmustbejudgedusingcorners/offsetresponse/highspeed,notasamplingfrequencylabel."
+  ],
+  "next_experiments": {
+    "repeats": "Predeclared3all-passedrepeatsoftheprovisionalcascade25winner, keepallmetrics/median/worst, neverchoosebestrepeat. Sameinitialposemodelseedshowsrepeatability, notgeneralization.",
+    "gain_smallsearch": "Kpxbaseline.6,alternatives.4/.8andKixbaseline.5alternatives.4/.6onefactoratatime. Keepoutercross.8/.2,yaw1.3/.15 andfilters/frequencyfixed. Characterizeaccelerationovershoot/saturation/commandvariationaswellasspeedMAE/parking.",
+    "heldout": "Frozenflatcorner/roundtrip,0.5→0.7→1m/sstages,12mup/downrampsand5/10cmfunctionalsteps. Source/profile/collider/footcontactproofsrequired. NoSLAMorhardwareclaim.",
+    "frequency": "Retain10/25/50Hztestedrangesforselecteddesignonchallengingheldoutscenarioifpractical; onlytheninferbandwidthbenefit. Cannotincrease100Hzwithoutnewnativefreshsource."
+  },
+  "truth_scope": {
+    "navigation_truth_used": true,
+    "SLAM_navigation_verified": false,
+    "real_robot_verified": false,
+    "retraining": false
+  }
+}

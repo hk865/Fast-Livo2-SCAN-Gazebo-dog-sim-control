@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "status": "frozen_before_actual_dynamic_run",
+  "analyzer_sha256": "0c7608db35dbbfad4942179465e6a44376e52e949f276554eaa0a85d93723bf3",
+  "protocol_sha256": "0f97378e1bd9489abf9faae8868c3e77efc9b245aa59d201b1af5e6e3e37d24e",
+  "profile_sha256": "c4f198a923279943a607ffa9b5c1f81af690028e3a048f952f922df62f46b49e",
+  "runtime_freeze_sha256": "ad943f0d466558deb7c4be0753aa1403854b92ef2be086172b60ae0c828f2d32",
+  "common_frozen_analyzer_sha256": "5ed1af467538af3eb96239d456d2e5f63bbf0df74a3a4cee908c635d917effc0",
+  "read_only": true,
+  "global_acceptance_overwritten": false,
+  "additional_box_surface_matching": {
+    "minimum_side_returns": 3,
+    "post_run_geometry_tolerance_m": 0.07,
+    "world_z_side_band_m": [
+      0.15,
+      1.05
+    ],
+    "scope": "post-run actual observed box vs actual native guard cloud only; no navigation feedback"
+  },
+  "clear_semantics": "Exact registered cloud/self-filtered buffer and actual recorded steering corridor clear>=1s; can start during leaving. Full observed model return to initial is separate fixture condition. All blocked observed samples reset continuity. New SCAN after first full observed clear confirmation. Missing ticks not fabricated.",
+  "parking_selection": "First1s continuous actual stop while actual box is blocked; next fixed5s window, not best late window. Thresholds all from prospective frozen protocol.",
+  "legacy_scope": "Old flat runs are explicitly inapplicable to dynamic fixture; common actor/SLAM/SCAN/regions validated separately, no historical receipts overwritten."
+}

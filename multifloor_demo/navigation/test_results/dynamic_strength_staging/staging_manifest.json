@@ -1,0 +1,22 @@
+{
+  "scope": "Excluded staging only; no ROS or physical run executed. Candidate pending actual fixed-input yaw response result.",
+  "driver_sha256": {
+    "strength_stack.launch.py": "cfc87437e205f6519f84393a440c40de044965256fffe998a4e260592f2ad312",
+    "probe_dynamic_navigation.py": "ee1f8153b5d5f54d6191260f9e2ecc8fbcb115ea9181dea875739e4138823323",
+    "controller_strength_wrapper.py": "3c824bdce988ad3e0b8b439a9376cc3cf18e088ee213727b4049e4d5542b7be3",
+    "run_dynamic_component.sh": "07a3183ad95149eedc6382198d0bd6fabaaf26983639285942cd52c608ed4da5",
+    "run_dynamic_component.py": "0d71d7a5f22e8fcb699d580c2205bca65f89aeaeec2db7c626993899d2e16c85",
+    "test_held_command_contract.py": "c75de7704335504be91696b2234f6fc7fae507bf8b48f04092c351eb5e00cd65",
+    "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011",
+    "dynamic_probe.launch.py": "03d3dfc9503895d91a24c64d1110645024c4e40bbd259ffc3b2a49be6cbc9a21"
+  },
+  "production_walk_yaw_cap": 0.04,
+  "candidate_walk_yaw_cap": 0.08,
+  "walk_gain": 0.5,
+  "production_source_unchanged": true,
+  "physical_candidate_passed": false,
+  "execution_authorized_after_physical_owner_handoff_only": true,
+  "held_timing_evaluation": "immutable native zero edge + same currentgoal successful reference + actual resume counter and accepted steering, never 4Hz observer flag alone",
+  "held_edge_regressions": 11,
+  "held_edge_regressions_passed": true
+}

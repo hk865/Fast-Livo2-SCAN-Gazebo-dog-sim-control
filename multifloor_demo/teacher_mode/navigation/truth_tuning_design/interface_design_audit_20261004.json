@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "kind": "read_only_truth_controller_design_audit",
+  "created_at": "2026-10-04T23:12:52.381071+08:00",
+  "authorization": "Human requests Gazebo truth pose/velocity based controller calibration across scenes and feedback frequencies; simulation only, separate from actual SLAM navigation validation.",
+  "status": "design_only_no_runtime_or_existing_acceptance_modified_no_processes_started",
+  "sources": {
+    "policy/worker.py": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+    "policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+    "policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+    "simulation/teacher_actuator.cpp": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+    "simulation/prepare.py": "5136e9e51961ddeffaa61525d2638ee44572ecf528e118442aa4b5143265319f",
+    "scripts/run_test.py": "915f743d789a3ce959df4bb192fc95f2821235a4c9b696587b4f52365e3241e6",
+    "navigation/pid_mode/pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "navigation/pid_mode/controller.py": "f71c5e6812339bd5e70671942a495bd4795a1e0fab86658754907bacab4ebbeb",
+    "navigation/pid_mode/profiles_heading_v5/flat_long.json": "d0f10be2b7d29f89bcfbfb896fa22dea3458c2faf239e5bf625531a00998ba41"
+  },
+  "minimum_architecture": {
+    "entry_point": "New independent worker receiving the unchanged native64 frame and running truth controller immediately before frozen CPU Teacher inference. Reuse load_actor/build_observation but do not change old worker/controller defaults or old source hashes.",
+    "joint_executor": "Keep teacher_sim::TeacherActuator the sole JointForceCmd writer. Controller outputs only vx/vy/yaw_rate; no joint position/force writer, CHAMP or ros2_control.",
+    "feedback": "Use received native frame directly. Avoid state.json (written once per 10 actor frames = only5Hz) or reading log files for control.",
+    "frequency_matrix_hz": [
+      10,
+      25,
+      50
+    ],
+    "sample_clock": "Fresh feedback update in simulation time from integer source physics timestamp, then zero-order-hold controller output between admitted samples; actor remains50Hz and physicalPD200Hz.",
+    "cannot_claim": "Current socket exchanges are50Hz. A100Hz timer with repeated native frame is not100Hz effective feedback. A real100Hz test needs an independently reviewed native interface with actor still50Hz.",
+    "truth_label": "Separate truth calibration manifest with truth_feedback_used=true, slam_navigation_integration_passed=false; do not forge source=scan_slam or pass actual navigation acceptance.",
+    "unchanged": "Frozen checkpointSHA, actor architecture/observations/actionscale/jointmap/basePD/motor limits, bootstrap/learned zero-command stop, native200ms IPC fault and unique executor checks."
+  },
+  "native_fields": {
+    "state_time_s": "s[0] -0.005, physical result from preceding5ms Physics integration",
+    "position": "s[1:4], world base link origin, m",
+    "quaternion": "s[4:8], normalized world-from-body wxyz",
+    "linear_velocity": "s[8:11], base COM point velocity in full body orientation, m/s",
+    "angular_velocity": "s[11:14], full body-frame angular velocity, rad/s",
+    "joints": "s[14:26] positions, s[26:38] velocities, s[38:50] previous clipped actual applied torque, trainingFR FL RR RL hip/thigh/calf order",
+    "contacts": "s[50:55], native collision counts body/FR/FL/RR/RL, -1 means unavailable",
+    "origin_COM_consistency": "Do not pair origin position derivative with COM linear velocity silently. Native plugin knows comOffset; either choose COM position p_origin+R@offset and COM velocity for tracking, or subtract omega_world cross R@offset to obtain origin velocity. Record chosen tracked point.",
+    "slope_transform": "World linear velocity is full quaternion R@v_body, not only yawR. Body omega_z differs from Euler yaw derivative on roll/pitch: yawdot=(sin(roll)*omega_y+cos(roll)*omega_z)/cos(pitch). Record both, protect cos(pitch) singularity."
+  },
+  "reference_design": {
+    "route": "Immutable prospective exact continuous world polyline with active segment ledger and explicit goal region/dwell. No SCAN replan, moving lookahead as hidden reference, or reset to current drifted robot pose.",
+    "geometry": "Project chosen tracked point continuously onto active finite line segment; retain signed along/cross-track error, endpoint distance and exact world trajectory for audit.",
+    "space_vs_time": "Primary path-following target is spatial: time-independent path geometry plus prescribed cruise speed. If timed trajectory is added, mark and score its separate along-track schedule error; do not mix definitions.",
+    "desired_velocity": "v_ref_worldXY = tangent*v_profile - normal*k_cross*e_cross, with explicit endpoint deceleration and terminal position control. Desired heading follows the same segment/path tangent; curves add curvature*v_profile yaw-rate feedforward.",
+    "ramp": "Keep XY/yaw servo; height and support clearance are safety/arrival evidence. Never apply vertical PID or interpret ramp connection as true stairs.",
+    "terminal": "Use explicit measured stop/dwell and slowdown at remaining distance; never freeze action or set action=0. Learned Teacher continues on zero velocity command."
+  },
+  "controller_candidates": [
+    {
+      "id": "baseline_position_pid_truth",
+      "purpose": "Replace only feedback/path reference in old P/I/D design to isolate localization/reference effects, keeping old gains for baseline."
+    },
+    {
+      "id": "spatial_path_feedforward_PD",
+      "purpose": "Decouple along/cross coordinates, prescribe tangent cruise-speed feedforward, cross-track P plus measured lateral damping, no position integral initially; yaw angle P plus angular-rate damping."
+    },
+    {
+      "id": "cascade_position_yaw_outer_velocity_PI_inner",
+      "purpose": "Outer path/angle error produces target twist. Inner body vx/vy/yaw-rate error PI corrects Teacher response. Derivative is unnecessary initially because velocity signal has gait oscillations; do not double-count outer velocity damping.",
+      "candidate_initial_gains_not_validated": {
+        "velocity_kp": [
+          0.25,
+          0.5
+        ],
+        "velocity_ki_per_s": [
+          0.3,
+          0.6
+        ],
+        "cross_position_kp_per_s": [
+          0.6,
+          1.0
+        ],
+        "cross_position_ki": 0,
+        "yaw_angle_kp_per_s": [
+          0.8,
+          1.1
+        ]
+      },
+      "saturation": "Command clamp per frozen training ranges[-1,1]vx,[-.4,.4]vy,[-1,1]wz plus stricter prospective speed/stage caps. Conditional/back-calculation antiwindup observes both slew and per-axis clipping; reset on stop/fault/new route-leg, not every sampled state."
+    }
+  ],
+  "experiment_order": [
+    "1. Freeze source/config/protocol and record CPU/GPU competition. Bare CPU physics screening, sensors/camera only selected actual verification to avoid changing load across candidates.",
+    "2. Open-loop Teacher response by axes and speed stages0.3,0.5,0.7,1.0m/s, positive/negative y and yaw, transition to learned zero velocity. Separate achievable speed/stop distance from PID performance.",
+    "3. Fixed straight6m and lateral offset recovery, bothdirections, heading offset±0.2rad. Compare three controller designs at10/25/50Hz with identical source phase/initial condition.",
+    "4. Select best tested feasible controller; tune one axis/gain at a time with prospective bounded small grid, then3repetitions of winner at speeds that cleared previous stage.",
+    "5. Heldout square/corner or smooth turn,12m up/down ramp and5/10cm step; failures retained separately. Multilevel navigation integration remains unverified.",
+    "6. Inject controlled command producer pause/timeout and stop/recovery; if inline controller used, distinguish internal safety semantics from actual bridge communication failure.",
+    "7. Freeze winning controller/config and prospective same tests, swap onlyfeedback to realSLAM plus causal IMU prediction; no truth-assisted route/arrival success claims."
+  ],
+  "proposed_new_criteria_must_be_frozen_before_runs": {
+    "hard_safety": {
+      "no_body_collision": true,
+      "no_native_fault": true,
+      "max_abs_roll_pitch_rad": 0.65,
+      "min_body_clearance_m": 0.18,
+      "effort_limit_Nm": 23.5000001,
+      "joint_speed_radps": 30.001,
+      "only_one_joint_executor": true
+    },
+    "flat_tracking": {
+      "cross_track_max_m": 0.15,
+      "cross_track_RMS_m": 0.08,
+      "heading_abs_max_rad": 0.15,
+      "steady_velocity_RMSE": "max(.05m/s,.20*abs(reference_axis_speed))",
+      "steady_window": "Explicit post-acceleration interval≥3s, before endpoint slowdown; do not select favorable window afterwards."
+    },
+    "arrival": "Endpoint radius0.15m with measured speed≤.03m/s and yaw-rate≤.05rad/s continuous.6s; deadlines scale by length/cruise speed plus predetermined turn and settle margin.",
+    "parking": "5s fixed window after predetermined completion+settle; XYdrift≤.03m, yawdrift≤.10rad, preserve actor inference and zero requested/applied velocity command.",
+    "ranking": "Hard-gate feasibility first; among passed candidates rank prespecified normalized routeRMS+velocityRMSE+headingRMS+command total variation/overshoot with allrepeats; call best-tested parameters, never global optimal.",
+    "validation_scope": "These are NEW calibration criteria, not a change/reinterpretation of previous original navigation formal25checks."
+  },
+  "logging_required": [
+    "exact physics state timestamp and admitted source sequence",
+    "feedback update/held flag and actual intervals",
+    "tracked point definition/COMoffset",
+    "immutable route hash/active leg",
+    "signedalong/crosstrack/terminal/yaw errors",
+    "desired twist/P/I/D and velocity error",
+    "pre/post slew and saturation plus antiwindup/reset reasons",
+    "Teacher applied command and actual body COM twist",
+    "full native pose/RP/contact/torque/qd/qtargets",
+    "resources and source/model/config/protocol hashes",
+    "allstop/failure/timeouts"
+  ],
+  "material_risks": [
+    "Current old HeaderPID and worker schedule caps are .3/.2/.3; must not silently widen established navigation scope.",
+    "A reference of1m/s and commandmax1m/s may be infeasible if Teacher undertracks; report infeasible operating point rather than windup/highergain fix.",
+    "Training command support includes1m/s but does not establish stable deployment performance.",
+    "Base link-origin position and COM velocity refer to different points; posture change causes a real angular velocity offset.",
+    "On ramp bodyomega_z is not exact worldEuler yawrate; fullorientation transform needed.",
+    "Current Teacher scan privileged+20raystart can see upperdeck; controller tuning cannot repair that scene-observation mismatch.",
+    "Task can identify best tested controller, not mathematical global optimal PID."
+  ]
+}

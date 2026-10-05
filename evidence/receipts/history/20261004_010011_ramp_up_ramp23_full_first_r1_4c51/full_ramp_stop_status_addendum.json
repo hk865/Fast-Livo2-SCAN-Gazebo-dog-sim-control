@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope": "Destination parking status clarification only; original frozen receipt retained",
+  "status": "unverified",
+  "teacher_stop_on_destination_landing": {
+    "status": "unverified",
+    "passed": null,
+    "window_s": [
+      78,
+      83
+    ],
+    "translation_drift_m": null,
+    "yaw_drift_rad": null,
+    "linear_rms_mps": [
+      null,
+      null
+    ],
+    "yaw_rate_rms_radps": null,
+    "native_samples": 0,
+    "strategy": "continuous learned Teacher with zero VELOCITY command; action remains inferred",
+    "destination_completion_time_s": null,
+    "reason": "Destination not reached or complete stop window absent; parking not tested"
+  },
+  "original_summary_sha256": "80f144a6531a8544cd70ec10642de9ef8a92cc65097602e3787e761eeb355502",
+  "original_analyzer_sha256": "a5b903ba57e0e9eccd9bd1a58d0f6638f0c663d228c996d1f6fff4ca69fd5396",
+  "corrected_analyzer_sha256": "f7d420cf35332f0a84d9d3ed193d2926e0f1f52ff5bea73ca096c9e7dd36a172",
+  "overall_full_ramp_status": "failed",
+  "native_safety_status": "failed",
+  "original_summary_bytes_unchanged": true,
+  "original_npz_bytes_unchanged": true,
+  "meaning": "No destination landing completion or parking samples: parking not tested; route/safety failures remain real and original receipt is not overwritten",
+  "errors": []
+}

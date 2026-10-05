@@ -1,0 +1,58 @@
+{
+  "status": "READY for input/driver staging only; no dynamic physics permission or actual motion outcome",
+  "scope": "Read-only final selected schema2 two-goal contract. Candidate control unchanged.",
+  "source_SHA256": {
+    "probe_dynamic_drift.py": "58918acd3553ae2ccf5a616c2a17b835c659484ea5e18793271f746f9f92cab6",
+    "dynamic_region_contract.py": "6928ac176e031e42dbf40004a5a2a2ba18e35e0c9ee0881d134af383290241c3",
+    "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011"
+  },
+  "review": {
+    "two_original_offsets_north2_east2": true,
+    "outer_sphere_030_control_sphere_022": true,
+    "original_dwell_040_gap_020_each_deadline90": true,
+    "single_native_initial_SE3_reused_by_diagnostics": true,
+    "original_windows_rawinner_same_time_GTouter": true,
+    "origin_to_native_terminal_all_truth_pairs_required": true,
+    "ground_truth_only_evaluation": true,
+    "actual_NAV_request_hash_index_and_receipts": true,
+    "obstacle_mission_heartbeat_echoes_actual_NAV_no_invented_index": true,
+    "real_event_cloud_SHA_and_original_held_reference_helper": true,
+    "requested_safe_actual_zero_after_terminal_and_nominal_idle": true,
+    "modern_required_disabled_bodyfeedback_and_failure_stop": true,
+    "sole_original_NAV_command_publisher": true
+  },
+  "tests_receipt": {
+    "passed": true,
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "scope": "selected two sphere windows + actual driver methods, no nodes/physics",
+    "sha256": {
+      "probe_dynamic_drift.py": "58918acd3553ae2ccf5a616c2a17b835c659484ea5e18793271f746f9f92cab6",
+      "dynamic_region_contract.py": "6928ac176e031e42dbf40004a5a2a2ba18e35e0c9ee0881d134af383290241c3",
+      "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011",
+      "test_dynamic_contract.py": "bc3262d568fc8fecca18212f5f6ee0b23b6c6d7215f076feb23e4817faf6caae"
+    }
+  },
+  "archived_import_receipt": {
+    "passed": true,
+    "no_ros_context_initialized": true,
+    "archive_directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/test_results/nav_drift_extended_driver/dynamic_import_archive/staging",
+    "sha256": {
+      "probe_dynamic_drift.py": "58918acd3553ae2ccf5a616c2a17b835c659484ea5e18793271f746f9f92cab6",
+      "dynamic_region_contract.py": "6928ac176e031e42dbf40004a5a2a2ba18e35e0c9ee0881d134af383290241c3",
+      "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011"
+    },
+    "byte_matches_origin": {
+      "probe_dynamic_drift.py": true,
+      "dynamic_region_contract.py": true,
+      "held_command_contract.py": true
+    }
+  },
+  "pending_orchestrator_requirements": [
+    "Dynamic runner must explicitly archive all THREE driver/helper files, not earlier two-file list.",
+    "Preflight/source/runtime/staging/actualmaps and original obstacle shape/time checks still need fresh matching run manifest.",
+    "Root has not authorized dynamic physics. This is not acceptance of actual stop/resume or motion."
+  ],
+  "historical_outcomes_unchanged": true
+}

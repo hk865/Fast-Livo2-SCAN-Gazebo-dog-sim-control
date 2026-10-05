@@ -1,0 +1,2895 @@
+{
+  "verdict": "Actual original lowD ALIGN first4 independently passed joint-region/safety checks; no full-demo or gain production adoption claim",
+  "checks": {
+    "original_driver20_checks_true": true,
+    "original4_goals_preregistered_exact": true,
+    "canonical_hash_exact": true,
+    "samewindow_independent_rawinner_GTouter4ordered": true,
+    "all_active_GT_coverage_no_missing": true,
+    "rawIMU1ms_allactive_observed": false,
+    "rawEuler_componentmax_under030": true,
+    "actual_bridge_noholds": true,
+    "actual_body_contact_none": true,
+    "native_active_sync_allcovered": true,
+    "generic_current_input_frame_allactive": true,
+    "original_source269_runtime_assets_allunchanged": true,
+    "actual_profile_and_CM_early_terminal_true": true,
+    "actual_ownedclean_exit0": true,
+    "all19_archivedsource_matchdeclared": true,
+    "actual_live_ALIGN_configuration_matches_declared": true
+  },
+  "all_joint_evidence_checks_true": false,
+  "original_result_SHA256": "b79704bdf77f8058d57edf8f40dc5750a0858c5b3ec7b27c9514f82f1f6f7a7b",
+  "original_result_passed": true,
+  "independent_original_windows": {
+    "passed": true,
+    "checks": {
+      "actual_matching_goal_hash_and_definitions": true,
+      "native_receipts_immutable": true,
+      "actual_NAV_succeeded": true,
+      "ordered_four_original_receipt_windows": true,
+      "independent_truth_full_active_pose_coverage": true,
+      "native_sensor_timestamps_valid": true
+    },
+    "errors": [],
+    "regions": [
+      {
+        "index": 0,
+        "goal_id": "exploration:0",
+        "definition": {
+          "goal_id": "exploration:0",
+          "center": [
+            0.006686662720471707,
+            -1.0006569906111857,
+            0.0003329264899414562
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        "passed": true,
+        "receipt": {
+          "request_id": "first-four-regions-1790893770101336252",
+          "goal_id": "exploration:0",
+          "waypoint_index": 0,
+          "goals_definition_sha256": "2db1a9c86c6077d5c7fbf7ef73826a826904d4f70a304a1fcf77f167c83c03ea",
+          "stamp_ns": 46200000000,
+          "start_stamp_ns": 45799999999,
+          "dwell_ns": 400000001,
+          "raw_position": [
+            0.03578114382145468,
+            -0.7993250623459521,
+            0.015862498518588706
+          ],
+          "center_error_m": 0.20401519986737646,
+          "region_inside": true,
+          "control_region_inside": true,
+          "protected": false,
+          "reason": "arrived",
+          "max_observation_gap_ns": 200000000,
+          "arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "control_arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.25,
+            "height_half_span_m": 0.1
+          }
+        },
+        "observations": [
+          {
+            "stamp_ns": 45799999999,
+            "raw_slam": [
+              -0.0278421182031678,
+              -0.757650832365949,
+              -0.0012748445156040783
+            ],
+            "truth_world": [
+              -0.026231259237017444,
+              -0.7617219869686359,
+              0.31255440527639694
+            ],
+            "truth_in_slam": [
+              -0.03139924511502248,
+              -0.7617817210436487,
+              -0.0027675182312547875
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 45899999999,
+            "raw_slam": [
+              -0.009066382035565214,
+              -0.7669499544350404,
+              -0.001895242234940258
+            ],
+            "truth_world": [
+              -0.006554493982777359,
+              -0.7716635008284877,
+              0.3125247092832582
+            ],
+            "truth_in_slam": [
+              -0.01165648915559978,
+              -0.771591510728958,
+              -0.0028033512437096596
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 46000000000,
+            "raw_slam": [
+              0.011536030149434804,
+              -0.7801836080008491,
+              -0.005113312399231072
+            ],
+            "truth_world": [
+              0.01462600091454928,
+              -0.7850142018173808,
+              0.31007322924211334
+            ],
+            "truth_in_slam": [
+              0.009611850515647896,
+              -0.7848006516995143,
+              -0.005261126219383246
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 46100000000,
+            "raw_slam": [
+              0.03484546671553562,
+              -0.7981800506748291,
+              0.006824797393776745
+            ],
+            "truth_world": [
+              0.037604723200995484,
+              -0.803134384959628,
+              0.3225127128540211
+            ],
+            "truth_in_slam": [
+              0.032715768785093836,
+              -0.8027653658839919,
+              0.007171953544935333
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 46200000000,
+            "raw_slam": [
+              0.03578114382145468,
+              -0.7993250623459521,
+              0.015862498518588706
+            ],
+            "truth_world": [
+              0.036907259279823815,
+              -0.8031641475949755,
+              0.3315675638762007
+            ],
+            "truth_in_slam": [
+              0.03202187320579968,
+              -0.802798704219292,
+              0.016227066258209574
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          }
+        ],
+        "errors": []
+      },
+      {
+        "index": 1,
+        "goal_id": "exploration:1",
+        "definition": {
+          "goal_id": "exploration:1",
+          "center": [
+            1.0066644503946036,
+            -0.9939918455753255,
+            0.0003329264899414562
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        "passed": true,
+        "receipt": {
+          "request_id": "first-four-regions-1790893770101336252",
+          "goal_id": "exploration:1",
+          "waypoint_index": 1,
+          "goals_definition_sha256": "2db1a9c86c6077d5c7fbf7ef73826a826904d4f70a304a1fcf77f167c83c03ea",
+          "stamp_ns": 69500000000,
+          "start_stamp_ns": 69099999999,
+          "dwell_ns": 400000001,
+          "raw_position": [
+            0.7860988384469697,
+            -0.9600268668747042,
+            0.0015378067960087716
+          ],
+          "center_error_m": 0.22316868214093086,
+          "region_inside": true,
+          "control_region_inside": true,
+          "protected": false,
+          "reason": "arrived",
+          "max_observation_gap_ns": 200000000,
+          "arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "control_arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.25,
+            "height_half_span_m": 0.1
+          }
+        },
+        "observations": [
+          {
+            "stamp_ns": 69099999999,
+            "raw_slam": [
+              0.7819325843917463,
+              -0.9561387765895958,
+              0.00242343166628043
+            ],
+            "truth_world": [
+              0.7862892802555898,
+              -0.9653566443913058,
+              0.3187920676475918
+            ],
+            "truth_in_slam": [
+              0.782466361860179,
+              -0.9599807669986002,
+              0.0031924480686820644
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 69200000000,
+            "raw_slam": [
+              0.7887261270118271,
+              -0.9645698022132734,
+              0.000776106617221949
+            ],
+            "truth_world": [
+              0.7914134584570527,
+              -0.9730658026354065,
+              0.31754444467377113
+            ],
+            "truth_in_slam": [
+              0.7876414860842067,
+              -0.9676556561146925,
+              0.001943827838463231
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 69299999999,
+            "raw_slam": [
+              0.7752601721300462,
+              -0.9609898627165797,
+              -0.0010459810335565409
+            ],
+            "truth_world": [
+              0.7785528913377998,
+              -0.9701449042636162,
+              0.315434945126832
+            ],
+            "truth_in_slam": [
+              0.7747609043849564,
+              -0.9648210267352219,
+              -0.00016124071995791853
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 69400000000,
+            "raw_slam": [
+              0.7778494229104043,
+              -0.9527686665104792,
+              -0.0001980655121767281
+            ],
+            "truth_world": [
+              0.779831859827126,
+              -0.962811486584998,
+              0.31569355599265025
+            ],
+            "truth_in_slam": [
+              0.775990928290145,
+              -0.9574791941778832,
+              9.60348489254123e-05
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 69500000000,
+            "raw_slam": [
+              0.7860988384469697,
+              -0.9600268668747042,
+              0.0015378067960087716
+            ],
+            "truth_world": [
+              0.7873480699645888,
+              -0.9699546594245031,
+              0.3173734083554314
+            ],
+            "truth_in_slam": [
+              0.7835553324906805,
+              -0.9645717730949294,
+              0.0017739354427253762
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          }
+        ],
+        "errors": []
+      },
+      {
+        "index": 2,
+        "goal_id": "exploration:2",
+        "definition": {
+          "goal_id": "exploration:2",
+          "center": [
+            0.9999993053587433,
+            0.005985942098806352,
+            0.0003329264899414562
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        "passed": true,
+        "receipt": {
+          "request_id": "first-four-regions-1790893770101336252",
+          "goal_id": "exploration:2",
+          "waypoint_index": 2,
+          "goals_definition_sha256": "2db1a9c86c6077d5c7fbf7ef73826a826904d4f70a304a1fcf77f167c83c03ea",
+          "stamp_ns": 105700000000,
+          "start_stamp_ns": 105200000000,
+          "dwell_ns": 500000000,
+          "raw_position": [
+            0.9150604382302117,
+            -0.1957016200459112,
+            -0.0036010881153025445
+          ],
+          "center_error_m": 0.21887887139665155,
+          "region_inside": true,
+          "control_region_inside": true,
+          "protected": false,
+          "reason": "arrived",
+          "max_observation_gap_ns": 200000000,
+          "arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "control_arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.25,
+            "height_half_span_m": 0.1
+          }
+        },
+        "observations": [
+          {
+            "stamp_ns": 105200000000,
+            "raw_slam": [
+              0.917667658143131,
+              -0.21808820136143342,
+              0.0006647164457784138
+            ],
+            "truth_world": [
+              0.9245393215478894,
+              -0.22465341372661152,
+              0.3170351889765129
+            ],
+            "truth_in_slam": [
+              0.9157622843013348,
+              -0.21837032878704124,
+              0.0012973350579457408
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 105299999999,
+            "raw_slam": [
+              0.9249587245653316,
+              -0.20242710516638393,
+              -0.004858162416824568
+            ],
+            "truth_world": [
+              0.930506373336867,
+              -0.20974306677460733,
+              0.31080469297169255
+            ],
+            "truth_in_slam": [
+              0.9216272438092057,
+              -0.2034211819382928,
+              -0.004937124999922377
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 105400000000,
+            "raw_slam": [
+              0.9153937709572768,
+              -0.19452642652559834,
+              -0.0006410175608957999
+            ],
+            "truth_world": [
+              0.921589466666666,
+              -0.20344030332990168,
+              0.3158325838922847
+            ],
+            "truth_in_slam": [
+              0.9126702756599402,
+              -0.19717755115772168,
+              9.333571091863451e-05
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 105500000000,
+            "raw_slam": [
+              0.9058841808189452,
+              -0.1887636523498302,
+              -0.007461161691708141
+            ],
+            "truth_world": [
+              0.9108484223463866,
+              -0.1971002290830461,
+              0.3097182268712093
+            ],
+            "truth_in_slam": [
+              0.9018848344159374,
+              -0.1909101367728163,
+              -0.006017777970487215
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 105599999999,
+            "raw_slam": [
+              0.9091346469857668,
+              -0.18983445952340675,
+              0.003299956838577433
+            ],
+            "truth_world": [
+              0.9153637500267784,
+              -0.19829642440266404,
+              0.32150174068035353
+            ],
+            "truth_in_slam": [
+              0.9064124199872448,
+              -0.192074716147347,
+              0.005764199315570814
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 105700000000,
+            "raw_slam": [
+              0.9150604382302117,
+              -0.1957016200459112,
+              -0.0036010881153025445
+            ],
+            "truth_world": [
+              0.923103051178191,
+              -0.20475801349123163,
+              0.3155913598911977
+            ],
+            "truth_in_slam": [
+              0.914192543621346,
+              -0.19848514505281448,
+              -0.00014829545572683247
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          }
+        ],
+        "errors": []
+      },
+      {
+        "index": 3,
+        "goal_id": "exploration:3",
+        "definition": {
+          "goal_id": "exploration:3",
+          "center": [
+            2.1517684611426446e-05,
+            -0.0006792029370539285,
+            0.0003329264899414562
+          ],
+          "arrival": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "timeout_sim_s": 90.0,
+          "route_surface_id": "floor_1",
+          "legacy": false
+        },
+        "passed": true,
+        "receipt": {
+          "request_id": "first-four-regions-1790893770101336252",
+          "goal_id": "exploration:3",
+          "waypoint_index": 3,
+          "goals_definition_sha256": "2db1a9c86c6077d5c7fbf7ef73826a826904d4f70a304a1fcf77f167c83c03ea",
+          "stamp_ns": 130500000000,
+          "start_stamp_ns": 130099999999,
+          "dwell_ns": 400000001,
+          "raw_position": [
+            0.20051357994208655,
+            -0.12388760043941745,
+            0.0007263756573380704
+          ],
+          "center_error_m": 0.23532431035828624,
+          "region_inside": true,
+          "control_region_inside": true,
+          "protected": false,
+          "reason": "arrived",
+          "max_observation_gap_ns": 200000000,
+          "arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.35,
+            "height_half_span_m": 0.1,
+            "control_band": {
+              "type": "disc_prism",
+              "dwell_sim_s": 0.4,
+              "axes": [
+                [
+                  0.9999777876741318,
+                  0.006665145035860281,
+                  0.0
+                ],
+                [
+                  -0.006665145035860281,
+                  0.9999777876741318,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "radius_m": 0.25,
+              "height_half_span_m": 0.1
+            }
+          },
+          "control_arrival_definition": {
+            "type": "disc_prism",
+            "dwell_sim_s": 0.4,
+            "axes": [
+              [
+                0.9999777876741318,
+                0.006665145035860281,
+                0.0
+              ],
+              [
+                -0.006665145035860281,
+                0.9999777876741318,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "radius_m": 0.25,
+            "height_half_span_m": 0.1
+          }
+        },
+        "observations": [
+          {
+            "stamp_ns": 130099999999,
+            "raw_slam": [
+              0.21230871829189168,
+              -0.13012789998049748,
+              0.0015716864528594597
+            ],
+            "truth_world": [
+              0.21618409718395548,
+              -0.13462142121435494,
+              0.315174404243094
+            ],
+            "truth_in_slam": [
+              0.20682052519994104,
+              -0.1330747177661977,
+              -0.00031108716049900497
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 130199999999,
+            "raw_slam": [
+              0.20271749305750808,
+              -0.12641187873148704,
+              0.014282910174774613
+            ],
+            "truth_world": [
+              0.20786184433634386,
+              -0.1309502792954071,
+              0.3285166966681497
+            ],
+            "truth_in_slam": [
+              0.19847886512117713,
+              -0.12945767920361753,
+              0.013033862512373455
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 130300000000,
+            "raw_slam": [
+              0.21072351184877208,
+              -0.10910208524764392,
+              0.00010249379258758285
+            ],
+            "truth_world": [
+              0.21610759516861958,
+              -0.11350979683018594,
+              0.31493779385779025
+            ],
+            "truth_in_slam": [
+              0.20660284111233443,
+              -0.11196410466663699,
+              -0.0005501465039315908
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 130400000000,
+            "raw_slam": [
+              0.20931171824793904,
+              -0.11431452361274032,
+              0.006802243675019169
+            ],
+            "truth_world": [
+              0.21438859296779955,
+              -0.11832418096054123,
+              0.3221423722566138
+            ],
+            "truth_in_slam": [
+              0.2049187220692754,
+              -0.116789006555291,
+              0.006655634358647067
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          },
+          {
+            "stamp_ns": 130500000000,
+            "raw_slam": [
+              0.20051357994208655,
+              -0.12388760043941745,
+              0.0007263756573380704
+            ],
+            "truth_world": [
+              0.20655907150892658,
+              -0.12725901172807516,
+              0.314260759826347
+            ],
+            "truth_in_slam": [
+              0.19714617126519624,
+              -0.1257769091268227,
+              -0.0012220228427689559
+            ],
+            "raw_inner": true,
+            "truth_outer": true
+          }
+        ],
+        "errors": []
+      }
+    ],
+    "goals_definition_sha256": "2db1a9c86c6077d5c7fbf7ef73826a826904d4f70a304a1fcf77f167c83c03ea",
+    "initial_fixed_SE3_evaluation_only": {
+      "stamp_ns": 20500000000,
+      "rotation_world_from_slam": [
+        [
+          0.9999775976436462,
+          0.006683295313081333,
+          -0.00037118001066569037
+        ],
+        [
+          -0.006683339283110387,
+          0.9999776593533782,
+          -0.00011734635057669902
+        ],
+        [
+          0.00037038745794942276,
+          0.00011982444368832386,
+          0.999999924227614
+        ]
+      ],
+      "translation": [
+        0.01025746741932217,
+        -0.00016746118772188268,
+        0.31542483325546594
+      ]
+    },
+    "coverage": {
+      "passed": true,
+      "active_interval_ns": [
+        20500000000,
+        130819000000
+      ],
+      "active_pose_rows": 1103,
+      "matched_pose_rows": 1103,
+      "unpaired_native_stamps": [],
+      "max_truth_interpolation_gap_ns": 150000000,
+      "missing_tail_never_extrapolated": true
+    },
+    "precision": {
+      "rmse": 0.004290670121759463,
+      "max": 0.009825741733535781
+    }
+  },
+  "active_raw_IMU": {
+    "count": 110318,
+    "span_ns": [
+      20500000000,
+      130819000000
+    ],
+    "unexpected_1ms_gaps": [
+      2000000,
+      2000000
+    ],
+    "original_Euler_peak_rad": 0.14969282982949367,
+    "first030": null,
+    "first050": null,
+    "gyro_peak_rad_s": 3.974016868855037
+  },
+  "same_initial_SE3_orientation_error": {
+    "samples": 1103,
+    "unpaired": [],
+    "RMSE_rad": 0.003794716513722146,
+    "max_rad": 0.01104711832139507
+  },
+  "native_FAST_IMU": {
+    "native_samples": 112598,
+    "unique_1ms_native_samples": 112598,
+    "span_ns": [
+      19600000000,
+      132199000000
+    ],
+    "missing_native_1ms": [
+      83205000000,
+      83206000000
+    ],
+    "null_bytes": 0,
+    "raw_observed_but_native_unconsumed_in_native_span": [
+      83205000000,
+      83206000000
+    ],
+    "native_not_in_probe_raw_count": 1374,
+    "native_clock_origin_first_camera_ns": 13500000000,
+    "log_float_quantization_max_ns": 2,
+    "active_sync_count": 1104,
+    "active_sync_bad": [],
+    "generic_slice_count": 1157,
+    "generic_slice_bad": [],
+    "limits": "Only native integrator log head timestamps recovered by documented first LiDAR origin; <=2ns log representation quantized for 1ms input coverage, never state interpolation or correction."
+  },
+  "active_generic_bad": [],
+  "fourth_original_interval_ns": [
+    105700000000,
+    130819000000
+  ],
+  "actual_CDR_fourth": {
+    "interval_ns": [
+      105700000000,
+      130819000000
+    ],
+    "all_fixed_period_sensor_JTC_headers_complete": true,
+    "streams": {
+      "clock": {
+        "retained_header_first_ns": 2000000,
+        "retained_header_last_ns": 132132000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 25120,
+        "decoded_original_messages": 0,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 1000000,
+        "expected_period_ns": 1000000,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "imu": {
+        "retained_header_first_ns": 1000000,
+        "retained_header_last_ns": 132131000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 25120,
+        "decoded_original_messages": 25120,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 1000000,
+        "expected_period_ns": 1000000,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 1,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "measured_joint": {
+        "retained_header_first_ns": 3000000,
+        "retained_header_last_ns": 132136000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 25120,
+        "decoded_original_messages": 25120,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 1000000,
+        "expected_period_ns": 1000000,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "legacy_joint": {
+        "retained_header_first_ns": 8000000,
+        "retained_header_last_ns": 132136000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 6280,
+        "decoded_original_messages": 6280,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 4000000,
+        "expected_period_ns": 4000000,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "jtc": {
+        "retained_header_first_ns": 136000000,
+        "retained_header_last_ns": 132136000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 6280,
+        "decoded_original_messages": 6280,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 4000000,
+        "expected_period_ns": 4000000,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "truth": {
+        "retained_header_first_ns": 20000000,
+        "retained_header_last_ns": 132120000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 1256,
+        "decoded_original_messages": 1256,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 20000000,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "slam": {
+        "retained_header_first_ns": 19600000000,
+        "retained_header_last_ns": 132099999999,
+        "native_headers_bracket_interval": true,
+        "interval_count": 251,
+        "decoded_original_messages": 251,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 199999999,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": false
+      },
+      "foot_lf": {
+        "retained_header_first_ns": 57000000,
+        "retained_header_last_ns": 132131000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 13987,
+        "decoded_original_messages": 13987,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 362000000,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 0,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": true
+      },
+      "foot_rf": {
+        "retained_header_first_ns": 57000000,
+        "retained_header_last_ns": 132131000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 14192,
+        "decoded_original_messages": 14192,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 342000000,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 1,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": true
+      },
+      "foot_lh": {
+        "retained_header_first_ns": 57000000,
+        "retained_header_last_ns": 132131000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 15112,
+        "decoded_original_messages": 15112,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 359000000,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 1,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": true
+      },
+      "foot_rh": {
+        "retained_header_first_ns": 57000000,
+        "retained_header_last_ns": 132131000000,
+        "native_headers_bracket_interval": true,
+        "interval_count": 15126,
+        "decoded_original_messages": 15126,
+        "duplicate_or_backward_in_interval": 0,
+        "max_interval_header_gap_ns": 495000000,
+        "expected_period_ns": null,
+        "unexpected_fixed_period_gaps": [],
+        "middleware_lost_events": 1,
+        "middleware_lost_callbacks_in_this_interval": 0,
+        "sparse_contact_observations": true
+      }
+    },
+    "retained_events": 923953,
+    "retained_sequence": [
+      0,
+      923953
+    ],
+    "interval_middleware_lost_callback_records": [],
+    "sequence_errors": [],
+    "metadata_matches_footer": true,
+    "full_original_payload_errors": [],
+    "decoded_original_window_messages": {
+      "slam": 251,
+      "truth": 1256,
+      "foot_rh": 15126,
+      "legacy_joint": 6280,
+      "jtc": 6280,
+      "foot_lf": 13987,
+      "foot_rf": 14192,
+      "imu": 25120,
+      "measured_joint": 25120,
+      "foot_lh": 15112
+    },
+    "joint_name_order_sets": {
+      "measured": [
+        [
+          "lf_hip_joint",
+          "lf_upper_leg_joint",
+          "lf_lower_leg_joint",
+          "lh_hip_joint",
+          "lh_upper_leg_joint",
+          "lh_lower_leg_joint",
+          "rf_hip_joint",
+          "rf_upper_leg_joint",
+          "rf_lower_leg_joint",
+          "rh_hip_joint",
+          "rh_upper_leg_joint",
+          "rh_lower_leg_joint"
+        ]
+      ],
+      "legacy_and_JTC": [
+        [
+          "lf_hip_joint",
+          "lf_lower_leg_joint",
+          "lf_upper_leg_joint",
+          "lh_hip_joint",
+          "lh_lower_leg_joint",
+          "lh_upper_leg_joint",
+          "rf_hip_joint",
+          "rf_lower_leg_joint",
+          "rf_upper_leg_joint",
+          "rh_hip_joint",
+          "rh_lower_leg_joint",
+          "rh_upper_leg_joint"
+        ],
+        [
+          "lf_hip_joint",
+          "lf_upper_leg_joint",
+          "lf_lower_leg_joint",
+          "rf_hip_joint",
+          "rf_upper_leg_joint",
+          "rf_lower_leg_joint",
+          "lh_hip_joint",
+          "lh_upper_leg_joint",
+          "lh_lower_leg_joint",
+          "rh_hip_joint",
+          "rh_upper_leg_joint",
+          "rh_lower_leg_joint"
+        ]
+      ]
+    },
+    "absolute_peaks": {
+      "legacy_joint.position": 2.0153235032262433,
+      "legacy_joint.velocity": 20.060000008989277,
+      "jtc.reference.positions": 2.015115457229558,
+      "jtc.reference.velocities": 20.166122794788496,
+      "jtc.reference.accelerations": 0.0,
+      "jtc.feedback.positions": 2.0153235032262433,
+      "jtc.feedback.velocities": 20.060000008989277,
+      "jtc.error.positions": 0.19834428520066516,
+      "jtc.error.velocities": 20.18237380759813,
+      "jtc.output.effort": 35.55,
+      "raw_guard_Euler_max_rad": 0.1383510176480744,
+      "measured_joint.position": 2.0153235032262433,
+      "measured_joint.velocity": 20.060000008989277,
+      "measured_joint.effort": 0.0
+    },
+    "JTC_peak_records": {
+      "reference.positions": {
+        "stamp_ns": 109504000000,
+        "max_abs": 2.015115457229558,
+        "values": [
+          -0.0016363197715654422,
+          0.7742256973938925,
+          -1.5481011657091899,
+          0.005371451773422255,
+          0.999232049572981,
+          -2.015115457229558,
+          -0.005246025822331303,
+          1.0069160805257662,
+          -2.0151000720314,
+          0.0015976890010195996,
+          0.7766199666073287,
+          -1.5480694016057543
+        ]
+      },
+      "reference.velocities": {
+        "stamp_ns": 121876000000,
+        "max_abs": 20.166122794788496,
+        "values": [
+          2.884095893926358e-06,
+          -0.8066239155740578,
+          1.6132478311481155,
+          0.01404987260442764,
+          10.336913742220469,
+          -20.166122794788496,
+          -0.013305776134116048,
+          10.35676785776256,
+          -20.165586352968212,
+          2.8840957220208514e-06,
+          -0.8066239155740578,
+          1.6132478311481155
+        ]
+      },
+      "feedback.positions": {
+        "stamp_ns": 107100000000,
+        "max_abs": 2.0153235032262433,
+        "values": [
+          0.009719229478879762,
+          0.792205945417135,
+          -1.612315403842473,
+          -0.02109944116765537,
+          1.0059020120924664,
+          -2.0153235032262433,
+          0.01125986852404726,
+          1.0089721096355482,
+          -2.0148139703738077,
+          0.0013458714704184555,
+          0.7441086417984252,
+          -1.5791892239403422
+        ]
+      },
+      "feedback.velocities": {
+        "stamp_ns": 107060000000,
+        "max_abs": 20.060000008989277,
+        "values": [
+          0.14486768804969297,
+          0.5958731225213044,
+          -0.01782950670413941,
+          3.169089335137479,
+          9.269906863919104,
+          -20.06000000852797,
+          -2.6905495740999514,
+          9.936465633742255,
+          -20.060000008989277,
+          -0.09991974843000029,
+          0.8983976455230364,
+          -0.9488161453557873
+        ]
+      },
+      "error.positions": {
+        "stamp_ns": 123212000000,
+        "max_abs": 0.19834428520066516,
+        "values": [
+          -0.04549663958840096,
+          0.024051295108078796,
+          0.019094966323569773,
+          -0.00799115667714146,
+          -0.09620497594267419,
+          0.19834428520066516,
+          0.0007380732509401382,
+          -0.002025845700179274,
+          0.0033747785343420933,
+          0.00593133219909257,
+          0.023540685560488717,
+          0.054709609532537895
+        ]
+      },
+      "error.velocities": {
+        "stamp_ns": 121876000000,
+        "max_abs": 20.18237380759813,
+        "values": [
+          -0.01177870980896635,
+          -0.8066239155809065,
+          1.5968045298701405,
+          0.0023108313105097717,
+          10.329083271707907,
+          -20.15134723019044,
+          -0.013305776123411777,
+          10.356767857770317,
+          -20.18237380759813,
+          -2.176927562770559e-06,
+          -0.8066239155801819,
+          1.6132478311621936
+        ]
+      },
+      "output.effort": {
+        "stamp_ns": 107788000000,
+        "max_abs": 35.55,
+        "values": [
+          -5.529130929185742,
+          4.18013075544778,
+          8.998486206888408,
+          -3.38465537915854,
+          -15.818771514707365,
+          35.55,
+          -0.2292132409258405,
+          0.733900779220596,
+          -1.0149678217712064,
+          -0.0005679079266522891,
+          6.413595177600786,
+          13.505587967276677
+        ]
+      }
+    },
+    "measured_joint_nonzero_effort_messages": 0,
+    "unavailable_legacy_effort": {
+      "legacy_joint.effort_nonfinite_messages": 6280
+    },
+    "JTC_name_mapped_peaks_and_actual_model_limits": {
+      "lf_hip_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.0472,
+          "upper": 1.0472,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 19.278837971572518,
+        "reference_velocity_abs_max": 0.22385897467715418,
+        "actual_feedback_velocity_abs_max": 3.485715634699194,
+        "position_error_abs_max": 0.08377946115816381,
+        "velocity_error_abs_max": 3.493052872039039,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 114896000000,
+        "reference_velocity_abs_max_stamp_ns": 115804000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 110824000000,
+        "position_error_abs_max_stamp_ns": 114900000000,
+        "velocity_error_abs_max_stamp_ns": 110664000000
+      },
+      "lf_upper_leg_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.5708,
+          "upper": 3.4907,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 21.184711438994995,
+        "reference_velocity_abs_max": 2.5226291391293008,
+        "actual_feedback_velocity_abs_max": 10.4395322578837,
+        "position_error_abs_max": 0.09587758403022417,
+        "velocity_error_abs_max": 8.055869963974986,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 109900000000,
+        "reference_velocity_abs_max_stamp_ns": 109864000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 124496000000,
+        "position_error_abs_max_stamp_ns": 109904000000,
+        "velocity_error_abs_max_stamp_ns": 124496000000
+      },
+      "lf_lower_leg_joint": {
+        "URDF": {
+          "effort": 35.55,
+          "lower": -2.7227,
+          "upper": -0.83776,
+          "velocity": 20.06
+        },
+        "output_command_effort_abs_max": 35.55,
+        "reference_velocity_abs_max": 5.033624634695563,
+        "actual_feedback_velocity_abs_max": 10.716875510838545,
+        "position_error_abs_max": 0.18175700511264603,
+        "velocity_error_abs_max": 6.934627671852863,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 127116000000,
+        "reference_velocity_abs_max_stamp_ns": 109864000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 109868000000,
+        "position_error_abs_max_stamp_ns": 127128000000,
+        "velocity_error_abs_max_stamp_ns": 115456000000
+      },
+      "rf_hip_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.0472,
+          "upper": 1.0472,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 15.478990488192846,
+        "reference_velocity_abs_max": 0.26717690093528856,
+        "actual_feedback_velocity_abs_max": 6.272220655505949,
+        "position_error_abs_max": 0.06717439571484246,
+        "velocity_error_abs_max": 6.258673567260963,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 119464000000,
+        "reference_velocity_abs_max_stamp_ns": 115960000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 121900000000,
+        "position_error_abs_max_stamp_ns": 119464000000,
+        "velocity_error_abs_max_stamp_ns": 121900000000
+      },
+      "rf_upper_leg_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.5708,
+          "upper": 3.4907,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 23.7,
+        "reference_velocity_abs_max": 10.336913742220469,
+        "actual_feedback_velocity_abs_max": 13.343872356382553,
+        "position_error_abs_max": 0.10894494136010602,
+        "velocity_error_abs_max": 10.987837444545267,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 115012000000,
+        "reference_velocity_abs_max_stamp_ns": 121876000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 107068000000,
+        "position_error_abs_max_stamp_ns": 115016000000,
+        "velocity_error_abs_max_stamp_ns": 121892000000
+      },
+      "rf_lower_leg_joint": {
+        "URDF": {
+          "effort": 35.55,
+          "lower": -2.7227,
+          "upper": -0.83776,
+          "velocity": 20.06
+        },
+        "output_command_effort_abs_max": 35.55,
+        "reference_velocity_abs_max": 20.166122794788496,
+        "actual_feedback_velocity_abs_max": 20.06000000872197,
+        "position_error_abs_max": 0.19834428520066516,
+        "velocity_error_abs_max": 20.15134723019044,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 6,
+        "output_command_effort_abs_max_stamp_ns": 107788000000,
+        "reference_velocity_abs_max_stamp_ns": 121876000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 121880000000,
+        "position_error_abs_max_stamp_ns": 123212000000,
+        "velocity_error_abs_max_stamp_ns": 121876000000
+      },
+      "lh_hip_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.0472,
+          "upper": 1.0472,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 17.854845952745535,
+        "reference_velocity_abs_max": 0.26717690098322516,
+        "actual_feedback_velocity_abs_max": 4.609629812404349,
+        "position_error_abs_max": 0.07912162433606264,
+        "velocity_error_abs_max": 4.718416334509576,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 114608000000,
+        "reference_velocity_abs_max_stamp_ns": 115960000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 107080000000,
+        "position_error_abs_max_stamp_ns": 114612000000,
+        "velocity_error_abs_max_stamp_ns": 107080000000
+      },
+      "lh_upper_leg_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.5708,
+          "upper": 3.4907,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 23.7,
+        "reference_velocity_abs_max": 10.35676785776256,
+        "actual_feedback_velocity_abs_max": 14.87391678811401,
+        "position_error_abs_max": 0.17661862023511032,
+        "velocity_error_abs_max": 11.928814499848553,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 111040000000,
+        "reference_velocity_abs_max_stamp_ns": 121876000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 121888000000,
+        "position_error_abs_max_stamp_ns": 115312000000,
+        "velocity_error_abs_max_stamp_ns": 121892000000
+      },
+      "lh_lower_leg_joint": {
+        "URDF": {
+          "effort": 35.55,
+          "lower": -2.7227,
+          "upper": -0.83776,
+          "velocity": 20.06
+        },
+        "output_command_effort_abs_max": 35.55,
+        "reference_velocity_abs_max": 20.165586352968212,
+        "actual_feedback_velocity_abs_max": 20.060000008989277,
+        "position_error_abs_max": 0.15912190047040675,
+        "velocity_error_abs_max": 20.18237380759813,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 5,
+        "output_command_effort_abs_max_stamp_ns": 111032000000,
+        "reference_velocity_abs_max_stamp_ns": 121876000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 107060000000,
+        "position_error_abs_max_stamp_ns": 111044000000,
+        "velocity_error_abs_max_stamp_ns": 121876000000
+      },
+      "rh_hip_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.0472,
+          "upper": 1.0472,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 16.0251649862396,
+        "reference_velocity_abs_max": 0.2238565142923015,
+        "actual_feedback_velocity_abs_max": 3.407247578258,
+        "position_error_abs_max": 0.07094902469003961,
+        "velocity_error_abs_max": 3.432658273103595,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 109484000000,
+        "reference_velocity_abs_max_stamp_ns": 115804000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 114832000000,
+        "position_error_abs_max_stamp_ns": 109488000000,
+        "velocity_error_abs_max_stamp_ns": 114832000000
+      },
+      "rh_upper_leg_joint": {
+        "URDF": {
+          "effort": 23.7,
+          "lower": -1.5708,
+          "upper": 3.4907,
+          "velocity": 30.1
+        },
+        "output_command_effort_abs_max": 23.7,
+        "reference_velocity_abs_max": 2.582835551949758,
+        "actual_feedback_velocity_abs_max": 9.526684629075618,
+        "position_error_abs_max": 0.111781087297667,
+        "velocity_error_abs_max": 7.7046993077478225,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 110512000000,
+        "reference_velocity_abs_max_stamp_ns": 110872000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 127508000000,
+        "position_error_abs_max_stamp_ns": 110520000000,
+        "velocity_error_abs_max_stamp_ns": 114744000000
+      },
+      "rh_lower_leg_joint": {
+        "URDF": {
+          "effort": 35.55,
+          "lower": -2.7227,
+          "upper": -0.83776,
+          "velocity": 20.06
+        },
+        "output_command_effort_abs_max": 35.55,
+        "reference_velocity_abs_max": 5.03331018855593,
+        "actual_feedback_velocity_abs_max": 10.710094974170165,
+        "position_error_abs_max": 0.19507986368927588,
+        "velocity_error_abs_max": 7.1852462265860275,
+        "command_output_above_URDF_effort_rows": 0,
+        "first_command_output_above_URDF_effort_stamp_ns": null,
+        "actual_velocity_at_URDF_limit_rows": 0,
+        "output_command_effort_abs_max_stamp_ns": 110480000000,
+        "reference_velocity_abs_max_stamp_ns": 109864000000,
+        "actual_feedback_velocity_abs_max_stamp_ns": 116492000000,
+        "position_error_abs_max_stamp_ns": 114700000000,
+        "velocity_error_abs_max_stamp_ns": 110508000000
+      }
+    },
+    "footer": {
+      "scope": "Passive bounded CDR suffix, not a controller. No body/goal/pose publishers.\n\nEvery message is serialized with its complete original ROS schema. Total\nreceived counts and DDS loss diagnostics are separate from retained suffix\ncoverage. output.effort in JTC state is commanded effort, not applied torque.\n",
+      "counts_received": {
+        "raw_target": 27489,
+        "safe_command": 6684,
+        "actual_command": 8809,
+        "adapter": 6870,
+        "safety": 2463,
+        "feedback_pose": 16615,
+        "feedback_command": 6686,
+        "feedback_status": 2459,
+        "imu": 132130,
+        "clock": 132131,
+        "target": 26552,
+        "measured_joint": 132134,
+        "legacy_joint": 32950,
+        "truth": 6606,
+        "foot_rh": 90192,
+        "foot_lf": 84009,
+        "foot_rf": 84474,
+        "foot_lh": 90629,
+        "jtc": 32918,
+        "slam": 1125
+      },
+      "middleware_lost_events": {
+        "imu": 1,
+        "foot_rf": 1,
+        "foot_lh": 1,
+        "foot_rh": 1
+      },
+      "total_events": 923953,
+      "retained_events": 923953,
+      "overwritten_events": 0,
+      "retained_sequence": [
+        0,
+        923953
+      ],
+      "exact_consecutive_sequence": true,
+      "capacity": 3600000,
+      "payload_limit": 2147483648,
+      "payload_bytes": 362631791,
+      "high_water_count": 923953,
+      "high_water_payload": 362631791,
+      "retained_topic_ranges": {
+        "raw_target": {
+          "count": 27489,
+          "first_header_ns": 0,
+          "last_header_ns": 0,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132129000000,
+          "first_wall_ns": 136933004360337,
+          "last_wall_ns": 137070442387146
+        },
+        "safe_command": {
+          "count": 6684,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132126000000,
+          "first_wall_ns": 136933051853497,
+          "last_wall_ns": 137070439562029
+        },
+        "actual_command": {
+          "count": 8809,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136933071491015,
+          "last_wall_ns": 137070451546107
+        },
+        "adapter": {
+          "count": 6870,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136933071567050,
+          "last_wall_ns": 137070451813798
+        },
+        "safety": {
+          "count": 2463,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132130000000,
+          "first_wall_ns": 136933092071308,
+          "last_wall_ns": 137070444575168
+        },
+        "feedback_pose": {
+          "count": 16615,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136933113687679,
+          "last_wall_ns": 137070453986633
+        },
+        "feedback_command": {
+          "count": 6686,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132128000000,
+          "first_wall_ns": 136933113985295,
+          "last_wall_ns": 137070441005473
+        },
+        "feedback_status": {
+          "count": 2459,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132130000000,
+          "first_wall_ns": 136933153777702,
+          "last_wall_ns": 137070444361974
+        },
+        "publisher_graph": {
+          "count": 24,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 0,
+          "last_clock_ns": 14013000000,
+          "first_wall_ns": 136934004336577,
+          "last_wall_ns": 136952004676595
+        },
+        "imu": {
+          "count": 132130,
+          "first_header_ns": 1000000,
+          "last_header_ns": 132131000000,
+          "first_clock_ns": 0,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136936994180171,
+          "last_wall_ns": 137070446337260
+        },
+        "clock": {
+          "count": 132131,
+          "first_header_ns": 2000000,
+          "last_header_ns": 132132000000,
+          "first_clock_ns": 2000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136936995180187,
+          "last_wall_ns": 137070446211361
+        },
+        "target": {
+          "count": 26552,
+          "first_header_ns": 0,
+          "last_header_ns": 0,
+          "first_clock_ns": 2000000,
+          "last_clock_ns": 132130000000,
+          "first_wall_ns": 136936998164779,
+          "last_wall_ns": 137070443249895
+        },
+        "measured_joint": {
+          "count": 132134,
+          "first_header_ns": 3000000,
+          "last_header_ns": 132136000000,
+          "first_clock_ns": 3000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136937288866317,
+          "last_wall_ns": 137070450203768
+        },
+        "legacy_joint": {
+          "count": 32950,
+          "first_header_ns": 8000000,
+          "last_header_ns": 132136000000,
+          "first_clock_ns": 8000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136937886700262,
+          "last_wall_ns": 137070450661178
+        },
+        "truth": {
+          "count": 6606,
+          "first_header_ns": 20000000,
+          "last_header_ns": 132120000000,
+          "first_clock_ns": 20000000,
+          "last_clock_ns": 132120000000,
+          "first_wall_ns": 136937898899677,
+          "last_wall_ns": 137070431923866
+        },
+        "foot_rh": {
+          "count": 90192,
+          "first_header_ns": 57000000,
+          "last_header_ns": 132131000000,
+          "first_clock_ns": 57000000,
+          "last_clock_ns": 132131000000,
+          "first_wall_ns": 136937936210601,
+          "last_wall_ns": 137070445799986
+        },
+        "foot_lf": {
+          "count": 84009,
+          "first_header_ns": 57000000,
+          "last_header_ns": 132131000000,
+          "first_clock_ns": 58000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136937936619104,
+          "last_wall_ns": 137070446477327
+        },
+        "foot_rf": {
+          "count": 84474,
+          "first_header_ns": 57000000,
+          "last_header_ns": 132131000000,
+          "first_clock_ns": 58000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136937936704371,
+          "last_wall_ns": 137070446620545
+        },
+        "foot_lh": {
+          "count": 90629,
+          "first_header_ns": 57000000,
+          "last_header_ns": 132131000000,
+          "first_clock_ns": 58000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136937936776646,
+          "last_wall_ns": 137070446725188
+        },
+        "jtc": {
+          "count": 32918,
+          "first_header_ns": 136000000,
+          "last_header_ns": 132136000000,
+          "first_clock_ns": 136000000,
+          "last_clock_ns": 132132000000,
+          "first_wall_ns": 136938014842252,
+          "last_wall_ns": 137070450373738
+        },
+        "slam": {
+          "count": 1125,
+          "first_header_ns": 19600000000,
+          "last_header_ns": 132099999999,
+          "first_clock_ns": 19633000000,
+          "last_clock_ns": 132118000000,
+          "first_wall_ns": 136957635199725,
+          "last_wall_ns": 137070430443165
+        },
+        "middleware_lost": {
+          "count": 4,
+          "first_header_ns": null,
+          "last_header_ns": null,
+          "first_clock_ns": 88411000000,
+          "last_clock_ns": 88411000000,
+          "first_wall_ns": 137026611746823,
+          "last_wall_ns": 137026611833502
+        }
+      },
+      "failure": null,
+      "clock_ns": 132132000000,
+      "wall_elapsed": 140.52571244700812,
+      "callback_max_ns": 1759861,
+      "publishers": {
+        "/clock": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "rosgraph_msgs/msg/Clock",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/livox/imu": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              22,
+              3
+            ],
+            "topic_type": "sensor_msgs/msg/Imu",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/measured_joint_states": [
+          {
+            "node_name": "demo_measured_joint_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              188,
+              88,
+              252,
+              82,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "sensor_msgs/msg/JointState",
+            "qos": {
+              "reliability": 2,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/joint_states": [
+          {
+            "node_name": "joint_states_controller",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              187,
+              88,
+              105,
+              7,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              97,
+              3
+            ],
+            "topic_type": "sensor_msgs/msg/JointState",
+            "qos": {
+              "reliability": 1,
+              "durability": 1,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/joint_group_effort_controller/controller_state": [
+          {
+            "node_name": "joint_group_effort_controller",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              187,
+              88,
+              105,
+              7,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              123,
+              3
+            ],
+            "topic_type": "control_msgs/msg/JointTrajectoryControllerState",
+            "qos": {
+              "reliability": 1,
+              "durability": 1,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/joint_group_effort_controller/joint_trajectory": [
+          {
+            "node_name": "demo_joint_reference_adapter",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              186,
+              88,
+              59,
+              74,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "trajectory_msgs/msg/JointTrajectory",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/joint_reference/raw": [
+          {
+            "node_name": "quadruped_controller_node",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              192,
+              88,
+              47,
+              192,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              23,
+              3
+            ],
+            "topic_type": "trajectory_msgs/msg/JointTrajectory",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/actuator_cmd_vel": [
+          {
+            "node_name": "demo_joint_reference_adapter",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              186,
+              88,
+              59,
+              74,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              3
+            ],
+            "topic_type": "geometry_msgs/msg/Twist",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/safe_cmd_vel": [
+          {
+            "node_name": "demo_control_watchdog",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              185,
+              88,
+              1,
+              41,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              3
+            ],
+            "topic_type": "geometry_msgs/msg/Twist",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/test/body_stabilizer/safe_cmd_vel": [
+          {
+            "node_name": "demo_staging_body_stabilizer",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              184,
+              88,
+              185,
+              207,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              3
+            ],
+            "topic_type": "geometry_msgs/msg/Twist",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/test/body_stabilizer/body_pose": [
+          {
+            "node_name": "demo_staging_body_stabilizer",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              184,
+              88,
+              185,
+              207,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "geometry_msgs/msg/Pose",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/test/body_stabilizer/status": [
+          {
+            "node_name": "demo_staging_body_stabilizer",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              184,
+              88,
+              185,
+              207,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              21,
+              3
+            ],
+            "topic_type": "std_msgs/msg/String",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/safety": [
+          {
+            "node_name": "demo_control_watchdog",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              185,
+              88,
+              1,
+              41,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "std_msgs/msg/String",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/control/joint_stop_safety": [
+          {
+            "node_name": "demo_joint_reference_adapter",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              186,
+              88,
+              59,
+              74,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              21,
+              3
+            ],
+            "topic_type": "std_msgs/msg/String",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/ground_truth": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              25,
+              3
+            ],
+            "topic_type": "nav_msgs/msg/Odometry",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/slam/body_odom": [
+          {
+            "node_name": "demo_slam_odom_adapter",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              115,
+              97,
+              199,
+              142,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              20,
+              3
+            ],
+            "topic_type": "nav_msgs/msg/Odometry",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/body_contacts": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26,
+              3
+            ],
+            "topic_type": "ros_gz_interfaces/msg/Contacts",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/contacts/lf_foot": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              27,
+              3
+            ],
+            "topic_type": "ros_gz_interfaces/msg/Contacts",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/contacts/rf_foot": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              28,
+              3
+            ],
+            "topic_type": "ros_gz_interfaces/msg/Contacts",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/contacts/lh_foot": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              29,
+              3
+            ],
+            "topic_type": "ros_gz_interfaces/msg/Contacts",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ],
+        "/demo/contacts/rh_foot": [
+          {
+            "node_name": "demo_sensor_bridge",
+            "node_namespace": "/",
+            "gid": [
+              1,
+              15,
+              65,
+              96,
+              191,
+              88,
+              72,
+              132,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              30,
+              3
+            ],
+            "topic_type": "ros_gz_interfaces/msg/Contacts",
+            "qos": {
+              "reliability": 1,
+              "durability": 2,
+              "history": 3,
+              "depth": 0
+            }
+          }
+        ]
+      },
+      "gaps_entire_received_stream": {
+        "raw_target": {
+          "max_wall_gap_ns": 568654752,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 27488,
+          "backwards_headers": 0
+        },
+        "safe_command": {
+          "max_wall_gap_ns": 586896125,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "actual_command": {
+          "max_wall_gap_ns": 585953265,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "adapter": {
+          "max_wall_gap_ns": 585056684,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "safety": {
+          "max_wall_gap_ns": 582078030,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "feedback_pose": {
+          "max_wall_gap_ns": 572508858,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "feedback_command": {
+          "max_wall_gap_ns": 585990069,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "feedback_status": {
+          "max_wall_gap_ns": 582392319,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "imu": {
+          "max_wall_gap_ns": 594836546,
+          "max_header_gap_ns": 2000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "clock": {
+          "max_wall_gap_ns": 595018341,
+          "max_header_gap_ns": 1000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "target": {
+          "max_wall_gap_ns": 568364124,
+          "max_header_gap_ns": 0,
+          "duplicate_headers": 26551,
+          "backwards_headers": 0
+        },
+        "measured_joint": {
+          "max_wall_gap_ns": 594405684,
+          "max_header_gap_ns": 1000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "legacy_joint": {
+          "max_wall_gap_ns": 568845791,
+          "max_header_gap_ns": 336000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "truth": {
+          "max_wall_gap_ns": 572937812,
+          "max_header_gap_ns": 20000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "foot_rh": {
+          "max_wall_gap_ns": 619884077,
+          "max_header_gap_ns": 525000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "foot_lf": {
+          "max_wall_gap_ns": 632457285,
+          "max_header_gap_ns": 494000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "foot_rf": {
+          "max_wall_gap_ns": 635702973,
+          "max_header_gap_ns": 401000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "foot_lh": {
+          "max_wall_gap_ns": 617359636,
+          "max_header_gap_ns": 499000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "jtc": {
+          "max_wall_gap_ns": 568904897,
+          "max_header_gap_ns": 336000000,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        },
+        "slam": {
+          "max_wall_gap_ns": 588696601,
+          "max_header_gap_ns": 199999999,
+          "duplicate_headers": 0,
+          "backwards_headers": 0
+        }
+      },
+      "subscription_qos": {
+        "reliability": "BEST_EFFORT",
+        "depth": 4000
+      },
+      "evidence_limits": [
+        "Suffix only; count alone does not prove a time window is covered.",
+        "Require each relevant stream to bracket the entire fourth-goal interval or mark that evidence incomplete.",
+        "output.effort is commanded effort, not independently measured applied torque.",
+        "No headers are invented and no body/pose/control messages are published."
+      ]
+    },
+    "limits": [
+      "CDR retains all original fields; selected original payloads were decoded without altering messages.",
+      "Sparse contact header gaps are not invented empty-contact records or proof of a missed publisher frame.",
+      "Header continuity is observed state-publication evidence, not a native ControllerInterface::trigger_update capture.",
+      "JTC output.effort is commanded effort; actual JointState effort zero is not proof of zero applied torque.",
+      "Legacy JSB effort NaN is unavailable measurement, preserved as unavailable rather than an invalid payload or zero torque.",
+      "Output command exceeding URDF effort does not establish actual applied force, actuator clipping or its causal role.",
+      "Headerless command and Pose use recorder latest /clock association, not an invented exact simulation publication stamp."
+    ]
+  },
+  "CDR_deferred": false,
+  "actual_cleanup": {
+    "process_group": 3496095,
+    "return_code": 0,
+    "owned_group_clean": true,
+    "stop_reason": "driver_finished",
+    "actual_NAV_alignment_configuration_verified": true,
+    "prestop_maps_captured": true,
+    "actual_selected_CM_verified": true,
+    "source_unchanged": true,
+    "runtime_unchanged": true,
+    "staging_unchanged": true,
+    "control_profile_assets_unchanged": true,
+    "actual_control_profile_verified": true,
+    "recorder_actual_budget_verified": true,
+    "sensor_assets_unchanged": true,
+    "wall_elapsed": 142.4623258789943
+  },
+  "actual_ALIGN_configuration": {
+    "scope": "Actual NAV final audit and received live status configuration, not commanded plant response",
+    "final": {
+      "enabled": true,
+      "config": {
+        "kp_per_s": 0.8,
+        "kd": 0.4,
+        "max_abs_vx_m_s": 0.1,
+        "slew_m_s2": 0.2,
+        "window_ns": 400000000,
+        "min_fit_span_ns": 350000000,
+        "min_raw_observations": 3,
+        "min_fit_samples": 4,
+        "max_pose_gap_ns": 200000000,
+        "max_pose_age_ns": 250000000,
+        "position_fit_rms_limit_m": 0.02,
+        "anchor_deadband_m": 0.01,
+        "velocity_deadband_m_s": 0.015,
+        "mixed_yaw_cap_rad_s": 0.08,
+        "vy_m_s": 0.0,
+        "integral_enabled": false
+      }
+    },
+    "status_count": 424,
+    "final_matches": true,
+    "all_received_statuses_match": true
+  },
+  "limits": [
+    "One actual initial SE3 used only for evaluation; no GT/SLAM state correction feeds controller and no later receipt replaces any original window.",
+    "Every observed native-input/recorder missing stamp is retained separately; current SLAM accuracy does not repair consumption omissions.",
+    "Headers prove observed state-message coverage, not actual ControllerInterface trigger period or applied hardware torque.",
+    "Startup earlyRPC/maps and final runtime/source are separate certificates, both required.",
+    "Actual first4 scope only; no first8/dynamic or full46-route completion is inferred."
+  ]
+}

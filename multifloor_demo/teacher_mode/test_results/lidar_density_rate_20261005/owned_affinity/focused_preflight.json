@@ -1,0 +1,313 @@
+{
+  "status": "PASS_LIMITED_LAUNCH_PREFIX",
+  "scope": "Five taskset prefixes applied only to newly created no-ROS test children; actual full Gazebo multi-thread witness pending",
+  "contract": {
+    "schema": "teacher_owned_cpu_affinity/v1",
+    "enabled": true,
+    "simulation_only": true,
+    "group_cpus": {
+      "gazebo": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "slam": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "actor": [
+        18
+      ],
+      "controller": [
+        19
+      ],
+      "communications": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    "root_role_group": {
+      "worker": "actor",
+      "bridge": "communications",
+      "capture": "communications",
+      "navigation_stack": "communications",
+      "gazebo": "gazebo"
+    },
+    "launch_child_exceptions": {
+      "fastlivo_mapping": "slam",
+      "controller.py": "controller"
+    },
+    "other_owned_navigation_children": "communications",
+    "application": "taskset prefix on new owned subprocess only, children inherit explicit group; mapping and controller override at their own launch",
+    "other_task_processes_changed": false,
+    "runner_affinity_changed": false,
+    "same_frozen_V12_core_and_controller_math": true,
+    "isolation_limit": "CPU masks only. Does not reserve cores, move other tasks, or isolate GPU, memory bandwidth, disk, DDS scheduling or physical core ownership.",
+    "expected_groups_disjoint": true,
+    "topology": {
+      "cpu_core_raw": "0-7",
+      "cpu_atom_raw": "8-19",
+      "P_cpus": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "E_cpus": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "online_cpus": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "runner_allowed_cpus": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "thread_siblings": {
+        "0": "0",
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7",
+        "8": "8",
+        "9": "9",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "13": "13",
+        "14": "14",
+        "15": "15",
+        "16": "16",
+        "17": "17",
+        "18": "18",
+        "19": "19"
+      }
+    }
+  },
+  "children": [
+    {
+      "role": "worker",
+      "group": "actor",
+      "command": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "18",
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "import os,json;print(json.dumps(sorted(os.sched_getaffinity(0))))"
+      ],
+      "actual_cpus": [
+        18
+      ]
+    },
+    {
+      "role": "bridge",
+      "group": "communications",
+      "command": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "8,9,10,11,12,13,14,15,16,17",
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "import os,json;print(json.dumps(sorted(os.sched_getaffinity(0))))"
+      ],
+      "actual_cpus": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "role": "capture",
+      "group": "communications",
+      "command": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "8,9,10,11,12,13,14,15,16,17",
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "import os,json;print(json.dumps(sorted(os.sched_getaffinity(0))))"
+      ],
+      "actual_cpus": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "role": "navigation_stack",
+      "group": "communications",
+      "command": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "8,9,10,11,12,13,14,15,16,17",
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "import os,json;print(json.dumps(sorted(os.sched_getaffinity(0))))"
+      ],
+      "actual_cpus": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "role": "gazebo",
+      "group": "gazebo",
+      "command": [
+        "/usr/bin/taskset",
+        "--cpu-list",
+        "0,1,2,3",
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "import os,json;print(json.dumps(sorted(os.sched_getaffinity(0))))"
+      ],
+      "actual_cpus": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "runner_before": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "runner_after": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "Node_prefix_string_checked": true,
+  "classifier_checked": true,
+  "other_task_affinity_changed": false,
+  "actual_SLAM_Gazebo_navigation": "UNVERIFIED"
+}

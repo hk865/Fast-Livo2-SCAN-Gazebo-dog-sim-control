@@ -1,0 +1,920 @@
+{
+  "schema_version": 1,
+  "test": "step05_continue",
+  "status": "passed",
+  "functional_status": "passed",
+  "levels": {
+    "interface": "passed",
+    "functional_step": "passed",
+    "sim2sim": "unverified",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "tests": [
+    {
+      "name": "step05_continue",
+      "status": "passed",
+      "reason": "",
+      "metrics": {
+        "continued_motion": {
+          "edge_plus_half_m_first_time_s": 9.57,
+          "all_four_feet_active_ascent_confirmed_time_s": 9.055,
+          "continued_x_progress_m": 2.906660280597184,
+          "late_interval_s": [
+            9.57,
+            22
+          ],
+          "late_forward_velocity_mean_mps": 0.23385035797775625,
+          "late_positive_velocity_fraction": 1.0,
+          "on_platform_body_samples_fraction": 1.0,
+          "continued_duration_s": 12.424999999999997,
+          "rolling_velocity_windows": 2387,
+          "rolling_window_s": 0.5,
+          "maximum_no_foot_top_support_s": 0.0,
+          "measured_position_source": "native Gazebo state, diagnostic simulation evaluation only"
+        },
+        "safety": {
+          "max_abs_roll_pitch_rad": 0.039924376876884285,
+          "min_support_clearance_m": 0.2664275660576187,
+          "body_contact_samples": 0,
+          "unknown_contact_samples": 0,
+          "clearance_definition": "base-link origin world z minus actual collision surface directly below base; safety only"
+        },
+        "stop": {
+          "window_s": [
+            26,
+            30
+          ],
+          "translation_drift_m": 0.0005139875341777531,
+          "yaw_drift_rad": 0.004163867110098141,
+          "velocity_rms": [
+            0.0003298905402229285,
+            0.00015423779773844176,
+            0.001164953219387489
+          ],
+          "samples": 201,
+          "strategy": "continuous Teacher at zero velocity command"
+        },
+        "feet": {
+          "FR": {
+            "collision": "go2::rf_lower_leg_link::rf_lower_leg_link_fixed_joint_lump__rf_foot_link_collision_1",
+            "radius_m": 0.02,
+            "chain": [
+              "rf_hip_joint",
+              "rf_upper_leg_joint",
+              "rf_lower_leg_joint"
+            ],
+            "entry_time_s": 6.78,
+            "entry_center_world_m": [
+              7.004414659916565,
+              -0.7382224671274388,
+              0.06952085463599822
+            ],
+            "tread_contact_pair_samples": 4340,
+            "verified_top_support_samples": 4329,
+            "max_continuous_tread_support_s": 0.6749999999999989,
+            "support_interval_s": [
+              8.950000000000001,
+              9.625
+            ],
+            "top_position_with_missing_normals_samples": 0,
+            "position_and_collider_geometry_fallback_span_s": 0.6749999999999989,
+            "tread_pair_missing_position_samples": 0,
+            "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+            "first_active_support_confirmed_time_s": 6.890000000000001,
+            "stop_tread_support_samples": 801,
+            "max_continuous_stop_tread_support_s": 4.0,
+            "stop_support_interval_s": [
+              26.0,
+              30.0
+            ]
+          },
+          "FL": {
+            "collision": "go2::lf_lower_leg_link::lf_lower_leg_link_fixed_joint_lump__lf_foot_link_collision_1",
+            "radius_m": 0.02,
+            "chain": [
+              "lf_hip_joint",
+              "lf_upper_leg_joint",
+              "lf_lower_leg_joint"
+            ],
+            "entry_time_s": 7.025,
+            "entry_center_world_m": [
+              7.000115443496173,
+              -0.6043869709543904,
+              0.07940989035505669
+            ],
+            "tread_contact_pair_samples": 4429,
+            "verified_top_support_samples": 4317,
+            "max_continuous_tread_support_s": 0.7850000000000001,
+            "support_interval_s": [
+              8.58,
+              9.365
+            ],
+            "top_position_with_missing_normals_samples": 0,
+            "position_and_collider_geometry_fallback_span_s": 0.7850000000000001,
+            "tread_pair_missing_position_samples": 0,
+            "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+            "first_active_support_confirmed_time_s": 7.21,
+            "stop_tread_support_samples": 801,
+            "max_continuous_stop_tread_support_s": 4.0,
+            "stop_support_interval_s": [
+              26.0,
+              30.0
+            ]
+          },
+          "RR": {
+            "collision": "go2::rh_lower_leg_link::rh_lower_leg_link_fixed_joint_lump__rh_foot_link_collision_1",
+            "radius_m": 0.02,
+            "chain": [
+              "rh_hip_joint",
+              "rh_upper_leg_joint",
+              "rh_lower_leg_joint"
+            ],
+            "entry_time_s": 8.505,
+            "entry_center_world_m": [
+              7.006919959721385,
+              -0.8067367143830572,
+              0.0773448658101325
+            ],
+            "tread_contact_pair_samples": 4183,
+            "verified_top_support_samples": 4050,
+            "max_continuous_tread_support_s": 0.7449999999999992,
+            "support_interval_s": [
+              8.63,
+              9.375
+            ],
+            "top_position_with_missing_normals_samples": 0,
+            "position_and_collider_geometry_fallback_span_s": 0.7449999999999992,
+            "tread_pair_missing_position_samples": 0,
+            "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+            "first_active_support_confirmed_time_s": 8.73,
+            "stop_tread_support_samples": 801,
+            "max_continuous_stop_tread_support_s": 4.0,
+            "stop_support_interval_s": [
+              26.0,
+              30.0
+            ]
+          },
+          "RL": {
+            "collision": "go2::lh_lower_leg_link::lh_lower_leg_link_fixed_joint_lump__lh_foot_link_collision_1",
+            "radius_m": 0.02,
+            "chain": [
+              "lh_hip_joint",
+              "lh_upper_leg_joint",
+              "lh_lower_leg_joint"
+            ],
+            "entry_time_s": 8.790000000000001,
+            "entry_center_world_m": [
+              7.001789606600672,
+              -0.5411518862106246,
+              0.07452337367240569
+            ],
+            "tread_contact_pair_samples": 4118,
+            "verified_top_support_samples": 3985,
+            "max_continuous_tread_support_s": 1.004999999999999,
+            "support_interval_s": [
+              11.120000000000001,
+              12.125
+            ],
+            "top_position_with_missing_normals_samples": 0,
+            "position_and_collider_geometry_fallback_span_s": 1.004999999999999,
+            "tread_pair_missing_position_samples": 0,
+            "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+            "first_active_support_confirmed_time_s": 9.055,
+            "stop_tread_support_samples": 801,
+            "max_continuous_stop_tread_support_s": 4.0,
+            "stop_support_interval_s": [
+              26.0,
+              30.0
+            ]
+          }
+        },
+        "body_world_height_gain_diagnostic_m": 0.023222602943720194,
+        "body_world_height_gain_used_for_pass": false,
+        "command_timing": {
+          "duration_s": 30.0,
+          "forward_end_s": 22,
+          "stop_evaluation_start_s": 26
+        }
+      }
+    }
+  ],
+  "checks": {
+    "fixture": {
+      "passed": true,
+      "front_x_m": 7.0,
+      "back_x_m": 13.0,
+      "tread_y_limits_m": [
+        -1.4,
+        0.0
+      ],
+      "top_z_m": 0.05,
+      "collision": "teacher_low_step::link::collision"
+    },
+    "complete_continuous_runtime": {
+      "passed": true,
+      "duration_s": 30.0,
+      "policy_samples": 1501,
+      "physics_samples": 6001,
+      "native_termination": true,
+      "worker_fault": null,
+      "runner_error": null,
+      "main_exit_codes": [
+        0,
+        0
+      ]
+    },
+    "continuous_cpu_teacher": {
+      "passed": true,
+      "target_action_max_error_rad": 0.0,
+      "bootstrap_excluded_s": 0.1,
+      "legacy_interface": "passed"
+    },
+    "command_profile": {
+      "passed": true,
+      "forward_interval_s": [
+        3,
+        22
+      ],
+      "stop_interval_s": [
+        26,
+        30
+      ],
+      "forward_samples": 950,
+      "stop_samples": 201
+    },
+    "FR_front_entry_and_real_tread_support": {
+      "passed": true,
+      "collision": "go2::rf_lower_leg_link::rf_lower_leg_link_fixed_joint_lump__rf_foot_link_collision_1",
+      "radius_m": 0.02,
+      "chain": [
+        "rf_hip_joint",
+        "rf_upper_leg_joint",
+        "rf_lower_leg_joint"
+      ],
+      "entry_time_s": 6.78,
+      "entry_center_world_m": [
+        7.004414659916565,
+        -0.7382224671274388,
+        0.06952085463599822
+      ],
+      "tread_contact_pair_samples": 4340,
+      "verified_top_support_samples": 4329,
+      "max_continuous_tread_support_s": 0.6749999999999989,
+      "support_interval_s": [
+        8.950000000000001,
+        9.625
+      ],
+      "top_position_with_missing_normals_samples": 0,
+      "position_and_collider_geometry_fallback_span_s": 0.6749999999999989,
+      "tread_pair_missing_position_samples": 0,
+      "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+      "first_active_support_confirmed_time_s": 6.890000000000001,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "FR_stopped_on_real_tread": {
+      "passed": true,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "FR_contact_geometry_complete": {
+      "passed": true,
+      "missing_positions": 0,
+      "missing_normals": 0,
+      "raw_wrench_not_used_as_inferred_load": true
+    },
+    "FL_front_entry_and_real_tread_support": {
+      "passed": true,
+      "collision": "go2::lf_lower_leg_link::lf_lower_leg_link_fixed_joint_lump__lf_foot_link_collision_1",
+      "radius_m": 0.02,
+      "chain": [
+        "lf_hip_joint",
+        "lf_upper_leg_joint",
+        "lf_lower_leg_joint"
+      ],
+      "entry_time_s": 7.025,
+      "entry_center_world_m": [
+        7.000115443496173,
+        -0.6043869709543904,
+        0.07940989035505669
+      ],
+      "tread_contact_pair_samples": 4429,
+      "verified_top_support_samples": 4317,
+      "max_continuous_tread_support_s": 0.7850000000000001,
+      "support_interval_s": [
+        8.58,
+        9.365
+      ],
+      "top_position_with_missing_normals_samples": 0,
+      "position_and_collider_geometry_fallback_span_s": 0.7850000000000001,
+      "tread_pair_missing_position_samples": 0,
+      "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+      "first_active_support_confirmed_time_s": 7.21,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "FL_stopped_on_real_tread": {
+      "passed": true,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "FL_contact_geometry_complete": {
+      "passed": true,
+      "missing_positions": 0,
+      "missing_normals": 0,
+      "raw_wrench_not_used_as_inferred_load": true
+    },
+    "RR_front_entry_and_real_tread_support": {
+      "passed": true,
+      "collision": "go2::rh_lower_leg_link::rh_lower_leg_link_fixed_joint_lump__rh_foot_link_collision_1",
+      "radius_m": 0.02,
+      "chain": [
+        "rh_hip_joint",
+        "rh_upper_leg_joint",
+        "rh_lower_leg_joint"
+      ],
+      "entry_time_s": 8.505,
+      "entry_center_world_m": [
+        7.006919959721385,
+        -0.8067367143830572,
+        0.0773448658101325
+      ],
+      "tread_contact_pair_samples": 4183,
+      "verified_top_support_samples": 4050,
+      "max_continuous_tread_support_s": 0.7449999999999992,
+      "support_interval_s": [
+        8.63,
+        9.375
+      ],
+      "top_position_with_missing_normals_samples": 0,
+      "position_and_collider_geometry_fallback_span_s": 0.7449999999999992,
+      "tread_pair_missing_position_samples": 0,
+      "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+      "first_active_support_confirmed_time_s": 8.73,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "RR_stopped_on_real_tread": {
+      "passed": true,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "RR_contact_geometry_complete": {
+      "passed": true,
+      "missing_positions": 0,
+      "missing_normals": 0,
+      "raw_wrench_not_used_as_inferred_load": true
+    },
+    "RL_front_entry_and_real_tread_support": {
+      "passed": true,
+      "collision": "go2::lh_lower_leg_link::lh_lower_leg_link_fixed_joint_lump__lh_foot_link_collision_1",
+      "radius_m": 0.02,
+      "chain": [
+        "lh_hip_joint",
+        "lh_upper_leg_joint",
+        "lh_lower_leg_joint"
+      ],
+      "entry_time_s": 8.790000000000001,
+      "entry_center_world_m": [
+        7.001789606600672,
+        -0.5411518862106246,
+        0.07452337367240569
+      ],
+      "tread_contact_pair_samples": 4118,
+      "verified_top_support_samples": 3985,
+      "max_continuous_tread_support_s": 1.004999999999999,
+      "support_interval_s": [
+        11.120000000000001,
+        12.125
+      ],
+      "top_position_with_missing_normals_samples": 0,
+      "position_and_collider_geometry_fallback_span_s": 1.004999999999999,
+      "tread_pair_missing_position_samples": 0,
+      "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+      "first_active_support_confirmed_time_s": 9.055,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "RL_stopped_on_real_tread": {
+      "passed": true,
+      "stop_tread_support_samples": 801,
+      "max_continuous_stop_tread_support_s": 4.0,
+      "stop_support_interval_s": [
+        26.0,
+        30.0
+      ]
+    },
+    "RL_contact_geometry_complete": {
+      "passed": true,
+      "missing_positions": 0,
+      "missing_normals": 0,
+      "raw_wrench_not_used_as_inferred_load": true
+    },
+    "four_feet_simultaneous_top_stop_support": {
+      "passed": true,
+      "continuous_span_s": 4.0,
+      "interval_s": [
+        26.0,
+        30.0
+      ],
+      "final_sample_all_four_on_top": true
+    },
+    "continued_teacher_forward_on_tread": {
+      "passed": true,
+      "edge_plus_half_m_first_time_s": 9.57,
+      "all_four_feet_active_ascent_confirmed_time_s": 9.055,
+      "continued_x_progress_m": 2.906660280597184,
+      "late_interval_s": [
+        9.57,
+        22
+      ],
+      "late_forward_velocity_mean_mps": 0.23385035797775625,
+      "late_positive_velocity_fraction": 1.0,
+      "on_platform_body_samples_fraction": 1.0,
+      "continued_duration_s": 12.424999999999997,
+      "rolling_velocity_windows": 2387,
+      "rolling_window_s": 0.5,
+      "maximum_no_foot_top_support_s": 0.0,
+      "measured_position_source": "native Gazebo state, diagnostic simulation evaluation only"
+    },
+    "safety": {
+      "passed": true,
+      "max_abs_roll_pitch_rad": 0.039924376876884285,
+      "min_support_clearance_m": 0.2664275660576187,
+      "body_contact_samples": 0,
+      "unknown_contact_samples": 0,
+      "clearance_definition": "base-link origin world z minus actual collision surface directly below base; safety only"
+    },
+    "teacher_zero_command_stop": {
+      "passed": true,
+      "window_s": [
+        26,
+        30
+      ],
+      "translation_drift_m": 0.0005139875341777531,
+      "yaw_drift_rad": 0.004163867110098141,
+      "velocity_rms": [
+        0.0003298905402229285,
+        0.00015423779773844176,
+        0.001164953219387489
+      ],
+      "samples": 201,
+      "strategy": "continuous Teacher at zero velocity command"
+    }
+  },
+  "metrics": {
+    "continued_motion": {
+      "edge_plus_half_m_first_time_s": 9.57,
+      "all_four_feet_active_ascent_confirmed_time_s": 9.055,
+      "continued_x_progress_m": 2.906660280597184,
+      "late_interval_s": [
+        9.57,
+        22
+      ],
+      "late_forward_velocity_mean_mps": 0.23385035797775625,
+      "late_positive_velocity_fraction": 1.0,
+      "on_platform_body_samples_fraction": 1.0,
+      "continued_duration_s": 12.424999999999997,
+      "rolling_velocity_windows": 2387,
+      "rolling_window_s": 0.5,
+      "maximum_no_foot_top_support_s": 0.0,
+      "measured_position_source": "native Gazebo state, diagnostic simulation evaluation only"
+    },
+    "safety": {
+      "max_abs_roll_pitch_rad": 0.039924376876884285,
+      "min_support_clearance_m": 0.2664275660576187,
+      "body_contact_samples": 0,
+      "unknown_contact_samples": 0,
+      "clearance_definition": "base-link origin world z minus actual collision surface directly below base; safety only"
+    },
+    "stop": {
+      "window_s": [
+        26,
+        30
+      ],
+      "translation_drift_m": 0.0005139875341777531,
+      "yaw_drift_rad": 0.004163867110098141,
+      "velocity_rms": [
+        0.0003298905402229285,
+        0.00015423779773844176,
+        0.001164953219387489
+      ],
+      "samples": 201,
+      "strategy": "continuous Teacher at zero velocity command"
+    },
+    "feet": {
+      "FR": {
+        "collision": "go2::rf_lower_leg_link::rf_lower_leg_link_fixed_joint_lump__rf_foot_link_collision_1",
+        "radius_m": 0.02,
+        "chain": [
+          "rf_hip_joint",
+          "rf_upper_leg_joint",
+          "rf_lower_leg_joint"
+        ],
+        "entry_time_s": 6.78,
+        "entry_center_world_m": [
+          7.004414659916565,
+          -0.7382224671274388,
+          0.06952085463599822
+        ],
+        "tread_contact_pair_samples": 4340,
+        "verified_top_support_samples": 4329,
+        "max_continuous_tread_support_s": 0.6749999999999989,
+        "support_interval_s": [
+          8.950000000000001,
+          9.625
+        ],
+        "top_position_with_missing_normals_samples": 0,
+        "position_and_collider_geometry_fallback_span_s": 0.6749999999999989,
+        "tread_pair_missing_position_samples": 0,
+        "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+        "first_active_support_confirmed_time_s": 6.890000000000001,
+        "stop_tread_support_samples": 801,
+        "max_continuous_stop_tread_support_s": 4.0,
+        "stop_support_interval_s": [
+          26.0,
+          30.0
+        ]
+      },
+      "FL": {
+        "collision": "go2::lf_lower_leg_link::lf_lower_leg_link_fixed_joint_lump__lf_foot_link_collision_1",
+        "radius_m": 0.02,
+        "chain": [
+          "lf_hip_joint",
+          "lf_upper_leg_joint",
+          "lf_lower_leg_joint"
+        ],
+        "entry_time_s": 7.025,
+        "entry_center_world_m": [
+          7.000115443496173,
+          -0.6043869709543904,
+          0.07940989035505669
+        ],
+        "tread_contact_pair_samples": 4429,
+        "verified_top_support_samples": 4317,
+        "max_continuous_tread_support_s": 0.7850000000000001,
+        "support_interval_s": [
+          8.58,
+          9.365
+        ],
+        "top_position_with_missing_normals_samples": 0,
+        "position_and_collider_geometry_fallback_span_s": 0.7850000000000001,
+        "tread_pair_missing_position_samples": 0,
+        "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+        "first_active_support_confirmed_time_s": 7.21,
+        "stop_tread_support_samples": 801,
+        "max_continuous_stop_tread_support_s": 4.0,
+        "stop_support_interval_s": [
+          26.0,
+          30.0
+        ]
+      },
+      "RR": {
+        "collision": "go2::rh_lower_leg_link::rh_lower_leg_link_fixed_joint_lump__rh_foot_link_collision_1",
+        "radius_m": 0.02,
+        "chain": [
+          "rh_hip_joint",
+          "rh_upper_leg_joint",
+          "rh_lower_leg_joint"
+        ],
+        "entry_time_s": 8.505,
+        "entry_center_world_m": [
+          7.006919959721385,
+          -0.8067367143830572,
+          0.0773448658101325
+        ],
+        "tread_contact_pair_samples": 4183,
+        "verified_top_support_samples": 4050,
+        "max_continuous_tread_support_s": 0.7449999999999992,
+        "support_interval_s": [
+          8.63,
+          9.375
+        ],
+        "top_position_with_missing_normals_samples": 0,
+        "position_and_collider_geometry_fallback_span_s": 0.7449999999999992,
+        "tread_pair_missing_position_samples": 0,
+        "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+        "first_active_support_confirmed_time_s": 8.73,
+        "stop_tread_support_samples": 801,
+        "max_continuous_stop_tread_support_s": 4.0,
+        "stop_support_interval_s": [
+          26.0,
+          30.0
+        ]
+      },
+      "RL": {
+        "collision": "go2::lh_lower_leg_link::lh_lower_leg_link_fixed_joint_lump__lh_foot_link_collision_1",
+        "radius_m": 0.02,
+        "chain": [
+          "lh_hip_joint",
+          "lh_upper_leg_joint",
+          "lh_lower_leg_joint"
+        ],
+        "entry_time_s": 8.790000000000001,
+        "entry_center_world_m": [
+          7.001789606600672,
+          -0.5411518862106246,
+          0.07452337367240569
+        ],
+        "tread_contact_pair_samples": 4118,
+        "verified_top_support_samples": 3985,
+        "max_continuous_tread_support_s": 1.004999999999999,
+        "support_interval_s": [
+          11.120000000000001,
+          12.125
+        ],
+        "top_position_with_missing_normals_samples": 0,
+        "position_and_collider_geometry_fallback_span_s": 1.004999999999999,
+        "tread_pair_missing_position_samples": 0,
+        "contact_normal_source": "actual gz.msgs.Contact normal; missing normals never guessed; fallback diagnostic does not satisfy strict support",
+        "first_active_support_confirmed_time_s": 9.055,
+        "stop_tread_support_samples": 801,
+        "max_continuous_stop_tread_support_s": 4.0,
+        "stop_support_interval_s": [
+          26.0,
+          30.0
+        ]
+      }
+    },
+    "body_world_height_gain_diagnostic_m": 0.023222602943720194,
+    "body_world_height_gain_used_for_pass": false,
+    "command_timing": {
+      "duration_s": 30.0,
+      "forward_end_s": 22,
+      "stop_evaluation_start_s": 26
+    }
+  },
+  "protocol": {
+    "schema_version": 1,
+    "scope": "Prospective user-requested step ascent and continued forward locomotion retest; historical42/body-height-ratio acceptance preserved separately",
+    "tests": [
+      "step05_continue",
+      "step10_continue"
+    ],
+    "repetitions": 3,
+    "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+    "physics_dt_s": 0.005,
+    "policy_hz": 50,
+    "fixture": {
+      "front_x_m": 7,
+      "back_x_m": 13,
+      "center_y_m": -0.7,
+      "width_m": 1.4,
+      "height_m": [
+        0.05,
+        0.1
+      ],
+      "change_from_original": "Tread length2m→6m; same front edge, height and width; no robot/body assistance"
+    },
+    "timing": {
+      "bootstrap_pd_s": 0.1,
+      "command_start_s": 3,
+      "forward_command_end_s": 22,
+      "end_s": 30,
+      "stand_stop_start_s": 26
+    },
+    "command": {
+      "body_vx_mps": 0.3,
+      "body_vy_mps": 0,
+      "yaw_radps": 0,
+      "slew_acceleration": [
+        0.6,
+        0.6,
+        0.8
+      ]
+    },
+    "ascent": {
+      "four_named_feet_required": true,
+      "actual_top_contact_xyz_required": true,
+      "contact_xy_margin_m": 0.005,
+      "top_contact_z_tolerance_m": 0.015,
+      "minimum_abs_normal_z": 0.8,
+      "each_foot_continuous_top_support_s": 0.1,
+      "max_native_sample_gap_s": 0.005001,
+      "must_occur_during_active_command": true
+    },
+    "continuation": {
+      "base_start_after_front_m": 0.5,
+      "min_forward_progress_m": 1.0,
+      "command_must_remain_active": true,
+      "min_duration_s": 3.0,
+      "rolling_window_s": 0.5,
+      "minimum_world_forward_mean_mps": 0.05,
+      "minimum_positive_window_fraction": 0.9,
+      "must_remain_inside_tread": true,
+      "maximum_unsupported_s": 0.3
+    },
+    "safety": {
+      "max_abs_roll_pitch_rad": 0.65,
+      "minimum_body_above_support_m": 0.18,
+      "body_contact_allowed": false,
+      "latched_fault_allowed": false
+    },
+    "stand_stop": {
+      "translation_drift_m": 0.15,
+      "yaw_drift_rad": 0.2,
+      "linear_rms_mps": 0.08,
+      "yaw_rate_rms_radps": 0.1,
+      "continuous_teacher_required": true,
+      "final_top_support_required": true,
+      "simultaneous_four_foot_top_support_s": 0.1
+    },
+    "world_base_height_gain": {
+      "role": "diagnostic_only",
+      "used_as_pass_gate": false,
+      "reason": "World base height combines ground rise and posture change; step capability is measured with feet support and sustained actual progress"
+    },
+    "observation_source": "Gazebo privileged physics and same archived187 static SDF rays; no SLAM/navigation claim",
+    "camera": {
+      "actual_gazebo_overview_hz": 10,
+      "archive_stride": 1,
+      "synthetic_frames": false
+    }
+  },
+  "criteria_flattened": {
+    "scope": "5/10 cm single raised tread entry and continued walking; not stairs or full obstacle crossing",
+    "duration_s": 30,
+    "command_start_s": 3,
+    "command_end_s": 22,
+    "stop_window_s": [
+      26,
+      30
+    ],
+    "command_vx_mps": 0.3,
+    "minimum_continuous_foot_tread_support_s": 0.1,
+    "body_entry_past_front_m": 0.5,
+    "minimum_continued_progress_m": 1.0,
+    "minimum_late_forward_velocity_mps": 0.05,
+    "minimum_late_positive_velocity_fraction": 0.9,
+    "max_abs_roll_pitch_rad": 0.65,
+    "min_support_clearance_m": 0.18,
+    "stop_translation_drift_m": 0.15,
+    "stop_yaw_drift_rad": 0.2,
+    "stop_linear_rms_mps": 0.08,
+    "stop_yaw_rate_rms_radps": 0.1,
+    "foot_top_geometric_tolerance_m": 0.015,
+    "contact_top_z_tolerance_m": 0.015,
+    "minimum_abs_contact_normal_z": 0.8,
+    "body_world_height_gain_is_pass_criterion": false,
+    "max_native_gap_s": 0.005001,
+    "contact_xy_margin_m": 0.005,
+    "continuation_min_duration_s": 3.0,
+    "rolling_window_s": 0.5,
+    "maximum_unsupported_s": 0.3
+  },
+  "protocol_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_232549_step05_continue_functional_retest_r3_9038/sources/tests/step_functional_protocol.json",
+  "protocol_sha256": "8b7a43c74b21c063f5b56984e2b63256ee9bb0db88fda5c2f59944bb8b70f431",
+  "evaluator_sha256": "da61b8bba7296b049f33d38a5c6a64df2d0a0ea11083899ac165235c2bb9629a",
+  "source_hashes": {
+    "world.sdf": "11d4fe5026dfe31c80071b0e68d34fd2d4b54f2c63f730142f1d20e2e7943484",
+    "telemetry.jsonl": "2059c377077f41c0af6bd7856b9284d7d3d5624c1fa23b87c222964acb69449d",
+    "actuator.jsonl": "2cb497d648228fe9ac0dd0c551a217d1bcc1032589726e27aff8f22fd4dcf274",
+    "runtime_manifest.json": "44bdedf6333367fbb0cdd4594aebb5cc0e46fd869c8d2656f0f97afbc6a63666",
+    "policy_manifest.json": "1fc3807cf459c453956ee442e816476fff8c1b835bdc815a5b560abdbb61f185",
+    "source_manifest.json": "c1630c507201c1ca20f2b1b00f6aed5eec95c1871f7fe29255f65bc26af73600"
+  },
+  "legacy_summary": {
+    "levels": {
+      "interface": "passed",
+      "motion": "failed",
+      "sim2sim": "unverified",
+      "navigation": "unverified",
+      "real_robot": "unverified"
+    },
+    "tests": [
+      {
+        "name": "step05_continue",
+        "status": "failed",
+        "reason": "Teacher stand/stop translation drift; Teacher stand/stop residual velocity; Stand/stop window contains nonzero velocity command; Low step tread was not reached with settled measured height gain",
+        "metrics": {
+          "duration_s": 30.0,
+          "samples": 1501,
+          "max_abs_roll_pitch_rad": 0.039924376876884285,
+          "min_body_clearance_m": 0.2664275660576187,
+          "body_contact_samples": 0,
+          "unknown_contact_samples": 0,
+          "max_applied_torque_Nm": 15.560171297267097,
+          "position_delta_m": [
+            4.434752001298786,
+            0.5224141317262949,
+            -0.06101994310748343
+          ],
+          "total_yaw_delta_rad": 0.28072649777593733,
+          "assisted_phase_counts": {
+            "support_capture": 0,
+            "support_hold": 0
+          },
+          "tracking": [
+            {
+              "window_s": [
+                5,
+                10
+              ],
+              "command_mean": [
+                0.2999999999999986,
+                0.0,
+                0.0
+              ],
+              "measured_mean": [
+                0.24261920471407955,
+                0.0024459310863514014,
+                0.012240824085237856
+              ],
+              "rmse": [
+                0.0708432601809192,
+                0.04822173660672922,
+                0.05448839916815815
+              ]
+            }
+          ],
+          "stop_teacher": {
+            "samples": 601,
+            "window_s": [
+              18.0,
+              30.0
+            ],
+            "translation_drift_m": 0.9157221750002436,
+            "yaw_drift_rad": 0.057663338266871755,
+            "velocity_rms": [
+              0.13284170352079835,
+              0.03111444570329373,
+              0.020549059081416316
+            ]
+          },
+          "stop_assisted": {
+            "samples": 0
+          },
+          "stop": {
+            "samples": 601,
+            "window_s": [
+              18.0,
+              30.0
+            ],
+            "translation_drift_m": 0.9157221750002436,
+            "yaw_drift_rad": 0.057663338266871755,
+            "velocity_rms": [
+              0.13284170352079835,
+              0.03111444570329373,
+              0.020549059081416316
+            ]
+          },
+          "terrain": {
+            "description": "Low-step ascent onto box tread; not complete obstacle traversal",
+            "start_median_position_m": [
+              6.001747980796979,
+              -0.6969356765924537,
+              0.315415261441494
+            ],
+            "end_median_position_m": [
+              10.434649953994573,
+              -0.17761997385525144,
+              0.33876157997109835
+            ],
+            "height_gain_m": 0.023346318529604337,
+            "native_end_support_foot_groups": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "native_end_all_four_support_samples": 201,
+            "native_end_samples": 201,
+            "end_inside_tread": true,
+            "step_height_m": 0.1,
+            "minimum_height_gain_m": 0.06
+          }
+        }
+      }
+    ]
+  },
+  "scope": "Independent extended-tread functional retest; body height gain is diagnostic, not an acceptance gate; privileged evaluation is not SLAM navigation proof"
+}

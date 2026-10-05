@@ -1,0 +1,147 @@
+{
+  "schema": "champ_execution_contract/v1",
+  "controller_kind": "champ",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline",
+  "physical_scene_identical_except_actuation_plugins": true,
+  "exclusive_effort_writer": "gz_ros2_control::GazeboSimROS2ControlPlugin",
+  "observer": "champ_compare::NativeObserver",
+  "observer_writes_joint_force": false,
+  "observer_state_phase": "PostUpdate",
+  "state_time_offset_s": 0,
+  "duration_s": 180.0,
+  "execution_duration_s": 188.0,
+  "terminal_parking_after_navigation_duration_s": 8,
+  "input_world_sha256": "bb972451c65300098e0407e70089bce64da7bfff4557bf7768cab938261c8204",
+  "world_sha256": "46b161a0c01d142aea6149b2be8cfcd19e0abc2e0ce9415ea34bbc7db78f22a5",
+  "physical_model_mass_kg": 16.512,
+  "physics_step_s": 0.005,
+  "joint_names_training_order": [
+    "rf_hip_joint",
+    "rf_upper_leg_joint",
+    "rf_lower_leg_joint",
+    "lf_hip_joint",
+    "lf_upper_leg_joint",
+    "lf_lower_leg_joint",
+    "rh_hip_joint",
+    "rh_upper_leg_joint",
+    "rh_lower_leg_joint",
+    "lh_hip_joint",
+    "lh_upper_leg_joint",
+    "lh_lower_leg_joint"
+  ],
+  "initialization": "Original ros2_control URDF initial positions (0,.9,-1.8 per leg), native hold_joints Pg100 until trajectory controller; CHAMP adapter nominal calibration .5 sim seconds and >=50 actual raw samples; zero body cmd before3s",
+  "body_pose_resets": 0,
+  "body_servo": false,
+  "body_stabilizer": false,
+  "auxiliary": [
+    "original bounded nominal joint-stop adapter"
+  ],
+  "pid": {
+    "p": 220.982919,
+    "i": 0.2,
+    "d": 1.0,
+    "i_clamp": 2.5,
+    "configured_controller_manager_hz": 250,
+    "actual_period_requires_runtime_evidence": true
+  },
+  "command_boundary": {
+    "file": "navigation_command.json",
+    "source": "scan_slam",
+    "mode": "scan_slam",
+    "dual_ttl_s": 0.3,
+    "future_tolerance_s": 0.05,
+    "limits": [
+      0.3,
+      0.2,
+      0.3
+    ],
+    "slew_per_s": [
+      0.6,
+      0.6,
+      0.8
+    ]
+  },
+  "health": {
+    "topic": "/demo/champ/execution_health",
+    "schema": 1,
+    "mode": "champ",
+    "source": "scan_slam",
+    "states": [
+      "ready",
+      "hold",
+      "failed"
+    ],
+    "requires": [
+      "actual controller_state feedback fresh",
+      "actual Adapter nominal calibration",
+      "unique command/target publishers"
+    ]
+  },
+  "selected_gait": {
+    "executable": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/bin/quadruped_controller_node",
+      "sha256": "2527d4c9e64b7562a57e6ba8e9559c98b3828eae9463af16df7e78880138df64"
+    },
+    "library": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/lib/libquadruped_controller.so",
+      "sha256": "60ae6c054c143ec7751297906cbd9f9ff0b3a6d9eb48084ad7dc8f6deeb9d1f8"
+    }
+  },
+  "qualified_gait_deployment": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/gait_control_ws/deployment_manifest.json",
+    "sha256": "ad285929645925816fd24dfc28b284ef7bf1d2ceb362113e7e6fc85ba21657aa"
+  },
+  "controller_manager_library": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/ros2_control_ws/install/controller_manager/lib/libcontroller_manager.so",
+    "sha256": "18b0ed045399c20c6e3138384a697d5847c5da4aa03704e2634f4c52e0b9630e"
+  },
+  "gz_ros2_control_plugin": {
+    "path": "/opt/ros/jazzy/lib/libgz_ros2_control-system.so",
+    "sha256": "f890f4c37f4422d046924d55c3d50217b8b535c25e4908be9b5778b1802a21c7"
+  },
+  "executor_source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/prepare.py": "d398f6bc0e2baf5b0e03000a824292f26bdde61f18ec61a22d5daab2cf573440",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/baseline.launch.py": "01710dc29e2ba715af164dc19e39a68f13442744e0c4d0b7b49204866aae9d1a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py": "6679152c6db9716c99cf8c527ba5cd895e10b380db99291e5645945c5cb45e44",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/native/champ_native_observer.cpp": "9ccaebded8e5d0ccf3aed1546f8ff97e06886936862b9a2ab2864b0915e340b7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/native/CMakeLists.txt": "1bc66de0e9c401956f5a9b7f599d2fe55245303e5ec38fa63c2ea0845102012a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/worker.py": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b"
+  },
+  "artifacts": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/input_teacher_asset_manifest.json": "3948f553855302aee3a9f23efb0b6737ca25efb6a9e71b7692fac6a3952179c0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/ros_control.yaml": "4e3bb234b1be88435cb2f8e042588a3711d13765c2c98a0ce723e5e724288adf",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/joint_stop_core.py": "da6f57213b7bb5417b19b169f3f3fc295113d15a498cc7aaaa7277793d9029f5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/libchamp_native_observer.so": "8dc70ac7b96f8156c8a3d138774442d2c9eeab5d76ee7628ec762f75e2636ee7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/input_teacher_world.sdf": "bb972451c65300098e0407e70089bce64da7bfff4557bf7768cab938261c8204",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/protected_before.json": "b3005178e313e2bbab8aa4a8ee8b3c29246e9a7158f7704bd9711c309be5b763",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/joints.yaml": "bef858fb7055f6f94d5b6d5f293c129573f572c19b9c9fd06870188600802cda",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/gait.yaml": "de96ec5d55a2139197001c2df6125aec8bad8a7621fe818d462306b051cc8dc5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/links.yaml": "87acd33a4a87af95ee3802e8f6f618cae3dd78956b4ba024c7243b3107cb75f6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/joint_reference_adapter.py": "2116912b3c286c304d629a40177f9393192c4f88f871b3ad18cc923162505f72",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/input_teacher_frames.urdf": "aa295af20cf09e8e3af7970a8f3a71e7ae7672ad8149c710bcf04b56554eff1b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/execution_safety.py": "11aa9446c230a70c2cae87c7a20fa96fce6aea71b0eaddcb1b0c552154e3bba5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/champ.urdf": "a93067bf35bcc94eac8fd29094e088ed89768a01065a4624fe9eae81bd2e4199",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/lib/libquadruped_controller.so": "60ae6c054c143ec7751297906cbd9f9ff0b3a6d9eb48084ad7dc8f6deeb9d1f8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/prepared_offline/champ/bin/quadruped_controller_node": "2527d4c9e64b7562a57e6ba8e9559c98b3828eae9463af16df7e78880138df64"
+  },
+  "protected_before": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_measured.urdf": "9ca0361f56df92550ab8588a690ae57db8dcaf8c16cf8beb170dd6eee7cf1748",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_converted.sdf": "bc31d84d25cca05a58da367fb950d4385a6215f5d6dda2149f611a2f6b195924",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/three_floors.sdf": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/config/gait.yaml": "de96ec5d55a2139197001c2df6125aec8bad8a7621fe818d462306b051cc8dc5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/config/ros_control.yaml": "4e3bb234b1be88435cb2f8e042588a3711d13765c2c98a0ce723e5e724288adf",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/joint_reference_adapter.py": "2116912b3c286c304d629a40177f9393192c4f88f871b3ad18cc923162505f72",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/joint_stop_core.py": "da6f57213b7bb5417b19b169f3f3fc295113d15a498cc7aaaa7277793d9029f5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/execution_safety.py": "11aa9446c230a70c2cae87c7a20fa96fce6aea71b0eaddcb1b0c552154e3bba5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/gait_selection.py": "423aafc12fda3349f9104cf17b8a5e13824cd2826097cc2ed890f8d74338e212",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/gait_runtime.py": "baee72a5a812cd5ebfc9c4065b13a478f0e602d8adc7c026a87fc404eed910ea",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/controller_runtime.py": "782336f4fcb84a9ccd01ccce18f702634314bbde59cc9986a89f02ff20903f86",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/acceptance.json": "0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/simulation/generated/camera_rig.sdf": "ddd00f818081eef6746224b7ab96db97edb99f53152e47d71e7bb8e45ba65e33",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/simulation/generated/three_floors_camera.sdf": "7e5c74c27c0fb7dda94ab624e521c83154463f861542f096d40b3f8545d4ccbd"
+  },
+  "teacher_actor_started": false,
+  "actual_runtime_verified": false,
+  "historical_camera_demo_used_as_motion_evidence": false
+}

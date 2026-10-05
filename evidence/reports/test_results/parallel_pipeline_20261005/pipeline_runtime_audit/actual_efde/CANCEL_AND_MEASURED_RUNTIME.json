@@ -1,0 +1,394 @@
+{
+  "schema": "actual_V17_smoke_runtime_limits_and_cancel_evidence/v1",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde",
+  "strict_pipeline_status": "failed",
+  "receipt": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/pipeline_runtime_audit/V17_efde_RUNTIME_RECEIPT.json",
+  "receipt_sha256": "80efc11ed7c5537c7ef70493f58527db5b8f28ef20cdcfe3bcc2e2dd5df4af20",
+  "reader_sha256": "0271d1ee014c58d15b5b156e9e36212efb552aa4faa00d34b78ac4b5d83b0044",
+  "criteria_sha256": "85a39bc1adc538e468207fd785348bf32630c66772ebadc985f9fcf096342867",
+  "failed_checks": {
+    "final_lifecycle_no_loss": {
+      "status": "failed",
+      "passed": false,
+      "trace_committed": 31614,
+      "summary": {
+        "schema": "ordered_ingress_v17",
+        "accepted": 31615,
+        "delivered": 31614,
+        "committed": 31614,
+        "canceled": 1,
+        "rejected": 0,
+        "peak_pending": 15,
+        "peak_bytes": 4211680,
+        "failure": ""
+      },
+      "cleanup_exemption_applied": false,
+      "missing_count": 1
+    }
+  },
+  "passed_check_names": [
+    "ready_FIFO_contiguous_original_order",
+    "single_distinct_RX_and_owner_TID",
+    "receive_decode_pop_commit_causality",
+    "ready_queue_count_and_accounted_byte_bounds",
+    "original_timer_metadata",
+    "every_committed_sensor_original_integer_header_receipt_order_exact",
+    "original_writer_final_complete_and_drained",
+    "actual_frozen_V17_source_and_loaded_binary_bindings",
+    "actual_environment_pipeline_and_owner_role",
+    "actual_navigation_no_truth_unchanged_CPU_owner_scope",
+    "declared_60s_scope_same_sampling",
+    "actual_GPS_and_decode_exception_source_semantics"
+  ],
+  "unverified_check_names": [
+    "original_native_motion_and_300ms_publication_guard_receipts"
+  ],
+  "cancel_evidence": {
+    "last_committed": {
+      "sequence": "31614",
+      "kind": "0",
+      "source_ns": "0",
+      "receipt_wall": "458417.09829193499",
+      "decoded_wall": "458417.09829193499",
+      "pop_wall": "458417.09851257398",
+      "commit_end_wall": "458417.098516158",
+      "receive_tid": "1280635",
+      "owner_tid": "1280423",
+      "decode_cpu_begin_ns": "3199783002",
+      "decode_cpu_end_ns": "3199783002",
+      "pending_after_pop": "0",
+      "bytes_after_pop": "0"
+    },
+    "last_committed_by_sensor_kind": {
+      "1": {
+        "sequence": "31524",
+        "kind": "1",
+        "source_ns": "60010000000",
+        "receipt_wall": "458416.73987375002",
+        "decoded_wall": "458416.739875253",
+        "pop_wall": "458416.74000664498",
+        "commit_end_wall": "458416.74001930299",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3195338957",
+        "decode_cpu_end_ns": "3195339242",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      },
+      "2": {
+        "sequence": "31508",
+        "kind": "2",
+        "source_ns": "59995000000",
+        "receipt_wall": "458416.678809579",
+        "decoded_wall": "458416.67929729802",
+        "pop_wall": "458416.67932567198",
+        "commit_end_wall": "458416.679336217",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3194075880",
+        "decode_cpu_end_ns": "3194562291",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      },
+      "3": {
+        "sequence": "31504",
+        "kind": "3",
+        "source_ns": "59995000000",
+        "receipt_wall": "458416.67297360301",
+        "decoded_wall": "458416.67319388001",
+        "pop_wall": "458416.67327566398",
+        "commit_end_wall": "458416.67335165798",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3193411367",
+        "decode_cpu_end_ns": "3193629399",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      }
+    },
+    "final_timer_only_committed_suffix_length": 90,
+    "last_pop_queue_empty": true,
+    "cancel_packet_sequence_candidate": 31615,
+    "candidate_sequence_rule": "Exactly one accepted-but-undelivered event after continuous committed sequence1..31614; packet itself not traced. No kind/header/receipt is inferred.",
+    "queue_close_source_rule": "stop_ingress cancels and joins RX before OrderedQueue.close(); close increments canceled by pending queue size and clears it. This locates cancellation to close, not original receipt time.",
+    "cancel_event_kind": "unverified",
+    "cancel_event_source_ns": "unverified",
+    "cancel_event_receipt_wall": "unverified",
+    "cancel_event_close_wall": "unverified",
+    "cleanup_exemption_applied": false
+  },
+  "source_evidence": {
+    "LIVMapper.cpp": {
+      "path": "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/sources/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp",
+      "sha256": "39195ef48be4a72a01d988aba8c75d2b3fadb8c71c296d4cb8b6a9999427f727",
+      "range": "run796-841; stop_ingress1997-2013; commit_ingress2014-2041"
+    },
+    "ordered_ingress.h": {
+      "path": "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/sources/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/ordered_ingress.h",
+      "sha256": "1ec8b022e67233807ec45b3a27c11a877adf712b8160460c09c3e51620e96e08",
+      "range": "push/pop/close"
+    }
+  },
+  "per_kind_measurements": {
+    "0": {
+      "count": 15974,
+      "receive_to_decoded_wall_ms": {
+        "count": 15974,
+        "minimum": 0.0,
+        "median": 0.0,
+        "mean": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "decoded_to_pop_including_push_and_FIFO_wall_ms": {
+        "count": 15974,
+        "minimum": 0.0013060052879154682,
+        "median": 0.42573947575874627,
+        "mean": 3.8134283275578493,
+        "p95": 14.709266039426428,
+        "maximum": 30.074907990638167
+      },
+      "pop_to_commit_end_wall_ms": {
+        "count": 15974,
+        "minimum": 0.0006079790182411671,
+        "median": 0.0017249840311706066,
+        "mean": 0.0032558043589865637,
+        "p95": 0.010331976227462292,
+        "maximum": 0.06781599950045347
+      },
+      "receive_to_commit_end_wall_ms": {
+        "count": 15974,
+        "minimum": 0.0024450127966701984,
+        "median": 0.428826519055292,
+        "mean": 3.816684131916836,
+        "p95": 14.720877146464773,
+        "maximum": 30.077780014835298
+      },
+      "decode_RX_thread_CPU_ms": {
+        "count": 15974,
+        "minimum": 0.0,
+        "median": 0.0,
+        "mean": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "received_wall_hz": 250.0002080036277,
+      "committed_wall_hz": 250.00058561463655
+    },
+    "1": {
+      "count": 12002,
+      "receive_to_decoded_wall_ms": {
+        "count": 12002,
+        "minimum": 0.0003020395524799824,
+        "median": 0.0012459931895136833,
+        "mean": 0.001344648098859888,
+        "p95": 0.0022989202989265314,
+        "maximum": 0.11391000589355826
+      },
+      "decoded_to_pop_including_push_and_FIFO_wall_ms": {
+        "count": 12002,
+        "minimum": 0.0008409842848777771,
+        "median": 1.200611499371007,
+        "mean": 4.817270432697282,
+        "p95": 15.580735911498776,
+        "maximum": 24.132510006893426
+      },
+      "pop_to_commit_end_wall_ms": {
+        "count": 12002,
+        "minimum": 0.002125045284628868,
+        "median": 0.005812995368614793,
+        "mean": 0.007417155955830449,
+        "p95": 0.01537750067654996,
+        "maximum": 1.9652089686132967
+      },
+      "receive_to_commit_end_wall_ms": {
+        "count": 12002,
+        "minimum": 0.005975016392767429,
+        "median": 1.2090779782738537,
+        "mean": 4.826032236751972,
+        "p95": 15.584943385329098,
+        "maximum": 24.14139499887824
+      },
+      "decode_RX_thread_CPU_ms": {
+        "count": 12002,
+        "minimum": 0.000112,
+        "median": 0.000319,
+        "mean": 0.0003392740376603899,
+        "p95": 0.000556,
+        "maximum": 0.012142
+      },
+      "received_wall_hz": 194.39965643530468,
+      "committed_wall_hz": 194.39942257150312,
+      "source_header_hz": 200.0
+    },
+    "2": {
+      "count": 1819,
+      "receive_to_decoded_wall_ms": {
+        "count": 1819,
+        "minimum": 0.3515270072966814,
+        "median": 0.41798799065873027,
+        "mean": 0.4285951578590779,
+        "p95": 0.5194527853745967,
+        "maximum": 2.1510039805434644
+      },
+      "decoded_to_pop_including_push_and_FIFO_wall_ms": {
+        "count": 1819,
+        "minimum": 0.0011209631338715553,
+        "median": 0.12676999904215336,
+        "mean": 0.1580888135235812,
+        "p95": 0.24998598964884874,
+        "maximum": 6.47279602708295
+      },
+      "pop_to_commit_end_wall_ms": {
+        "count": 1819,
+        "minimum": 0.0033040414564311504,
+        "median": 0.010474002920091152,
+        "mean": 0.011190426586592112,
+        "p95": 0.019110686844214797,
+        "maximum": 0.061772007029503584
+      },
+      "receive_to_commit_end_wall_ms": {
+        "count": 1819,
+        "minimum": 0.370107009075582,
+        "median": 0.5641620373353362,
+        "mean": 0.5978743979692512,
+        "p95": 0.73783541447483,
+        "maximum": 6.850847974419594
+      },
+      "decode_RX_thread_CPU_ms": {
+        "count": 1819,
+        "minimum": 0.35013299999999997,
+        "median": 0.41607299999999997,
+        "mean": 0.42518203298515667,
+        "p95": 0.5104188,
+        "maximum": 1.13263
+      },
+      "received_wall_hz": 30.053067406886278,
+      "committed_wall_hz": 30.05340866288766,
+      "source_header_hz": 30.307576894223555
+    },
+    "3": {
+      "count": 1819,
+      "receive_to_decoded_wall_ms": {
+        "count": 1819,
+        "minimum": 0.13526203110814095,
+        "median": 0.1748609938658774,
+        "mean": 0.19574146563547687,
+        "p95": 0.2918620186392218,
+        "maximum": 1.9533769809640944
+      },
+      "decoded_to_pop_including_push_and_FIFO_wall_ms": {
+        "count": 1819,
+        "minimum": 0.0015370314940810204,
+        "median": 0.15636399621143937,
+        "mean": 0.5753446710713253,
+        "p95": 3.8080907135736175,
+        "maximum": 13.705689983908087
+      },
+      "pop_to_commit_end_wall_ms": {
+        "count": 1819,
+        "minimum": 0.05014002090319991,
+        "median": 0.09284797124564648,
+        "mean": 0.09983864399374613,
+        "p95": 0.1453511824365705,
+        "maximum": 0.42717199539765716
+      },
+      "receive_to_commit_end_wall_ms": {
+        "count": 1819,
+        "minimum": 0.22988795535638928,
+        "median": 0.4437830066308379,
+        "mean": 0.8709247807005482,
+        "p95": 4.108974582049993,
+        "maximum": 14.180159021634609
+      },
+      "decode_RX_thread_CPU_ms": {
+        "count": 1819,
+        "minimum": 0.122086,
+        "median": 0.169899,
+        "mean": 0.18679407421660252,
+        "p95": 0.2801649999999999,
+        "maximum": 0.653937
+      },
+      "received_wall_hz": 30.05167232565746,
+      "committed_wall_hz": 30.05204512804414,
+      "source_header_hz": 30.307576894223555
+    }
+  },
+  "effective_update_measurements": {
+    "LIO": {
+      "successful_completed_records": 1709,
+      "skipped_completed_records": 109,
+      "started_records": 1818,
+      "completed_wall_hz": 30.034437442354708,
+      "completed_source_hz": 30.305180979418022,
+      "completion_rule": "Only original diag_stage flag1; flag0 skipped snapshots are not processed updates",
+      "received_kind1_header_minus_processing_target_s": {
+        "count": 1818,
+        "minimum": 0.0,
+        "median": 0.015000000000000001,
+        "mean": 0.012304730473047306,
+        "p95": 0.02,
+        "maximum": 0.025
+      },
+      "received_kind2_header_minus_processing_target_s": {
+        "count": 1818,
+        "minimum": 0.0,
+        "median": 0.0,
+        "mean": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "received_kind3_header_minus_processing_target_s": {
+        "count": 1818,
+        "minimum": 0.0,
+        "median": 0.0,
+        "mean": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      }
+    },
+    "VIO": {
+      "successful_completed_records": 1708,
+      "skipped_completed_records": 109,
+      "started_records": 1817,
+      "completed_wall_hz": 30.02959600079894,
+      "completed_source_hz": 30.30356825847683,
+      "completion_rule": "Only original diag_stage flag1; flag0 skipped snapshots are not processed updates",
+      "received_kind1_header_minus_processing_target_s": {
+        "count": 1817,
+        "minimum": 0.030000000000000002,
+        "median": 0.045000000000000005,
+        "mean": 0.04267473858007705,
+        "p95": 0.05,
+        "maximum": 0.055
+      },
+      "received_kind2_header_minus_processing_target_s": {
+        "count": 1817,
+        "minimum": 0.030000000000000002,
+        "median": 0.035,
+        "mean": 0.032999449642267475,
+        "p95": 0.035,
+        "maximum": 0.035
+      },
+      "received_kind3_header_minus_processing_target_s": {
+        "count": 1817,
+        "minimum": 0.030000000000000002,
+        "median": 0.035,
+        "mean": 0.032999449642267475,
+        "p95": 0.035,
+        "maximum": 0.035
+      }
+    }
+  },
+  "limits": [
+    "No complete32route or multilevelnavigationpass",
+    "No pipeline speedup from FIFO/semanticPASS alone",
+    "No fullestimatorreplay",
+    "No dynamic obstacle or realrobot validation",
+    "No matched serial/parallel full-run A/B; cannot attribute the runtime rates to pipeline speedup alone.",
+    "Received source-head age is not current /clock age or a navigation TTL replacement.",
+    "Single60s prefix is not a full32-region/multifloor navigation PASS.",
+    "One canceled event is whole-lifecycle failure; apparent shutdown timing is not an exemption."
+  ],
+  "navigation_pass_claimed": false
+}

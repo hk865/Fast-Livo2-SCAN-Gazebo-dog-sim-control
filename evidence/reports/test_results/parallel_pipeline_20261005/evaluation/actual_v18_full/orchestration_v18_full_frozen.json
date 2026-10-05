@@ -1,0 +1,151 @@
+{
+  "schema": "append_original_parallel_candidate_receipts/v1",
+  "created_UTC": "2026-10-05T15:51:33.392963+00:00",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+  "full_requested": true,
+  "pre_test_plan_sha256": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+  "orchestrator_sha256": "82ff48551088ae7e0f3763de260cf9ea4162bdc57f7d0f0dc733d81d8a578dcf",
+  "no_new_numeric_thresholds": true,
+  "steps": [
+    {
+      "step": "common_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/evaluate_completed_run.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+        "--suffix",
+        "v18_full_frozen",
+        "--output",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "645ec32c64bb7e471ce57e4d1944d39d8beb2f51670271acabd2133cc46197cb"
+    },
+    {
+      "step": "publication_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/publication_ledger_v11/audit_publication_ledger.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "eaf9ad8ce8ffbb0ae175fa4fb3bcddbc3148e8c5baf06c0720fc483dca3a6557"
+    },
+    {
+      "step": "ramp_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+        "--receipt-suffix",
+        "v18_full_frozen"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "c2b4a73ce941435f9cacf0dca25e138653aad4d4398e18cabd87aa19d22201ed"
+    },
+    {
+      "step": "performance_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/performance_proc_full.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+        "--output",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full/owned_cpu_and_boundary.json"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "909bf025e59323f4eb8607180850d80b95576e5720f8d9a79fbc93c5ee4eb2a9"
+    },
+    {
+      "step": "pipeline_ages_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_pipeline_ages.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+        "--output",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full/pipeline_ages.json"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "4dc40cc05251b218187d67cde632aef9df7f81b45fc0366f9d475173fdf21d8d"
+    },
+    {
+      "step": "source_height_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/analyze_sensor_experiment.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+        "--output",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full/source_height"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "4b9b3c07fa6c09f40c27fd8b190c72212d323120b1758c5b5183bd29b6acbbea"
+    },
+    {
+      "step": "metadata_v1_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_terrain_metadata.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "77b67c9faf1fd97effb4d5c600fa8c211bbc71de7324bdbc8d1f6930ad4c37bb"
+    },
+    {
+      "step": "metadata_v2_v18_full_frozen",
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_terrain_metadata_v2.py",
+        "--run",
+        "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53"
+      ],
+      "exit_code": 0,
+      "execution_log_sha256": "d71a5ac115f444645acb2ed243c80a6b5f1e0bdf141564650204bb4ba558b705"
+    }
+  ],
+  "receipts": {
+    "summary_closed_loop_cascade_independent.v18_full_frozen.json": {
+      "sha256": "b986e4480e0b6f7db93eb87f97c998fa7abe6058d1c1b6d11e50f03a97d0317a",
+      "status": "unverified"
+    },
+    "summary_closed_loop_clock_hold_independent.json": {
+      "sha256": "3ea8b069ab865e1fa830ff8856e795e59109782e82d5a4dc16abc00ac03acd62",
+      "status": "unverified"
+    },
+    "summary_closed_loop_cascade_independent.json": {
+      "sha256": "b986e4480e0b6f7db93eb87f97c998fa7abe6058d1c1b6d11e50f03a97d0317a",
+      "status": "unverified"
+    },
+    "summary_closed_loop_terrain_metadata_join_independent_v2.json": {
+      "sha256": "1398f53ec33310c510944ba5100d62d67d205c7596250b972a89332bb57e5280",
+      "status": "passed"
+    },
+    "summary_closed_loop_terrain_metadata_join_independent.json": {
+      "sha256": "dc9a7a4f2568d39122302da586a6b5e92766504e09a7ea4b7381fdcbacfba640",
+      "status": "passed"
+    },
+    "summary_closed_loop_ramp_independent.json": {
+      "sha256": "99068b1a8aa56079e3006bf7d6204598b16b091bd7ed438b6b72da3a96b0a01a",
+      "status": "unverified"
+    },
+    "summary_closed_loop_ramp_independent.v18_full_frozen.json": {
+      "sha256": "99068b1a8aa56079e3006bf7d6204598b16b091bd7ed438b6b72da3a96b0a01a",
+      "status": "unverified"
+    }
+  },
+  "all_execution_returncodes_zero": true,
+  "actual_status_must_be_read_from_original_receipts": true
+}

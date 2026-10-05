@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_execution",
+  "scope": "Future simulation-only single command-producer dropout; does not establish physical stop/recovery/nav pass",
+  "rules": {
+    "label": "slam_scan_ttl_drop_v4",
+    "wait_wall_s": 180.0,
+    "hold_sim_ns": 10000000000,
+    "clock_stall_wall_s": 60.0,
+    "motion_dwell_ns": 300000000,
+    "pose_gap_max_ns": 200000000,
+    "forward_body_velocity_mps": 0.03,
+    "healthy_forward_command_mps": 0.08,
+    "trigger_source_age_wall_s": 0.3,
+    "trigger_source_age_sim_s": 0.3,
+    "clock_phase_tolerance_s": 0.05,
+    "post_resume_sim_ns": 3000000000,
+    "post_resume_max_wall_s": 30.0,
+    "poll_wall_s": 0.02
+  },
+  "fixture_sha256": "b69f4b1552681dbe15c8314bb260482689e8737f65afa63d434e671c69ec1aba",
+  "input_sources": [
+    "navigation_slam_poses.jsonl original measured SLAM body_velocity/stamp/frame/receivewall",
+    "navigation_sensor_gate.json actual ROS /clock stamp; no truth",
+    "navigation_command.json original healthy SLAM/SCAN envelope bytes and stamps"
+  ],
+  "new_run_only": true,
+  "trigger": "Measured SLAM body forward vx>=.03 for >=.3sim seconds, gaps<=.2, fresh sources; healthy actual envelope forward vx>=.08. No simulator position or velocity is read.",
+  "signal_target": "Unique ownuid navigation/bridge.py process, exact acceptance/command-file argv, ROS79/GZpartition/DEMO_RUN_DIR and navstack ancestor match",
+  "identity_and_recovery": "/proc PID+starttime+cmdline verified, kernel pidfd pins process, SIGSTOP confirmed stateT, SIGCONT after at least10actualclock seconds; finally same-identity SIGCONT under blocked interrupts",
+  "file_envelope": "Read only. No rewrite, timestamp refresh, synthetic command or joint publication. Byte hash/mtime/size must remain unchanged while paused. Original full envelope retained.",
+  "failure": "180wall armwait;60wall stopped clock; run ending; missing/changed inputs; ambiguous process; changed identity; logging failure => failed receipt and mandatory same-process recovery. PID reuse never signalled.",
+  "post_resume": "Observe actual source files up to3sim seconds/30wall, can exit before route ends; physical/nav success independently audited",
+  "self_test": "Offline compile and mock signal tests; zero live signals during preparation",
+  "expected_output": [
+    "protocol.json immutable copy",
+    "executed_fixture.py immutable copy",
+    "events.jsonl actual clock/SLAM/header/envelope/state/signal history",
+    "receipt.json error/scope/recovery/PID starttime/protocol and source hashes"
+  ]
+}

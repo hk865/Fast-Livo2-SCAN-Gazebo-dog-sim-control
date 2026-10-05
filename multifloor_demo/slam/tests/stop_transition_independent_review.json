@@ -1,0 +1,377 @@
+{
+  "scope": "Independent read-only review of actual flat stop-transition records; no ROS or physics started, no production change. This supports a stop target/JTC mechanism, not a proven cause of slope failure.",
+  "method": "Use the unique recorded return-to-standing target pair after each actual safe-command zero edge, not the maximum adjacent gait jump in a surrounding window. Compare actual reference/feedback/effort samples before and after.",
+  "diagnostic_sequence": {
+    "scope": "Test-only exact-zero transition recorder; physical feedback uses IMU, never GT.",
+    "completed_sequence": true,
+    "failure": null,
+    "max_imu_tilt": 0.18599366418484395,
+    "body_contacts": 0,
+    "events": [
+      {
+        "event": "gate_phase",
+        "segment": 0,
+        "phase": "pre_turn",
+        "stamp": 20.037,
+        "yaw": -0.0745114128271652,
+        "locked_heading": null
+      },
+      {
+        "event": "gate_phase",
+        "segment": 0,
+        "phase": "align",
+        "stamp": 21.037,
+        "yaw": -0.07450993150650696,
+        "locked_heading": -1.5707963267948966
+      },
+      {
+        "event": "gate_phase",
+        "segment": 0,
+        "phase": "settle",
+        "stamp": 30.067,
+        "yaw": -1.4723383644548365,
+        "locked_heading": -1.5707963267948966
+      },
+      {
+        "event": "gate_phase",
+        "segment": 0,
+        "phase": "drive",
+        "stamp": 31.067,
+        "yaw": -1.5151032560155908,
+        "locked_heading": null
+      },
+      {
+        "event": "segment_complete",
+        "segment": 0,
+        "stamp": 35.063,
+        "drive_seconds": 4.015000000000004
+      }
+    ],
+    "counts": {
+      "safe_command": 2904,
+      "command": 20531,
+      "safety": 373,
+      "joint_target": 9170,
+      "imu": 41082,
+      "joint_state": 10269,
+      "truth": 2054,
+      "controller_state": 10260,
+      "slam": 215
+    },
+    "final_bridge": {
+      "state": "ready",
+      "reason": "imu_stable",
+      "imu_stamp": 40.956,
+      "imu_wall_age": 0.0011470879981061444,
+      "tilt": 0.0019293212408568528,
+      "max_tilt": 0.18599366418484395,
+      "holds": 0,
+      "failures": 0,
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "safe": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_wall_age": 0.0001286570004594978
+    },
+    "control_core_sha256": "98eb4702af719b92109f30f2b3f8f0c9cf161ce3cf67fc3062797b64d6df2646",
+    "gait_config_sha256": "de96ec5d55a2139197001c2df6125aec8bad8a7621fe818d462306b051cc8dc5",
+    "arguments": {
+      "output": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/stop_transition_diagnostic/stop_result.json",
+      "headings": [
+        -90
+      ],
+      "drive": 4.0,
+      "initial_settle": 20.0,
+      "wall_timeout": 150.0
+    },
+    "acceptance_note": "Diagnostic evidence only, not full navigation acceptance; no gait or safety changes."
+  },
+  "events": [
+    {
+      "safezero_receipt_wall": 34.98501485599991,
+      "latest_imu_stamp": 30.089,
+      "stage": "segment_0_settle",
+      "prior_safe": [
+        0.0,
+        0.0,
+        -0.12
+      ],
+      "exact_return_to_nominal": {
+        "receipt_delta_from_safezero_s": 0.002604694000183372,
+        "latest_imu_stamp": 30.091,
+        "max_joint_delta_rad": 0.012468129335665878,
+        "max_URDF_target_foot_delta_m": 0.004655175437345023,
+        "joint_deltas_rad": [
+          0.012468010247919992,
+          0.007372260093688965,
+          0.003198981285095215,
+          -0.009151667295718369,
+          0.011900186538696289,
+          -0.010044097900390625,
+          0.009151548207972482,
+          -0.001856088638305664,
+          -0.010044097900390625,
+          -0.012468129335665878,
+          -0.01057124137878418,
+          0.003198981285095215
+        ],
+        "header": {
+          "sec": 0,
+          "nanosec": 0
+        },
+        "point_horizon_s": 0.016666666
+      },
+      "peaks": {
+        "pre300ms": {
+          "reference": {
+            "receipt_delta_from_safezero_s": -0.03717364000112866,
+            "controller_stamp": 30.052,
+            "joint": "lf_lower_leg_joint",
+            "value": 8.560797905915429,
+            "max_absolute_value": 8.560797905915429
+          },
+          "feedback": {
+            "receipt_delta_from_safezero_s": -0.21310875700146426,
+            "controller_stamp": 29.876,
+            "joint": "lf_lower_leg_joint",
+            "value": -11.310036152698991,
+            "max_absolute_value": 11.310036152698991
+          },
+          "output": {
+            "receipt_delta_from_safezero_s": -0.2970401860002312,
+            "controller_stamp": 29.792,
+            "joint": "lh_lower_leg_joint",
+            "value": 26.27507456573836,
+            "max_absolute_value": 26.27507456573836
+          }
+        },
+        "post300ms": {
+          "reference": {
+            "receipt_delta_from_safezero_s": 0.0030938829986553174,
+            "controller_stamp": 30.092,
+            "joint": "rh_lower_leg_joint",
+            "value": 5.734132569128579,
+            "max_absolute_value": 5.734132569128579
+          },
+          "feedback": {
+            "receipt_delta_from_safezero_s": 0.07086778300072183,
+            "controller_stamp": 30.16,
+            "joint": "rf_upper_leg_joint",
+            "value": 3.5950169539187042,
+            "max_absolute_value": 3.5950169539187042
+          },
+          "output": {
+            "receipt_delta_from_safezero_s": 0.023055718000250636,
+            "controller_stamp": 30.112,
+            "joint": "rf_lower_leg_joint",
+            "value": 19.70145280579528,
+            "max_absolute_value": 19.70145280579528
+          }
+        }
+      },
+      "first_post_edge_peak_attribution": {
+        "controller_stamp": 30.092,
+        "joint": "rh_lower_leg_joint",
+        "joint_target_rad": -1.5789296627044678,
+        "measured_q_rad": -1.6744985350338557,
+        "previous_target_to_current_delta_rad": 0.003198981285095215,
+        "target_minus_actual_rad": 0.09556887232938793,
+        "point_horizon_s": 0.016666666,
+        "reference_v_rad_s": 5.734132569128579,
+        "predicted_v_from_actual_error_rad_s": 5.734132569128579,
+        "all12_velocity_equation_max_abs_error": 0.0,
+        "all12_reference_position_equals_feedback": true,
+        "measured_v_at_first_sample_rad_s": 0.16152124458537243,
+        "position_error_rad": 0.0,
+        "velocity_error_rad_s": 5.572611324543207,
+        "configured_D_gain": 1.0,
+        "D_input_contribution_nm": 5.572611324543207,
+        "output_effort_nm": 16.31480606364447,
+        "previous_output_effort_nm": 14.1231141758892,
+        "previous_command_carry_estimate_nm": 10.73356663809577,
+        "PD_plus_carry_residual_nm": 0.008628101005491828,
+        "all12_PD_plus_carry_residual_max_nm": 0.00878289871548077,
+        "effort_attribution_caveat": "The velocity equation matches actual data directly. Carry estimate additionally uses official source semantics and archived gains; exact integral/PID internal states and runtime parameter query were not recorded, so residual is not claimed exact PID replay."
+      }
+    },
+    {
+      "safezero_receipt_wall": 39.98514334399806,
+      "latest_imu_stamp": 35.084,
+      "stage": "final_stop",
+      "prior_safe": [
+        0.12,
+        0.0,
+        -0.04
+      ],
+      "exact_return_to_nominal": {
+        "receipt_delta_from_safezero_s": 0.0024912260014389176,
+        "latest_imu_stamp": 35.087,
+        "max_joint_delta_rad": 0.1985633373260498,
+        "max_URDF_target_foot_delta_m": 0.04259307732582347,
+        "joint_deltas_rad": [
+          -0.0075430869448442905,
+          -0.1985633373260498,
+          0.17778348922729492,
+          0.0025365353238342436,
+          0.046743571758270264,
+          -0.025774121284484863,
+          -0.002038717209126517,
+          0.05008965730667114,
+          -0.025698065757751465,
+          0.00607028609631044,
+          -0.190105140209198,
+          0.1803607940673828
+        ],
+        "header": {
+          "sec": 0,
+          "nanosec": 0
+        },
+        "point_horizon_s": 0.016666666
+      },
+      "peaks": {
+        "pre300ms": {
+          "reference": {
+            "receipt_delta_from_safezero_s": -0.09668919499745243,
+            "controller_stamp": 34.988,
+            "joint": "rf_lower_leg_joint",
+            "value": 8.89451832300208,
+            "max_absolute_value": 8.89451832300208
+          },
+          "feedback": {
+            "receipt_delta_from_safezero_s": -0.09230093799851602,
+            "controller_stamp": 34.992,
+            "joint": "lh_lower_leg_joint",
+            "value": 11.77268207535036,
+            "max_absolute_value": 11.77268207535036
+          },
+          "output": {
+            "receipt_delta_from_safezero_s": -0.23652830499850097,
+            "controller_stamp": 34.848,
+            "joint": "lf_lower_leg_joint",
+            "value": 27.256043427431667,
+            "max_absolute_value": 27.256043427431667
+          }
+        },
+        "post300ms": {
+          "reference": {
+            "receipt_delta_from_safezero_s": 0.0038025480025680736,
+            "controller_stamp": 35.088,
+            "joint": "rh_upper_leg_joint",
+            "value": -10.060269854122529,
+            "max_absolute_value": 10.060269854122529
+          },
+          "feedback": {
+            "receipt_delta_from_safezero_s": 0.015653943999495823,
+            "controller_stamp": 35.1,
+            "joint": "rh_upper_leg_joint",
+            "value": -8.034800520206689,
+            "max_absolute_value": 8.034800520206689
+          },
+          "output": {
+            "receipt_delta_from_safezero_s": 0.0038025480025680736,
+            "controller_stamp": 35.088,
+            "joint": "rh_upper_leg_joint",
+            "value": -20.08522628455397,
+            "max_absolute_value": 20.08522628455397
+          }
+        }
+      },
+      "first_post_edge_peak_attribution": {
+        "controller_stamp": 35.088,
+        "joint": "rh_upper_leg_joint",
+        "joint_target_rad": 0.7894648909568787,
+        "measured_q_rad": 0.9571360484854076,
+        "previous_target_to_current_delta_rad": -0.190105140209198,
+        "target_minus_actual_rad": -0.1676711575285289,
+        "point_horizon_s": 0.016666666,
+        "reference_v_rad_s": -10.060269854122529,
+        "predicted_v_from_actual_error_rad_s": -10.060269854122529,
+        "all12_velocity_equation_max_abs_error": 0.0,
+        "all12_reference_position_equals_feedback": true,
+        "measured_v_at_first_sample_rad_s": 4.600789843854264,
+        "position_error_rad": 0.0,
+        "velocity_error_rad_s": -14.661059697976793,
+        "configured_D_gain": 1.0,
+        "D_input_contribution_nm": -14.661059697976793,
+        "output_effort_nm": -20.08522628455397,
+        "previous_output_effort_nm": -7.142367339769702,
+        "previous_command_carry_estimate_nm": -5.428199109659195,
+        "PD_plus_carry_residual_nm": 0.004032523082019068,
+        "all12_PD_plus_carry_residual_max_nm": 0.010271109300600934,
+        "effort_attribution_caveat": "The velocity equation matches actual data directly. Carry estimate additionally uses official source semantics and archived gains; exact integral/PID internal states and runtime parameter query were not recorded, so residual is not claimed exact PID replay.",
+        "same_actual_error_candidate150ms_reference_v_rad_s": -1.1178077168568594,
+        "same_actual_error_candidate150ms_D_input_nm": -5.718597560711123,
+        "candidate_estimate_caveat": "Counterfactual first-sample arithmetic only; longer-motion dynamics, previous effort carry, contact impulses and outcome are not predicted. It is not actual candidate evidence."
+      }
+    }
+  ],
+  "timing": {
+    "active_target_count": 3402,
+    "target_header_zero_count": 3402,
+    "positions_only_count": 3402,
+    "target_receipt_wall_gap_mean_s": 0.0050000328306378595,
+    "target_receipt_wall_gap_min_s": 0.002342886000405997,
+    "target_receipt_wall_gap_max_s": 0.007606606999615906,
+    "controller_actual_stamp_gap_max_s": 0.008000000000002672,
+    "controller_actual_stamp_gap_median_s": 0.004000000000001336,
+    "controller_duplicate_stamp_count": 1,
+    "controller_first_sample_reference_time_zero_fraction": 0.800658978583196,
+    "warning": "CHAMP source headers are zero. Receipt/latest IMU timing is not exact source publish timing; controller-state header stamps are actual controller sample stamps. No large wall/clock pause is evident in this active interval."
+  },
+  "source_semantics": {
+    "installed_JTC_version": "4.40.1",
+    "local_CHAMP": "200Hz wall timer; safe velocity becomes zero; generate(step_length==0) keeps fresh nominal feet, replaces previous feet and returns. Publisher uses one positions-only point at1/60s with header0.",
+    "JTC": "New messages replace trajectories. On first sample default interpolate_from_desired_state=false captures measured state; header0 starts now. Effort-only PID includes velocity error. Controller reads previous effort command into its start state.",
+    "trajectory": "Positions-only endpoints use linear interpolation, reference velocity=(goal-position_at_start)/duration. Empty final effort becomes zero; nonempty start effort is interpolated toward it.",
+    "primary_urls": [
+      "https://raw.githubusercontent.com/ros-controls/ros2_controllers/4.40.1/joint_trajectory_controller/src/joint_trajectory_controller.cpp",
+      "https://raw.githubusercontent.com/ros-controls/ros2_controllers/4.40.1/joint_trajectory_controller/src/trajectory.cpp"
+    ]
+  },
+  "causal_assessment": [
+    "Confirmed: actual final safezero is followed by a198.56mrad target change; one measured-state JTC sample creates10.06rad/s reference velocity and14.66rad/s velocity error. Both position arrays match exactly at that sample.",
+    "Supported: configured derivative feedback and short interpolation produce an immediate effort transient, followed by measured joint velocity. This occurs without an instantaneous actual joint-position jump.",
+    "Not established: that transient uniquely explains slope drift/fall. Flat sequence completed, body contact0 and post-edge tilt small. Normal gait immediately before the edge already has high reference/actual velocity and effort.",
+    "The first turn-stop target change is only12.47mrad/4.66mm; the old surrounding-window maximum occurred before the safezero edge. Final forward-stop is198.56mrad/42.59mm. Stop phase strongly affects magnitude."
+  ],
+  "candidate_review": {
+    "status": "Proposal only; no implementation or causal A/B performed in this review.",
+    "preferred_minimal_scope": "Demo-local joint trajectory relay, with CHAMP remapped to a raw target input and relay as the only JTC publisher. Nonzero safe-command gait messages preserve all original fields and cadence. Shared go2 sources and SLAM remain untouched.",
+    "stop_only": "On an actual safe-command zero transition, settle joint posture toward the genuine CHAMP standing target with one bounded approximately150ms trajectory, then hold it. Suppress redundant identical zero trajectories so the same motion is not restarted every5ms. Do not send another locomotion Twist or continue gait phases after safety zero.",
+    "conditional_design": "A positions-only150ms target reduces the same first-sample displacement-derived velocity about9fold. A measured-q/velocity start and zero-velocity endpoint can provide C1 continuity, but cubic overshoot with large initial velocity must be bounded against URDF limits and checked physically before adoption. Duration150ms is a candidate, not a certified stopping bound.",
+    "callback_race": "safe_command and raw CHAMP targets are separate topics. The first target received after zero may be an old gait sample. Relay must inhibit old gait targets immediately and use a verified standing target, e.g. cached initial stable CHAMP standing vector in this fixed-body-pose Demo, or explicit target/mode synchronization. Do not blindly assume arrival order.",
+    "avoid": [
+      "Globally enable desired-state/open-loop interpolation; this changes normal gait and may compound error",
+      "Re-send the same150ms goal at200Hz; repeatedly restarts interpolation",
+      "Merely smooth body velocity after a safety zero or wait until the next footfall by continuing locomotion",
+      "Modify shared CHAMP or correct posture from GT"
+    ],
+    "necessary_validation": [
+      "Offline relay contracts: one stop motion despite repeatedzero, normal gait payloads exact, stale state/order mismatch rejected, no second JTC publisher",
+      "Actual flat randomized stop phases incl. high-swing phase, same recordedtargets/reference/effort/actualv and no contacts; compare bothzero edges and pre-edge gait baseline",
+      "Only after that, same-runtime/source controlled slope baseline vs relay candidate, actual1000Hz/full generic SLAM, unchanged90s/raw.22/joint.30, zero commands/safety limits; report failure if progress or stability does not improve",
+      "Actual dynamic obstacle hold/resume plus final full prescribed multi-floor browser run remain required"
+    ]
+  },
+  "input_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/stop_transition_diagnostic/stop_result.jsonl": "3dde5765c032b6e14f6d31b9ea57933f16d912ec11d561968133f9dc65bb046b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/stop_transition_diagnostic/stop_result.json": "d83f64a429311648d1f06506ec15c8d8946d5fbb63383086d5da7b4306055b0e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/stop_transition_diagnostic/runtime_manifest.json": "b67ead62adb432036f4fe52f29c3974886e5e55636ee14742e697798408ff60a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/stop_transition_diagnostic/source_snapshot.tar.gz": "a425c56587144bb49670684d8ea8b64c11009233c9574b2878cf55cf9945565e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/config/ros_control.yaml": "d693d36340795b6c5e3250783c93d1f6fc10934bd0ff93c20c4b21a5bf07d096",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/go2_sim_control/src/unitree_go2_ros2/champ_base/src/quadruped_controller.cpp": "437fe3c841a7537148889c0b61f1049fff4ff61d2660eccf4965d32390baede7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/go2_sim_control/src/unitree_go2_ros2/champ/include/champ/leg_controller/trajectory_planner.h": "64b93b1cf8502ee7e833ddcbcbba3be097d25e1eb86af442cf68c8bc48cff656"
+  },
+  "installed_JTC_observation": {
+    "version": "4.40.1",
+    "path": "/opt/ros/jazzy/lib/libjoint_trajectory_controller.so",
+    "sha256": "0b06588d694dc98877cdae782bc4f0daa3e5a13a04fa6326a944aa5755cf2118",
+    "provenance_limit": "Read-only installed library observation after diagnostic; original runtime_manifest did not archive JTC, so this is not retroactively claimed as its original binary receipt."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "revision": "v4_ROS_numeric_logging",
+  "parent_sha256": "563bebe6b4f9a33c44119c9ea2a7a9cd756fdc66c5335a7488bf0a596796fcf2",
+  "failed_run": "20261005_012718_SLAM_fixed_route_v3_safety1m_mapped10_gyro_v3_r1_4b68",
+  "reason": "Real ROS covariance comparison yields numpy.bool_. Cast tobool andserialize known numpy numerictypes via.item, keepingfinite/rejectunknown. Fifteen binding+ROSnumeric loggingchecks nowPASS; previous tilt puretest initialfixture lackedcausalgyrocorrected. No core/gain/TTL changes.",
+  "files": {
+    "adapter.py": "35729e22e853677e41a312322411fe839cae3af9a6bab3504a5b47f00b0af07c",
+    "worker.py": "ccb5b06c200b7ca960be1e0d182eecdaec74f9bea9f59511d01b2b7511c1ea9d",
+    "run.py": "35bdafdc1904b09d7e9c2dee8e8a0d47030bd4350150ae4fcb770de0a147d996",
+    "test_binding.py": "6ac838d83b9c8d0de51eca99e1e0b2781f8598d8845d20bf7a6334567fddacd2"
+  },
+  "timestamp": "2026-10-04T17:30:04.004590+00:00"
+}

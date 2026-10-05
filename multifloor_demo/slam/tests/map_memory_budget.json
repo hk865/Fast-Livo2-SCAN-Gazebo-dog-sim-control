@@ -1,0 +1,123 @@
+{
+  "default_capacity_points": 8000000,
+  "voxel_size_m": 0.08,
+  "capacity_is_guard_only_no_preallocation": true,
+  "actual_observed_run": "20260930_192104_5bf2b6",
+  "actual_observed_voxels": 629714,
+  "full_route_engineering_estimate_voxels": 2833713.0,
+  "estimate_basis": "actual run11 observed voxels times three floor viewpoints times1.5 allowance for return and repeated navigation; overlaps and unseen terrain not measured, not an accuracy claim or mathematical bound",
+  "measured_deep_bytes_per_voxel": 488.3033726421836,
+  "estimated_deep_archive_bytes_at_capacity": 3906426981.137469,
+  "actual_map_memory_measurement": {
+    "actual_archive_voxels": 629714,
+    "total_deep_archive_bytes": 307491470,
+    "deep_bytes_per_voxel": 488.3033726421836,
+    "archive_add_rss_delta_bytes": 397299712,
+    "snapshot_conversion_wall_s": 0.17119871100112505,
+    "actual_archive_rebuild_wall_s": 1.2473752370005968,
+    "process_high_water_bytes": 477528064,
+    "snapshot_binary_bytes": 10075424,
+    "dict_bytes": 20971600
+  },
+  "temporary_synthetic_capacity_fixture": {
+    "scope": "temporary synthetic unique-voxel storage stress fixture using actual archive and PCD code; not a SLAM run, no map changes, no ROS publishers",
+    "cases": [
+      {
+        "voxels": 2000000,
+        "snapshot_construct_s": 0.5674518609994266,
+        "binary_serialize_s": 0.0023043749988573836,
+        "pcd_construct_s": 0.05513829099982104,
+        "rss_before_snapshot_bytes": 1216860160,
+        "rss_after_temporary_release_bytes": 1218789376,
+        "process_high_water_bytes": 1386528768,
+        "binary_bytes": 32000000,
+        "pcd_bytes": 32000200
+      },
+      {
+        "voxels": 4000000,
+        "snapshot_construct_s": 1.125361749998774,
+        "binary_serialize_s": 0.020317686001362745,
+        "pcd_construct_s": 0.10467316300128005,
+        "rss_before_snapshot_bytes": 2392199168,
+        "rss_after_temporary_release_bytes": 2426204160,
+        "process_high_water_bytes": 2730098688,
+        "binary_bytes": 64000000,
+        "pcd_bytes": 64000200
+      },
+      {
+        "voxels": 8000000,
+        "snapshot_construct_s": 2.257762040999296,
+        "binary_serialize_s": 0.040373674000875326,
+        "pcd_construct_s": 0.21252212600120401,
+        "rss_before_snapshot_bytes": 4742610944,
+        "rss_after_temporary_release_bytes": 4744548352,
+        "process_high_water_bytes": 5352431616,
+        "binary_bytes": 128000000,
+        "pcd_bytes": 128000200
+      }
+    ],
+    "total_wall_s": 15.238945487999445
+  },
+  "snapshot_binary_bytes_at_capacity": 128000000,
+  "three_retained_binary_snapshots_disk_bytes_at_capacity": 384000000,
+  "MemAvailable_bytes": 55761428480,
+  "known_scene_geometry": {
+    "box_count": 44,
+    "all_box_faces_area_m2": 1654.1987462608986,
+    "floor_top_area_m2": 426.0,
+    "ramp_top_area_m2": 48.39940298138027,
+    "interior_wall_faces_area_m2": 296.0,
+    "all_box_faces_one_voxel_surface_estimate": 258469,
+    "surface_limit_not_a_3d_archive_bound": "SLAM registration uncertainty and repeated viewpoints occupy multiple voxels normal to a physical surface",
+    "world_box_bounds": {},
+    "exploration_length_m": 43.11970149069014,
+    "return_origin_length_m": 37.11970149069014,
+    "navigation_f1_f3_length_m": 37.11970149069014
+  },
+  "map_spatial_quality_limitations": {
+    "actual_bbox": {
+      "min": [
+        -5.591683864593506,
+        -4.698978424072266,
+        -3.878317356109619
+      ],
+      "max": [
+        18.997804641723633,
+        14.69625186920166,
+        6.480091094970703
+      ]
+    },
+    "nominal_scene_comparison": {
+      "transform": "frozen sensor heading plus initial SLAM origin, nominal standing height .30; no ground truth",
+      "distance_quantiles_m": [
+        0.018300508593041925,
+        0.15023804727346618,
+        0.7342952583321462,
+        0.9680347066296842,
+        1.5913161927202137,
+        3.550889393971491
+      ],
+      "within08m_fraction": 0.35807684123268657,
+      "within16m_fraction": 0.513706222189756,
+      "within30m_fraction": 0.6616019335761949,
+      "over1m_fraction": 0.045603242106734165
+    },
+    "meaning": "All actual observations preserved. Capacity uplift neither filters registration error nor validates map geometry; no ground truth remapping was performed."
+  },
+  "single_thread_risk": "8M fixture snapshot records2.258s plus bytes.040s exceeds2s snapshot period and could delay callbacks/map health; actual expected2.83M approximately.8s. Parent chose retain single-thread design and verify actual source ages/end-to-end health; no offload change authorized.",
+  "previous_budget_preserved_as_history": {
+    "sample_voxels": 10000,
+    "estimated_sparse_dict_bytes_per_voxel": 484.4992,
+    "estimated_sparse_archive_bytes_at_capacity": 968998400.0,
+    "snapshot_binary_bytes_at_capacity": 32000000,
+    "xyz_rgb_temporary_arrays_bytes_at_capacity": 30000000,
+    "default_capacity_points": 2000000,
+    "voxel_size": 0.08,
+    "system_memory": {
+      "MemTotal_bytes": 67015229440,
+      "MemAvailable_bytes": 56688775168
+    },
+    "budget_basis": "run8 397150 actual first-floor voxels x three floors x 1.5 margin = 1787175; 2M bound"
+  },
+  "evidence_directory": "multifloor_demo/runs/20260930_192104_5bf2b6/capacity_audit"
+}

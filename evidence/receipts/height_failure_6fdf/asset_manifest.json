@@ -1,0 +1,98 @@
+{
+  "terrain": "ramp_up",
+  "sensors": true,
+  "camera_only": false,
+  "render_engine": "ogre2",
+  "spawn": [
+    1.2,
+    2,
+    0.4,
+    0
+  ],
+  "physics_step_s": 0.005,
+  "decimation": 4,
+  "policy_hz": 50,
+  "real_time_factor": 1.0,
+  "exclusive_writer": "teacher_sim::TeacherActuator",
+  "disabled": [
+    "CHAMP",
+    "body_stabilizer",
+    "ros2_control",
+    "JointTrajectoryController"
+  ],
+  "joint_mapping": {
+    "FR": "rf",
+    "FL": "lf",
+    "RR": "rh",
+    "RL": "lh"
+  },
+  "joint_names": [
+    "rf_hip_joint",
+    "rf_upper_leg_joint",
+    "rf_lower_leg_joint",
+    "lf_hip_joint",
+    "lf_upper_leg_joint",
+    "lf_lower_leg_joint",
+    "rh_hip_joint",
+    "rh_upper_leg_joint",
+    "rh_lower_leg_joint",
+    "lh_hip_joint",
+    "lh_upper_leg_joint",
+    "lh_lower_leg_joint"
+  ],
+  "default_q": [
+    -0.1,
+    0.8,
+    -1.5,
+    0.1,
+    0.8,
+    -1.5,
+    -0.1,
+    1.0,
+    -1.5,
+    0.1,
+    1.0,
+    -1.5
+  ],
+  "hard_lower": [
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227
+  ],
+  "hard_upper": [
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776
+  ],
+  "friction_baseline": 0.7,
+  "model_mass_kg": 16.512,
+  "base_inertial_pose": "0.055230920345489418 -0.0018690019193857959 0.0060952991842610337 0 0 0",
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_converted.sdf": "bc31d84d25cca05a58da367fb950d4385a6215f5d6dda2149f611a2f6b195924",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/three_floors.sdf": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161"
+  },
+  "world_sha256": "8e3460cff297a261cbedc7f860b842b810911f2a02a2ed23878f21ed13dbfd4b",
+  "true_stairs": false,
+  "sensor_contract_sha256": "1d96b513ac76b434c6a8e6bb95d0151d304c62871d6b1ba94a7942d07246c502",
+  "sensor_bridge_sha256": "392b90b684057966dd8d1e41196a57013115ac6bf5d870c7d0fb67a1a3fedbcf",
+  "spawn_override": true,
+  "scenario_label": "height_diag_baseline_r1"
+}

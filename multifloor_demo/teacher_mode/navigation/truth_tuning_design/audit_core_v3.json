@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-04T23:45:10.091542+08:00",
+  "status": "READY_FOR_NEW_PROSPECTIVE_A2_NOT_ACTUAL_PASS",
+  "sources": {
+    "core.py": "1f7f74df251833cd416cbaf308f59aa80747aa407f7f35e3b85f7b01c9a026e8",
+    "worker.py": "120ac848ed4e08be0005c0b9440240f2fd46e25716461c9fbb5a72f63e0be2ea",
+    "run.py": "ebefc64f05ded4a125c93fbf76a57565a62cb2abcd32ad02f41cbad85e2d42c8",
+    "evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+    "protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+  },
+  "unchanged_vs_A1": {
+    "worker.py": true,
+    "evaluate.py": true,
+    "protocol.json": true
+  },
+  "verified_changes": {
+    "dwell": "Entryradius.12unchanged,continuousdwellstayslatchedonlywithin.14,originalv<.08/yawdot<.1/eyaw<.2conditionsretained;failconditionexitresetsdwell. Bothradiiinsideindependentgoal.15.",
+    "integral": "active_dt0duringpre_turn/settle/goal_dwell/parkingfreezesouter/innerintegralincrements;dtloggingretainsfreshsourcecadence. TurnratePIremainsactiveasrequired.",
+    "runner": "NativeGazebo0returnallowsownedCPUworker10swaitforarchives. NonzeroGazeboreturnorworkerreturnstillfails; missingcompleteworkerreceiptfailsindependentevaluation. Finallysignalsonlyownedchildren."
+  },
+  "in_memory_probes": {
+    "latches_r13_after_r11_entry": true,
+    "completes_after_continuous_dwell": true,
+    "dwell_commands_all_zero": true,
+    "integral_frozen": true,
+    "dwell_source_header_dt_preserved": true,
+    "r141_exits_dwell": true,
+    "v10_exits_dwell": true
+  },
+  "acceptance": "Independentprotocol/evaluatorunchanged. NoA1receiptchanged/reinterpreted. A2rerunall9configurationssamev3source; anyfailed/unverifiedrunscore remainsnull.",
+  "limitations": [
+    "Controllerdwellandguardsarecheckedatadmittedfeedbackcadence, noteveryPhysicsstep; native200Hzacceptancecanseerecordedovershoot.",
+    "Thisauditdoesnotclaimnewmotionpass; A2mustphysicallyrun.",
+    "Finalparkingcontinueslearnedzerocommandratherthanactivepositionhold; anyremainingTeacherdriftstillcanfailunchangedgate."
+  ]
+}

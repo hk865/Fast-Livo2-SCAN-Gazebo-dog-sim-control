@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-04T23:32:04.481302+08:00",
+  "kind": "read_only_core_safety_fix_reaudit",
+  "source_sha256": "83e2413ba049529cf1f2741abbeb72b827d93ed26770df158c5bdaf8a05b70fe",
+  "in_memory_probes": {
+    "open_loop_heading_deadlock_fixed": true,
+    "open_loop_has_forward_command": true,
+    "moving_inside_goal_does_not_complete": true,
+    "applied_estimate_matches_declared_worker_slew": true
+  },
+  "source_review": {
+    "goal_dwell": "distance.12/actualoriginplanarspeed.08/yawdot.1/eyaw.2for.6s, aligned with controller contract but looser than earlier proposed diagnostic plan; actualindependentprotocol remainsauthority.",
+    "common_outer_velocity_filter": "legacy,pathPD,cascadeouteralluse.2stimeconstantfilter; cascadeinner.1additionalfilter isexplicitdesign difference.",
+    "slew_antiwindup": "cascadeconditionallyrejectsintegralincrementworseningpredictednext20msworkercommandgap; commandestimatedeverynativeframe includingholds; noactualTeachercommandfeedback used.",
+    "remaining_log_limitation": "Parkingrownewreferencevelocityandcommandzero correctly; measuredvectorsstillinherited withcontroller_updatedfalse, useactualtelemetry/native forparkingvelocity plots.",
+    "legacy_cap": "vxlimitedbydesiredspeed; currentnormlimitself.limits[0]mayexceeddesiredspeed, reportorfixbeforefidelityclaim."
+  },
+  "actual_validation": "Onlyalgorithm probes run afterrepair; oldsmoke3170differentarchivedsourceandnotnewcorevalidation. Noactualsimulationstarted byauditor."
+}

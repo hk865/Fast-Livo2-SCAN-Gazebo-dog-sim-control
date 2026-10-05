@@ -1,0 +1,271 @@
+{
+  "test": "ramp_up",
+  "levels": {
+    "interface": "passed",
+    "motion": "failed",
+    "sim2sim": "unverified",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "iface_checks": {
+    "cpu_frozen_checkpoint": {
+      "passed": true,
+      "device": "cpu",
+      "declared_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+      "actual_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34"
+    },
+    "source_hashes": {
+      "passed": true,
+      "verified_count": 102,
+      "missing": [],
+      "mismatched": [],
+      "core_missing": [],
+      "protocol_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_081027_ramp_up_ramp12_lower12_provider_full_r1_502c/sources/tests/protocol.json",
+      "snapshot_present": true
+    },
+    "world_hash": {
+      "passed": true,
+      "actual": "7eccdfe5a2d9bdac82b9b524a7915d1e1d86a3a1ad1652b547f0dcb9c340e766",
+      "declared": "7eccdfe5a2d9bdac82b9b524a7915d1e1d86a3a1ad1652b547f0dcb9c340e766"
+    },
+    "plugin_hash": {
+      "passed": true,
+      "actual": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+      "declared": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2"
+    },
+    "native_exclusive_owner": {
+      "passed": true,
+      "evidence": [
+        {
+          "kind": "model_plugin_ownership",
+          "plugins": [
+            {
+              "name": "teacher_sim::TeacherActuator",
+              "filename": "libteacher_actuator.so"
+            }
+          ],
+          "teacher_writers": 1,
+          "passed": true
+        }
+      ]
+    },
+    "native_training_contract": {
+      "passed": true,
+      "actual": {
+        "kp": 25,
+        "kd": 0.5,
+        "effort_limit": 23.5,
+        "saturation_effort": 23.5,
+        "velocity_limit": 30,
+        "expected_dt": 0.005,
+        "decimation": 4
+      },
+      "joint_order": [
+        "rf_hip_joint",
+        "rf_upper_leg_joint",
+        "rf_lower_leg_joint",
+        "lf_hip_joint",
+        "lf_upper_leg_joint",
+        "lf_lower_leg_joint",
+        "rh_hip_joint",
+        "rh_upper_leg_joint",
+        "rh_lower_leg_joint",
+        "lh_hip_joint",
+        "lh_upper_leg_joint",
+        "lh_lower_leg_joint"
+      ],
+      "joint_position_reset_count": 12,
+      "body_pose_resets": 0,
+      "torque_source": "clipped native JointForceCmd passed to physics, not hardware torque measurement",
+      "state_source": "Gazebo native base link, base COM, joints and collision ContactSensorData"
+    },
+    "finite_telemetry": {
+      "passed": true,
+      "samples": 1803
+    },
+    "observation_action_dimensions": {
+      "passed": true,
+      "observation_shape": [
+        1803,
+        247
+      ],
+      "action_shape": [
+        1803,
+        12
+      ],
+      "telemetry_samples": 1803,
+      "action_max_error": 0.0
+    },
+    "policy_50hz": {
+      "passed": true,
+      "maximum_gap_s": 0.02000000000000668,
+      "maximum_period_error_s": 6.678685382510707e-15
+    },
+    "cpu_inference_samples": {
+      "passed": true,
+      "samples": 1803,
+      "worker_samples": 1803,
+      "p95_ms": 0.31876499999999997
+    },
+    "native_timing_and_transport": {
+      "passed": true,
+      "physics_steps": 7209,
+      "policy_exchanges": 1803,
+      "first_native_policy_time_s": 0.01,
+      "maximum_physics_period_error_s": 4.5475775922732e-15,
+      "telemetry_exchange_alignment": true
+    },
+    "actual_pd_dcmotor_curve": {
+      "passed": true,
+      "envelope_error_Nm": 0.0,
+      "pd_error_Nm": 0.0,
+      "clipped_command_error_Nm": 0.0,
+      "torque_is": "Native physics joint-force input; not independent hardware torque measurement"
+    },
+    "actual_teacher_target_execution": {
+      "passed": true,
+      "samples": 1797,
+      "target_max_error_rad": 0.0,
+      "excluded_assisted_phases": [
+        "support_capture",
+        "support_hold"
+      ]
+    },
+    "actual_run_end": {
+      "passed": true,
+      "native_terminate": true,
+      "terminal_time_alignment": true,
+      "main_process_returncodes": [
+        0,
+        0
+      ],
+      "runner_error": null
+    },
+    "observation_provenance": {
+      "passed": true,
+      "policy_source": "Gazebo privileged COM twist, quaternion, joint physics, applied DCMotor torque, static SDF terrain raycast",
+      "native_source": "Gazebo native base link, base COM, joints and collision ContactSensorData",
+      "navigation_truth_used": false
+    },
+    "evidence_readable": {
+      "passed": true,
+      "errors": []
+    }
+  },
+  "tests": [
+    {
+      "name": "ramp_up",
+      "status": "failed",
+      "reason": "body_contact; Test ended before required duration; Body clearance below criterion; Body ground/object contact; Teacher stand/stop translation drift; Teacher stand/stop residual velocity; Stand/stop window contains nonzero velocity command; Active ramp trace leaves its physical x/y support footprint; Measured height change does not follow the physical ramp surface",
+      "metrics": {
+        "duration_s": 36.04,
+        "samples": 1803,
+        "max_abs_roll_pitch_rad": 0.3211915932583192,
+        "min_body_clearance_m": 0.16411709212581294,
+        "body_contact_samples": 1,
+        "unknown_contact_samples": 0,
+        "max_applied_torque_Nm": 23.5,
+        "position_delta_m": [
+          8.007760907071773,
+          0.7640622843027316,
+          0.4858798182575642
+        ],
+        "total_yaw_delta_rad": 0.09073684967425061,
+        "assisted_phase_counts": {
+          "support_capture": 0,
+          "support_hold": 0
+        },
+        "tracking": [
+          {
+            "window_s": [
+              5,
+              10
+            ],
+            "command_mean": [
+              0.2999999999999986,
+              0.0,
+              0.0
+            ],
+            "measured_mean": [
+              0.2560009781701338,
+              -0.0037699690621216305,
+              0.008754255903523751
+            ],
+            "rmse": [
+              0.04651671013014718,
+              0.04463893933105947,
+              0.040999085444543074
+            ]
+          }
+        ],
+        "stop_teacher": {
+          "samples": 1053,
+          "window_s": [
+            15.0,
+            36.04
+          ],
+          "translation_drift_m": 5.043541408446927,
+          "yaw_drift_rad": 0.07043052515249473,
+          "velocity_rms": [
+            0.24845455874528802,
+            0.05929038191137908,
+            0.09482871611564328
+          ]
+        },
+        "stop_assisted": {
+          "samples": 0
+        },
+        "stop": {
+          "samples": 1053,
+          "window_s": [
+            15.0,
+            36.04
+          ],
+          "translation_drift_m": 5.043541408446927,
+          "yaw_drift_rad": 0.07043052515249473,
+          "velocity_rms": [
+            0.24845455874528802,
+            0.05929038191137908,
+            0.09482871611564328
+          ]
+        },
+        "terrain": {
+          "description": "10% physical ramp, not stairs",
+          "start_median_position_m": [
+            1.2016922479295942,
+            2.0030998291274487,
+            0.3154739394365134
+          ],
+          "end_median_position_m": [
+            9.100819157565688,
+            2.708862558945055,
+            0.8936194899918697
+          ],
+          "height_gain_m": 0.5781455505553563,
+          "native_end_support_foot_groups": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "native_end_all_four_support_samples": 2,
+          "native_end_samples": 201,
+          "end_inside_tread": true,
+          "progress_m": 7.899126909636093,
+          "expected_surface_height_change_m": 0.7899126909636095,
+          "height_change_error_m": 0.21176714040825317,
+          "active_support_foot_groups": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      }
+    }
+  ],
+  "protocol_sha256": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+  "protocol_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_081027_ramp_up_ramp12_lower12_provider_full_r1_502c/sources/tests/protocol.json",
+  "evaluator_sha256": "2d78577649a32bca9bd49ba2953a3d3da0a14191f001e1f0cf64d5dd61c45ad8",
+  "scope": "Actual Gazebo physics with privileged policy observations; no navigation localization claim. Low-step ascent and ramps do not demonstrate stairs. Three independent repetitions remain required for full motion acceptance."
+}

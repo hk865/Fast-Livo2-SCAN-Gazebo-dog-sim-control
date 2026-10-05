@@ -1,0 +1,220 @@
+{
+  "schema": "independent_exact_terrain_status_payload_metadata_join/v1",
+  "run": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb",
+  "status": "passed",
+  "passed": true,
+  "checks": {
+    "all_other_original_common_v2_ramp_numeric_gates": {
+      "status": "passed",
+      "passed": true,
+      "original_common_nonflat_applicability_only": "unverified",
+      "original_ramp_terrain_causal_only": {
+        "status": "unverified",
+        "passed": null,
+        "reason": "MissingEvidence: Original provider status read not joined to raw status history"
+      },
+      "all_other_gates_passed": true,
+      "original_required_ramp_gates": [
+        "all_unchanged_original_common_gates",
+        "prospective_exact_ramp_contract",
+        "unchanged_first_active_hold_on_final_actual_landing",
+        "leg_0_ramp_12_complete_original_12m_fixture",
+        "leg_0_ramp_12_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_0_ramp_12_all_named_feet_ordered_actual_top_support",
+        "leg_0_ramp_12_first_destination_landing_continuous_support",
+        "leg_0_ramp_12_all_twelve_metre_bins_actual_support",
+        "leg_0_ramp_12_whole_traversal_real_support_and_axis_safety",
+        "leg_0_ramp_12_actual_original_SLAM_destination_region_on_correct_physical_floor",
+        "leg_1_ramp_23_complete_original_12m_fixture",
+        "leg_1_ramp_23_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_1_ramp_23_all_named_feet_ordered_actual_top_support",
+        "leg_1_ramp_23_first_destination_landing_continuous_support",
+        "leg_1_ramp_23_all_twelve_metre_bins_actual_support",
+        "leg_1_ramp_23_whole_traversal_real_support_and_axis_safety",
+        "leg_1_ramp_23_actual_original_SLAM_destination_region_on_correct_physical_floor"
+      ],
+      "all32_arrivals_preserved": true,
+      "fixed_first_five_second_parking_preserved": true
+    },
+    "frozen_exact_archival_metadata_addition": {
+      "status": "passed",
+      "passed": true,
+      "snapshot": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/sources/navigation/lidar_sampling_v12/teacher_wrapper.py",
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+      "original_append_lineno": 51,
+      "original_atomic_lineno": 53,
+      "archival_fields_only": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "whole_payload": "Original **data exact expansion, followed by atomic JSON file of the same data; no mutation between calls",
+      "exact_archive_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='append', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.jsonl')), Dict(keys=[None, Constant(value='monotonic_wall'), Constant(value='ros_sim_time')], values=[Name(id='data', ctx=Load()), Call(func=Attribute(value=Name(id='time', ctx=Load()), attr='monotonic', ctx=Load()), args=[], keywords=[]), BinOp(left=Attribute(value=Call(func=Attribute(value=Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='get_clock', ctx=Load()), args=[], keywords=[]), attr='now', ctx=Load()), args=[], keywords=[]), attr='nanoseconds', ctx=Load()), op=Div(), right=Constant(value=1000000000.0))])], keywords=[])",
+      "exact_original_file_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='atomic', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.json')), Name(id='data', ctx=Load())], keywords=[])"
+    },
+    "exact_unique_full_payload_and_original_causal_join": {
+      "status": "passed",
+      "passed": true,
+      "original_history_index": 605,
+      "unique_original_payload_matches": 1,
+      "removed_archival_fields": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "removed_archival_values": {
+        "ros_sim_time": 131.83,
+        "monotonic_wall": 449588.381504006
+      },
+      "original_payload_field_count": 74,
+      "all_original_payload_fields_equal": true,
+      "original_payload_sha256": "dcd887f82b5d88da54fb1c3df372c60f0aa750cbaf73eae1085e8c5c14c40581",
+      "original_whole_history_row_sha256": "bd0386159987bb0ad911a8ba15b32190e13a31bf148fe24ef78c044f3dec0f72",
+      "original_causal_wall_order_s": [
+        449588.381504006,
+        449588.39111505,
+        449588.391601091,
+        449588.396736713
+      ],
+      "original_arrival_status_native_clock_ns": [
+        131675000000,
+        131830000000,
+        131850000000
+      ],
+      "source_receipts_or_clock_freshness_refreshed": false
+    },
+    "all_original_terrain_switch_ray_and_native_conditions": {
+      "status": "passed",
+      "passed": true,
+      "original_connector_arrival_stamp_ns": 131675000000,
+      "actual_native_request_clock_ns": 131850000000,
+      "effective_physics_clock_ns": 131845000000,
+      "initial_manifest_sha256": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+      "alternate_manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+      "actual_187_ray_replay_errors_m": [
+        0.0,
+        0.0
+      ],
+      "max_actual_provider_hit_z_difference_m": 0.0,
+      "all_actual_rays_on_shared_floor2": true,
+      "identical_float64_bytes_diagnostic": true,
+      "native_state_only_checks_Actor_input_equivalence_and_is_not_navigation_feedback": true
+    }
+  },
+  "proofs": {
+    "all_original_gates_preserved": {
+      "original_common_nonflat_applicability_only": "unverified",
+      "original_ramp_terrain_causal_only": {
+        "status": "unverified",
+        "passed": null,
+        "reason": "MissingEvidence: Original provider status read not joined to raw status history"
+      },
+      "all_other_gates_passed": true,
+      "original_required_ramp_gates": [
+        "all_unchanged_original_common_gates",
+        "prospective_exact_ramp_contract",
+        "unchanged_first_active_hold_on_final_actual_landing",
+        "leg_0_ramp_12_complete_original_12m_fixture",
+        "leg_0_ramp_12_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_0_ramp_12_all_named_feet_ordered_actual_top_support",
+        "leg_0_ramp_12_first_destination_landing_continuous_support",
+        "leg_0_ramp_12_all_twelve_metre_bins_actual_support",
+        "leg_0_ramp_12_whole_traversal_real_support_and_axis_safety",
+        "leg_0_ramp_12_actual_original_SLAM_destination_region_on_correct_physical_floor",
+        "leg_1_ramp_23_complete_original_12m_fixture",
+        "leg_1_ramp_23_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_1_ramp_23_all_named_feet_ordered_actual_top_support",
+        "leg_1_ramp_23_first_destination_landing_continuous_support",
+        "leg_1_ramp_23_all_twelve_metre_bins_actual_support",
+        "leg_1_ramp_23_whole_traversal_real_support_and_axis_safety",
+        "leg_1_ramp_23_actual_original_SLAM_destination_region_on_correct_physical_floor"
+      ],
+      "all32_arrivals_preserved": true,
+      "fixed_first_five_second_parking_preserved": true
+    },
+    "frozen_status_producer": {
+      "snapshot": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/sources/navigation/lidar_sampling_v12/teacher_wrapper.py",
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+      "original_append_lineno": 51,
+      "original_atomic_lineno": 53,
+      "archival_fields_only": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "whole_payload": "Original **data exact expansion, followed by atomic JSON file of the same data; no mutation between calls",
+      "exact_archive_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='append', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.jsonl')), Dict(keys=[None, Constant(value='monotonic_wall'), Constant(value='ros_sim_time')], values=[Name(id='data', ctx=Load()), Call(func=Attribute(value=Name(id='time', ctx=Load()), attr='monotonic', ctx=Load()), args=[], keywords=[]), BinOp(left=Attribute(value=Call(func=Attribute(value=Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='get_clock', ctx=Load()), args=[], keywords=[]), attr='now', ctx=Load()), args=[], keywords=[]), attr='nanoseconds', ctx=Load()), op=Div(), right=Constant(value=1000000000.0))])], keywords=[])",
+      "exact_original_file_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='atomic', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.json')), Name(id='data', ctx=Load())], keywords=[])"
+    },
+    "exact_original_status_join": {
+      "original_history_index": 605,
+      "unique_original_payload_matches": 1,
+      "removed_archival_fields": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "removed_archival_values": {
+        "ros_sim_time": 131.83,
+        "monotonic_wall": 449588.381504006
+      },
+      "original_payload_field_count": 74,
+      "all_original_payload_fields_equal": true,
+      "original_payload_sha256": "dcd887f82b5d88da54fb1c3df372c60f0aa750cbaf73eae1085e8c5c14c40581",
+      "original_whole_history_row_sha256": "bd0386159987bb0ad911a8ba15b32190e13a31bf148fe24ef78c044f3dec0f72",
+      "original_causal_wall_order_s": [
+        449588.381504006,
+        449588.39111505,
+        449588.391601091,
+        449588.396736713
+      ],
+      "original_arrival_status_native_clock_ns": [
+        131675000000,
+        131830000000,
+        131850000000
+      ],
+      "source_receipts_or_clock_freshness_refreshed": false
+    }
+  },
+  "original_receipts": {
+    "summary_closed_loop_cascade_independent.json": {
+      "path": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_cascade_independent.json",
+      "sha256": "d14292800d88fef70dece542c5f6bd452e9a6b328201d0883e2371e4889c523a",
+      "status": "unverified"
+    },
+    "summary_closed_loop_clock_hold_independent.json": {
+      "path": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_clock_hold_independent.json",
+      "sha256": "5a25158257ff5ddfec5caf8dd7bcd0e39d83d8da6b26c82435ac32a64a44e0c5",
+      "status": "unverified"
+    },
+    "summary_closed_loop_ramp_independent.json": {
+      "path": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_ramp_independent.json",
+      "sha256": "f818db44129b1014b97fe56957e866334792ccd14e32c691aef460c2497b5cba",
+      "status": "unverified"
+    }
+  },
+  "verified_input_source_sha256": {
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_cascade_independent.json": "d14292800d88fef70dece542c5f6bd452e9a6b328201d0883e2371e4889c523a",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_clock_hold_independent.json": "5a25158257ff5ddfec5caf8dd7bcd0e39d83d8da6b26c82435ac32a64a44e0c5",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_ramp_independent.json": "f818db44129b1014b97fe56957e866334792ccd14e32c691aef460c2497b5cba",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_scope.json": "1f4f9df18d94aa611f8cdd29d9af7e7202c6bb0e3066533de3f3fd1876df68d1",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_source_snapshots.json": "1de2412fefc5a935a9413f416185dec93071d441a10ee5f5e4b3c9079c5d0b81",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_status.jsonl": "5a32cad7a9289abb5a6712e8acfc32d7ebb53d4e98fad772b1b52d3e293fc569",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/terrain_provider_events.jsonl": "98a8edda0e0c3b83788f4c891edddad64443696cd68f87220b0c94928cee4280",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/terrain_provider_result.json": "953462eb8302c4103daa990d1559101cff3f5d6f1d70e42cedd33215e20f1324",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/ramp_acceptance_contract.json": "4669f60f53df0732720c3739d32079a4b168694596109d3c0e0e7990c248491f",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_request.json": "4f64c6d65792b208b377865925d13b9215c36734e2983d9637fa017e97e1720b",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/telemetry.jsonl": "88bb83bc92993cc8ba754f4d909da01867dee91d4884731623f89e559946d0a0",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/actuator.jsonl": "959faa54eeba35ff846e7ea590398d4e0aced568324899a8ff224e8a55cb3db0",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/terrain_target_manifest.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/alternate_terrain_target_manifest.json": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/sources/navigation/lidar_sampling_v12/teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py": "d7024636a84e59dfcc3d5e94b8cc79cedfb1b6cec85cdac2babad23ab2e17b89",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e"
+  },
+  "evaluator_sha256": "1d464d0a70e9b7a5484a9535727683cd8118743a2d2282afa792ff302cb06c53",
+  "correction_scope": "Archive bookkeeping only: exact same whole original status payload plus frozen-producer two archival fields. No numeric/ray/phase/arrival/parking/source TTL/control criterion changes; original three receipts immutable.",
+  "retrospective_reader_correction_explicit": true,
+  "original_ramp_status_not_relabelled": true,
+  "navigation_ground_truth_used": false,
+  "limitations": [
+    "Static registered32-region route and two ramps plus first5s active hold only; no dynamic-obstacle or real-robot inference.",
+    "Actor observation inputs remain privileged and separate from sensor SLAM navigation feedback."
+  ]
+}

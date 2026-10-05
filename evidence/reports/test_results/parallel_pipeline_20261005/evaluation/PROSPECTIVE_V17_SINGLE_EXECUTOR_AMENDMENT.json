@@ -1,0 +1,25 @@
+{
+  "schema": "prospective_parallel_pipeline_plan_scope_amendment/v1",
+  "created_UTC": "2026-10-05T14:38:58.266849+00:00",
+  "parent_plan": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_EVALUATION_PLAN.json",
+  "parent_plan_sha256": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+  "numeric_gate_changes": false,
+  "original_receipts_and_sources_unchanged": true,
+  "reason": "Root selected a smaller first V17 concurrency boundary before any V17 physical run.",
+  "first_V17_boundary": {
+    "receive_and_decode": "One background ROS SingleThreadedExecutor retains its actual callback order and decodes in that same thread.",
+    "commit": "Bounded ready FIFO, consumed by one main mapper owner. All buffer commits, IMU propagation, sync and LIO/VIO remain main-owner serial.",
+    "timers": "Timer events enter that same ready FIFO and execute on owner.",
+    "original_receipt": "Captured at each callback entry; raw diagnostics written by main owner with original receipt preserved.",
+    "explicit_limit": "Heavy decoding can still briefly block the receive executor. A separate decoder is a later candidate requiring new prospective audit.",
+    "pure_gates": [
+      "FIFO is bounded and preserves actual receipt callback sequence without drops or overwrites",
+      "Timer and measurement events preserve documented global dispatch order",
+      "Decoded data bits equal V12 decoder outputs for same raw inputs",
+      "Main-owner-only mutation and sync calls",
+      "Shutdown drains or explicitly rejects remaining events; never report missing as valid",
+      "Sequence, receipt, decode completion, enqueue, dequeue/commit and watermark trace"
+    ],
+    "physical_authorization_by_this_document": false
+  }
+}

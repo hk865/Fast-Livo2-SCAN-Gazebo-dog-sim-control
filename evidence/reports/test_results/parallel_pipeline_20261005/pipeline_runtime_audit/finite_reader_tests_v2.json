@@ -1,0 +1,206 @@
+{
+  "schema": "independent_V17_finite_runtime_reader_negative_tests/v1",
+  "status": "PASS_FINITE_TESTS_ONLY",
+  "actual_runtime_claim": false,
+  "case_count": 22,
+  "cases": [
+    {
+      "case": "finite_reference_only_not_actual",
+      "expected": "finite reference pass",
+      "status": "passed",
+      "passed": true,
+      "failed_checks": []
+    },
+    {
+      "case": "canceled_at_cleanup_is_not_exempt",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "final_lifecycle_no_loss"
+      ]
+    },
+    {
+      "case": "rejected_is_not_missing_zero",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "final_lifecycle_no_loss"
+      ]
+    },
+    {
+      "case": "delivered_uncommitted_owner_exception",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "final_lifecycle_no_loss"
+      ]
+    },
+    {
+      "case": "missing_original_raw_sensor",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "every_committed_sensor_original_integer_header_receipt_order_exact"
+      ]
+    },
+    {
+      "case": "wrong_original_integer_header",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "every_committed_sensor_original_integer_header_receipt_order_exact"
+      ]
+    },
+    {
+      "case": "refreshed_receipt_owner_pop",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "every_committed_sensor_original_integer_header_receipt_order_exact"
+      ]
+    },
+    {
+      "case": "foreign_receiver_thread",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "single_distinct_RX_and_owner_TID"
+      ]
+    },
+    {
+      "case": "owner_is_receiver",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "single_distinct_RX_and_owner_TID"
+      ]
+    },
+    {
+      "case": "sequence_gap",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_FIFO_contiguous_original_order"
+      ]
+    },
+    {
+      "case": "reordered_committed_sensor_raw",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "every_committed_sensor_original_integer_header_receipt_order_exact"
+      ]
+    },
+    {
+      "case": "clock_backwards",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "receive_decode_pop_commit_causality"
+      ]
+    },
+    {
+      "case": "CPU_clock_backwards",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "receive_decode_pop_commit_causality"
+      ]
+    },
+    {
+      "case": "RX_callbacks_overlap",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "receive_decode_pop_commit_causality",
+        "every_committed_sensor_original_integer_header_receipt_order_exact"
+      ]
+    },
+    {
+      "case": "owner_callbacks_overlap",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "receive_decode_pop_commit_causality"
+      ]
+    },
+    {
+      "case": "queue_pending_over_bound",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_queue_count_and_accounted_byte_bounds"
+      ]
+    },
+    {
+      "case": "queue_bytes_over_bound",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_queue_count_and_accounted_byte_bounds"
+      ]
+    },
+    {
+      "case": "queue_zero_pending_nonzero_bytes",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_queue_count_and_accounted_byte_bounds"
+      ]
+    },
+    {
+      "case": "peak_count_inconsistent",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_queue_count_and_accounted_byte_bounds"
+      ]
+    },
+    {
+      "case": "peak_bytes_inconsistent",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "ready_queue_count_and_accounted_byte_bounds"
+      ]
+    },
+    {
+      "case": "summary_overflow_failure",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "final_lifecycle_no_loss"
+      ]
+    },
+    {
+      "case": "timer_nonzero_source",
+      "expected": "finite rejection",
+      "status": "failed",
+      "passed": true,
+      "failed_checks": [
+        "original_timer_metadata"
+      ]
+    }
+  ],
+  "reader_sha256": "0271d1ee014c58d15b5b156e9e36212efb552aa4faa00d34b78ac4b5d83b0044"
+}

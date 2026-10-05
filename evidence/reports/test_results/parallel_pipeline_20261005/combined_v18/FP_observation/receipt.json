@@ -1,0 +1,84 @@
+{
+  "schema": "V18_main_and_worker_FP/v1",
+  "observed_actual_executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/combined_v18/candidate_V18/fixture",
+  "main": [
+    {
+      "phase": "main_enter",
+      "pid": 1173639,
+      "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/combined_v18/candidate_V18/fixture",
+      "cpu": 6,
+      "fp_rounding_mode": 0,
+      "mxcsr_control_mask": 8064
+    },
+    {
+      "phase": "main_exit",
+      "pid": 1173639,
+      "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/combined_v18/candidate_V18/fixture",
+      "cpu": 6,
+      "fp_rounding_mode": 0,
+      "mxcsr_control_mask": 8064
+    }
+  ],
+  "ignored_taskset_observer_rows": [
+    {
+      "phase": "main_enter",
+      "pid": 1173639,
+      "executable": "/usr/bin/taskset",
+      "cpu": 18,
+      "fp_rounding_mode": 0,
+      "mxcsr_control_mask": 8064
+    }
+  ],
+  "VIO_patch_worker": [
+    {
+      "sequence": 1,
+      "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+      "requested": 1,
+      "actual_team": 1,
+      "cpus": [
+        6
+      ],
+      "fp_rounding_modes": [
+        0
+      ],
+      "mxcsr_control_masks": [
+        8064
+      ]
+    },
+    {
+      "sequence": 2,
+      "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+      "requested": 1,
+      "actual_team": 1,
+      "cpus": [
+        6
+      ],
+      "fp_rounding_modes": [
+        0
+      ],
+      "mxcsr_control_masks": [
+        8064
+      ]
+    },
+    {
+      "sequence": 3,
+      "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+      "requested": 1,
+      "actual_team": 1,
+      "cpus": [
+        6
+      ],
+      "fp_rounding_modes": [
+        0
+      ],
+      "mxcsr_control_masks": [
+        8064
+      ]
+    }
+  ],
+  "LIO4_worker_FP_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/combined_v18/combined_team_and_loader_witness.json",
+  "FE_rounding": 0,
+  "MXCSR_control": 8064,
+  "test_only_no_control_setting_change": true,
+  "performance_eligible": false
+}

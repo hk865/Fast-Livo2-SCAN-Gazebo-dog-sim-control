@@ -1,0 +1,3464 @@
+{
+  "schema": "actual_lidar_density_rate_comparison/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "truth_is_offline_only": true,
+  "navigation_ground_truth_used": false,
+  "reader_sha256": "0ff603f816f81f5913afa0b8b9d26fc83c9e1a0fd448290ec096acfb091cf8c0",
+  "sensor_contract": {
+    "schema_version": 1,
+    "renderer": "ogre2",
+    "scope": "read-only sensor diagnostics; privileged actor remains unchanged; no SLAM or navigation started",
+    "joint_states": {
+      "gz_topic": "/demo/teacher/physical_joint_states",
+      "ros_topic": "/demo/control/measured_joint_states",
+      "publisher": "gz::sim::systems::JointStatePublisher",
+      "enabled": true,
+      "reads": "native physics joint position/velocity",
+      "rate_hz": 200,
+      "actuation": false
+    },
+    "overview": {
+      "gz_topic": "/demo/teacher/overview",
+      "ros_topic": "/demo/teacher/overview",
+      "frame": "teacher_overview_frame",
+      "world_pose": [
+        8.0,
+        -1.0,
+        2.5,
+        0.0,
+        0.45,
+        1.5707963267948966
+      ],
+      "rate_hz": 2,
+      "width": 640,
+      "height": 480,
+      "horizontal_fov": 1.3962634015954636,
+      "collision_geometry": false,
+      "gz_camera_info_topic": "/demo/teacher/overview_info",
+      "ros_camera_info_topic": "/demo/teacher/overview_info",
+      "camera_model": "default pinhole; no SDF distortion configured; confirm with actual CameraInfo",
+      "purpose": "observer only; never pair this image with vehicle SLAM camera intrinsics"
+    },
+    "camera": {
+      "type": "camera",
+      "link": "base_link",
+      "sensor_name": "demo_rgb",
+      "body_xyz": [
+        0.28,
+        0.0,
+        0.1
+      ],
+      "body_rpy": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rate_hz": 10.0,
+      "frame": "demo_camera_optical_frame",
+      "gz_topic": "/demo/camera",
+      "ros_topic": "/demo/camera",
+      "gz_camera_info_topic": "/demo/camera_info",
+      "ros_camera_info_topic": "/demo/camera_info",
+      "camera_model": "default pinhole; no SDF distortion configured; confirm with actual CameraInfo",
+      "horizontal_fov": 1.3962634015954636,
+      "width": 640,
+      "height": 480
+    },
+    "imu": {
+      "type": "imu",
+      "link": "base_link",
+      "sensor_name": "imu_sensor",
+      "body_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "body_rpy": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rate_hz": 200.0,
+      "frame": "imu_link",
+      "gz_topic": "/imu/data",
+      "ros_topic": "/livox/imu",
+      "orientation_reference": {
+        "localization": "CUSTOM",
+        "custom_parent_frame": "world",
+        "world_rpy": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "world_quaternion": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "body_imu_quaternion": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "description": "actual generated SDF IMU CUSTOM/world reference"
+      }
+    },
+    "lidar": {
+      "type": "gpu_lidar",
+      "link": "base_link",
+      "sensor_name": "velodyne-VLP16",
+      "body_xyz": [
+        0.2,
+        0.0,
+        0.1177
+      ],
+      "body_rpy": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rate_hz": 10.0,
+      "frame": "velodyne",
+      "gz_topic": "/velodyne_points",
+      "gz_points_topic": "/velodyne_points/points",
+      "ros_topic": "/demo/teacher/raw_lidar",
+      "cloud_registered_full": false,
+      "samples": {
+        "horizontal": 480,
+        "vertical": 32
+      }
+    }
+  },
+  "configured_beams_per_frame": 15360,
+  "configured_beams_per_sim_second": 153600.0,
+  "configured_sensor_rates_hz": {
+    "lidar": 10.0,
+    "camera": 10.0,
+    "imu": 200.0
+  },
+  "declared_duration_s": 210,
+  "actual_native_end_s": 210.005,
+  "offline_alignment_anchor_s": 6.799999999000001,
+  "physical_windows": {
+    "whole_post_anchor": {
+      "window_start_exclusive_end_inclusive_s": [
+        6.799999999000001,
+        210.0
+      ],
+      "native_sample_count": 40641,
+      "SLAM_sample_count": 2032,
+      "native_delta_z_m": 1.1812873646415518,
+      "native_z_range_m": 1.21383670673112,
+      "SLAM_delta_z_m": 0.9421446474313073,
+      "SLAM_native_relative_z_error_start_end_m": [
+        0.00013784959852546422,
+        -0.23889862505107728
+      ],
+      "SLAM_native_relative_z_error_max_abs_m": 0.29245314986043314,
+      "native_roll_pitch_abs_max_rad": [
+        0.034003482807351645,
+        0.04778614147568239
+      ],
+      "native_world_vz_mps": {
+        "count": 40641,
+        "min": -0.16166956430000265,
+        "p50": 5.315744360764611e-05,
+        "p95": 0.08172911560187585,
+        "max": 0.15994746546520597
+      },
+      "native_body_contact_samples": 0,
+      "native_fault_samples": 0,
+      "SLAM_source_callback_age_s": {
+        "count": 2032,
+        "min": 0.01,
+        "p50": 0.025000001,
+        "p95": 0.030000001,
+        "max": 0.045
+      }
+    },
+    "baseline_fault_window_131_134": {
+      "window_start_exclusive_end_inclusive_s": [
+        131.0,
+        134.0
+      ],
+      "native_sample_count": 600,
+      "SLAM_sample_count": 30,
+      "native_delta_z_m": -0.0036684191897915497,
+      "native_z_range_m": 0.011839523222509474,
+      "SLAM_delta_z_m": -0.33097127516530167,
+      "SLAM_native_relative_z_error_start_end_m": [
+        0.04015583958190638,
+        -0.28618478999687935
+      ],
+      "SLAM_native_relative_z_error_max_abs_m": 0.29245314986043314,
+      "native_roll_pitch_abs_max_rad": [
+        0.016064806116929176,
+        0.03117419983378955
+      ],
+      "native_world_vz_mps": {
+        "count": 600,
+        "min": -0.12017028864523469,
+        "p50": 0.00037006131208075103,
+        "p95": 0.08155200260881178,
+        "max": 0.09073510431570084
+      },
+      "native_body_contact_samples": 0,
+      "native_fault_samples": 0,
+      "SLAM_source_callback_age_s": {
+        "count": 30,
+        "min": 0.025,
+        "p50": 0.025000001,
+        "p95": 0.030000001,
+        "max": 0.030000001
+      }
+    },
+    "5s_before_actual_first_failure": {
+      "window_start_exclusive_end_inclusive_s": [
+        128.099999999,
+        133.099999999
+      ],
+      "native_sample_count": 1000,
+      "SLAM_sample_count": 50,
+      "native_delta_z_m": -0.0031584950137142354,
+      "native_z_range_m": 0.01327708193149224,
+      "SLAM_delta_z_m": -0.34383918726546836,
+      "SLAM_native_relative_z_error_start_end_m": [
+        0.06242105788703478,
+        -0.27991347694626023
+      ],
+      "SLAM_native_relative_z_error_max_abs_m": 0.27991347694626023,
+      "native_roll_pitch_abs_max_rad": [
+        0.018510003786967322,
+        0.037867191120211086
+      ],
+      "native_world_vz_mps": {
+        "count": 1000,
+        "min": -0.13056425387646964,
+        "p50": 0.0024770981347836474,
+        "p95": 0.07368145197396005,
+        "max": 0.0963030307936954
+      },
+      "native_body_contact_samples": 0,
+      "native_fault_samples": 0,
+      "SLAM_source_callback_age_s": {
+        "count": 50,
+        "min": 0.025,
+        "p50": 0.03,
+        "p95": 0.030000001,
+        "max": 0.030000001
+      }
+    }
+  },
+  "first_failed_guard": {
+    "sim_time": 133.13,
+    "slam_stamp_ns": 133099999999,
+    "reason": "Measured SLAM body pose left finite route fence; restart after review",
+    "registered_route_fence": {
+      "inside": false,
+      "segment": 16,
+      "fraction": 0.25071174715099637,
+      "nearest_camera_init_xyz": [
+        14.911260210934657,
+        2.542266438491282,
+        1.20575359602667
+      ],
+      "horizontal_error_m": 0.005145478865704646,
+      "height_error_m": 0.3034826113022563,
+      "horizontal_radius_m": 0.45,
+      "maximum_height_error_m": 0.3,
+      "navigation_ground_truth_used": false
+    },
+    "ages": {
+      "clock_wall_s": 1.2639793567359447e-06,
+      "pose_wall_s": 0.004962661012541503,
+      "command_wall_s": 0.011634918977506459,
+      "pose_sim_s": 0.030000001,
+      "command_sim_s": 0.015
+    }
+  },
+  "first_cleanup_bridge_failed_row": {
+    "sim_time": 210.01,
+    "slam_stamp_ns": 209900000000,
+    "reason": "Measured SLAM body pose left finite route fence; restart after review"
+  },
+  "dynamic_failure_window_clock_source": "first physical-time bridge failure original SLAM header",
+  "region_arrivals": 16,
+  "total_regions": 32,
+  "final_navigation_state": "failed",
+  "worker_result": {
+    "completed": true,
+    "fault": null,
+    "samples": 10501,
+    "physical_test_completion_time_s": null,
+    "last_sim_time": 210.0,
+    "cpu_forward_ms": {
+      "p50": 0.289854,
+      "p95": 0.329483,
+      "max": 0.468137
+    },
+    "controller_hold_observed_worker_elapsed_s": null,
+    "navigation_ground_truth_used": false,
+    "actor_observations_remain_privileged": true,
+    "last_closed_loop_read": {
+      "sim_time": 210.0,
+      "physics_clock_ns": 210010000000,
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rejected": true,
+      "reason": "SLAM/SCAN input unhealthy",
+      "actual_read_attempt": {
+        "read_clock_ns": 210010000000,
+        "read_monotonic_wall": 437283.514949486,
+        "raw_utf8": "{\n  \"state\": \"failed\",\n  \"healthy\": false,\n  \"stop_requested\": true,\n  \"reason\": \"Measured SLAM body pose left finite route fence; restart after review\",\n  \"requested\": [\n    0.0,\n    0.0,\n    0.0\n  ],\n  \"command\": [\n    0.0,\n    0.0,\n    0.0\n  ],\n  \"ages\": {\n    \"clock_wall_s\": 1.1280062608420849e-06,\n    \"pose_wall_s\": 0.06929736502934247,\n    \"command_wall_s\": 0.015377345029264688,\n    \"pose_sim_s\": 0.09,\n    \"command_sim_s\": 0.015\n  },\n  \"slam_valid_samples\": 2063,\n  \"command_received_monotonic_wall\": 437283.479128433,\n  \"command_received_ros_sim_time_ns\": 209975000000,\n  \"slam_stamp_ns\": 209900000000,\n  \"publisher_graph\": {\n    \"slam\": true,\n    \"command\": true,\n    \"details\": {\n      \"slam_publishers\": [\n        \"/demo_slam_odom_adapter\"\n      ],\n      \"command_publishers\": [\n        \"/demo_navigation\"\n      ]\n    }\n  },\n  \"controller_source\": null,\n  \"controller_source_receipt\": null,\n  \"registered_route_fence\": {\n    \"inside\": true,\n    \"segment\": 16,\n    \"fraction\": 0.28467473487331957,\n    \"nearest_camera_init_xyz\": [\n      14.914694036040057,\n      2.6271044440610867,\n      1.20575359602667\n    ],\n    \"horizontal_error_m\": 0.003627783061460849,\n    \"height_error_m\": 0.2560234436193566,\n    \"horizontal_radius_m\": 0.45,\n    \"maximum_height_error_m\": 0.3,\n    \"navigation_ground_truth_used\": false\n  },\n  \"controller_source_error\": null,\n  \"schema_version\": 1,\n  \"sequence\": 12271,\n  \"mode\": \"scan_slam\",\n  \"source\": \"scan_slam\",\n  \"monotonic_wall\": 437283.494505778,\n  \"sim_time\": 209.99,\n  \"stamp\": {\n    \"monotonic_wall\": 437283.494505778,\n    \"ros_sim_time_ns\": 209990000000,\n    \"ros_sim_time\": 209.99\n  },\n  \"valid_for_wall_s\": 0.3,\n  \"limits\": {\n    \"vx_mps\": 0.6,\n    \"vy_mps\": 0.2,\n    \"wz_radps\": 0.6\n  },\n  \"observation_source\": {\n    \"navigation_pose\": \"/demo/slam/body_odom\",\n    \"navigation_frame\": \"camera_init\",\n    \"navigation_ground_truth_used\": false,\n    \"velocity_request\": \"/demo/cmd_vel\",\n    \"policy_inputs\": \"Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only\"\n  },\n  \"acceptance\": {\n    \"path\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json\",\n    \"sha256\": \"64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257\",\n    \"run_dir\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf\",\n    \"profile\": {\n      \"schema_version\": 1,\n      \"experiment\": \"teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6\",\n      \"scope\": \"Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only\",\n      \"distance_m\": 13.6,\n      \"max_speed_mps\": 0.2,\n      \"max_yaw_rate_radps\": 0.6,\n      \"arrival_radius_m\": 0.22,\n      \"arrival_height_half_span_m\": 0.1,\n      \"arrival_control_radius_m\": 0.17,\n      \"dwell_sim_s\": 0.6,\n      \"goal_timeout_sim_s\": 90.0,\n      \"pose_cloud_timeout_s\": 0.3,\n      \"sensor_warmup_sim_s\": 2.0,\n      \"interface_version\": \"navigation_v4_latest_clock_measured_transition\",\n      \"warmup_history\": {\n        \"imu\": {\n          \"min_samples\": 600,\n          \"min_span_sim_s\": 2.9\n        },\n        \"body_odom\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"cloud\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"raw_lidar\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"image\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"camera_info\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        }\n      },\n      \"request_startup_timeout_sim_s\": 90.0,\n      \"request_startup_timeout_wall_s\": 600.0,\n      \"teacher_transition\": {\n        \"stop_window_sim_s\": 0.3,\n        \"stop_min_pose_samples\": 3,\n        \"stop_pose_gap_max_s\": 0.2,\n        \"gyro_pose_pair_max_s\": 0.15,\n        \"stop_planar_speed_mps\": 0.03,\n        \"stop_slam_yaw_rate_radps\": 0.05,\n        \"stop_body_gyro_radps\": 0.05,\n        \"turn_complete_rad\": 0.1,\n        \"drive_heading_max_rad\": 0.2\n      },\n      \"recovery_fresh_pose_samples\": 2,\n      \"recovery_min_pose_span_sim_s\": 0.1,\n      \"fence\": {\n        \"along_min_m\": -0.45,\n        \"along_max_m\": 14.049999999999999,\n        \"lateral_abs_m\": 0.45,\n        \"height_abs_m\": 1.4\n      },\n      \"navigation_ground_truth_used\": false,\n      \"policy_observations\": \"Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only\",\n      \"excluded\": [\n        \"real_robot\",\n        \"true_stairs\",\n        \"full_46_region_mission\",\n        \"unbounded_dynamic_mission\"\n      ],\n      \"max_lateral_speed_mps\": 0.2,\n      \"arrival_stop_policy\": \"after_measured_dwell\",\n      \"clear_guard_gap_max_sim_s\": 0.3,\n      \"pid\": {\n        \"position_kp\": 0.6,\n        \"position_ki\": 0.08,\n        \"position_kd\": 0.12,\n        \"yaw_kp\": 1.1,\n        \"yaw_ki\": 0.04,\n        \"yaw_kd\": 0.15,\n        \"position_integral_limit\": 0.4,\n        \"yaw_integral_limit\": 0.3,\n        \"derivative_filter_tau_s\": 0.2,\n        \"header_gap_max_s\": 0.3,\n        \"slew_acceleration\": [\n          0.3,\n          0.3,\n          0.25\n        ],\n        \"position_derivative_source\": \"actual SLAM body-origin twist transformed by the actual SLAM rotation\",\n        \"yaw_derivative_source\": \"actual body-transformed IMU gyro; no IMU yaw localization\"\n      },\n      \"selector\": \"multifloor12_23_segmented_turn06\",\n      \"route_height_delta_m\": 2.4,\n      \"return_to_origin\": false,\n      \"expected_asset\": {\n        \"terrain\": \"ramp_up\",\n        \"spawn\": [\n          1.2,\n          2,\n          0.4,\n          0\n        ]\n      },\n      \"review_basis\": \"explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation\",\n      \"spawn\": [\n        1.2,\n        2,\n        0.4,\n        0\n      ],\n      \"duration_s\": 210,\n      \"overview_pose\": [\n        8,\n        -1,\n        2.5,\n        0,\n        0.45,\n        1.5707963267948966\n      ],\n      \"terrain_target_manifest\": \"tests/terrain_targets/lower12.json\",\n      \"controller_kind\": \"teacher\",\n      \"protocol_case_id\": \"ramp12_up_full\",\n      \"pid_runtime_revision\": \"legacy PID fields preserved only for input compatibility; unused by cascade mathematics\",\n      \"controller_selector\": \"closed_loop_multifloor_v6\",\n      \"cascade_runtime_revision\": \"v6_same_controller_online_gravity_bias_visual_cov1000\",\n      \"cascade\": {\n        \"desired_speed\": 0.2,\n        \"command_limits\": [\n          0.6,\n          0.2,\n          0.6\n        ],\n        \"external_heading_gate\": true,\n        \"base_com_offset\": [\n          0.05523092034548942,\n          -0.001869001919385796,\n          0.006095299184261034\n        ],\n        \"maximum_gyro_pair_gap_s\": 0.02,\n        \"goal_z_tolerance_m\": 0.1,\n        \"gains\": {\n          \"cross_kp\": 0.8,\n          \"cross_kd\": 0.2,\n          \"yaw_kp\": 1.3,\n          \"yaw_kd\": 0.15,\n          \"velocity_kp_x\": 0.6,\n          \"velocity_ki_x\": 0.5,\n          \"velocity_kp_y\": 0.4,\n          \"velocity_ki_y\": 0.3,\n          \"rate_kp\": 0.3,\n          \"rate_ki\": 0.2\n        },\n        \"command_slew_per_s\": [\n          0.6,\n          0.6,\n          0.8\n        ],\n        \"feedback_expected_hz\": 10,\n        \"feedback_ttl_sim_and_wall_s\": 0.3,\n        \"navigation_ground_truth_used\": false,\n        \"controller_source_file\": \"cascade_command_source.json\",\n        \"actual_navigation_verified\": false\n      },\n      \"pid_parent_profile\": {\n        \"path\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json\",\n        \"unchanged_fields\": [\n          \"warmup_history\",\n          \"teacher_transition\",\n          \"pose_cloud_timeout_s\",\n          \"pid\",\n          \"expected_asset\",\n          \"spawn\",\n          \"route_height_delta_m\",\n          \"terrain_target_manifest\",\n          \"arrival_radius_m\",\n          \"arrival_height_half_span_m\",\n          \"arrival_control_radius_m\",\n          \"dwell_sim_s\"\n        ],\n        \"note\": \"Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only.\"\n      },\n      \"registered_route_fence\": {\n        \"horizontal_radius_m\": 0.45,\n        \"height_error_m\": 0.3,\n        \"scope\": \"tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback\"\n      },\n      \"scene_initial_support_z\": 0.0,\n      \"scene_xy_anchor_uncertainty_m\": 0.15,\n      \"prospective_change\": \"Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.\",\n      \"route_prior_source\": \"Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.\",\n      \"route_world_points\": [\n        {\n          \"goal_id\": \"lower_x02\",\n          \"xyz\": [\n            2,\n            2,\n            0.0\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x03\",\n          \"xyz\": [\n            3,\n            2,\n            0.1\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x04\",\n          \"xyz\": [\n            4,\n            2,\n            0.2\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x05\",\n          \"xyz\": [\n            5,\n            2,\n            0.30000000000000004\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x06\",\n          \"xyz\": [\n            6,\n            2,\n            0.4\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x07\",\n          \"xyz\": [\n            7,\n            2,\n            0.5\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x08\",\n          \"xyz\": [\n            8,\n            2,\n            0.6000000000000001\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x09\",\n          \"xyz\": [\n            9,\n            2,\n            0.7000000000000001\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x10\",\n          \"xyz\": [\n            10,\n            2,\n            0.8\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x11\",\n          \"xyz\": [\n            11,\n            2,\n            0.9\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x12\",\n          \"xyz\": [\n            12,\n            2,\n            1.0\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x13\",\n          \"xyz\": [\n            13,\n            2,\n            1.1\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x14\",\n          \"xyz\": [\n            14,\n            2,\n            1.2000000000000002\n          ]\n        },\n        {\n          \"goal_id\": \"lower_exit\",\n          \"xyz\": [\n            14.8,\n            2,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_x\",\n          \"xyz\": [\n            16,\n            2,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_mid\",\n          \"xyz\": [\n            16,\n            4.5,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_y\",\n          \"xyz\": [\n            16,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_entry\",\n          \"xyz\": [\n            14.8,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x14\",\n          \"xyz\": [\n            14,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x13\",\n          \"xyz\": [\n            13,\n            7,\n            1.3\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x12\",\n          \"xyz\": [\n            12,\n            7,\n            1.4\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x11\",\n          \"xyz\": [\n            11,\n            7,\n            1.5\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x10\",\n          \"xyz\": [\n            10,\n            7,\n            1.6\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x09\",\n          \"xyz\": [\n            9,\n            7,\n            1.7\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x08\",\n          \"xyz\": [\n            8,\n            7,\n            1.8\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x07\",\n          \"xyz\": [\n            7,\n            7,\n            1.9\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x06\",\n          \"xyz\": [\n            6,\n            7,\n            2.0\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x05\",\n          \"xyz\": [\n            5,\n            7,\n            2.1\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x04\",\n          \"xyz\": [\n            4,\n            7,\n            2.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x03\",\n          \"xyz\": [\n            3,\n            7,\n            2.3\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x02\",\n          \"xyz\": [\n            2,\n            7,\n            2.4000000000000004\n          ]\n        },\n        {\n          \"goal_id\": \"floor3_stop\",\n          \"xyz\": [\n            1.2,\n            7,\n            2.4\n          ]\n        }\n      ],\n      \"ramp_segments\": [\n        {\n          \"model\": \"ramp_12\",\n          \"direction\": \"up\",\n          \"destination_goal_index\": 13\n        },\n        {\n          \"model\": \"ramp_23\",\n          \"direction\": \"up\",\n          \"destination_goal_index\": 31\n        }\n      ],\n      \"terrain_layer_switch\": {\n        \"initial_manifest\": \"tests/terrain_targets/lower12.json\",\n        \"alternate_manifest\": \"tests/terrain_targets/upper23.json\",\n        \"completed_goal_id\": \"connector_mid\",\n        \"alternate_include_models\": [\n          \"floor_2\",\n          \"ramp_23\",\n          \"floor_3\"\n        ],\n        \"source\": \"Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check\",\n        \"ray_equality_tolerance_m\": 1e-09\n      },\n      \"slam_imu_online_estimation\": {\n        \"gravity_est_en\": true,\n        \"ba_bg_est_en\": true\n      },\n      \"slam_visual_measurement_covariance\": 1000,\n      \"diagnostic_scope\": {\n        \"baseline_version\": \"closed_loop_multifloor_v6\",\n        \"route_controller_gates_unchanged\": true,\n        \"finite_horizon_s\": 210,\n        \"detail_window_sim_s\": [\n          115,\n          165\n        ],\n        \"navigation_outcome_is_not_full_route_pass\": true,\n        \"purpose\": \"acquire actual LIO/VIO constraints and IMU accel for height fault\"\n      }\n    },\n    \"controller_kind\": \"teacher\",\n    \"experimental\": true,\n    \"experiment\": \"teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6\",\n    \"navigation_is_verified\": false,\n    \"checkpoint_sha256\": \"bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34\",\n    \"scope\": \"Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed\"\n  },\n  \"navigation_validation\": \"unverified\",\n  \"health_scope\": \"SLAM/SCAN input health only; this does not establish actuator health or physical stopping\",\n  \"clock_source\": \"single rclpy ROS TimeSource /clock, KEEP_LAST depth=1\",\n  \"transport\": {\n    \"type\": \"latest_pending_atomic_file\",\n    \"superseded\": 12,\n    \"written\": 12258,\n    \"max_queue_delay_wall_s\": 0.0037422680179588497\n  }\n}\n",
+        "raw_bytes_sha256": "b502730a006203cf258747b5ee8551004e05ee01e9be888a02d67a5117244544",
+        "decoded_envelope": {
+          "state": "failed",
+          "healthy": false,
+          "stop_requested": true,
+          "reason": "Measured SLAM body pose left finite route fence; restart after review",
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ages": {
+            "clock_wall_s": 1.1280062608420849e-06,
+            "pose_wall_s": 0.06929736502934247,
+            "command_wall_s": 0.015377345029264688,
+            "pose_sim_s": 0.09,
+            "command_sim_s": 0.015
+          },
+          "slam_valid_samples": 2063,
+          "command_received_monotonic_wall": 437283.479128433,
+          "command_received_ros_sim_time_ns": 209975000000,
+          "slam_stamp_ns": 209900000000,
+          "publisher_graph": {
+            "slam": true,
+            "command": true,
+            "details": {
+              "slam_publishers": [
+                "/demo_slam_odom_adapter"
+              ],
+              "command_publishers": [
+                "/demo_navigation"
+              ]
+            }
+          },
+          "controller_source": null,
+          "controller_source_receipt": null,
+          "registered_route_fence": {
+            "inside": true,
+            "segment": 16,
+            "fraction": 0.28467473487331957,
+            "nearest_camera_init_xyz": [
+              14.914694036040057,
+              2.6271044440610867,
+              1.20575359602667
+            ],
+            "horizontal_error_m": 0.003627783061460849,
+            "height_error_m": 0.2560234436193566,
+            "horizontal_radius_m": 0.45,
+            "maximum_height_error_m": 0.3,
+            "navigation_ground_truth_used": false
+          },
+          "controller_source_error": null,
+          "schema_version": 1,
+          "sequence": 12271,
+          "mode": "scan_slam",
+          "source": "scan_slam",
+          "monotonic_wall": 437283.494505778,
+          "sim_time": 209.99,
+          "stamp": {
+            "monotonic_wall": 437283.494505778,
+            "ros_sim_time_ns": 209990000000,
+            "ros_sim_time": 209.99
+          },
+          "valid_for_wall_s": 0.3,
+          "limits": {
+            "vx_mps": 0.6,
+            "vy_mps": 0.2,
+            "wz_radps": 0.6
+          },
+          "observation_source": {
+            "navigation_pose": "/demo/slam/body_odom",
+            "navigation_frame": "camera_init",
+            "navigation_ground_truth_used": false,
+            "velocity_request": "/demo/cmd_vel",
+            "policy_inputs": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only"
+          },
+          "acceptance": {
+            "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json",
+            "sha256": "64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257",
+            "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+            "profile": {
+              "schema_version": 1,
+              "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+              "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+              "distance_m": 13.6,
+              "max_speed_mps": 0.2,
+              "max_yaw_rate_radps": 0.6,
+              "arrival_radius_m": 0.22,
+              "arrival_height_half_span_m": 0.1,
+              "arrival_control_radius_m": 0.17,
+              "dwell_sim_s": 0.6,
+              "goal_timeout_sim_s": 90.0,
+              "pose_cloud_timeout_s": 0.3,
+              "sensor_warmup_sim_s": 2.0,
+              "interface_version": "navigation_v4_latest_clock_measured_transition",
+              "warmup_history": {
+                "imu": {
+                  "min_samples": 600,
+                  "min_span_sim_s": 2.9
+                },
+                "body_odom": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "cloud": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "raw_lidar": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "image": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "camera_info": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                }
+              },
+              "request_startup_timeout_sim_s": 90.0,
+              "request_startup_timeout_wall_s": 600.0,
+              "teacher_transition": {
+                "stop_window_sim_s": 0.3,
+                "stop_min_pose_samples": 3,
+                "stop_pose_gap_max_s": 0.2,
+                "gyro_pose_pair_max_s": 0.15,
+                "stop_planar_speed_mps": 0.03,
+                "stop_slam_yaw_rate_radps": 0.05,
+                "stop_body_gyro_radps": 0.05,
+                "turn_complete_rad": 0.1,
+                "drive_heading_max_rad": 0.2
+              },
+              "recovery_fresh_pose_samples": 2,
+              "recovery_min_pose_span_sim_s": 0.1,
+              "fence": {
+                "along_min_m": -0.45,
+                "along_max_m": 14.049999999999999,
+                "lateral_abs_m": 0.45,
+                "height_abs_m": 1.4
+              },
+              "navigation_ground_truth_used": false,
+              "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+              "excluded": [
+                "real_robot",
+                "true_stairs",
+                "full_46_region_mission",
+                "unbounded_dynamic_mission"
+              ],
+              "max_lateral_speed_mps": 0.2,
+              "arrival_stop_policy": "after_measured_dwell",
+              "clear_guard_gap_max_sim_s": 0.3,
+              "pid": {
+                "position_kp": 0.6,
+                "position_ki": 0.08,
+                "position_kd": 0.12,
+                "yaw_kp": 1.1,
+                "yaw_ki": 0.04,
+                "yaw_kd": 0.15,
+                "position_integral_limit": 0.4,
+                "yaw_integral_limit": 0.3,
+                "derivative_filter_tau_s": 0.2,
+                "header_gap_max_s": 0.3,
+                "slew_acceleration": [
+                  0.3,
+                  0.3,
+                  0.25
+                ],
+                "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+                "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+              },
+              "selector": "multifloor12_23_segmented_turn06",
+              "route_height_delta_m": 2.4,
+              "return_to_origin": false,
+              "expected_asset": {
+                "terrain": "ramp_up",
+                "spawn": [
+                  1.2,
+                  2,
+                  0.4,
+                  0
+                ]
+              },
+              "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+              "spawn": [
+                1.2,
+                2,
+                0.4,
+                0
+              ],
+              "duration_s": 210,
+              "overview_pose": [
+                8,
+                -1,
+                2.5,
+                0,
+                0.45,
+                1.5707963267948966
+              ],
+              "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+              "controller_kind": "teacher",
+              "protocol_case_id": "ramp12_up_full",
+              "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+              "controller_selector": "closed_loop_multifloor_v6",
+              "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
+              "cascade": {
+                "desired_speed": 0.2,
+                "command_limits": [
+                  0.6,
+                  0.2,
+                  0.6
+                ],
+                "external_heading_gate": true,
+                "base_com_offset": [
+                  0.05523092034548942,
+                  -0.001869001919385796,
+                  0.006095299184261034
+                ],
+                "maximum_gyro_pair_gap_s": 0.02,
+                "goal_z_tolerance_m": 0.1,
+                "gains": {
+                  "cross_kp": 0.8,
+                  "cross_kd": 0.2,
+                  "yaw_kp": 1.3,
+                  "yaw_kd": 0.15,
+                  "velocity_kp_x": 0.6,
+                  "velocity_ki_x": 0.5,
+                  "velocity_kp_y": 0.4,
+                  "velocity_ki_y": 0.3,
+                  "rate_kp": 0.3,
+                  "rate_ki": 0.2
+                },
+                "command_slew_per_s": [
+                  0.6,
+                  0.6,
+                  0.8
+                ],
+                "feedback_expected_hz": 10,
+                "feedback_ttl_sim_and_wall_s": 0.3,
+                "navigation_ground_truth_used": false,
+                "controller_source_file": "cascade_command_source.json",
+                "actual_navigation_verified": false
+              },
+              "pid_parent_profile": {
+                "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+                "unchanged_fields": [
+                  "warmup_history",
+                  "teacher_transition",
+                  "pose_cloud_timeout_s",
+                  "pid",
+                  "expected_asset",
+                  "spawn",
+                  "route_height_delta_m",
+                  "terrain_target_manifest",
+                  "arrival_radius_m",
+                  "arrival_height_half_span_m",
+                  "arrival_control_radius_m",
+                  "dwell_sim_s"
+                ],
+                "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+              },
+              "registered_route_fence": {
+                "horizontal_radius_m": 0.45,
+                "height_error_m": 0.3,
+                "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+              },
+              "scene_initial_support_z": 0.0,
+              "scene_xy_anchor_uncertainty_m": 0.15,
+              "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
+              "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+              "route_world_points": [
+                {
+                  "goal_id": "lower_x02",
+                  "xyz": [
+                    2,
+                    2,
+                    0.0
+                  ]
+                },
+                {
+                  "goal_id": "lower_x03",
+                  "xyz": [
+                    3,
+                    2,
+                    0.1
+                  ]
+                },
+                {
+                  "goal_id": "lower_x04",
+                  "xyz": [
+                    4,
+                    2,
+                    0.2
+                  ]
+                },
+                {
+                  "goal_id": "lower_x05",
+                  "xyz": [
+                    5,
+                    2,
+                    0.30000000000000004
+                  ]
+                },
+                {
+                  "goal_id": "lower_x06",
+                  "xyz": [
+                    6,
+                    2,
+                    0.4
+                  ]
+                },
+                {
+                  "goal_id": "lower_x07",
+                  "xyz": [
+                    7,
+                    2,
+                    0.5
+                  ]
+                },
+                {
+                  "goal_id": "lower_x08",
+                  "xyz": [
+                    8,
+                    2,
+                    0.6000000000000001
+                  ]
+                },
+                {
+                  "goal_id": "lower_x09",
+                  "xyz": [
+                    9,
+                    2,
+                    0.7000000000000001
+                  ]
+                },
+                {
+                  "goal_id": "lower_x10",
+                  "xyz": [
+                    10,
+                    2,
+                    0.8
+                  ]
+                },
+                {
+                  "goal_id": "lower_x11",
+                  "xyz": [
+                    11,
+                    2,
+                    0.9
+                  ]
+                },
+                {
+                  "goal_id": "lower_x12",
+                  "xyz": [
+                    12,
+                    2,
+                    1.0
+                  ]
+                },
+                {
+                  "goal_id": "lower_x13",
+                  "xyz": [
+                    13,
+                    2,
+                    1.1
+                  ]
+                },
+                {
+                  "goal_id": "lower_x14",
+                  "xyz": [
+                    14,
+                    2,
+                    1.2000000000000002
+                  ]
+                },
+                {
+                  "goal_id": "lower_exit",
+                  "xyz": [
+                    14.8,
+                    2,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_x",
+                  "xyz": [
+                    16,
+                    2,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_mid",
+                  "xyz": [
+                    16,
+                    4.5,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_y",
+                  "xyz": [
+                    16,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_entry",
+                  "xyz": [
+                    14.8,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x14",
+                  "xyz": [
+                    14,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x13",
+                  "xyz": [
+                    13,
+                    7,
+                    1.3
+                  ]
+                },
+                {
+                  "goal_id": "upper_x12",
+                  "xyz": [
+                    12,
+                    7,
+                    1.4
+                  ]
+                },
+                {
+                  "goal_id": "upper_x11",
+                  "xyz": [
+                    11,
+                    7,
+                    1.5
+                  ]
+                },
+                {
+                  "goal_id": "upper_x10",
+                  "xyz": [
+                    10,
+                    7,
+                    1.6
+                  ]
+                },
+                {
+                  "goal_id": "upper_x09",
+                  "xyz": [
+                    9,
+                    7,
+                    1.7
+                  ]
+                },
+                {
+                  "goal_id": "upper_x08",
+                  "xyz": [
+                    8,
+                    7,
+                    1.8
+                  ]
+                },
+                {
+                  "goal_id": "upper_x07",
+                  "xyz": [
+                    7,
+                    7,
+                    1.9
+                  ]
+                },
+                {
+                  "goal_id": "upper_x06",
+                  "xyz": [
+                    6,
+                    7,
+                    2.0
+                  ]
+                },
+                {
+                  "goal_id": "upper_x05",
+                  "xyz": [
+                    5,
+                    7,
+                    2.1
+                  ]
+                },
+                {
+                  "goal_id": "upper_x04",
+                  "xyz": [
+                    4,
+                    7,
+                    2.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x03",
+                  "xyz": [
+                    3,
+                    7,
+                    2.3
+                  ]
+                },
+                {
+                  "goal_id": "upper_x02",
+                  "xyz": [
+                    2,
+                    7,
+                    2.4000000000000004
+                  ]
+                },
+                {
+                  "goal_id": "floor3_stop",
+                  "xyz": [
+                    1.2,
+                    7,
+                    2.4
+                  ]
+                }
+              ],
+              "ramp_segments": [
+                {
+                  "model": "ramp_12",
+                  "direction": "up",
+                  "destination_goal_index": 13
+                },
+                {
+                  "model": "ramp_23",
+                  "direction": "up",
+                  "destination_goal_index": 31
+                }
+              ],
+              "terrain_layer_switch": {
+                "initial_manifest": "tests/terrain_targets/lower12.json",
+                "alternate_manifest": "tests/terrain_targets/upper23.json",
+                "completed_goal_id": "connector_mid",
+                "alternate_include_models": [
+                  "floor_2",
+                  "ramp_23",
+                  "floor_3"
+                ],
+                "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+                "ray_equality_tolerance_m": 1e-09
+              },
+              "slam_imu_online_estimation": {
+                "gravity_est_en": true,
+                "ba_bg_est_en": true
+              },
+              "slam_visual_measurement_covariance": 1000,
+              "diagnostic_scope": {
+                "baseline_version": "closed_loop_multifloor_v6",
+                "route_controller_gates_unchanged": true,
+                "finite_horizon_s": 210,
+                "detail_window_sim_s": [
+                  115,
+                  165
+                ],
+                "navigation_outcome_is_not_full_route_pass": true,
+                "purpose": "acquire actual LIO/VIO constraints and IMU accel for height fault"
+              }
+            },
+            "controller_kind": "teacher",
+            "experimental": true,
+            "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+            "navigation_is_verified": false,
+            "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+            "scope": "Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed"
+          },
+          "navigation_validation": "unverified",
+          "health_scope": "SLAM/SCAN input health only; this does not establish actuator health or physical stopping",
+          "clock_source": "single rclpy ROS TimeSource /clock, KEEP_LAST depth=1",
+          "transport": {
+            "type": "latest_pending_atomic_file",
+            "superseded": 12,
+            "written": 12258,
+            "max_queue_delay_wall_s": 0.0037422680179588497
+          }
+        },
+        "status": "rejected",
+        "reason": "SLAM/SCAN input unhealthy"
+      },
+      "actual_original_envelope": {
+        "state": "failed",
+        "healthy": false,
+        "stop_requested": true,
+        "reason": "Measured SLAM body pose left finite route fence; restart after review",
+        "requested": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "ages": {
+          "clock_wall_s": 1.1280062608420849e-06,
+          "pose_wall_s": 0.06929736502934247,
+          "command_wall_s": 0.015377345029264688,
+          "pose_sim_s": 0.09,
+          "command_sim_s": 0.015
+        },
+        "slam_valid_samples": 2063,
+        "command_received_monotonic_wall": 437283.479128433,
+        "command_received_ros_sim_time_ns": 209975000000,
+        "slam_stamp_ns": 209900000000,
+        "publisher_graph": {
+          "slam": true,
+          "command": true,
+          "details": {
+            "slam_publishers": [
+              "/demo_slam_odom_adapter"
+            ],
+            "command_publishers": [
+              "/demo_navigation"
+            ]
+          }
+        },
+        "controller_source": null,
+        "controller_source_receipt": null,
+        "registered_route_fence": {
+          "inside": true,
+          "segment": 16,
+          "fraction": 0.28467473487331957,
+          "nearest_camera_init_xyz": [
+            14.914694036040057,
+            2.6271044440610867,
+            1.20575359602667
+          ],
+          "horizontal_error_m": 0.003627783061460849,
+          "height_error_m": 0.2560234436193566,
+          "horizontal_radius_m": 0.45,
+          "maximum_height_error_m": 0.3,
+          "navigation_ground_truth_used": false
+        },
+        "controller_source_error": null,
+        "schema_version": 1,
+        "sequence": 12271,
+        "mode": "scan_slam",
+        "source": "scan_slam",
+        "monotonic_wall": 437283.494505778,
+        "sim_time": 209.99,
+        "stamp": {
+          "monotonic_wall": 437283.494505778,
+          "ros_sim_time_ns": 209990000000,
+          "ros_sim_time": 209.99
+        },
+        "valid_for_wall_s": 0.3,
+        "limits": {
+          "vx_mps": 0.6,
+          "vy_mps": 0.2,
+          "wz_radps": 0.6
+        },
+        "observation_source": {
+          "navigation_pose": "/demo/slam/body_odom",
+          "navigation_frame": "camera_init",
+          "navigation_ground_truth_used": false,
+          "velocity_request": "/demo/cmd_vel",
+          "policy_inputs": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only"
+        },
+        "acceptance": {
+          "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json",
+          "sha256": "64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257",
+          "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+          "profile": {
+            "schema_version": 1,
+            "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+            "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+            "distance_m": 13.6,
+            "max_speed_mps": 0.2,
+            "max_yaw_rate_radps": 0.6,
+            "arrival_radius_m": 0.22,
+            "arrival_height_half_span_m": 0.1,
+            "arrival_control_radius_m": 0.17,
+            "dwell_sim_s": 0.6,
+            "goal_timeout_sim_s": 90.0,
+            "pose_cloud_timeout_s": 0.3,
+            "sensor_warmup_sim_s": 2.0,
+            "interface_version": "navigation_v4_latest_clock_measured_transition",
+            "warmup_history": {
+              "imu": {
+                "min_samples": 600,
+                "min_span_sim_s": 2.9
+              },
+              "body_odom": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "cloud": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "raw_lidar": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "image": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "camera_info": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              }
+            },
+            "request_startup_timeout_sim_s": 90.0,
+            "request_startup_timeout_wall_s": 600.0,
+            "teacher_transition": {
+              "stop_window_sim_s": 0.3,
+              "stop_min_pose_samples": 3,
+              "stop_pose_gap_max_s": 0.2,
+              "gyro_pose_pair_max_s": 0.15,
+              "stop_planar_speed_mps": 0.03,
+              "stop_slam_yaw_rate_radps": 0.05,
+              "stop_body_gyro_radps": 0.05,
+              "turn_complete_rad": 0.1,
+              "drive_heading_max_rad": 0.2
+            },
+            "recovery_fresh_pose_samples": 2,
+            "recovery_min_pose_span_sim_s": 0.1,
+            "fence": {
+              "along_min_m": -0.45,
+              "along_max_m": 14.049999999999999,
+              "lateral_abs_m": 0.45,
+              "height_abs_m": 1.4
+            },
+            "navigation_ground_truth_used": false,
+            "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+            "excluded": [
+              "real_robot",
+              "true_stairs",
+              "full_46_region_mission",
+              "unbounded_dynamic_mission"
+            ],
+            "max_lateral_speed_mps": 0.2,
+            "arrival_stop_policy": "after_measured_dwell",
+            "clear_guard_gap_max_sim_s": 0.3,
+            "pid": {
+              "position_kp": 0.6,
+              "position_ki": 0.08,
+              "position_kd": 0.12,
+              "yaw_kp": 1.1,
+              "yaw_ki": 0.04,
+              "yaw_kd": 0.15,
+              "position_integral_limit": 0.4,
+              "yaw_integral_limit": 0.3,
+              "derivative_filter_tau_s": 0.2,
+              "header_gap_max_s": 0.3,
+              "slew_acceleration": [
+                0.3,
+                0.3,
+                0.25
+              ],
+              "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+              "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+            },
+            "selector": "multifloor12_23_segmented_turn06",
+            "route_height_delta_m": 2.4,
+            "return_to_origin": false,
+            "expected_asset": {
+              "terrain": "ramp_up",
+              "spawn": [
+                1.2,
+                2,
+                0.4,
+                0
+              ]
+            },
+            "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+            "spawn": [
+              1.2,
+              2,
+              0.4,
+              0
+            ],
+            "duration_s": 210,
+            "overview_pose": [
+              8,
+              -1,
+              2.5,
+              0,
+              0.45,
+              1.5707963267948966
+            ],
+            "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+            "controller_kind": "teacher",
+            "protocol_case_id": "ramp12_up_full",
+            "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+            "controller_selector": "closed_loop_multifloor_v6",
+            "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
+            "cascade": {
+              "desired_speed": 0.2,
+              "command_limits": [
+                0.6,
+                0.2,
+                0.6
+              ],
+              "external_heading_gate": true,
+              "base_com_offset": [
+                0.05523092034548942,
+                -0.001869001919385796,
+                0.006095299184261034
+              ],
+              "maximum_gyro_pair_gap_s": 0.02,
+              "goal_z_tolerance_m": 0.1,
+              "gains": {
+                "cross_kp": 0.8,
+                "cross_kd": 0.2,
+                "yaw_kp": 1.3,
+                "yaw_kd": 0.15,
+                "velocity_kp_x": 0.6,
+                "velocity_ki_x": 0.5,
+                "velocity_kp_y": 0.4,
+                "velocity_ki_y": 0.3,
+                "rate_kp": 0.3,
+                "rate_ki": 0.2
+              },
+              "command_slew_per_s": [
+                0.6,
+                0.6,
+                0.8
+              ],
+              "feedback_expected_hz": 10,
+              "feedback_ttl_sim_and_wall_s": 0.3,
+              "navigation_ground_truth_used": false,
+              "controller_source_file": "cascade_command_source.json",
+              "actual_navigation_verified": false
+            },
+            "pid_parent_profile": {
+              "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+              "unchanged_fields": [
+                "warmup_history",
+                "teacher_transition",
+                "pose_cloud_timeout_s",
+                "pid",
+                "expected_asset",
+                "spawn",
+                "route_height_delta_m",
+                "terrain_target_manifest",
+                "arrival_radius_m",
+                "arrival_height_half_span_m",
+                "arrival_control_radius_m",
+                "dwell_sim_s"
+              ],
+              "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+            },
+            "registered_route_fence": {
+              "horizontal_radius_m": 0.45,
+              "height_error_m": 0.3,
+              "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+            },
+            "scene_initial_support_z": 0.0,
+            "scene_xy_anchor_uncertainty_m": 0.15,
+            "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
+            "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+            "route_world_points": [
+              {
+                "goal_id": "lower_x02",
+                "xyz": [
+                  2,
+                  2,
+                  0.0
+                ]
+              },
+              {
+                "goal_id": "lower_x03",
+                "xyz": [
+                  3,
+                  2,
+                  0.1
+                ]
+              },
+              {
+                "goal_id": "lower_x04",
+                "xyz": [
+                  4,
+                  2,
+                  0.2
+                ]
+              },
+              {
+                "goal_id": "lower_x05",
+                "xyz": [
+                  5,
+                  2,
+                  0.30000000000000004
+                ]
+              },
+              {
+                "goal_id": "lower_x06",
+                "xyz": [
+                  6,
+                  2,
+                  0.4
+                ]
+              },
+              {
+                "goal_id": "lower_x07",
+                "xyz": [
+                  7,
+                  2,
+                  0.5
+                ]
+              },
+              {
+                "goal_id": "lower_x08",
+                "xyz": [
+                  8,
+                  2,
+                  0.6000000000000001
+                ]
+              },
+              {
+                "goal_id": "lower_x09",
+                "xyz": [
+                  9,
+                  2,
+                  0.7000000000000001
+                ]
+              },
+              {
+                "goal_id": "lower_x10",
+                "xyz": [
+                  10,
+                  2,
+                  0.8
+                ]
+              },
+              {
+                "goal_id": "lower_x11",
+                "xyz": [
+                  11,
+                  2,
+                  0.9
+                ]
+              },
+              {
+                "goal_id": "lower_x12",
+                "xyz": [
+                  12,
+                  2,
+                  1.0
+                ]
+              },
+              {
+                "goal_id": "lower_x13",
+                "xyz": [
+                  13,
+                  2,
+                  1.1
+                ]
+              },
+              {
+                "goal_id": "lower_x14",
+                "xyz": [
+                  14,
+                  2,
+                  1.2000000000000002
+                ]
+              },
+              {
+                "goal_id": "lower_exit",
+                "xyz": [
+                  14.8,
+                  2,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_x",
+                "xyz": [
+                  16,
+                  2,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_mid",
+                "xyz": [
+                  16,
+                  4.5,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_y",
+                "xyz": [
+                  16,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_entry",
+                "xyz": [
+                  14.8,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_x14",
+                "xyz": [
+                  14,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_x13",
+                "xyz": [
+                  13,
+                  7,
+                  1.3
+                ]
+              },
+              {
+                "goal_id": "upper_x12",
+                "xyz": [
+                  12,
+                  7,
+                  1.4
+                ]
+              },
+              {
+                "goal_id": "upper_x11",
+                "xyz": [
+                  11,
+                  7,
+                  1.5
+                ]
+              },
+              {
+                "goal_id": "upper_x10",
+                "xyz": [
+                  10,
+                  7,
+                  1.6
+                ]
+              },
+              {
+                "goal_id": "upper_x09",
+                "xyz": [
+                  9,
+                  7,
+                  1.7
+                ]
+              },
+              {
+                "goal_id": "upper_x08",
+                "xyz": [
+                  8,
+                  7,
+                  1.8
+                ]
+              },
+              {
+                "goal_id": "upper_x07",
+                "xyz": [
+                  7,
+                  7,
+                  1.9
+                ]
+              },
+              {
+                "goal_id": "upper_x06",
+                "xyz": [
+                  6,
+                  7,
+                  2.0
+                ]
+              },
+              {
+                "goal_id": "upper_x05",
+                "xyz": [
+                  5,
+                  7,
+                  2.1
+                ]
+              },
+              {
+                "goal_id": "upper_x04",
+                "xyz": [
+                  4,
+                  7,
+                  2.2
+                ]
+              },
+              {
+                "goal_id": "upper_x03",
+                "xyz": [
+                  3,
+                  7,
+                  2.3
+                ]
+              },
+              {
+                "goal_id": "upper_x02",
+                "xyz": [
+                  2,
+                  7,
+                  2.4000000000000004
+                ]
+              },
+              {
+                "goal_id": "floor3_stop",
+                "xyz": [
+                  1.2,
+                  7,
+                  2.4
+                ]
+              }
+            ],
+            "ramp_segments": [
+              {
+                "model": "ramp_12",
+                "direction": "up",
+                "destination_goal_index": 13
+              },
+              {
+                "model": "ramp_23",
+                "direction": "up",
+                "destination_goal_index": 31
+              }
+            ],
+            "terrain_layer_switch": {
+              "initial_manifest": "tests/terrain_targets/lower12.json",
+              "alternate_manifest": "tests/terrain_targets/upper23.json",
+              "completed_goal_id": "connector_mid",
+              "alternate_include_models": [
+                "floor_2",
+                "ramp_23",
+                "floor_3"
+              ],
+              "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+              "ray_equality_tolerance_m": 1e-09
+            },
+            "slam_imu_online_estimation": {
+              "gravity_est_en": true,
+              "ba_bg_est_en": true
+            },
+            "slam_visual_measurement_covariance": 1000,
+            "diagnostic_scope": {
+              "baseline_version": "closed_loop_multifloor_v6",
+              "route_controller_gates_unchanged": true,
+              "finite_horizon_s": 210,
+              "detail_window_sim_s": [
+                115,
+                165
+              ],
+              "navigation_outcome_is_not_full_route_pass": true,
+              "purpose": "acquire actual LIO/VIO constraints and IMU accel for height fault"
+            }
+          },
+          "controller_kind": "teacher",
+          "experimental": true,
+          "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+          "navigation_is_verified": false,
+          "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+          "scope": "Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed"
+        },
+        "navigation_validation": "unverified",
+        "health_scope": "SLAM/SCAN input health only; this does not establish actuator health or physical stopping",
+        "clock_source": "single rclpy ROS TimeSource /clock, KEEP_LAST depth=1",
+        "transport": {
+          "type": "latest_pending_atomic_file",
+          "superseded": 12,
+          "written": 12258,
+          "max_queue_delay_wall_s": 0.0037422680179588497
+        }
+      },
+      "navigation_ground_truth_used": false,
+      "actor_terrain_provider": {
+        "schema": "teacher_actor_terrain_switch/v1",
+        "current_provider": "alternate",
+        "include_models": [
+          "floor_2",
+          "ramp_23",
+          "floor_3"
+        ],
+        "manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+        "switched": true,
+        "failure": null,
+        "event_sequence": 2,
+        "arrival_stamp_ns": 127900000000,
+        "pending_arrival_stamp_ns": null,
+        "navigation_ground_truth_used": false
+      }
+    },
+    "actor_terrain_provider": {
+      "schema": "teacher_actor_terrain_switch/v1",
+      "current_provider": "alternate",
+      "include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+      "switched": true,
+      "failure": null,
+      "event_sequence": 2,
+      "arrival_stamp_ns": 127900000000,
+      "pending_arrival_stamp_ns": null,
+      "navigation_ground_truth_used": false
+    },
+    "actor_terrain_switch_failed": false
+  },
+  "first_navigation_failed_status": {
+    "ros_sim_time": 133.13,
+    "message": "execution_bridge\u4fdd\u62a4\u5df2\u9501\u5b9a\uff0c\u505c\u8f66",
+    "reason": null,
+    "failure": null,
+    "waypoint_index": 16,
+    "total": 32,
+    "pose": [
+      14.916401480227417,
+      2.5420583452027548,
+      0.9022709847244138
+    ]
+  },
+  "runtime_completed": "completed_requires_independent_navigation_evaluation",
+  "whole_run_native_safety": {
+    "samples": 42001,
+    "body_contact_samples": 0,
+    "fault_samples": 0,
+    "native_source_rate": {
+      "count": 42001,
+      "unique_headers": 42001,
+      "first_last_s": [
+        0.005,
+        210.00500000000002
+      ],
+      "span_average_hz": 200.0,
+      "median_dt_hz": 200.0,
+      "source_gap_s": {
+        "count": 42000,
+        "min": 0.005,
+        "p50": 0.005,
+        "p95": 0.005,
+        "max": 0.005
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    }
+  },
+  "actual_navigation_SLAM_source_rate": {
+    "count": 2064,
+    "unique_headers": 2064,
+    "first_last_s": [
+      3.7,
+      210.0
+    ],
+    "span_average_hz": 10.0,
+    "median_dt_hz": 10.0,
+    "source_gap_s": {
+      "count": 2063,
+      "min": 0.099999999,
+      "p50": 0.1,
+      "p95": 0.100000001,
+      "max": 0.100000001
+    },
+    "duplicate_headers": 0,
+    "backward_headers": 0,
+    "over_300ms_source_gaps": 0
+  },
+  "actual_controller_math_update_rate": {
+    "count": 1105,
+    "unique_headers": 1105,
+    "first_last_s": [
+      7.0,
+      133.0
+    ],
+    "span_average_hz": 8.761904761904761,
+    "median_dt_hz": 10.0,
+    "source_gap_s": {
+      "count": 1104,
+      "min": 0.099999999,
+      "p50": 0.1,
+      "p95": 0.100000001,
+      "max": 1.3000000010000001
+    },
+    "duplicate_headers": 0,
+    "backward_headers": 0,
+    "over_300ms_source_gaps": 17
+  },
+  "actual_controller_ticker_rate": {
+    "count": 2504,
+    "unique_headers": 2502,
+    "first_last_s": [
+      6.930000000000001,
+      133.11
+    ],
+    "span_average_hz": 19.82089079093359,
+    "median_dt_hz": 20.0,
+    "source_gap_s": {
+      "count": 2503,
+      "min": 0.0,
+      "p50": 0.05,
+      "p95": 0.055,
+      "max": 0.155
+    },
+    "duplicate_headers": 2,
+    "backward_headers": 0,
+    "over_300ms_source_gaps": 0
+  },
+  "controller_ages_all_modes": {
+    "pose_sim_age_s": {
+      "count": 2504,
+      "min": 0.01,
+      "p50": 0.07500000000000001,
+      "p95": 0.125,
+      "max": 0.130000001,
+      "over_300ms_count": 0
+    },
+    "paired_IMU_sim_age_s": {
+      "count": 2504,
+      "min": 0.01,
+      "p50": 0.07500000000000001,
+      "p95": 0.125,
+      "max": 0.135,
+      "over_300ms_count": 0
+    },
+    "pose_wall_age_s": {
+      "count": 2504,
+      "min": 0.0016171929892152548,
+      "p50": 0.052415390440728515,
+      "p95": 0.0980093814257998,
+      "max": 0.17203578597400337,
+      "over_300ms_count": 0
+    }
+  },
+  "controller_ages_without_protection": {
+    "pose_sim_age_s": {
+      "count": 2222,
+      "min": 0.01,
+      "p50": 0.07500000000000001,
+      "p95": 0.125,
+      "max": 0.130000001,
+      "over_300ms_count": 0
+    },
+    "paired_IMU_sim_age_s": {
+      "count": 2222,
+      "min": 0.01,
+      "p50": 0.07500000000000001,
+      "p95": 0.125,
+      "max": 0.135,
+      "over_300ms_count": 0
+    },
+    "pose_wall_age_s": {
+      "count": 2222,
+      "min": 0.0016171929892152548,
+      "p50": 0.052415390440728515,
+      "p95": 0.09801516382140107,
+      "max": 0.17203578597400337,
+      "over_300ms_count": 0
+    }
+  },
+  "shared_resources": {
+    "logical_cpus": 20,
+    "load1": {
+      "count": 105,
+      "min": 1.09765625,
+      "p50": 3.236328125,
+      "p95": 4.2002929687499995,
+      "max": 4.5595703125
+    },
+    "GPU_used_MiB": {
+      "count": 105,
+      "min": 804.0,
+      "p50": 1097.0,
+      "p95": 1113.8,
+      "max": 1146.0
+    },
+    "GPU_utilization_percent": {
+      "count": 105,
+      "min": 3.0,
+      "p50": 13.0,
+      "p95": 28.0,
+      "max": 40.0
+    },
+    "RAM_available_GiB": {
+      "count": 105,
+      "min": 47.518863677978516,
+      "p50": 47.676177978515625,
+      "p95": 48.30634307861328,
+      "max": 49.5229377746582
+    },
+    "scope": "shared resources; not exclusive Teacher/Gazebo/SLAM GPU/CPU consumption"
+  },
+  "diagnostics": {
+    "rates": {
+      "raw_IMU_callback": {
+        "count": 42001,
+        "unique_headers": 42001,
+        "first_last_s": [
+          0.01,
+          210.01000000000002
+        ],
+        "span_average_hz": 200.0,
+        "median_dt_hz": 200.0,
+        "source_gap_s": {
+          "count": 42000,
+          "min": 0.005,
+          "p50": 0.005,
+          "p95": 0.005,
+          "max": 0.005
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "actual_image_callback": {
+        "count": 2101,
+        "unique_headers": 2101,
+        "first_last_s": [
+          0.01,
+          210.0
+        ],
+        "span_average_hz": 10.000476213153007,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2100,
+          "min": 0.09000000000000001,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "actual_FASTLIVO_valid_PointCloud2_callback": {
+        "count": 2101,
+        "unique_headers": 2101,
+        "first_last_s": [
+          0.01,
+          210.0
+        ],
+        "span_average_hz": 10.000476213153007,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2100,
+          "min": 0.09000000000000001,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "before_Process2_stage_2": {
+        "count": 2100,
+        "unique_headers": 2100,
+        "first_last_s": [
+          0.1,
+          210.0
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2099,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "before_Process2_stage_1": {
+        "count": 2099,
+        "unique_headers": 2099,
+        "first_last_s": [
+          0.1,
+          209.9
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2098,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "actual_LIO_optimizer_frames": {
+        "count": 2064,
+        "unique_headers": 2064,
+        "first_last_s": [
+          3.7,
+          210.0
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2063,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "LIO_handler_after_processed": {
+        "count": 2064,
+        "unique_headers": 2064,
+        "first_last_s": [
+          3.7,
+          210.0
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2063,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "VIO_handler_after_processed": {
+        "count": 2063,
+        "unique_headers": 2063,
+        "first_last_s": [
+          3.7,
+          209.9
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2062,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      },
+      "actual_VIO_optimizer_frames": {
+        "count": 2061,
+        "unique_headers": 2061,
+        "first_last_s": [
+          3.9000000000000004,
+          209.9
+        ],
+        "span_average_hz": 10.0,
+        "median_dt_hz": 10.0,
+        "source_gap_s": {
+          "count": 2060,
+          "min": 0.1,
+          "p50": 0.1,
+          "p95": 0.1,
+          "max": 0.1
+        },
+        "duplicate_headers": 0,
+        "backward_headers": 0,
+        "over_300ms_source_gaps": 0
+      }
+    },
+    "point_counts": {
+      "valid_FASTLIVO_input_points": {
+        "count": 2101,
+        "min": 14761.0,
+        "p50": 14775.0,
+        "p95": 14785.0,
+        "max": 14803.0
+      },
+      "first_LIO_iteration_downsampled_points": {
+        "count": 2064,
+        "min": 4698.0,
+        "p50": 5318.0,
+        "p95": 7653.0,
+        "max": 8079.0
+      },
+      "first_LIO_iteration_effective_constraints": {
+        "count": 2064,
+        "min": 3335.0,
+        "p50": 4338.0,
+        "p95": 6310.85,
+        "max": 6661.0
+      },
+      "post_preprocess_points_detail_window": {
+        "count": 501,
+        "min": 13988.0,
+        "p50": 14018.0,
+        "p95": 14206.0,
+        "max": 14295.0
+      }
+    },
+    "callback_wall_receipt_rates": {
+      "actual_image_callback": {
+        "callback_count": 2101,
+        "wall_span_average_hz": 9.952826625039707,
+        "wall_gap_s": {
+          "count": 2100,
+          "min": 0.08034332399256527,
+          "p50": 0.10003376202075742,
+          "p95": 0.10444341498659923,
+          "max": 0.18291546497493982
+        },
+        "over_300ms_wall_gaps": 0
+      },
+      "actual_FASTLIVO_valid_PointCloud2_callback": {
+        "callback_count": 2101,
+        "wall_span_average_hz": 9.95295428407563,
+        "wall_gap_s": {
+          "count": 2100,
+          "min": 0.07972001499729231,
+          "p50": 0.10005721898050979,
+          "p95": 0.10454567773849703,
+          "max": 0.18315730500034988
+        },
+        "over_300ms_wall_gaps": 0
+      }
+    },
+    "actual_phase_begin_wall_progress": {
+      "2": {
+        "phases": 2100,
+        "wall_span_average_hz": 9.951968687594508,
+        "begin_to_same_stage_begin_wall_gap_s": {
+          "count": 2099,
+          "min": 0.07966923899948597,
+          "p50": 0.10003084997879341,
+          "p95": 0.10447661839425564,
+          "max": 0.18268595897825435
+        }
+      },
+      "1": {
+        "phases": 2099,
+        "wall_span_average_hz": 9.952127520446064,
+        "begin_to_same_stage_begin_wall_gap_s": {
+          "count": 2098,
+          "min": 0.0797036630101502,
+          "p50": 0.1000525740091689,
+          "p95": 0.10457450349931605,
+          "max": 0.18315492302644998
+        }
+      }
+    },
+    "observed_latest_raw_IMU_header_minus_phase_target_s": {
+      "2": {
+        "startup_0_10": {
+          "count": 99,
+          "min": 0.005,
+          "p50": 0.005,
+          "p95": 0.005,
+          "max": 0.025
+        },
+        "pre_detail_10_115": {
+          "count": 1050,
+          "min": 0.005,
+          "p50": 0.005,
+          "p95": 0.01,
+          "max": 0.02
+        },
+        "detail_115_165": {
+          "count": 501,
+          "min": 0.005,
+          "p50": 0.005,
+          "p95": 0.01,
+          "max": 0.01
+        },
+        "post_detail_165_end": {
+          "count": 450,
+          "min": 0.005,
+          "p50": 0.005,
+          "p95": 0.01,
+          "max": 0.015000000000000001
+        }
+      },
+      "1": {
+        "startup_0_10": {
+          "count": 99,
+          "min": 0.10500000000000001,
+          "p50": 0.10500000000000001,
+          "p95": 0.10500000000000001,
+          "max": 0.125
+        },
+        "pre_detail_10_115": {
+          "count": 1050,
+          "min": 0.10500000000000001,
+          "p50": 0.10500000000000001,
+          "p95": 0.10500000000000001,
+          "max": 0.12000000000000001
+        },
+        "detail_115_165": {
+          "count": 501,
+          "min": 0.1,
+          "p50": 0.10500000000000001,
+          "p95": 0.10500000000000001,
+          "max": 0.10500000000000001
+        },
+        "post_detail_165_end": {
+          "count": 449,
+          "min": 0.10500000000000001,
+          "p50": 0.10500000000000001,
+          "p95": 0.10500000000000001,
+          "max": 0.115
+        }
+      }
+    },
+    "stage_timing_scope": "Recorded phase_total ends immediately after StateEstimation/visual solve; excludes later voxel-map updates, colored-cloud/image/path publication, dispatch/wait and other phase costs. Begin-to-same-stage wall gap includes these and waiting; not exclusive optimizer CPU cost. Backlog uses latest raw IMU callback observed before kind10, not Gazebo truth.",
+    "actual_estimator_stage_wall_latency": {
+      "LIO": {
+        "detail_115_165": {
+          "phase_total_wall_s": {
+            "count": 501,
+            "min": 0.009536730998661369,
+            "p50": 0.014183532039169222,
+            "p95": 0.01696171297226101,
+            "max": 0.018803588987793773,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 501,
+            "min": 0.008998221950605512,
+            "p50": 0.013535981008317322,
+            "p95": 0.016323991992976516,
+            "max": 0.01811224495759234,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "post_detail_165_end": {
+          "phase_total_wall_s": {
+            "count": 450,
+            "min": 0.006250764010474086,
+            "p50": 0.01129091953043826,
+            "p95": 0.013933307741535823,
+            "max": 0.015278512029908597,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 450,
+            "min": 0.005715225008316338,
+            "p50": 0.010695425007725134,
+            "p95": 0.013292793405707925,
+            "max": 0.014592454012017697,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "pre_detail_10_115": {
+          "phase_total_wall_s": {
+            "count": 1050,
+            "min": 0.0072509750025346875,
+            "p50": 0.014316159504232928,
+            "p95": 0.019534424680750815,
+            "max": 0.02463659696513787,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 1050,
+            "min": 0.006682582024950534,
+            "p50": 0.01364374699187465,
+            "p95": 0.018880496523343025,
+            "max": 0.023910973977763206,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "startup_0_10": {
+          "phase_total_wall_s": {
+            "count": 99,
+            "min": 1.8599035684019327e-05,
+            "p50": 0.008876268984749913,
+            "p95": 0.01321992501616478,
+            "max": 0.015079089964274317,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 99,
+            "min": 9.030045475810766e-06,
+            "p50": 0.008259836002252996,
+            "p95": 0.012521070899674669,
+            "max": 0.014435552002396435,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        }
+      },
+      "VIO": {
+        "detail_115_165": {
+          "phase_total_wall_s": {
+            "count": 501,
+            "min": 0.0018113600090146065,
+            "p50": 0.002556685998570174,
+            "p95": 0.003075852000620216,
+            "max": 0.003892795997671783,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 501,
+            "min": 0.0018021679716184735,
+            "p50": 0.002545844006817788,
+            "p95": 0.003066123987082392,
+            "max": 0.0038844970404170454,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "post_detail_165_end": {
+          "phase_total_wall_s": {
+            "count": 449,
+            "min": 0.0020315629662945867,
+            "p50": 0.0025141650112345815,
+            "p95": 0.002826321020256728,
+            "max": 0.0033066070172935724,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 449,
+            "min": 0.0020197299891151488,
+            "p50": 0.0025025379727594554,
+            "p95": 0.0028129330021329224,
+            "max": 0.0032912750029936433,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "pre_detail_10_115": {
+          "phase_total_wall_s": {
+            "count": 1050,
+            "min": 0.0010813060216605663,
+            "p50": 0.0019617525103967637,
+            "p95": 0.0023537879547802726,
+            "max": 0.0026330400141887367,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 1050,
+            "min": 0.0010714809759519994,
+            "p50": 0.0019496679888106883,
+            "p95": 0.002341574587626382,
+            "max": 0.002622672007419169,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        },
+        "startup_0_10": {
+          "phase_total_wall_s": {
+            "count": 99,
+            "min": 3.065401688218117e-05,
+            "p50": 0.001053070998750627,
+            "p95": 0.0013247319031506775,
+            "max": 0.0014825579710304737,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          },
+          "observation_wall_s": {
+            "count": 99,
+            "min": 2.405099803581834e-05,
+            "p50": 0.001041973999235779,
+            "p95": 0.001311568106757477,
+            "max": 0.0014690280077047646,
+            "over_300ms_count": 0,
+            "over_configured_lidar_period_count": 0
+          }
+        }
+      }
+    },
+    "record_kind_counts": {
+      "1": 42001,
+      "3": 2101,
+      "2": 2101,
+      "10": 4199,
+      "11": 4199,
+      "13": 2100,
+      "12": 2099,
+      "20": 41280,
+      "100": 8885,
+      "200": 8252,
+      "201": 17498,
+      "4": 501,
+      "101": 1002,
+      "102": 1002,
+      "14": 501,
+      "103": 442,
+      "202": 17586,
+      "203": 4008
+    },
+    "frozen_lio_schema": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/sources/navigation/closed_loop_multifloor_v7/lio_diagnostic_schema.json",
+      "sha256": "13b40541a29d5f0bc7a1e5cc6edc5ea497a01b3d07753ec175016069aada3e33"
+    },
+    "index_sha256": "0cc817d4c0f66e18e4cafe5c4900d17bf4cc2dbc5c5ecd617625a48f239edbc7",
+    "selected_read_diagnostic_sha256": "473074a9ed150ce9336507eaa41417d561692b88f61e67d47b95bba5031c61ff",
+    "literal_SDF_east_wall": {
+      "model": "wall_18.5",
+      "inner_x_m": 18.4,
+      "y_bounds_m": [
+        -3.5,
+        10.5
+      ],
+      "z_bounds_m": [
+        0.0,
+        4.0
+      ]
+    },
+    "sampled_east_wall_matching_geometry": [
+      {
+        "stamp_ns": 115000000000,
+        "actual_constraints": 4261,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 726,
+        "east_wall_normal_error_degrees": {
+          "count": 726,
+          "min": 0.2603952942794133,
+          "p50": 4.439152118756325,
+          "p95": 83.92596475508711,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 131,
+        "east_wall_historical_mid_over_max": {
+          "count": 726,
+          "min": 0.002345382632105416,
+          "p50": 0.20459073497626096,
+          "p95": 0.6818172269695921,
+          "max": 0.8358675189710876
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 331,
+        "east_wall_near_horizontal_normal_constraints": 142
+      },
+      {
+        "stamp_ns": 116000000000,
+        "actual_constraints": 4146,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 729,
+        "east_wall_normal_error_degrees": {
+          "count": 729,
+          "min": 0.2603952942794133,
+          "p50": 4.676145236588888,
+          "p95": 83.43815037710861,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 122,
+        "east_wall_historical_mid_over_max": {
+          "count": 729,
+          "min": 0.0030400558807490265,
+          "p50": 0.18117085759350457,
+          "p95": 0.6965219434769825,
+          "max": 0.8633999319043325
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 331,
+        "east_wall_near_horizontal_normal_constraints": 138
+      },
+      {
+        "stamp_ns": 117000000000,
+        "actual_constraints": 4036,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 685,
+        "east_wall_normal_error_degrees": {
+          "count": 685,
+          "min": 0.2603952942794133,
+          "p50": 5.446361916032971,
+          "p95": 82.81688081507538,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 138,
+        "east_wall_historical_mid_over_max": {
+          "count": 685,
+          "min": 0.002345382632105416,
+          "p50": 0.20395193483957758,
+          "p95": 0.6097598442627744,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 304,
+        "east_wall_near_horizontal_normal_constraints": 150
+      },
+      {
+        "stamp_ns": 118000000000,
+        "actual_constraints": 4043,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 646,
+        "east_wall_normal_error_degrees": {
+          "count": 646,
+          "min": 0.4670307280456987,
+          "p50": 4.676145236588888,
+          "p95": 81.96421212149497,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 114,
+        "east_wall_historical_mid_over_max": {
+          "count": 646,
+          "min": 0.0030400558807490265,
+          "p50": 0.14125263049465683,
+          "p95": 0.6383044961689237,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 288,
+        "east_wall_near_horizontal_normal_constraints": 140
+      },
+      {
+        "stamp_ns": 119000000000,
+        "actual_constraints": 3950,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 683,
+        "east_wall_normal_error_degrees": {
+          "count": 683,
+          "min": 0.4670307280456987,
+          "p50": 4.676145236588888,
+          "p95": 82.81688081507538,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 133,
+        "east_wall_historical_mid_over_max": {
+          "count": 683,
+          "min": 0.002345382632105416,
+          "p50": 0.20395193483957758,
+          "p95": 0.7365477609547533,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 293,
+        "east_wall_near_horizontal_normal_constraints": 141
+      },
+      {
+        "stamp_ns": 120000000000,
+        "actual_constraints": 3935,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 692,
+        "east_wall_normal_error_degrees": {
+          "count": 692,
+          "min": 0.4376185001430944,
+          "p50": 4.676145236588888,
+          "p95": 83.92596475508711,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 141,
+        "east_wall_historical_mid_over_max": {
+          "count": 692,
+          "min": 0.0030400558807490265,
+          "p50": 0.21413079920292433,
+          "p95": 0.6697355336403409,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 305,
+        "east_wall_near_horizontal_normal_constraints": 151
+      },
+      {
+        "stamp_ns": 121000000000,
+        "actual_constraints": 3899,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 693,
+        "east_wall_normal_error_degrees": {
+          "count": 693,
+          "min": 0.4670307280456987,
+          "p50": 5.022652550132305,
+          "p95": 84.25087718504967,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 151,
+        "east_wall_historical_mid_over_max": {
+          "count": 693,
+          "min": 0.002345382632105416,
+          "p50": 0.31246908381869126,
+          "p95": 0.6350814778200171,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 278,
+        "east_wall_near_horizontal_normal_constraints": 146
+      },
+      {
+        "stamp_ns": 122000000000,
+        "actual_constraints": 3886,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 699,
+        "east_wall_normal_error_degrees": {
+          "count": 699,
+          "min": 0.4670307280456987,
+          "p50": 4.676145236588888,
+          "p95": 84.7276521997058,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 160,
+        "east_wall_historical_mid_over_max": {
+          "count": 699,
+          "min": 0.0030400558807490265,
+          "p50": 0.26750823476219376,
+          "p95": 0.7365477609547533,
+          "max": 0.8124427035823032
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 298,
+        "east_wall_near_horizontal_normal_constraints": 164
+      },
+      {
+        "stamp_ns": 123000000000,
+        "actual_constraints": 3981,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 744,
+        "east_wall_normal_error_degrees": {
+          "count": 744,
+          "min": 0.5396155659620021,
+          "p50": 4.1113960816978645,
+          "p95": 84.7276521997058,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 171,
+        "east_wall_historical_mid_over_max": {
+          "count": 744,
+          "min": 0.002345382632105416,
+          "p50": 0.30722765544711717,
+          "p95": 0.6097598442627744,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 321,
+        "east_wall_near_horizontal_normal_constraints": 188
+      },
+      {
+        "stamp_ns": 124000000000,
+        "actual_constraints": 3876,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 783,
+        "east_wall_normal_error_degrees": {
+          "count": 783,
+          "min": 0.5396155659620021,
+          "p50": 4.1113960816978645,
+          "p95": 85.8205242330813,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 173,
+        "east_wall_historical_mid_over_max": {
+          "count": 783,
+          "min": 0.002345382632105416,
+          "p50": 0.31246908381869126,
+          "p95": 0.7292448311675231,
+          "max": 0.8147793876475067
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 347,
+        "east_wall_near_horizontal_normal_constraints": 201
+      },
+      {
+        "stamp_ns": 125000000000,
+        "actual_constraints": 3883,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 756,
+        "east_wall_normal_error_degrees": {
+          "count": 756,
+          "min": 0.4376185001430944,
+          "p50": 4.110664777345279,
+          "p95": 85.8205242330813,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 185,
+        "east_wall_historical_mid_over_max": {
+          "count": 756,
+          "min": 0.0030400558807490265,
+          "p50": 0.31246908381869126,
+          "p95": 0.6097598442627744,
+          "max": 0.8124427035823032
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 325,
+        "east_wall_near_horizontal_normal_constraints": 194
+      },
+      {
+        "stamp_ns": 126000000000,
+        "actual_constraints": 3817,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 755,
+        "east_wall_normal_error_degrees": {
+          "count": 755,
+          "min": 0.2603952942794133,
+          "p50": 4.1113960816978645,
+          "p95": 85.20473481755306,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 188,
+        "east_wall_historical_mid_over_max": {
+          "count": 755,
+          "min": 0.0029373691159436813,
+          "p50": 0.14125263049465683,
+          "p95": 0.6097598442627744,
+          "max": 0.8124427035823032
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 355,
+        "east_wall_near_horizontal_normal_constraints": 214
+      },
+      {
+        "stamp_ns": 127000000000,
+        "actual_constraints": 3812,
+        "native_body_pose_nearest_gap_s": 1.4210854715202004e-14,
+        "east_wall_constraints": 781,
+        "east_wall_normal_error_degrees": {
+          "count": 781,
+          "min": 0.2603952942794133,
+          "p50": 4.439152118756325,
+          "p95": 85.8205242330813,
+          "max": 89.58344791299051
+        },
+        "east_wall_normal_error_over60deg_constraints": 210,
+        "east_wall_historical_mid_over_max": {
+          "count": 781,
+          "min": 0.0030400558807490265,
+          "p50": 0.14125263049465683,
+          "p95": 0.5566642018637535,
+          "max": 0.8124427035823032
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 359,
+        "east_wall_near_horizontal_normal_constraints": 219
+      },
+      {
+        "stamp_ns": 128000000000,
+        "actual_constraints": 3848,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 939,
+        "east_wall_normal_error_degrees": {
+          "count": 939,
+          "min": 0.2603952942794133,
+          "p50": 4.37495722257975,
+          "p95": 85.8205242330813,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 233,
+        "east_wall_historical_mid_over_max": {
+          "count": 939,
+          "min": 0.0030400558807490265,
+          "p50": 0.24709074081234408,
+          "p95": 0.5566642018637535,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 411,
+        "east_wall_near_horizontal_normal_constraints": 246
+      },
+      {
+        "stamp_ns": 129000000000,
+        "actual_constraints": 3740,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 807,
+        "east_wall_normal_error_degrees": {
+          "count": 807,
+          "min": 0.2603952942794133,
+          "p50": 4.1113960816978645,
+          "p95": 88.20028109431293,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 209,
+        "east_wall_historical_mid_over_max": {
+          "count": 807,
+          "min": 0.0030400558807490265,
+          "p50": 0.24709074081234408,
+          "p95": 0.5571335278025757,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 331,
+        "east_wall_near_horizontal_normal_constraints": 207
+      },
+      {
+        "stamp_ns": 130000000000,
+        "actual_constraints": 3832,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 920,
+        "east_wall_normal_error_degrees": {
+          "count": 920,
+          "min": 0.2603952942794133,
+          "p50": 4.439152118756325,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 235,
+        "east_wall_historical_mid_over_max": {
+          "count": 920,
+          "min": 0.0030400558807490265,
+          "p50": 0.2009210195267306,
+          "p95": 0.5723367493805606,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 396,
+        "east_wall_near_horizontal_normal_constraints": 239
+      },
+      {
+        "stamp_ns": 131000000000,
+        "actual_constraints": 3612,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 821,
+        "east_wall_normal_error_degrees": {
+          "count": 821,
+          "min": 0.2603952942794133,
+          "p50": 4.620962636269845,
+          "p95": 85.8205242330813,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 218,
+        "east_wall_historical_mid_over_max": {
+          "count": 821,
+          "min": 0.0030400558807490265,
+          "p50": 0.18117085759350457,
+          "p95": 0.6032459147405834,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 366,
+        "east_wall_near_horizontal_normal_constraints": 228
+      },
+      {
+        "stamp_ns": 132000000000,
+        "actual_constraints": 3369,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 847,
+        "east_wall_normal_error_degrees": {
+          "count": 847,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.508171313187,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 220,
+        "east_wall_historical_mid_over_max": {
+          "count": 847,
+          "min": 0.0030400558807490265,
+          "p50": 0.18210953378527267,
+          "p95": 0.6097598442627744,
+          "max": 0.8358675189710876
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 354,
+        "east_wall_near_horizontal_normal_constraints": 227
+      },
+      {
+        "stamp_ns": 133000000000,
+        "actual_constraints": 3493,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 769,
+        "east_wall_normal_error_degrees": {
+          "count": 769,
+          "min": 0.4376185001430944,
+          "p50": 5.022652550132305,
+          "p95": 87.67686820196501,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 256,
+        "east_wall_historical_mid_over_max": {
+          "count": 769,
+          "min": 0.003144567210890847,
+          "p50": 0.08491561634165347,
+          "p95": 0.6032459147405834,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 378,
+        "east_wall_near_horizontal_normal_constraints": 267
+      },
+      {
+        "stamp_ns": 134000000000,
+        "actual_constraints": 3402,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 741,
+        "east_wall_normal_error_degrees": {
+          "count": 741,
+          "min": 0.6838872907024257,
+          "p50": 4.110664777345279,
+          "p95": 87.55291274392332,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 201,
+        "east_wall_historical_mid_over_max": {
+          "count": 741,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.5723367493805606,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 343,
+        "east_wall_near_horizontal_normal_constraints": 212
+      },
+      {
+        "stamp_ns": 135000000000,
+        "actual_constraints": 3375,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 693,
+        "east_wall_normal_error_degrees": {
+          "count": 693,
+          "min": 0.6211408432581665,
+          "p50": 4.110664777345279,
+          "p95": 87.55291274392332,
+          "max": 89.58344791299051
+        },
+        "east_wall_normal_error_over60deg_constraints": 186,
+        "east_wall_historical_mid_over_max": {
+          "count": 693,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6129503509473689,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 329,
+        "east_wall_near_horizontal_normal_constraints": 196
+      },
+      {
+        "stamp_ns": 136000000000,
+        "actual_constraints": 3403,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 693,
+        "east_wall_normal_error_degrees": {
+          "count": 693,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.508171313187,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 173,
+        "east_wall_historical_mid_over_max": {
+          "count": 693,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.5927997967178016,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 333,
+        "east_wall_near_horizontal_normal_constraints": 196
+      },
+      {
+        "stamp_ns": 137000000000,
+        "actual_constraints": 3415,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 690,
+        "east_wall_normal_error_degrees": {
+          "count": 690,
+          "min": 0.4376185001430944,
+          "p50": 4.676145236588888,
+          "p95": 87.55291274392332,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 179,
+        "east_wall_historical_mid_over_max": {
+          "count": 690,
+          "min": 0.0030400558807490265,
+          "p50": 0.0700704536011196,
+          "p95": 0.6032459147405834,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 336,
+        "east_wall_near_horizontal_normal_constraints": 199
+      },
+      {
+        "stamp_ns": 138000000000,
+        "actual_constraints": 3385,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 685,
+        "east_wall_normal_error_degrees": {
+          "count": 685,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 195,
+        "east_wall_historical_mid_over_max": {
+          "count": 685,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.6032459147405834,
+          "max": 0.8147793876475067
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 329,
+        "east_wall_near_horizontal_normal_constraints": 206
+      },
+      {
+        "stamp_ns": 139000000000,
+        "actual_constraints": 3399,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 689,
+        "east_wall_normal_error_degrees": {
+          "count": 689,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 190,
+        "east_wall_historical_mid_over_max": {
+          "count": 689,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6097598442627744,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 323,
+        "east_wall_near_horizontal_normal_constraints": 211
+      },
+      {
+        "stamp_ns": 140000000000,
+        "actual_constraints": 3455,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 720,
+        "east_wall_normal_error_degrees": {
+          "count": 720,
+          "min": 0.6211408432581665,
+          "p50": 4.676145236588888,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 199,
+        "east_wall_historical_mid_over_max": {
+          "count": 720,
+          "min": 0.0030400558807490265,
+          "p50": 0.09227557689902914,
+          "p95": 0.6516631844382287,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 339,
+        "east_wall_near_horizontal_normal_constraints": 207
+      },
+      {
+        "stamp_ns": 141000000000,
+        "actual_constraints": 3423,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 698,
+        "east_wall_normal_error_degrees": {
+          "count": 698,
+          "min": 0.6211408432581665,
+          "p50": 5.022652550132305,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 191,
+        "east_wall_historical_mid_over_max": {
+          "count": 698,
+          "min": 0.0030400558807490265,
+          "p50": 0.10977768861732773,
+          "p95": 0.6375687338127485,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 325,
+        "east_wall_near_horizontal_normal_constraints": 200
+      },
+      {
+        "stamp_ns": 142000000000,
+        "actual_constraints": 3443,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 689,
+        "east_wall_normal_error_degrees": {
+          "count": 689,
+          "min": 0.4376185001430944,
+          "p50": 5.022652550132305,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 197,
+        "east_wall_historical_mid_over_max": {
+          "count": 689,
+          "min": 0.0030400558807490265,
+          "p50": 0.08491561634165347,
+          "p95": 0.5990674675314709,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 335,
+        "east_wall_near_horizontal_normal_constraints": 207
+      },
+      {
+        "stamp_ns": 143000000000,
+        "actual_constraints": 3424,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 684,
+        "east_wall_normal_error_degrees": {
+          "count": 684,
+          "min": 0.6838872907024257,
+          "p50": 4.725516022373765,
+          "p95": 87.508171313187,
+          "max": 89.58344791299051
+        },
+        "east_wall_normal_error_over60deg_constraints": 177,
+        "east_wall_historical_mid_over_max": {
+          "count": 684,
+          "min": 0.0030400558807490265,
+          "p50": 0.08491561634165347,
+          "p95": 0.6032459147405834,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 330,
+        "east_wall_near_horizontal_normal_constraints": 191
+      },
+      {
+        "stamp_ns": 144000000000,
+        "actual_constraints": 3394,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 674,
+        "east_wall_normal_error_degrees": {
+          "count": 674,
+          "min": 0.6838872907024257,
+          "p50": 5.022652550132305,
+          "p95": 87.55291274392332,
+          "max": 89.58344791299051
+        },
+        "east_wall_normal_error_over60deg_constraints": 187,
+        "east_wall_historical_mid_over_max": {
+          "count": 674,
+          "min": 0.0030400558807490265,
+          "p50": 0.04824100464539364,
+          "p95": 0.5831549572565693,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 342,
+        "east_wall_near_horizontal_normal_constraints": 211
+      },
+      {
+        "stamp_ns": 145000000000,
+        "actual_constraints": 3432,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 704,
+        "east_wall_normal_error_degrees": {
+          "count": 704,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.54620152931287,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 179,
+        "east_wall_historical_mid_over_max": {
+          "count": 704,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6097598442627744,
+          "max": 0.7907345305038121
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 334,
+        "east_wall_near_horizontal_normal_constraints": 206
+      },
+      {
+        "stamp_ns": 146000000000,
+        "actual_constraints": 3411,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 690,
+        "east_wall_normal_error_degrees": {
+          "count": 690,
+          "min": 0.6838872907024257,
+          "p50": 4.725516022373765,
+          "p95": 87.55291274392332,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 205,
+        "east_wall_historical_mid_over_max": {
+          "count": 690,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.5985451616303311,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 332,
+        "east_wall_near_horizontal_normal_constraints": 218
+      },
+      {
+        "stamp_ns": 147000000000,
+        "actual_constraints": 3403,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 675,
+        "east_wall_normal_error_degrees": {
+          "count": 675,
+          "min": 0.6838872907024257,
+          "p50": 4.676145236588888,
+          "p95": 87.55291274392332,
+          "max": 89.56898010362879
+        },
+        "east_wall_normal_error_over60deg_constraints": 196,
+        "east_wall_historical_mid_over_max": {
+          "count": 675,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.6097598442627744,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 324,
+        "east_wall_near_horizontal_normal_constraints": 213
+      },
+      {
+        "stamp_ns": 148000000000,
+        "actual_constraints": 3417,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 703,
+        "east_wall_normal_error_degrees": {
+          "count": 703,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 199,
+        "east_wall_historical_mid_over_max": {
+          "count": 703,
+          "min": 0.0030400558807490265,
+          "p50": 0.12123072651242008,
+          "p95": 0.6097598442627744,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 317,
+        "east_wall_near_horizontal_normal_constraints": 201
+      },
+      {
+        "stamp_ns": 149000000000,
+        "actual_constraints": 3449,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 707,
+        "east_wall_normal_error_degrees": {
+          "count": 707,
+          "min": 0.6211408432581665,
+          "p50": 4.725516022373765,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 212,
+        "east_wall_historical_mid_over_max": {
+          "count": 707,
+          "min": 0.0030400558807490265,
+          "p50": 0.12971007708071394,
+          "p95": 0.6097598442627744,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 320,
+        "east_wall_near_horizontal_normal_constraints": 206
+      },
+      {
+        "stamp_ns": 150000000000,
+        "actual_constraints": 3425,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 680,
+        "east_wall_normal_error_degrees": {
+          "count": 680,
+          "min": 0.4376185001430944,
+          "p50": 4.1113960816978645,
+          "p95": 87.55291274392332,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 189,
+        "east_wall_historical_mid_over_max": {
+          "count": 680,
+          "min": 0.0030400558807490265,
+          "p50": 0.12123072651242008,
+          "p95": 0.6097598442627744,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 309,
+        "east_wall_near_horizontal_normal_constraints": 202
+      },
+      {
+        "stamp_ns": 151000000000,
+        "actual_constraints": 3399,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 669,
+        "east_wall_normal_error_degrees": {
+          "count": 669,
+          "min": 0.4376185001430944,
+          "p50": 4.676145236588888,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 188,
+        "east_wall_historical_mid_over_max": {
+          "count": 669,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6338512411996541,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 315,
+        "east_wall_near_horizontal_normal_constraints": 202
+      },
+      {
+        "stamp_ns": 152000000000,
+        "actual_constraints": 3420,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 691,
+        "east_wall_normal_error_degrees": {
+          "count": 691,
+          "min": 0.6211408432581665,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 186,
+        "east_wall_historical_mid_over_max": {
+          "count": 691,
+          "min": 0.0030400558807490265,
+          "p50": 0.12123072651242008,
+          "p95": 0.644594661349915,
+          "max": 0.8439038879066554
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 314,
+        "east_wall_near_horizontal_normal_constraints": 194
+      },
+      {
+        "stamp_ns": 153000000000,
+        "actual_constraints": 3443,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 697,
+        "east_wall_normal_error_degrees": {
+          "count": 697,
+          "min": 0.6211408432581665,
+          "p50": 4.110664777345279,
+          "p95": 87.55291274392332,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 189,
+        "east_wall_historical_mid_over_max": {
+          "count": 697,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6516631844382287,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 322,
+        "east_wall_near_horizontal_normal_constraints": 199
+      },
+      {
+        "stamp_ns": 154000000000,
+        "actual_constraints": 3441,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 679,
+        "east_wall_normal_error_degrees": {
+          "count": 679,
+          "min": 0.4376185001430944,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 184,
+        "east_wall_historical_mid_over_max": {
+          "count": 679,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6453015136587466,
+          "max": 0.8219758977556009
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 317,
+        "east_wall_near_horizontal_normal_constraints": 199
+      },
+      {
+        "stamp_ns": 155000000000,
+        "actual_constraints": 3454,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 713,
+        "east_wall_normal_error_degrees": {
+          "count": 713,
+          "min": 0.4376185001430944,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 207,
+        "east_wall_historical_mid_over_max": {
+          "count": 713,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6516631844382287,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 337,
+        "east_wall_near_horizontal_normal_constraints": 208
+      },
+      {
+        "stamp_ns": 156000000000,
+        "actual_constraints": 3476,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 724,
+        "east_wall_normal_error_degrees": {
+          "count": 724,
+          "min": 0.6211408432581665,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 201,
+        "east_wall_historical_mid_over_max": {
+          "count": 724,
+          "min": 0.0030400558807490265,
+          "p50": 0.10977768861732773,
+          "p95": 0.6312832327864313,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 334,
+        "east_wall_near_horizontal_normal_constraints": 203
+      },
+      {
+        "stamp_ns": 157000000000,
+        "actual_constraints": 3462,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 704,
+        "east_wall_normal_error_degrees": {
+          "count": 704,
+          "min": 0.6838872907024257,
+          "p50": 4.1113960816978645,
+          "p95": 87.55291274392332,
+          "max": 89.58344791299051
+        },
+        "east_wall_normal_error_over60deg_constraints": 184,
+        "east_wall_historical_mid_over_max": {
+          "count": 704,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6350814778200171,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 334,
+        "east_wall_near_horizontal_normal_constraints": 193
+      },
+      {
+        "stamp_ns": 158000000000,
+        "actual_constraints": 3450,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 703,
+        "east_wall_normal_error_degrees": {
+          "count": 703,
+          "min": 0.4376185001430944,
+          "p50": 4.676145236588888,
+          "p95": 87.55291274392332,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 196,
+        "east_wall_historical_mid_over_max": {
+          "count": 703,
+          "min": 0.0030400558807490265,
+          "p50": 0.08491561634165347,
+          "p95": 0.6097598442627744,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 343,
+        "east_wall_near_horizontal_normal_constraints": 210
+      },
+      {
+        "stamp_ns": 159000000000,
+        "actual_constraints": 3470,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 716,
+        "east_wall_normal_error_degrees": {
+          "count": 716,
+          "min": 0.4376185001430944,
+          "p50": 4.439152118756325,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 189,
+        "east_wall_historical_mid_over_max": {
+          "count": 716,
+          "min": 0.0030400558807490265,
+          "p50": 0.09227557689902914,
+          "p95": 0.6097598442627744,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 345,
+        "east_wall_near_horizontal_normal_constraints": 207
+      },
+      {
+        "stamp_ns": 160000000000,
+        "actual_constraints": 3487,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 723,
+        "east_wall_normal_error_degrees": {
+          "count": 723,
+          "min": 0.6838872907024257,
+          "p50": 4.439152118756325,
+          "p95": 87.508171313187,
+          "max": 89.68020247129834
+        },
+        "east_wall_normal_error_over60deg_constraints": 180,
+        "east_wall_historical_mid_over_max": {
+          "count": 723,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6097598442627744,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 342,
+        "east_wall_near_horizontal_normal_constraints": 199
+      },
+      {
+        "stamp_ns": 161000000000,
+        "actual_constraints": 3465,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 721,
+        "east_wall_normal_error_degrees": {
+          "count": 721,
+          "min": 0.6838872907024257,
+          "p50": 4.725516022373765,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 190,
+        "east_wall_historical_mid_over_max": {
+          "count": 721,
+          "min": 0.0030400558807490265,
+          "p50": 0.0700704536011196,
+          "p95": 0.6097598442627744,
+          "max": 0.8938218189105027
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 354,
+        "east_wall_near_horizontal_normal_constraints": 205
+      },
+      {
+        "stamp_ns": 162000000000,
+        "actual_constraints": 3493,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 705,
+        "east_wall_normal_error_degrees": {
+          "count": 705,
+          "min": 0.6838872907024257,
+          "p50": 4.676145236588888,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 177,
+        "east_wall_historical_mid_over_max": {
+          "count": 705,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.6097598442627744,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 336,
+        "east_wall_near_horizontal_normal_constraints": 189
+      },
+      {
+        "stamp_ns": 163000000000,
+        "actual_constraints": 3488,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 711,
+        "east_wall_normal_error_degrees": {
+          "count": 711,
+          "min": 0.6211408432581665,
+          "p50": 4.439152118756325,
+          "p95": 87.67686820196501,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 196,
+        "east_wall_historical_mid_over_max": {
+          "count": 711,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.6032459147405834,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 335,
+        "east_wall_near_horizontal_normal_constraints": 191
+      },
+      {
+        "stamp_ns": 164000000000,
+        "actual_constraints": 3455,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 701,
+        "east_wall_normal_error_degrees": {
+          "count": 701,
+          "min": 0.6838872907024257,
+          "p50": 5.022652550132305,
+          "p95": 88.06352350171852,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 207,
+        "east_wall_historical_mid_over_max": {
+          "count": 701,
+          "min": 0.0030400558807490265,
+          "p50": 0.09832465072223538,
+          "p95": 0.5927997967178016,
+          "max": 0.7365477609547533
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 332,
+        "east_wall_near_horizontal_normal_constraints": 207
+      },
+      {
+        "stamp_ns": 165000000000,
+        "actual_constraints": 3498,
+        "native_body_pose_nearest_gap_s": 0.0,
+        "east_wall_constraints": 709,
+        "east_wall_normal_error_degrees": {
+          "count": 709,
+          "min": 0.4376185001430944,
+          "p50": 4.725516022373765,
+          "p95": 87.55291274392332,
+          "max": 89.86824291474541
+        },
+        "east_wall_normal_error_over60deg_constraints": 199,
+        "east_wall_historical_mid_over_max": {
+          "count": 709,
+          "min": 0.0030400558807490265,
+          "p50": 0.0862265030758229,
+          "p95": 0.6032459147405834,
+          "max": 0.7602645914707504
+        },
+        "east_wall_weak2D_mid_over_max_under005_constraints": 337,
+        "east_wall_near_horizontal_normal_constraints": 209
+      }
+    ],
+    "geometry_sampling": "first iteration, first actual frame in each integer sim second within original115\u2013165s detail window; no cross-run plane ID matching",
+    "sampled_115_165s_plane_event_spectrum": {
+      "event_rows": 366,
+      "mid_over_max": {
+        "count": 366,
+        "min": 0.0006433272618068847,
+        "p50": 0.4458686289661606,
+        "p95": 0.8540774323536401,
+        "max": 0.9782120549023453
+      },
+      "near_horizontal_normal_fraction": 0.7622950819672131,
+      "meaning": "first event record in each integer second of115\u2013165s; event rows may revisit same plane, descriptive not unique plane count. Initial0\u201310s map events are not logged by unchanged V7 logger; historical spectra appear in actual accepted constraint rows."
+    },
+    "writer_stats": {
+      "schema": "fastlivo_diagnostics/v1",
+      "final": true,
+      "attempted": 159757,
+      "written": 159757,
+      "dropped": 0,
+      "maximum_queue_records": 39,
+      "file_bytes": 6912621864,
+      "detail_begin_s": 115,
+      "detail_end_s": 165,
+      "writer_io_failed": false
+    }
+  },
+  "source_hashes": {
+    "sensor_contract.json": "1d96b513ac76b434c6a8e6bb95d0151d304c62871d6b1ba94a7942d07246c502",
+    "world.sdf": "8e3460cff297a261cbedc7f860b842b810911f2a02a2ed23878f21ed13dbfd4b",
+    "navigation_profile.json": "de8e410fc05a50742a76e8375cc7c15a24d2e8e3bdc90f9a79e6143cb47c0938",
+    "navigation_fastlivo.yaml": "10258fa98e46c2ccd622a8791ec41e5e6fe8a31eb6eea2287c6336e2745791ee",
+    "policy_manifest.json": "611fcac605cfada469a21f5b394c7b2da28a277b15c557845ea6b0248d2b22bd",
+    "navigation_source_snapshots.json": "c0706ecbe957284dbbbb0e7970dcf426998220978f2472b040f3ec2b0bb52703",
+    "navigation_scene_axis_registration.json": "82e7eebab88dde8bb9f435bb93b85a8fe3cb8e5866ba86022f4d7c7f584b04b4"
+  },
+  "acceptance": "Descriptive independent comparison only. Common/ramp frozen evaluators retain all original thresholds; finite prefix without full32-region completion cannot pass navigation."
+}

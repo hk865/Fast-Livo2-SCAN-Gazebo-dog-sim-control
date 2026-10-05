@@ -1,0 +1,788 @@
+{
+  "schema": "teacher_closed_loop_navigation_scope/v1",
+  "allowed": true,
+  "status": "experimental_unverified",
+  "navigation_is_verified": false,
+  "navigation_ground_truth_used": false,
+  "controller_kind": "teacher",
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+  "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca",
+  "profile": {
+    "schema_version": 1,
+    "experiment": "teacher_actual_SLAM_SCAN_lidar_sampling_l64_r10_c10_v8",
+    "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+    "distance_m": 13.6,
+    "max_speed_mps": 0.2,
+    "max_yaw_rate_radps": 0.6,
+    "arrival_radius_m": 0.22,
+    "arrival_height_half_span_m": 0.1,
+    "arrival_control_radius_m": 0.17,
+    "dwell_sim_s": 0.6,
+    "goal_timeout_sim_s": 90.0,
+    "pose_cloud_timeout_s": 0.3,
+    "sensor_warmup_sim_s": 2.0,
+    "interface_version": "navigation_v4_latest_clock_measured_transition",
+    "warmup_history": {
+      "imu": {
+        "min_samples": 600,
+        "min_span_sim_s": 2.9
+      },
+      "body_odom": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "cloud": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "raw_lidar": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "image": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "camera_info": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      }
+    },
+    "request_startup_timeout_sim_s": 90.0,
+    "request_startup_timeout_wall_s": 600.0,
+    "teacher_transition": {
+      "stop_window_sim_s": 0.3,
+      "stop_min_pose_samples": 3,
+      "stop_pose_gap_max_s": 0.2,
+      "gyro_pose_pair_max_s": 0.15,
+      "stop_planar_speed_mps": 0.03,
+      "stop_slam_yaw_rate_radps": 0.05,
+      "stop_body_gyro_radps": 0.05,
+      "turn_complete_rad": 0.1,
+      "drive_heading_max_rad": 0.2
+    },
+    "recovery_fresh_pose_samples": 2,
+    "recovery_min_pose_span_sim_s": 0.1,
+    "fence": {
+      "along_min_m": -0.45,
+      "along_max_m": 14.049999999999999,
+      "lateral_abs_m": 0.45,
+      "height_abs_m": 1.4
+    },
+    "navigation_ground_truth_used": false,
+    "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+    "excluded": [
+      "real_robot",
+      "true_stairs",
+      "full_46_region_mission",
+      "unbounded_dynamic_mission"
+    ],
+    "max_lateral_speed_mps": 0.2,
+    "arrival_stop_policy": "after_measured_dwell",
+    "clear_guard_gap_max_sim_s": 0.3,
+    "pid": {
+      "position_kp": 0.6,
+      "position_ki": 0.08,
+      "position_kd": 0.12,
+      "yaw_kp": 1.1,
+      "yaw_ki": 0.04,
+      "yaw_kd": 0.15,
+      "position_integral_limit": 0.4,
+      "yaw_integral_limit": 0.3,
+      "derivative_filter_tau_s": 0.2,
+      "header_gap_max_s": 0.3,
+      "slew_acceleration": [
+        0.3,
+        0.3,
+        0.25
+      ],
+      "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+      "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+    },
+    "selector": "multifloor12_23_segmented_turn06",
+    "route_height_delta_m": 2.4,
+    "return_to_origin": false,
+    "expected_asset": {
+      "terrain": "ramp_up",
+      "spawn": [
+        1.2,
+        2,
+        0.4,
+        0
+      ]
+    },
+    "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ],
+    "duration_s": 210,
+    "overview_pose": [
+      8,
+      -1,
+      2.5,
+      0,
+      0.45,
+      1.5707963267948966
+    ],
+    "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+    "controller_kind": "teacher",
+    "protocol_case_id": "ramp12_up_full",
+    "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+    "controller_selector": "lidar_sampling_v8",
+    "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v8",
+    "cascade": {
+      "desired_speed": 0.2,
+      "command_limits": [
+        0.6,
+        0.2,
+        0.6
+      ],
+      "external_heading_gate": true,
+      "base_com_offset": [
+        0.05523092034548942,
+        -0.001869001919385796,
+        0.006095299184261034
+      ],
+      "maximum_gyro_pair_gap_s": 0.02,
+      "goal_z_tolerance_m": 0.1,
+      "gains": {
+        "cross_kp": 0.8,
+        "cross_kd": 0.2,
+        "yaw_kp": 1.3,
+        "yaw_kd": 0.15,
+        "velocity_kp_x": 0.6,
+        "velocity_ki_x": 0.5,
+        "velocity_kp_y": 0.4,
+        "velocity_ki_y": 0.3,
+        "rate_kp": 0.3,
+        "rate_ki": 0.2
+      },
+      "command_slew_per_s": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "feedback_expected_hz": 10,
+      "feedback_ttl_sim_and_wall_s": 0.3,
+      "navigation_ground_truth_used": false,
+      "controller_source_file": "cascade_command_source.json",
+      "actual_navigation_verified": false
+    },
+    "pid_parent_profile": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+      "unchanged_fields": [
+        "warmup_history",
+        "teacher_transition",
+        "pose_cloud_timeout_s",
+        "pid",
+        "expected_asset",
+        "spawn",
+        "route_height_delta_m",
+        "terrain_target_manifest",
+        "arrival_radius_m",
+        "arrival_height_half_span_m",
+        "arrival_control_radius_m",
+        "dwell_sim_s"
+      ],
+      "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+    },
+    "registered_route_fence": {
+      "horizontal_radius_m": 0.45,
+      "height_error_m": 0.3,
+      "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+    },
+    "scene_initial_support_z": 0.0,
+    "scene_xy_anchor_uncertainty_m": 0.15,
+    "prospective_change": "LiDAR sampling64x480 at10Hz, vehicle camera10Hz; independent source-rate metadata/initial stationary pair capacity adapted; estimator geometry/weights/control laws and all gates unchanged; CPU Teacher",
+    "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+    "route_world_points": [
+      {
+        "goal_id": "lower_x02",
+        "xyz": [
+          2,
+          2,
+          0.0
+        ]
+      },
+      {
+        "goal_id": "lower_x03",
+        "xyz": [
+          3,
+          2,
+          0.1
+        ]
+      },
+      {
+        "goal_id": "lower_x04",
+        "xyz": [
+          4,
+          2,
+          0.2
+        ]
+      },
+      {
+        "goal_id": "lower_x05",
+        "xyz": [
+          5,
+          2,
+          0.30000000000000004
+        ]
+      },
+      {
+        "goal_id": "lower_x06",
+        "xyz": [
+          6,
+          2,
+          0.4
+        ]
+      },
+      {
+        "goal_id": "lower_x07",
+        "xyz": [
+          7,
+          2,
+          0.5
+        ]
+      },
+      {
+        "goal_id": "lower_x08",
+        "xyz": [
+          8,
+          2,
+          0.6000000000000001
+        ]
+      },
+      {
+        "goal_id": "lower_x09",
+        "xyz": [
+          9,
+          2,
+          0.7000000000000001
+        ]
+      },
+      {
+        "goal_id": "lower_x10",
+        "xyz": [
+          10,
+          2,
+          0.8
+        ]
+      },
+      {
+        "goal_id": "lower_x11",
+        "xyz": [
+          11,
+          2,
+          0.9
+        ]
+      },
+      {
+        "goal_id": "lower_x12",
+        "xyz": [
+          12,
+          2,
+          1.0
+        ]
+      },
+      {
+        "goal_id": "lower_x13",
+        "xyz": [
+          13,
+          2,
+          1.1
+        ]
+      },
+      {
+        "goal_id": "lower_x14",
+        "xyz": [
+          14,
+          2,
+          1.2000000000000002
+        ]
+      },
+      {
+        "goal_id": "lower_exit",
+        "xyz": [
+          14.8,
+          2,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_x",
+        "xyz": [
+          16,
+          2,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_mid",
+        "xyz": [
+          16,
+          4.5,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_y",
+        "xyz": [
+          16,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_entry",
+        "xyz": [
+          14.8,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_x14",
+        "xyz": [
+          14,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_x13",
+        "xyz": [
+          13,
+          7,
+          1.3
+        ]
+      },
+      {
+        "goal_id": "upper_x12",
+        "xyz": [
+          12,
+          7,
+          1.4
+        ]
+      },
+      {
+        "goal_id": "upper_x11",
+        "xyz": [
+          11,
+          7,
+          1.5
+        ]
+      },
+      {
+        "goal_id": "upper_x10",
+        "xyz": [
+          10,
+          7,
+          1.6
+        ]
+      },
+      {
+        "goal_id": "upper_x09",
+        "xyz": [
+          9,
+          7,
+          1.7
+        ]
+      },
+      {
+        "goal_id": "upper_x08",
+        "xyz": [
+          8,
+          7,
+          1.8
+        ]
+      },
+      {
+        "goal_id": "upper_x07",
+        "xyz": [
+          7,
+          7,
+          1.9
+        ]
+      },
+      {
+        "goal_id": "upper_x06",
+        "xyz": [
+          6,
+          7,
+          2.0
+        ]
+      },
+      {
+        "goal_id": "upper_x05",
+        "xyz": [
+          5,
+          7,
+          2.1
+        ]
+      },
+      {
+        "goal_id": "upper_x04",
+        "xyz": [
+          4,
+          7,
+          2.2
+        ]
+      },
+      {
+        "goal_id": "upper_x03",
+        "xyz": [
+          3,
+          7,
+          2.3
+        ]
+      },
+      {
+        "goal_id": "upper_x02",
+        "xyz": [
+          2,
+          7,
+          2.4000000000000004
+        ]
+      },
+      {
+        "goal_id": "floor3_stop",
+        "xyz": [
+          1.2,
+          7,
+          2.4
+        ]
+      }
+    ],
+    "ramp_segments": [
+      {
+        "model": "ramp_12",
+        "direction": "up",
+        "destination_goal_index": 13
+      },
+      {
+        "model": "ramp_23",
+        "direction": "up",
+        "destination_goal_index": 31
+      }
+    ],
+    "terrain_layer_switch": {
+      "initial_manifest": "tests/terrain_targets/lower12.json",
+      "alternate_manifest": "tests/terrain_targets/upper23.json",
+      "completed_goal_id": "connector_mid",
+      "alternate_include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+      "ray_equality_tolerance_m": 1e-09
+    },
+    "slam_imu_online_estimation": {
+      "gravity_est_en": true,
+      "ba_bg_est_en": true
+    },
+    "slam_visual_measurement_covariance": 1000,
+    "diagnostic_scope": {
+      "baseline_version": "closed_loop_multifloor_v7",
+      "route_controller_gates_unchanged": true,
+      "finite_horizon_s": 210,
+      "detail_window_sim_s": [
+        115,
+        165
+      ],
+      "navigation_outcome_is_not_full_route_pass": true,
+      "purpose": "sensor density/rate actual trial, no plane algorithm correction"
+    },
+    "sensor_sampling": {
+      "vertical_lines": 64,
+      "horizontal_samples": 480,
+      "lidar_hz": 10,
+      "camera_hz": 10,
+      "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+      "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+      "control_wall_tick_s": 0.05
+    }
+  },
+  "references": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/bridge.py": "01c15c630c6df4fb0779c879b7b3cb799ad16f8629564756e06f5d3719948d94",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/cascade_core.py": "dccb1c8fc8ceeae1dc1aaabda8c39ada9a3fdb171e823a1ae09cc272e9461cc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/controller.py": "13f5cdc21a66ad6e5fac0c17e41e52cc8148ad62b9ba6bda5451435bdcf0b251",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/pid_scope.py": "69d331407dc5f88c9939e3b66be830e7d94cd7dfd47da68d0331ca6d4feaf3af",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/request.py": "d837670da14368386fa4e74159b7314b3575d96d0b96f0c63d2221e4cd50d629",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/route.py": "79d9e80d427ecb513f9015dd7d3ef94e098d18087ef3b5bf64a60e495f827265",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/route_fence.py": "0cee6450f504cd9242651fbdcd55d76425da278f2764c0933f65e95e2a5ef49e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/route_leg_heading.py": "61e89808f31e205e117f4b7060754e1dd0f7c605134a5f2785c0fe24ee3203cc",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/run.py": "22398fbf9e0b5d8a7b747a17b792be0d35b8a97e1bf9b547135b4e8d620c76b1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/sampling.py": "630a8e50176648d03a062d453e30f97308841fdc209584c4f1c23dd5348a6488",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/scoped_profile.py": "1e01b1dd2175ee6843012d7fb4a56fc4323e9e0cedd6845604d7d97ec9d9327f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/sensor_gate.py": "77500a4ea80fd43f9039ea704de4feea84f1d3f55b8ece8faf96f11c2a54208e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/slam.launch.py": "bce2c0a154a417b198ffb0fa4d56cb66fe100752d491497f214aed59d0c7b0dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/stack.launch.py": "bba5203f1c2d03fd0b38d60141cff6c524771f3e5ac5b5654c62f58811e1a7d4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/terrain_provider.py": "cdb9baa9d326f378703b7a607c31489c48d2e0dd6d5b9c4926119038ad636c5f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/transition_gate.py": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/worker.py": "0e2e1e79d0142d01c54530e40ee236459afda66adcc90f714e48b2e43dffc087",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r10_c10_210.json": "bbc38cd083d4c0b1482671759be70abc260a28b9557ee7852e37a8ef2e901205",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r30_c10_210.json": "1f3d8bd1c3e8a9a3c9fbf2df68dc75ff38be18f5b91084d512f753e741a9e053",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r30_c10_600.json": "1663264700e082214cf67e5106bacfa51b331169056422fe32e75daccde269dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r30_c30_210.json": "1e9e57709e0e8f3acac172903b09cb653c4b75e0a1567986676c799a95c8a8e7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r30_c30_600.json": "58b4fd048e39d8756fff320665e4a630c39e127b51b49199e307604b8e978391",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/caller_diagnostic_schema.json": "3c8dd5b4a60d3e26818a173af3e48783bad0c9865ad12eb679cd69530fb6715e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/lio_diagnostic_schema.json": "13b40541a29d5f0bc7a1e5cc6edc5ea497a01b3d07753ec175016069aada3e33",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/vio_diagnostic_schema.json": "75e48c4dd74dc74565efb251084e5c88db7173431d63a4ea2d82797713d8f073",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/diagnostic_preflight.json": "eea1ef941c0c26abce9aeea08467fe48cf8865e4900320614f25f94022d036f4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/CMakeLists.txt": "e3c70712e3f074f5efebfdefa8999e313534cb63f152a94d6f8f92780d1f08c3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": "b89d3f7e4d9cd38bd10a4f4abdcfdda2644f91f8817d91d4506130576f600319",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": "5111be03a6c10c03c09a61f643f92ba5698b4d6199ce0d0714695d53030b92be",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/common_lib.h": "7b936106168f11c85a7cbf1b647c09457f97d1b9c2f1d97bb7f8898c616a3014",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": "5db7451b2cbbddcbc24b312860b94ac38b1d02d95758a85720292d5c59d704ab",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/feature.h": "27eaea6a52e4d0edc9aa04a770a5f436eb129b4c4fbfc7bf9812c5fd3f644799",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/frame.h": "91a7ff427c0fb1e12220d4e60ac0ea9ed0785c1ae73c8da98c14ebe2f9782fa6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/preprocess.h": "03c8a5f6062eac3bf3461e384f585601c7c40f20eddf7e104c852b078ce7e648",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": "5a18d8a934403b22ccf7db3c98d83af7b061710c8aec53fea6897081fde94703",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": "39a7cda11924068cc463b0eba1ae89da9c923c7ef8668393dfee5adf0730fbb9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/vio.h": "29f02eb7b897b37ae5beba9bc8b39ff21fd3446461d2b7d0929e183241e67930",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/visual_point.h": "c528be4967454ff79f6aac0c5322d62b19ec34c7e8c248b49981d1b3a7f1888d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": "a322f86592cc29ea3203075cb9620f3eda19286f156377cd584a23e73783de39",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": "47ae77c64f4d05f7f471d0c2032f52f985926b2eb1c8c2a71f8e78b08c33157d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": "36b6f7f0a2545dd425779124429a17703b7f73a237f3f59777fcda68175aae78",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/runner.hpp": "452a5aeae6e502b06ead69b74ff47d94cc710d4d2938062cdd4664c2d6443135",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/color.h": "a8dca85646b18e26432f453993cf2da8de8e6b6e3184228b9fb92651c4a8f2ef",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": "fa815b3bc8dc157a2ab8d692b0dd604b369680a7e711fef666f4e12d4ab33c37",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/types.h": "ade63d344d8d4cdec2dd8ec0fd6ea7930cb007c9c41ba83500bc7ea79d874d45",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/utils.h": "53e212cc56c9f7627bc9a58cae906b9fe9bb334184b28a1b6f8a2821e2ebf3e8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/package.xml": "36323cb18443fb39332690f085bba0381e7cae9dcca40e981ca8a611ca321ebe",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": "caadf1b4ac6c5d28032b185ed3f0735da424aed47cd0da35a0dc2c8d79c7b18b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/frame.cpp": "d45bb8ab1edf065089515940d0c7d6ff2c08fe460143778f62f09547e63f489a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/preprocess.cpp": "5c9c30b0f293251bfe7c721b888fbf80e1c087a52630a4355ebe7a1e5dc90d94",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/runner.cpp": "d349c46c4fd8c83c51c03ca10fbe1ff154558c03c92a9e97e08d83823c29ea13",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/utils.cpp": "3e0aeaccaf94d7a5e44af952027ddda88f8e3787580b942af5b2db66ff0705d3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/vio.cpp": "44a14f27f4a322c1c7d2f18e62ffad21c3df9c7ae120a75c47963663d7917e78",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/visual_point.cpp": "d067e2b05445835cbbb4c8a159519bf4a01a271b96d06cc3a32419092b3fcc6e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/voxel_map.cpp": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/CMakeLists.txt": "a5d9fbd9e6f2acfb8087a17235c9f1b11d43ecea641197f348676543db630488",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/package.xml": "2211d1466f2c76b784b367fb6bf6e3256325b72656b6325f8bb721ece274dd96",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/src/main.cpp": "86760a58acf8083d877b13f3006ddb918f7b209b6238203ab6839de95dafca7e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_core/compile_commands.json": "9e15af1768d329a650ce3a8ddcab336bd1a8013519bb3ba31c13fbb818da52c2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_core/CMakeCache.txt": "db3999ab6419ea727892294ccff217577d38ad14b29a2d5e2ed46af66730ba60",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_ros/compile_commands.json": "45ccaee164d4ccc82e8314898917755ecfee864b0af8631951f4e9cbf386fce3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_ros/CMakeCache.txt": "ac3bd1b9bba80431419be03d56416138e5e4149c05b7408872ed0817eab292d7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/diagnostic_baseline.json": "9914c5c6f0ab976f60f865009aff08efafbaf9d826979723cff962b7a01b0054",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/setup.bash": "7c9c644146805a84ed5b4acbafca79568824d5806a0e70445bab40cb76c0c018",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/local_setup.bash": "0e10d666bbf43cf559467b11b75cf6d26cf8d210e7f94e79dfe5a7dddb2fe91c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/runtime_io.py": "0ce262de267fabb2d3816b280e377299619a1a5053fac8ebaf1fa7b16ebd68e0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/teacher_transition.py": "cbb8e4c22258179ccd3e3102fa61307fefcfbad55beaf1e7c2c28aeb3e7ea419",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/guard_audit.py": "3088f7b207d7335e88108dbdaab826df5661b6172264d8dcd43aae293aea0c64",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/sensor_relay.py": "765641bac4e90f4e36624fe750848935cb3336730dcb63ac86c4c246178b58f2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/control_core.py": "c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/trajectory_contract.py": "e61e32035b387301ac784eeae8dc1255ee4087619e49e6c9d653159633a2d235",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/event_archive.py": "d01a4d2ee32a7ea9ddadff1ebd360b4fd2e13203ba1f3209882f2ee5aaf5dc58",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/odom_adapter.py": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/self_echo_filter.py": "e613b634b7cb69a6bac25be97fcdb869f239af6b733d1064250297a56805b962",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/geometry.py": "7c293432e333f6e046390a399b49733e921f272f5f2bd988c9ab83de2cc2d3c5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/map_archive.py": "6bc9cc8735961735bc2a33dbadfe825adcf10525432ba776bcb383fbf5c142d9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/heading_alignment.py": "8c1cace7a83ca1e4ffbb2abf5d0a2193d42011611fa62eff32c0c00142cb692e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/slam/fastlivo.yaml": "6019b86bc6e3abab57dce3426fa71ac8c534fcd1c4cb1867e6b7983fa39e4cca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/slam/camera.yaml": "9def8d2c48b852ddc4e26055c6d23c544b095120f625bd1d13e68a53a564bbff",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node": "5a5e3745314d7252bc69dbdf41118305f988c2252e8148e2956b11114b687332",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/worker.py": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/prepare.py": "5136e9e51961ddeffaa61525d2638ee44572ecf528e118442aa4b5143265319f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/teacher_actuator.cpp": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/build/libteacher_actuator.so": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py": "e395fd8a05438eadb9a32d434d8936eb5df473ba917b44493d85f271bd99476d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/acceptance.json": "0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py": "d7024636a84e59dfcc3d5e94b8cc79cedfb1b6cec85cdac2babad23ab2e17b89",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/terrain_targets/lower12.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/terrain_targets/upper23.json": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/alternate_terrain_target_manifest.json": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/world.sdf": "d1af3f0b83c56e30ba2c50a77908dec989e74d0b6fada0cee9b2f71218c52772",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/asset_manifest.json": "d3754729a5444c352d4afb883413477286a6f996849d1b539a9ad7da236e12fd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sensor_contract.json": "f8a8010ea116fd90469b089de17411283f4a33eedca647a157b7820381cdf313",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sensor_bridge.yaml": "392b90b684057966dd8d1e41196a57013115ac6bf5d870c7d0fb67a1a3fedbcf",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_profile.json": "bbc38cd083d4c0b1482671759be70abc260a28b9557ee7852e37a8ef2e901205",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_fastlivo.yaml": "535f7e71443193c99d3b9bb8f760dbab1f69e799b5b6f9636db64f3965a96dd5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_camera.yaml": "86d0a0cdc1a799c71b1be89fe2e063ba7316c0805c33b4e01f5ef966c16cb142",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_scenario.json": "a0944cf20f6ccb3fd44515ad72f53aad0cb9a1ba6edec8ebeee1009f6b5db0cf",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/terrain_target_manifest.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sensor_sampling_contract.json": "a2f3b144a4ff3b551197130fe217d89ff003925328516ac4a064479b9b6df0c1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/cloud_transport_manifest.json": "23c559d77549433fabf05f7e477d90f8c5a76702416cfabf148e6017153d0f5a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/cloud_transport.xml": "c66c445e9e60157750dab3729a03d4764a4867e346edc7db739df673b4cf35ad",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/cloud_transport_probe_20261004/prepare_transport.py": "06b27f25b0d58ce92d4ec04377f4f3fa118537e35c5035916b8d4501394dd1ea",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/cloud_transport_probe_20261004/config_env_manifest.json": "09329a3326dc0bf797a35db6b2478d9339ee4badbd55510d251f4ff68a4dcb86",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/cloud_transport_probe_20261004/config_shm64MiB.xml": "c66c445e9e60157750dab3729a03d4764a4867e346edc7db739df673b4cf35ad",
+    "/opt/ros/jazzy/lib/libfastrtps.so.2.14.6": "8d39de86a55a92e1be92640a22e6322f099227930d4fc98bd821b6effd7a3eaa",
+    "/opt/ros/jazzy/lib/libfastcdr.so.2.2.7": "0eeb1f3d1859db07e7551be9df814053a8a4805c9feb9cb990363e43ac45cd69",
+    "/opt/ros/jazzy/lib/librmw_fastrtps_cpp.so": "046375a1ef195094abb57c832b275c385261052cfed3ee044cce70e25a42cef3",
+    "/opt/ros/jazzy/lib/librmw_fastrtps_shared_cpp.so": "c1abaceb3433fd4f20b1f5a5fa6686d285659bce8a2bb81ec2d61954a6d490ec",
+    "/opt/ros/jazzy/lib/librmw_implementation.so": "b62da4c8cf62b4636ab02d24d5ded40a80c9f433cd2766081ee4bedd089b4981",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/rmw_participant_8_4_4.cpp": "b5ed71b30dc68aba1d415ce7d969d08283da784b5e61d48e6bc72338e955bf89",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransport_2_14_6.cpp": "41ccff0110549720e74869b82daf8c049eb278024487d02ef101097665a099aa",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/urls.json": "621c8de0ffadbc97ff60f7da67bcbe89d97e90d15677a5c607b0dea07e7326c8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/rmw_README_8_4_4.md": "8383e86d3afc4c4eee77bc65c3edd70b033aa2e678228f15f4659e3bc9e15301",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransportDescriptor_2_14_6.cpp": "593821e720bc80c73c142ecd8e04a89edb14a8a76abddf4ab82201a99c958c4f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransport_2_14_6.h": "a1e772ae79b6dcb2825fc78c7a9221885613bb7ec822d1b5145e66090e1deba1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_slam_contract.json": "181bffd39b209425bc630b9afbb15eb272c9a4b90ff6e82bec56cee028fa41f4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/bridge.py": "01c15c630c6df4fb0779c879b7b3cb799ad16f8629564756e06f5d3719948d94",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/cascade_core.py": "dccb1c8fc8ceeae1dc1aaabda8c39ada9a3fdb171e823a1ae09cc272e9461cc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/controller.py": "13f5cdc21a66ad6e5fac0c17e41e52cc8148ad62b9ba6bda5451435bdcf0b251",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/pid_scope.py": "69d331407dc5f88c9939e3b66be830e7d94cd7dfd47da68d0331ca6d4feaf3af",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/request.py": "d837670da14368386fa4e74159b7314b3575d96d0b96f0c63d2221e4cd50d629",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/route.py": "79d9e80d427ecb513f9015dd7d3ef94e098d18087ef3b5bf64a60e495f827265",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/route_fence.py": "0cee6450f504cd9242651fbdcd55d76425da278f2764c0933f65e95e2a5ef49e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/route_leg_heading.py": "61e89808f31e205e117f4b7060754e1dd0f7c605134a5f2785c0fe24ee3203cc",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/run.py": "22398fbf9e0b5d8a7b747a17b792be0d35b8a97e1bf9b547135b4e8d620c76b1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/sampling.py": "630a8e50176648d03a062d453e30f97308841fdc209584c4f1c23dd5348a6488",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/scoped_profile.py": "1e01b1dd2175ee6843012d7fb4a56fc4323e9e0cedd6845604d7d97ec9d9327f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/sensor_gate.py": "77500a4ea80fd43f9039ea704de4feea84f1d3f55b8ece8faf96f11c2a54208e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/slam.launch.py": "bce2c0a154a417b198ffb0fa4d56cb66fe100752d491497f214aed59d0c7b0dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/stack.launch.py": "bba5203f1c2d03fd0b38d60141cff6c524771f3e5ac5b5654c62f58811e1a7d4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/terrain_provider.py": "cdb9baa9d326f378703b7a607c31489c48d2e0dd6d5b9c4926119038ad636c5f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/transition_gate.py": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/worker.py": "0e2e1e79d0142d01c54530e40ee236459afda66adcc90f714e48b2e43dffc087",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/profiles/l64_r10_c10_210.json": "bbc38cd083d4c0b1482671759be70abc260a28b9557ee7852e37a8ef2e901205",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/profiles/l64_r30_c10_210.json": "1f3d8bd1c3e8a9a3c9fbf2df68dc75ff38be18f5b91084d512f753e741a9e053",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/profiles/l64_r30_c10_600.json": "1663264700e082214cf67e5106bacfa51b331169056422fe32e75daccde269dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/profiles/l64_r30_c30_210.json": "1e9e57709e0e8f3acac172903b09cb653c4b75e0a1567986676c799a95c8a8e7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/profiles/l64_r30_c30_600.json": "58b4fd048e39d8756fff320665e4a630c39e127b51b49199e307604b8e978391",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/caller_diagnostic_schema.json": "3c8dd5b4a60d3e26818a173af3e48783bad0c9865ad12eb679cd69530fb6715e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/lio_diagnostic_schema.json": "13b40541a29d5f0bc7a1e5cc6edc5ea497a01b3d07753ec175016069aada3e33",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/vio_diagnostic_schema.json": "75e48c4dd74dc74565efb251084e5c88db7173431d63a4ea2d82797713d8f073",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/diagnostic_preflight.json": "eea1ef941c0c26abce9aeea08467fe48cf8865e4900320614f25f94022d036f4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/CMakeLists.txt": "e3c70712e3f074f5efebfdefa8999e313534cb63f152a94d6f8f92780d1f08c3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": "b89d3f7e4d9cd38bd10a4f4abdcfdda2644f91f8817d91d4506130576f600319",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": "5111be03a6c10c03c09a61f643f92ba5698b4d6199ce0d0714695d53030b92be",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/common_lib.h": "7b936106168f11c85a7cbf1b647c09457f97d1b9c2f1d97bb7f8898c616a3014",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": "5db7451b2cbbddcbc24b312860b94ac38b1d02d95758a85720292d5c59d704ab",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/feature.h": "27eaea6a52e4d0edc9aa04a770a5f436eb129b4c4fbfc7bf9812c5fd3f644799",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/frame.h": "91a7ff427c0fb1e12220d4e60ac0ea9ed0785c1ae73c8da98c14ebe2f9782fa6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/preprocess.h": "03c8a5f6062eac3bf3461e384f585601c7c40f20eddf7e104c852b078ce7e648",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": "5a18d8a934403b22ccf7db3c98d83af7b061710c8aec53fea6897081fde94703",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": "39a7cda11924068cc463b0eba1ae89da9c923c7ef8668393dfee5adf0730fbb9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/vio.h": "29f02eb7b897b37ae5beba9bc8b39ff21fd3446461d2b7d0929e183241e67930",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/visual_point.h": "c528be4967454ff79f6aac0c5322d62b19ec34c7e8c248b49981d1b3a7f1888d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": "a322f86592cc29ea3203075cb9620f3eda19286f156377cd584a23e73783de39",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": "47ae77c64f4d05f7f471d0c2032f52f985926b2eb1c8c2a71f8e78b08c33157d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": "36b6f7f0a2545dd425779124429a17703b7f73a237f3f59777fcda68175aae78",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/runner.hpp": "452a5aeae6e502b06ead69b74ff47d94cc710d4d2938062cdd4664c2d6443135",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/color.h": "a8dca85646b18e26432f453993cf2da8de8e6b6e3184228b9fb92651c4a8f2ef",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": "fa815b3bc8dc157a2ab8d692b0dd604b369680a7e711fef666f4e12d4ab33c37",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/types.h": "ade63d344d8d4cdec2dd8ec0fd6ea7930cb007c9c41ba83500bc7ea79d874d45",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/include/fast_livo2_core/utils/utils.h": "53e212cc56c9f7627bc9a58cae906b9fe9bb334184b28a1b6f8a2821e2ebf3e8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/package.xml": "36323cb18443fb39332690f085bba0381e7cae9dcca40e981ca8a611ca321ebe",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": "caadf1b4ac6c5d28032b185ed3f0735da424aed47cd0da35a0dc2c8d79c7b18b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/frame.cpp": "d45bb8ab1edf065089515940d0c7d6ff2c08fe460143778f62f09547e63f489a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/preprocess.cpp": "5c9c30b0f293251bfe7c721b888fbf80e1c087a52630a4355ebe7a1e5dc90d94",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/runner.cpp": "d349c46c4fd8c83c51c03ca10fbe1ff154558c03c92a9e97e08d83823c29ea13",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/utils.cpp": "3e0aeaccaf94d7a5e44af952027ddda88f8e3787580b942af5b2db66ff0705d3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/vio.cpp": "44a14f27f4a322c1c7d2f18e62ffad21c3df9c7ae120a75c47963663d7917e78",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/visual_point.cpp": "d067e2b05445835cbbb4c8a159519bf4a01a271b96d06cc3a32419092b3fcc6e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/voxel_map.cpp": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/CMakeLists.txt": "a5d9fbd9e6f2acfb8087a17235c9f1b11d43ecea641197f348676543db630488",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/package.xml": "2211d1466f2c76b784b367fb6bf6e3256325b72656b6325f8bb721ece274dd96",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_ros/src/main.cpp": "86760a58acf8083d877b13f3006ddb918f7b209b6238203ab6839de95dafca7e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_core/compile_commands.json": "9e15af1768d329a650ce3a8ddcab336bd1a8013519bb3ba31c13fbb818da52c2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_core/CMakeCache.txt": "db3999ab6419ea727892294ccff217577d38ad14b29a2d5e2ed46af66730ba60",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_ros/compile_commands.json": "45ccaee164d4ccc82e8314898917755ecfee864b0af8631951f4e9cbf386fce3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/build/fast_livo2_ros/CMakeCache.txt": "ac3bd1b9bba80431419be03d56416138e5e4149c05b7408872ed0817eab292d7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/lidar_sampling_v8/diagnostic_baseline.json": "9914c5c6f0ab976f60f865009aff08efafbaf9d826979723cff962b7a01b0054",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/install/setup.bash": "7c9c644146805a84ed5b4acbafca79568824d5806a0e70445bab40cb76c0c018",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/install/local_setup.bash": "0e10d666bbf43cf559467b11b75cf6d26cf8d210e7f94e79dfe5a7dddb2fe91c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/runtime_io.py": "0ce262de267fabb2d3816b280e377299619a1a5053fac8ebaf1fa7b16ebd68e0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/teacher_transition.py": "cbb8e4c22258179ccd3e3102fa61307fefcfbad55beaf1e7c2c28aeb3e7ea419",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/guard_audit.py": "3088f7b207d7335e88108dbdaab826df5661b6172264d8dcd43aae293aea0c64",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/sensor_relay.py": "765641bac4e90f4e36624fe750848935cb3336730dcb63ac86c4c246178b58f2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/c198dd11f62950d7_control_core.py": "c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/e61e32035b387301_trajectory_contract.py": "e61e32035b387301ac784eeae8dc1255ee4087619e49e6c9d653159633a2d235",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/64dd44490624852c_goal_regions.py": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/d01a4d2ee32a7ea9_event_archive.py": "d01a4d2ee32a7ea9ddadff1ebd360b4fd2e13203ba1f3209882f2ee5aaf5dc58",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/23f901e6702be4d2_odom_adapter.py": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/e613b634b7cb69a6_self_echo_filter.py": "e613b634b7cb69a6bac25be97fcdb869f239af6b733d1064250297a56805b962",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/7c293432e333f6e0_geometry.py": "7c293432e333f6e046390a399b49733e921f272f5f2bd988c9ab83de2cc2d3c5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/6bc9cc8735961735_map_archive.py": "6bc9cc8735961735bc2a33dbadfe825adcf10525432ba776bcb383fbf5c142d9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/8c1cace7a83ca1e4_heading_alignment.py": "8c1cace7a83ca1e4ffbb2abf5d0a2193d42011611fa62eff32c0c00142cb692e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/6019b86bc6e3abab_fastlivo.yaml": "6019b86bc6e3abab57dce3426fa71ac8c534fcd1c4cb1867e6b7983fa39e4cca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/9def8d2c48b852dd_camera.yaml": "9def8d2c48b852ddc4e26055c6d23c544b095120f625bd1d13e68a53a564bbff",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/5a5e3745314d7252_scan_planner_node": "5a5e3745314d7252bc69dbdf41118305f988c2252e8148e2956b11114b687332",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/policy/worker.py": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/simulation/prepare.py": "5136e9e51961ddeffaa61525d2638ee44572ecf528e118442aa4b5143265319f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/simulation/teacher_actuator.cpp": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/simulation/build/libteacher_actuator.so": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/scripts/capture.py": "e395fd8a05438eadb9a32d434d8936eb5df473ba917b44493d85f271bd99476d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/runs/acceptance.json": "0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py": "d7024636a84e59dfcc3d5e94b8cc79cedfb1b6cec85cdac2babad23ab2e17b89",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/tests/terrain_targets/lower12.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/tests/terrain_targets/upper23.json": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/tests/cloud_transport_probe_20261004/prepare_transport.py": "06b27f25b0d58ce92d4ec04377f4f3fa118537e35c5035916b8d4501394dd1ea",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/tests/cloud_transport_probe_20261004/config_env_manifest.json": "09329a3326dc0bf797a35db6b2478d9339ee4badbd55510d251f4ff68a4dcb86",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/tests/cloud_transport_probe_20261004/config_shm64MiB.xml": "c66c445e9e60157750dab3729a03d4764a4867e346edc7db739df673b4cf35ad",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/8d39de86a55a92e1_libfastrtps.so.2.14.6": "8d39de86a55a92e1be92640a22e6322f099227930d4fc98bd821b6effd7a3eaa",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/0eeb1f3d1859db07_libfastcdr.so.2.2.7": "0eeb1f3d1859db07e7551be9df814053a8a4805c9feb9cb990363e43ac45cd69",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/046375a1ef195094_librmw_fastrtps_cpp.so": "046375a1ef195094abb57c832b275c385261052cfed3ee044cce70e25a42cef3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/c1abaceb3433fd4f_librmw_fastrtps_shared_cpp.so": "c1abaceb3433fd4f20b1f5a5fa6686d285659bce8a2bb81ec2d61954a6d490ec",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/external/b62da4c8cf62b463_librmw_implementation.so": "b62da4c8cf62b4636ab02d24d5ded40a80c9f433cd2766081ee4bedd089b4981",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/rmw_participant_8_4_4.cpp": "b5ed71b30dc68aba1d415ce7d969d08283da784b5e61d48e6bc72338e955bf89",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransport_2_14_6.cpp": "41ccff0110549720e74869b82daf8c049eb278024487d02ef101097665a099aa",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/urls.json": "621c8de0ffadbc97ff60f7da67bcbe89d97e90d15677a5c607b0dea07e7326c8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/rmw_README_8_4_4.md": "8383e86d3afc4c4eee77bc65c3edd70b033aa2e678228f15f4659e3bc9e15301",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransportDescriptor_2_14_6.cpp": "593821e720bc80c73c142ecd8e04a89edb14a8a76abddf4ab82201a99c958c4f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/sources/test_results/pid_dds_transport_audit_20261004/sources/SharedMemTransport_2_14_6.h": "a1e772ae79b6dcb2825fc78c7a9221885613bb7ec822d1b5145e66090e1deba1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/source_manifest.json": "6ef6dfecdc406c12d6b7d023603022120dffb761658ead56d162aaf7cb3df9ef",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_193528_closed_loop_cascade_lidar64_10hz_rgb10_density_r1_22ca/navigation_source_snapshots.json": "d4afadc8a102d07a9df3135b1d5f157bcb7cfee59ae13ca628dfc758f85c329d"
+  },
+  "historical_acceptance_sha256": "0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c",
+  "runtime": {
+    "required_owned_roles": [
+      "worker",
+      "bridge",
+      "capture",
+      "navigation_stack",
+      "gazebo"
+    ],
+    "expected_launch_children": 11
+  },
+  "prospective_gates": {
+    "route_xy_max_m": 0.2,
+    "route_xy_rms_m": 0.08,
+    "heading_max_rad": 0.2,
+    "COM_speed_MAE_floor_mps": 0.05,
+    "COM_speed_MAE_reference_fraction": 0.25,
+    "native_roll_pitch_max_rad": 0.65,
+    "native_clearance_min_m": 0.18,
+    "body_contact_max": 0,
+    "joint_torque_max_Nm": 23.50001,
+    "joint_speed_max_radps": 30.001,
+    "active_hold_first_window_s": 5.0,
+    "active_hold_xy_drift_max_m": 0.05,
+    "active_hold_yaw_drift_max_rad": 0.1,
+    "active_hold_origin_speed_peak_mps": 0.08,
+    "active_hold_body_wz_and_Euler_yawrate_max_radps": 0.1,
+    "source_pose_and_IMU_timeout_s": 0.3,
+    "causal_gyro_pair_gap_s": 0.02
+  },
+  "open_loop_error_is_not_closed_loop_launch_gate": true,
+  "meaning": "Permission to run the bounded test; never an outcome pass"
+}

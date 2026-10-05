@@ -1,0 +1,557 @@
+{
+  "schema": 1,
+  "updated_at": "2026-10-05T07:55:38.713298+00:00",
+  "scope": "2026-10-05 actual SLAM/SCAN cascade and multifloor diagnostic batch; full mission remains failed/unverified by scope",
+  "finalized": true,
+  "levels_by_scope": {
+    "interface": {
+      "status": "passed",
+      "description": "冻结247维CPU策略、显式关节映射与唯一执行器"
+    },
+    "basic_motion": {
+      "status": "passed",
+      "description": "已有平地命令及5/10cm持续登台通过；新真值串级35次运动、完整上下坡另列，不等同全局感知导航"
+    },
+    "full_sim2sim": {
+      "status": "failed",
+      "description": "历史开环完整坡道/原起点及快照时序失败原件保留；新真值PID Gazebo坡道已通过，尚无新律匹配Isaac闭环对照"
+    },
+    "finite_navigation": {
+      "status": "passed",
+      "description": "真实SLAM/SCAN平地往返4轮；目标中心相距1米"
+    },
+    "targeted_TTL": {
+      "status": "passed",
+      "description": "真实执行桥暂停10秒，300ms保护停车与恢复"
+    },
+    "dynamic_functional": {
+      "status": "passed",
+      "description": "实际移动箱进入、保持、撤回；真实点云停车及新SCAN复走"
+    },
+    "complete_dynamic_runtime": {
+      "status": "passed",
+      "description": "V4.5a实际240秒：19项独立判据全通过，含原点云覆盖、两SLAM区域与完整退出"
+    },
+    "full_scene_navigation": {
+      "status": "unverified",
+      "description": "原46区域全任务未验证；新串级实际SLAM/SCAN的32区域双坡道路线已测试，V4/V5/V6均在二层高度失效，仅16/32；单次完整12m下层坡道通过。"
+    },
+    "real_sensor_30dim": {
+      "status": "passed",
+      "description": "真实IMU/q/qd30维前进停车3轮；旧墙龄失败保留"
+    },
+    "real_robot": {
+      "status": "unverified",
+      "description": "本次仅仿真"
+    },
+    "pid_short_route": {
+      "status": "failed",
+      "description": "历史早期PID V2/V3失败保留；后续V4同版实测单列"
+    },
+    "pid_short_route_v4": {
+      "status": "passed",
+      "description": "同版Teacher目标中心1米往返3/3、逐轮25项全通过；不包含6米、坡道或长期停车"
+    },
+    "champ_short_baseline_v4": {
+      "status": "failed",
+      "description": "同配置CHAMP3轮到达区域，但实际路线/航向均未整体通过"
+    },
+    "pid_flat_long_v4": {
+      "status": "failed",
+      "description": "6米目标实际SLAM到达、速度和停车通过；行走航向超原0.35rad门"
+    },
+    "pid_flat_long_v5": {
+      "status": "failed",
+      "description": "单轮6米航向0.0976rad合格，但预定场地路线max0.5049m/RMS0.2204m超限；不合并V4重复"
+    },
+    "ramp_registration_capture": {
+      "status": "passed",
+      "description": "坡面90秒站立及60秒真实SLAM/IMU/完整点云采集、20项来源审计通过；非完整运动或导航"
+    },
+    "ramp_registered_route": {
+      "status": "unverified",
+      "description": "冻结拟合未确认当前支持层/完整坡道，full_route=null；局部实际5.503度拟合仅诊断"
+    },
+    "truth_pid_calibration_v3": {
+      "status": "passed",
+      "description": "A2结构/10-25-50Hz9次、B增益9次、C重复9次，27/27原门通过；有限候选选CAS25，不称全局最优",
+      "actual_runs": 27,
+      "truth_feedback_for_calibration": true,
+      "counts_as_SLAM_navigation": false
+    },
+    "truth_pid_heldout_motion_v3": {
+      "status": "passed",
+      "description": "35/35真值闭环运动及追加独立真实接触判据通过；ramp12/23上下坡各3次、5/10cm登台各3次、平地/折线/往返/最高1m/s直线",
+      "actual_runs": 35,
+      "uses_Gazebo_truth_in_controller": true,
+      "counts_as_SLAM_navigation": false,
+      "original_v2_nonflat_unverified_applicability_receipts_preserved": true
+    },
+    "actual_SLAM_fixed_route_transfer_v5": {
+      "status": "passed",
+      "description": "实际SLAM/IMU约10Hz反馈、初始机身相对固定平地6m单程及6m+6m往返各3次；132/132独立门通过；非旧地图注册/SCAN",
+      "actual_runs": 6,
+      "control_uses_Gazebo_truth": false,
+      "arrival_uses_Gazebo_truth": false,
+      "actor_privileged_dimensions": 232,
+      "Actor_hz": 50,
+      "native_PD_hz": 200
+    },
+    "turn_radius_characterization_v3": {
+      "status": "passed",
+      "description": "24轮预定vx/wz包络＋12轮边界复测，共36/36通过；六个已测边界各3次；非全局物理最小半径",
+      "actual_runs": 36,
+      "terrain": "independent_unobstructed_60x60m_plane",
+      "minimum_at_teacher_input_vx_mps": {
+        "0.3": {
+          "left_m": 0.3554484667,
+          "right_m": 0.3661765468
+        },
+        "0.5": {
+          "left_m": 0.6028447831,
+          "right_m": 0.6180066955
+        },
+        "1.0": {
+          "left_m": 1.2848692406,
+          "right_m": 1.2966823735
+        }
+      },
+      "first_sweep_outer_launcher_returncode": 143,
+      "outer_returncode_cause": "unverified; original children and independent receipts complete",
+      "boundary_outer_launcher_returncode": 0
+    },
+    "continuous_curve_drive_v1": {
+      "status": "passed",
+      "description": "14/14实际连续drive动态七项通过，包含完整R0.6/1.2左右圆圈及两种曲率S的10/25/50Hz；本项不含停车结论",
+      "actual_runs": 14,
+      "passed_checks": 98,
+      "required_checks": 98,
+      "reference_speed_mps": 0.3,
+      "control_uses_Gazebo_truth": true,
+      "counts_as_SLAM_navigation": false
+    },
+    "continuous_curve_complete_motion_v1": {
+      "status": "failed",
+      "description": "完整项13/14通过；tightS25原固定5s停车yaw0.114522rad超过0.1门，原FAILED保留；行驶通过不能提升整项",
+      "actual_runs": 14,
+      "passed_runs": 13,
+      "failed_run": "20261005_023511_truth_pid_S_tight_curvature_cascade_pi_25hz_0b78",
+      "original_curve_checks_passed": 208,
+      "required_original_curve_checks": 210,
+      "parking_velocity_PI_bypassed": true,
+      "active_pose_heading_hold_verified": false
+    },
+    "new_cascade_controller_sim2sim": {
+      "status": "unverified",
+      "description": "Gazebo真值完整坡道通过，但新同控制律/路线的Isaac闭环对照未完成"
+    },
+    "continuous_curve_actual_SLAM_SCAN_multifloor": {
+      "status": "unverified",
+      "description": "新curvature core只测真值独立平面；实际SLAM曲线、SCAN/动障碍融合、旧地图注册及多层坡道未验证"
+    },
+    "active_parking_pose_heading_hold": {
+      "status": "passed",
+      "description": "新V4固定终点主动位置/朝向PD＋COM速度PI在tightS25真值反馈先导＋3新确认4/4通过；旧零命令合同/失败不回填；靠近14.12s仍慢",
+      "actual_runs_accepted": 4,
+      "new_independent_checks_passed": 88,
+      "new_independent_checks_total": 88,
+      "original_V4_archive_unverified_preserved": 3,
+      "V3_capture_failure_preserved": true,
+      "formal_window_s": [
+        51.405,
+        56.405
+      ],
+      "xy_drift_m": 0.0044482670768256575,
+      "yaw_drift_rad": 0.002408736234918935,
+      "capture_duration_s": 14.12,
+      "control_uses_Gazebo_truth": true,
+      "counts_as_SLAM_navigation": false,
+      "new_10_and_50Hz_hold_actual_verified": false,
+      "randomized_robustness_verified": false
+    },
+    "actual_SLAM_SCAN_cascade_flat_v1": {
+      "status": "partial",
+      "description": "新路径PD+速度PI真实SLAM/IMU/SCAN 1m往返：三轮区域路线/速度/来源均通过，整体2通过1首5s停车漂移失败；原18项独立门不放宽。"
+    },
+    "actual_SLAM_SCAN_complete_ramp_v4": {
+      "status": "passed",
+      "description": "ramp12独立实走完整12m、14/14区域与首5s停车通过；仅单次、实际SLAM/IMU/SCAN反馈",
+      "run": "20261005_145244_closed_loop_cascade_segmented_ramp12_r4_4791",
+      "receipt_sha256": "a599e699fea67263ec5dbdd2852cb16ba40ef17cdd134a924cd75996ca247e03",
+      "navigation_ground_truth_used": false
+    },
+    "actual_SLAM_SCAN_multifloor_v4": {
+      "status": "failed",
+      "description": "16/32实际区域，下层12m通过；二层connector_y原SLAM高度低估.2165m拒绝到达，上层/最终停车未完成",
+      "run": "20261005_145640_closed_loop_cascade_actual_multifloor_r1_d42e"
+    },
+    "actual_SLAM_SCAN_multifloor_v5": {
+      "status": "failed",
+      "description": "仅开在线gravity/bias未消除此轮heightfail；16/32区域，connector_y高度误差.2226m；429.33s传输故障后真实机身接触，整轮失败",
+      "run": "20261005_151217_closed_loop_cascade_online_SLAM_multifloor_r1_b182"
+    },
+    "actual_SLAM_SCAN_multifloor_v6": {
+      "status": "failed",
+      "description": "实际600s/30001次推理及原生安全通过；16/32后SLAM tube-height306.505mm>300mm保护，原多层导航失败；正式common/ramp FAILED、heading8/8 PASS",
+      "run": "20261005_153109_closed_loop_cascade_visual_cov1000_multifloor_r1_9cc6",
+      "receipts": {
+        "summary_closed_loop_cascade_independent.json": "b875631e4fb33701429623e8da072960ce9861b1e873839dc43aaf2239d38583",
+        "summary_closed_loop_ramp_independent.json": "8384975078c81d3f202fcdf9f580c1f144939b2caddeb345b5c128ff1426c2d6",
+        "summary_heading_source_independent.json": "ab4e5fc106dad5c143e6e7174d9fc188e7752b502181d7113ca650985b4a1f04"
+      }
+    }
+  },
+  "display_note": "真实SLAM/IMU+实际SCAN+Teacher串级controller：单次完整12m ramp12、14区域、首5s停车4.55mm正式通过。连续三层V4/V5/V6仅16/32区域，二层局部高度失效；恢复gravity/bias及视觉权重均未解决，失败保留。V6实际600s生命周期已结束，运行完成不代替导航通过。Actor232维特权输入，导航不使用Gazebo真值。",
+  "sensor_replacement_combined_with_navigation_verified": false,
+  "navigation_ground_truth_used": false,
+  "navigation_truth_scope": "Actual SLAM transfer and historical SLAM/SCAN commands/arrival use real sources; NEW truth calibration and curve campaigns explicitly use Gazebo state in controller and do not count as navigation.",
+  "historical_acceptance_preserved": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/acceptance.json",
+    "sha256": "0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c"
+  },
+  "evidence_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_082258_navigation_slam_scan_roundtrip_v4_r1_9c33/summary_navigation_independent.json": "002410d824a69fbaab3d227554a1f031210bb52d18525741ee5eb21f5c1b845b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_082715_navigation_slam_scan_roundtrip_v4_confirm_r1_1c57/summary_navigation_independent.json": "78de5be3cf409a5d9e9c4ab60dab577733415442e527aa6a5cb8891b050e0f83",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_083026_navigation_slam_scan_roundtrip_v4_confirm_r2_bd19/summary_navigation_independent.json": "46fff7a62567f2e7b745567b478e6785e50a86ef6b377a2d7c9aae182d89dcc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_091122_navigation_slam_scan_atomic_transport_v41_r1_dba1/summary_navigation_independent.json": "fee07536ebf241f94a770c41e919c52073fcd58542acad5ea71bb6e930ba6e6d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_084733_navigation_slam_scan_ttl_drop_v4_r1_24d9/summary_ttl_dropout_independent.json": "fa372aa98ca2dfddeda40955313ae5abc0367291e27be64f3c3a4054aadd44a2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_091513_navigation_slam_scan_dynamic_flat_v41_r1_6614/summary_dynamic_obstacle_independent.json": "7f3743ab462611f980f8b39d6c72ee332bc5757df3757f97c83cb50635f2e914",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/STEP_RETEST_REPORT.md": "73a487a0c80873f27abc67e5d446cf09cf345dfbb116d0958f8e56d5f3ff6e61",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/FULL_RAMP_REPORT.md": "506adc12bb107af0ec259ff5c33ca507866bc4f95b2b79e153bb3381cbd65cb1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/sensor_replacement_audit_20261004_idle_v3.json": "f7d6341b31a0b9fd8011b6a4ba72f8f0998c007c5d3ff3408ff8749208f68b03",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/summary_dynamic_obstacle_independent.json": "c1e26edf0bd71b284ed48012cda6faebba2615743d103609493b3387f02f9865",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/runtime_manifest.json": "22088f4e5090414fcdbcd25c25e02a74b120d04137ad48fac5951fc6b7defcca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/post_arrival_long_standing_diagnostic.json": "3b24bc73acb58f329ad2ea023968aae929f656f1f5edaf5fcddb1535796547c2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/frame_replay_manifest.json": "461b2072fbd39ad227b8bb5f500d2ed2737c9da49e81a5f80db0d723567b3f55",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/camera_records_dynamic_v45a_20261004.json": "867bde29221829cd06172f05e3db1f1c8a15cad48be130e264bd9fb42e1c9c0d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/navigation_v45a_observer_cleanup_freeze.json": "7d54a8ee0fd0a1763e0ed15c57b1a67ee33d3d5658f0b65b02ac58b07336bae9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/dynamic_independent_candidate5_v45a_20261004/freeze_manifest.json": "3b807c9b1887245afd522b31577673d9343031b67ae3af1405d3cc1dac17be96",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/final_v45a_protection_audit_20261004/audit.json": "bc76319c9ab7884fa5e41c52c1eaa3d82fd16cf5a57d9ed35603d29ad1983aa1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/final_v45a_protection_audit_20261004/recorder_metadata.json": "0774cf9f00d7ca2046756271a4f763eab3f10e58ae99c7b1168e2aca3991556b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/navigation_dynamic_independent_final_delivery_20261004.json": "1786f08b8bc8eb97144f1cc77be1e0a6d32fbfe7518e8d712b63dc333a3d53ab",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/browser_proof_20261004/dynamic_v45a_final_browser_manifest.json": "aede34dcc94a30055bab6a70e5e4211899b5899b370a64c0abe1c9324e196db0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/README.md": "fb44ae1e31abefc42da205ab73278c0257100cf5192c51eef0ccffd17f99dd63",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CONTINUATION_REPORT_20261004.md": "91f495ee94ccddaab1bf6c8f092809ca70aa082ac16de141cc06731680a12783",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CAMERA_AUDIT.md": "a4de1eeea167135c631e0087d4cc057c8230b40c59b984cfbc23dff72ad8d7cd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/NAVIGATION_REPORT.md": "18b85c8c11b56d2bc4fc5829e1607d4ff5d5a2b4df2fce2bc8d63ac3463f6cc3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/DYNAMIC_OBSTACLE_REPORT.md": "a4a37f20e7c499a7fae73c3fe40a02897532929da597d117d2faf9fbddb4e770",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/OBSERVATION_REPLACEMENT.md": "5d70e7a609b0a89084a959fd300199b936fb00bbf85d1649943144b136db77c4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/SENSOR_REPLACEMENT_REPORT.md": "ebba2db42155e621bdb2010a0370cade6c0ca406ff2ddcf758b8088b9ed0b885",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_135857_navigation_teacher_pid_v4_transport_r1_r1_8c2a/summary_pid_navigation_independent.json": "64cc836aad86c957249c63cb47a8de9e828d56134bcaae3b7eeb089abd6139df",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140619_navigation_teacher_pid_v4_transport_r2_r1_f2b7/summary_pid_navigation_independent.json": "0a92e89e2a06ef4a54207e5fe5dd13a3ee5aec8f04d6651febdc178e9469e75e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_141334_navigation_teacher_pid_v4_transport_r3_r1_ecd9/summary_pid_navigation_independent.json": "f6b3a526107f40db61d9fc5af32e0e5adb77f48aecd10932487a25119bd1a1e8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140244_navigation_champ_pid_v4_transport_r1_r1_b0ab/summary_pid_navigation_independent.json": "f4d7dc4d31a3d6b75bf676a52ec6941d6d87fcf421bf70509690ff7910027689",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140950_navigation_champ_pid_v4_transport_r2_r1_5e9f/summary_pid_navigation_independent.json": "14b7344833ff5badf0e73d2a045ba0aa551cb40e444431b5c7bbc21cc6a4449f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_141929_navigation_champ_pid_v4_transport_r3_r1_c2c6/summary_pid_navigation_independent.json": "0f103adbb13a3d14755b9a398de492a58f2663c27efe8be10dd2cf0d3126750a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_142327_navigation_teacher_pid_v4_flat_long_r1_r1_1939/summary_pid_navigation_independent.json": "8084e14521671bd2f1d05994010cbbcc101dee30b9a08d1119c024b3b78b4590",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/PID_NAVIGATION_REPORT.md": "1da6378712771b3486435bf62b2fb505adf1ff75cebf821c41d0514155fc37c2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CLOUD_TRANSPORT_REPORT_20261004.md": "2cfa11075b6b61837b127eb4d315fd74a71c0b0d7728050e60a5acc47445e537",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RAMP_REGISTRATION_REPORT_20261004.md": "7e5a8f366f2b1933ae514f7081e890e2ad5cc57151cf98be9acf826adc75cc92",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_matched_short_v4_20261004/comparison.json": "b81382e9e46950f24d199d729a95a0cef865ba4565d0f76587e01a78b193f6a0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_frequency_actual_20261004.json": "38fc58f7f632051a8e712b7b0231d1a0d7cc3fbc799f7c29de7982bb543952a0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_navigation_runtime_v5_routeleg_freeze_20261004/v5.json": "58f9bf7912d9402f8c3ae257acad9f96a59b180c0fd5250a71330e45f35fb444",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_150033_navigation_teacher_pid_v5_routeleg_6m_r1_r1_8ef5/summary_pid_navigation_independent.json": "ab48eb26e8fcd8ddc8840e1e208dd78d6915901f7c6d5e9ddb41296dd66b8c89",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_150033_navigation_teacher_pid_v5_routeleg_6m_r1_r1_8ef5/pid_route_leg_source_audit.json": "d0fc60f3a529318fa7093c46dab391f4df564c25e4e9347c2d54419499a31731",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_150033_navigation_teacher_pid_v5_routeleg_6m_r1_r1_8ef5/pid_route_registration_diagnostic.json": "8824ce2479f44a89ed1f3da3c236ff17db63610b54592f8e440869a07aae4483",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/ramp_registration_actual_20261004/stand2071/AUDIT.json": "db4de8a2818d02bcd9ab24901bc3bab675de25f749c2f0ebdb8f5b001ce71362",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/ramp_registration_actual_20261004/stand2071/root_delivery_verification.json": "df2f81417090a3b4c2d2766b3650cbf2386953974baf2e0922251da2aec752ab",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/ramp_registration_actual_20261004/stand2071/registration/registration.json": "16ae1b67908b650f1be1fd1cbce7df694fd1d30f767ced77b6b6b9a72bacb48a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/browser_proof_pid_20261004/pid_final_browser_manifest.json": "bfcf87a8b70290feaad36f67e4c62bf7534dfa2ace068520305c931df9496138",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/TRUTH_PID_CALIBRATION_REPORT_20261005.md": "5cab9b8cde1f6cf508b12bb4b1ade0e7ea562b452517458d20c3eaf00369bd5a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/SLAM_CONTROLLER_TRANSFER_REPORT_20261005.md": "3c50068d0f33dece295e8f7c8ee1ddb22084ff4d5ad3de3f9dba19f11322caa9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CURVATURE_ENVELOPE_REPORT_20261005.md": "89bc929e2c84a0e4a04e80fcf36830572541e65066b4745afb9adb2097b5645e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RESUME_CURVATURE_20261005.md": "5d71d565f6d46353e67c34ef50d5c1d66bfd1dbcced954efa03a4086d9b586bb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_design/campaign_ABC_analysis_final.md": "d7eb36068c8ca4c46b458253684364983e92bc64e889f051b36121e01f117b92",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_design/campaign_ABC_analysis_final.json": "eb490616d307f5051e5fd4bf9ec60008cd72bf376f225a703da68f9f1b0de032",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/actual_motion_overview/actual_motion_overview.json": "5f3c828bd959bd085a8c2fdf001e0851a01febe5bf05875779a634bb7e9093ae",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/observer_placement_completed_receipt_v2.json": "a8213af942b00ffabcc51e76cef354cb609925c9009709652c7cc1d7b15fea15",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/slam_transfer_v3_20261005/v5_aggregate/aggregate.json": "8accee196d2709a193af174c425d829ac1dde49e155dd851faa2eac33426d149",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/slam_transfer_v3_20261005/v5_aggregate/manifest.json": "bf321c89b41ad1c6179303009de253449f8d70938968b26aa74e4c7c758a86c8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/analysis/final_/20261004T181443_819883Z/selected_minimum_receipts.json": "d1d2a515d17424e69d4759077ebdd06852555a5d46ee16696ac94419c35b24b2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/boundary_analysis/final_/20261004T182346_462506Z/boundary_receipts.json": "2d9346d5c2ed7cbe73a4d8f468aaef0523cc2d039cac3f20a70753076b9d18e1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/curve_analysis/aggregate.json": "1f53db51bfc3a808aa40edb8778433a385836f22ed6320643aa2de48df06e4cb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/curve_analysis/manifest.json": "d08907c0d170b9a6c6aba28ef471492a1bceed8eff30b5b9d7e3e572e645bd43",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/curve_freeze_v1.json": "ff51c37873a14c3bf6c81235f3e002a1a218718b17ded568fa2395df9bfa2dcd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_campaign_20261005/sweep_outer_launcher_receipt_v1.json": "b4167965ca7105f38ce54b6c5b257029f53f511a232d9d79a8a616e8beeb61a0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/package_index_audit_20261005/audit.json": "b88bbc8011855714287745f9bd57669118094259e1e55f44ba2f0034c6ed9683",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/final_delivery_20261005/final_verification_20261005.json": "a166c0390e53a28435fe51ac1eb6f8d264d7a1460447f191068204fcadf0ac57",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/automation_pause_receipt.json": "874b190cda383e85f980cb0955715a85da0ca44d42d0e384a88f1a5256d3a1ae",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/host_audit.json": "3d93d86b5994bbccc7238c3667f6d8e535f8fd1404683f8dd86ac232df64098f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/active_hold_plan_v4r2.json": "851ae5a756dc0f7e5883c50de1f1ddd12e08d4612d6bb9f75ce60e2f39d102ee",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/active_hold_results_v3.jsonl": "26d376b741cdf29ce28c00ae7e31cb9d7a3538ccb2a04917a362db0354cb3077",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/active_hold_results_v4.jsonl": "1b1db3ea84ade9850b8ad254491e84c41dfcc387b912999aaba175e209f27be7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/active_hold_results_v4r2.jsonl": "7a492a0291468bac73657796cdd9c0633b2ac6fc121974c1158d58d78dc362c6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/analysis/analysis_v4_final/aggregate.json": "3b0a4d43bbbdf006ec3062b0936fad49e494183e63cc093e380fd4ecc7680b11",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/analysis/analysis_v4r2_confirm3/aggregate.json": "9b8ec5d7f2e1639470870cf6c1c5c3f9ce2d0dac1b763173a26763a22524a1c3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/analysis/analysis_v4_final/completion_receipt.json": "bd8fb518ad1fb1052187635ff52bbf5ac0301177c07ac366fbb3d766831d59d0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/SLAM_CURVE_TRANSFER_DESIGN.md": "a4caa400203df26197f55c011406ba0d213c19b512e5c226071d0f5fd82d3d51",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/V4_PHASE_SOURCE_REVIEW.md": "1608290528c5a7d6828271680a949d9a13f13e3b1fbd2a4a400832ed2df504bf",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/final_delivery_receipt.json": "79f8d1b6275decb8a954feda3cca9c611348581c7c37ba123af9bed247b7c0c9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/ACTIVE_PARKING_REPORT_20261005.md": "9fd1e1cf08b7e6249da0f9fbf8ee0b5db65976ce3c8fdea1060bfb1ed6481fd2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RESUME_ACTIVE_PARKING_20261005.md": "8f263fd840e1966c6f58006a21993c62d802e40e072ebd01c66fc58fbe7c4c71",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_084832_truth_pid_S_tight_active_hold_capture_p2_curvature_cascade_pi_active_hold_25hz_518e/summary_active_hold_independent.json": "81ca9a15954f93165a1d40289c2218f5091181d0c557cff66d5859a987057d0b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_084941_truth_pid_S_tight_active_hold_capture_p2_curvature_cascade_pi_active_hold_25hz_5627/summary_active_hold_independent.json": "c45692daadf77e769eb1e8cc2329d1520ea15378bebc0b98ac5ba8a0de9a56f0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_085050_truth_pid_S_tight_active_hold_capture_p2_curvature_cascade_pi_active_hold_25hz_6767/summary_active_hold_independent.json": "5842d4d97ea31d0cc679d30b4ba3cd2e3101a461244c0a19b2981422ff993726",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_084153_truth_pid_S_tight_active_hold_capture_p2_curvature_cascade_pi_active_hold_25hz_4788/summary_active_hold_independent.json": "096c50d39be8084e4dbca62cf48d453793d03d897de6147b7cb39ae9c53dc39a"
+  },
+  "actor_sources_by_test": {
+    "navigation": {
+      "privileged_native_state_and_height_dims": 220,
+      "controller_known_dims": 27,
+      "actual_sensor_replaced_dims": 0
+    },
+    "standalone_actual_sensor_forward": {
+      "privileged_COM_and_height_dims": 190,
+      "controller_known_dims": 27,
+      "actual_sensor_replaced_dims": 30
+    }
+  },
+  "final_actual_dynamic_run": {
+    "run_id": "20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f",
+    "duration_sim_s": 240,
+    "policy_samples": 12001,
+    "frozen_independent_checks": 19,
+    "passed_checks": 19,
+    "status": "passed",
+    "runtime_freeze_sha256": "7d54a8ee0fd0a1763e0ed15c57b1a67ee33d3d5658f0b65b02ac58b07336bae9",
+    "receipt_sha256": "c1e26edf0bd71b284ed48012cda6faebba2615743d103609493b3387f02f9865",
+    "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+    "actual_registered_cloud_replay_records": 109,
+    "actual_native_guard_original_xyz_replays": 110,
+    "total_actual_guards": 519,
+    "required_fixture_window_missing_xyz": 0,
+    "outside_fixture_window_raw_xyz_unverified_guards": 409,
+    "real_slam_two_regions_confirmed": true,
+    "target_centers_distance_m": 1.0,
+    "maximum_actual_xy_excursion_m": 0.8466690841314799,
+    "all_six_owned_exit_zero": true,
+    "all_fifteen_started_navigation_children_clean": true
+  },
+  "preserved_dynamic_failures": {
+    "V4.1_6614": "physical function passed; navstack exit-15 caused complete runtime failure",
+    "V4.2_10c7": "return90s deadline failed; continuous-clear evidence insufficient",
+    "V4.3_2f70": "outward deadline failed; fixed parking speed exceeded0.03; newSCAN before strict actual-guard clear",
+    "V4.4_1536": "all physical/navigation/exit gates passed; required entry-prefix originalXYZ missing"
+  },
+  "additional_long_standing_diagnostic": {
+    "run_id": "20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f",
+    "world_window_s": [
+      97.69,
+      240.005
+    ],
+    "requested_and_actor_velocity_all_zero": true,
+    "max_planar_speed_mps": 0.00044272814968895284,
+    "max_xy_departure_m": 0.0024342197925180695,
+    "max_yaw_departure_rad": 0.04379013463990944,
+    "post_hoc_gate_added": false,
+    "previous_v44_zero_command_pulses_preserved": true
+  },
+  "current_frozen_inputs": 76,
+  "executed_source_copies_archived": 31,
+  "not_run_source_copies": [
+    "native_actuator_binary",
+    "passive_pose_observer_binary",
+    "historical_global_acceptance"
+  ],
+  "one_shot_08_automation_status": "PAUSED",
+  "all_evidence_writers_completed": true,
+  "active_work": {
+    "scope": "Actual SLAM/IMU + actual SCAN cascade/multifloor diagnostic batch",
+    "status": "navigation_failed_diagnosis_archived",
+    "single_complete_lower_ramp_verified": true,
+    "full32_mission_verified": false,
+    "next_required_evidence": "actual solver plane correspondence/information/P/state diagnostics",
+    "handoff": "docs/RESUME_CLOSED_LOOP_SCAN_20261005_AFTERNOON.md",
+    "truth_navigation_used": false
+  },
+  "prior_frozen_input_count_dynamic_v45a": 34,
+  "frozen_inputs_by_scope": {
+    "dynamic_v45a": 34,
+    "PID_v4_DDS": 72,
+    "PID_v5_route_leg": 76,
+    "ramp_readonly_core": 6,
+    "plant_radius_v3_local_files": 7,
+    "SLAM_transfer_v5_local_files": 4,
+    "continuous_curvature_v1_prospective_source_files": 18,
+    "active_hold_V4r2_prospective_inputs": 23
+  },
+  "velocity_PID_frequency": {
+    "effective_SLAM_feedback_sim_Hz": 10,
+    "timer_wall_Hz": 20,
+    "bridge_wall_Hz": 50,
+    "Teacher_sim_Hz": 50,
+    "joint_PD_sim_Hz": 200,
+    "raw_IMU_sim_Hz": 200,
+    "actual_v5_PID_calls": 903,
+    "new_feedback_updates": 433,
+    "duplicate_headers_held": 470,
+    "timer_changed_for_user_question": false,
+    "historical_scope": "Legacy PID navigation V5; new truth curves and actual_SLAM transfer frequencies are separately listed below."
+  },
+  "pid_v5_actual": {
+    "run_id": "20261004_150033_navigation_teacher_pid_v5_routeleg_6m_r1_r1_8ef5",
+    "status": "failed",
+    "formal_checks_passed": 24,
+    "formal_checks_total": 25,
+    "heading_peak_rad": 0.0976027582764121,
+    "world_route_peak_distance_m": 0.5048820865479076,
+    "world_route_drive_RMS_m": 0.220444222199079,
+    "raw_SLAM_arrival_confirmed": true,
+    "route_leg_source_audit": "7/7 passed",
+    "not_pooled_with_v4_repetitions": true
+  },
+  "ramp_capture_actual": {
+    "run_id": "20261004_150720_stand_ramp12_registration_stand_v1_r1_2071",
+    "stand_sim_s": 90,
+    "Teacher_samples": 4501,
+    "readonly_capture_sim_s": 60,
+    "raw_clouds": 571,
+    "admitted_clouds": 566,
+    "processed_records": 13598,
+    "source_audit_checks_passed": 20,
+    "registration_status": "unverified",
+    "full_route": null,
+    "diagnostic_local_tilt_deg": 5.503060307987958,
+    "navigation_emitted": false,
+    "Actor_source": "explicit lower12 privileged provider"
+  },
+  "prior_evidence_sha256_before_pid_final": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_082258_navigation_slam_scan_roundtrip_v4_r1_9c33/summary_navigation_independent.json": "002410d824a69fbaab3d227554a1f031210bb52d18525741ee5eb21f5c1b845b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_082715_navigation_slam_scan_roundtrip_v4_confirm_r1_1c57/summary_navigation_independent.json": "78de5be3cf409a5d9e9c4ab60dab577733415442e527aa6a5cb8891b050e0f83",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_083026_navigation_slam_scan_roundtrip_v4_confirm_r2_bd19/summary_navigation_independent.json": "46fff7a62567f2e7b745567b478e6785e50a86ef6b377a2d7c9aae182d89dcc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_091122_navigation_slam_scan_atomic_transport_v41_r1_dba1/summary_navigation_independent.json": "fee07536ebf241f94a770c41e919c52073fcd58542acad5ea71bb6e930ba6e6d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_084733_navigation_slam_scan_ttl_drop_v4_r1_24d9/summary_ttl_dropout_independent.json": "fa372aa98ca2dfddeda40955313ae5abc0367291e27be64f3c3a4054aadd44a2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_091513_navigation_slam_scan_dynamic_flat_v41_r1_6614/summary_dynamic_obstacle_independent.json": "7f3743ab462611f980f8b39d6c72ee332bc5757df3757f97c83cb50635f2e914",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/STEP_RETEST_REPORT.md": "73a487a0c80873f27abc67e5d446cf09cf345dfbb116d0958f8e56d5f3ff6e61",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/FULL_RAMP_REPORT.md": "506adc12bb107af0ec259ff5c33ca507866bc4f95b2b79e153bb3381cbd65cb1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/sensor_replacement_audit_20261004_idle_v3.json": "f7d6341b31a0b9fd8011b6a4ba72f8f0998c007c5d3ff3408ff8749208f68b03",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/summary_dynamic_obstacle_independent.json": "c1e26edf0bd71b284ed48012cda6faebba2615743d103609493b3387f02f9865",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/runtime_manifest.json": "22088f4e5090414fcdbcd25c25e02a74b120d04137ad48fac5951fc6b7defcca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/post_arrival_long_standing_diagnostic.json": "3b24bc73acb58f329ad2ea023968aae929f656f1f5edaf5fcddb1535796547c2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_105315_navigation_slam_scan_dynamic_flat_v45a_preroll_r1_dc6f/frame_replay_manifest.json": "461b2072fbd39ad227b8bb5f500d2ed2737c9da49e81a5f80db0d723567b3f55",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/camera_records_dynamic_v45a_20261004.json": "867bde29221829cd06172f05e3db1f1c8a15cad48be130e264bd9fb42e1c9c0d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/navigation_v45a_observer_cleanup_freeze.json": "7d54a8ee0fd0a1763e0ed15c57b1a67ee33d3d5658f0b65b02ac58b07336bae9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/dynamic_independent_candidate5_v45a_20261004/freeze_manifest.json": "3b807c9b1887245afd522b31577673d9343031b67ae3af1405d3cc1dac17be96",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/final_v45a_protection_audit_20261004/audit.json": "bc76319c9ab7884fa5e41c52c1eaa3d82fd16cf5a57d9ed35603d29ad1983aa1",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/final_v45a_protection_audit_20261004/recorder_metadata.json": "0774cf9f00d7ca2046756271a4f763eab3f10e58ae99c7b1168e2aca3991556b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/navigation_dynamic_independent_final_delivery_20261004.json": "1786f08b8bc8eb97144f1cc77be1e0a6d32fbfe7518e8d712b63dc333a3d53ab",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/browser_proof_20261004/dynamic_v45a_final_browser_manifest.json": "aede34dcc94a30055bab6a70e5e4211899b5899b370a64c0abe1c9324e196db0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/README.md": "1ede6c206c8afbb14fb62ac7b4a6b19fa8629557795109ce5861513e34e9e361",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CONTINUATION_REPORT_20261004.md": "91f495ee94ccddaab1bf6c8f092809ca70aa082ac16de141cc06731680a12783",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CAMERA_AUDIT.md": "a4de1eeea167135c631e0087d4cc057c8230b40c59b984cfbc23dff72ad8d7cd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/NAVIGATION_REPORT.md": "18b85c8c11b56d2bc4fc5829e1607d4ff5d5a2b4df2fce2bc8d63ac3463f6cc3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/DYNAMIC_OBSTACLE_REPORT.md": "a4a37f20e7c499a7fae73c3fe40a02897532929da597d117d2faf9fbddb4e770",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/OBSERVATION_REPLACEMENT.md": "5d70e7a609b0a89084a959fd300199b936fb00bbf85d1649943144b136db77c4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/SENSOR_REPLACEMENT_REPORT.md": "ebba2db42155e621bdb2010a0370cade6c0ca406ff2ddcf758b8088b9ed0b885",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_135857_navigation_teacher_pid_v4_transport_r1_r1_8c2a/summary_pid_navigation_independent.json": "64cc836aad86c957249c63cb47a8de9e828d56134bcaae3b7eeb089abd6139df",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140619_navigation_teacher_pid_v4_transport_r2_r1_f2b7/summary_pid_navigation_independent.json": "0a92e89e2a06ef4a54207e5fe5dd13a3ee5aec8f04d6651febdc178e9469e75e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_141334_navigation_teacher_pid_v4_transport_r3_r1_ecd9/summary_pid_navigation_independent.json": "f6b3a526107f40db61d9fc5af32e0e5adb77f48aecd10932487a25119bd1a1e8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140244_navigation_champ_pid_v4_transport_r1_r1_b0ab/summary_pid_navigation_independent.json": "f4d7dc4d31a3d6b75bf676a52ec6941d6d87fcf421bf70509690ff7910027689",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_140950_navigation_champ_pid_v4_transport_r2_r1_5e9f/summary_pid_navigation_independent.json": "14b7344833ff5badf0e73d2a045ba0aa551cb40e444431b5c7bbc21cc6a4449f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_141929_navigation_champ_pid_v4_transport_r3_r1_c2c6/summary_pid_navigation_independent.json": "0f103adbb13a3d14755b9a398de492a58f2663c27efe8be10dd2cf0d3126750a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_142327_navigation_teacher_pid_v4_flat_long_r1_r1_1939/summary_pid_navigation_independent.json": "8084e14521671bd2f1d05994010cbbcc101dee30b9a08d1119c024b3b78b4590"
+  },
+  "truth_controller_calibration_ground_truth_used": true,
+  "current_frozen_inputs_scope": "Legacy numeric count76 belongs only to historical PID_v5_route_leg; it is not an all-current-campaign/source count.",
+  "executed_source_copies_archived_scope": "Legacy count31 refers to dynamic_v45a sources; current per-run manifests are authoritative.",
+  "current_controller_frequency_by_scope": {
+    "selected_truth_cascade_PI_hz": 25,
+    "truth_continuous_curve_tested_hz": [
+      10,
+      25,
+      50
+    ],
+    "actual_SLAM_transfer_new_pose_update_hz": 10,
+    "Teacher_hz": 50,
+    "native_joint_PD_hz": 200,
+    "faster_than_Teacher_required_by_results": false,
+    "new_active_hold_actual_fresh_hz": 25,
+    "new_active_hold_other_hz_actual_unverified": [
+      10,
+      50
+    ]
+  },
+  "controller_variants": {
+    "cascade_pi_v3": "truth_tuning/core.py; flat/polygon/ramp tuning; actualSLAM V5 fixed route transfer",
+    "curvature_cascade_pi_v1": "curvature_tracking/core.py; continuous analytic circle/S kappa*v feedforward; truth-only",
+    "curvature_cascade_pi_active_hold_v4": {
+      "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tracking_v4/core.py",
+      "sha256": "9eca389f54277986656c0ccda3da42f01d9cbc25ed15d99b57cc9a1e51087384",
+      "new_phase": "bounded capture then weak fixed endpoint active hold",
+      "scope": "tightS25 Gazebo truth only"
+    },
+    "curvature_cascade_pi_active_hold_v4r2": {
+      "core_sha256_same_as_V4": true,
+      "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tracking_v4r2/core.py",
+      "only_runner_observer_archival_fix": true,
+      "runner_sha256": "70ced9ed76c4e333467d6c6b4c6c12faf145177b2ca3d0da4dc83c76883d379b"
+    }
+  },
+  "actor_source_by_scope": {
+    "truth_v3_and_new_curves_and_SLAM_transfer_v5": {
+      "native_privileged_dimensions": 232,
+      "known_command_and_previous_action_dimensions": 15,
+      "source": "Gazebo native COM/omega/gravity/q/qd/applied_force_cmd plus static geometry187 height; high-level SLAM source does not replace Actor fields",
+      "IMU_q_qd_30dim_replacement_combined": false
+    },
+    "new_active_hold_v4": {
+      "native_privileged_dimensions": 232,
+      "known_command_and_previous_action_dimensions": 15,
+      "source": "Gazebo native COM/omega/gravity/q/qd/applied_force_cmd plus static geometry187 height; high-level SLAM source does not replace Actor fields",
+      "IMU_q_qd_30dim_replacement_combined": false
+    }
+  },
+  "current_reports": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/TRUTH_PID_CALIBRATION_REPORT_20261005.md": "5cab9b8cde1f6cf508b12bb4b1ade0e7ea562b452517458d20c3eaf00369bd5a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/SLAM_CONTROLLER_TRANSFER_REPORT_20261005.md": "3c50068d0f33dece295e8f7c8ee1ddb22084ff4d5ad3de3f9dba19f11322caa9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CURVATURE_ENVELOPE_REPORT_20261005.md": "89bc929e2c84a0e4a04e80fcf36830572541e65066b4745afb9adb2097b5645e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RESUME_CURVATURE_20261005.md": "5d71d565f6d46353e67c34ef50d5c1d66bfd1dbcced954efa03a4086d9b586bb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/ACTIVE_PARKING_REPORT_20261005.md": "9fd1e1cf08b7e6249da0f9fbf8ee0b5db65976ce3c8fdea1060bfb1ed6481fd2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RESUME_ACTIVE_PARKING_20261005.md": "8f263fd840e1966c6f58006a21993c62d802e40e072ebd01c66fc58fbe7c4c71",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/CLOSED_LOOP_SCAN_MULTIFLOOR_REPORT_20261005.md": "5f38aef31650eda69b105bd9570f1965cb22a9aeccf97ba325b18ae6b65d71b4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/SLAM_INITIALIZATION_MATCHING_AUDIT_20261005.md": "2e568471a67de99479683a4d5a71afec94a145e9b62c2812095bcdfc96160f25",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/docs/RESUME_CLOSED_LOOP_SCAN_20261005_AFTERNOON.md": "aaad70ba7977ed4f8dfb83419198bc9bf32b140b9a3c3cf39772cf709708bbd3"
+  },
+  "preserved_failures_current_campaign": {
+    "A1": "boundary arrival chatter/runner flush cleanup failures; original receipts preserved",
+    "SLAM_interface_V1_V2_V3": "context and NumPy boolean/JSON defects; original startup failures preserved",
+    "SLAM_transfer_V4": "read-begin vs atomic JSON version concurrency race; source TTL unchanged, V5 independently rerun six times",
+    "tight_S_25Hz": "fixed first five seconds parking yaw above0.1rad; no source or threshold changes",
+    "radius_sweep_outer_launcher": "outer143 cause unverified; all24 physical children complete, no retcon",
+    "historical_global": "old5cm body-height ratio, open-loop ramp23/lowerramp, original origin and snapshot timing failures not erased",
+    "active_hold_V2_startup": "UNVERIFIED before Gazebo; cross-NumPy numerical endpoint hash mismatch; actual failure preserved",
+    "active_hold_V3_capture": "FAILED after actual180s; never declaredhold; final residual~66mm",
+    "active_hold_V4_archival": "original c842/6f9d/3765 UNVERIFIED missing frozen capture.py; no archived file or receipt replaced",
+    "active_hold_original_common": "original summary_truth_pid overallFAILED with zero-command parking gateUNVERIFIED; separate active hold contract accepts bounded nonzero commands"
+  },
+  "one_shot_08_automation_actual_confirmation_receipt": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/automation_pause_receipt.json",
+  "active_closed_loop_campaign": {
+    "status": "navigation_failed_diagnosis_archived",
+    "current_run": "20261005_153109_closed_loop_cascade_visual_cov1000_multifloor_r1_9cc6",
+    "current_configuration": "closed_loop_multifloor_v6",
+    "navigation_ground_truth_used": false,
+    "Actor_privileged_dimensions": 232,
+    "Actor_hz": 50,
+    "native_PD_hz": 200,
+    "actual_feedback_hz": 10,
+    "heartbeat_hz": 20,
+    "change": "Run-scoped visual measurement covariance 100000000→1000; same V5 control/online flags/initialization/3D gates",
+    "current_navigation_verified": false,
+    "last_runtime_completed_s": 600,
+    "last_Actor_samples": 30001,
+    "last_worker_fault": null,
+    "next_work": "Isolated actual solver correspondence/information/covariance instrumentation; see RESUME_CLOSED_LOOP_SCAN_20261005_AFTERNOON.md",
+    "actual_navigation_mission_completed": false,
+    "all_owned_runtime_clean": true,
+    "all_current_audits_completed": true
+  },
+  "prior_active_work_before_actual_SCAN_campaign": {
+    "scope": "V4 fixed endpoint capture and active hold; unchanged v1 continuous drive",
+    "status": "actual_truth_hold_calibration_completed",
+    "accepted_pilot_plus_three_confirmation": 4,
+    "prospective_plan": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/heartbeat_resume_20261005_0800/active_hold_plan_v4r2.json",
+    "new_SLAM_curve_and_multifloor_work": "unverified; source interface audit only, not yet implemented",
+    "truth_feedback_only": true,
+    "counts_as_SLAM_navigation": false
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "experiment": "teacher_pid_flat_long_v5_route_leg_yaw",
+  "scope": "Prospective actual SLAM/SCAN PID velocity-command experiment; simulation only",
+  "distance_m": 6.0,
+  "max_speed_mps": 0.2,
+  "max_yaw_rate_radps": 0.2,
+  "arrival_radius_m": 0.22,
+  "arrival_height_half_span_m": 0.1,
+  "arrival_control_radius_m": 0.17,
+  "dwell_sim_s": 0.6,
+  "goal_timeout_sim_s": 120.0,
+  "pose_cloud_timeout_s": 0.3,
+  "sensor_warmup_sim_s": 2.0,
+  "interface_version": "navigation_v4_latest_clock_measured_transition",
+  "warmup_history": {
+    "imu": {
+      "min_samples": 600,
+      "min_span_sim_s": 2.9
+    },
+    "body_odom": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "cloud": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "raw_lidar": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "image": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "camera_info": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    }
+  },
+  "request_startup_timeout_sim_s": 90.0,
+  "request_startup_timeout_wall_s": 600.0,
+  "teacher_transition": {
+    "stop_window_sim_s": 0.3,
+    "stop_min_pose_samples": 3,
+    "stop_pose_gap_max_s": 0.2,
+    "gyro_pose_pair_max_s": 0.15,
+    "stop_planar_speed_mps": 0.03,
+    "stop_slam_yaw_rate_radps": 0.05,
+    "stop_body_gyro_radps": 0.05,
+    "turn_complete_rad": 0.1,
+    "drive_heading_max_rad": 0.2
+  },
+  "recovery_fresh_pose_samples": 2,
+  "recovery_min_pose_span_sim_s": 0.1,
+  "fence": {
+    "along_min_m": -0.45,
+    "along_max_m": 6.45,
+    "lateral_abs_m": 0.45,
+    "height_abs_m": 0.2
+  },
+  "navigation_ground_truth_used": false,
+  "policy_observations": "Teacher CPU actor: 220 privileged simulator-state/scan dimensions plus 27 known command/action/applied-torque dimensions; navigation feedback uses actual sensor SLAM only",
+  "excluded": [
+    "real_robot",
+    "true_stairs",
+    "full_46_region_mission",
+    "unbounded_dynamic_mission"
+  ],
+  "max_lateral_speed_mps": 0.1,
+  "arrival_stop_policy": "after_measured_dwell",
+  "clear_guard_gap_max_sim_s": 0.3,
+  "pid": {
+    "position_kp": 0.6,
+    "position_ki": 0.08,
+    "position_kd": 0.12,
+    "yaw_kp": 1.1,
+    "yaw_ki": 0.04,
+    "yaw_kd": 0.15,
+    "position_integral_limit": 0.4,
+    "yaw_integral_limit": 0.3,
+    "derivative_filter_tau_s": 0.2,
+    "header_gap_max_s": 0.3,
+    "slew_acceleration": [
+      0.3,
+      0.3,
+      0.25
+    ],
+    "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+    "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+  },
+  "selector": "flat_long",
+  "route_height_delta_m": 0.0,
+  "return_to_origin": false,
+  "expected_asset": {
+    "terrain": "flat",
+    "spawn": [
+      4,
+      -0.7,
+      0.4,
+      0
+    ]
+  },
+  "review_basis": "explicit_user_pid_speed_command_teacher_route_and_multifloor_simulation",
+  "spawn": [
+    4,
+    -0.7,
+    0.4,
+    0
+  ],
+  "duration_s": 180,
+  "overview_pose": [
+    8,
+    2.5,
+    2.2,
+    0,
+    0.5,
+    -1.5707963267948966
+  ],
+  "terrain_target_manifest": "tests/terrain_targets/all_static.json",
+  "controller_kind": "teacher",
+  "protocol_case_id": "flat_straight_6m",
+  "pid_runtime_revision": "v5_actual_slam_frozen_route_leg_yaw",
+  "heading_reference": "route_leg",
+  "heading_reference_contract": {
+    "source": "activated raw SLAM segment_start and frozen SLAM-relative requested goal in camera_init",
+    "key": [
+      "request_id",
+      "waypoint_index"
+    ],
+    "activation": "before measured region arrival/planning; original accepted raw SLAM pose header retained",
+    "frozen_for_replanning": true,
+    "used_by": [
+      "TeacherHeadingGate",
+      "HeaderPID yaw"
+    ],
+    "XY_target": "unchanged actual checked SCAN lookahead target",
+    "invalid_reference": "failed protection and exact zero velocity; no heading fallback",
+    "navigation_ground_truth_used": false,
+    "eligible_geometry": "three straight flat cases only"
+  }
+}

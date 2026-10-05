@@ -1,0 +1,16 @@
+{
+  "schema": "prospective_parallel_pipeline_batch_execution_definition/v1",
+  "created_UTC": "2026-10-05T14:57:09.509357+00:00",
+  "parent_plan": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_EVALUATION_PLAN.json",
+  "parent_plan_sha256": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+  "numerical_threshold_changes": false,
+  "definition": "An independent valid measured batch is one fresh benchmark process group for one input scene and one variant. Repeated inner timer samples in a process are not independent process batches.",
+  "required_valid_process_groups_per_scene_per_variant": 30,
+  "recommended_valid_process_groups_per_scene_per_variant": 32,
+  "warmups_per_process_minimum": 10,
+  "inner_timer_samples_separately_reported": true,
+  "different_scenes_not_pooled_for_batch_count": true,
+  "ABBA_BAAB_balanced_order_required": true,
+  "pilot_preserved": "V15 first48 process groups =4 per scene per variant, each40 inner samples; retained as pilot, not upgraded to satisfy this process-batch count.",
+  "confirmation_authorization": "Root schedules fresh confirmation after V16 statistical window; this file starts no process or physics."
+}

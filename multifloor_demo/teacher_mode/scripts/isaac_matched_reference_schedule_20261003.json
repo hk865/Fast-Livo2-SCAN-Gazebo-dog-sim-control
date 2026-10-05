@@ -1,0 +1,464 @@
+{
+  "description": "Matched Gazebo command profile; nominal PhysX1envCPU, robot/ground material1 vs Gazebo robot.7/ground1; training model total16.087kg vs Demo16.512kg. Same command/bootstrap schedule is not identical dynamics. PD initialization first.1s only; every stop uses zero velocity command and ongoing Teacher inference.",
+  "cases": [
+    {
+      "name": "stand",
+      "duration": 15,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 15,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "forward",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0.3,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "backward",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            -0.3,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "left",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0,
+            0.2,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "right",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0,
+            -0.2,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "yaw_positive",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0,
+            0,
+            0.3
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "yaw_negative",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0,
+            0,
+            -0.3
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "duration": 26,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 8,
+          "command": [
+            0.3,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 8,
+          "end": 13,
+          "command": [
+            0,
+            0.2,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 13,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            -0.3
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 18,
+          "end": 26,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    },
+    {
+      "name": "command_timeout",
+      "duration": 18,
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 3,
+          "end": 7.3,
+          "command": [
+            0.3,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        },
+        {
+          "start": 7.3,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "teacher"
+        }
+      ]
+    }
+  ]
+}

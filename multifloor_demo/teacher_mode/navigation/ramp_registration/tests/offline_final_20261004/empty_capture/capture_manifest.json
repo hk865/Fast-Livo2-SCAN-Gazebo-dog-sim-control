@@ -1,0 +1,212 @@
+{
+  "schema": "actual_ramp_cloud_capture/v1",
+  "status": "observation_complete",
+  "stop_reason": "duration_complete",
+  "errors": [],
+  "counts": {
+    "full_cloud": 1
+  },
+  "submitted": 1,
+  "processed": 1,
+  "writer_drained": true,
+  "peak_queue_bytes": 2048,
+  "archive_bytes": 1016,
+  "admitted_clouds": 0,
+  "recorded_clouds": 1,
+  "body_anchor": null,
+  "gravity": null,
+  "clouds": [
+    {
+      "stream": "full_cloud",
+      "original_stamp_ns": 1000000000,
+      "frame_id": "camera_init",
+      "received_monotonic_wall": 10.0,
+      "received_ros_clock_ns": 1010000000,
+      "received_clock_wall_age_s": 0.005,
+      "position": [
+        1.0,
+        0.0,
+        0.4
+      ],
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "body_linear_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "child_frame_id": "aft_mapped",
+      "linear_acceleration": [
+        0.0,
+        0.0,
+        9.81
+      ],
+      "angular_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pose_covariance": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "twist_covariance": [
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04
+      ],
+      "width": 0,
+      "height": 0,
+      "point_step": 48,
+      "row_step": 0,
+      "is_bigendian": false,
+      "is_dense": false,
+      "fields": [
+        {
+          "name": "x",
+          "offset": 0,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "y",
+          "offset": 4,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "z",
+          "offset": 8,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "intensity",
+          "offset": 16,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "normal",
+          "offset": 20,
+          "datatype": 7,
+          "count": 3
+        },
+        {
+          "name": "ring",
+          "offset": 40,
+          "datatype": 4,
+          "count": 1
+        }
+      ],
+      "processed_monotonic_wall": 339452.605013527,
+      "background_queue_delay_wall_s": 339442.605013527,
+      "archive_file": "clouds/000001_1000000000.npz",
+      "archive_sha256": "06b6a54e5d38b9f2352f9dd60baf2d5506fabe82e1e4e7c32f364c2b1f066331",
+      "raw_payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_payload_bytes": 0,
+      "decoded_xyz_dtype": "<f8",
+      "decoded_xyz_shape": [
+        0,
+        3
+      ],
+      "decoded_xyz_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "original_structured_dtype": [
+        [
+          "",
+          "|u1"
+        ]
+      ],
+      "finite_points": 0,
+      "nonfinite_points": 0,
+      "decode_error": "invalid PointCloud2 dimensions or payload length",
+      "body_pose": null,
+      "geometry_admitted": false,
+      "geometry_rejection_reasons": [
+        "missing_actual_slam_body_pose",
+        "invalid_PointCloud2_field_layout_or_empty_payload: invalid PointCloud2 dimensions or payload length",
+        "no_finite_actual_XYZ",
+        "actual_gravity_not_initialized"
+      ],
+      "gravity_receipt": null,
+      "source_topic": "/cloud_registered_full",
+      "color_cloud_used": false,
+      "ground_truth_used": false
+    }
+  ],
+  "navigation_verified": false,
+  "control_outputs": 0,
+  "ground_truth_used": false,
+  "registration_readiness": "unverified_no_admitted_clouds"
+}

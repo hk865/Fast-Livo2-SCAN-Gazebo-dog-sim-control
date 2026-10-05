@@ -1,0 +1,173 @@
+{
+  "schema": "fastlivo_diagnostics/v1",
+  "header": "16-byte FLIVODIAG0001LE NUL; repeated 7*u64 LE (kind,sequence,stamp_ns,stage,iteration,level,n_values) then n_values f64 LE",
+  "negative_iteration_level": "u64 two-complement reinterpret int64",
+  "state25": [
+    "rot_rowmajor[9]",
+    "position[3]",
+    "inv_exposure[1]",
+    "velocity[3]",
+    "gyro_bias[3]",
+    "accel_bias[3]",
+    "gravity[3]"
+  ],
+  "cov361": "19x19 row-major, rot0:3 pos3:6 expo6 velocity7:10 gyro_bias10:13 accel_bias13:16 gravity16:19",
+  "source_ns": "kinds1/2/3 are original integer ROS stamp; kind10-20 estimator phase target double converted ns, original first/back IMU ns also saved; all source clocks sim seconds, receipt steady seconds",
+  "kinds": {
+    "1": {
+      "length": 42,
+      "fields": [
+        "receipt_steady",
+        "imu_enabled",
+        "last_lidar_s",
+        "imu_time_offset",
+        "ros_driver_fix",
+        "raw_gyro[3]",
+        "raw_acceleration[3]",
+        "raw_quaternion_xyzw[4]",
+        "orientation_cov9",
+        "gyro_cov9",
+        "accel_cov9"
+      ],
+      "note": "callback input before time correction and all early returns; quaternion is recorded for audit and not an estimator input"
+    },
+    "2": {
+      "length": 7,
+      "fields": [
+        "receipt_steady",
+        "lidar_enabled",
+        "lidar_offset",
+        "width",
+        "height",
+        "point_step",
+        "row_step"
+      ]
+    },
+    "3": {
+      "length": 7,
+      "fields": [
+        "receipt_steady",
+        "image_enabled",
+        "image_offset",
+        "width",
+        "height",
+        "step",
+        "hilti_enabled"
+      ]
+    },
+    "10": {
+      "length": 400,
+      "fields": [
+        "receipt_steady",
+        "scan_begin",
+        "scan_end",
+        "last_update_before",
+        "lio_target",
+        "vio_target",
+        "imu_count",
+        "need_init",
+        "gravity_align_enabled",
+        "gravity_align_finished",
+        "first_lidar",
+        "first_imu_original_ns",
+        "last_imu_original_ns",
+        "max_imu_gap",
+        "state25",
+        "cov361"
+      ],
+      "note": "before Process2"
+    },
+    "11": {
+      "length": 391,
+      "fields": [
+        "receipt_steady",
+        "last_update_after",
+        "need_init",
+        "gravity_align_finished",
+        "undistorted_count",
+        "state25",
+        "cov361"
+      ],
+      "note": "after Process2 and gravityAlignment"
+    },
+    "12": {
+      "length": 388,
+      "fields": [
+        "processed_flag",
+        "receipt_steady",
+        "state25",
+        "cov361"
+      ],
+      "note": "after VIO or skip empty cloud"
+    },
+    "13": {
+      "length": 388,
+      "fields": [
+        "processed_flag",
+        "receipt_steady",
+        "state25",
+        "cov361"
+      ],
+      "note": "after LIO StateEstimation or skip empty cloud"
+    },
+    "14": {
+      "fields": [
+        "rows",
+        "row_width=15",
+        "map_write_state25",
+        "rows*(body_point3,world_point3,var9)"
+      ],
+      "note": "detail-only actual map-write points after LIO before VIO; does not change map"
+    },
+    "20": {
+      "length": 58,
+      "fields": [
+        "head_s",
+        "tail_s",
+        "prop_begin",
+        "prop_end",
+        "dt",
+        "offset",
+        "mean_acc_norm",
+        "gravity_scale",
+        "bias_est_enabled",
+        "gravity_est_enabled",
+        "corrected_gyro3",
+        "scaled_bias_corrected_accel3",
+        "gyro_bias3",
+        "accel_bias3",
+        "gravity3",
+        "vel_before3",
+        "pos_before3",
+        "rot_before9",
+        "world_accel3",
+        "vel_after3",
+        "pos_after3",
+        "rot_after9"
+      ],
+      "note": "every actual propagated IMU pair incl reused prior tail; raw acceleration only kind1; supports exact discrete vertical displacement decomposition"
+    },
+    "4": {
+      "fields": [
+        "rows",
+        "width=5",
+        "offset_corrected_scan_begin_s",
+        "rows*(x,y,z,intensity,curvature_ms)"
+      ],
+      "note": "115–165s: actual preprocessed input cloud in LiDAR frame after existing self-echo relay and preprocess; source original integer header; not simulation truth; no logging on OMP"
+    }
+  },
+  "purpose": "read-only estimator copies; no estimator algebra or branches changed; maps and navigation truth remain separate",
+  "V11_collection_scope": {
+    "profile_window_sim_s": [
+      115,
+      118
+    ],
+    "outside_detail_is_absence_not_zero": true,
+    "solver_kind100_and_query_sidecars": "detail-only",
+    "VIO_retrieval_frame_cov_and_iteration_kind201": "detail-only; exceptional skip kind200 remains original",
+    "caller_kind1_2_3_10_11_12_13_14_20": "original gating retained;14 already detail-only",
+    "kind4": "detail_at(offset-corrected source header) using profile-defined window; raw record original header unchanged",
+    "record_layout_math_state_covariance_unchanged": true
+  }
+}

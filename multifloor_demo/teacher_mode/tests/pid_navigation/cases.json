@@ -1,0 +1,404 @@
+{
+  "flat_straight_6m": {
+    "case_id": "flat_straight_6m",
+    "fixture_kind": "flat",
+    "spawn": [
+      4,
+      -0.7,
+      0.4,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        6,
+        0,
+        0
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 120,
+    "duration_s": 180,
+    "wall_timeout_s": 600,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2
+  },
+  "flat_roundtrip_6m": {
+    "case_id": "flat_roundtrip_6m",
+    "fixture_kind": "flat",
+    "spawn": [
+      4,
+      -0.7,
+      0.4,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 120,
+    "duration_s": 300,
+    "wall_timeout_s": 960,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2
+  },
+  "ramp12_up_full": {
+    "case_id": "ramp12_up_full",
+    "fixture_kind": "ramp",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        1.2
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 190,
+    "wall_timeout_s": 630,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "ramp": "ramp_12",
+    "start_landing": "floor_1",
+    "destination_landing": "floor_2",
+    "world_forward_x_sign": 1,
+    "minimum_total_route_progress_m": 13.2,
+    "expected_horizontal_ramp_span_m": 12,
+    "terrain_targets": [
+      "floor_1",
+      "ramp_12",
+      "floor_2"
+    ]
+  },
+  "ramp12_down_full": {
+    "case_id": "ramp12_down_full",
+    "fixture_kind": "ramp",
+    "spawn": [
+      14.8,
+      2,
+      1.6,
+      3.141592653589793
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        -1.2
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 190,
+    "wall_timeout_s": 630,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "ramp": "ramp_12",
+    "start_landing": "floor_2",
+    "destination_landing": "floor_1",
+    "world_forward_x_sign": -1,
+    "minimum_total_route_progress_m": 13.2,
+    "expected_horizontal_ramp_span_m": 12,
+    "terrain_targets": [
+      "floor_2",
+      "ramp_12",
+      "floor_1"
+    ]
+  },
+  "ramp23_up_full": {
+    "case_id": "ramp23_up_full",
+    "fixture_kind": "ramp",
+    "spawn": [
+      14.8,
+      7,
+      1.6,
+      3.141592653589793
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        1.2
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 190,
+    "wall_timeout_s": 630,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "ramp": "ramp_23",
+    "start_landing": "floor_2",
+    "destination_landing": "floor_3",
+    "world_forward_x_sign": -1,
+    "minimum_total_route_progress_m": 13.2,
+    "expected_horizontal_ramp_span_m": 12,
+    "terrain_targets": [
+      "floor_2",
+      "ramp_23",
+      "floor_3"
+    ]
+  },
+  "ramp23_down_full": {
+    "case_id": "ramp23_down_full",
+    "fixture_kind": "ramp",
+    "spawn": [
+      1.2,
+      7,
+      2.8,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        -1.2
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 190,
+    "wall_timeout_s": 630,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "ramp": "ramp_23",
+    "start_landing": "floor_3",
+    "destination_landing": "floor_2",
+    "world_forward_x_sign": 1,
+    "minimum_total_route_progress_m": 13.2,
+    "expected_horizontal_ramp_span_m": 12,
+    "terrain_targets": [
+      "floor_3",
+      "ramp_23",
+      "floor_2"
+    ]
+  },
+  "continuous_two_ramps_up": {
+    "case_id": "continuous_two_ramps_up",
+    "fixture_kind": "continuous_ramps",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        1.2
+      ],
+      [
+        14.8,
+        0,
+        1.2
+      ],
+      [
+        14.8,
+        5,
+        1.2
+      ],
+      [
+        13.6,
+        5,
+        1.2
+      ],
+      [
+        0,
+        5,
+        2.4
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 500,
+    "wall_timeout_s": 1560,
+    "stage": "deferred",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "world_landmark_route": [
+      [
+        1.2,
+        2,
+        0
+      ],
+      [
+        14.8,
+        2,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        14.8,
+        7,
+        1.2
+      ],
+      [
+        1.2,
+        7,
+        2.4
+      ]
+    ]
+  },
+  "flat_short_1m_roundtrip": {
+    "case_id": "flat_short_1m_roundtrip",
+    "fixture_kind": "flat",
+    "spawn": [
+      6,
+      -0.7,
+      0.4,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 90,
+    "duration_s": 180,
+    "wall_timeout_s": 600,
+    "stage": "prospective",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "scope": "Preliminary safety calibration only; this1m result cannot satisfy the6m long-route stages."
+  },
+  "continuous_two_ramps_down": {
+    "case_id": "continuous_two_ramps_down",
+    "fixture_kind": "continuous_ramps",
+    "spawn": [
+      1.2,
+      7,
+      2.8,
+      0
+    ],
+    "relative_waypoints_m": [
+      [
+        13.6,
+        0,
+        -1.2
+      ],
+      [
+        14.8,
+        0,
+        -1.2
+      ],
+      [
+        14.8,
+        -5,
+        -1.2
+      ],
+      [
+        13.6,
+        -5,
+        -1.2
+      ],
+      [
+        0,
+        -5,
+        -2.4
+      ]
+    ],
+    "relative_frame": "yaw-aligned immutable initial raw SLAM anchor; z gravity aligned",
+    "goal_deadline_s": 140,
+    "duration_s": 500,
+    "wall_timeout_s": 1560,
+    "stage": "deferred",
+    "nominal_body_forward_mps": 0.2,
+    "maximum_body_lateral_mps": 0.1,
+    "maximum_yaw_rate_radps": 0.2,
+    "maximum_world_lateral_m": 0.45,
+    "route_lateral_rms_m": 0.2,
+    "world_landmark_route": [
+      [
+        1.2,
+        7,
+        2.4
+      ],
+      [
+        14.8,
+        7,
+        1.2
+      ],
+      [
+        16,
+        7,
+        1.2
+      ],
+      [
+        16,
+        2,
+        1.2
+      ],
+      [
+        14.8,
+        2,
+        1.2
+      ],
+      [
+        1.2,
+        2,
+        0
+      ]
+    ]
+  }
+}

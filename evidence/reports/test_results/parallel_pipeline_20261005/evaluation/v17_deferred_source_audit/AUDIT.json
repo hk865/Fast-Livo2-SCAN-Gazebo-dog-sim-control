@@ -1,0 +1,40 @@
+{
+  "schema": "independent_v17_deferred_decode_source_review/v1",
+  "created_UTC": "2026-10-05T14:52:50.316031+00:00",
+  "sources": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": {
+      "sha256": "58bcf05fd2248b2a5a7471477c1d775ba731bd37f272148912e4dfe0dbc7ccd5",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_deferred_source_audit/LIVMapper.cpp"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": {
+      "sha256": "5a2990efddac357211d93f002219a4dc47eb92071b476fd001bcc3ba52d193b2",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_deferred_source_audit/LIVMapper.h"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/ordered_ingress.h": {
+      "sha256": "1ec8b022e67233807ec45b3a27c11a877adf712b8160460c09c3e51620e96e08",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_deferred_source_audit/ordered_ingress.h"
+    }
+  },
+  "previous_audit_sha256": "e080f2d60eb9833b6111656e02a92c14af36bdeb98bc3868c6f8f7e46229fa4e",
+  "decoder_skip_issue_source_resolved": true,
+  "evidence": "receive_cloud/image catches exception_ptr in packet; owner rethrows at original process/getImage position, after original image header gates. Worker does not read last_timestamp_img.",
+  "thread_ownership_review": "One receiver owns decoder and sequence; main owner runs all original callback/IMU/map/sync functions. No new direct estimator/map writer found on limited path.",
+  "trace_added": [
+    "original receipt",
+    "decoded-end",
+    "pop-adjacent wall",
+    "commit-end",
+    "receiver and owner TID",
+    "decoder thread CPU begin/end",
+    "pending/bytes same-lock delivery snapshot"
+  ],
+  "remaining_measurement_limits": [
+    "No exact enqueue timestamp: decoded→pop includes push and queue delay, cannot separate them exactly.",
+    "kind300 preprocess12 no longer includes actual decoder; active pipeline N/A. spin_some8 now owner commit.",
+    "Failed owner callback currently has no normal completed CSV row; delivered/committed/runtime failure must reject, no fabricated complete trace.",
+    "Queue peak bounds do not bound DDS queues/decoder scratch."
+  ],
+  "actual_fixture_proposal": "../v17_header_exception_fixture.cpp, source only, uncompiled/unexecuted",
+  "numeric_semantics_proven": "UNVERIFIED pending actual LIVMapper fixture results",
+  "physical_performance": "UNVERIFIED: no pipeline actual run"
+}

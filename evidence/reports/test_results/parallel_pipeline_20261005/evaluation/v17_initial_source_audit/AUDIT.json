@@ -1,0 +1,72 @@
+{
+  "schema": "independent_v17_ingress_source_semantics_audit/v1",
+  "created_UTC": "2026-10-05T14:44:33.757217+00:00",
+  "source_scope": "Initial candidate only; root may repair then require new source binding. No Gazebo, estimator replay, numeric benchmark or throughput pass claimed.",
+  "sources": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": {
+      "sha256": "2ae6a48aabdb4b8b1c53a682078a290a080661da26db1d5bc0820894bbf1045c",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_initial_source_audit/LIVMapper.cpp"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": {
+      "sha256": "7320a85f0b960c77db98bf21b0154dfc0afa50bda928bf1275e667788739c999",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_initial_source_audit/LIVMapper.h"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/include/fast_livo2_core/core/ordered_ingress.h": {
+      "sha256": "630934a9066b564bd80d346b14b80399a9da3c15be348a7a3f330dfec3955729",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_initial_source_audit/ordered_ingress.h"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ingress_pipeline_v17/slam_ws/src/fast_livo2_core/src/preprocess.cpp": {
+      "sha256": "5c9c30b0f293251bfe7c721b888fbf80e1c087a52630a4355ebe7a1e5dc90d94",
+      "audit_snapshot": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_initial_source_audit/preprocess.cpp"
+    }
+  },
+  "thread_ownership_findings": {
+    "receiver": "Exactly one SingleThreadedExecutor invokes receive_cloud/image/imu/tick; ingress_sequence belongs to receiver.",
+    "mutable_decode_scratch": "p_pre process runs only receiver in enabled generic path; owner reads only configuration lidar_type after initialization. GPS/HILTI/disabled sensor modes rejected.",
+    "estimator_owner": "Old measurement callbacks and timer execute only commit_ingress on main. Model state/map/sync buffer/current diagnostics context remain main owner.",
+    "queue": "Mutex serializes push/pop/stats/fail/close. FIFO capacity failure sticky, main pop fails rather than silently dropping/overwriting accepted history.",
+    "payload_lifetime": "Shared original messages kept; decoded image is cloned by existing decoder; per-cloud copy keeps decoder scratch independent."
+  },
+  "must_address_before_semantic_pass": [
+    {
+      "id": "decode_error_before_header_skip",
+      "issue": "receive_image decodes before original duplicate/backward/min_interval checks, so decoder error in an otherwise skipped frame newly fails the run.",
+      "scope": "Actual current simulation may only provide valid frames; that does not establish same-input skip/error equivalence.",
+      "suggestion": "Capture decoder exception in packet, rethrow only at original owner decode position after unchanged header gates; never prefilter using shared owner last_timestamp. Test malformed duplicate/backward/sub20ms frame."
+    },
+    {
+      "id": "timing_stage_semantics",
+      "issue": "kind300 standard_preprocess12 became an empty main-owner scope; spin_some8 now only commit. These are not same measured intervals as V12.",
+      "suggestion": "Prospective new stage schema and explicit old12 N/A for active pipeline; instrument receiver decode/queue/owner spans, not call empty time decode speedup."
+    },
+    {
+      "id": "pipeline_trace_completeness",
+      "issue": "CSV receipt/decode-end/commit-start lacks enqueue/dequeue/end, queue watermark per event, worker and owner identities, attempted receive/final exception context.",
+      "suggestion": "Read-only per-event sequence/original integer source receipt/receive/decode/enqueue/dequeue/commit-end/queue bytes-count/thread ID and explicit final attempted/accepted/delivered/committed/canceled/rejected identities; missing trace must reject independently."
+    }
+  ],
+  "scope_limits": [
+    {
+      "id": "ready_fifo_not_global_memory_bound",
+      "detail": "512/64MiB bounds ready queue retained payload, not original ROS QoS depth200000/DDS queue nor decoder scratch; report queue limit scope."
+    },
+    {
+      "id": "same_dispatch_not_same_baseline_interleaving",
+      "detail": "FIFO preserves this executor observed callback order. Continuous spin vs spin_some changes dispatch/batch timing; only identical explicit event replay can claim same ordering/numeric output."
+    },
+    {
+      "id": "decode_blocking",
+      "detail": "First version decodes in receive executor; long decode blocks later IMU/timer receive. No separate receiver/decoder stage yet."
+    },
+    {
+      "id": "timer_elapsed_time",
+      "detail": "Queued timer executes unchanged original imu_prop_callback on owner, but after queue delay. Actual scheduling/TTL/output rate must be measured; pure queue does not establish end-to-end benefit."
+    },
+    {
+      "id": "shutdown",
+      "detail": "Cancel and join precede owner queue close, pending count retained as canceled. Explicit canceled evidence must remain; no final lossless claim from accepted alone."
+    }
+  ],
+  "algorithm_numeric_verification": "UNVERIFIED: source ownership review does not substitute decoded output bits or event/estimator numeric replay.",
+  "physical_navigation": "UNVERIFIED: no V17 physical run authorized by this audit."
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "Independent source review of current NAV-SCAN reference provenance; no ROS publisher/Gazebo started.",
+  "reviewed_source_sha256": {
+    "trajectory_contract.py": "e61e32035b387301ac784eeae8dc1255ee4087619e49e6c9d653159633a2d235",
+    "controller.py": "d9c1b34f3505de2359e95996a820c9bdf291ac899b8e3c8d1216c27e56f6cc14",
+    "scan.launch.py": "32ce93c0b6706d72a7e184c5311e0c6173a96f81f63f38295ee196b44014d19c",
+    "ros2_ws/src/plan_manage/src/scan_replan_fsm.cpp": "1836771fdac3b3b16bd57d42681152b513f809f57bb239b9dad8d65b71758cf1",
+    "ros2_ws/src/plan_manage/src/scan_planner_node.cpp": "2040950cf8e72e6037543185b89a92fa9f416b05976131730d7ae05236bc2f08",
+    "ros2_ws/src/plan_manage/src/planner_manager.cpp": "720af0a0f63b56f8c08ce74f2d0d374e0aa0329223c4552c791a1546a1385239"
+  },
+  "findings": [
+    "Current waypoint clears association before any new request; cumulative reference_requests is no longer acceptance authority.",
+    "Each reference Path header has a per-process strictly increasing immutable stamp, independent of mutable Bspline start_time.",
+    "SCAN reference_ready is cleared before processing; original requested body goal and stamp are committed only after successful global planning.",
+    "SingleThreadedExecutor prevents an interleaved local publish inside pathCallback planning/commit.",
+    "Both normal and emergency Bspline publishers emit matching full numeric payload metadata from the actual published message.",
+    "Global goal collision adjustment is recorded separately and never replaces the original mission arrival coordinate.",
+    "NAV accepts a pair only for its current reference and original body goal, with full order/id/start_time/control points/knots equality.",
+    "Bounded caches handle either topic arriving first; new reference clears both caches.",
+    "After pairing, controller still applies spline dimensions/finite/start distance/nondegenerate checks; actual LiDAR collision and raw SLAM arrival remain authoritative.",
+    "All request_plan paths invalidate samples before waiting for the new trajectory; no continued old samples on a new reference.",
+    "Measured-state replacement and zero planned stop boundary do not change measured start position or inject GT; GT remains independent mission evaluation."
+  ],
+  "additional_hardening_initial_findings": [
+    "Same-reference pair replay 1 -> 2 -> 1 can regress accepted output without a monotonic accepted trajectory id. Normal ordered delivery from the current single DDS writer avoids this ordering; broader delayed/replayed fixture exposes it.",
+    "Non-object JSON metadata raises AttributeError before current callback error handler. A dictionary validation should reject safely."
+  ],
+  "limits": [
+    "Provenance does not establish collision freedom or progress. Geometry and sensors must still pass their independent gates.",
+    "Run11 did not archive full historical Bspline payloads or the actual boundary acceleration; this is not an exact spline replay.",
+    "The run11 new replan111 east curve is supported by printed new-reference evidence and the independent polynomial fixture; metadata race is not claimed as its proven primary cause.",
+    "No complete three-floor exploration/return/F1-F3 mission PASS is established by this source/protocol review."
+  ],
+  "additional_hardening_resolution": "Both findings fixed by navigation owner: accepted trajectory id high water rejects same-reference old pairs, and non-object metadata rejects safely. Independent protocol tests 12/12 with all 24 two-trajectory delivery permutations pass.",
+  "protocol_evidence": "review_trajectory_association.json"
+}

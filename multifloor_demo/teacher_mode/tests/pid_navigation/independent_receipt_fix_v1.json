@@ -1,0 +1,24 @@
+{
+  "schema": "pid_navigation_independent_receipt_correction/v1",
+  "scope": "Independent analysis implementation fixes only; prospective protocol, case, runtime and numerical criteria unchanged. Original receipts are preserved. This correction does not convert a real forward-speed failure into passage.",
+  "original_analyzer": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/analyze_pid_navigation.py",
+  "original_analyzer_sha256": "9d4ef434ba1940abbd204a2002a06bd8eb7e3be6ea1d8ee87771d3512b774c65",
+  "corrected_analyzer": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/analyze_pid_navigation_v1_receipt_fix.py",
+  "corrected_analyzer_sha256": "777b4706f09fd74065e1dc99af1fba326364d16f16c1addb01491ad082151753",
+  "protocol_sha256": "002a3847395159cc644914caa687cfb8a0f879802281bbfedee2cfe155a4bd13",
+  "cases_sha256": "445ff554cbc8ec85425603f7b50eb7d774b5971f137b650768a1b9cb97dca2d4",
+  "changes": [
+    {
+      "field": "controller_identity_and_execution",
+      "bug": "Exact equality with shortened writer label rejected actual frozen native contract descriptor ending sole JointForceCmd writer. All device/model/action/target/observation checks already matched.",
+      "fix": "Accept only the two explicit native Teacher writer descriptors; exclusive physical plugin ownership remains independently required."
+    },
+    {
+      "field": "physical_route_tracking_and_actual_motion",
+      "bug": "Nonzero residual worker translation during waypoint handoff/hold was treated as drive, producing 2.947762rad heading error relative to newly reversed route.",
+      "fix": "A drive interval must additionally have the causally matched actual PID mode=drive; neither heading threshold nor forward-speed criterion changes."
+    }
+  ],
+  "original_receipt_kept": true,
+  "protocol_runtime_changed": false
+}

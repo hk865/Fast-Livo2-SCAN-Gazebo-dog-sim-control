@@ -1,0 +1,218 @@
+{
+  "schema": "independent_V17_original_prefix_guard_and_strict_pipeline_union/v1",
+  "status": "FAIL_STRICT_PIPELINE_LIFECYCLE",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde",
+  "created_UTC": "2026-10-05T16:00:23.403300+00:00",
+  "pipeline_original_receipt_status_preserved": "failed",
+  "pipeline_original_delegated_native_gate_not_rewritten": {
+    "status": "unverified",
+    "passed": null,
+    "reason": "Must be separately joined to this run original common/publication receipts; this reader does not invent native/TTL PASS or excuse cleanup"
+  },
+  "new_separate_original_guard_evidence": {
+    "all16_original_prefix_common_gates_passed": true,
+    "all7_original_publication_extra_gates_passed": true,
+    "common_status": "failed",
+    "publication_status": "failed",
+    "full32_parking_nonflat_incomplete_keys": [
+      "all_original_SLAM_3D_region_arrivals",
+      "new_first_declared_active_hold_fixed_5s",
+      "strict_nonflat_complete_contact_geometry"
+    ]
+  },
+  "strict_lifecycle_failure": {
+    "status": "failed",
+    "passed": false,
+    "trace_committed": 31614,
+    "summary": {
+      "schema": "ordered_ingress_v17",
+      "accepted": 31615,
+      "delivered": 31614,
+      "committed": 31614,
+      "canceled": 1,
+      "rejected": 0,
+      "peak_pending": 15,
+      "peak_bytes": 4211680,
+      "failure": ""
+    },
+    "cleanup_exemption_applied": false,
+    "missing_count": 1
+  },
+  "missing_packet_identity": {
+    "last_committed": {
+      "sequence": "31614",
+      "kind": "0",
+      "source_ns": "0",
+      "receipt_wall": "458417.09829193499",
+      "decoded_wall": "458417.09829193499",
+      "pop_wall": "458417.09851257398",
+      "commit_end_wall": "458417.098516158",
+      "receive_tid": "1280635",
+      "owner_tid": "1280423",
+      "decode_cpu_begin_ns": "3199783002",
+      "decode_cpu_end_ns": "3199783002",
+      "pending_after_pop": "0",
+      "bytes_after_pop": "0"
+    },
+    "last_committed_by_sensor_kind": {
+      "1": {
+        "sequence": "31524",
+        "kind": "1",
+        "source_ns": "60010000000",
+        "receipt_wall": "458416.73987375002",
+        "decoded_wall": "458416.739875253",
+        "pop_wall": "458416.74000664498",
+        "commit_end_wall": "458416.74001930299",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3195338957",
+        "decode_cpu_end_ns": "3195339242",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      },
+      "2": {
+        "sequence": "31508",
+        "kind": "2",
+        "source_ns": "59995000000",
+        "receipt_wall": "458416.678809579",
+        "decoded_wall": "458416.67929729802",
+        "pop_wall": "458416.67932567198",
+        "commit_end_wall": "458416.679336217",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3194075880",
+        "decode_cpu_end_ns": "3194562291",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      },
+      "3": {
+        "sequence": "31504",
+        "kind": "3",
+        "source_ns": "59995000000",
+        "receipt_wall": "458416.67297360301",
+        "decoded_wall": "458416.67319388001",
+        "pop_wall": "458416.67327566398",
+        "commit_end_wall": "458416.67335165798",
+        "receive_tid": "1280635",
+        "owner_tid": "1280423",
+        "decode_cpu_begin_ns": "3193411367",
+        "decode_cpu_end_ns": "3193629399",
+        "pending_after_pop": "0",
+        "bytes_after_pop": "0"
+      }
+    },
+    "final_timer_only_committed_suffix_length": 90,
+    "last_pop_queue_empty": true,
+    "cancel_packet_sequence_candidate": 31615,
+    "candidate_sequence_rule": "Exactly one accepted-but-undelivered event after continuous committed sequence1..31614; packet itself not traced. No kind/header/receipt is inferred.",
+    "queue_close_source_rule": "stop_ingress cancels and joins RX before OrderedQueue.close(); close increments canceled by pending queue size and clears it. This locates cancellation to close, not original receipt time.",
+    "cancel_event_kind": "unverified",
+    "cancel_event_source_ns": "unverified",
+    "cancel_event_receipt_wall": "unverified",
+    "cancel_event_close_wall": "unverified",
+    "cleanup_exemption_applied": false
+  },
+  "criteria_unchanged": true,
+  "cleanup_exemption": false,
+  "actual_regions": 8,
+  "required_regions": 32,
+  "native_200hz_safety": {
+    "native_continuous_200Hz": {
+      "status": "passed",
+      "passed": true,
+      "phase": "PreUpdate t-dt",
+      "maximum_gap_s": 0.005000000000004334,
+      "samples": 12001
+    },
+    "native_physical_safety": {
+      "status": "passed",
+      "passed": true,
+      "minimum_clearance_m": 0.2756869148699862,
+      "maximum_roll_pitch_rad": 0.11397524708836097,
+      "body_contacts": 0,
+      "fault_samples": 0,
+      "ground_truth_used_only_offline": true
+    },
+    "native_force_velocity_and_support": {
+      "status": "passed",
+      "passed": true,
+      "maximum_tau_Nm": 14.601157462834916,
+      "maximum_qd_radps": 13.447307815754531,
+      "maximum_unsupported_s": 0.009999999999999995,
+      "torque_is_command_feed_to_physics_not_measured_motor_torque": true
+    }
+  },
+  "actual_source_and_math_metrics": {
+    "status": "passed",
+    "passed": true,
+    "invalid_ticks": [],
+    "actual_math_updates": 932,
+    "actual_math_header_hz": 15.384615621302336,
+    "actual_header_dt_s": {
+      "count": 931,
+      "min": 0.0299999989999975,
+      "p50": 0.06499999899999764,
+      "p95": 0.07000000000000028,
+      "max": 1.2550000000000026
+    },
+    "SLAM_age_sim_s": {
+      "count": 933,
+      "min": 0.015,
+      "p50": 0.05,
+      "p95": 0.065000001,
+      "max": 0.075000001
+    },
+    "SLAM_age_wall_s": {
+      "count": 933,
+      "min": 0.0016893309657461941,
+      "p50": 0.01894875697325915,
+      "p95": 0.03827181837987154,
+      "max": 0.06420888501452282
+    },
+    "causal_gyro_gap_s": {
+      "count": 933,
+      "min": 0.0,
+      "p50": 0.004999999,
+      "p95": 0.01,
+      "max": 0.02
+    },
+    "IMU_orientation_used_only_if_actual_publisher_declares_available": true,
+    "original_feedback_entry_to_base_callback_record_wall_offset_s": {
+      "count": 933,
+      "min": 7.912050932645798e-06,
+      "p50": 1.45149533636868e-05,
+      "p95": 1.8432585056871177e-05,
+      "max": 3.860698780044913e-05
+    },
+    "receipt_sampling_points_are_different_and_not_falsely_required_bit_exact": true,
+    "selected_controller_hz": null,
+    "actor_hz_is_not_source_feedback_hz": true
+  },
+  "actual_route_metrics": {
+    "status": "passed",
+    "passed": true,
+    "body_relative_route_registration": "single offline SE3 at original source anchor; not a registered original scene route",
+    "absolute_original_scene_centerline_registration": "unverified",
+    "maximum_route_distance_m": 0.13537944668946855,
+    "active_route_RMS_m": 0.02726629337280676,
+    "maximum_drive_heading_rad": 0.10048063745646103,
+    "native_COM_projected_speed_mean_mps": 0.16957254628048526,
+    "reference_speed_mean_mps": 0.18912573672555025,
+    "speed_MAE_mps": 0.04022185580835519,
+    "actual_Gazebo_state_used_only_after_sensor_command_audit": true
+  },
+  "runtime_committed_body_bit_identity": "UNVERIFIED; actual raw stream has metadata only; limited synthetic semantics not full runtime body replay",
+  "full_route_ramp_parking_replay": "NOT_RUN_FOR_60S_SMOKE",
+  "performance_promotion": "FAIL_CLOSED; one smoke cannot demonstrate whole pipeline benefit",
+  "verified_input_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/pipeline_runtime_audit/V17_efde_RUNTIME_RECEIPT.json": "80efc11ed7c5537c7ef70493f58527db5b8f28ef20cdcfe3bcc2e2dd5df4af20",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/pipeline_runtime_audit/actual_efde/CANCEL_AND_MEASURED_RUNTIME.json": "cab8baae7be2675417adc5ff621523050a5379e3cfb7dddfd77f4380f2dfd2d2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/pipeline_runtime_audit/actual_efde/MANIFEST.json": "c66ab782f3b29e4d323d2a0b877a21fdaf6f49e516a94f6abbec62f4e557d633",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/summary_closed_loop_cascade_independent.json": "57a8608ab29af29d520cb06fe57018a7cbeb97c681cdd7bdf5f14197417b0b86",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/summary_closed_loop_clock_hold_independent.json": "3f8b7dbcbfd4bb3032656784c3d86028efea5e0eb3e620e1cf3ebf3456d024fb",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/worker_result.json": "7eff44f043f7d0c3419a5e94d504fbeb9d71eb6a8cb66ecd58cf234eb4a83541",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234627_closed_loop_cascade_clock_hold_ingress_v17_smoke_r1_efde/runtime_manifest.json": "9604266cc7008623adb459413591ec504ca2173b245e6b57b30c29746315da15",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V17_60S_SMOKE_CRITERIA.json": "85a39bc1adc538e468207fd785348bf32630c66772ebadc985f9fcf096342867",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V17_TIMING_SCOPE.json": "709d4cf1e906cb869b82411c5a399ac0e85597645e438bd513518404b1cbbb96"
+  }
+}

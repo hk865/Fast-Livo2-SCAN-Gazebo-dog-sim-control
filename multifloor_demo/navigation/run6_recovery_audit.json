@@ -1,0 +1,58 @@
+{
+  "source_run": "20260922_211651_8232a9",
+  "source_artifacts": [
+    "feedback.jsonl",
+    "control_audit.jsonl",
+    "mission.json"
+  ],
+  "scope": "read-only diagnosis of retained failed physical run; no claim that replay validates closed-loop navigation",
+  "first_goal_camera_init": [
+    0.009310853982197682,
+    -1.0005813749154917,
+    -0.00010269433283714644
+  ],
+  "arrival_radius_m": 0.22,
+  "arrival_required_sim_s": 0.4,
+  "minimum_raw_slam_distance_m": 0.21834463435339058,
+  "inside_arrival_radius_windows": [
+    {
+      "start_sim_s": 72.828,
+      "end_sim_s": 72.929,
+      "duration_s": 0.10099999999999909
+    },
+    {
+      "start_sim_s": 90.905,
+      "end_sim_s": 90.905,
+      "duration_s": 0.0
+    }
+  ],
+  "phase_sample_fractions": {
+    "drive": 0.23959827833572453,
+    "pre_turn": 0.2998565279770445,
+    "align": 0.1492109038737446,
+    "settle": 0.3113342898134864
+  },
+  "observed_drive_windows": 20,
+  "drive_window_duration_median_s": 0.7035000000000053,
+  "drive_window_duration_min_s": 0.30100000000000193,
+  "evidence": {
+    "max_nav_tilt_rad": 0.08589335903319685,
+    "obstacle_stops": 0,
+    "reference_requests": 1,
+    "scan_replans": 7,
+    "pose_error_rmse_m": 0.02770328216345878,
+    "pose_error_max_m": 0.10936347597910774
+  },
+  "diagnosis": "Repeated near-endpoint heading-gate stops interrupt CHAMP before sustained forward motion; instantaneous measured body sway and SLAM x excursions are amplified by a roughly 0.24 m lookahead vector. The robot only enters raw arrival radius for at most 0.101 s, below the unchanged 0.4 s dwell.",
+  "changes": {
+    "tracking_position_lowpass_sim_tau_s": 0.4,
+    "drive_heading_deviation_rad": 0.2,
+    "drive_heading_deviation_dwell_sim_s": 0.5,
+    "large_heading_deviation_immediate_stop_rad": 0.55,
+    "walking_yaw_gain": 0.5,
+    "walking_yaw_max_rad_s": 0.04,
+    "raw_slam_arrival_tilt_and_obstacle_checks_unchanged": true,
+    "pure_turn_and_before_after_settle_unchanged": true
+  },
+  "new_core_sha256": "f621bc3aa5f1c7d0c2db11c01526c9774aae7b5af906bbcf22f2236505fd3da3"
+}

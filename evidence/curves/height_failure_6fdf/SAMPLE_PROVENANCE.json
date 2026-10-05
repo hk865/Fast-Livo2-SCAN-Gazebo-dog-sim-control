@@ -1,0 +1,67 @@
+{
+  "schema": "go2_compact_visualization_samples/v1",
+  "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "label": "height_failure_6fdf",
+  "sample_interval_s": 0.2,
+  "telemetry": {
+    "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/telemetry.jsonl",
+    "source_size_bytes": 477169182,
+    "source_sha256_reference": "aa333bf55cb659d2a6d8e7734f114f47f88a3115f0caf0b72fbcc02eb3bcfec4",
+    "historical_inventory": "PACKAGE_MANIFEST",
+    "source_sha256_not_recomputed": true,
+    "source_rows": 10501,
+    "selected_rows": 1051,
+    "selection": "first source row in floor((time+1e-8)/0.2); additionally retain final endpoint",
+    "time_field": "sim_time",
+    "retained_fields": [
+      "sim_time",
+      "world_sim_time",
+      "command",
+      "body_lin_vel",
+      "body_ang_vel",
+      "position",
+      "rpy",
+      "contacts",
+      "fault",
+      "q_target",
+      "applied_torque",
+      "state",
+      "command_expired",
+      "command_source",
+      "observation_source"
+    ],
+    "full_raw_reaudit_supported_by_this_sample": false
+  },
+  "SLAM": {
+    "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_slam_poses.jsonl",
+    "source_size_bytes": 2085274,
+    "source_sha256_reference": "55880a3a4ad193f1eb29b1f9c301b29607a6d394dc2481aac1f6e00330a23197",
+    "historical_inventory": "PACKAGE_MANIFEST",
+    "source_sha256_not_recomputed": true,
+    "source_rows": 2064,
+    "selected_rows": 1033,
+    "selection": "first source row in floor((time+1e-8)/0.2); additionally retain final endpoint",
+    "time_field": "stamp_ns",
+    "retained_fields": [
+      "stamp_ns",
+      "frame_id",
+      "child_frame_id",
+      "position",
+      "quaternion",
+      "body_velocity",
+      "body_angular_velocity",
+      "received_monotonic_wall",
+      "callback_ros_clock_ns",
+      "sim_age_at_callback_s",
+      "body_gyro",
+      "gyro_stamp_s"
+    ],
+    "full_raw_reaudit_supported_by_this_sample": false
+  },
+  "warnings": [
+    "Partial fields and downsampling discard observations, actions and transient safety/TTL/contact events.",
+    "Original native world and camera_init SLAM frames are not registered by these samples.",
+    "SHA values are quoted from immutable sealed inventories; large source data were not rehashed.",
+    "This evidence archive cannot reconstruct or re-audit full original records after their deletion."
+  ]
+}

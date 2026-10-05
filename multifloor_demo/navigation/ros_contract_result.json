@@ -1,0 +1,110 @@
+{
+  "scope": "synthetic ROS component contract; not end-to-end SLAM",
+  "passed": true,
+  "checks": [
+    {
+      "name": "controller discovered and idle",
+      "passed": true
+    },
+    {
+      "name": "SCAN reference emitted",
+      "passed": true
+    },
+    {
+      "name": "SCAN internal body height offset cancelled",
+      "passed": true
+    },
+    {
+      "name": "no SCAN trajectory means no translation",
+      "passed": true
+    },
+    {
+      "name": "B-spline without committed metadata cannot drive",
+      "passed": true
+    },
+    {
+      "name": "old reference cannot be relabelled by fresh B-spline time",
+      "passed": true
+    },
+    {
+      "name": "valid SCAN trajectory drives feedback motion",
+      "passed": true
+    },
+    {
+      "name": "idempotent request preserves trajectory",
+      "passed": true
+    },
+    {
+      "name": "repeated raw IMU stamps cannot bypass freshness",
+      "passed": true
+    },
+    {
+      "name": "SCAN emergency parking spline clears previous motion",
+      "passed": true
+    },
+    {
+      "name": "valid SCAN route recovers after parking rejection",
+      "passed": true
+    },
+    {
+      "name": "registered obstacle causes stop",
+      "passed": true
+    },
+    {
+      "name": "cleared obstacle requests replan",
+      "passed": true
+    },
+    {
+      "name": "new trajectory resumes translation",
+      "passed": true
+    },
+    {
+      "name": "raw IMU stops while SLAM remains level",
+      "passed": true
+    },
+    {
+      "name": "raw IMU hold cannot resume before stable window",
+      "passed": true
+    },
+    {
+      "name": "both stable attitudes release raw IMU hold",
+      "passed": true
+    },
+    {
+      "name": "missing raw IMU stops despite fresh SLAM and cloud",
+      "passed": true
+    },
+    {
+      "name": "odom loss stops without waiting for failure",
+      "passed": true
+    },
+    {
+      "name": "repeated old stamps do not bypass watchdog",
+      "passed": true
+    },
+    {
+      "name": "SLAM tilt protection stops motion",
+      "passed": true
+    },
+    {
+      "name": "stable body pose releases tilt hold and replans",
+      "passed": true
+    },
+    {
+      "name": "stop cancels and publishes zero",
+      "passed": true
+    },
+    {
+      "name": "severe SLAM tilt fails task without translating",
+      "passed": true
+    },
+    {
+      "name": "severe raw IMU fails task while SLAM level",
+      "passed": true
+    },
+    {
+      "name": "execution bridge fail latch propagates to task with level SLAM and IMU",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "schema": "v11_logging_acceleration_prospective_preflight/v1",
+  "status": "SOURCE_PREPARED_UNBUILT",
+  "simulation_started": false,
+  "ROS_started": false,
+  "build_started": false,
+  "limited_numeric_fixture_run": false,
+  "C++_source_preparation_only": true,
+  "syntax_checked_in_memory": true,
+  "full_actual_replay_equivalence": "UNVERIFIED",
+  "profile_detail_window_sim_s": [
+    115,
+    118
+  ],
+  "earlier_V10_multicore_preflight_and_contract": "Historical baseline only until V11 build SHA is substituted; V11 runner refuses source-only preflight",
+  "retained_execution_logic_bytes_V10": [
+    "controller.py",
+    "clock_hold.py",
+    "cascade_core.py",
+    "pid_core.py",
+    "teacher_wrapper.py",
+    "worker.py",
+    "sensor_gate.py"
+  ],
+  "source_before": {
+    "fast_livo2_core/CMakeLists.txt": "c55d27c31faab458ad98ffb66eed770e1cb71dffcc43632cc5101d2caff5827d",
+    "fast_livo2_core/README.md": "f4ddbdbf76e73597a62a21d9e8c7cb8512d765602b87e8a61d2a9e92a965a37a",
+    "fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": "b89d3f7e4d9cd38bd10a4f4abdcfdda2644f91f8817d91d4506130576f600319",
+    "fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": "5111be03a6c10c03c09a61f643f92ba5698b4d6199ce0d0714695d53030b92be",
+    "fast_livo2_core/include/fast_livo2_core/core/common_lib.h": "7b936106168f11c85a7cbf1b647c09457f97d1b9c2f1d97bb7f8898c616a3014",
+    "fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": "5db7451b2cbbddcbc24b312860b94ac38b1d02d95758a85720292d5c59d704ab",
+    "fast_livo2_core/include/fast_livo2_core/core/feature.h": "27eaea6a52e4d0edc9aa04a770a5f436eb129b4c4fbfc7bf9812c5fd3f644799",
+    "fast_livo2_core/include/fast_livo2_core/core/frame.h": "91a7ff427c0fb1e12220d4e60ac0ea9ed0785c1ae73c8da98c14ebe2f9782fa6",
+    "fast_livo2_core/include/fast_livo2_core/core/preprocess.h": "03c8a5f6062eac3bf3461e384f585601c7c40f20eddf7e104c852b078ce7e648",
+    "fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": "5a18d8a934403b22ccf7db3c98d83af7b061710c8aec53fea6897081fde94703",
+    "fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": "39a7cda11924068cc463b0eba1ae89da9c923c7ef8668393dfee5adf0730fbb9",
+    "fast_livo2_core/include/fast_livo2_core/core/vio.h": "29f02eb7b897b37ae5beba9bc8b39ff21fd3446461d2b7d0929e183241e67930",
+    "fast_livo2_core/include/fast_livo2_core/core/visual_point.h": "c528be4967454ff79f6aac0c5322d62b19ec34c7e8c248b49981d1b3a7f1888d",
+    "fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": "a322f86592cc29ea3203075cb9620f3eda19286f156377cd584a23e73783de39",
+    "fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": "47ae77c64f4d05f7f471d0c2032f52f985926b2eb1c8c2a71f8e78b08c33157d",
+    "fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": "36b6f7f0a2545dd425779124429a17703b7f73a237f3f59777fcda68175aae78",
+    "fast_livo2_core/include/fast_livo2_core/runner.hpp": "452a5aeae6e502b06ead69b74ff47d94cc710d4d2938062cdd4664c2d6443135",
+    "fast_livo2_core/include/fast_livo2_core/utils/color.h": "a8dca85646b18e26432f453993cf2da8de8e6b6e3184228b9fb92651c4a8f2ef",
+    "fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": "fa815b3bc8dc157a2ab8d692b0dd604b369680a7e711fef666f4e12d4ab33c37",
+    "fast_livo2_core/include/fast_livo2_core/utils/types.h": "ade63d344d8d4cdec2dd8ec0fd6ea7930cb007c9c41ba83500bc7ea79d874d45",
+    "fast_livo2_core/include/fast_livo2_core/utils/utils.h": "53e212cc56c9f7627bc9a58cae906b9fe9bb334184b28a1b6f8a2821e2ebf3e8",
+    "fast_livo2_core/package.xml": "36323cb18443fb39332690f085bba0381e7cae9dcca40e981ca8a611ca321ebe",
+    "fast_livo2_core/src/IMU_Processing.cpp": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+    "fast_livo2_core/src/LIVMapper.cpp": "caadf1b4ac6c5d28032b185ed3f0735da424aed47cd0da35a0dc2c8d79c7b18b",
+    "fast_livo2_core/src/frame.cpp": "d45bb8ab1edf065089515940d0c7d6ff2c08fe460143778f62f09547e63f489a",
+    "fast_livo2_core/src/preprocess.cpp": "5c9c30b0f293251bfe7c721b888fbf80e1c087a52630a4355ebe7a1e5dc90d94",
+    "fast_livo2_core/src/runner.cpp": "d349c46c4fd8c83c51c03ca10fbe1ff154558c03c92a9e97e08d83823c29ea13",
+    "fast_livo2_core/src/utils.cpp": "3e0aeaccaf94d7a5e44af952027ddda88f8e3787580b942af5b2db66ff0705d3",
+    "fast_livo2_core/src/vio.cpp": "44a14f27f4a322c1c7d2f18e62ffad21c3df9c7ae120a75c47963663d7917e78",
+    "fast_livo2_core/src/visual_point.cpp": "d067e2b05445835cbbb4c8a159519bf4a01a271b96d06cc3a32419092b3fcc6e",
+    "fast_livo2_core/src/voxel_map.cpp": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+    "fast_livo2_ros/CMakeLists.txt": "a5d9fbd9e6f2acfb8087a17235c9f1b11d43ecea641197f348676543db630488",
+    "fast_livo2_ros/README.md": "543b6153b1a93fe42fc89e368c0026e2bb5530056e39a7cb57f50d7271500b9f",
+    "fast_livo2_ros/config/avia.yaml": "77938f14ade2100bcb14cd56e9988bf778c833ecbc41861410172680c3ad3855",
+    "fast_livo2_ros/config/camera_pinhole.yaml": "cd58242cf93b5f8408428387291bb91425420be8f7bf2c75ceb1efe1770b442c",
+    "fast_livo2_ros/launch/mapping_aviz.launch.py": "1978aa994cc1dd99b2eae45228749cbeca7b13401a3e9e4f7906759cbf089b6a",
+    "fast_livo2_ros/package.xml": "2211d1466f2c76b784b367fb6bf6e3256325b72656b6325f8bb721ece274dd96",
+    "fast_livo2_ros/rviz/fast_livo2.rviz": "c18b0dcff13bc377c876cfa2cefe2131e5fbd4b596526651ad623f96871f7bd6",
+    "fast_livo2_ros/rviz/octomap_only.rviz": "3a72395cc613943788f7e0c0f7827c29cd3fcb09dd3033e9cf7c269311c11fd8",
+    "fast_livo2_ros/scripts/decompress_images.py": "375d6b107a33de4049535c89761d1a9fc2d836a411a7444f943cd14c5d039a93",
+    "fast_livo2_ros/src/main.cpp": "86760a58acf8083d877b13f3006ddb918f7b209b6238203ab6839de95dafca7e"
+  },
+  "source_after": {
+    "fast_livo2_core/CMakeLists.txt": "c55d27c31faab458ad98ffb66eed770e1cb71dffcc43632cc5101d2caff5827d",
+    "fast_livo2_core/README.md": "f4ddbdbf76e73597a62a21d9e8c7cb8512d765602b87e8a61d2a9e92a965a37a",
+    "fast_livo2_core/include/fast_livo2_core/core/IMU_Processing.h": "b89d3f7e4d9cd38bd10a4f4abdcfdda2644f91f8817d91d4506130576f600319",
+    "fast_livo2_core/include/fast_livo2_core/core/LIVMapper.h": "5111be03a6c10c03c09a61f643f92ba5698b4d6199ce0d0714695d53030b92be",
+    "fast_livo2_core/include/fast_livo2_core/core/common_lib.h": "7b936106168f11c85a7cbf1b647c09457f97d1b9c2f1d97bb7f8898c616a3014",
+    "fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": "a5e56d67dff5eede8a68b891e63ffd71a0fcd0f699715a67a3ec51fa9a65adb9",
+    "fast_livo2_core/include/fast_livo2_core/core/feature.h": "27eaea6a52e4d0edc9aa04a770a5f436eb129b4c4fbfc7bf9812c5fd3f644799",
+    "fast_livo2_core/include/fast_livo2_core/core/frame.h": "91a7ff427c0fb1e12220d4e60ac0ea9ed0785c1ae73c8da98c14ebe2f9782fa6",
+    "fast_livo2_core/include/fast_livo2_core/core/preprocess.h": "03c8a5f6062eac3bf3461e384f585601c7c40f20eddf7e104c852b078ce7e648",
+    "fast_livo2_core/include/fast_livo2_core/core/run_log_directory.h": "5a18d8a934403b22ccf7db3c98d83af7b061710c8aec53fea6897081fde94703",
+    "fast_livo2_core/include/fast_livo2_core/core/stationary_imu_initialization.h": "39a7cda11924068cc463b0eba1ae89da9c923c7ef8668393dfee5adf0730fbb9",
+    "fast_livo2_core/include/fast_livo2_core/core/vio.h": "29f02eb7b897b37ae5beba9bc8b39ff21fd3446461d2b7d0929e183241e67930",
+    "fast_livo2_core/include/fast_livo2_core/core/visual_point.h": "c528be4967454ff79f6aac0c5322d62b19ec34c7e8c248b49981d1b3a7f1888d",
+    "fast_livo2_core/include/fast_livo2_core/core/voxel_map.h": "a322f86592cc29ea3203075cb9620f3eda19286f156377cd584a23e73783de39",
+    "fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomMsg.h": "47ae77c64f4d05f7f471d0c2032f52f985926b2eb1c8c2a71f8e78b08c33157d",
+    "fast_livo2_core/include/fast_livo2_core/livox_ros_driver/CustomPoint.h": "36b6f7f0a2545dd425779124429a17703b7f73a237f3f59777fcda68175aae78",
+    "fast_livo2_core/include/fast_livo2_core/runner.hpp": "452a5aeae6e502b06ead69b74ff47d94cc710d4d2938062cdd4664c2d6443135",
+    "fast_livo2_core/include/fast_livo2_core/utils/color.h": "a8dca85646b18e26432f453993cf2da8de8e6b6e3184228b9fb92651c4a8f2ef",
+    "fast_livo2_core/include/fast_livo2_core/utils/so3_math.h": "fa815b3bc8dc157a2ab8d692b0dd604b369680a7e711fef666f4e12d4ab33c37",
+    "fast_livo2_core/include/fast_livo2_core/utils/types.h": "ade63d344d8d4cdec2dd8ec0fd6ea7930cb007c9c41ba83500bc7ea79d874d45",
+    "fast_livo2_core/include/fast_livo2_core/utils/utils.h": "53e212cc56c9f7627bc9a58cae906b9fe9bb334184b28a1b6f8a2821e2ebf3e8",
+    "fast_livo2_core/package.xml": "36323cb18443fb39332690f085bba0381e7cae9dcca40e981ca8a611ca321ebe",
+    "fast_livo2_core/src/IMU_Processing.cpp": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+    "fast_livo2_core/src/LIVMapper.cpp": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+    "fast_livo2_core/src/frame.cpp": "d45bb8ab1edf065089515940d0c7d6ff2c08fe460143778f62f09547e63f489a",
+    "fast_livo2_core/src/preprocess.cpp": "5c9c30b0f293251bfe7c721b888fbf80e1c087a52630a4355ebe7a1e5dc90d94",
+    "fast_livo2_core/src/runner.cpp": "d349c46c4fd8c83c51c03ca10fbe1ff154558c03c92a9e97e08d83823c29ea13",
+    "fast_livo2_core/src/utils.cpp": "3e0aeaccaf94d7a5e44af952027ddda88f8e3787580b942af5b2db66ff0705d3",
+    "fast_livo2_core/src/vio.cpp": "862776c0bb6569c27a9cbd8ae426a7c70dc1b2b22c13f242409fd8a10928c314",
+    "fast_livo2_core/src/visual_point.cpp": "d067e2b05445835cbbb4c8a159519bf4a01a271b96d06cc3a32419092b3fcc6e",
+    "fast_livo2_core/src/voxel_map.cpp": "d333313f1ea964761ceec780ad005ae708c1fa5151361e50a3ec476319a63108",
+    "fast_livo2_ros/CMakeLists.txt": "a5d9fbd9e6f2acfb8087a17235c9f1b11d43ecea641197f348676543db630488",
+    "fast_livo2_ros/README.md": "543b6153b1a93fe42fc89e368c0026e2bb5530056e39a7cb57f50d7271500b9f",
+    "fast_livo2_ros/config/avia.yaml": "77938f14ade2100bcb14cd56e9988bf778c833ecbc41861410172680c3ad3855",
+    "fast_livo2_ros/config/camera_pinhole.yaml": "cd58242cf93b5f8408428387291bb91425420be8f7bf2c75ceb1efe1770b442c",
+    "fast_livo2_ros/launch/mapping_aviz.launch.py": "1978aa994cc1dd99b2eae45228749cbeca7b13401a3e9e4f7906759cbf089b6a",
+    "fast_livo2_ros/package.xml": "2211d1466f2c76b784b367fb6bf6e3256325b72656b6325f8bb721ece274dd96",
+    "fast_livo2_ros/rviz/fast_livo2.rviz": "c18b0dcff13bc377c876cfa2cefe2131e5fbd4b596526651ad623f96871f7bd6",
+    "fast_livo2_ros/rviz/octomap_only.rviz": "3a72395cc613943788f7e0c0f7827c29cd3fcb09dd3033e9cf7c269311c11fd8",
+    "fast_livo2_ros/scripts/decompress_images.py": "375d6b107a33de4049535c89761d1a9fc2d836a411a7444f943cd14c5d039a93",
+    "fast_livo2_ros/src/main.cpp": "86760a58acf8083d877b13f3006ddb918f7b209b6238203ab6839de95dafca7e"
+  },
+  "source_changed": [
+    "fast_livo2_core/include/fast_livo2_core/core/diagnostics.h",
+    "fast_livo2_core/src/LIVMapper.cpp",
+    "fast_livo2_core/src/vio.cpp",
+    "fast_livo2_core/src/voxel_map.cpp"
+  ],
+  "proof": {
+    "src/fast_livo2_core/src/voxel_map.cpp": {
+      "before_sha256": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+      "candidate_sha256": "d333313f1ea964761ceec780ad005ae708c1fa5151361e50a3ec476319a63108",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1,
+        1
+      ]
+    },
+    "src/fast_livo2_core/src/vio.cpp": {
+      "before_sha256": "44a14f27f4a322c1c7d2f18e62ffad21c3df9c7ae120a75c47963663d7917e78",
+      "candidate_sha256": "862776c0bb6569c27a9cbd8ae426a7c70dc1b2b22c13f242409fd8a10928c314",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        3,
+        2
+      ]
+    },
+    "src/fast_livo2_core/src/LIVMapper.cpp": {
+      "before_sha256": "caadf1b4ac6c5d28032b185ed3f0735da424aed47cd0da35a0dc2c8d79c7b18b",
+      "candidate_sha256": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1
+      ]
+    },
+    "src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": {
+      "before_sha256": "5db7451b2cbbddcbc24b312860b94ac38b1d02d95758a85720292d5c59d704ab",
+      "candidate_sha256": "a5e56d67dff5eede8a68b891e63ffd71a0fcd0f699715a67a3ec51fa9a65adb9",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1
+      ]
+    }
+  },
+  "created": "2026-10-05T20:09:20.395311+08:00"
+}

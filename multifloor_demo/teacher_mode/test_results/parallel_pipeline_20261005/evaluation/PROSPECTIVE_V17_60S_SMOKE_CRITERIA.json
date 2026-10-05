@@ -1,0 +1,51 @@
+{
+  "schema": "prospective_independent_v17_60s_ingress_smoke/v1",
+  "created_UTC": "2026-10-05T15:12:28.060885+00:00",
+  "pre_test_references_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_EVALUATION_PLAN.json": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V17_SINGLE_EXECUTOR_AMENDMENT.json": "0902dde6d3a3b1657e7a942957e7bd93424cd8cc7aaee83ce16d8e0000ac72dc",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V17_TIMING_SCOPE.json": "709d4cf1e906cb869b82411c5a399ac0e85597645e438bd513518404b1cbbb96",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/semantic_receipt.json": "6843d9f33f3e45675d1e250635c6bcec215840d67906d2752bfaca52980c5dcd"
+  },
+  "simulation_only": true,
+  "physical_launch_authorized_by_this_file": false,
+  "runtime_scope": {
+    "limit_sim_s": 60,
+    "route_regions": 32,
+    "route_remains_original_full32": true,
+    "sensor": "same64x480LiDAR30/RGB30",
+    "Actor": "frozenTeacherCPU1,50Hz,232privileged+15known; no newtraining orGPU",
+    "navigation": "actualSLAM/IMU/cloud/SCAN only; native truth offlineacceptance",
+    "command_source_ttl_sim_and_wall_s": 0.3,
+    "control_equations": "originalfixedV12 controller/publication/holdmath"
+  },
+  "mandatory_smoke_gates": {
+    "new_source_scope_library_and_actual_loaded_binary_verified": true,
+    "default_and_actual_navigation_ground_truth_used_false": true,
+    "actual_GPS_parameter_false": true,
+    "one_native_actuator_and_CPU_Teacher_instance": true,
+    "writer_final_expected_written_equal_drop0_iofalse": true,
+    "ready_FIFO_received_sequence_contiguous_original_order": true,
+    "accepted_equals_delivered_equals_committed": true,
+    "rejected_canceled_missing_count_zero": true,
+    "one_actual_receiver_tid_and_one_owner_tid_distinct": true,
+    "cloud_image_imu_original_integer_headers_and_receipt_preserved": true,
+    "clock_receipt_le_decoded_le_pop_le_commit_end": true,
+    "queue_peak_pending_at_most": 512,
+    "queue_peak_bytes_at_most": 67108864,
+    "explicit_decode_failures_surface_at_original_owner_place": true,
+    "same_original_300ms_all_sources_and_all_publication_hold_guard_rules": true,
+    "no_native_fault_or_failed_motion_guard_in_physical_epoch": true,
+    "actual_processed_LIO_VIO_frequencies_and_source_headages_reported": true
+  },
+  "cleanup_and_missing_evidence_policy": "Any canceled/rejected pending event is retained and is not counted as zero loss. If the only final data lack the original clock/source for canceled events, active-vs-cleanup classification stays UNVERIFIED; no guessed exclusion or adjusted TTL. Original physical safety and scoped pipeline completeness are separate results.",
+  "original_route_full_motion_gates": "Run unchangedcommon19/publication26 and prospectiveactualnative safety; a60s prefix cannot passfull32/two12mramp/final5sparking. Preserve failed/unverified fullgates and publish limitedsmokechecks in a newparallelreceipt only.",
+  "timing_source": "Original kind300 scopes8/9/11 changedinterval labels and12 N/A explicitlybound to709d timing scope; originalV12 interval mustnot be substituted. At60s,detail115–118 absent meanskind100/101/201 numericaldetails N/A, notzero matching.",
+  "non_claims": [
+    "No complete32route or multilevelnavigationpass",
+    "No pipeline speedup from FIFO/semanticPASS alone",
+    "No fullestimatorreplay",
+    "No dynamic obstacle or realrobot validation"
+  ],
+  "parent_smoke_request": "Root requested actual60s smoke only after puresemantics/sourcefreeze; original numerical gates remain."
+}

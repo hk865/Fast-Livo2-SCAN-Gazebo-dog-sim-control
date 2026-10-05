@@ -1,0 +1,2334 @@
+{
+  "schema": "actual_run_plane_geometry_offline_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "read_only_runtime": true,
+  "navigation_truth_used": false,
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/world.sdf": "8e3460cff297a261cbedc7f860b842b810911f2a02a2ed23878f21ed13dbfd4b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/sensor_contract.json": "1d96b513ac76b434c6a8e6bb95d0151d304c62871d6b1ba94a7942d07246c502",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_fastlivo.yaml": "10258fa98e46c2ccd622a8791ec41e5e6fe8a31eb6eea2287c6336e2745791ee",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scene_axis_registration.json": "82e7eebab88dde8bb9f435bb93b85a8fe3cb8e5866ba86022f4d7c7f584b04b4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/fastlivo_diagnostics/index.csv": "0cc817d4c0f66e18e4cafe5c4900d17bf4cc2dbc5c5ecd617625a48f239edbc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/lio_diagnostic_schema.json": "13b40541a29d5f0bc7a1e5cc6edc5ea497a01b3d07753ec175016069aada3e33",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/analysis/actual_r1_physical/native_trace_200hz.csv": "0ffa67122625180b57f2a35f1c96472f2c0f6577d5a896b1f8d0ebdf4e7b0ba7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/analysis/actual_r1_lio/plane_degeneracy.json": "a5f9915e7520d310d063c4725bcf0ba6a6957c7c68bf5322ba32f6295390a845",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/analysis/actual_r1_lio/constraint_details.json": "9d3b0391a1f520241d08887ae3a6e97a2c671d06761997bcf956d10f9dff57ed",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/analysis/actual_r1_lio/map_plane_events.json": "30f93d6626757b87741389a4e9ab1996f223cfecff1ca7475da68877ab72721f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/src/fast_livo2_core/src/voxel_map.cpp": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750"
+  },
+  "exact_constraint_record": {
+    "time_s": 132,
+    "iteration": 0,
+    "sequence": 2639,
+    "count": 3369,
+    "source_index_rows": [
+      {
+        "offset": "2560578304",
+        "kind": "100",
+        "sequence": "2639",
+        "stamp_ns": "132000000000",
+        "stage": "2",
+        "iteration": "0",
+        "level": "18446744073709551615",
+        "n_values": "1393"
+      },
+      {
+        "offset": "2560589504",
+        "kind": "101",
+        "sequence": "2639",
+        "stamp_ns": "132000000000",
+        "stage": "2",
+        "iteration": "0",
+        "level": "18446744073709551615",
+        "n_values": "360486"
+      }
+    ],
+    "selected100101_header_payload_sha256": "d1865910502d8cf769d851f09b4270cecef3eacf748fc032def14475cf2a8dba"
+  },
+  "offline_coordinate_alignment": {
+    "purpose": "geometry diagnosis only; never navigation or pose correction",
+    "primary": "inverse frozen sensor yaw rotation plus native/body to SLAM/body position pairing at 6.8 s",
+    "anchor_time_s": 6.799999999000001,
+    "native_body_world_position": [
+      1.1983314787278065,
+      2.015896629459494,
+      0.32123458883995804
+    ],
+    "SLAM_body_camera_init_position": [
+      -0.003084855276808232,
+      0.016586240731072857,
+      0.005753596026670164
+    ],
+    "rotation_camera_init_from_world_frozen_yaw": [
+      [
+        0.9991818889837252,
+        0.0404419673966865,
+        0.0
+      ],
+      [
+        -0.0404419673966865,
+        0.9991818889837252,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "full_attitude_pair_sensitivity_rotation_camera_init_from_world": [
+      [
+        0.9991839838617567,
+        0.040350743355766175,
+        0.0017843499619154268
+      ],
+      [
+        -0.04033112481419608,
+        0.9991370748085213,
+        -0.009925024649523958
+      ],
+      [
+        -0.002183292323815471,
+        0.009844960828211267,
+        0.999949153697787
+      ]
+    ],
+    "IMU_in_body_translation_m": [
+      0,
+      0,
+      0
+    ],
+    "lidar_in_body_translation_m": [
+      0.2,
+      0.0,
+      0.1177
+    ],
+    "current_query_geometry": "132 s actual accepted point_lidar transformed by 200 Hz native/body pose interpolation and measured lidar extrinsic; already estimator-undistorted points so this is an offline surface check with scan/motion uncertainty, not a replacement raw-cloud replay"
+  },
+  "scene": {
+    "static_visual_box_count": 44,
+    "external_include_count": 0,
+    "unhandled_static_visual_geometry": [],
+    "east_wall": {
+      "model": "wall_18.5",
+      "link": "link",
+      "visual": "visual",
+      "center": [
+        18.5,
+        3.5,
+        2.0
+      ],
+      "rotation": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size": [
+        0.2,
+        14.0,
+        4.0
+      ],
+      "dynamic_pose_plugin": false
+    },
+    "east_wall_inner_world_x_m": 18.4,
+    "east_wall_y_bounds_m": [
+      -3.5,
+      10.5
+    ],
+    "east_wall_z_bounds_m": [
+      0,
+      4
+    ],
+    "nearby_other_objects": [
+      {
+        "model": "floor_2",
+        "link": "link",
+        "visual": "visual",
+        "center": [
+          16.0,
+          4.5,
+          1.1
+        ],
+        "rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "size": [
+          4.0,
+          9.0,
+          0.2
+        ],
+        "dynamic_pose_plugin": false
+      },
+      {
+        "model": "ramp_12",
+        "link": "link",
+        "visual": "visual",
+        "center": [
+          8.0,
+          2.0,
+          0.5502481404895005
+        ],
+        "rotation": [
+          [
+            0.995037190209989,
+            0.0,
+            -0.09950371902099893
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.09950371902099893,
+            0.0,
+            0.995037190209989
+          ]
+        ],
+        "size": [
+          12.099850745345067,
+          2.0,
+          0.1
+        ],
+        "dynamic_pose_plugin": false
+      },
+      {
+        "model": "ramp_23",
+        "link": "link",
+        "visual": "visual",
+        "center": [
+          8.0,
+          7.0,
+          1.7502481404895005
+        ],
+        "rotation": [
+          [
+            0.995037190209989,
+            0.0,
+            0.09950371902099893
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.09950371902099893,
+            0.0,
+            0.995037190209989
+          ]
+        ],
+        "size": [
+          12.099850745345067,
+          2.0,
+          0.1
+        ],
+        "dynamic_pose_plugin": false
+      },
+      {
+        "model": "landmark_4",
+        "link": "link",
+        "visual": "visual",
+        "center": [
+          17.2,
+          4.5,
+          1.7
+        ],
+        "rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "size": [
+          0.5,
+          0.5,
+          1.0
+        ],
+        "dynamic_pose_plugin": false
+      }
+    ]
+  },
+  "sensor": {
+    "name": "velodyne-VLP16",
+    "type": "gpu_lidar",
+    "rate_hz": 10.0,
+    "pose": "0.20000000000000001 0 0.1177 0 0 0",
+    "horizontal_samples": 480,
+    "horizontal_min_max_rad": [
+      -3.14159,
+      3.14159
+    ],
+    "vertical_samples": 32,
+    "vertical_min_max_rad": [
+      -0.523599,
+      0.261799
+    ],
+    "noise_stddev_m": 0.008,
+    "range_min_max_m": [
+      0.3,
+      35.0
+    ]
+  },
+  "map_parameters": {
+    "max_iterations": 5,
+    "dept_err": 0.02,
+    "beam_err": 0.05,
+    "min_eigen_value": 0.005,
+    "voxel_size": 0.5,
+    "max_layer": 2,
+    "max_points_num": 50,
+    "layer_init_num": [
+      5,
+      5,
+      5,
+      5,
+      5
+    ]
+  },
+  "actual132_iter0": {
+    "net_measurement_delta_vz_mps": -0.03066398856333999,
+    "net_measurement_delta_pz_m": -0.008797100507366026,
+    "near_horizontal_count": 546,
+    "near_horizontal_net_delta_vz_mps": -0.03149025593760982,
+    "all_native_east_wall_count": 863,
+    "near_horizontal_native_east_wall_count": 209,
+    "near_horizontal_native_east_wall_net_delta_vz_mps": -0.030867411942662168,
+    "near_horizontal_native_east_wall_net_delta_pz_m": -0.008574760943539294,
+    "selected10plane_net_delta_vz_mps": -0.02357279807383165,
+    "native_east_wall_near_horizontal_fraction_of_total_near_horizontal_net_vz": 0.9802210564378498
+  },
+  "planes": [
+    {
+      "plane_id": 871,
+      "accepted_count_at132_iter0": 9,
+      "net_delta_vz_from_measurement_mps": -0.003436982550473582,
+      "net_delta_pz_from_measurement_m": -0.0009684971760046381,
+      "historical_center_camera_init": [
+        17.31319801012675,
+        2.2532389611005783,
+        0.6792990242441496
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.409993065963352,
+        4.951024066673336,
+        0.9947800170574375
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.408806711264404,
+        4.955975199986575,
+        1.0034452450523477
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.009993065963352171,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            4.951024066673336,
+            0.9947800170574375
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.4100262947177294,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            4.951024066673336,
+            1.0
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.9947800170574376,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.409993065963352,
+            4.951024066673336,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.05287856777131721,
+        -0.0014556563861898633,
+        0.9985998889119404
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.05277643762438759,
+        -0.0035929788114554984,
+        0.9985998889119404
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 86.97472734807111,
+      "historical_eigenvalues_m2": [
+        1.0851590559468605e-05,
+        0.0002006471186177805,
+        0.020592298358678818
+      ],
+      "historical_mid_max_ratio": 0.00974379426341285,
+      "historical_min_mid_ratio": 0.05408296233817425,
+      "historical_mid_minus_min_gap_m2": 0.0001897955280583119,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.7,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        2.25,
+        0.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.39193459729298,
+        4.7207981246233395,
+        1.128817472620344
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.411370123034096,
+        5.070866421777547,
+        1.2388534585576991
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 9,
+        "min": 0.0020042705109055703,
+        "median": 0.008065402707018166,
+        "p90": 0.01042910422246166,
+        "p99": 0.011276021152934277,
+        "max": 0.011370123034097901
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        4.344705417429857e-05,
+        0.002357556626809727,
+        0.01649919812067639
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.997046166656166,
+        -0.031799952812944614,
+        -0.06991212024634426
+      ],
+      "current_vs_historical_normal_abs_dot": 0.12249031900186502,
+      "current_native_geometry_group_eigenvalues_m2": [
+        4.344881040692463e-05,
+        0.002357555936046167,
+        0.0164991980795751
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9973818687478009,
+        0.004879258971314485,
+        -0.07214984909918588
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9973818687478009,
+      "solver_weight": {
+        "count": 9,
+        "min": 76.51303176837936,
+        "median": 142.21129764898836,
+        "p90": 202.43938055392317,
+        "p99": 204.6532627206371,
+        "max": 204.89924962804974
+      },
+      "residual_signed_m": {
+        "count": 9,
+        "min": 0.10671941936016083,
+        "median": 0.11871051788330078,
+        "p90": 0.21689848005771636,
+        "p99": 0.21906858026981355,
+        "max": 0.2193097025156021
+      }
+    },
+    {
+      "plane_id": 872,
+      "accepted_count_at132_iter0": 10,
+      "net_delta_vz_from_measurement_mps": -0.003130944790587881,
+      "net_delta_pz_from_measurement_m": -0.0008751323087119787,
+      "historical_center_camera_init": [
+        17.323083480199177,
+        2.7546880344549813,
+        0.6815874675909678
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.399590861548113,
+        5.452462686875097,
+        0.9970684604042557
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.398455113127504,
+        5.457412976004287,
+        1.0007743167649075
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.0004091384518872532,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            5.452462686875097,
+            0.9970684604042557
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.39960161480800405,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            5.452462686875097,
+            1.0
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.9970684604042558,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.399590861548113,
+            5.452462686875097,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.09338172897063081,
+        -0.004345984237840494,
+        0.9956208942742515
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.09312957219658789,
+        -0.008118969578735426,
+        0.9956208942742515
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 84.65632511196453,
+      "historical_eigenvalues_m2": [
+        6.229991413420066e-06,
+        0.0003036102862097323,
+        0.02057753875851631
+      ],
+      "historical_mid_max_ratio": 0.01475445094637855,
+      "historical_min_mid_ratio": 0.020519698101125673,
+      "historical_mid_minus_min_gap_m2": 0.00029738029479631223,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.7,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        2.75,
+        0.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.389730132331522,
+        5.1915372048322,
+        1.126390909817226
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.412895396224155,
+        5.659150623727048,
+        1.245242453749602
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 10,
+        "min": 0.0028370935069723657,
+        "median": 0.005815400858383057,
+        "p90": 0.010532420524044638,
+        "p99": 0.012659098654144892,
+        "max": 0.01289539622415603
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        4.859622009940915e-05,
+        0.002069717331504703,
+        0.027786420337659504
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9985478323166735,
+        -0.05027923919583847,
+        -0.019344887737083608
+      ],
+      "current_vs_historical_normal_abs_dot": 0.11228778468900097,
+      "current_native_geometry_group_eigenvalues_m2": [
+        4.85943887379545e-05,
+        0.0020697169202768206,
+        0.02778641855661096
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9996899641284136,
+        -0.012832242490327024,
+        -0.021337974917987286
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9996899641284136,
+      "solver_weight": {
+        "count": 10,
+        "min": 36.00571631782892,
+        "median": 80.91851569533972,
+        "p90": 204.88287417425585,
+        "p99": 254.94729563037313,
+        "max": 260.5100091254973
+      },
+      "residual_signed_m": {
+        "count": 10,
+        "min": 0.11092155426740646,
+        "median": 0.14648570865392685,
+        "p90": 0.2219434544444084,
+        "p99": 0.22882791921496393,
+        "max": 0.22959285974502563
+      }
+    },
+    {
+      "plane_id": 874,
+      "accepted_count_at132_iter0": 6,
+      "net_delta_vz_from_measurement_mps": -0.002451905811291307,
+      "net_delta_pz_from_measurement_m": -0.0006774659536085497,
+      "historical_center_camera_init": [
+        17.377240618069965,
+        3.7412133713563285,
+        0.6893530872960886
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.41380666735683,
+        6.440371157734559,
+        1.0048340801093765
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.412763426786963,
+        6.445348748333301,
+        0.9988448886177534
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.013806667356830366,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            6.440371157734559,
+            1.0048340801093765
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.41380666735683036,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            6.440371157734559,
+            1.0048340801093765
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.0048340801093765,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.41380666735683,
+            6.440371157734559,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        0.042944684287368494,
+        -0.014028881641808943,
+        0.9989789510151544
+      ],
+      "historical_normal_world_frozen_yaw": [
+        0.043476906342032565,
+        -0.012280636937381012,
+        0.9989789510151544
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 87.508171313187,
+      "historical_eigenvalues_m2": [
+        2.303635028511053e-06,
+        0.00012421935389284045,
+        0.01947789080440998
+      ],
+      "historical_mid_max_ratio": 0.0063774540652377,
+      "historical_min_mid_ratio": 0.0185448962365262,
+      "historical_mid_minus_min_gap_m2": 0.00012191571886432939,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.9,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        3.75,
+        0.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.390685048882595,
+        6.298353814437005,
+        1.1198134333181882
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.410009751594032,
+        6.660534587855136,
+        1.2405720574661865
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 6,
+        "min": 0.0020629824374580608,
+        "median": 0.005940782210373641,
+        "p90": 0.009662351355718357,
+        "p99": 0.009975011570201886,
+        "max": 0.01000975159403339
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        5.314717220936186e-06,
+        0.00232952732482845,
+        0.015747496912573603
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9950079726979302,
+        -0.06929541128973038,
+        0.07181420640612987
+      ],
+      "current_vs_historical_normal_abs_dot": 0.11544332095781268,
+      "current_native_geometry_group_eigenvalues_m2": [
+        5.316216344803742e-06,
+        0.002329528914724259,
+        0.01574749291837093
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9970684802060188,
+        -0.03071470915794948,
+        0.07007890139694199
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9970684802060188,
+      "solver_weight": {
+        "count": 6,
+        "min": 58.65464106954759,
+        "median": 105.12836304360806,
+        "p90": 272.71103880566034,
+        "p99": 297.7636377952013,
+        "max": 300.54725990515027
+      },
+      "residual_signed_m": {
+        "count": 6,
+        "min": 0.110027976334095,
+        "median": 0.1385919377207756,
+        "p90": 0.22931142151355743,
+        "p99": 0.22974909096956253,
+        "max": 0.22979772090911865
+      }
+    },
+    {
+      "plane_id": 883,
+      "accepted_count_at132_iter0": 10,
+      "net_delta_vz_from_measurement_mps": -0.0033793963197764365,
+      "net_delta_pz_from_measurement_m": -0.0009186294023051898,
+      "historical_center_camera_init": [
+        17.384590188662212,
+        4.73666125535965,
+        0.6986976079642773
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.380892354314447,
+        7.435301885952121,
+        1.0141786007775653
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.379939065334987,
+        7.440326192357392,
+        0.9983222035715772
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.01910764568555265,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            7.435301885952121,
+            1.0141786007775653
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.38089235431444735,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            7.435301885952121,
+            1.0141786007775653
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.0141786007775653,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.380892354314447,
+            7.435301885952121,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.03432043010861779,
+        -0.0123855393168839,
+        0.9993341315561024
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.03379145660941884,
+        -0.013763392286219232,
+        0.9993341315561024
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 88.06352350171852,
+      "historical_eigenvalues_m2": [
+        1.31545039039338e-06,
+        0.00028913834830746055,
+        0.022052818909287453
+      ],
+      "historical_mid_max_ratio": 0.013111174108707307,
+      "historical_min_mid_ratio": 0.004549553520291165,
+      "historical_mid_minus_min_gap_m2": 0.00028782289791706717,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.800000000000001,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        4.75,
+        0.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.386099153719346,
+        7.208448562012071,
+        1.106348203211366
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.41629290228557,
+        7.615196772955829,
+        1.261726981766973
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 10,
+        "min": 0.0011157864895139369,
+        "median": 0.009756009167043445,
+        "p90": 0.015929311008196834,
+        "p99": 0.016256543157833293,
+        "max": 0.016292902285570676
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        0.00010813160461649337,
+        0.003725385524266601,
+        0.020012431249079497
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9997690794673755,
+        -0.01978215396729086,
+        0.008393695572940908
+      ],
+      "current_vs_historical_normal_abs_dot": 0.02567938569495147,
+      "current_native_geometry_group_eigenvalues_m2": [
+        0.00010813343506373682,
+        0.003725385141548971,
+        0.02001242503239873
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9998189564397705,
+        0.018066893695309123,
+        0.005970066657160234
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9998189564397705,
+      "solver_weight": {
+        "count": 10,
+        "min": 60.43829329851504,
+        "median": 97.75555876809412,
+        "p90": 145.90323884431018,
+        "p99": 280.7208658287195,
+        "max": 295.70060216032056
+      },
+      "residual_signed_m": {
+        "count": 10,
+        "min": 0.10048045217990875,
+        "median": 0.13632960617542267,
+        "p90": 0.2490447297692299,
+        "p99": 0.2548800511658192,
+        "max": 0.25552842020988464
+      }
+    },
+    {
+      "plane_id": 887,
+      "accepted_count_at132_iter0": 8,
+      "net_delta_vz_from_measurement_mps": -0.0019505496335099303,
+      "net_delta_pz_from_measurement_m": -0.000521070745361853,
+      "historical_center_camera_init": [
+        17.44935381412506,
+        5.73369895418485,
+        0.712657048056523
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.405280829832694,
+        8.434143065681731,
+        1.0281380408698109
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.404407713220113,
+        8.439254212806155,
+        1.0025008711131966
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.005280829832694428,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            8.434143065681731,
+            1.0281380408698109
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.4052808298326944,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            8.434143065681731,
+            1.0281380408698109
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.0281380408698109,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.405280829832694,
+            8.434143065681731,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.14017190373989988,
+        -0.006567835795554299,
+        0.9901053989020032
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.13979161136016746,
+        -0.012231290137717381,
+        0.9901053989020032
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 81.96421212149497,
+      "historical_eigenvalues_m2": [
+        2.1720911718148272e-06,
+        0.0001075245818356052,
+        0.020993154495954514
+      ],
+      "historical_mid_max_ratio": 0.005121887797106706,
+      "historical_min_mid_ratio": 0.02020087997306278,
+      "historical_mid_minus_min_gap_m2": 0.00010535249066379038,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 6.0,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        5.75,
+        0.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.392410139161687,
+        8.223108086425693,
+        1.1274445903896164
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.418315862114543,
+        8.649864762192479,
+        1.239966787906655
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 8,
+        "min": 0.0010473221861353466,
+        "median": 0.010288867985615013,
+        "p90": 0.016420779494363203,
+        "p99": 0.01812635385252637,
+        "max": 0.0183158621145445
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        8.952801507447494e-05,
+        0.0017888126919079377,
+        0.022964194285368437
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9974407044597249,
+        -0.012613844623843518,
+        -0.07037707020538349
+      ],
+      "current_vs_historical_normal_abs_dot": 0.20941103392080196,
+      "current_native_geometry_group_eigenvalues_m2": [
+        8.95341968772427e-05,
+        0.0017888144114816833,
+        0.022964196739636414
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9970495111353304,
+        0.024059776412786588,
+        -0.07289306896931691
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9970495111353304,
+      "solver_weight": {
+        "count": 8,
+        "min": 12.61105378089574,
+        "median": 50.38546642475623,
+        "p90": 188.12154719128466,
+        "p99": 309.396617665331,
+        "max": 322.8716254957807
+      },
+      "residual_signed_m": {
+        "count": 8,
+        "min": 0.1236894354224205,
+        "median": 0.20541024953126907,
+        "p90": 0.22930615544319152,
+        "p99": 0.23145511984825134,
+        "max": 0.23169389367103577
+      }
+    },
+    {
+      "plane_id": 930,
+      "accepted_count_at132_iter0": 10,
+      "net_delta_vz_from_measurement_mps": -0.000765346565719851,
+      "net_delta_pz_from_measurement_m": -0.00021293458301559502,
+      "historical_center_camera_init": [
+        17.35304256280263,
+        3.244552955031395,
+        1.5727819129824638
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.40971433314932,
+        5.943138447805383,
+        1.8882629057957518
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.406687207390554,
+        5.95683782545882,
+        1.8871149842905472
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.009714333149320714,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            5.943138447805383,
+            1.8882629057957518
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.8009816866086292,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            5.943138447805383,
+            1.2000000000000002
+          ]
+        },
+        {
+          "model": "landmark_4",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.5312187815213363,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            17.45,
+            4.75,
+            1.8882629057957518
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        0.006607614802605262,
+        -0.022759435290997474,
+        0.9997191343231635
+      ],
+      "historical_normal_world_frozen_yaw": [
+        0.007522645380149466,
+        -0.02247359060384489,
+        0.9997191343231635
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 89.56898010362879,
+      "historical_eigenvalues_m2": [
+        3.695246050483547e-06,
+        0.00016088827396743,
+        0.01984357088804245
+      ],
+      "historical_mid_max_ratio": 0.008107828720705696,
+      "historical_min_mid_ratio": 0.022967777323732168,
+      "historical_mid_minus_min_gap_m2": 0.00015719302791694645,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.800000000000001,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        3.25,
+        1.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.390346156483997,
+        5.79111594956669,
+        1.8256998021406603
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.413751727950576,
+        6.108399319959974,
+        2.1251548228248596
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 10,
+        "min": 0.0008612263599765413,
+        "median": 0.006358721716090088,
+        "p90": 0.012863788323500458,
+        "p99": 0.013662933987869543,
+        "max": 0.01375172795057722
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        4.256162212871314e-05,
+        0.009391580227920537,
+        0.016002593406698518
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9999782877469925,
+        -0.0004541105344668282,
+        0.006574026027922843
+      ],
+      "current_vs_historical_normal_abs_dot": 0.013189986245378019,
+      "current_native_geometry_group_eigenvalues_m2": [
+        4.2560975346222684e-05,
+        0.00939158168161662,
+        0.01600259771108427
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9992941720645611,
+        0.03736354737742401,
+        0.0038888308240831162
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9992941720645611,
+      "solver_weight": {
+        "count": 10,
+        "min": 63.655013993251615,
+        "median": 272.8632585725969,
+        "p90": 537.3398219084022,
+        "p99": 656.7042518688945,
+        "max": 669.9669663089492
+      },
+      "residual_signed_m": {
+        "count": 10,
+        "min": -0.07597906142473221,
+        "median": 0.030845707282423973,
+        "p90": 0.18399017900228498,
+        "p99": 0.21949063822627068,
+        "max": 0.22343513369560242
+      }
+    },
+    {
+      "plane_id": 940,
+      "accepted_count_at132_iter0": 17,
+      "net_delta_vz_from_measurement_mps": -0.0014409638666994,
+      "net_delta_pz_from_measurement_m": -0.00039252844342203613,
+      "historical_center_camera_init": [
+        17.397676467895508,
+        4.730064421892166,
+        1.6058411474029224
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.394234716442554,
+        7.429239684304867,
+        1.9213221402162102
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.391300164140944,
+        7.443193885169855,
+        1.9055084423522906
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.005765283557445849,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            7.429239684304867,
+            1.9213221402162102
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.8220259373125856,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            7.429239684304867,
+            1.2000000000000002
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.9213221402162102,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.394234716442554,
+            7.429239684304867,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.07398647130574372,
+        -0.025839573032497044,
+        0.996924429698271
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.07288093898838864,
+        -0.02881059185348609,
+        0.996924429698271
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 85.8205242330813,
+      "historical_eigenvalues_m2": [
+        1.3144858712621499e-06,
+        0.0003625464451033622,
+        0.020940937101840973
+      ],
+      "historical_mid_max_ratio": 0.01731280903716051,
+      "historical_min_mid_ratio": 0.0036257033795694484,
+      "historical_mid_minus_min_gap_m2": 0.00036123195923210005,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.9,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        4.75,
+        1.75
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.388210443785788,
+        7.209679029593443,
+        1.8308029640462493
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.42288613940893,
+        7.61883172569328,
+        2.2570619701299637
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 17,
+        "min": 0.0018029817169917806,
+        "median": 0.0078117903023624535,
+        "p90": 0.01149218265614067,
+        "p99": 0.02111068609777675,
+        "max": 0.022886139408932138
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        7.972557993786483e-05,
+        0.017055992420105,
+        0.02340278478461713
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9994680057634684,
+        -0.028414990876407892,
+        -0.016009177014735237
+      ],
+      "current_vs_historical_normal_abs_dot": 0.08917281936281267,
+      "current_native_geometry_group_eigenvalues_m2": [
+        7.972754857014549e-05,
+        0.0170559946648833,
+        0.023402788047166622
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9997910351131994,
+        0.009094637564719014,
+        -0.018307749038143292
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9997910351131994,
+      "solver_weight": {
+        "count": 17,
+        "min": 32.533676796126784,
+        "median": 109.46731590340286,
+        "p90": 352.4792955251625,
+        "p99": 364.50556166010915,
+        "max": 366.2761540700265
+      },
+      "residual_signed_m": {
+        "count": 17,
+        "min": -0.07960069924592972,
+        "median": 0.0705467164516449,
+        "p90": 0.23497936725616456,
+        "p99": 0.32609025955200194,
+        "max": 0.33990025520324707
+      }
+    },
+    {
+      "plane_id": 949,
+      "accepted_count_at132_iter0": 7,
+      "net_delta_vz_from_measurement_mps": -0.0018706260070080003,
+      "net_delta_pz_from_measurement_m": -0.0005060051059921011,
+      "historical_center_camera_init": [
+        17.427345951398213,
+        5.232911050319672,
+        2.081333955128988
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.403543820061557,
+        7.932874820650652,
+        2.396814947942276
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.399626926935646,
+        7.951484988354714,
+        2.3760392485870394
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.003543820061557318,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            7.932874820650652,
+            2.396814947942276
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.2630176698399538,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            7.932874820650652,
+            1.2000000000000002
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 2.396814947942276,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.403543820061557,
+            7.932874820650652,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.1478119555731592,
+        -0.030599554728664945,
+        0.9885420036801905
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.1464535227892779,
+        -0.036552327183978495,
+        0.9885420036801905
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 81.5785414568515,
+      "historical_eigenvalues_m2": [
+        1.3162946288503008e-06,
+        0.00033621228067204356,
+        0.021887263283133507
+      ],
+      "historical_mid_max_ratio": 0.015361092719670044,
+      "historical_min_mid_ratio": 0.00391507004508938,
+      "historical_mid_minus_min_gap_m2": 0.00033489598604319326,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 5.9,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        5.25,
+        2.25
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.389656583656947,
+        7.76360103691592,
+        2.318011602892888
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.41446874956803,
+        8.071008025754043,
+        2.5882077183807968
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 7,
+        "min": 0.0012954403465492703,
+        "median": 0.008293741296466095,
+        "p90": 0.012987140808776589,
+        "p99": 0.014320588692106069,
+        "max": 0.01446874956803157
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        2.8516234754209893e-05,
+        0.005916093445112486,
+        0.016627103629105133
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9954134090948905,
+        -0.09394336118247226,
+        0.018077330661015127
+      ],
+      "current_vs_historical_normal_abs_dot": 0.12638917690733387,
+      "current_native_geometry_group_eigenvalues_m2": [
+        2.851449307659394e-05,
+        0.00591609713307383,
+        0.016627116587909045
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9982876706996016,
+        -0.05606509603273446,
+        0.016686267887220683
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9982876706996016,
+      "solver_weight": {
+        "count": 7,
+        "min": 54.34211677118415,
+        "median": 150.49925767913425,
+        "p90": 343.71248912711417,
+        "p99": 420.5015195551486,
+        "max": 429.03363404715253
+      },
+      "residual_signed_m": {
+        "count": 7,
+        "min": -0.06534595042467117,
+        "median": 0.0627533346414566,
+        "p90": 0.19285752177238466,
+        "p99": 0.20667533457279205,
+        "max": 0.20821064710617065
+      }
+    },
+    {
+      "plane_id": 950,
+      "accepted_count_at132_iter0": 15,
+      "net_delta_vz_from_measurement_mps": -0.002406340513567045,
+      "net_delta_pz_from_measurement_m": -0.0006468084173686995,
+      "historical_center_camera_init": [
+        17.46721812089284,
+        5.734667032957077,
+        2.1034603863954544
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.423091370604165,
+        8.435832820169917,
+        2.4189413792087424
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.419181868466946,
+        8.454634698642128,
+        2.3932557602146916
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.023091370604165468,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            8.435832820169917,
+            2.4189413792087424
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.2902807422522518,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            8.435832820169917,
+            1.2000000000000002
+          ]
+        },
+        {
+          "model": "wall_north",
+          "face_local_axis": 1,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 1.9641671798300826,
+          "normal_world": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.423091370604165,
+            10.4,
+            2.4189413792087424
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        -0.21284308783405353,
+        -0.031112639337341742,
+        0.976590919287462
+      ],
+      "historical_normal_world_frozen_yaw": [
+        -0.2114107022134529,
+        -0.03969497896314935,
+        0.976590919287462
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 77.79496418650976,
+      "historical_eigenvalues_m2": [
+        2.8551073683047434e-06,
+        7.632409688085318e-05,
+        0.020805032923817635
+      ],
+      "historical_mid_max_ratio": 0.0036685400672198517,
+      "historical_min_mid_ratio": 0.03740767968419921,
+      "historical_mid_minus_min_gap_m2": 7.346898951254843e-05,
+      "initialization_birth_s": 3.8000000000000003,
+      "last_refit_s": 6.0,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        5.75,
+        2.25
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.391133267929668,
+        8.192360058284763,
+        2.295133584067929
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.416797973909073,
+        8.654338861706542,
+        2.7280390486632955
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 15,
+        "min": 0.00020665643229733632,
+        "median": 0.00886673207033084,
+        "p90": 0.012995533285877058,
+        "p99": 0.016327341965247724,
+        "max": 0.01679797390907467
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        4.0315961935545856e-05,
+        0.0167055913690364,
+        0.027652020551059038
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9990510255721938,
+        -0.03796403364426577,
+        -0.021349015260771875
+      ],
+      "current_vs_historical_normal_abs_dot": 0.2323091983393982,
+      "current_native_geometry_group_eigenvalues_m2": [
+        4.031343620169962e-05,
+        0.01670558285956648,
+        0.027652021743237432
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9997233716930946,
+        -0.0005350085940120618,
+        -0.023513695081703374
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9997233716930946,
+      "solver_weight": {
+        "count": 15,
+        "min": 13.995761471521034,
+        "median": 51.55695915044143,
+        "p90": 204.40959655767608,
+        "p99": 264.29095652697833,
+        "max": 273.7914202508837
+      },
+      "residual_signed_m": {
+        "count": 15,
+        "min": -0.09719867259263992,
+        "median": 0.15678873658180237,
+        "p90": 0.29857687950134276,
+        "p99": 0.3241810810565948,
+        "max": 0.3265364170074463
+      }
+    },
+    {
+      "plane_id": 1291,
+      "accepted_count_at132_iter0": 6,
+      "net_delta_vz_from_measurement_mps": -0.00273974201519822,
+      "net_delta_pz_from_measurement_m": -0.0008221659458028098,
+      "historical_center_camera_init": [
+        17.104763746261597,
+        -2.7467671682437262,
+        1.1444085414210956
+      ],
+      "historical_center_world_frozen_yaw_offline": [
+        18.403939409331812,
+        -0.05332099427869785,
+        1.4598895342343834
+      ],
+      "historical_center_world_full_attitude_pair_sensitivity": [
+        18.401182934358072,
+        -0.04354779062150582,
+        1.5177843775409445
+      ],
+      "nearest_static_visual_faces_frozen_yaw": [
+        {
+          "model": "wall_18.5",
+          "face_local_axis": 0,
+          "face_sign": -1,
+          "euclidean_face_distance_m": 0.003939409331812277,
+          "normal_world": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "closest_point_world": [
+            18.4,
+            -0.05332099427869785,
+            1.4598895342343834
+          ]
+        },
+        {
+          "model": "floor_2",
+          "face_local_axis": 0,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 0.4832729506673915,
+          "normal_world": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "closest_point_world": [
+            18.0,
+            0.0,
+            1.2000000000000002
+          ]
+        },
+        {
+          "model": "floor_1",
+          "face_local_axis": 2,
+          "face_sign": 1,
+          "euclidean_face_distance_m": 1.4598895342343834,
+          "normal_world": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "closest_point_world": [
+            18.403939409331812,
+            -0.05332099427869785,
+            0.0
+          ]
+        }
+      ],
+      "historical_normal_camera_init": [
+        0.5980850865100037,
+        -0.029215430121163226,
+        -0.8008999237964486
+      ],
+      "historical_normal_world_frozen_yaw": [
+        0.5987773159845003,
+        -0.0050037910868538996,
+        -0.8008999237964486
+      ],
+      "normal_angle_to_nearest_true_surface_degrees": 53.21762054952468,
+      "historical_eigenvalues_m2": [
+        2.937841600214597e-05,
+        8.980463462648913e-05,
+        0.021235639229416847
+      ],
+      "historical_mid_max_ratio": 0.004228958387185563,
+      "historical_min_mid_ratio": 0.32713696931494884,
+      "historical_mid_minus_min_gap_m2": 6.0426218624343164e-05,
+      "initialization_birth_s": 4.4,
+      "last_refit_s": 6.300000000000001,
+      "refit_count": 8,
+      "frozen": true,
+      "last_refit_point_count": 48,
+      "octree_layer": 0,
+      "selected_voxel_center_camera_init": [
+        17.25,
+        -2.75,
+        1.25
+      ],
+      "selected_voxel_quarter_length_m": 0.125,
+      "actual_lidar_points_offline_native_world_min": [
+        18.4006546733687,
+        -0.21749173444221714,
+        1.6570619761959404
+      ],
+      "actual_lidar_points_offline_native_world_max": [
+        18.41402467629559,
+        0.11928172944838789,
+        1.8081760845702166
+      ],
+      "actual_lidar_world_distance_to_east_wall_inner_face_m": {
+        "count": 6,
+        "min": 0.000654673368700287,
+        "median": 0.00804955593788037,
+        "p90": 0.012833670619189164,
+        "p99": 0.013905575727950925,
+        "max": 0.01402467629559112
+      },
+      "current_accepted_SLAM_group_eigenvalues_m2": [
+        5.504339130470284e-06,
+        0.005218642430003866,
+        0.018778852612958415
+      ],
+      "current_accepted_SLAM_group_smallest_eigenvector": [
+        0.9975169945801248,
+        -0.06514435062715798,
+        -0.026759280730265927
+      ],
+      "current_vs_historical_normal_abs_dot": 0.6199347641199069,
+      "current_native_geometry_group_eigenvalues_m2": [
+        5.503540917741942e-06,
+        0.005218643644560097,
+        0.01877884631586458
+      ],
+      "current_native_geometry_group_smallest_eigenvector_world": [
+        0.9992050041351768,
+        -0.027826443221803138,
+        -0.0285490589835265
+      ],
+      "current_native_geometry_normal_abs_dot_true_wall": 0.9992050041351768,
+      "solver_weight": {
+        "count": 6,
+        "min": 146.3417887535321,
+        "median": 283.9068230690885,
+        "p90": 480.5304642154743,
+        "p99": 505.1141619155779,
+        "max": 507.845683882256
+      },
+      "residual_signed_m": {
+        "count": 6,
+        "min": -0.19442865252494812,
+        "median": -0.13175569474697113,
+        "p90": -0.07520022988319397,
+        "p99": -0.07470512092113495,
+        "max": -0.0746501088142395
+      }
+    }
+  ],
+  "analytic_lidar_sampling": {
+    "method": "No ROS/Gazebo replay: first intersection with static SDF visual boxes for actual native 3.7–6.0 s 10 Hz pose, 480x32 ideal beams; group hits inside historical leaf voxel using full attitude anchor; predicted ring groups are approximate because original pre-115 s input clouds and map-point list were not logged",
+    "moving_obstacle_assumption": "SDF initial pose used for ray occlusion; no selected east-wall result relies on moving-obstacle face",
+    "vertical_beam_spacing_rad": 0.02533541935483874,
+    "vertical_beam_spacing_deg": 1.4516126012263189,
+    "far_wall_horizontal_range_m_approx": 17,
+    "near_horizontal_vertical_ring_spacing_m_approx": 0.43079430622540205,
+    "map_leaf_side_m": 0.5,
+    "single_trace_formula": "For wall x=D, level lidar and a fixed elevation e: y=D*tan(a), z=z_lidar+D*tan(e)/cos(a). Within a small voxel this is a nearly one-dimensional curved scan trace; successive rings around 17 m are separated about 0.43 m. Range noise along the beam can exceed the tiny cross-trace curvature spread.",
+    "noise_mc_scope": "fixed analytic candidate points plus independent Gaussian range noise, 200 trials with seed42; demonstrates mechanism plausibility, not original stochastic Gazebo map-building reproduction or AB fix validation; reported absdot-with-wall <=0.20 means near-orthogonal to the wall normal, not an independently tested |nz| production gate.",
+    "planes": [
+      {
+        "plane_id": 871,
+        "predicted_candidate_count": 53,
+        "predicted_ring_ids": [
+          23
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          2.992196145018163e-05,
+          0.021673259785044953
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.0015189155766780799,
+          "median": 0.14294896664415002,
+          "p90": 0.3387549446408017,
+          "p99": 0.4742747275447289,
+          "max": 0.5240568960013171
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0015573731392266774,
+          "median": 0.002778672216723061,
+          "p90": 0.0034825500026447816,
+          "p99": 0.0039029048695697764,
+          "max": 0.004557775201214463
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.665
+      },
+      {
+        "plane_id": 872,
+        "predicted_candidate_count": 52,
+        "predicted_ring_ids": [
+          23
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          1.8002006360988594e-05,
+          0.021082281123051022
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 1.3018259361948683e-05,
+          "median": 0.0859885958181427,
+          "p90": 0.20055482745951964,
+          "p99": 0.31500424868858357,
+          "max": 0.32759244618638694
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0015366665348055567,
+          "median": 0.0028578595328733443,
+          "p90": 0.003587136314221553,
+          "p99": 0.004394629645199067,
+          "max": 0.00464266921163584
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.895
+      },
+      {
+        "plane_id": 874,
+        "predicted_candidate_count": 51,
+        "predicted_ring_ids": [
+          23
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          4.86452898159822e-06,
+          0.020753162768792775
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.0017241583023820638,
+          "median": 0.04562706634529295,
+          "p90": 0.09818642529399998,
+          "p99": 0.14621427977302526,
+          "max": 0.15760005136951702
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.001654298911221168,
+          "median": 0.0027788468747040372,
+          "p90": 0.003574082382792075,
+          "p99": 0.004207473104127606,
+          "max": 0.004924500804947465
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 1.0
+      },
+      {
+        "plane_id": 883,
+        "predicted_candidate_count": 49,
+        "predicted_ring_ids": [
+          23
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          4.614959580450814e-06,
+          0.020529910088861444
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.00028951313446137864,
+          "median": 0.034956511747693354,
+          "p90": 0.09614829997601466,
+          "p99": 0.15584612328783473,
+          "max": 0.16657917546428713
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0014085958715623265,
+          "median": 0.0027240070593779466,
+          "p90": 0.0034619705544299243,
+          "p99": 0.004027367492894082,
+          "max": 0.0041699464153995185
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 1.0
+      },
+      {
+        "plane_id": 887,
+        "predicted_candidate_count": 10,
+        "predicted_ring_ids": [
+          23
+        ],
+        "predicted_time_s_min_max": [
+          5.500000000000002,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          1.262177448353619e-29,
+          3.0302755970969894e-06,
+          0.014506855060588778
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.0017345550292441091,
+          "median": 0.08066294503191773,
+          "p90": 0.18844738727765853,
+          "p99": 0.31488925640532417,
+          "max": 0.40210659880825644
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0005735259285691244,
+          "median": 0.002846313976491742,
+          "p90": 0.005356772680466514,
+          "p99": 0.006882945415775305,
+          "max": 0.01026818686960542
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.905
+      },
+      {
+        "plane_id": 930,
+        "predicted_candidate_count": 50,
+        "predicted_ring_ids": [
+          25
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          9.602909160208139e-06,
+          0.019505633738310327
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 7.883880772584619e-05,
+          "median": 0.0958224923740395,
+          "p90": 0.17900940899832882,
+          "p99": 0.26553192458905417,
+          "max": 0.28650813821084964
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0017075734043025116,
+          "median": 0.0030430434754775137,
+          "p90": 0.00376407383019727,
+          "p99": 0.004330804912685413,
+          "max": 0.005369943261977243
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.935
+      },
+      {
+        "plane_id": 940,
+        "predicted_candidate_count": 49,
+        "predicted_ring_ids": [
+          25
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          4.796397094772129e-06,
+          0.02062206103133896
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.0008064522408413781,
+          "median": 0.08078890701062943,
+          "p90": 0.1527339435523466,
+          "p99": 0.20710065822200388,
+          "max": 0.22266402835012722
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.001408624917653111,
+          "median": 0.002720478463205647,
+          "p90": 0.003392385078768668,
+          "p99": 0.0040338777234414196,
+          "max": 0.004209348265795478
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.985
+      },
+      {
+        "plane_id": 949,
+        "predicted_candidate_count": 48,
+        "predicted_ring_ids": [
+          26
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          9.916477661989682e-06,
+          0.020559553349867036
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.001543842082910349,
+          "median": 0.11651021072539991,
+          "p90": 0.22340639997754075,
+          "p99": 0.28901757432365904,
+          "max": 0.32797999471199557
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0014565968969424774,
+          "median": 0.0026510061736141335,
+          "p90": 0.003512103547834974,
+          "p99": 0.003990289282702399,
+          "max": 0.004688027647474585
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.865
+      },
+      {
+        "plane_id": 950,
+        "predicted_candidate_count": 47,
+        "predicted_ring_ids": [
+          26
+        ],
+        "predicted_time_s_min_max": [
+          3.7,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          1.876495428993736e-05,
+          0.020386711321338936
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.0001602208451431751,
+          "median": 0.16313434209710342,
+          "p90": 0.32515117516011127,
+          "p99": 0.48813208848672013,
+          "max": 0.5239869966796153
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.0011986337765827954,
+          "median": 0.002668982014581857,
+          "p90": 0.0033912767983162394,
+          "p99": 0.004010635442696054,
+          "max": 0.004154153577361043
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.63
+      },
+      {
+        "plane_id": 1291,
+        "predicted_candidate_count": 40,
+        "predicted_ring_ids": [
+          24
+        ],
+        "predicted_time_s_min_max": [
+          4.200000000000001,
+          6.000000000000002
+        ],
+        "predicted_native_world_point_cov_eigenvalues_no_noise_m2": [
+          2.0194839173657902e-28,
+          0.00016895532964529612,
+          0.020277469065300015
+        ],
+        "noise_mc_trials": 200,
+        "noise_mc_seed": 42,
+        "noise_mc_abs_dot_normal_with_true_wall": {
+          "count": 200,
+          "min": 0.9349084228789786,
+          "median": 0.9949112215295737,
+          "p90": 0.9997308064928279,
+          "p99": 0.999983434527345,
+          "max": 0.9999912443815699
+        },
+        "noise_mc_midmax_ratio": {
+          "count": 200,
+          "min": 0.008243470582536992,
+          "median": 0.008380403169975431,
+          "p90": 0.008654301622435486,
+          "p99": 0.008966460928381364,
+          "max": 0.009131164569811445
+        },
+        "noise_mc_normal_nearly_orthogonal_to_wall_fraction_absdotwall_le020": 0.0
+      }
+    ],
+    "current132_native_body_world_xyz_m": [
+      16.00728891,
+      4.92219885,
+      1.50513266
+    ],
+    "current132_horizontal_distance_to_east_wall_m": 2.39271109,
+    "current132_near_horizontal_vertical_ring_spacing_approx_m": 0.06063346
+  },
+  "PCA_interpretation": {
+    "eigenvalues_order": "lambda0<=lambda1<=lambda2; covariance eigenvalues have unit m^2",
+    "exact_line_counterexample": {
+      "covariance_m2": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0.02,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "eigenvalues_m2": [
+        0,
+        0,
+        0.02
+      ],
+      "nullspace_normals": "any unit normal in x-z plane, including physical wall x normal and false horizontal z normal; both have identical zero residual",
+      "normal_unique": false
+    },
+    "actual_near_line": "Historical eigenvalues are finite and the smallest eigenvector is algebraically unique where the eigengap is nonzero; this does not make that normal a reliable physical-surface normal. Very small lambda1/lambda2 signals poor two-dimensional support and sensitivity to scan-line curvature/noise/early motion.",
+    "original_acceptance": "init_plane checks only lambda0 < planer_threshold (0.005); lambda1 lower-bound code exists only as comments. A near-line cluster meets this criterion.",
+    "freeze": "max_points_num=50 disables later refits; saved plane has 48 points from last refit. Later broad 2D wall observations do not update it.",
+    "uncertainty_caveat": "lambda1/lambda2 is a diagnostic indicator, not a newly proposed universal production threshold; lambda0/lambda1, eigengap relative to range/angle uncertainty, 2D support, distance, normal consistency and non-frozen update behavior need controlled AB tests."
+  },
+  "conclusions": [
+    "Selected historical near-horizontal constraints correspond to the actual east vertical wall, independently verified by scene placement and actual accepted lidar-point/native geometry.",
+    "Historical near-line wall sampling accepted as planes, then frozen, is a direct contributor to the erroneous downward correction at 132 s; it is not a physical 20–34 cm body drop.",
+    "This is stronger than a generic SLAM-init or GPU-load guess, but one diagnostic run is not a controlled intervention: do not claim that a specific PCA/map-update fix is proven or that no other LIO/VIO issue contributes."
+  ],
+  "limits": [
+    "Only the 210 s diagnostic prefix; original full-navigation acceptance remains failed.",
+    "Initial 3.7–6 s raw lidar/map-member points absent from detailed archive; historical eigenvalues/normal/count/refit times are exact saved values, while ring/range-noise simulation is an offline analytic plausibility check.",
+    "Primary frame comparison uses frozen yaw and early paired position; full-attitude anchor is a sensitivity check. Neither feeds online navigation.",
+    "No C++/runtime/old-camera modifications, no process signals, no new simulation run."
+  ]
+}

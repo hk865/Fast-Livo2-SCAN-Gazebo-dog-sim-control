@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "experiment": "finite_flat_dynamic_stop_resume_turn20_v1",
+  "scope": "Finite SLAM-relative 1m out/return with one physical moving_obstacle entry, 10sim-second blockage and withdrawal; simulation only",
+  "distance_m": 1.0,
+  "max_speed_mps": 0.2,
+  "max_yaw_rate_radps": 0.2,
+  "arrival_radius_m": 0.22,
+  "arrival_height_half_span_m": 0.1,
+  "arrival_control_radius_m": 0.17,
+  "dwell_sim_s": 0.6,
+  "goal_timeout_sim_s": 90.0,
+  "pose_cloud_timeout_s": 0.3,
+  "sensor_warmup_sim_s": 2.0,
+  "interface_version": "navigation_v4_latest_clock_measured_transition",
+  "warmup_history": {
+    "imu": {
+      "min_samples": 600,
+      "min_span_sim_s": 2.9
+    },
+    "body_odom": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "cloud": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "raw_lidar": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "image": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "camera_info": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    }
+  },
+  "request_startup_timeout_sim_s": 90.0,
+  "request_startup_timeout_wall_s": 600.0,
+  "teacher_transition": {
+    "stop_window_sim_s": 0.3,
+    "stop_min_pose_samples": 3,
+    "stop_pose_gap_max_s": 0.2,
+    "gyro_pose_pair_max_s": 0.15,
+    "stop_planar_speed_mps": 0.03,
+    "stop_slam_yaw_rate_radps": 0.05,
+    "stop_body_gyro_radps": 0.05,
+    "turn_complete_rad": 0.1,
+    "drive_heading_max_rad": 0.2
+  },
+  "recovery_fresh_pose_samples": 2,
+  "recovery_min_pose_span_sim_s": 0.1,
+  "fence": {
+    "along_min_m": -0.45,
+    "along_max_m": 1.45,
+    "lateral_abs_m": 0.45,
+    "height_abs_m": 0.15
+  },
+  "navigation_ground_truth_used": false,
+  "policy_observations": "Gazebo privileged Teacher inputs retained; this experiment evaluates sensor SLAM and SCAN navigation only",
+  "excluded": [
+    "original_origin",
+    "overhead_decks",
+    "ramps",
+    "low_steps",
+    "full_46_region_mission",
+    "real_robot",
+    "unbounded_dynamic_obstacle_mission"
+  ],
+  "dynamic_fixture": {
+    "protocol": "dynamic/protocol.json",
+    "allowed_entity": "moving_obstacle",
+    "navigation_ground_truth_used": false,
+    "prospective_unverified": true
+  },
+  "variant": {
+    "id": "dynamic_turn20",
+    "changes_from_dynamic_v1": {
+      "max_yaw_rate_radps": {
+        "before": 0.12,
+        "after": 0.2
+      }
+    },
+    "prospective_unverified": true,
+    "goal_timeout_sim_s_unchanged": 90.0,
+    "region_and_TTL_and_parking_unchanged": true
+  }
+}

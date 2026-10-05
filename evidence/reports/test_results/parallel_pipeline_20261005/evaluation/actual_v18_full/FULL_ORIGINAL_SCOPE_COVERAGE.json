@@ -1,0 +1,684 @@
+{
+  "schema": "independent_combined_V18_full_original_scope_union/v1",
+  "status": "PASS_ORIGINAL_STATIC32_MULTIFLOOR_SIMULATION_SCOPE",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+  "created_UTC": "2026-10-05T15:55:43.685707+00:00",
+  "original_common_v2_ramp_statuses_preserved": [
+    "unverified",
+    "unverified",
+    "unverified"
+  ],
+  "source_closed_metadata2_status": "passed",
+  "source_closed_metadata2_sha256": "1398f53ec33310c510944ba5100d62d67d205c7596250b972a89332bb57e5280",
+  "original_gate_counts": [
+    19,
+    26,
+    25
+  ],
+  "numeric_criteria_unchanged": true,
+  "metrics": {
+    "actual_worker_end_sim_s": 264.6,
+    "actual_native_end_s": 264.605,
+    "actual_worker_samples": 13231,
+    "native_samples": 52921,
+    "native_fault_samples": 0,
+    "native_body_contact_samples": 0,
+    "SLAM_source_rate": {
+      "count": 7907,
+      "unique_headers": 7907,
+      "first_last_s": [
+        3.634999999,
+        264.595
+      ],
+      "span_average_hz": 30.2958307785473,
+      "median_dt_hz": 28.57142938775512,
+      "source_gap_s": {
+        "count": 7906,
+        "min": 0.029999999000000003,
+        "p50": 0.034999999000000004,
+        "p95": 0.035000001,
+        "max": 0.065
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "controller_ages_without_protection": {
+      "pose_sim_age_s": {
+        "count": 4649,
+        "min": 0.01,
+        "p50": 0.045000000000000005,
+        "p95": 0.065,
+        "max": 0.08,
+        "over_300ms_count": 0
+      },
+      "paired_IMU_sim_age_s": {
+        "count": 4649,
+        "min": 0.01,
+        "p50": 0.05,
+        "p95": 0.065,
+        "max": 0.085,
+        "over_300ms_count": 0
+      },
+      "pose_wall_age_s": {
+        "count": 4649,
+        "min": 0.0007000479963608086,
+        "p50": 0.01830071397125721,
+        "p95": 0.03697640016907825,
+        "max": 0.13609043799806386,
+        "over_300ms_count": 0
+      }
+    },
+    "actual_controller_math_rate": {
+      "count": 4634,
+      "unique_headers": 4634,
+      "first_last_s": [
+        6.835000000000001,
+        264.595
+      ],
+      "span_average_hz": 17.974084419615146,
+      "median_dt_hz": 28.57142775510206,
+      "source_gap_s": {
+        "count": 4633,
+        "min": 0.029999999000000003,
+        "p50": 0.035000001,
+        "p95": 0.07,
+        "max": 1.3200000010000001
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 33
+    },
+    "actual_controller_ticker_rate": {
+      "count": 5183,
+      "unique_headers": 5183,
+      "first_last_s": [
+        6.8100000000000005,
+        264.61
+      ],
+      "span_average_hz": 20.10085337470908,
+      "median_dt_hz": 20.0,
+      "source_gap_s": {
+        "count": 5182,
+        "min": 0.005,
+        "p50": 0.05,
+        "p95": 0.055,
+        "max": 0.195
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "original_consumer_accepted_producer_age_s": {
+      "count": 12896,
+      "min": 0.0,
+      "p50": 0.00999999999999801,
+      "p95": 0.020000000000010232,
+      "max": 0.025000000000005684
+    },
+    "route": {
+      "status": "passed",
+      "passed": true,
+      "body_relative_route_registration": "single offline SE3 at original source anchor; not a registered original scene route",
+      "absolute_original_scene_centerline_registration": "unverified",
+      "maximum_route_distance_m": 0.1389056541408315,
+      "active_route_RMS_m": 0.0372791639779041,
+      "maximum_drive_heading_rad": 0.16657702539230115,
+      "native_COM_projected_speed_mean_mps": 0.17118604075039717,
+      "reference_speed_mean_mps": 0.19108520904817192,
+      "speed_MAE_mps": 0.03827786180993174,
+      "actual_Gazebo_state_used_only_after_sensor_command_audit": true
+    },
+    "hold": {
+      "status": "passed",
+      "passed": true,
+      "stopping_semantics": "new fixed endpoint active velocity hold, explicitly different from historical zero-command parking",
+      "first_declared_source_stamp_ns": 257269999999,
+      "first_actual_Teacher_index": 12867,
+      "fixed_native_window_s": [
+        257.345,
+        262.345
+      ],
+      "native_samples": 1001,
+      "SLAM_samples": 151,
+      "capture_distinct_source_dwell_s": 0.625,
+      "strict_entry_radius_verified": true,
+      "target_camera_init_xyz": [
+        0.20430061993334042,
+        5.009016169936247,
+        2.405369875414966
+      ],
+      "target_sha256": "ada6b209ba1e86ab48f81067a3194c4adb73660492f0f27e57747b507c380335",
+      "native_xy_drift_m": 0.002139600814548513,
+      "native_yaw_drift_rad": 0.004681897826584791,
+      "SLAM_xy_drift_m": 0.0021212457678049484,
+      "SLAM_yaw_drift_rad": 0.004490336743996348,
+      "origin_speed_peak_mps": 0.018309044101137636,
+      "Euler_yawdot_peak_radps": 0.028973870376850525,
+      "body_wz_peak_radps": 0.029003227909655042
+    },
+    "original32_region_arrivals": {
+      "status": "passed",
+      "passed": true,
+      "arrivals": [
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x02",
+          "original_begin_end_ns": [
+            10695000000,
+            11320000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 4.61,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x03",
+          "original_begin_end_ns": [
+            17660000000,
+            18320000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035,
+          "deadline_elapsed_s": 6.9,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x04",
+          "original_begin_end_ns": [
+            24620000000,
+            25250000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.85,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x05",
+          "original_begin_end_ns": [
+            31054999999,
+            31684999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035,
+          "deadline_elapsed_s": 6.334999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x06",
+          "original_begin_end_ns": [
+            38049999999,
+            38679999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.899999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x07",
+          "original_begin_end_ns": [
+            45445000000,
+            46070000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 7.3,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x08",
+          "original_begin_end_ns": [
+            52670000000,
+            53299999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.629999999,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 7.129999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x09",
+          "original_begin_end_ns": [
+            59405000000,
+            60030000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.64,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x10",
+          "original_begin_end_ns": [
+            66465000000,
+            67090000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.96,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x11",
+          "original_begin_end_ns": [
+            73459999999,
+            74090000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.630000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.895,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x12",
+          "original_begin_end_ns": [
+            80454999999,
+            81084999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.899999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x13",
+          "original_begin_end_ns": [
+            87385000000,
+            88015000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.845,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_x14",
+          "original_begin_end_ns": [
+            93954999999,
+            94579999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.489999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "lower_exit",
+          "original_begin_end_ns": [
+            99959999999,
+            100584999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 5.894999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "connector_x",
+          "original_begin_end_ns": [
+            108079999999,
+            108739999999
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 8.049999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "connector_mid",
+          "original_begin_end_ns": [
+            126489999999,
+            127120000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.630000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 18.3,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "connector_y",
+          "original_begin_end_ns": [
+            141275000000,
+            141905000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 14.68,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_entry",
+          "original_begin_end_ns": [
+            153384999999,
+            154014999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 12.014999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x14",
+          "original_begin_end_ns": [
+            159754999999,
+            160384999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.274999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x13",
+          "original_begin_end_ns": [
+            166620000000,
+            167280000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.8,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x12",
+          "original_begin_end_ns": [
+            173514999999,
+            174145000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.630000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.78,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x11",
+          "original_begin_end_ns": [
+            180645000000,
+            181305000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 7.065,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x10",
+          "original_begin_end_ns": [
+            187474999999,
+            188104999999
+          ],
+          "original_headers": 19,
+          "dwell_s": 0.63,
+          "maximum_gap_s": 0.065,
+          "deadline_elapsed_s": 6.734999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x09",
+          "original_begin_end_ns": [
+            194074999999,
+            194705000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.630000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.515,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x08",
+          "original_begin_end_ns": [
+            200939999999,
+            201564999999
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.774999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x07",
+          "original_begin_end_ns": [
+            207870000000,
+            208495000000
+          ],
+          "original_headers": 20,
+          "dwell_s": 0.625,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.825,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x06",
+          "original_begin_end_ns": [
+            214669999999,
+            215330000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.660000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.75,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x05",
+          "original_begin_end_ns": [
+            221134999999,
+            221794999999
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.379999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x04",
+          "original_begin_end_ns": [
+            228560000000,
+            229219999999
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.659999999,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 7.339999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x03",
+          "original_begin_end_ns": [
+            235719999999,
+            236379999999
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 7.074999999,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "upper_x02",
+          "original_begin_end_ns": [
+            242389999999,
+            243050000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.660000001,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 6.59,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        },
+        {
+          "status": "passed",
+          "passed": true,
+          "goal_id": "floor3_stop",
+          "original_begin_end_ns": [
+            248425000000,
+            249085000000
+          ],
+          "original_headers": 21,
+          "dwell_s": 0.66,
+          "maximum_gap_s": 0.035000001,
+          "deadline_elapsed_s": 5.95,
+          "exact_original_3D_geometry": true,
+          "protected_status_rows": 0
+        }
+      ],
+      "actual_last_state": "succeeded",
+      "goals_definition_sha256": "71cb0654b76902aff417f14c84ed8b2cad76b01245b1ccd920489dcbe9e6f401"
+    },
+    "policy_forward_CPU_ms": {
+      "p50": 0.319758,
+      "p95": 0.409639,
+      "max": 2.898509
+    },
+    "first_physical_failed_guard": null
+  },
+  "privileged_actor_dimensions": 232,
+  "known_command_previous_action_dimensions": 15,
+  "Teacher_CPU_threads": 1,
+  "Teacher_rate_sim_hz": 50,
+  "navigation_ground_truth_used": false,
+  "physical_truth_only_offline_and_explicit_Actor_input": true,
+  "scope_limitations": [
+    "single successful static original32-route trial, not general robustness",
+    "Actor232 dimensions still privileged",
+    "absolute original scene centerline registration unverified; numerical route max/RMS are body-relative offline singleSE3",
+    "two12m ramps are not stairs",
+    "dynamic obstacle stopping/recovery unverified in this run",
+    "1m/s unverified; original cap0.2m/s preserved",
+    "GPU deployment and real robot unverified",
+    "kind300 disabled, CPU means from /proc only; missing boundary costs N/A"
+  ],
+  "verified_input_sha256": {
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_cascade_independent.json": "b986e4480e0b6f7db93eb87f97c998fa7abe6058d1c1b6d11e50f03a97d0317a",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_clock_hold_independent.json": "3ea8b069ab865e1fa830ff8856e795e59109782e82d5a4dc16abc00ac03acd62",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_ramp_independent.json": "99068b1a8aa56079e3006bf7d6204598b16b091bd7ed438b6b72da3a96b0a01a",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_terrain_metadata_join_independent.json": "dc9a7a4f2568d39122302da586a6b5e92766504e09a7ea4b7381fdcbacfba640",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_terrain_metadata_join_independent_v2.json": "1398f53ec33310c510944ba5100d62d67d205c7596250b972a89332bb57e5280",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/worker_result.json": "ba0101a40a02cbc309439e79724f386fa2b5bd229b437620c917aa895dfc3bec",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/runtime_manifest.json": "cbd878e139111363907944169f66a92137da3e1a48c6b7e6350853a4439ceb0b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full/source_height/comparison.json": "8a458e527523f40f11d724a15f65e67055835468cf781531a7284c5abe831f40",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_full/pipeline_ages.json": "8f7036911550cb677cbbd79aa320af6332deea87c9d1194262e6e740eca7c00d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_EVALUATION_PLAN.json": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V18_COMBINED_SCOPE.json": "bb7fff70041c98d1546b42ba8185b24fef4a49c5890350f493ea743c19652f34"
+  }
+}

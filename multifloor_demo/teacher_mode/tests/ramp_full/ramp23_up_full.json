@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "profile_id": "ramp23_up_full",
+  "duration_s": 86,
+  "commands": [
+    {
+      "start_s": 0,
+      "command": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "start_s": 3,
+      "command": [
+        0.3,
+        0,
+        0
+      ]
+    },
+    {
+      "start_s": 75,
+      "command": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+  "terrain": "ramp_up",
+  "spawn": [
+    14.8,
+    7,
+    1.6,
+    3.141592653589793
+  ],
+  "completion_stop": {
+    "axis": "x",
+    "comparison": "le",
+    "threshold": 1.2,
+    "minimum_active_s": 3,
+    "settle_s": 8
+  },
+  "ramp": "ramp_23",
+  "start_landing": "floor_2",
+  "destination_landing": "floor_3",
+  "world_forward_sign": -1,
+  "acceptance_protocol": "tests/ramp_full_protocol.json",
+  "acceptance_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+  "priority": "primary"
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "actual_ramp_registration/v1",
+  "frame_id": "camera_init",
+  "source_kind": "full_registered_cloud",
+  "ground_truth_used": false,
+  "up_camera_init": [
+    0.0,
+    0.0,
+    1.0
+  ],
+  "body_anchor": [
+    1.0,
+    0.0,
+    0.4
+  ],
+  "configuration": {
+    "plane_tolerance_m": 0.025,
+    "min_plane_points": 80,
+    "ransac_trials": 180,
+    "max_planes": 10,
+    "max_fit_points": 30000,
+    "horizontal_max_deg": 1.5,
+    "ramp_min_deg": 3.0,
+    "ramp_max_deg": 20.0,
+    "bin_m": 0.25,
+    "min_bin_points": 6,
+    "minimum_supported_width_m": 1.0,
+    "side_drop_min_m": 0.06,
+    "side_evidence_distance_m": 0.2,
+    "seam_tolerance_m": 0.25,
+    "minimum_ramp_length_m": 1.0,
+    "maximum_edge_spread_m": 0.12,
+    "support_cell_width_m": 0.1,
+    "minimum_interior_coverage_fraction": 0.8,
+    "side_face_min_vertical_span_m": 0.06
+  },
+  "input_points": 3,
+  "status": "unverified",
+  "full_route_eligible": false,
+  "full_route": null,
+  "support_planes": [],
+  "ramp_candidates": [],
+  "rejection_reasons": [
+    "insufficient_actual_points"
+  ],
+  "capture_manifest_sha256": "129db586d0d5e2ad86644472a21cc69ff5560bcdcedcd0a031a9654adcf6635c",
+  "input_source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/tests/offline_attempt2_20261004/capture/capture_manifest.json": "129db586d0d5e2ad86644472a21cc69ff5560bcdcedcd0a031a9654adcf6635c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/tests/offline_attempt2_20261004/capture/clouds/000001_700000000.npz": "92d13388599a1d74b03654a8c735df771c97b235bbe26b597aaaed94b6c04e4c"
+  },
+  "analyzed_clouds": [
+    {
+      "original_stamp_ns": 700000000,
+      "received_monotonic_wall": 338666.449644802,
+      "archive_file": "clouds/000001_700000000.npz",
+      "body_stamp_ns": 700000000,
+      "removed_self_box_points": 0
+    }
+  ],
+  "observed_downsample_m": 0.04,
+  "observed_downsample_frame": "initial actual SLAM body pose",
+  "retained_observed_points": 3,
+  "analysis_source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/analyze.py": "3abb3569d3ca612c6ecc73cb277f3345978084756faca44d9bbf436e94838056",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/geometry.py": "e2067dd59650dc62f93e20ec7f1955894733c78d553673024d3ee05ae4473133",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/cloud.py": "fdaa93bb6e97ef7b6b543e7b60b6d5ef93a8a0ba7bc4f583becd62927c5f019a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/capture.py": "d7f97d43421f9a2c2b3ba726147178703b7ed4e2f8fd8dcc4a4ce97ed01e9504"
+  },
+  "registration_control_enabled": false,
+  "navigation_request_emitted": false,
+  "limitations": [
+    "Plane/edge candidates need independent review; geometry does not establish motor/solver/SLAM accuracy.",
+    "Full candidate covers observed ramp seams, not an entire multifloor mission.",
+    "Recorded actual accelerometer calibration is stationary; no simulator or absolute IMU yaw input.",
+    "No unobserved opposite edge, floor, endpoint or route segment is filled."
+  ],
+  "observed_xyz_artifact": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/tests/offline_attempt2_20261004/analysis_no_full/observed_xyz.npz",
+    "sha256": "a98b657503d031008a2110cf36aabded5b35587de356f0c2e66ebcd4de529ca5"
+  },
+  "registration_content_sha256": "ff0e36a4920cd14f774b47c5efaa738002f5489337717c713504e43fe01bec53"
+}

@@ -1,0 +1,73 @@
+{
+  "scope": "Full ramp actual-data terrain target sensitivity, observation-only shadow. Zero overhead does not imply terrain scopes are equivalent. Missing hits retain archived -inf raw and -1 policy clip semantics.",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_010011_ramp_up_ramp23_full_first_r1_4c51",
+      "scope": "Read-only hypothetical scan-target replay on unchanged actually-recorded poses; no actor or dynamics replay and no claimed outcome improvement",
+      "recorded_actual_scope": "all static SDF collision models excludinggo2/teacher_go2/moving_obstacle",
+      "alternative_scope": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "observation_source_sha256": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+      "world_sha256": "a1a4f6cb78c600af8535f7874f43c04edee339f28ee0b2ec3fa58df3c0886d33",
+      "recorded_scan_replay_max_abs_error": 0.0,
+      "recorded_scan_exact_replayed": true,
+      "total_policy_frames": 1146,
+      "frames_changed": 190,
+      "total_changed_points": 4023,
+      "max_clipped_delta": 2.0,
+      "first_difference": {
+        "sim_time_s": 19.119999999999997,
+        "position": [
+          10.732409671200754,
+          6.6515015921208445,
+          1.8204873244019282
+        ],
+        "changed_points": 1,
+        "upper23_missing_points": 1,
+        "max_clipped_delta": 2.0
+      },
+      "maximum_upper23_missing_points_per_frame": 51,
+      "all_static_changed_hit_models": {
+        "floor_1/link/collision": 4023
+      },
+      "actual_telemetry_overhead_frames": 0
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_010157_ramp_down_ramp23_full_first_r1_a13d",
+      "scope": "Read-only hypothetical scan-target replay on unchanged actually-recorded poses; no actor or dynamics replay and no claimed outcome improvement",
+      "recorded_actual_scope": "all static SDF collision models excludinggo2/teacher_go2/moving_obstacle",
+      "alternative_scope": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "observation_source_sha256": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+      "world_sha256": "49b52da71f0ecfeed467b849330742a158eda0adf6e6e0d01d00223099b9ec97",
+      "recorded_scan_replay_max_abs_error": 0.0,
+      "recorded_scan_exact_replayed": true,
+      "total_policy_frames": 1275,
+      "frames_changed": 211,
+      "total_changed_points": 3025,
+      "max_clipped_delta": 2.0,
+      "first_difference": {
+        "sim_time_s": 21.279999999999998,
+        "position": [
+          5.040446490092415,
+          7.383968056239518,
+          2.4026276106253657
+        ],
+        "changed_points": 1,
+        "upper23_missing_points": 1,
+        "max_clipped_delta": 2.0
+      },
+      "maximum_upper23_missing_points_per_frame": 51,
+      "all_static_changed_hit_models": {
+        "floor_1/link/collision": 3025
+      },
+      "actual_telemetry_overhead_frames": 0
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "scope": "offline prepare/consumer/launch construction only; no actual CHAMP simulation pass",
+  "checks": {
+    "fresh_same_command": true,
+    "wall_300ms_reject": true,
+    "sim_300ms_reject": true,
+    "future_50ms_reject": true,
+    "unhealthy_zero": true,
+    "controlled_stop_is_velocity_zero": true,
+    "repeated_read_no_timestamp_refresh": true,
+    "command_bounds_unchanged": true,
+    "nonfinite_zero": true,
+    "boolean_sequence_rejected": true,
+    "same_sequence_changed_payload_rejected": true,
+    "file_stamp_bytes_untouched_by_reader": true,
+    "all_14_original_protected_hashes_unchanged": true,
+    "all_scene_geometry_physics_sensors_pose_exact_XML": true,
+    "sole_ros2_control_no_teacher_plugin": true,
+    "native_no_force_position_velocity_reset_api": true,
+    "native_state_phase_postupdate_zero_offset": true,
+    "controller_PID_native_and_no_body_servo": true,
+    "launch_constructs_without_ROS_Gazebo_start": true,
+    "no_model_load_or_training_import": true,
+    "native_qtarget_not_fabricated": true
+  },
+  "passed": true,
+  "passed_count": 21,
+  "total": 21,
+  "consumer_function_ast_sha256": "eb42ee6044a279b1d0d44452f94a17dc6afc472f059c32be6510afae8c5a9ac0",
+  "source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/prepare.py": "d398f6bc0e2baf5b0e03000a824292f26bdde61f18ec61a22d5daab2cf573440",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py": "6679152c6db9716c99cf8c527ba5cd895e10b380db99291e5645945c5cb45e44",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/baseline.launch.py": "01710dc29e2ba715af164dc19e39a68f13442744e0c4d0b7b49204866aae9d1a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/native/champ_native_observer.cpp": "9ccaebded8e5d0ccf3aed1546f8ff97e06886936862b9a2ab2864b0915e340b7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/native/CMakeLists.txt": "1bc66de0e9c401956f5a9b7f599d2fe55245303e5ec38fa63c2ea0845102012a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/offline_checks.py": "fb692a826a76665c1a6b0dea1b73ac7df3a1e551a9b8a5fb4c9e64ca77c5ac09"
+  },
+  "native_so_sha256": "8dc70ac7b96f8156c8a3d138774442d2c9eeab5d76ee7628ec762f75e2636ee7",
+  "ROS_started": false,
+  "simulator_started": false,
+  "training_started": false
+}

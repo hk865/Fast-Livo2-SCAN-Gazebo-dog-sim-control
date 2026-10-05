@@ -1,0 +1,1301 @@
+{
+  "scope": "Read-only Full17 startup records and frozen source. No ROS nodes, tests, builds, physics, or control.",
+  "run_id": "20261001_232612_ad2317",
+  "original_outcome": {
+    "stage": "failed",
+    "message": "底层控制已锁定失败，停止任务：joint_adapter_status_timeout",
+    "events": [
+      {
+        "stage": "waiting_sensors",
+        "elapsed_s": 0.0,
+        "message": "正在启动仿真，等待稳定的 SLAM、雷达、IMU 和 RGB 数据。"
+      },
+      {
+        "stage": "failed",
+        "elapsed_s": 20.366,
+        "message": "底层控制已锁定失败，停止任务：joint_adapter_status_timeout"
+      }
+    ],
+    "current_request": null,
+    "origin": null
+  },
+  "source_receipts": {
+    "simulation/control_bridge.py": {
+      "current_sha256": "f206a86d01c3545ce0d939a8270c6cd2ac4065fbdee57f34aa27808bd6e4c358",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "simulation/execution_safety.py": {
+      "current_sha256": "11aa9446c230a70c2cae87c7a20fa96fce6aea71b0eaddcb1b0c552154e3bba5",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "simulation/joint_reference_adapter.py": {
+      "current_sha256": "2116912b3c286c304d629a40177f9393192c4f88f871b3ad18cc923162505f72",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "scripts/stack.launch.py": {
+      "current_sha256": "c6b48a0ec8a59febb2abe034ed227399538b803ae6eefc64fe65c4c82ba77692",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "scripts/wait_sensors.py": {
+      "current_sha256": "f0b46f5e5e7f9eb9ea05da35fbb5b29301207eba3d8c113d11aa334dde6cd50b",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "scripts/sensor_startup_gate.py": {
+      "current_sha256": "978fb696d5e750ccc5e71dc49234e84e70d71b8d24e632668a3b8525083ff069",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "scripts/mission_server.py": {
+      "current_sha256": "fa510182414589d4a1cd45df9695445ee966fad40a2c4aebc537ec6e801e3811",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    },
+    "navigation/controller.py": {
+      "current_sha256": "7364761409354386440724dd92c75f663b71bfed75efa1ae3f6d5a341a1c9a32",
+      "frozen_sha256": null,
+      "matches_frozen": false
+    }
+  },
+  "input_sha256": {
+    "mission.json": "d5966426079d1612d7a736b59b0b7a5e52669d81ab3fb768a8e9c36a8d2dde67",
+    "startup_gate.json": "92815e66d776226789db373e4f6951a4d4717bc9a2163fc0162d5c78fadc3f42",
+    "joint_stop_adapter.jsonl": "e976edeab3e90de2d3e6812600fbccc676a8756cfe002a8d7bda985ce59aa713",
+    "feedback_navigation.jsonl": "ccb1065ba6798aaa898431be944034ffceab5f344a363dc659d6bde7054519ba",
+    "sensor_audit.jsonl": "df108eea6996973787449b00d253e9945b1dc1d713302eef72defd909a5b2038",
+    "stack.log": "7abac579a38fd84bd13612e6d5c008db5c7b751b44db703906d8002574a0f6a3",
+    "acceptance.json": "a0d37beda6655f91edbf4b9c533401c14e9d178d58505bf4ed21a8bbf24e3404",
+    "root_terminal_provenance.json": "2a6f876ee08c07c92629416926655c50655c16aa6068654a5b9f169a39ceb630"
+  },
+  "gate": {
+    "passed": true,
+    "observed": {
+      "sim": 13.0,
+      "imu": 13000,
+      "camera": 127,
+      "imu_at": 111554.561572816,
+      "camera_at": 111554.466926972
+    },
+    "wall_elapsed": 17.990397898000083,
+    "reason": "stable_imu_and_ready_bridge",
+    "metrics": {
+      "samples": 3001,
+      "first_stamp": 10.0,
+      "last_stamp": 13.0,
+      "duration": 3.0,
+      "mean_world_acceleration": [
+        0.0001419324221841916,
+        -0.0003315072319588552,
+        9.810402802938375
+      ],
+      "acceleration_std_norm": 0.2948867687495793,
+      "mean_gravity_norm_error": 0.00040280956612726015,
+      "gravity_direction_error": 3.675824109663232e-05,
+      "max_gyro": 0.006765825025919051,
+      "orientation_range": 9.397244554071961e-05,
+      "resets": 0
+    },
+    "buffered_samples": 3001,
+    "thresholds": {
+      "WARM_SECONDS": 10.0,
+      "WINDOW_SECONDS": 3.0,
+      "MIN_SAMPLES": 300,
+      "MAX_GAP": 0.030001,
+      "MAX_GYRO": 0.03,
+      "MAX_ORIENTATION_CHANGE": 0.01,
+      "MAX_ACCEL_STD": 0.5,
+      "MAX_MEAN_GRAVITY_ERROR": 0.25,
+      "MAX_GRAVITY_ANGLE": 0.01,
+      "GRAVITY": 9.81
+    },
+    "world_reference": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "source": "real IMU and bridge status; no ground truth"
+  },
+  "actual_thresholds": {
+    "adapter_status_timeout_wall_s": 0.3,
+    "bridge_command_timeout_wall_s": 0.4,
+    "adapter_safe_command_timeout_wall_s": 0.25,
+    "all_preserved": true,
+    "source": "JointAdapterHealth default, Bridge tick and Adapter watchdog"
+  },
+  "adapter_callback_evidence": {
+    "last_to_first_any_logged_event_gap": {
+      "wall_gap_s": 0.33723718200053554,
+      "prior": {
+        "kind": "filtered_target",
+        "sim": 13.843,
+        "wall": 18.811190121996333,
+        "state": "idle",
+        "positions": [
+          -1.3909067675399456e-08,
+          0.7894648909568787,
+          -1.5789296627044678,
+          -7.351371067443324e-08,
+          0.7894648909568787,
+          -1.5789296627044678,
+          -1.3909067675399456e-08,
+          0.7894648909568787,
+          -1.5789296627044678,
+          -7.351371067443324e-08,
+          0.7894648909568787,
+          -1.5789296627044678
+        ],
+        "mode": "native_nominal_idle"
+      },
+      "following": {
+        "kind": "actual_champ_command",
+        "sim": 13.848,
+        "wall": 19.14842730399687,
+        "state": "idle",
+        "value": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "post_10_kind_largest_gaps": {
+      "raw_target": {
+        "wall_gap_s": 0.3382644439989235,
+        "prior": {
+          "kind": "raw_target",
+          "sim": 13.843,
+          "wall": 18.810993202991085,
+          "state": "idle",
+          "positions": [
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678
+          ],
+          "header_stamp": [
+            0,
+            0
+          ],
+          "horizon": [
+            0,
+            16666666
+          ]
+        },
+        "following": {
+          "kind": "raw_target",
+          "sim": 13.848,
+          "wall": 19.14925764699001,
+          "state": "idle",
+          "positions": [
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678
+          ],
+          "header_stamp": [
+            0,
+            0
+          ],
+          "horizon": [
+            0,
+            16666666
+          ]
+        }
+      },
+      "filtered_target": {
+        "wall_gap_s": 0.33831193900550716,
+        "prior": {
+          "kind": "filtered_target",
+          "sim": 13.843,
+          "wall": 18.811190121996333,
+          "state": "idle",
+          "positions": [
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678
+          ],
+          "mode": "native_nominal_idle"
+        },
+        "following": {
+          "kind": "filtered_target",
+          "sim": 13.848,
+          "wall": 19.14950206100184,
+          "state": "idle",
+          "positions": [
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -1.3909067675399456e-08,
+            0.7894648909568787,
+            -1.5789296627044678,
+            -7.351371067443324e-08,
+            0.7894648909568787,
+            -1.5789296627044678
+          ],
+          "mode": "native_nominal_idle"
+        }
+      },
+      "requested_safe": {
+        "wall_gap_s": 0.35673180800222326,
+        "prior": {
+          "kind": "requested_safe",
+          "sim": 13.824,
+          "wall": 18.792316663995734,
+          "state": "idle",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "following": {
+          "kind": "requested_safe",
+          "sim": 13.848,
+          "wall": 19.149048471997958,
+          "state": "idle",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "actual_champ_command": {
+        "wall_gap_s": 0.3447559610067401,
+        "prior": {
+          "kind": "actual_champ_command",
+          "sim": 13.836,
+          "wall": 18.80367134299013,
+          "state": "idle",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "following": {
+          "kind": "actual_champ_command",
+          "sim": 13.848,
+          "wall": 19.14842730399687,
+          "state": "idle",
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "own_failure_rows": [],
+    "actual_and_requested_command_rows": 5646,
+    "all_six_command_values_exact_zero": true,
+    "raw_and_filtered_target_rows": 6761,
+    "all_nominal_positions_exact_equal": true,
+    "shutdown": {
+      "kind": "shutdown",
+      "sim": 14.398,
+      "wall": 19.367018651988474,
+      "state": "idle"
+    },
+    "timestamp_limit": "wall is adapter-relative monotonic; sim is cached /clock. This is callback/log evidence, not publisher entry/return."
+  },
+  "independent_sensor_evidence": {
+    "imu_count": 14399,
+    "first_stamp": 0.001,
+    "last_stamp": 14.399000000000001,
+    "all_imu_stamp_steps_1ms": true,
+    "post_10_wall_max_gap_s": 0.003113615995971486,
+    "during_adapter_cached_clock_gap_13_843_to_14_178": {
+      "count": 336,
+      "statement": "Independent original IMU continued; adapter clock cache jumped from 13.848 to 14.178 after its callback gap."
+    }
+  },
+  "final_bridge_safety": {
+    "state": "failed",
+    "reason": "joint_adapter_status_timeout",
+    "imu_state": "ready",
+    "imu_reason": "imu_stable",
+    "imu_stamp": 14.349,
+    "imu_wall_age": 0.0005114109953865409,
+    "tilt": 0.009174430573877224,
+    "max_tilt": 0.198451588370099,
+    "holds": 0,
+    "failures": 0,
+    "requested": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "safe": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "command_wall_age": 0.027636511003947817,
+    "joint_adapter_required": true,
+    "joint_adapter": {
+      "state": "idle",
+      "failed": false,
+      "reason": "boot",
+      "sim": 14.336,
+      "counters": {
+        "raw": 3807,
+        "filtered": 2927,
+        "stops": 0,
+        "queued_nonzero": 0,
+        "ignored_queued_gait": 0
+      },
+      "nominal_calibrated": true,
+      "test_only": false
+    },
+    "joint_adapter_wall_age": 0.013233375997515395
+  },
+  "official_nav_status_samples": [
+    {
+      "wall_elapsed": 18.814360452000983,
+      "sim_time": 13.869,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 6
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.749,
+          "imu_wall_age": 0.0005128159973537549,
+          "tilt": 0.005005844766440128,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02751198600162752,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.736,
+            "counters": {
+              "raw": 3687,
+              "filtered": 2807,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.013345801999093965
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    },
+    {
+      "wall_elapsed": 18.914478403006797,
+      "sim_time": 13.969,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 6
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.749,
+          "imu_wall_age": 0.0005128159973537549,
+          "tilt": 0.005005844766440128,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02751198600162752,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.736,
+            "counters": {
+              "raw": 3687,
+              "filtered": 2807,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.013345801999093965
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    },
+    {
+      "wall_elapsed": 19.015372983005363,
+      "sim_time": 14.07,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 6
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.749,
+          "imu_wall_age": 0.0005128159973537549,
+          "tilt": 0.005005844766440128,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02751198600162752,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.736,
+            "counters": {
+              "raw": 3687,
+              "filtered": 2807,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.013345801999093965
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    },
+    {
+      "wall_elapsed": 19.115543606996653,
+      "sim_time": 14.17,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 12
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.999,
+          "imu_wall_age": 0.0006130680121714249,
+          "tilt": 0.002314032983446487,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02764074900187552,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.836,
+            "counters": {
+              "raw": 3707,
+              "filtered": 2827,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.16325573000358418
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    },
+    {
+      "wall_elapsed": 19.21583369000291,
+      "sim_time": 14.27,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 12
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.999,
+          "imu_wall_age": 0.0006130680121714249,
+          "tilt": 0.002314032983446487,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02764074900187552,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.836,
+            "counters": {
+              "raw": 3707,
+              "filtered": 2827,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.16325573000358418
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    },
+    {
+      "wall_elapsed": 19.315905784998904,
+      "sim_time": 14.37,
+      "navigation": {
+        "request_id": null,
+        "state": "idle",
+        "goals_definition_sha256": null,
+        "goals_definitions": [],
+        "current_goal": null,
+        "region_arrival_evidence": null,
+        "region_arrivals": [],
+        "waypoint_index": 0,
+        "total": 0,
+        "message": "等待任务",
+        "obstacle_hold": false,
+        "obstacle_stops": 0,
+        "obstacle_resumes": 0,
+        "min_obstacle_clearance": null,
+        "replans": 0,
+        "reference_requests": 0,
+        "degenerate_splines": 0,
+        "last_spline_rejected": null,
+        "trajectory_reference_stamp": null,
+        "trajectory_association_rejected": 0,
+        "last_trajectory_association_rejected": null,
+        "planning_start_state": null,
+        "steering": null,
+        "accepted_trajectory_id": null,
+        "obstacle_resume_pending": false,
+        "aligned_obstacle_resumes": 0,
+        "pose_age": null,
+        "cloud_age": null,
+        "actual_cloud_message_stamp_ns": null,
+        "obstacle_guard_cloud_stamp_ns": null,
+        "last_obstacle_event_id": null,
+        "obstacle_event_capture_error": null,
+        "obstacle_event_archive": {
+          "submitted": 0,
+          "completed": 0,
+          "dropped": 0,
+          "pending": 0,
+          "counter_scope": "node lifetime"
+        },
+        "pose": null,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "counts": {
+          "odom": 0,
+          "cloud": 0,
+          "imu": 0,
+          "bspline": 0,
+          "commands": 12
+        },
+        "last_rejected": null,
+        "self_filtered_points": 0,
+        "tilt_hold": false,
+        "tilt_stops": 0,
+        "max_tilt_rad": 0.0,
+        "tilt_source": null,
+        "raw_imu_age": null,
+        "raw_imu_stamp_age": null,
+        "raw_imu_tilt_rad": null,
+        "raw_imu_max_tilt_rad": 0.0,
+        "raw_imu_last_rejected": null,
+        "raw_imu_fixed_body_rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "execution_bridge_safety": {
+          "state": "ready",
+          "reason": "imu_stable",
+          "imu_state": "ready",
+          "imu_reason": "imu_stable",
+          "imu_stamp": 13.999,
+          "imu_wall_age": 0.0006130680121714249,
+          "tilt": 0.002314032983446487,
+          "max_tilt": 0.198451588370099,
+          "holds": 0,
+          "failures": 0,
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "safe": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command_wall_age": 0.02764074900187552,
+          "joint_adapter_required": true,
+          "joint_adapter": {
+            "state": "idle",
+            "failed": false,
+            "reason": "boot",
+            "sim": 13.836,
+            "counters": {
+              "raw": 3707,
+              "filtered": 2827,
+              "stops": 0,
+              "queued_nonzero": 0,
+              "ignored_queued_gait": 0
+            },
+            "nominal_calibrated": true,
+            "test_only": false
+          },
+          "joint_adapter_wall_age": 0.16325573000358418
+        },
+        "alignment_hold": true,
+        "filtered_yaw_rate": 0.0,
+        "alignment_phase": "pre_turn",
+        "locked_heading": null,
+        "tracking_pose": null,
+        "heading_deviation_since": null,
+        "motion_limits": {
+          "walk_yaw_rate_rad_s": 0.08,
+          "pure_turn_rate_rad_s": 0.12,
+          "forward_speed_m_s": 0.12
+        },
+        "frame_id": "camera_init",
+        "feedback_source": "/demo/slam/body_odom",
+        "planner": "SCAN with measured-pose trajectory execution",
+        "avoidance": "registered-LiDAR stop, wait for clearance, replan and resume"
+      }
+    }
+  ],
+  "recording_limits": {
+    "control_audit_bytes": 0,
+    "navigation_audit_bytes": 0,
+    "trajectories_bytes": 0,
+    "bridge_first_failure_callback_not_recorded": true,
+    "adapter_status_publisher_enter_return_not_recorded": true,
+    "scheduler_or_native_syscall_durations_not_recorded": true
+  },
+  "causal_classification": {
+    "proved": [
+      "Initial static-sensor/ready-bridge gate passed before heavy modules launched.",
+      "No navigation request, SLAM body odom, path or goal-region arrival was produced.",
+      "Adapter remained idle with no own failure record; commands were exact zero and joint targets constant.",
+      "Different adapter callback classes jointly failed to log progress for 337ms while independent IMU continued.",
+      "Bridge joint health latched adapter_status_timeout; a later fresh healthy adapter status did not clear that latch.",
+      "Mission independently consumed failed bridge status and ended startup at 20.366wall seconds."
+    ],
+    "not_proved": [
+      "Specific blocking rcl_publish topic, DDS duration, log-write duration, or OS scheduling cause.",
+      "Exact bridge first timeout instant or whether IMU callback/timer/new-status callback first latched it.",
+      "Actual JTC target delivery time/effort during callback gap; only adapter-side returned-publish log is available.",
+      "CM regression, NAV/SCAN steering fault, region failure, or motion-response correctness."
+    ],
+    "plausible_mechanisms_to_separate": [
+      "One synchronous publish call blocks the adapter single-threaded executor, preventing status/clock/raw/safe callbacks.",
+      "The adapter process is not scheduled or waits in executor while other processes keep running.",
+      "Adapter callback-side serialization/file write stalls; no native write duration was captured."
+    ],
+    "pure_status_delivery_lag_insufficient": "Would not alone account for all independent adapter callback/log streams stalling and cached clock catching up."
+  },
+  "minimal_next_observation_only": {
+    "keep_limits_and_control_unchanged": true,
+    "native_boundary": "Bounded in-memory rcl_publish entry/return hook for adapter actuator Twist, filtered JointTrajectory and joint_stop_safety String; verify topic/type/publisher handle.",
+    "status_consume_boundary": "Bounded status callback wall-entry receipt in Bridge with original source sim/counters; do not refresh watchdog from observer.",
+    "interpretation": "If the adapter publish entry spans the whole blank then isolate publishing; if no such call spans it, inspect process scheduling/native write boundary. No widening TTL or ignoring failed latch."
+  },
+  "terminal_provenance": {
+    "evaluated_at": "2026-10-01T15:35:05.985232+00:00",
+    "source_unchanged": true,
+    "source_changes": [],
+    "runtime_unchanged": true,
+    "runtime_changes": [],
+    "matches_full17_frozen_sources": true,
+    "owned_process_group": 937797,
+    "owned_clean": true,
+    "owned": [],
+    "stage": "failed",
+    "passed": false,
+    "official_acceptance_sha256": "a0d37beda6655f91edbf4b9c533401c14e9d178d58505bf4ed21a8bbf24e3404",
+    "browser_screenshot": "browser_startup_failure.png",
+    "browser_start_receipt": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/test_results/full17_browser_start.json"
+  }
+}

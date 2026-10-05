@@ -1,0 +1,113 @@
+{
+  "description": "Same command/bootstrap/slew/spawn and exact world static collision geometry as Gazebo; PhysX CPU nominal training robot dynamics differ. Ramp travel is not stairs. Step ascent onto a tread is not a full obstacle traversal.",
+  "cases": [
+    {
+      "name": "ramp_up",
+      "duration": 18,
+      "spawn_xyz_yaw": [
+        4,
+        2,
+        0.6,
+        0
+      ],
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0.3,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ramp_down",
+      "duration": 18,
+      "spawn_xyz_yaw": [
+        8,
+        2,
+        1,
+        3.141592653589793
+      ],
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 3,
+          "end": 11,
+          "command": [
+            0.3,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 11,
+          "end": 18,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

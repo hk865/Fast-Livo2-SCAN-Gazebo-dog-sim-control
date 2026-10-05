@@ -1,0 +1,1397 @@
+{
+  "schema": "fastlivo_v7_vio_diagnostic_analysis/v1",
+  "binary": "multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/fastlivo_diagnostics/records.bin",
+  "analysis_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/analysis/analyze_vio_diagnostics.py",
+  "analysis_source_sha256": "b7ed01b7fffddf0c741357f03829f326be8aaf71b1e76d6c64e3d2b99af67877",
+  "source": {
+    "bytes_read": 904977760,
+    "record_count": 159757,
+    "selected_record_count": 152107,
+    "partial_tail": false,
+    "binary_bytes": 6912621864,
+    "index_used": true,
+    "hash_scope": "16-byte magic plus selected complete record headers and payloads in original order; not a full binary hash",
+    "selected_record_bytes_sha256": "371d5661be7f400ee8f212e9601ae00cff55b9755311661392f1748a92ad1fd9"
+  },
+  "record_counts": {
+    "1": 42001,
+    "10": 4199,
+    "11": 4199,
+    "13": 2100,
+    "12": 2099,
+    "20": 41280,
+    "100": 8885,
+    "200": 8252,
+    "201": 17498,
+    "202": 17586,
+    "203": 4008
+  },
+  "writer_stats": {
+    "schema": "fastlivo_diagnostics/v1",
+    "final": true,
+    "attempted": 159757,
+    "written": 159757,
+    "dropped": 0,
+    "maximum_queue_records": 39,
+    "file_bytes": 6912621864,
+    "detail_begin_s": 115,
+    "detail_end_s": 165,
+    "writer_io_failed": false
+  },
+  "diagnostic_capture_complete": true,
+  "algebra_checks_passed": false,
+  "checks": {
+    "IMU_pair_discrete_position_update": {
+      "passed": 41280,
+      "failed": 0,
+      "maximum_absolute_error": 2.1762648107215288e-16,
+      "failure_examples": []
+    },
+    "IMU_pair_discrete_velocity_update": {
+      "passed": 41280,
+      "failed": 0,
+      "maximum_absolute_error": 2.7321894746634712e-17,
+      "failure_examples": []
+    },
+    "disabled_NCC_is_not_evaluated": {
+      "passed": 2063,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "frame_covariance_update_state_unchanged": {
+      "passed": 2,
+      "failed": 2061,
+      "maximum_absolute_error": 0.031687849924347256,
+      "failure_examples": [
+        {
+          "context": {
+            "sequence": 78,
+            "stamp_ns": 3900000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1269960
+          },
+          "absolute_error": 7.90306650189053e-05
+        },
+        {
+          "context": {
+            "sequence": 80,
+            "stamp_ns": 4000000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1407856
+          },
+          "absolute_error": 1.594324515512036e-05
+        },
+        {
+          "context": {
+            "sequence": 82,
+            "stamp_ns": 4100000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1545752
+          },
+          "absolute_error": 0.00011022065722729005
+        },
+        {
+          "context": {
+            "sequence": 84,
+            "stamp_ns": 4200000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1676520
+          },
+          "absolute_error": 9.131575880731284e-05
+        },
+        {
+          "context": {
+            "sequence": 86,
+            "stamp_ns": 4300000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1807288
+          },
+          "absolute_error": 9.7030780563568e-05
+        },
+        {
+          "context": {
+            "sequence": 88,
+            "stamp_ns": 4400000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 1938056
+          },
+          "absolute_error": 5.033332885532194e-05
+        },
+        {
+          "context": {
+            "sequence": 90,
+            "stamp_ns": 4500000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 2054568
+          },
+          "absolute_error": 5.584533078333877e-05
+        },
+        {
+          "context": {
+            "sequence": 92,
+            "stamp_ns": 4600000000,
+            "stage": 1,
+            "iteration": -1,
+            "level": -1,
+            "offset": 2171080
+          },
+          "absolute_error": 4.343483661197519e-05
+        }
+      ]
+    },
+    "zero_track_frame_covariance_unchanged": {
+      "passed": 2,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "iteration_covariance_unchanged": {
+      "passed": 17496,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "post_update_error_explicitly_not_computed": {
+      "passed": 17496,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "actual_acceptance_branch_matches_error_test": {
+      "passed": 17496,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "accepted_solution_matches_state_delta": {
+      "passed": 7248,
+      "failed": 7071,
+      "maximum_absolute_error": 9.867773468244523e-06,
+      "failure_examples": [
+        {
+          "context": {
+            "sequence": 78,
+            "stamp_ns": 3900000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 3,
+            "offset": 1227192
+          },
+          "absolute_error": 4.0035538197147336e-08
+        },
+        {
+          "context": {
+            "sequence": 78,
+            "stamp_ns": 3900000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 2,
+            "offset": 1241448
+          },
+          "absolute_error": 1.969019427366936e-08
+        },
+        {
+          "context": {
+            "sequence": 78,
+            "stamp_ns": 3900000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 1,
+            "offset": 1255704
+          },
+          "absolute_error": 1.29211437572066e-06
+        },
+        {
+          "context": {
+            "sequence": 80,
+            "stamp_ns": 4000000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 3,
+            "offset": 1357960
+          },
+          "absolute_error": 6.471240998964789e-08
+        },
+        {
+          "context": {
+            "sequence": 80,
+            "stamp_ns": 4000000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 0,
+            "offset": 1400728
+          },
+          "absolute_error": 2.0400529637497333e-06
+        },
+        {
+          "context": {
+            "sequence": 82,
+            "stamp_ns": 4100000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 3,
+            "offset": 1495856
+          },
+          "absolute_error": 3.3757000333922704e-08
+        },
+        {
+          "context": {
+            "sequence": 82,
+            "stamp_ns": 4100000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 1,
+            "offset": 1524368
+          },
+          "absolute_error": 1.3950912018979855e-06
+        },
+        {
+          "context": {
+            "sequence": 84,
+            "stamp_ns": 4200000000,
+            "stage": 1,
+            "iteration": 1,
+            "level": 3,
+            "offset": 1633752
+          },
+          "absolute_error": 7.597442036599844e-09
+        }
+      ]
+    },
+    "solution_reconstructed_from_information_prior": {
+      "passed": 14319,
+      "failed": 0,
+      "maximum_absolute_error": 3.915399515025397e-11,
+      "failure_examples": []
+    },
+    "actual_frame_covariance_P_minus_GP": {
+      "passed": 2061,
+      "failed": 0,
+      "maximum_absolute_error": 5.293955920339377e-23,
+      "failure_examples": []
+    },
+    "frame_gain_matches_latest_accepted_iteration": {
+      "passed": 2061,
+      "failed": 0,
+      "maximum_absolute_error": 4.1744385725905886e-14,
+      "failure_examples": []
+    },
+    "rollback_restores_original_old_state": {
+      "passed": 3177,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "rollback_solution_absent": {
+      "passed": 3177,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "actual_track_frame_age_matches_source": {
+      "passed": 17586,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "disabled_track_NCC_is_NaN": {
+      "passed": 17586,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "pixel_metadata_matches_aggregate": {
+      "passed": 4008,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "HtH_reconstructed_from_actual_pixels": {
+      "passed": 4008,
+      "failed": 0,
+      "maximum_absolute_error": 2.3283064365386963e-08,
+      "failure_examples": []
+    },
+    "HTz_reconstructed_from_actual_pixels": {
+      "passed": 4008,
+      "failed": 0,
+      "maximum_absolute_error": 5.820766091346741e-11,
+      "failure_examples": []
+    },
+    "detail_pixel_arrays_available": {
+      "passed": 1,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    },
+    "accepted_track_detail_count_matches_retrieval": {
+      "passed": 501,
+      "failed": 0,
+      "maximum_absolute_error": 0.0,
+      "failure_examples": []
+    }
+  },
+  "navigation_or_motion_acceptance_changed": false,
+  "native_or_Gazebo_pose_read": false,
+  "detail_window_s": [
+    115.0,
+    165.0
+  ],
+  "windows": [
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        115,
+        125
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": -0.005503716537430092,
+          "measurement_dz_sum_m": -0.053034764727229344,
+          "propagation_dvz_sum_mps": 0.06499575006793328,
+          "measurement_dvz_sum_mps": -0.33273745311120795,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.05573286998514293,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 0.33936844831616103,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 2443,
+          "stamp_ns": 122200000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 1195246608,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.006240990329769769,
+          "propagation_dvz": 0.011490743068626873,
+          "measurement_dz": -0.0033352820248839787,
+          "measurement_dvz": -0.02217953558758419,
+          "z_before": 1.258323270334408,
+          "z_predicted": 1.2520822800046383,
+          "z_final": 1.2487469979797543,
+          "vz_before": -0.01943730947393937,
+          "vz_predicted": -0.007946566405312497,
+          "vz_final": -0.030126101992896687,
+          "P_pz_vz_before": 7.036271924682959e-06,
+          "P_pz_vz_predicted": 2.432014530762327e-05,
+          "P_pz_vz_final": 8.214283805040998e-06
+        },
+        {
+          "sequence": 2425,
+          "stamp_ns": 121300000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 1069369464,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.005370937677694698,
+          "propagation_dvz": -0.004490290980286816,
+          "measurement_dz": -0.0034090469072542984,
+          "measurement_dvz": -0.020868897128139764,
+          "z_before": 1.258517873553302,
+          "z_predicted": 1.2531469358756073,
+          "z_final": 1.249737888968353,
+          "vz_before": -0.004027296041481358,
+          "vz_predicted": -0.008517587021768174,
+          "vz_final": -0.029386484149907938,
+          "P_pz_vz_before": 6.517702153559107e-06,
+          "P_pz_vz_predicted": 2.3447092983208973e-05,
+          "P_pz_vz_final": 7.892166606546162e-06
+        },
+        {
+          "sequence": 2487,
+          "stamp_ns": 124400000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 1504532128,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.0009339320545529439,
+          "propagation_dvz": 0.01293990119846891,
+          "measurement_dz": -0.00317772167112107,
+          "measurement_dvz": -0.02052491369630248,
+          "z_before": 1.2569325569543945,
+          "z_predicted": 1.2559986248998416,
+          "z_final": 1.2528209032287205,
+          "vz_before": -0.01171182617153994,
+          "vz_predicted": 0.0012280750269289696,
+          "vz_final": -0.01929683866937351,
+          "P_pz_vz_before": 7.3117864331711755e-06,
+          "P_pz_vz_predicted": 2.478016445397885e-05,
+          "P_pz_vz_final": 7.95127122920232e-06
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 19.0,
+        "median": 31.0,
+        "mean": 31.18,
+        "maximum": 41.0
+      },
+      "reference_age_s": {
+        "count": 3118,
+        "minimum": 0.09999999999999432,
+        "median": 4.800000000000011,
+        "mean": 7.0630853110968586,
+        "maximum": 112.80000000000001
+      },
+      "observations_per_track": {
+        "count": 3118,
+        "minimum": 1.0,
+        "median": 9.0,
+        "mean": 13.062860808210392,
+        "maximum": 30.0
+      },
+      "added_visual_points": 1622,
+      "added_reference_observations": 2161,
+      "VIO_Mzz": {
+        "count": 831,
+        "minimum": 2162.2742136870443,
+        "median": 16426.681028996372,
+        "mean": 20480.46014580289,
+        "maximum": 147660.41581776555
+      },
+      "VIO_conditional_z_information": {
+        "count": 831,
+        "minimum": 36.46240386255613,
+        "median": 438.52693779997935,
+        "mean": 560.3743942221028,
+        "maximum": 3179.2722463718965
+      },
+      "LIO_Mzz": {
+        "count": 448,
+        "minimum": 483235.7720420595,
+        "median": 569736.3605145502,
+        "mean": 574198.810443433,
+        "maximum": 722630.2652264684
+      },
+      "LIO_conditional_z_information": {
+        "count": 448,
+        "minimum": 385108.1368231193,
+        "median": 461771.59342364606,
+        "mean": 466614.4873075771,
+        "maximum": 586136.6634273684
+      },
+      "LIO_effective_constraints": {
+        "count": 448,
+        "minimum": 3792.0,
+        "median": 3958.5,
+        "mean": 3977.5870535714284,
+        "maximum": 4245.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.010774934424734496,
+        "median": 0.08880568767313322,
+        "mean": 0.11779836428028456,
+        "maximum": 0.5715573724156542
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 5.804674773215591,
+        "median": 9.787596394405103,
+        "mean": 9.833818295428,
+        "maximum": 13.626348371777066
+      },
+      "actual_IMU_propagation_dz_from_velocity": -0.0056662059080035306,
+      "actual_IMU_propagation_dz_from_acceleration": 0.00016248937057482715,
+      "actual_IMU_propagation_dvz": 0.06499575006793334,
+      "VIO_accepted_iterations": 762,
+      "VIO_rollback_iterations": 69
+    },
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        125,
+        135
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": -0.35251637082087695,
+          "measurement_dz_sum_m": -0.19765872067428814,
+          "propagation_dvz_sum_mps": -0.06577122856662679,
+          "measurement_dvz_sum_mps": -1.0388037779793302,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.19769250108201952,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 1.0691625225292265,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 2645,
+          "stamp_ns": 132300000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 2610283904,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.012570414742646863,
+          "propagation_dvz": 0.0035449305236764095,
+          "measurement_dz": -0.019027997774256233,
+          "measurement_dvz": -0.06790419493777519,
+          "z_before": 1.0956475289481535,
+          "z_predicted": 1.0830771142055067,
+          "z_final": 1.0640491164312504,
+          "vz_before": -0.14632972321700546,
+          "vz_predicted": -0.14278479269332905,
+          "vz_final": -0.21068898763110425,
+          "P_pz_vz_before": 1.5986922739357422e-05,
+          "P_pz_vz_predicted": 3.869626216388112e-05,
+          "P_pz_vz_final": 1.2060668787028509e-05
+        },
+        {
+          "sequence": 2647,
+          "stamp_ns": 132400000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 2623523448,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.029106414201985897,
+          "propagation_dvz": -0.15538894923244606,
+          "measurement_dz": -0.011468544890440802,
+          "measurement_dvz": -0.049917564988055496,
+          "z_before": 1.0683651185602177,
+          "z_predicted": 1.0392587043582318,
+          "z_final": 1.027790159467791,
+          "vz_before": -0.1932639598032893,
+          "vz_predicted": -0.34865290903573537,
+          "vz_final": -0.39857047402379087,
+          "P_pz_vz_before": 9.81948890796407e-06,
+          "P_pz_vz_predicted": 3.0126080792810768e-05,
+          "P_pz_vz_final": 9.968590771028673e-06
+        },
+        {
+          "sequence": 2633,
+          "stamp_ns": 131700000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 2532380112,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.003681679527319126,
+          "propagation_dvz": -0.026577603169375075,
+          "measurement_dz": -0.011146188403568402,
+          "measurement_dvz": -0.04851614063680755,
+          "z_before": 1.2097643336020363,
+          "z_predicted": 1.2060826540747172,
+          "z_final": 1.1949364656711488,
+          "vz_before": -0.022665666828944275,
+          "vz_predicted": -0.04924326999831935,
+          "vz_final": -0.0977594106351269,
+          "P_pz_vz_before": 1.3516409246808375e-05,
+          "P_pz_vz_predicted": 3.451006902591189e-05,
+          "P_pz_vz_final": 1.702227723135966e-05
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 17.0,
+        "median": 40.0,
+        "mean": 37.29,
+        "maximum": 50.0
+      },
+      "reference_age_s": {
+        "count": 3729,
+        "minimum": 0.09999999999999432,
+        "median": 8.200000000000003,
+        "mean": 9.156315366049878,
+        "maximum": 128.6
+      },
+      "observations_per_track": {
+        "count": 3729,
+        "minimum": 1.0,
+        "median": 14.0,
+        "mean": 15.329310807186914,
+        "maximum": 30.0
+      },
+      "added_visual_points": 1081,
+      "added_reference_observations": 2448,
+      "VIO_Mzz": {
+        "count": 902,
+        "minimum": 2123.1097646573644,
+        "median": 28369.738201322536,
+        "mean": 30496.93314170734,
+        "maximum": 121771.52696611403
+      },
+      "VIO_conditional_z_information": {
+        "count": 902,
+        "minimum": 0.40006533799305544,
+        "median": 687.3704260062823,
+        "mean": 680.7362616831366,
+        "maximum": 1900.1676842366505
+      },
+      "LIO_Mzz": {
+        "count": 483,
+        "minimum": 156222.27168548072,
+        "median": 415680.7042144355,
+        "mean": 386247.51864357735,
+        "maximum": 559082.1077994399
+      },
+      "LIO_conditional_z_information": {
+        "count": 483,
+        "minimum": 86264.7076518129,
+        "median": 326293.97027294827,
+        "mean": 295837.3815573487,
+        "maximum": 463699.9253481114
+      },
+      "LIO_effective_constraints": {
+        "count": 483,
+        "minimum": 3333.0,
+        "median": 3691.0,
+        "mean": 3637.832298136646,
+        "maximum": 3986.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.009036406694130483,
+        "median": 0.07596463438172965,
+        "mean": 0.1005270326952833,
+        "maximum": 0.47224791512064657
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 5.78515071865821,
+        "median": 9.808184247794117,
+        "mean": 9.818388310000143,
+        "maximum": 13.49873386833711
+      },
+      "actual_IMU_propagation_dz_from_velocity": -0.3523519427504915,
+      "actual_IMU_propagation_dz_from_acceleration": -0.0001644280703807677,
+      "actual_IMU_propagation_dvz": -0.06577122856662665,
+      "VIO_accepted_iterations": 753,
+      "VIO_rollback_iterations": 149
+    },
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        135,
+        145
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.041654021257562124,
+          "measurement_dz_sum_m": -0.02222876810056751,
+          "propagation_dvz_sum_mps": -0.01907690183669103,
+          "measurement_dvz_sum_mps": -0.1208146067167373,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.023566881149590713,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 0.130697585465744,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 2853,
+          "stamp_ns": 142700000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 3949814152,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.0010358778312847816,
+          "propagation_dvz": -0.00020375277758153017,
+          "measurement_dz": -0.0026692212930324866,
+          "measurement_dvz": -0.01433102924768382,
+          "z_before": 0.9469827076034238,
+          "z_predicted": 0.9480185854347086,
+          "z_final": 0.9453493641416761,
+          "vz_before": 0.010376494754174584,
+          "vz_predicted": 0.010172741976593054,
+          "vz_final": -0.004158287271090767,
+          "P_pz_vz_before": 9.894983136782493e-06,
+          "P_pz_vz_predicted": 2.9133192686654478e-05,
+          "P_pz_vz_final": 1.0303556140646284e-05
+        },
+        {
+          "sequence": 2887,
+          "stamp_ns": 144400000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 4167143552,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.00021818035422216386,
+          "propagation_dvz": -0.00013944320078238545,
+          "measurement_dz": -0.0023819668564406538,
+          "measurement_dvz": -0.012520364920850933,
+          "z_before": 0.9496301456852128,
+          "z_predicted": 0.9498483260394349,
+          "z_final": 0.9474663591829943,
+          "vz_before": 0.002371383349814695,
+          "vz_predicted": 0.0022319401490323095,
+          "vz_final": -0.010288424771818624,
+          "P_pz_vz_before": 9.728739463285605e-06,
+          "P_pz_vz_predicted": 2.8919103602290106e-05,
+          "P_pz_vz_final": 9.815392369959367e-06
+        },
+        {
+          "sequence": 2851,
+          "stamp_ns": 142600000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 3936838304,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.0021432116154229686,
+          "propagation_dvz": 2.014531761809074e-05,
+          "measurement_dz": -0.0018413018050675856,
+          "measurement_dvz": -0.011425155341827285,
+          "z_before": 0.9466251546261468,
+          "z_predicted": 0.9487683662415698,
+          "z_final": 0.9469270644365022,
+          "vz_before": 0.021414314357816204,
+          "vz_predicted": 0.021434459675434295,
+          "vz_final": 0.01000930433360701,
+          "P_pz_vz_before": 6.2841564446943755e-06,
+          "P_pz_vz_predicted": 2.3704375612141578e-05,
+          "P_pz_vz_final": 1.0102833605537775e-05
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 31.0,
+        "median": 36.0,
+        "mean": 35.95,
+        "maximum": 43.0
+      },
+      "reference_age_s": {
+        "count": 3595,
+        "minimum": 0.09999999999999432,
+        "median": 7.300000000000011,
+        "mean": 10.909262865090405,
+        "maximum": 136.1
+      },
+      "observations_per_track": {
+        "count": 3595,
+        "minimum": 1.0,
+        "median": 1.0,
+        "mean": 10.268706536856746,
+        "maximum": 30.0
+      },
+      "added_visual_points": 821,
+      "added_reference_observations": 1333,
+      "VIO_Mzz": {
+        "count": 875,
+        "minimum": 5839.960078050924,
+        "median": 33382.664941613795,
+        "mean": 37557.712315429235,
+        "maximum": 291288.77961117646
+      },
+      "VIO_conditional_z_information": {
+        "count": 875,
+        "minimum": 116.9179526720236,
+        "median": 405.3347561187111,
+        "mean": 571.6223617954402,
+        "maximum": 8757.84382670137
+      },
+      "LIO_Mzz": {
+        "count": 478,
+        "minimum": 343997.07523343514,
+        "median": 368657.46506002423,
+        "mean": 368133.4664386175,
+        "maximum": 385401.243509767
+      },
+      "LIO_conditional_z_information": {
+        "count": 478,
+        "minimum": 248294.7223817737,
+        "median": 277244.3580300204,
+        "mean": 276688.42900894786,
+        "maximum": 301901.76779574086
+      },
+      "LIO_effective_constraints": {
+        "count": 478,
+        "minimum": 3355.0,
+        "median": 3422.5,
+        "mean": 3422.0251046025105,
+        "maximum": 3482.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.006259429944794808,
+        "median": 0.014052061006530791,
+        "mean": 0.015334974635837927,
+        "maximum": 0.0264570643147498
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 9.748472095373335,
+        "median": 9.81104060369855,
+        "mean": 9.810624256418343,
+        "maximum": 9.870523440837752
+      },
+      "actual_IMU_propagation_dz_from_velocity": 0.041701713511786136,
+      "actual_IMU_propagation_dz_from_acceleration": -4.7692254226484465e-05,
+      "actual_IMU_propagation_dvz": -0.019076901836691015,
+      "VIO_accepted_iterations": 743,
+      "VIO_rollback_iterations": 132
+    },
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        145,
+        155
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": -0.000635580731342511,
+          "measurement_dz_sum_m": -0.010576651298590645,
+          "propagation_dvz_sum_mps": -0.019042721302287933,
+          "measurement_dvz_sum_mps": -0.055291098946082536,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.013935876976054806,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 0.07726699036872217,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 2927,
+          "stamp_ns": 146400000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 4426495800,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.0005133779802598548,
+          "propagation_dvz": -0.0003091546715426599,
+          "measurement_dz": -0.002096704793441484,
+          "measurement_dvz": -0.011502527885301985,
+          "z_before": 0.9458380666372304,
+          "z_predicted": 0.9453246886569705,
+          "z_final": 0.943227983863529,
+          "vz_before": -0.005132001885570516,
+          "vz_predicted": -0.005441156557113176,
+          "vz_final": -0.01694368444241516,
+          "P_pz_vz_before": 9.774951679803317e-06,
+          "P_pz_vz_predicted": 2.8970020875379945e-05,
+          "P_pz_vz_final": 9.881933928885969e-06
+        },
+        {
+          "sequence": 2921,
+          "stamp_ns": 146100000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 4387565416,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.00016765178947042436,
+          "propagation_dvz": -0.0004848795969820609,
+          "measurement_dz": -0.0016006548867467663,
+          "measurement_dvz": -0.007973466503354691,
+          "z_before": 0.9475750590991132,
+          "z_predicted": 0.9474074073096428,
+          "z_final": 0.945806752422896,
+          "vz_before": -0.0014624164026142787,
+          "vz_predicted": -0.0019472959995963397,
+          "vz_final": -0.009920762502951031,
+          "P_pz_vz_before": 9.779334746808203e-06,
+          "P_pz_vz_predicted": 2.886779868819654e-05,
+          "P_pz_vz_final": 9.872701486729893e-06
+        },
+        {
+          "sequence": 3097,
+          "stamp_ns": 154900000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 5528439936,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.0004830569421805375,
+          "propagation_dvz": -3.932072275384096e-05,
+          "measurement_dz": -0.0014512294976312123,
+          "measurement_dvz": -0.00782542114661599,
+          "z_before": 0.9471948321218587,
+          "z_predicted": 0.9476778890640393,
+          "z_final": 0.9462266595664081,
+          "vz_before": 0.004776113513603319,
+          "vz_predicted": 0.004736792790849478,
+          "vz_final": -0.0030886283557665104,
+          "P_pz_vz_before": 9.57072425628098e-06,
+          "P_pz_vz_predicted": 2.8620644778829026e-05,
+          "P_pz_vz_final": 9.802507586781543e-06
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 32.0,
+        "median": 37.0,
+        "mean": 37.36,
+        "maximum": 41.0
+      },
+      "reference_age_s": {
+        "count": 3736,
+        "minimum": 0.09999999999999432,
+        "median": 16.30000000000001,
+        "mean": 17.237928265524626,
+        "maximum": 42.099999999999994
+      },
+      "observations_per_track": {
+        "count": 3736,
+        "minimum": 1.0,
+        "median": 24.0,
+        "mean": 16.614025695931478,
+        "maximum": 30.0
+      },
+      "added_visual_points": 481,
+      "added_reference_observations": 2236,
+      "VIO_Mzz": {
+        "count": 867,
+        "minimum": 5758.0865771008175,
+        "median": 42670.66986816959,
+        "mean": 46214.256630356955,
+        "maximum": 352325.3677256215
+      },
+      "VIO_conditional_z_information": {
+        "count": 867,
+        "minimum": 133.70573303262245,
+        "median": 660.6771409899375,
+        "mean": 819.4944712284715,
+        "maximum": 8707.770172909877
+      },
+      "LIO_Mzz": {
+        "count": 442,
+        "minimum": 357047.4672757243,
+        "median": 374804.46625404083,
+        "mean": 374505.85896359436,
+        "maximum": 390825.14366078307
+      },
+      "LIO_conditional_z_information": {
+        "count": 442,
+        "minimum": 268297.71382001037,
+        "median": 284126.9870724634,
+        "mean": 283926.7557310701,
+        "maximum": 296588.0153237138
+      },
+      "LIO_effective_constraints": {
+        "count": 442,
+        "minimum": 3376.0,
+        "median": 3427.0,
+        "mean": 3426.3371040723982,
+        "maximum": 3481.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.003038993254871326,
+        "median": 0.004231356263614743,
+        "mean": 0.00444345647980636,
+        "maximum": 0.0069864748989556785
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 9.75320547865383,
+        "median": 9.81050111301882,
+        "mean": 9.810325215264914,
+        "maximum": 9.867367961475827
+      },
+      "actual_IMU_propagation_dz_from_velocity": -0.0005879739284158529,
+      "actual_IMU_propagation_dz_from_acceleration": -4.760680292716939e-05,
+      "actual_IMU_propagation_dvz": -0.019042721302287898,
+      "VIO_accepted_iterations": 753,
+      "VIO_rollback_iterations": 114
+    },
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        155,
+        165
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": -0.0024434115401464895,
+          "measurement_dz_sum_m": -0.06968499204101952,
+          "propagation_dvz_sum_mps": -0.022075781459439732,
+          "measurement_dvz_sum_mps": -0.385200508474086,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.07306643258655798,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 0.4105865950771279,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 3267,
+          "stamp_ns": 163400000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6628476368,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 7.996531675591445e-05,
+          "propagation_dvz": -0.0007917778438363426,
+          "measurement_dz": -0.0031465528744136773,
+          "measurement_dvz": -0.01751747236464259,
+          "z_before": 0.9526815013231078,
+          "z_predicted": 0.9527614666398637,
+          "z_final": 0.94961491376545,
+          "vz_before": 0.0013080716841429342,
+          "vz_predicted": 0.0005162938403065916,
+          "vz_final": -0.017001178524335997,
+          "P_pz_vz_before": 9.829543824219266e-06,
+          "P_pz_vz_predicted": 2.9079629876754938e-05,
+          "P_pz_vz_final": 9.994554294306576e-06
+        },
+        {
+          "sequence": 3231,
+          "stamp_ns": 161600000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6392334368,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.00022053195376958712,
+          "propagation_dvz": -0.00045855513069486056,
+          "measurement_dz": -0.002464360041257052,
+          "measurement_dvz": -0.013229966118967231,
+          "z_before": 0.9530416476724092,
+          "z_predicted": 0.9532621796261788,
+          "z_final": 0.9507978195849217,
+          "vz_before": 0.002383957362997293,
+          "vz_predicted": 0.0019254022323024326,
+          "vz_final": -0.011304563886664799,
+          "P_pz_vz_before": 1.000383631185453e-05,
+          "P_pz_vz_predicted": 2.933965609127246e-05,
+          "P_pz_vz_final": 1.0175579042189351e-05
+        },
+        {
+          "sequence": 3223,
+          "stamp_ns": 161200000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6340276320,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.00046214221924545384,
+          "propagation_dvz": 0.0001340627228077233,
+          "measurement_dz": -0.002467705492938732,
+          "measurement_dvz": -0.012384907627892619,
+          "z_before": 0.9529424318414671,
+          "z_predicted": 0.9534045740607126,
+          "z_final": 0.9509368685677738,
+          "vz_before": 0.0046009854749506805,
+          "vz_predicted": 0.004735048197758404,
+          "vz_final": -0.007649859430134215,
+          "P_pz_vz_before": 9.958376219003581e-06,
+          "P_pz_vz_predicted": 2.9272280386532206e-05,
+          "P_pz_vz_final": 1.005670589694578e-05
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 29.0,
+        "median": 32.5,
+        "mean": 33.87,
+        "maximum": 41.0
+      },
+      "reference_age_s": {
+        "count": 3387,
+        "minimum": 0.09999999999999432,
+        "median": 25.900000000000006,
+        "mean": 25.516799527605556,
+        "maximum": 51.900000000000006
+      },
+      "observations_per_track": {
+        "count": 3387,
+        "minimum": 1.0,
+        "median": 30.0,
+        "mean": 18.783289046353705,
+        "maximum": 30.0
+      },
+      "added_visual_points": 487,
+      "added_reference_observations": 2194,
+      "VIO_Mzz": {
+        "count": 866,
+        "minimum": 8882.120759917527,
+        "median": 32023.52069345239,
+        "mean": 36600.420997003625,
+        "maximum": 113693.21531433873
+      },
+      "VIO_conditional_z_information": {
+        "count": 866,
+        "minimum": 152.43431503831744,
+        "median": 529.6282239771735,
+        "mean": 629.5440521623449,
+        "maximum": 1819.098792420089
+      },
+      "LIO_Mzz": {
+        "count": 460,
+        "minimum": 351280.93394530436,
+        "median": 371016.75677489745,
+        "mean": 369995.92514826666,
+        "maximum": 384372.2971881051
+      },
+      "LIO_conditional_z_information": {
+        "count": 460,
+        "minimum": 254131.08857872727,
+        "median": 279123.633061564,
+        "mean": 277735.6233417683,
+        "maximum": 296873.43196490244
+      },
+      "LIO_effective_constraints": {
+        "count": 460,
+        "minimum": 3423.0,
+        "median": 3476.0,
+        "mean": 3474.754347826087,
+        "maximum": 3510.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.002173204530998165,
+        "median": 0.002992847234884158,
+        "mean": 0.0030078901714917015,
+        "maximum": 0.0038803676986104096
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 9.748093602312895,
+        "median": 9.80958902479986,
+        "mean": 9.809681904175378,
+        "maximum": 9.864277042096017
+      },
+      "actual_IMU_propagation_dz_from_velocity": -0.002388222086329957,
+      "actual_IMU_propagation_dz_from_acceleration": -5.518945381588554e-05,
+      "actual_IMU_propagation_dvz": -0.022075781459439753,
+      "VIO_accepted_iterations": 679,
+      "VIO_rollback_iterations": 187
+    },
+    {
+      "window_start_exclusive_end_inclusive_s": [
+        165,
+        175
+      ],
+      "phase_sums": {
+        "LIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0009234656954164588,
+          "measurement_dz_sum_m": -0.10775701749898026,
+          "propagation_dvz_sum_mps": -0.015541480851039301,
+          "measurement_dvz_sum_mps": -0.6020610283578921,
+          "incomplete_stage_count": 0
+        },
+        "VIO": {
+          "complete_stage_count": 100,
+          "propagation_dz_sum_m": 0.0,
+          "measurement_dz_sum_m": 0.11017602508580515,
+          "propagation_dvz_sum_mps": 0.0,
+          "measurement_dvz_sum_mps": 0.6147353704730877,
+          "incomplete_stage_count": 0
+        }
+      },
+      "largest_downward_velocity_updates": [
+        {
+          "sequence": 3475,
+          "stamp_ns": 173800000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6854209096,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.00032393797632679355,
+          "propagation_dvz": -0.0005387389681918691,
+          "measurement_dz": -0.004209732220696427,
+          "measurement_dvz": -0.02281480447697183,
+          "z_before": 0.9588701817550411,
+          "z_predicted": 0.9591941197313679,
+          "z_final": 0.9549843875106715,
+          "vz_before": 0.0034951721104669172,
+          "vz_predicted": 0.002956433142275048,
+          "vz_final": -0.019858371334696784,
+          "P_pz_vz_before": 9.960609310717474e-06,
+          "P_pz_vz_predicted": 2.9212996664081544e-05,
+          "P_pz_vz_final": 1.0259108383074635e-05
+        },
+        {
+          "sequence": 3429,
+          "stamp_ns": 171500000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6850483584,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": 0.0011078689361592176,
+          "propagation_dvz": -0.0008011437133227505,
+          "measurement_dz": -0.003193554692854761,
+          "measurement_dvz": -0.016951175644842328,
+          "z_before": 0.9541645623979778,
+          "z_predicted": 0.955272431334137,
+          "z_final": 0.9520788766412822,
+          "vz_before": 0.011345775586920069,
+          "vz_predicted": 0.010544631873597318,
+          "vz_final": -0.0064065437712450095,
+          "P_pz_vz_before": 9.897466980853756e-06,
+          "P_pz_vz_predicted": 2.9094430396534154e-05,
+          "P_pz_vz_final": 1.0422284965052888e-05
+        },
+        {
+          "sequence": 3483,
+          "stamp_ns": 174200000000,
+          "stage": 2,
+          "iteration": -1,
+          "level": -1,
+          "offset": 6854839080,
+          "complete": 1,
+          "processed": 1,
+          "propagation_dz": -0.001045022660476791,
+          "propagation_dvz": 1.9505536065047777e-05,
+          "measurement_dz": -0.002766651864656966,
+          "measurement_dvz": -0.015693852826145653,
+          "z_before": 0.953223916616859,
+          "z_predicted": 0.9521788939563822,
+          "z_final": 0.9494122420917253,
+          "vz_before": -0.010340945060367167,
+          "vz_predicted": -0.010321439524302119,
+          "vz_final": -0.026015292350447774,
+          "P_pz_vz_before": 9.838465267095496e-06,
+          "P_pz_vz_predicted": 2.901687912046098e-05,
+          "P_pz_vz_final": 9.814352627698042e-06
+        }
+      ],
+      "actual_tracks": {
+        "count": 100,
+        "minimum": 31.0,
+        "median": 34.0,
+        "mean": 33.91,
+        "maximum": 38.0
+      },
+      "reference_age_s": {
+        "count": 0,
+        "minimum": null,
+        "median": null,
+        "mean": null,
+        "maximum": null
+      },
+      "observations_per_track": {
+        "count": 0,
+        "minimum": null,
+        "median": null,
+        "mean": null,
+        "maximum": null
+      },
+      "added_visual_points": 595,
+      "added_reference_observations": 2354,
+      "VIO_Mzz": {
+        "count": 871,
+        "minimum": 4293.920210293524,
+        "median": 31034.21120323905,
+        "mean": 29900.148971294297,
+        "maximum": 50482.559499881965
+      },
+      "VIO_conditional_z_information": {
+        "count": 871,
+        "minimum": 166.98102807295072,
+        "median": 392.5424273206045,
+        "mean": 553.7680863935883,
+        "maximum": 1682.215250034882
+      },
+      "LIO_Mzz": {
+        "count": 439,
+        "minimum": 330016.48214701796,
+        "median": 357056.1497003505,
+        "mean": 357330.6640109399,
+        "maximum": 380197.6838429787
+      },
+      "LIO_conditional_z_information": {
+        "count": 439,
+        "minimum": 233278.57982115838,
+        "median": 256409.07986791426,
+        "mean": 256755.66025534543,
+        "maximum": 281270.34725751326
+      },
+      "LIO_effective_constraints": {
+        "count": 439,
+        "minimum": 3453.0,
+        "median": 3504.0,
+        "mean": 3502.6059225512527,
+        "maximum": 3557.0
+      },
+      "raw_IMU_gyro_norm": {
+        "count": 2000,
+        "minimum": 0.002383619585890095,
+        "median": 0.003231503378285707,
+        "mean": 0.0032848958020082687,
+        "maximum": 0.004714011753275082
+      },
+      "raw_IMU_accel_norm": {
+        "count": 2000,
+        "minimum": 9.75883228027592,
+        "median": 9.810328421844375,
+        "mean": 9.809983465317567,
+        "maximum": 9.860466565796816
+      },
+      "actual_IMU_propagation_dz_from_velocity": 0.0009623193978112317,
+      "actual_IMU_propagation_dz_from_acceleration": -3.885370239730773e-05,
+      "actual_IMU_propagation_dvz": -0.015541480851039298,
+      "VIO_accepted_iterations": 679,
+      "VIO_rollback_iterations": 192
+    }
+  ],
+  "limitations": [
+    "Algebra checks only validate diagnostic reconstruction and original numerical updates; they do not make navigation or Sim2Sim pass.",
+    "VIO information eigenvalues/rank derive from actual saved pixel Jacobians; mixed rotation-radian/translation-meter units use a 1 m reference length and relative rank threshold 1e-9. They are not full fused SLAM observability or proof of correct association.",
+    "Conditional z information uses symmetric offline M6 and pseudoinverse of other pose DOFs at rcond1e-9; original matrix bytes are preserved in binary.",
+    "Point/ref statistics are actual retrieval/update values; no raw patch imagery or removal-count trace is synthesized.",
+    "phase sums use exact absolute source stamp and sequence; no nearest-time or hard-coded debug offset. LIO final published state and post-VIO state remain distinct.",
+    "Missing/dropped/incomplete writer capture prevents complete diagnostic claims; --allow-partial explicitly marks partial results."
+  ]
+}

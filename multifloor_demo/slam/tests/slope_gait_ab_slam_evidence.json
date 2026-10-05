@@ -1,0 +1,782 @@
+{
+  "scope": "Independent offline audit of two failed actual slope components; GT is evaluation only, no controller or estimator correction; no full demo claim.",
+  "provenance": {
+    "source_hashes_identical": true,
+    "runtime_artifacts_identical": true,
+    "urdf_identical": true,
+    "only_gait_swing_difference": true,
+    "actual_rate_hz": [
+      1000,
+      1000
+    ],
+    "swing_height_m": [
+      0.07,
+      0.04
+    ]
+  },
+  "results": [
+    {
+      "component": "slope_gait_a_007",
+      "summary": {
+        "directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/slope_gait_a_007",
+        "imu_rate_hz": 1000,
+        "passed": false,
+        "failure": "\u5f53\u524d\u822a\u70b9\u8d85\u8fc7\u4eff\u771f\u65f6\u95f4\u9650\u5236\uff0c\u505c\u8f66",
+        "interval": [
+          20.0,
+          110.239
+        ],
+        "duration_sim_s": 90.239,
+        "complete_sim": null,
+        "joint_arrivals": [],
+        "active_max_imu_tilt": 0.2733044568629211,
+        "active_bridge_holds": 0,
+        "body_contacts": 0,
+        "contact_publisher_present": true,
+        "probe_sampling": {
+          "count": 90240,
+          "duplicates_or_backward": 0,
+          "median_gap_s": 0.0010000000000012221,
+          "max_gap_s": 0.0010000000000047748,
+          "span_s": 90.239,
+          "actual_rate_hz": 1000.0
+        },
+        "official_sampling": {
+          "count": 90240,
+          "duplicates_or_backward": 0,
+          "median_gap_s": 0.0010000000000012221,
+          "max_gap_s": 0.0010000000000047748,
+          "span_s": 90.239,
+          "actual_rate_hz": 1000.0
+        },
+        "probe_stamps_missing_in_official": 0,
+        "official_stamps_missing_in_probe": 0,
+        "measured_real_time_factor": 0.9988753162386179,
+        "raw_world_acceleration": {
+          "mean": [
+            0.0008086897183467385,
+            -0.00024845164414969535,
+            -0.0001431424131361281
+          ],
+          "std": [
+            2.0857963059305704,
+            1.8762298097217491,
+            4.646605450365428
+          ],
+          "integrated_delta_v": [
+            0.07327800042440262,
+            -0.025519810218507986,
+            -0.014159898029677686
+          ],
+          "gt_velocity_delta": [
+            0.06574811758782939,
+            -0.05639867865997683,
+            0.013747886688378896
+          ],
+          "residual_delta_v": [
+            0.007529882836573229,
+            0.030878868441468844,
+            -0.027907784718056584
+          ],
+          "cumulative_residual_rms": [
+            0.02291745076678128,
+            0.02161109237359691,
+            0.05957251901971902
+          ],
+          "one_second_residual_rms": [
+            0.036748253322584655,
+            0.031251553602163855,
+            0.08345641666746867
+          ]
+        },
+        "slam_fixed_initial_alignment": {
+          "count": 903,
+          "rmse_m": 0.0027397469556968155,
+          "max_m": 0.007092176180309863,
+          "final_m": 0.0036265958566298597,
+          "axis_rmse_m": [
+            0.0015362278093599597,
+            0.0010015879970612731,
+            0.0020354456473072064
+          ]
+        },
+        "alignment_phase_seconds": {
+          "pre_turn": 10.538999999999998,
+          "settle": 9.840999999999983,
+          "drive": 47.86800000000001,
+          "align": 21.887000000000004
+        },
+        "command_mode_seconds": {
+          "zero": 20.776000000000003,
+          "walk": 47.071,
+          "turn": 22.287999999999993
+        },
+        "phase_transitions": [
+          {
+            "sim": 20.084,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 21.387,
+            "phase": "settle"
+          },
+          {
+            "sim": 22.392,
+            "phase": "drive"
+          },
+          {
+            "sim": 30.929,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 31.934,
+            "phase": "align"
+          },
+          {
+            "sim": 33.94,
+            "phase": "settle"
+          },
+          {
+            "sim": 34.743,
+            "phase": "drive"
+          },
+          {
+            "sim": 36.151,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 37.055,
+            "phase": "align"
+          },
+          {
+            "sim": 39.762,
+            "phase": "settle"
+          },
+          {
+            "sim": 40.565,
+            "phase": "drive"
+          },
+          {
+            "sim": 42.973,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 44.078,
+            "phase": "align"
+          },
+          {
+            "sim": 45.785,
+            "phase": "settle"
+          },
+          {
+            "sim": 46.888,
+            "phase": "drive"
+          },
+          {
+            "sim": 52.001,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 53.105,
+            "phase": "align"
+          },
+          {
+            "sim": 54.308,
+            "phase": "settle"
+          },
+          {
+            "sim": 55.213,
+            "phase": "drive"
+          },
+          {
+            "sim": 64.54,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 65.645,
+            "phase": "align"
+          },
+          {
+            "sim": 68.156,
+            "phase": "settle"
+          },
+          {
+            "sim": 69.06,
+            "phase": "drive"
+          },
+          {
+            "sim": 70.461,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 71.362,
+            "phase": "align"
+          },
+          {
+            "sim": 74.373,
+            "phase": "settle"
+          },
+          {
+            "sim": 75.576,
+            "phase": "drive"
+          },
+          {
+            "sim": 76.679,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 77.784,
+            "phase": "align"
+          },
+          {
+            "sim": 80.498,
+            "phase": "settle"
+          },
+          {
+            "sim": 81.702,
+            "phase": "drive"
+          },
+          {
+            "sim": 82.808,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 83.911,
+            "phase": "align"
+          },
+          {
+            "sim": 86.319,
+            "phase": "settle"
+          },
+          {
+            "sim": 87.124,
+            "phase": "drive"
+          },
+          {
+            "sim": 92.24,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 93.144,
+            "phase": "align"
+          },
+          {
+            "sim": 96.764,
+            "phase": "settle"
+          },
+          {
+            "sim": 97.87,
+            "phase": "drive"
+          }
+        ],
+        "cleanup": {
+          "process_group": 1584943,
+          "return_code": 0,
+          "owned_group_clean": true,
+          "wall_elapsed": 120.2262677639992
+        },
+        "input_sha256": {
+          "slope_result.json": "02c84672bd4dcf948942c3d5439ff3f949045177ef78849294e4488f905d7255",
+          "sensor_audit.jsonl": "efb74399de0a7aca720d9a0e23351f88dc2c4f7c2459f126a9f13284ea75f976",
+          "feedback_navigation.jsonl": "5db4d3060daf85ec2959dc0821211c770bedec2c48b36cc7ec7cb820c0a3e226",
+          "probe_manifest.json": "a87125a400b4d9a058043d3064e34f759d4a0d70990f39d262b42701f68590b0",
+          "runtime_manifest.json": "ae8323806604f8b4202d8b3dd79761307cef8e1bc117a922f2353cbb33e39746",
+          "process_cleanup.json": "eb27936161b38b4489af70a5f89e98df9c9f967e4d7ff5b775fa9ca11ca7f755"
+        }
+      },
+      "single_earliest_pose_alignment": {
+        "stamp": 18.3,
+        "rotation": [
+          [
+            0.9995120483526508,
+            0.031235278063761095,
+            0.00015034017384014614
+          ],
+          [
+            -0.031235289477931836,
+            0.9995120565497108,
+            7.418219258757173e-05
+          ],
+          [
+            -0.0001479497149241532,
+            -7.884191411455422e-05,
+            0.9999999859474171
+          ]
+        ],
+        "translation": [
+          3.963990326343711,
+          1.991369670734661,
+          0.5139610117890525
+        ],
+        "count": 950,
+        "rmse_m": 0.0027344737919537555,
+        "max_m": 0.006909387533645542,
+        "final_m": 0.0021159277812408503,
+        "initial_pose_in_active_request": false
+      },
+      "coverage": {
+        "active_frames": 903,
+        "camera_interval": [
+          20.0,
+          110.2
+        ],
+        "raw_count": 90300,
+        "core_used_count": 90300,
+        "per_frame_count_mismatches": [],
+        "empty_batches": 0,
+        "max_latest_imu_lag_s": -0.006000000000000227,
+        "max_last_used_lag_s": 2.000000165480742e-09,
+        "native_internal_time_offset": 14.200000000000001,
+        "native_rows": 95700,
+        "native_nul_bytes": 0,
+        "native_matched_head_tail_pairs": 90300,
+        "native_missing_head_tail_pairs": [],
+        "max_logged_gyro_difference": 4.999996805477025e-10,
+        "max_logged_acc_difference": 4.999964886565067e-10,
+        "expected_native_head_tail_pairs": 90300,
+        "native_stamp_duplicates": 0,
+        "actual_slice_count": 903,
+        "actual_generic_slice_offset_min_ms": 100.0,
+        "actual_generic_slice_offset_max_ms": 100.0,
+        "actual_generic_max_pending": 0.0,
+        "boundary_method": "Each exact actual 1ms timestamp is rounded to microseconds only to tolerate <=2ns conversion; no input replacement."
+      },
+      "rgb": {
+        "actual_points": 85504,
+        "metadata_points": 85504,
+        "distinct_rgb": 4046,
+        "finite_xyz": true,
+        "ground_truth_used": false,
+        "reference_map_loaded": false,
+        "capacity_rejections": 0,
+        "recorded_terminal_slam_healthy": true,
+        "recorded_terminal_camera_healthy": true,
+        "ages": {
+          "lidar": 0.14449303500077804,
+          "imu": 0.12044666099973256,
+          "camera": 0.14635223500226857,
+          "odom": 0.12801873200078262,
+          "full_cloud": 0.1263503779991879,
+          "colored_cloud": 0.13603453199903015
+        },
+        "save": {
+          "requested": false,
+          "complete": false,
+          "filename": null
+        }
+      },
+      "actual_gait_parameter": "Double value is: 0.07",
+      "input_sha256": {
+        "fastlivo_debug/imu.txt": "e84d7f0d8c7d561bc5f714bfce57bd744bbc6569f17ee8caa79226b03b5c0d95",
+        "fastlivo_debug/mat_pre.txt": "ee0e1f3c0221b4fccb24c6e8ffe44d52a238a5808c728a7d73e424d47f4e34aa",
+        "fastlivo_debug/mat_out.txt": "f0c6c242cf7ae80eae0c56edb8beea6de0aeba85475f4809e8b9e233e3f295b7",
+        "stack.log": "4631e38beb41b04fe6f097ceebf93bc3328619aa4c51825602c4ba5a15fdda6d",
+        "map_metadata.json": "1850840d43ec7352aa49d0578f0d91f24c6d9f59e4a5e7f86c83c36de11de9d4"
+      },
+      "independent_goal_evidence": {
+        "world_goal_single_initial_se3": [
+          6.963394788348849,
+          1.9924718096239815,
+          0.8131732515897285
+        ],
+        "closest_joint_candidate": {
+          "stamp": 62.899999999,
+          "slam_error_m": 2.474432502151198,
+          "truth_error_m": 2.474355637186585,
+          "slam_position": [
+            0.5489002841553327,
+            -0.16354565041188815,
+            0.05742946287256985
+          ],
+          "truth_position": [
+            4.50758109177615,
+            1.8097043950793015,
+            0.5723185668031958
+          ]
+        },
+        "joint_samples": [],
+        "truth_request_to_last_delta_m": [
+          0.15744218791949915,
+          -0.2837156455431158,
+          0.014025300204206226
+        ],
+        "active_initial_truth": [
+          3.963454098516218,
+          1.992119327450989,
+          0.5138407128069088
+        ],
+        "active_final_truth": [
+          4.120896286435717,
+          1.7084036819078732,
+          0.527866013011115
+        ],
+        "NAV_formal_success": false
+      }
+    },
+    {
+      "component": "slope_gait_b_004",
+      "summary": {
+        "directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/slope_gait_b_004",
+        "imu_rate_hz": 1000,
+        "passed": false,
+        "failure": "\u5f53\u524d\u822a\u70b9\u8d85\u8fc7\u4eff\u771f\u65f6\u95f4\u9650\u5236\uff0c\u505c\u8f66",
+        "interval": [
+          20.5,
+          110.836
+        ],
+        "duration_sim_s": 90.336,
+        "complete_sim": null,
+        "joint_arrivals": [
+          {
+            "stamp": 103.2,
+            "slam_error": 0.2998603572070738,
+            "truth_error": 0.29806794695693406
+          },
+          {
+            "stamp": 103.299999999,
+            "slam_error": 0.2986498096060304,
+            "truth_error": 0.2976423891062068
+          }
+        ],
+        "active_max_imu_tilt": 0.21126339452684506,
+        "active_bridge_holds": 0,
+        "body_contacts": 0,
+        "contact_publisher_present": true,
+        "probe_sampling": {
+          "count": 90337,
+          "duplicates_or_backward": 0,
+          "median_gap_s": 0.0010000000000012221,
+          "max_gap_s": 0.0010000000000047748,
+          "span_s": 90.336,
+          "actual_rate_hz": 1000.0
+        },
+        "official_sampling": {
+          "count": 90337,
+          "duplicates_or_backward": 0,
+          "median_gap_s": 0.0010000000000012221,
+          "max_gap_s": 0.0010000000000047748,
+          "span_s": 90.336,
+          "actual_rate_hz": 1000.0
+        },
+        "probe_stamps_missing_in_official": 0,
+        "official_stamps_missing_in_probe": 0,
+        "measured_real_time_factor": 0.999144219382956,
+        "raw_world_acceleration": {
+          "mean": [
+            -0.002382287290976917,
+            -0.0005130920104674023,
+            -0.0016549586748495348
+          ],
+          "std": [
+            2.0335282943222475,
+            2.019629074388834,
+            3.667667174281366
+          ],
+          "integrated_delta_v": [
+            -0.21547739248567319,
+            -0.04731014270637165,
+            -0.1539400649186331
+          ],
+          "gt_velocity_delta": [
+            -0.2253955429744936,
+            -0.03992769983185429,
+            -0.07970565090078763
+          ],
+          "residual_delta_v": [
+            0.009918150488820415,
+            -0.007382442874517357,
+            -0.07423441401784547
+          ],
+          "cumulative_residual_rms": [
+            0.023166489983184053,
+            0.024103530640204693,
+            0.048235223189795784
+          ],
+          "one_second_residual_rms": [
+            0.0313108927731676,
+            0.028749940668679627,
+            0.07082286578384825
+          ]
+        },
+        "slam_fixed_initial_alignment": {
+          "count": 904,
+          "rmse_m": 0.003055418762743386,
+          "max_m": 0.007490217329397717,
+          "final_m": 0.0051802291056709205,
+          "axis_rmse_m": [
+            0.001120963282125405,
+            0.0016284063584389452,
+            0.002329660461879924
+          ]
+        },
+        "alignment_phase_seconds": {
+          "pre_turn": 7.618999999999993,
+          "settle": 5.224999999999984,
+          "drive": 65.95200000000003,
+          "align": 11.460999999999999
+        },
+        "command_mode_seconds": {
+          "zero": 13.845000000000002,
+          "walk": 64.74999999999999,
+          "turn": 11.662000000000006
+        },
+        "phase_transitions": [
+          {
+            "sim": 20.564,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 21.969,
+            "phase": "settle"
+          },
+          {
+            "sim": 22.773,
+            "phase": "drive"
+          },
+          {
+            "sim": 49.676,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 50.777,
+            "phase": "align"
+          },
+          {
+            "sim": 51.581,
+            "phase": "settle"
+          },
+          {
+            "sim": 52.487,
+            "phase": "drive"
+          },
+          {
+            "sim": 61.123,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 62.027,
+            "phase": "align"
+          },
+          {
+            "sim": 64.84,
+            "phase": "settle"
+          },
+          {
+            "sim": 65.642,
+            "phase": "drive"
+          },
+          {
+            "sim": 68.855,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 69.955,
+            "phase": "align"
+          },
+          {
+            "sim": 72.871,
+            "phase": "settle"
+          },
+          {
+            "sim": 73.975,
+            "phase": "drive"
+          },
+          {
+            "sim": 94.245,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 95.348,
+            "phase": "align"
+          },
+          {
+            "sim": 96.756,
+            "phase": "settle"
+          },
+          {
+            "sim": 97.56,
+            "phase": "drive"
+          },
+          {
+            "sim": 103.087,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 104.292,
+            "phase": "align"
+          },
+          {
+            "sim": 105.4,
+            "phase": "settle"
+          },
+          {
+            "sim": 106.205,
+            "phase": "drive"
+          },
+          {
+            "sim": 107.608,
+            "phase": "pre_turn"
+          },
+          {
+            "sim": 108.409,
+            "phase": "align"
+          }
+        ],
+        "cleanup": {
+          "process_group": 1599786,
+          "return_code": 0,
+          "owned_group_clean": true,
+          "wall_elapsed": 130.55205762999685
+        },
+        "input_sha256": {
+          "slope_result.json": "db420714b1b24594bf7843be0f9ece8236641bd672a59b6abf1a05868eaa5f5b",
+          "sensor_audit.jsonl": "3e519eba6034688982a87737019627fec572d12118ea9a497eec23151afd8823",
+          "feedback_navigation.jsonl": "af2d672f384fb15bb112836474fa5b6e2c590495d2bbc7e310047b516b43d24c",
+          "probe_manifest.json": "5942639f6c894f029b3a035e1964e63506aaf9b4e9d6f9da915cfe5615303162",
+          "runtime_manifest.json": "ae8323806604f8b4202d8b3dd79761307cef8e1bc117a922f2353cbb33e39746",
+          "process_cleanup.json": "d07e4c6b75b7ab4cac11739a56dc487f2f01420ccfda91961748fc43ad5e8dac"
+        }
+      },
+      "single_earliest_pose_alignment": {
+        "stamp": 19.6,
+        "rotation": [
+          [
+            0.9999252630303387,
+            0.012224984278297804,
+            0.00013458493092453316
+          ],
+          [
+            -0.01222501605820484,
+            0.9999252433991185,
+            0.0002378982776014578
+          ],
+          [
+            -0.0001316665671090554,
+            -0.00023952580074684698,
+            0.9999999626456524
+          ]
+        ],
+        "translation": [
+          3.9629346786607855,
+          1.9930597225583662,
+          0.5137587754102292
+        ],
+        "count": 943,
+        "rmse_m": 0.003188100275564001,
+        "max_m": 0.007782350612548795,
+        "final_m": 0.0027716836561435206,
+        "initial_pose_in_active_request": false
+      },
+      "coverage": {
+        "active_frames": 904,
+        "camera_interval": [
+          20.5,
+          110.8
+        ],
+        "raw_count": 90400,
+        "core_used_count": 90400,
+        "per_frame_count_mismatches": [],
+        "empty_batches": 0,
+        "max_latest_imu_lag_s": -0.004999999000002475,
+        "max_last_used_lag_s": 2.000000165480742e-09,
+        "native_internal_time_offset": 13.500000000000002,
+        "native_rows": 95000,
+        "native_nul_bytes": 0,
+        "native_matched_head_tail_pairs": 90400,
+        "native_missing_head_tail_pairs": [],
+        "max_logged_gyro_difference": 4.999997083032781e-10,
+        "max_logged_acc_difference": 4.999961833451749e-10,
+        "expected_native_head_tail_pairs": 90400,
+        "native_stamp_duplicates": 0,
+        "actual_slice_count": 904,
+        "actual_generic_slice_offset_min_ms": 100.0,
+        "actual_generic_slice_offset_max_ms": 100.0,
+        "actual_generic_max_pending": 0.0,
+        "boundary_method": "Each exact actual 1ms timestamp is rounded to microseconds only to tolerate <=2ns conversion; no input replacement."
+      },
+      "rgb": {
+        "actual_points": 69386,
+        "metadata_points": 69386,
+        "distinct_rgb": 3097,
+        "finite_xyz": true,
+        "ground_truth_used": false,
+        "reference_map_loaded": false,
+        "capacity_rejections": 0,
+        "recorded_terminal_slam_healthy": true,
+        "recorded_terminal_camera_healthy": true,
+        "ages": {
+          "lidar": 0.10372291000021505,
+          "imu": 0.09891430200150353,
+          "camera": 0.10697623200030648,
+          "odom": 0.18847599600121612,
+          "full_cloud": 0.18723554000098375,
+          "colored_cloud": 0.1973581109996303
+        },
+        "save": {
+          "requested": false,
+          "complete": false,
+          "filename": null
+        }
+      },
+      "actual_gait_parameter": "Double value is: 0.04",
+      "input_sha256": {
+        "fastlivo_debug/imu.txt": "4be6b7879d9cba841f4791640fe60890b21d3526c71984c44f1123881baae533",
+        "fastlivo_debug/mat_pre.txt": "9e9a7ad4b218fc3327f96fafc9af4096683ba0d991f145476ae8b09c385a21cb",
+        "fastlivo_debug/mat_out.txt": "5fe36dc820dbef1c2de543f55ef40ce0c903b8c3f168de87982f8e8a3c3f0194",
+        "stack.log": "aff9e27246375e3257dc8c69e914649daafe9c0cbbd05fa97b79964719dc1499",
+        "map_metadata.json": "3b676bf7c4ce10661dd556d163a9b70f3be216daaa2c2a3bce153d13c233aa1f"
+      },
+      "independent_goal_evidence": {
+        "world_goal_single_initial_se3": [
+          6.962719796010486,
+          1.9941615390100171,
+          0.8129923402196538
+        ],
+        "closest_joint_candidate": {
+          "stamp": 103.299999999,
+          "slam_error_m": 0.2986498096060304,
+          "truth_error_m": 0.29779954660356034,
+          "slam_position": [
+            2.7210155460004235,
+            -0.064981728939637,
+            0.26662838384758814
+          ],
+          "truth_position": [
+            6.683841334920725,
+            1.8935727240576705,
+            0.7848273938505329
+          ]
+        },
+        "joint_samples": [
+          {
+            "stamp": 103.2,
+            "slam_error_m": 0.2998603572070738,
+            "truth_error_m": 0.29822831699243196
+          },
+          {
+            "stamp": 103.299999999,
+            "slam_error_m": 0.2986498096060304,
+            "truth_error_m": 0.29779954660356034
+          }
+        ],
+        "truth_request_to_last_delta_m": [
+          2.43518640849784,
+          -0.1573856778052789,
+          0.246759826253802
+        ],
+        "active_initial_truth": [
+          3.962503002857008,
+          1.9940824701287525,
+          0.5137489698889522
+        ],
+        "active_final_truth": [
+          6.397689411354848,
+          1.8366967923234736,
+          0.7605087961427542
+        ],
+        "NAV_formal_success": false
+      }
+    }
+  ],
+  "conclusion": "Both remain failed on the unchanged NAV time limit. Quantitative single-initial alignment and exact raw/core audit distinguish accurate localization from absent route progress; they do not establish a unique physical cause."
+}

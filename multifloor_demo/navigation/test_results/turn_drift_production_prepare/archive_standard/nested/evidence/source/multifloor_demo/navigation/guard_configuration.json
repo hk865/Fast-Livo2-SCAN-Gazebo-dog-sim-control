@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "profile": "displacement_015_02",
+  "request_scope": "schema2_nonlegacy_goals",
+  "legacy_behavior": "original base point arrival/control; guard never arms",
+  "require_path_offset": false,
+  "limits": {
+    "planar_drift_m": 0.15,
+    "path_locked_offset_rad": 0.2,
+    "persistence_ns": 200000000,
+    "max_pose_gap_ns": 200000000,
+    "max_pose_age_ns": 250000000,
+    "zero_before_replan_ns": 1000000000,
+    "max_adapter_age_ns": 250000000,
+    "min_raw_observations": 3,
+    "require_path_offset": false
+  },
+  "source_sha256": {
+    "drift_controller.py": "370ef8eab8ffbc4ca286b153b6e196125fc2ed8325628ccd12fd7f14f9c58852",
+    "turn_drift.py": "4f981f48c1d37c3b5687610e0468a690270251e8bd4a9eced78e4f842c9b0ae4"
+  },
+  "scope": "excluded declaration for future runtime integration; no production adoption"
+}

@@ -1,0 +1,429 @@
+#!/usr/bin/env python3
+"""Actual two-goal dynamic-obstacle component; truth only evaluates results.
+
+Modern production adapter topics, final CM, frozen NAV drift candidate. One sensor-derived calibration, actual NAV
+[north2,east2], natural production SceneTrigger/box motion. No body velocity or
+robot pose publication, fabricated index, forced obstacle trigger, or GT steering.
+"""
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import sys
+import time
+
+import numpy as np
+from scipy.spatial.transform import Rotation, Slerp
+import rclpy
+from rclpy.executors import ExternalShutdownException
+from rclpy.impl.implementation_singleton import rclpy_implementation as _ros
+from rclpy.qos import qos_profile_sensor_data, QoSProfile, DurabilityPolicy, ReliabilityPolicy
+from std_msgs.msg import String, Bool
+from geometry_msgs.msg import Twist
+from ros_gz_interfaces.msg import Contacts
+
+ROOT=Path(os.environ['DEMO_TEST_ROOT']).resolve()
+sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'simulation'))
+import importlib.util
+_parent_spec=importlib.util.spec_from_file_location('production_slope_probe_parent',ROOT/'simulation/probe_slope_navigation.py')
+_parent_module=importlib.util.module_from_spec(_parent_spec);_parent_spec.loader.exec_module(_parent_module)
+SlopeProbe=_parent_module.SlopeProbe
+from slam.heading_alignment import calibrate_scene_heading, scene_waypoints_in_slam
+from held_command_contract import audit_held_commands
+from navigation.goal_regions import parse_goal,definitions_sha256
+from dynamic_region_contract import evaluate_regions, bounded_pair
+
+OFFSETS=[[0.,2.,0.],[2.,2.,0.]]
+def native_stamp(msg):return msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec
+
+
+def bounded_truth(t,times,positions,max_gap=.15):
+    """Independent evaluation only: reject extrapolation and missing brackets."""
+    index=int(np.searchsorted(times,t))
+    if index<len(times) and abs(float(times[index])-t)<1e-9:
+        return positions[index].copy(),(index,index)
+    if index==0 or index==len(times):return None
+    lo,hi=index-1,index
+    gap=float(times[hi]-times[lo])
+    if gap<=0 or gap>max_gap:return None
+    alpha=(t-times[lo])/gap
+    return positions[lo]+alpha*(positions[hi]-positions[lo]),(lo,hi)
+
+
+class DynamicProbe(SlopeProbe):
+    def create_subscription(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
+        # Exact parent callback on modern production topic; no duplicate old-topic subscription.
+        if topic=='/demo/test/joint_stop_safety':topic='/demo/control/joint_stop_safety'
+        if topic=='/demo/ground_truth':
+            qos_profile=QoSProfile(depth=2000,reliability=ReliabilityPolicy.BEST_EFFORT)
+        return super().create_subscription(msg_type,topic,callback,qos_profile,*args,**kwargs)
+
+    def on_bridge(self,msg):
+        self.bridge=json.loads(msg.data)
+        self.bridge_events.append(dict(sim=self.now(),safety=self.bridge))
+        feedback=self.bridge.get('body_feedback')
+        valid=(self.bridge.get('body_feedback_required') is True and isinstance(feedback,dict)
+            and type(feedback.get('enabled')) is bool and feedback['enabled']==self.expected_feedback_enabled)
+        if valid:self.feedback_health_established=True
+        elif self.feedback_health_established or self.origin is not None or feedback is not None:
+            self.feedback_health_mode_errors.append(self.bridge_events[-1])
+            self.failure=self.failure or 'required body feedback mode missing or mismatched'
+            if self.terminal_sim is None:self.terminal_sim=self.now()
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.stop_pub.publish(Bool(data=True))
+        if self.bridge.get('state')=='failed':
+            self.bridge_failure_seen=True
+            if self.terminal_sim is None:self.terminal_sim=self.now()
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.failure=self.failure or 'aggregate execution safety failed: '+str(self.bridge.get('reason'))
+            self.stop_pub.publish(Bool(data=True))
+        self.event('aggregate_execution_safety',self.bridge)
+
+    def on_adapter(self,msg):
+        state=json.loads(msg.data)
+        self.adapter_events.append(dict(sim=self.now(),status=state))
+        if state.get('failed'):
+            if self.terminal_sim is None:self.terminal_sim=self.now()
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.failure=self.failure or 'modern joint-reference adapter failure'
+            self.stop_pub.publish(Bool(data=True))
+        self.event('actual_modern_adapter_status',state)
+
+    def __init__(self,output):
+        mode=os.environ.get('DEMO_TEST_BODY_FEEDBACK_ENABLED')
+        if mode not in ('0','1'):raise ValueError('explicit required feedback mode 0/1 required')
+        super().__init__(output)
+        self.request_id='dynamic-physical-'+str(time.time_ns())
+        self.run_id=self.request_id
+        self.goals=None;self.nav_confirmations=[];self.obstacle_states=[]
+        self.bridge_events=[];self.adapter_events=[];self.bridge_failure_seen=False;self.terminal_sim=None
+        self.expected_feedback_enabled=mode=='1';self.feedback_health_established=False
+        self.feedback_health_mode_errors=[];self.declared_goals=();self.goal_hash=None
+        self.origin_stamp_ns=None;self.terminal_stamp_ns=None;self.zero_return_observed=False
+        self.command_evidence=[];self.foot_contacts={};self.last_confirmed_index=0
+        self.event_file=(output.parent/'dynamic_events.jsonl').open('w')
+        self.mission_pub=self.create_publisher(String,'/demo/mission/state',10)
+        self.enable_pub=self.create_publisher(Bool,'/demo/obstacle/enable',10)
+        self.create_subscription(String,'/demo/obstacle/state',self.on_obstacle,
+            QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL))
+        self.create_subscription(Twist,'/demo/cmd_vel',lambda m:self.on_command('requested',m),10)
+        self.create_subscription(Twist,'/demo/control/safe_cmd_vel',lambda m:self.on_command('safe',m),10)
+        self.create_subscription(Twist,'/demo/control/actuator_cmd_vel',lambda m:self.on_command('actuator',m),10)
+        for leg in ('lf','rf','lh','rh'):
+            self.create_subscription(Contacts,'/demo/contacts/'+leg+'_foot',
+                lambda m,leg=leg:self.on_foot(leg,m),qos_profile_sensor_data)
+
+    def event(self,kind,data):
+        self.event_file.write(json.dumps(dict(sim=self.now(),kind=kind,data=data))+'\n')
+        self.event_file.flush()
+
+    def on_slam(self,msg):
+        super().on_slam(msg);self.poses[-1]['stamp_ns']=native_stamp(msg)
+    def on_truth(self,msg):
+        super().on_truth(msg);self.truth[-1]['stamp_ns']=native_stamp(msg)
+    def on_imu(self,msg):
+        super().on_imu(msg);self.raw[-1]['stamp_ns']=native_stamp(msg)
+    def on_contact(self,msg):
+        if self.origin is not None and msg.contacts:
+            self.contacts.append(dict(stamp_ns=native_stamp(msg),count=len(msg.contacts)))
+            self.failure=self.failure or 'physical body contact'
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.stop_pub.publish(Bool(data=True))
+
+    def on_nav(self,msg):
+        super().on_nav(msg)
+        self.statuses[-1]['received_stamp_ns']=self.get_clock().now().nanoseconds
+        if self.nav.get('request_id')!=self.request_id:return
+        if (self.nav.get('goals_definition_sha256')!=self.goal_hash
+                or self.nav.get('goals_definitions')!=[g.definition() for g in self.declared_goals]):
+            self.failure=self.failure or 'actual NAV declared point region/hash mismatch'
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.stop_pub.publish(Bool(data=True));return
+        if self.nav.get('state') in ('succeeded','failed','stopped') and self.terminal_sim is None:
+            self.terminal_sim=self.now()
+        if self.nav.get('state') in ('succeeded','failed','stopped') and self.terminal_stamp_ns is None:
+            self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+        if self.nav.get('state')=='succeeded' and (self.nav.get('waypoint_index')!=2
+                or not isinstance(self.nav.get('region_arrivals'),list) or len(self.nav['region_arrivals'])!=2):
+            self.failure=self.failure or 'actual NAV success lacks two native sphere receipts'
+            self.stop_pub.publish(Bool(data=True));return
+        self.event('actual_navigation_status',self.nav)
+        index=self.nav.get('waypoint_index')
+        if type(index) is int and self.last_confirmed_index<index<=2:
+            for i in range(self.last_confirmed_index,index):
+                self.nav_confirmations.append(dict(goal_index=i,actual_nav_index=index,
+                    received_sim=self.now(),actual_nav_state=self.nav.get('state'),
+                    raw_nav_pose=self.nav.get('pose'),actual_message=self.nav.get('message')))
+            self.last_confirmed_index=index
+
+    def on_obstacle(self,msg):
+        row=dict(received_sim=self.now(),state=json.loads(msg.data))
+        self.obstacle_states.append(row);self.event('actual_collidable_box',row['state'])
+
+    def on_command(self,source,msg):
+        if self.origin is None:return
+        self.command_evidence.append(dict(sim=self.now(),source=source,
+            command=[msg.linear.x,msg.linear.y,msg.angular.z],
+            nav_request_id=self.nav.get('request_id'),nav_index=self.nav.get('waypoint_index'),
+            obstacle_hold=self.nav.get('obstacle_hold'),resumes=self.nav.get('obstacle_resumes',0),
+            replans=self.nav.get('replans',0),reference_stamp=self.nav.get('trajectory_reference_stamp'),
+            accepted_trajectory_id=self.nav.get('accepted_trajectory_id')))
+
+    def on_foot(self,leg,msg):
+        if self.origin is None:return
+        data=self.foot_contacts.setdefault(leg,dict(messages=0,nonempty=0,pairs=[],violations=[]))
+        data['messages']+=1;data['nonempty']+=bool(msg.contacts)
+        for c in msg.contacts:
+            pair=[c.collision1.name,c.collision2.name]
+            if pair not in data['pairs']:data['pairs'].append(pair)
+            supports=('floor_1','floor_2','floor_3','ramp_12','ramp_23')
+            if not any(any(s in name for s in supports) for name in pair):
+                if pair not in data['violations']:data['violations'].append(pair)
+
+    def tick(self):
+        if self.failure is not None:return
+        if self.origin is None:
+            if not (len(self.pairs)>=10 and self.bridge.get('state')=='ready' and self.feedback_health_established
+                and self.map.get('slam_healthy') and self.map.get('camera_healthy')
+                and self.request_pub.get_subscription_count() and self.enable_pub.get_subscription_count()
+                and self.poses):return
+            try:
+                alignment=calibrate_scene_heading(list(self.pairs),
+                    imu_reference_world_quaternion=self.reference['world_quaternion'],
+                    body_imu_quaternion=self.reference['body_imu_quaternion'],
+                    reference_description=self.reference['description'])
+            except ValueError as exc:
+                self.last_calibration_error=str(exc);return
+            self.alignment=alignment;self.origin=self.poses[-1]['p'].copy()
+            self.origin_stamp=self.poses[-1]['stamp']
+            self.origin_stamp_ns=self.poses[-1]['stamp_ns']
+            self.goals=scene_waypoints_in_slam(OFFSETS,self.origin,alignment['yaw_camera_init_from_world'])
+            # Input protocol upgrade only. Same original centers, .22 control
+            # sphere, .30 independent outer sphere, .4 raw dwell/.2 gap/90.
+            self.declared_goals=tuple(parse_goal(dict(goal_id='dynamic:'+str(i),center=goal,
+                arrival=dict(type='sphere',radius_m=.30,dwell_sim_s=.4,
+                    control_band=dict(type='sphere',radius_m=.22)),timeout_sim_s=90))
+                for i,goal in enumerate(self.goals))
+            self.goal_hash=definitions_sha256(self.declared_goals)
+            self.baseline_holds=self.bridge.get('holds',0)
+            self.command_publisher_names=[i.node_name for i in self.get_publishers_info_by_topic('/demo/cmd_vel')]
+            self.request_pub.publish(String(data=json.dumps(dict(schema_version=2,request_id=self.request_id,
+                frame_id='camera_init',goals=[g.definition() for g in self.declared_goals]))))
+            self.event('one_time_actual_sensor_calibration',dict(origin=self.origin,origin_stamp=self.origin_stamp,
+                heading_alignment=self.alignment,waypoints=self.goals,
+                origin_stamp_ns=self.origin_stamp_ns,goals_definitions=[g.definition() for g in self.declared_goals],
+                goals_definition_sha256=self.goal_hash))
+        self.contact_publisher_seen |= self.count_publishers('/demo/body_contacts')>0
+        if self.now()-self.origin_stamp>210:
+            self.failure='component cleanup bound210sim; original per-waypoint NAV90sim remains unchanged'
+            if self.terminal_stamp_ns is None:self.terminal_stamp_ns=self.get_clock().now().nanoseconds
+            self.stop_pub.publish(Bool(data=True));return
+        # Echo only the observed production NAV state. SceneTrigger itself checks
+        # exact current_request, running state, index1, and immutable calibration.
+        stage='navigating' if self.nav.get('request_id')==self.request_id and self.nav.get('state')=='running' else 'preparing_navigation'
+        self.mission_pub.publish(String(data=json.dumps(dict(run_id=self.run_id,stage=stage,
+            current_request=self.request_id,origin=self.origin,heading_alignment=self.alignment,
+            navigation=self.nav))))
+        self.enable_pub.publish(Bool(data=True))
+
+    def result(self):
+        checks={};joint=[[],[]];world_goals=None;fixed_SE3=None;precision=[];unpaired_truth=0
+        native_regions=(evaluate_regions(self.declared_goals,self.request_id,self.statuses,self.poses,self.truth,
+            self.origin_stamp_ns,self.terminal_stamp_ns,expected_count=2) if self.declared_goals else
+            dict(passed=False,checks={},regions=[],errors=['actual request never occurred']))
+        post_resume_progress=[]
+        active=[s['status'] for s in self.statuses if s['status'].get('request_id')==self.request_id]
+        terminal=[s['sim'] for s in self.statuses if s['status'].get('request_id')==self.request_id
+            and s['status'].get('state') in ('succeeded','failed','stopped')]
+        evaluation_end=(self.terminal_sim if self.terminal_sim is not None else self.complete if self.complete is not None else
+            min(terminal) if terminal else max((s['sim'] for s in self.statuses
+                if s['status'].get('request_id')==self.request_id),default=self.origin_stamp))
+        native_frame=native_regions.get('initial_fixed_SE3_evaluation_only')
+        if self.origin is not None and self.truth and self.goals and native_frame is not None:
+            times=np.array([r['stamp'] for r in self.truth]);tp=np.array([r['p'] for r in self.truth])
+            at=self.origin_stamp
+            # Native region acceptance constructs the sole fixed evaluation
+            # frame. Legacy diagnostics reuse it rather than refitting floats.
+            initial_truth=bounded_pair(self.origin_stamp_ns,self.truth)[0]
+            rotation=np.asarray(native_frame['rotation_world_from_slam'])
+            translation=np.asarray(native_frame['translation'])
+            fixed_SE3=dict(**native_frame,stamp=at,
+                scope='independent evaluation only; never used by calibration, request, mission or NAV')
+            world_goals=initial_truth+np.array(OFFSETS)
+            earliest=at
+            for row in self.poses:
+                t=row['stamp']
+                if t<at or t>evaluation_end:continue
+                match=bounded_truth(t,times,tp)
+                if match is None:
+                    unpaired_truth+=1;continue
+                actual=match[0]
+                precision.append(float(np.linalg.norm(rotation@np.array(row['p'])+translation-actual)))
+            for i,goal in enumerate(self.goals):
+                confirmations=[c for c in self.nav_confirmations if c['goal_index']==i]
+                limit=confirmations[0]['received_sim'] if confirmations else math.inf
+                for row in self.poses:
+                    t=row['stamp']
+                    if t<earliest or t>times[-1] or t>limit:continue
+                    seen=[s for s in self.statuses if s['sim']<=t
+                          and s['status'].get('request_id')==self.request_id]
+                    if not seen or seen[-1]['status'].get('waypoint_index')!=i:
+                        continue
+                    match=bounded_truth(t,times,tp)
+                    if match is None:continue
+                    actual=match[0]
+                    raw_error=float(np.linalg.norm(np.array(row['p'])-goal))
+                    actual_error=float(np.linalg.norm(actual-world_goals[i]))
+                    # Same immutable initial SE3 is also recorded and checked.
+                    rigid_goal=rotation@np.array(goal)+translation
+                    rigid_error=float(np.linalg.norm(actual-rigid_goal))
+                    if max(raw_error,actual_error,rigid_error)<=.30:
+                        joint[i].append(dict(stamp=t,slam_error=raw_error,truth_error=actual_error,
+                            fixed_SE3_goal_truth_error=rigid_error,
+                            observed_NAV_index=seen[-1]['status']['waypoint_index'],
+                            observed_NAV_status_sim=seen[-1]['sim']))
+                if confirmations:earliest=confirmations[0]['received_sim']
+            resume_commands=[c for c in self.command_evidence if c['source']=='safe'
+                and c['nav_request_id']==self.request_id and c['resumes']>=1 and c['command'][0]>.015]
+            if resume_commands:
+                begin=resume_commands[0]['sim']
+                slam_before=[p for p in self.poses if p['stamp']<=begin and begin-p['stamp']<=.15]
+                actual_begin=bounded_truth(begin,times,tp)
+                if slam_before and actual_begin is not None:
+                    start=np.array(slam_before[-1]['p']);target=np.array(self.goals[-1])
+                    unit=target[:2]-start[:2];unit/=max(float(np.linalg.norm(unit)),1e-9)
+                    for p in self.poses:
+                        if p['stamp']<=begin or (self.complete is not None and p['stamp']>self.complete):
+                            continue
+                        matched=bounded_truth(p['stamp'],times,tp)
+                        if matched is None:continue
+                        slam_forward=float((np.array(p['p'])[:2]-start[:2])@unit)
+                        truth_forward=float(matched[0][0]-actual_begin[0][0]) # Scene's second leg is eastward.
+                        if slam_forward>=.025 and truth_forward>=.025:
+                            post_resume_progress.append(dict(begin_sim=begin,end_stamp=p['stamp'],
+                                slam_forward_m=slam_forward,independent_truth_forward_m=truth_forward,
+                                minimum_progress_m=.025));break
+        held=[s for s in active if s.get('obstacle_hold')]
+        held_zero=[c for c in self.command_evidence if c['source']=='safe'
+            and c['nav_request_id']==self.request_id and c['obstacle_hold'] and c['command']==[0.,0.,0.]]
+        requested_zero=[c for c in self.command_evidence if c['source']=='requested'
+            and c['nav_request_id']==self.request_id and c['obstacle_hold'] and c['command']==[0.,0.,0.]]
+        held_commands=[c for c in self.command_evidence if c['nav_request_id']==self.request_id and c['obstacle_hold']]
+        resumed=[c for c in self.command_evidence if c['source']=='safe' and c['nav_request_id']==self.request_id
+            and c['resumes']>=1 and c['command'][0]>.015]
+        reference_after=any(s.get('obstacle_resumes',0)>=1 and s.get('accepted_trajectory_id') is not None
+            and s.get('reference_requests',0)>=2 and s.get('replans',0)>held[0].get('replans',0)
+            and s.get('trajectory_reference_stamp')!=held[0].get('trajectory_reference_stamp') for s in active) if held else False
+        box=[s['state'] for s in self.obstacle_states if s['state'].get('mission_run_id')==self.run_id]
+        phases={s.get('visible_phase') for s in box}
+        native=[]
+        for path in self.output.parent.glob('navigation_events/*.json'):
+            entry=json.loads(path.read_text())
+            if not (entry.get('edge_request_id')==entry.get('request_id')==self.request_id
+                    and entry.get('edge_waypoint_index')==entry.get('waypoint_index')==1
+                    and entry.get('guard_result',[False])[0] is True
+                    and entry.get('zero_command')==[0.,0.,0.]):continue
+            cloud_path=path.with_name(entry['cloud_file'])
+            if cloud_path.is_file() and hashlib.sha256(cloud_path.read_bytes()).hexdigest()==entry['cloud_sha256']:
+                native.append(dict(json_file=str(path),event=entry))
+        self.curve_file.flush()
+        metadata=[json.loads(line) for line in (self.output.parent/'trajectory_payloads.jsonl').open()]
+        held_timing=audit_held_commands(native,self.statuses,metadata,self.command_evidence,
+            self.request_id,self.goals or [])
+        raw=[r for r in self.raw if self.origin_stamp is not None and r['stamp']>=self.origin_stamp]
+        max_tilt=max((r['tilt'] for r in raw),default=None)
+        holds=max(0,self.bridge.get('holds',0)-(self.baseline_holds or 0))
+        checks.update(native_regions.get('checks',{}))
+        checks['native_two_sphere_receipt_windows']=native_regions['passed']
+        checks['required_disabled_feedback_mode']=(self.expected_feedback_enabled is False
+            and self.feedback_health_established and not self.feedback_health_mode_errors)
+        checks['post_terminal_actual_zero_and_adapter_idle']=self.zero_return_observed
+        checks.update(independent_truth_full_pose_coverage=unpaired_truth==0 and bool(precision),
+            modern_joint_adapter_observed=bool(self.adapter_events) and all(r['status'].get('test_only') is False for r in self.adapter_events),
+            aggregate_execution_safety_not_failed=not self.bridge_failure_seen,
+            actual_NAV_succeeded=self.complete is not None and self.failure is None,
+            two_actual_NAV_arrivals=len(self.nav_confirmations)==2,
+            actual_production_motion_limits=bool(active) and all(s.get('motion_limits',{}).get('walk_yaw_rate_rad_s')==.08 and s.get('motion_limits',{}).get('pure_turn_rate_rad_s')==.12 and s.get('motion_limits',{}).get('forward_speed_m_s')==.12 for s in active),
+            collidable_box_acknowledged_motion_at_least_1m=bool(box) and max(float(s['position'][1]) for s in box)-min(float(s['position'][1]) for s in box)>=1.,
+            ordered_two_source_joint_arrivals=all(joint),
+            natural_box_enter_block_leave_clear={'entering','blocking','leaving','clear'}<=phases,
+            actual_box_updates=bool(box) and box[-1].get('gazebo_updates',0)>0 and box[-1].get('failed_updates',0)==0,
+            real_obstacle_hold=bool(held),safe_zero_during_obstacle_hold=bool(held_zero),
+            requested_zero_during_obstacle_hold=bool(requested_zero),
+            every_observed_held_command_zero=held_timing['passed'],
+            committed_native_trigger_cloud=bool(native),fresh_current_reference_after_clearance=reference_after,
+            physical_safe_forward_motion_after_resume=bool(resumed) and bool(post_resume_progress),body_contacts_absent=not self.contacts,
+            actual_contact_publisher_present=self.contact_publisher_seen,
+            feet_ground_only=all(self.foot_contacts.get(leg,{}).get('nonempty',0)>0
+                and not self.foot_contacts[leg]['violations'] for leg in ('lf','rf','lh','rh')),
+            tilt_envelope_kept=max_tilt is not None and max_tilt<.30 and holds==0,
+            sole_body_command_publisher=self.command_publisher_names==['demo_navigation'])
+        return dict(scope=__doc__,passed=bool(all(checks.values())),checks=checks,failure=self.failure,
+            missing_acceptance=[k for k,v in checks.items() if not v],complete_sim=self.complete,
+            origin=self.origin,origin_stamp=self.origin_stamp,goals=self.goals,world_axis_offsets=OFFSETS,
+            initial_fixed_SE3_evaluation_only=fixed_SE3,
+            independent_truth_pairing_max_gap_s=.15,unpaired_truth_pose_rows=unpaired_truth,
+            independent_truth_evaluation_interval=[self.origin_stamp,evaluation_end],
+            aggregate_execution_safety=self.bridge_events,modern_adapter_statuses=self.adapter_events,
+            actual_post_resume_progress=post_resume_progress,
+            truth_goals_evaluation_only=None if world_goals is None else world_goals.tolist(),
+            initial_SE3_precision=dict(rmse=float(np.sqrt(np.mean(np.square(precision)))) if precision else None,
+                max=max(precision,default=None)),joint_arrivals=joint,nav_confirmations=self.nav_confirmations,
+            heading_alignment=self.alignment,native_obstacle_events=native,held_command_timing_audit=held_timing,
+            region_evaluation=native_regions,origin_stamp_ns=self.origin_stamp_ns,terminal_stamp_ns=self.terminal_stamp_ns,
+            goals_definitions=[g.definition() for g in self.declared_goals],goals_definition_sha256=self.goal_hash,
+            input_protocol_upgrade='schema2 same two point centers; control sphere .22/outer .30; raw .4 dwell/.2 gap/90',
+            selected_body_feedback_enabled=self.expected_feedback_enabled,
+            feedback_health_mode_errors=self.feedback_health_mode_errors,
+            observer_hold_labels_only=dict(nonzero_under_last_4hz_hold_label=[c for c in held_commands
+                if c['command']!=[0.,0.,0.]],scope='diagnostic only; immutable native/reference timing defines actual held intervals'),
+            foot_contacts=self.foot_contacts,
+            active_max_imu_tilt=max_tilt,active_bridge_holds=holds,body_contacts=self.contacts,
+            unchanged_limits=dict(nav_each_waypoint_sim_s=90,nav_raw_arrival_m=.22,joint_arrival_m=.30,
+                obstacle_timing_sim_s=[8,20,8],component_cleanup_bound_sim_s=210),
+            poses=self.poses,truth=self.truth,statuses=self.statuses,raw_imu=self.raw,
+            obstacle_states=self.obstacle_states,command_evidence=self.command_evidence)
+
+    def tail_ready(self):
+        if self.terminal_stamp_ns is None or not self.adapter_events:return False
+        adapter=self.adapter_events[-1]
+        if (round(adapter['sim']*1e9)<self.terminal_stamp_ns or adapter['status'].get('state')!='idle'
+                or adapter['status'].get('failed') or adapter['status'].get('nominal_calibrated') is not True):return False
+        for source in ('requested','safe','actuator'):
+            samples=[r for r in self.command_evidence if r['source']==source and round(r['sim']*1e9)>=self.terminal_stamp_ns]
+            if not samples or samples[-1]['command']!=[0.,0.,0.]:return False
+        return True
+
+
+def main():
+    output=Path(sys.argv[1]);output.parent.mkdir(parents=True,exist_ok=True)
+    rclpy.init();node=DynamicProbe(output);result=None
+    try:
+        while rclpy.ok() and node.failure is None and node.complete is None and time.monotonic()-node.started_wall<420:
+            rclpy.spin_once(node,timeout_sec=.05)
+        if node.failure is None and node.complete is None:node.failure='bounded component wall timeout'
+        if node.terminal_stamp_ns is None:node.terminal_stamp_ns=node.get_clock().now().nanoseconds
+        node.stop_pub.publish(Bool(data=True))
+        end=time.monotonic()+3
+        while rclpy.ok() and time.monotonic()<end:
+            rclpy.spin_once(node,timeout_sec=.05)
+            if node.tail_ready():node.zero_return_observed=True;break
+        result=node.result();output.write_text(json.dumps(result,separators=(',',':'))+'\n')
+        print(json.dumps({k:v for k,v in result.items() if k not in ('poses','truth','statuses','raw_imu','obstacle_states','command_evidence')},indent=2))
+    except (KeyboardInterrupt,ExternalShutdownException):
+        node.failure=node.failure or 'component interrupted; no success inferred'
+        result=node.result();output.write_text(json.dumps(result,separators=(',',':'))+'\n')
+    finally:
+        try:
+            if rclpy.ok():
+                try:node.stop_pub.publish(Bool(data=True));node.enable_pub.publish(Bool(data=False))
+                except _ros.RCLError:
+                    if rclpy.ok():raise
+        finally:
+            for stream in (node.curve_file,node.path_file,node.cloud_count_file,node.event_file):stream.close()
+            node.destroy_node();rclpy.try_shutdown()
+    return 0 if result and result['passed'] else 1
+
+
+if __name__=='__main__':raise SystemExit(main())

@@ -1,0 +1,14 @@
+{
+  "revision": "v3_gyro_only_real_IMU_support",
+  "parent_freeze_sha256": "eab0305ab00b537bc915b24514fd35a25b17ce823fd383a3599e9106cda02eb8",
+  "failed_run": "20261005_012344_SLAM_fixed_route_v3_safety1m_mapped10_v2_r1_6a9f",
+  "reason": "Actual publisher declares no orientation via covariance[0]=-1. Use declared gyro only; position/yaw/tilt from actualSLAM. Optional validIMUtilt guard additive; no quaternion-as-truth fallback. Gains/core/TTL unchanged. Preserve unavailableorientation and raw rejectedinput.",
+  "timestamp": "2026-10-04T17:27:18.192028+00:00",
+  "files": {
+    "adapter.py": "13fe9899ca6ab95dff4667aa517d489277ea37f1a1ec404aff7625585492a8a1",
+    "worker.py": "ccb5b06c200b7ca960be1e0d182eecdaec74f9bea9f59511d01b2b7511c1ea9d",
+    "run.py": "35bdafdc1904b09d7e9c2dee8e8a0d47030bd4350150ae4fcb770de0a147d996",
+    "test_binding.py": "714ed229f334c85478df3f941859fe182ab9b7496265fef9997541d4390ee526"
+  },
+  "tests": 15
+}

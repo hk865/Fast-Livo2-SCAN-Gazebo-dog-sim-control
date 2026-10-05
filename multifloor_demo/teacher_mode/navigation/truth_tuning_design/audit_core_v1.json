@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "kind": "independent_read_only_truth_controller_core_v1_audit",
+  "created_at": "2026-10-04T23:25:22.603275+08:00",
+  "status": "runtime_candidate_audited_with_findings_not_global_validation",
+  "sources": {
+    "core.py": {
+      "current_sha256": "13ae4195dfd996d603d1540074893e3060ff3c180cc43ddf01d91978a463cb06",
+      "smoke_archived_sha256": "13ae4195dfd996d603d1540074893e3060ff3c180cc43ddf01d91978a463cb06",
+      "same_as_smoke": true
+    },
+    "worker.py": {
+      "current_sha256": "e20318d0b3cb65d5292fc12341f48a44c850b594f58acfe7886fd3c92fa41016",
+      "smoke_archived_sha256": "e20318d0b3cb65d5292fc12341f48a44c850b594f58acfe7886fd3c92fa41016",
+      "same_as_smoke": true
+    },
+    "run.py": {
+      "current_sha256": "1207bf226084f8f12cfb41640c0b7e8ac201e5227b9df8d406d1ac8da11d616b",
+      "smoke_archived_sha256": "1207bf226084f8f12cfb41640c0b7e8ac201e5227b9df8d406d1ac8da11d616b",
+      "same_as_smoke": true
+    }
+  },
+  "read_only_scope": "Only3runtime sources andcompleted smoke were read; additional pure in-memory algorithm probes did not start simulations or modify source/run files. OnlythisauditJSONwritten.",
+  "confirmed": {
+    "one_executor": "run.py keeps native TeacherActuator plugin, no CHAMP/controllers started; originalnative ownership check remains active. Controlleroutputs vx/vy/wzonly. Smoke native model_plugin_ownership evidence below.",
+    "native_clock": "core stamp=s[0]-.005 andsame incomingTeacher frame, noROS/log/state.json feedback. Smoke50Hz fresh updates1324withallnonzero dt=.02s.",
+    "frequency": "Accepted5/10/25/50Hz exactinteger50Hzframe stride; in-memory probes fresh interval.2/.1/.04/.02s respectively. No100Hz claim.",
+    "tracked_point": "Base link origin position paired withorigin_body=com_body-cross(omega_body,com_offset), worldvelocity=R@origin_body; units/frame consistent.",
+    "yaw_rate": "Euler yawdot=(sinroll*bodyomegay+cosroll*bodyomegaz)/cospitch; unsafecospitchprotected. Path/cascade invertwref tobodywzusingcurrentomegay.",
+    "reference": "route_world_xyz is immutable withroute_reference_changes0; activecontinuoussegmentprojection andarc/normal error. Gradegeometryknot advancesdo not reanchor to robot.",
+    "initialization": "First.1soriginalbootstrapdefaultPD thenlearnedzero velocityuntil3s; nozeroactionparking.",
+    "turn_transition": "pre_turnzero velocity waitsoriginplanarspeed<.04andyawdot<.05for.3s, thenturncommandonlyyaw, settle.3saftereyaw<.08andrate<.08.",
+    "frozen_model": "Originalarchivedworker load_actor verifiesfullcheckpointSHA andCPU1 actor247→512→256→128→12; wrapperdoesnotchangeactionmapping.",
+    "stop": "Wrapper preservesworkercommandslew.6/.6/.8andTeachercontinuouszero-commandfeedback; nativeIPC200msfaultdampingpreserved.",
+    "truth_scope": "Bothprofileandruntime/policymanifest truthnavigationtrue/counts_as_SLAM_navigationfalse. Onlyownedchildren signaled; model/camera_mode/othertraining untouched."
+  },
+  "actual_smoke": {
+    "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_232054_truth_pid_flat_line_path_pd_50hz_3170",
+    "control_samples": 1824,
+    "teacher_samples": 1824,
+    "fresh_updates": 1324,
+    "intervals_s": [
+      0.0,
+      0.02
+    ],
+    "modes": {
+      "initializing": 150,
+      "drive": 1292,
+      "goal_dwell": 31,
+      "parking": 351
+    },
+    "same_exact_worldstamp_controller_and_teacher": true,
+    "worker_result": {
+      "completed": true,
+      "fault": null,
+      "samples": 1824,
+      "physical_test_completion_time_s": null,
+      "last_sim_time": 36.46,
+      "cpu_forward_ms": {
+        "p50": 0.289251,
+        "p95": 0.3721342,
+        "max": 4.314296
+      },
+      "truth_controller_completed_t_s": 29.459999999999997,
+      "waypoint_events": [],
+      "counts_as_SLAM_navigation": false
+    },
+    "runtime_manifest_sha256": "0aa10c5d0438fc1f81a8d6e308efc67dcba651a3c7f34b7b0aa12687acc1f7cd",
+    "native_ownership": {
+      "kind": "model_plugin_ownership",
+      "plugins": [
+        {
+          "name": "teacher_sim::TeacherActuator",
+          "filename": "libteacher_actuator.so"
+        }
+      ],
+      "teacher_writers": 1,
+      "passed": true
+    }
+  },
+  "findings": [
+    {
+      "severity": "blocks_pure_open_loop_characterization",
+      "id": "open_loop_heading_gate_deadlock",
+      "source": "core.py turn_phase andopen_loop branches",
+      "detail": "Open_loop retainsheadinggate. After|eyaw|>.20thegate pre_turn→turn; open_loopalwayssetswz=0andturnzerosXY, soallcommandaxeszero untildeadlinewithyawerrorremaining.",
+      "in_memory_reproduction": "Yaw=.3rad,positionstationary,open_loopfromt3..5:pre_turnfirst,turnlast,allwz0. Synthetic algorithm probe; noactualrunclaim.",
+      "recommendation": "Explicitlydisableheadingservo/gateforopenloopanduseprospectivefences/safety+timedcommandwindow; ormarkanyheadingguardterminationasresponse-truncation. Do notinterprettruncatedrunasfullTeacherresponse."
+    },
+    {
+      "severity": "arrival_semantics_must_be_verified",
+      "id": "goal_dwell_no_speed_or_yaw_gate",
+      "source": "core.py finalanddistance<=.12 branch",
+      "detail": "Completioncheckspositionregionand.6s only, notmeasuredplanarspeed/yawrate/heading. Completiontime isnotproof ofstopped arrival.",
+      "in_memory_reproduction": "Positionheld5.95onroutegoal6,feedbackvx1m/s:completedatt3.6despiteactualvx1. Synthetic nonphysicalstate probe demonstratesmissinggateonly.",
+      "recommendation": "Eitheraddlow-speed/yawrate measuredcontinuousdwell beforecompletion innewfrozenversion, orclearlynamecompletionposition-region event andrequireindependentarrival/parkingchecks."
+    },
+    {
+      "severity": "tuning_bias",
+      "id": "velocity_PI_antiwindup_ignores_slew",
+      "source": "core.py cascadecandidate/rawclipping vsarchivedworker .6/.6/.8slew",
+      "detail": "PIantiwindupobservesonlyper-axisbounds, notdownstreamcommandslew orplanarnormclamp. Duringstartup/commandchange controllercanintegrateagainstTeachercommand notyetapplied.",
+      "recommendation": "Recordactualslewedcommandandboundantiwindupduringacceleration; bestnewversionbackcalculatesorfreezesintegralwhenincrementworsensactuationslew/planarsaturation. Neverhotpatchactive orarchivedrun."
+    },
+    {
+      "severity": "plot_and_logging_semantics",
+      "id": "parking_row_retains_old_measurement",
+      "source": "core.py initialization/completionearlyreturn",
+      "detail": "Parkingrowscontroller_updatedfalse refreshfeedback_time_s/currentcontroltime butinheritoldmeasuredoriginvelocity/reference/errorfromlastupdate. Thoseinheritedvectorsarenotfreshmeasurementsattherowtime.",
+      "recommendation": "Useactualtelemetry/nativefieldsforparkingplots; excludeheldrowsfrommeasurementanalysisorrecomputeexplicitcurrentmeasurementwithoutadvancingcontroller."
+    },
+    {
+      "severity": "frequency_comparison_interpretation",
+      "id": "path_PD_derivative_uses_unfiltered_velocity",
+      "source": "core.py path_pd lateral/wref",
+      "detail": "path_PDcrossKDand yawKDusecurrentraworigin_world/yawdot. The.2sfilteredmeasurement iscomputedbutonlylegacybranchconsumesit; cascadeinneruses.1sfilter. Frequencycomparisonscanincludegaitnoise/aliasingdifferencesbetweendesigns.",
+      "recommendation": "Recordthisdifferenceandcommandvariation. Ifintentisfrequencyalone,freezeanidenticalphysicallytimedmeasurementfilteracrossallfeedbackratesanddesignsorlabeldesigncomparisonincludingfilterdifference."
+    }
+  ],
+  "limitations": [
+    "Noactualpre_turn/corner/ramp/timeout/open_looprunauditedyet.",
+    "controllerlocalwall/simfeedbackageguardsandnativeIPCtimeoutdonotbythemselvesproveexternalcommandproducerTTLstop/recovery.",
+    "LegacypositionbaselinepassesEuler-worldyawoutputdirectlytobodywzwhereasnewpath/cascadeperformconversion; onslopecomparisonisdesignsemanticdifference, notonlyfrequency/gains.",
+    "COMreferencelevercompensationassumesdesiredbodyomegaxyzeroexceptyawconversionusesmeasuredomegay; smallroll/pitchtransientremainingmismatchshouldbeloggedbeforeattributingtoroutePID."
+  ]
+}

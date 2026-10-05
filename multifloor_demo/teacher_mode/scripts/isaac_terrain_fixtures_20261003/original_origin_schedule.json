@@ -1,0 +1,41 @@
+{
+  "description": "Original SLAM5 navigation origin x0y0 retains overhead3rd-floor collisions and20m Teacher scan. Sole diagnostic termination change: use actual surface below base for physical fall rather than immediately ending from overhead scan clearance.",
+  "cases": [
+    {
+      "name": "stand_original_origin",
+      "duration": 15,
+      "spawn_xyz_yaw": [
+        0,
+        0,
+        0.4,
+        0
+      ],
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 15,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "schema": "actual_ramp_registration_readonly_freeze/v1",
+  "created_at_UTC": "2026-10-04T06:48:11.579947+00:00",
+  "status": "offline_ready_actual_unverified",
+  "source_hashes": {
+    "cloud.py": "4ab1b8f97a0ef15bf84ba0ca7ece0b48b736a146b41b09436d22a43a77a732f1",
+    "geometry.py": "06fdd1947e319b6a15dc7b6661e9ed927313e539b443c75398f879a44ecf6a06",
+    "capture.py": "c1d8093642af6ccc923efd159130759e6087e8d8e699a28d3b13b49feb97062a",
+    "observer.py": "2e1a96a050e5ab4e55b51e6dedca2112730225fea8b83659af300ee7b8af3401",
+    "analyze.py": "b097cf6a5da28bf4155705af80d3666700f528275d2e3ef09a3295a7e4e4988a",
+    "protocol.json": "149768ac83cff291e4940782023c22dafafbabc0ea1425afa946bb9e63288cb9"
+  },
+  "source_contract_refs": {
+    "rclpy_node.py": {
+      "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py",
+      "sha256": "518dbe153cf73d8933bb4476d245774df57ed6e621041b7c4a252f4363636c7a"
+    },
+    "rclpy_type_description_service.py": {
+      "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/type_description_service.py",
+      "sha256": "2446ed7eb7968acdbcd637123065634dd83e6726bcc4ee1b992b55e3823f20a1"
+    },
+    "LIVMapper.cpp": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/ros2_ws/src/fast_livo2_core/src/LIVMapper.cpp",
+      "sha256": "b32d0ab15106287c1b21f11ce864657e56edfa5e6e00dff0bdf1cf40b3d33e7b"
+    },
+    "slam_odom_adapter.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/odom_adapter.py",
+      "sha256": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b"
+    }
+  },
+  "offline": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/tests/offline_final_20261004/checks.json",
+    "sha256": "752f195a564d1dc1ae0f65a0ff014a9ae52a33e5e958c4f83042c40076a01b90",
+    "checks": 45,
+    "passed": true,
+    "simulation_started": false,
+    "ROS_initialized": false
+  },
+  "actual_ROS_message_construction_only": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/tests/ros_fields_offline_20261004_v2.json",
+    "sha256": "aae496f731fd4dc6e0030c60309914caddc8492a0d002b0e572102508ff74b1b",
+    "checks": 4,
+    "ROS_initialized": false,
+    "note": "Stamp and PointCloud2 methods unchanged; afterward only source/API dependency snapshot checks were added to observer."
+  },
+  "existing_runtime_comparison_informational_only": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_navigation_runtime_v4_transport_freeze_20261004/v4.json",
+    "sha256": "052d3a51e006c843d93c678c65063c98b6c0a8fba186b646cea8d3957acc92ee",
+    "source_count": 72,
+    "unchanged_count": 69,
+    "differences": {
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/controller.py": {
+        "expected": "13646157a58c0066efab47a90937ccbf88b493f9965a68b6e3dc9990d48fdef0",
+        "current": "f71c5e6812339bd5e70671942a495bd4795a1e0fab86658754907bacab4ebbeb"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/pid_scope.py": {
+        "expected": "d9d2b9d75058ce3e1e8de1984668d467ce206b8597ef0ffd54b35c7c3a9a3b4f",
+        "current": "71f88aaa5960b702a2e84c312f38e1a61306520a8f50021a09d610cc95b59cb2"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/run_test.py": {
+        "expected": "7066385cdfa0a3f4691d82e90a707363cf56aa592bc111d0381780210ba29d89",
+        "current": "2ba26120c22847467fb95991ddcdb5dd21494ccf8af30239f26745f7c9c027e8"
+      }
+    },
+    "difference_owner": "Root owns runner; training agent concurrently implements authorized independent PID V5 controller/scope. This module wrote only the new ramp_registration directory.",
+    "not_used_to_claim_entire_task_runtime_unchanged": true
+  },
+  "only_new_registration_directory_written_by_this_module": true,
+  "actual_capture_started": false,
+  "navigation_control_enabled": false,
+  "navigation_pass_claimed": false,
+  "registration_requires_independent_review": true,
+  "limitations": [
+    "Only observed real full-cloud geometry; missing opposing boundary/exit yields partial/full_route null.",
+    "Near-vertical edge faces may be unobservable in shallow LiDAR; no SDF width/opposite-edge fill.",
+    "Support plane relation is a candidate, not measured foot contact.",
+    "Full candidate is geometric observed coverage, not full-ramp motion or navigation acceptance.",
+    "Root runtime manifest must independently establish actual producer identity; saved source/config hashes alone do not.",
+    "This collector creates no DDS publishers/services/clients; rclpy local parameter bookkeeping is a local subclass sink."
+  ]
+}

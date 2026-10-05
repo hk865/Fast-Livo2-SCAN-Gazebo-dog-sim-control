@@ -1,0 +1,31 @@
+{
+  "schema": "fastlivo_exact_dt_deskew_transform_reuse/v1",
+  "status": "SOURCE_PREPARED_UNBUILT_UNVERIFIED",
+  "baseline_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/slam_ws",
+  "candidate_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v13/slam_ws",
+  "simulation_only": true,
+  "enabled_by": "FASTLIVO_DESKEW_REUSE=1 explicitly frozen from profile; default0",
+  "cache_key": "Exact floating equality dt after unchanged original instantaneous negative-epsilon clamp, plus current head interval implicit by reset. finite dt only; NaN/Inf never cached.",
+  "cached_values": [
+    "R_imu * Exp(angvel_avr,dt)",
+    "pos_imu + vel_imu*dt +0.5*acc_imu*dt*dt-state_inout.pos_end"
+  ],
+  "unchanged": [
+    "Point iteration and interval selection",
+    "Bias/state/covariance propagation and order",
+    "Point P_compensate transform expression",
+    "LIO lockfree4/VIO explicit serial",
+    "Detailed logging window/profile/controller/TTL/watchdog/model/PD"
+  ],
+  "not_implemented": "Forster preintegration, keyframe backend, or altered state propagation. This is only reuse of a rigid transform already computed for exactly identical point times.",
+  "required_before_build_acceptance": [
+    "Instantaneous repeated-dt",
+    "Mixed repeated/unique dt",
+    "Rolling unique dt",
+    "Original negative epsilon clamp boundary",
+    "Biased state and tilted attitude",
+    "Finite output/cov byte comparisons and speed test; all synthetic limits disclosed"
+  ],
+  "numerical": "UNVERIFIED",
+  "physical": "UNVERIFIED"
+}

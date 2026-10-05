@@ -1,0 +1,13 @@
+# V18 组合计算候选离线验证
+
+状态：PASS_LIMITED_COMBINED_KERNEL_ONLY。只准进入有限实验启动，尚未宣称实际仿真或导航通过。构建底为冻结V16 T1源码，只有voxel_map.cpp与voxel_map.h替换为冻结V15版本；源码逐文件对应证明保存在source_combination_proof.json。普通复制未复用build/install/log，独立构建限定MAKEFLAGS=-j2 -l2、CMAKE_BUILD_PARALLEL_LEVEL=2，实际编译为MP_PROC_NUM4及V16_VIO_PATCH_THREADS1/min64，无fast-math/native。峰值实际compiler进程数未采样。
+
+新运行27个729点LIO/9patch视觉正逆回归：V12、V18LIO1、V18LIO4与诊断off/inside/outside。状态、协方差、solver结果和原非wall记录全部逐字节一致，诊断writer未丢。另新跑V12与V18的41个视觉边界场景共82进程，覆盖曝光、空特征、nullable预备cache、多金字塔、63/64/65阈值、rollback；状态/cov/G/H/error/cache及原诊断均字节相等，观察98accepted和19rollback。新收据而非复制旧PASS绑定到候选启动门。
+
+test-only LD_DEBUG加载实见本候选私有库；GOMP观察实际LIO Jacobian team4、视觉team1。首次LIO观察变量误写，零条team记录的未完成收据保存在witness_wrong_env_attempt，重新观察正确，计时不据preload结果。
+
+本轮没有新统计性能基准。V15有限large row改善与V16选T1有限视觉改善仅为组成模块依据，无法相乘或声称组合前端/整链同幅度加速。V15历史HTH重建不完全一致及small/medium整个State尾延迟退化、V16四线程性能失败继续保留。未运行历史完整map/视觉状态checkpoint回放。
+
+原控制器7个producer/helper/预检/criterion文件与V12字节相同。32区域路线、300ms源期限、CPU1线程Teacher、停车与唯一执行器不变。新增两env只传导航栈，direct SLAM launch同时核配置与二者；COMBINED_COMPUTE_PREFLIGHT绑定候选库/执行文件/编译/source/两新数值收据与两组件限定证据。210s为前缀profile，600s完整路线仍需独立实际门；三层连接是坡道。
+
+实际运行命令见navigation/combined_compute_v18/README.md。本报告不改旧候选、旧run、camera_mode、模型和训练。真实机器人尚未验证。

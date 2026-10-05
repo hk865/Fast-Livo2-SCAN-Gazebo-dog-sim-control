@@ -1,0 +1,56 @@
+{
+  "schema": "teacher_truth_calibrated_SLAM_fixed_route_adapter_readme/v1",
+  "status": "implementation_candidate_not_actual_SLAM_route_verified",
+  "scope": "独立、仅仿真。冻结的Controller数学接实际SLAM/IMU固定路线；CPU Teacher保持独占native执行器，Actor观测仍含Gazebo特权量。不重新训练，不操作真机。",
+  "files": {
+    "adapter.py": "原始整数SLAM头＋因果IMU角速度→冻结Controller；独立JSON速度命令与来源记录。",
+    "worker.py": "独立归档CPU Teacher入口，只替换高层速度命令来源，保持PD/DCMotor/native执行/Actor观测/停车slew。",
+    "run.py": "生成新run、归档源和哈希、独占启动SLAM-only/桥/相机/adapter/Teacher/Gazebo，收尾仅自己的PID与进程组。",
+    "test_binding.py": "纯内存接口与失效负例，无ROS上下文，无仿真。"
+  },
+  "frozen_inputs": {
+    "controller": "必须显式传选优后归档的core.py路径及SHA256；禁止直接拿正在调参的源码无哈希启动。",
+    "profile": "必须显式传已归档profile及SHA256；数学gains、design、command_limits、selected feedback_hz保持。",
+    "deployment_route_change": "原route_world_xyz由单独SLAM路线替换，是显式部署坐标转换，不是回填真值调参成果。",
+    "rate_transfer": "mapped SLAM实际约10Hz。原profile若25/50Hz，必须加--allow-source-rate-reduction，记录选优率与实际源率；这只能称10Hz反馈迁移实验，不能称25/50Hz新SLAM位姿已实现。",
+    "future_propagation": "当前拒绝IMU传播位姿模式。未来/LIVO2/imu_propagate需独立审原点、world/camera_init帧、twist世界语义、body/COM外参、原始stamp和SLAM校正；估计不得称真值。"
+  },
+  "state_contract": {
+    "SLAM_pose": "/demo/slam/body_odom, frame=camera_init, child=demo_slam_body，原始整数header strictly increasing。已有odom_adapter由IMU原点按静态外参变为机身原点；本适配不重复变换。",
+    "SLAM_velocity": "已有body_odom twist.linear是机身原点线速度、当前机身坐标系中的SLAM位姿差分。首帧covariance=1e6拒绝，不当作实际零速。",
+    "IMU": "/livox/imu真实gyro，按当前scenario的body_imu_quaternion旋到body；选<=pose stamp最近历史样本，最大20ms因果差，不拿将来gyro补过去。",
+    "COM": "v_COM_body=v_origin_body+omega_body×base_com_offset；冻结profile COM偏置必须与未改机器人惯量位置一致。",
+    "attitude": "Controller位置/姿态惯性frame都是camera_init。IMU CUSTOM/world姿态只用于实际倾角保护，不用于XY/yaw地图定位。",
+    "core_ABI": "旧core把s[0]减5ms。新adapter仅内部传原SLAM秒stamp+5ms以中和旧约定，实际反馈时间仍是原SLAMstamp；64double容器只填core使用的位姿/速度字段，不是伪造Teacher247观测。",
+    "cadence": "一次新SLAMheader最多一次core更新，按5/10Hz配置或显式降率上限10Hz选择。跳过旧50Hz框架的重复缓存计算，只补其估计slew的hold步；3s初始化和goal dwell由原SLAM source时间推进，50Hz命令heartbeat不推进dwell。"
+  },
+  "route_contract": {
+    "default_runner": "首两份合格真实SLAMbody头后，首合格body origin＋yaw冻结一次。目标为水平机身相对6m（可显式roundtrip）。不读取Gazebo位姿，不读取SCAN trajectory。",
+    "limitation": "这是机身相对的sensor-SLAM路线。不会自动对齐原Gazebo场景x轴或坡道中心线，因此不得在原fixture坐标线下冒称地图注册成功。多楼层坡道必须另用真实地图/点云注册得到明确centerline。",
+    "explicit_map_route": "adapter也支持预先给出的camera_init固定点列，或带明确实际SLAM地图证据的刚体T_camera_init_from_route_frame。未知坐标、运行中更新参考或live simulator truth注册均不允许。",
+    "anchor_evidence": "SLAM_fixed_route/adapter_route_anchor.jsonl保存原始pose stamp、position、quaternion、yaw、旋转、relative原点列与实际冻结camera_init路线。"
+  },
+  "protection": {
+    "TTL": "300ms同时检查原始SLAM/gyro sim龄＋receive wall龄、producer clock＋wall龄、core最后实际source龄；重复heartbeat不能刷新旧反馈。",
+    "clock": "原始/clock直接订阅；回退锁存，墙钟暂停超过300ms输出0速度。",
+    "warmup_recovery": "两份不同真实SLAM头至少跨0.1s；stale保护清空积分/滤波/dwell，保持固定route和segment，不重定坐标。",
+    "single_writer": "adapter默认不发布Twist，唯一命令文件由adapter原子写入，Teacher worker只读。只有TeacherActuator写JointForceCmd；禁止启动旧PID/SCAN/CHAMP控制栈。",
+    "stop": "失效/初始化/停车输出Teacher速度命令0，CPU Actor继续观测/推理＋原slew；绝不把action=0或冻结joint target当停车。",
+    "graph": "要求body_odom发布者唯一demo_slam_odom_adapter、IMU发布者唯一ros_gz_bridge；topic名/frame与实际scenario核对。",
+    "sensor_bundle": "full sensors hardware/Ogre2，原車载80度相机10Hz与CameraInfo、IMU200Hz、LiDAR10Hz；仅图形GPU，Actor强制CPU。64MiB私有loopback DDS，独立ROS_DOMAIN_ID默认83。"
+  },
+  "commands": {
+    "offline_inspect": ["python3", "adapter.py", "--config", "NEW_RUN/slam_binding.json", "--inspect"],
+    "prepare_no_ROS_no_Gazebo": ["python3", "run.py", "--profile", "ABS_ARCHIVED_SELECTED_PROFILE.json", "--profile-sha256", "EXACT_SHA256", "--controller", "ABS_ARCHIVED_core.py", "--controller-sha256", "EXACT_SHA256", "--distance", "6", "--duration", "180", "--ros-domain", "83", "--prepare-only"],
+    "actual_root_only": "用相同明确argv去掉--prepare-only；若profile>10Hz另明确--allow-source-rate-reduction。不要同旧导航/CHAMP控制器并行运行。root独占实际启动和最终验收。",
+    "pure_binding_checks": ["python3", "test_binding.py"]
+  },
+  "evidence": {
+    "scope": "slam_execution.json、source_manifest.json、sources/*、immutable_generated_files、runtime_manifest.json，旧acceptance不修改。",
+    "sensor_route": "SLAM_fixed_route/adapter_slam_poses.jsonl、adapter_IMU_inputs.jsonl、adapter_route_anchor.jsonl、adapter_controller_updates.jsonl、adapter_publisher_graph.jsonl、adapter_writer_receipt.json。",
+    "execution": "slam_execution_commands.jsonl每个50Hz Teacher实际读包：raw_utf8/原bytesSHA、本次accepted/rejected及decoded_envelope另存，last_accepted_envelope单独标记，不把上次合格包冒称本次拒绝包；telemetry.jsonl真实requested/slewedcmd/本次TTL source；observations_actions.npz、actuator.jsonl真实200Hz物理、SLAM map_archive原始数据。",
+    "images": "实际overview与vehicle_rgb，原CameraInfo保存；无合成画面。",
+    "acceptance": "runner只记录完整运行/失败，不自动把无路线独立验收当pass。新summary_slam_fixed_route.json路线/Sim2Sim/真机均保持unverified；需随后独立核原SLAM区域到达、物理路线/姿态/接触/力矩、正式停车窗、所有source与子进程clean。"
+  },
+  "untested": ["本适配真实SLAM闭环", "25Hz或更高速实际SLAM/IMU传播反馈", "实时避障（本固定路线无SCAN/云guard，不得声称导航避障已接通）", "坡道/多楼层地图路线注册", "真机部署"]
+}

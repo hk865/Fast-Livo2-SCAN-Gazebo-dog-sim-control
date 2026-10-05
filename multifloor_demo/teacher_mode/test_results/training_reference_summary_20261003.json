@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "scope": "Training contract audit and frozen Teacher nominal CPU PhysX reference only; no Gazebo acceptance, no navigation/real-robot claim.",
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "contract_sha256": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+  "observation_module_sha256": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_matched_reference_20261003_c",
+      "results_status": "completed",
+      "cases": [
+        "stand",
+        "forward",
+        "backward",
+        "left",
+        "right",
+        "yaw_positive",
+        "yaw_negative",
+        "switch",
+        "command_timeout"
+      ],
+      "frames": 8350,
+      "protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_matched_reference_20261003_c/protocol.json",
+      "execution": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_matched_reference_20261003_c/execution.json",
+      "physical_cases_failed": [],
+      "matched_analysis": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_matched_reference_20261003_c/matched_analysis.json",
+      "recorded_timing_diagnostic": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_matched_reference_20261003_c/recorded_timing_diagnostic.json"
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_ramps_20261003_e",
+      "results_status": "completed",
+      "cases": [
+        "ramp_up",
+        "ramp_down"
+      ],
+      "frames": 1800,
+      "protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_ramps_20261003_e/protocol.json",
+      "execution": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_ramps_20261003_e/execution.json",
+      "physical_cases_failed": [],
+      "terrain_analysis": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_ramps_20261003_e/terrain_analysis.json"
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step05_20261003_f",
+      "results_status": "completed",
+      "cases": [
+        "step05"
+      ],
+      "frames": 1250,
+      "protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step05_20261003_f/protocol.json",
+      "execution": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step05_20261003_f/execution.json",
+      "physical_cases_failed": [],
+      "terrain_analysis": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step05_20261003_f/terrain_analysis.json"
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step10_20261003_g",
+      "results_status": "completed",
+      "cases": [
+        "step10"
+      ],
+      "frames": 1250,
+      "protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step10_20261003_g/protocol.json",
+      "execution": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step10_20261003_g/execution.json",
+      "physical_cases_failed": [],
+      "terrain_analysis": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_terrain_step10_20261003_g/terrain_analysis.json"
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_original_origin_20261003_h",
+      "results_status": "completed",
+      "cases": [
+        "stand_original_origin"
+      ],
+      "frames": 61,
+      "protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_original_origin_20261003_h/protocol.json",
+      "execution": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_original_origin_20261003_h/execution.json",
+      "physical_cases_failed": [
+        "stand_original_origin"
+      ],
+      "original_origin_analysis": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_original_origin_20261003_h/original_origin_analysis.json",
+      "analytic_ray_boundary_diagnostic": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/isaac_cpu_original_origin_20261003_h/analytic_ray_boundary_diagnostic.json"
+    }
+  ],
+  "retained_failures": [
+    "isaac_cpu_reference_20261003_a/failure.json",
+    "isaac_cpu_reference_20261003_b/observation_parity_full.json",
+    "isaac_cpu_matched_reference_20261003_c/matched_analysis.json strict fresh snapshot parity failed",
+    "isaac_cpu_terrain_ramps_20261003_d/failure.json",
+    "ramp_down unchanged progress threshold",
+    "step05 unchanged body height gain threshold",
+    "stand_original_origin physical failure; scan termination override and analytic edge failure documented"
+  ]
+}

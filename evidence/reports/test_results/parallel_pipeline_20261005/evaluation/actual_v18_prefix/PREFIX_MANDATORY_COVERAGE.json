@@ -1,0 +1,413 @@
+{
+  "schema": "independent_combined_V18_original_prefix_gate_coverage/v1",
+  "status": "PASS_LIMITED_ORIGINAL_MANDATORY_PREFIX_ONLY",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02",
+  "created_UTC": "2026-10-05T15:38:03.388115+00:00",
+  "original_common_status": "failed",
+  "original_v2_status": "failed",
+  "original_ramp_status": "failed",
+  "not_overall_route_pass": true,
+  "explicit_incomplete_original_common_keys": [
+    "all_original_SLAM_3D_region_arrivals",
+    "new_first_declared_active_hold_fixed_5s",
+    "strict_nonflat_complete_contact_geometry"
+  ],
+  "mandatory_common_prefix_all_passed": true,
+  "mandatory_original_publication_seven_all_passed": true,
+  "complete_first12m_ramp_original_checks_all_passed": [
+    "leg_0_ramp_12_complete_original_12m_fixture",
+    "leg_0_ramp_12_actual_COM_entryoutside_full_axis_exitoutside",
+    "leg_0_ramp_12_all_named_feet_ordered_actual_top_support",
+    "leg_0_ramp_12_first_destination_landing_continuous_support",
+    "leg_0_ramp_12_all_twelve_metre_bins_actual_support",
+    "leg_0_ramp_12_whole_traversal_real_support_and_axis_safety",
+    "leg_0_ramp_12_actual_original_SLAM_destination_region_on_correct_physical_floor"
+  ],
+  "second_ramp_complete": false,
+  "second_ramp_original_checks": {
+    "leg_1_ramp_23_complete_original_12m_fixture": {
+      "status": "passed",
+      "passed": true,
+      "exact_actual_world_surfaces": {
+        "ramp_23": {
+          "name": "ramp_23",
+          "collision": "ramp_23::link::collision",
+          "center": [
+            8.0,
+            7.0,
+            1.7502481404895005
+          ],
+          "rotation": [
+            [
+              0.9950371902099892,
+              0.0,
+              0.09950371902099893
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.09950371902099893,
+              0.0,
+              0.9950371902099892
+            ]
+          ],
+          "half": [
+            6.049925372672534,
+            1.0,
+            0.05
+          ]
+        },
+        "floor_2": {
+          "name": "floor_2",
+          "collision": "floor_2::link::collision",
+          "center": [
+            16.0,
+            4.5,
+            1.1
+          ],
+          "rotation": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "half": [
+            2.0,
+            4.5,
+            0.1
+          ]
+        },
+        "floor_3": {
+          "name": "floor_3",
+          "collision": "floor_3::link::collision",
+          "center": [
+            -0.5,
+            4.5,
+            2.3
+          ],
+          "rotation": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "half": [
+            2.5,
+            4.5,
+            0.1
+          ]
+        }
+      },
+      "nominal_world_x_seams_m": [
+        2.0,
+        14.0
+      ],
+      "sloped_walkway_not_stairs": true
+    },
+    "leg_1_ramp_23_actual_COM_entryoutside_full_axis_exitoutside": {
+      "status": "failed",
+      "passed": false,
+      "actual_entry_crossing_world_s": 163.85,
+      "actual_exit_outside_world_s": null,
+      "entry_outside_distance_m": 0.25,
+      "exit_outside_distance_m": 0.25,
+      "COM_source": "Actual native base_link COM = original base pose + measured rotation \u00d7 archived base_inertial_offset; not whole-robot aggregate COM"
+    },
+    "leg_1_ramp_23_complete_contact_traversal_and_destination": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Complete physical seam crossing absent; surviving on a prefix is not full-ramp success"
+    }
+  },
+  "terrain_switch_original_metadata_join": "UNVERIFIED preserved; prefix is ineligible for full25-gate composite correction",
+  "actual_first_failed_guard": null,
+  "actual_regions": 25,
+  "required_regions": 32,
+  "actual_controller_math_rate": {
+    "count": 3599,
+    "unique_headers": 3599,
+    "first_last_s": [
+      6.799999999000001,
+      209.979999999
+    ],
+    "span_average_hz": 17.70843586967221,
+    "median_dt_hz": 28.57142775510206,
+    "source_gap_s": {
+      "count": 3598,
+      "min": 0.029999999000000003,
+      "p50": 0.035000001,
+      "p95": 0.07,
+      "max": 1.520000001
+    },
+    "duplicate_headers": 0,
+    "backward_headers": 0,
+    "over_300ms_source_gaps": 29
+  },
+  "actual_source_stage_rates": {
+    "raw_IMU_callback": {
+      "count": 42002,
+      "unique_headers": 42002,
+      "first_last_s": [
+        0.005,
+        210.01000000000002
+      ],
+      "span_average_hz": 200.0,
+      "median_dt_hz": 200.0,
+      "source_gap_s": {
+        "count": 42001,
+        "min": 0.005,
+        "p50": 0.005,
+        "p95": 0.005,
+        "max": 0.005
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "actual_image_callback": {
+      "count": 6364,
+      "unique_headers": 6364,
+      "first_last_s": [
+        0.01,
+        209.98000000000002
+      ],
+      "span_average_hz": 30.304329189884267,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6363,
+        "min": 0.025,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "actual_FASTLIVO_valid_PointCloud2_callback": {
+      "count": 6364,
+      "unique_headers": 6364,
+      "first_last_s": [
+        0.01,
+        209.98000000000002
+      ],
+      "span_average_hz": 30.304329189884267,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6363,
+        "min": 0.025,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "before_Process2_stage_2": {
+      "count": 6363,
+      "unique_headers": 6363,
+      "first_last_s": [
+        0.035,
+        209.98000000000002
+      ],
+      "span_average_hz": 30.3031746409774,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6362,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "before_Process2_stage_1": {
+      "count": 6362,
+      "unique_headers": 6362,
+      "first_last_s": [
+        0.035,
+        209.95000000000002
+      ],
+      "span_average_hz": 30.30274158588,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6361,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "LIO_handler_after_processed": {
+      "count": 6254,
+      "unique_headers": 6254,
+      "first_last_s": [
+        3.6350000000000002,
+        209.98000000000002
+      ],
+      "span_average_hz": 30.30361772759214,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6253,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "VIO_handler_after_processed": {
+      "count": 6253,
+      "unique_headers": 6253,
+      "first_last_s": [
+        3.6350000000000002,
+        209.95000000000002
+      ],
+      "span_average_hz": 30.303177180524926,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 6252,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    },
+    "actual_LIO_optimizer_frames": {
+      "count": 91,
+      "unique_headers": 91,
+      "first_last_s": [
+        115.00500000000001,
+        117.98
+      ],
+      "span_average_hz": 30.252100840336137,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 90,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0,
+      "collection_scope": "actual writer detail window only",
+      "detail_window_sim_s": [
+        115.0,
+        118.0
+      ],
+      "whole_run_optimizer_frequency_status": "not_collected",
+      "missing_outside_window_is_not_zero": true
+    },
+    "actual_VIO_optimizer_frames": {
+      "count": 91,
+      "unique_headers": 91,
+      "first_last_s": [
+        115.00500000000001,
+        117.98
+      ],
+      "span_average_hz": 30.252100840336137,
+      "median_dt_hz": 28.57142857142857,
+      "source_gap_s": {
+        "count": 90,
+        "min": 0.030000000000000002,
+        "p50": 0.035,
+        "p95": 0.035,
+        "max": 0.035
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0,
+      "collection_scope": "actual writer detail window only",
+      "detail_window_sim_s": [
+        115.0,
+        118.0
+      ],
+      "whole_run_optimizer_frequency_status": "not_collected",
+      "missing_outside_window_is_not_zero": true
+    }
+  },
+  "physical_safety": {
+    "samples": 42001,
+    "body_contact_samples": 0,
+    "fault_samples": 0,
+    "native_source_rate": {
+      "count": 42001,
+      "unique_headers": 42001,
+      "first_last_s": [
+        0.005,
+        210.00500000000002
+      ],
+      "span_average_hz": 200.0,
+      "median_dt_hz": 200.0,
+      "source_gap_s": {
+        "count": 42000,
+        "min": 0.005,
+        "p50": 0.005,
+        "p95": 0.005,
+        "max": 0.005
+      },
+      "duplicate_headers": 0,
+      "backward_headers": 0,
+      "over_300ms_source_gaps": 0
+    }
+  },
+  "numeric_thresholds_changed": false,
+  "performance_comparison": "Separate builder performance_actual scope; old original all-proc endpoint intersection excludes late-start children and is not full SLAM CPU",
+  "allow_progression_to_full_original_static32_scope": "No material mandatory prefix regression observed; only parent decides actual launch",
+  "privileged_actor_disclosed": {
+    "privileged_dimensions": 232,
+    "known_dimensions": 15,
+    "CPU_threads": 1,
+    "actor_hz": 50,
+    "actual_navigation_feedback": "SLAM/IMU/SCAN; native only offline validation"
+  },
+  "verified_input_sha256": {
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02/summary_closed_loop_cascade_independent.json": "918a9aca141d662c25d4cb5adbec3a9106756033be422d2af974c4b138d12dd1",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02/summary_closed_loop_clock_hold_independent.json": "ac3aa09416ce4ce645ca4d03025558e776e26c49e16afb91e8b28a53f5739196",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02/summary_closed_loop_ramp_independent.json": "f847351ff2fce5bfe11fb04d38c4aeee9a6289ad281f601f95b8b84ce5efde90",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02/worker_result.json": "ff86557842c349ecbbe11e1b8fa2921a488cdfa186eb53fd5fc92a8fa38bbb47",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_232930_closed_loop_cascade_clock_hold_combined_v18_prefix_r1_ac02/runtime_manifest.json": "c210d7c727a3ce339ff536874429158be8f154eb03a7cd9988f0d05821283494",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_prefix/source_height/comparison.json": "10d80c4c75aaa5317683245af72da80c9fdfa269e6c7c6b38d61b5f0155c9d80",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/actual_v18_prefix/pipeline_ages.json": "f6f500a4e205888ec2bf509cbe8e94e5c21e781aeb73e5ef3f26f4a2592b2f05",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_EVALUATION_PLAN.json": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/PROSPECTIVE_V18_COMBINED_SCOPE.json": "bb7fff70041c98d1546b42ba8185b24fef4a49c5890350f493ea743c19652f34"
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "terrain": "flat",
+  "sensors": true,
+  "camera_only": false,
+  "render_engine": "ogre2",
+  "spawn": [
+    6,
+    -0.7,
+    0.4,
+    0
+  ],
+  "physics_step_s": 0.005,
+  "decimation": 4,
+  "policy_hz": 50,
+  "real_time_factor": 1.0,
+  "exclusive_writer": "gz_ros2_control::GazeboSimROS2ControlPlugin",
+  "disabled": [
+    "Teacher actor",
+    "TeacherActuator",
+    "body_stabilizer",
+    "body_servo"
+  ],
+  "joint_mapping": {
+    "FR": "rf",
+    "FL": "lf",
+    "RR": "rh",
+    "RL": "lh"
+  },
+  "joint_names": [
+    "rf_hip_joint",
+    "rf_upper_leg_joint",
+    "rf_lower_leg_joint",
+    "lf_hip_joint",
+    "lf_upper_leg_joint",
+    "lf_lower_leg_joint",
+    "rh_hip_joint",
+    "rh_upper_leg_joint",
+    "rh_lower_leg_joint",
+    "lh_hip_joint",
+    "lh_upper_leg_joint",
+    "lh_lower_leg_joint"
+  ],
+  "default_q": [
+    -0.1,
+    0.8,
+    -1.5,
+    0.1,
+    0.8,
+    -1.5,
+    -0.1,
+    1.0,
+    -1.5,
+    0.1,
+    1.0,
+    -1.5
+  ],
+  "hard_lower": [
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -1.5708,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227,
+    -1.0472,
+    -0.5236,
+    -2.7227
+  ],
+  "hard_upper": [
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    3.4907,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776,
+    1.0472,
+    4.5379,
+    -0.83776
+  ],
+  "friction_baseline": 0.7,
+  "model_mass_kg": 16.512,
+  "base_inertial_pose": "0.055230920345489418 -0.0018690019193857959 0.0060952991842610337 0 0 0",
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_converted.sdf": "bc31d84d25cca05a58da367fb950d4385a6215f5d6dda2149f611a2f6b195924",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/three_floors.sdf": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161"
+  },
+  "world_sha256": "330cb664b0fb105fe79b6683d7d45ef7798d2cd15fbf07b7dce897894ec36def",
+  "true_stairs": false,
+  "sensor_contract_sha256": "f835b07012ebe3cb8a566f54ddba2753f763503075037b24e19f5e3f2b925dac",
+  "sensor_bridge_sha256": "392b90b684057966dd8d1e41196a57013115ac6bf5d870c7d0fb67a1a3fedbcf",
+  "dynamic_fixture": {
+    "schema": 1,
+    "status": "prepared_unverified",
+    "experiment": "finite_flat_dynamic_stop_resume_v1",
+    "allowed_entity": "moving_obstacle",
+    "original_world_sha256": "1220190114aa82352fedf6162bcaed549f0656fe088b9d9a9ebd3a500918662e",
+    "protocol_sha256": "0f97378e1bd9489abf9faae8868c3e77efc9b245aa59d201b1af5e6e3e37d24e",
+    "preparer_sha256": "cab333ed4cec853ab55fe41b441b70d9c9671e989143550500988147728a4b67",
+    "changed_fields": [
+      "world/moving_obstacle/pose"
+    ],
+    "initial_position_world": [
+      7.15,
+      -1.6,
+      0.6
+    ],
+    "policy_terrain_scan_excludes_dynamic_entity": true,
+    "navigation_ground_truth_used": false,
+    "meaning": "Physical obstacle fixture preparation only; no simulated or navigation test has run"
+  },
+  "controller_kind": "champ",
+  "champ_contract_sha256": "4eded0db3472dbe9549109a4f42fe5815d0c92401c42a606e7af3bfd9b17b573"
+}

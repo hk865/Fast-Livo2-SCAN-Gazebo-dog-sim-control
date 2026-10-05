@@ -1,0 +1,249 @@
+{
+  "schema": "prospective_independent_parallel_pipeline_evaluation/v1",
+  "created_UTC": "2026-10-05T14:30:21.648842+00:00",
+  "simulation_only": true,
+  "real_robot": false,
+  "mutation_scope": "Only this new evaluation directory. Root alone creates new private run storage and launches physics. Old sealed runs, sources, receipts, browser/state/package are read-only.",
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "Actor_device": "CPU",
+  "Actor_threads": 1,
+  "Actor_Hz": 50,
+  "privileged_Actor_dimensions": 232,
+  "known_command_previous_action_dimensions": 15,
+  "baseline_core_sha256": "8303ec94d33a976bc8ac0940e9d3d213120ce4a035ea22385e07f301c019efed",
+  "baseline_prefix_run": "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d",
+  "baseline_full_run": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb",
+  "baseline_prefix_regions": "25/32 actual prefix; never full navigation pass",
+  "baseline_full_actual_duration_s": 275.18,
+  "candidates": {
+    "V15": "LIO per-constraint Jacobian independent rows; original final matrix products/prior/solve order untouched",
+    "V16": "VIO per-patch rows independent; original per-patch float SSE then original i-order merge, all solver/accept/rollback untouched",
+    "V17": "Pure proposed input pipeline: one receive executor, one decoder, bounded ready FIFO, single mapper owner for all commits/sync/IMU/LIO/VIO; no physical approval by this document"
+  },
+  "fixed_runtime": {
+    "LiDAR_vertical_lines": 64,
+    "LiDAR_horizontal_samples": 480,
+    "LiDAR_Hz": 30,
+    "RGB_Hz": 30,
+    "native_dt_s": 0.005,
+    "Actor_decimation": 4,
+    "controller_wall_tick_s": 0.05,
+    "source_dual_TTL_s": 0.3,
+    "route_regions": 32,
+    "prefix_limit_s": 210,
+    "full_limit_s": 600,
+    "full_early_completion_allowed": true,
+    "prefix_boundary_timing": true,
+    "full_boundary_timing": false,
+    "diagnostic_detail_window_sim_s": [
+      115,
+      118
+    ],
+    "drop_or_missing_is_not_zero": true
+  },
+  "frozen_original_numeric_criteria": {
+    "source_ttl_sim_s": 0.3,
+    "source_ttl_wall_s": 0.3,
+    "producer_clock_future_tolerance_s": 0.05,
+    "gyro_to_pose_max_gap_s": 0.02,
+    "region_control_radius_m": 0.17,
+    "region_dwell_s": 0.6,
+    "region_max_source_gap_s": 0.2,
+    "goal_deadline_s": 90.0,
+    "native_step_s": 0.005,
+    "actor_step_s": 0.02,
+    "bootstrap_s": 0.1,
+    "flat_route_max_distance_m": 0.2,
+    "flat_route_rms_m": 0.08,
+    "drive_heading_max_rad": 0.2,
+    "speed_mean_abs_error_floor_mps": 0.05,
+    "speed_mean_abs_error_fraction": 0.25,
+    "maximum_roll_pitch_rad": 0.65,
+    "minimum_clearance_m": 0.18,
+    "maximum_tau_Nm": 23.50001,
+    "maximum_qd_radps": 30.001,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "parking_window_s": 5.0,
+    "parking_xy_drift_m": 0.05,
+    "parking_yaw_drift_rad": 0.1,
+    "parking_origin_speed_peak_mps": 0.08,
+    "parking_euler_yawdot_peak_radps": 0.1,
+    "parking_body_wz_peak_radps": 0.1,
+    "worker_slew_acceleration": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "dynamic_clear_s": 1.0,
+    "dynamic_guard_max_gap_s": 0.3
+  },
+  "frozen_publication_criterion_sha256": "756ad4c3f78a68f42483c9d016a7caa49e2bcbfd22f41595de4ac1675acb480c",
+  "original_extra_check_keys": [
+    "prospective_clock_hold_criteria_and_archived_sources",
+    "actual_clock_hold_event_integrity_and_short_freeze",
+    "actual_clock_hold_stall_stale_reset_and_failure",
+    "actual_clock_hold_nonzero_resume_requires_native_geometry",
+    "actual_publication_slew_with_hold_chronology",
+    "actual_executor_ack_and_PI_replay_with_explicit_hold_resets",
+    "actual_control_publication_ledger_complete_and_original"
+  ],
+  "frozen_profile_semantic_fields": {
+    "max_speed_mps": 0.2,
+    "max_yaw_rate_radps": 0.6,
+    "arrival_radius_m": 0.22,
+    "arrival_height_half_span_m": 0.1,
+    "arrival_control_radius_m": 0.17,
+    "dwell_sim_s": 0.6,
+    "goal_timeout_sim_s": 90.0,
+    "pose_cloud_timeout_s": 0.3,
+    "sensor_warmup_sim_s": 2.0,
+    "controller_kind": "teacher",
+    "arrival_stop_policy": "after_measured_dwell",
+    "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+    "terrain_layer_switch": {
+      "initial_manifest": "tests/terrain_targets/lower12.json",
+      "alternate_manifest": "tests/terrain_targets/upper23.json",
+      "completed_goal_id": "connector_mid",
+      "alternate_include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+      "ray_equality_tolerance_m": 1e-09
+    },
+    "slam_imu_online_estimation": {
+      "gravity_est_en": true,
+      "ba_bg_est_en": true
+    },
+    "slam_visual_measurement_covariance": 1000,
+    "control_clock_contract": {
+      "schema": "teacher_control_clock_exact_zero_hold/v1",
+      "same_clock_policy": "exact_zero_before_math_and_native_geometry",
+      "freshness_sim_and_wall_s": 0.3,
+      "continuous_stale_fail_wall_s": 8.0,
+      "backward_clock_policy": "latch_failure",
+      "resume_policy": "actual_clock_advance_and_fresh_original_sources_and_native_geometry",
+      "short_hold_integral_and_dwell": "frozen",
+      "long_hold_integral_and_dwell": "protect_reset",
+      "source_receipt_refresh_permitted": false
+    },
+    "sensor_sampling": {
+      "vertical_lines": 64,
+      "horizontal_samples": 480,
+      "lidar_hz": 30,
+      "camera_hz": 30,
+      "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+      "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+      "control_wall_tick_s": 0.05
+    }
+  },
+  "numerical_gates": {
+    "same_input_required": true,
+    "same_P_core_type_required": true,
+    "same_compiler_flags_and_FP_modes_required": true,
+    "bitwise_original_numeric_outputs_required": true,
+    "non_numeric_wall_team_identity_fields_excluded_explicitly": true,
+    "required_outputs": [
+      "ordered H rows",
+      "R_inv or VIO z rows",
+      "original ordered error/n_meas",
+      "HTH/HTz",
+      "solution/state25/cov361",
+      "iteration/accept/rollback/skip decisions"
+    ],
+    "first_terminal_logged_arrays_not_every_iteration_claim": true,
+    "synthetic_fixture_scope": "limited actual production component and/or StateEstimation fixture, not complete estimator trajectory"
+  },
+  "effective_thread_gates": {
+    "required": "Actual runtime omp team/worker identity and completed item partitions; compiler flags or /proc thread count alone insufficient",
+    "small_fallback": "Predeclare candidate threshold before runs. Below threshold retain original serial path or show p95 no regression",
+    "maximum_requested_threads": 4,
+    "V15_declared_serial_below_constraints": 256
+  },
+  "performance_gates": {
+    "valid_measured_batches_minimum": 30,
+    "warmup_batches_minimum": 10,
+    "ordering": "Alternating AB/BA or ABBA, same input and same P-core type",
+    "large_kernel_median_improvement_min_fraction": 0.1,
+    "large_kernel_p95_no_worse_than_baseline": true,
+    "small_kernel_p95_no_worse_or_frozen_serial_fallback": true,
+    "load_cpu_frequency_recorded": true,
+    "CPU_seconds_and_wall_seconds_separate": true,
+    "nested_timer_intervals_never_added_as_exclusive_total": true,
+    "claim_scope": "Limited same-input kernel benefit only, not full pipeline speedup or navigation pass"
+  },
+  "actual_sequence": [
+    "No physical candidate run before source/library/contract freeze and pure numeric/team/order checks",
+    "Choose a beneficial single candidate for same210s timing prefix; avoid combining untested V15/V16/V17",
+    "Check original actual source/SCAN/guard/native/route/slew gates; prefix missing32/parking/full nonflat remains failed/unverified explicitly",
+    "Only candidate with numerical benefit and no actual mandatory regression may advance to static32 full600 upper bound",
+    "Evaluate actual duration,32 original3D arrivals, both complete12m ramps, first declared fixed5s parking, all publication chronology and provider source chain"
+  ],
+  "required_receipts": {
+    "raw_common_checks": 19,
+    "publication_v2_checks": 26,
+    "full_ramp_checks": 25,
+    "metadata_join_v2_closed_sources": true,
+    "exact_mandatory_key_sets_and_passed_flags": true,
+    "old_receipts_immutable": true,
+    "new_run_basename_and_realpath_binding": true
+  },
+  "storage_plan": {
+    "suggested_new_private_root": "/var/tmp/go2_teacher_parallel_20261005",
+    "creator": "root only",
+    "reported_available_GiB": 56,
+    "detailed_window_seconds": 3,
+    "must_keep": "All actual original navigation clouds/header bytes, IMU and feedback/command ledgers, native actuator/contact stream, source snapshots, failures. No deleting historical logs or reducing sensor estimator input.",
+    "budget": "Reserve >=15GiB before each210s; budget oneprefix+onefull first, actual size monitored; no rolling deletion or byte caps that silently omit mandatory evidence",
+    "work_during_actual": "Only lightweight owned CPU sampler + source/index status; no full hashes/native scans/figures/benchmarks"
+  },
+  "deterministic_replay": {
+    "possible_now": [
+      "LIO real selected ptpl Jacobian rows using kind100+101 and frozen extrinsics",
+      "VIO selected completed H/z and Hessian/update algebra using kinds201+203",
+      "Discrete IMU propagation/state/covariance steps via kinds1/10/11/20 within recorded scope"
+    ],
+    "not_complete": [
+      "LiDAR full original clouds only detail window",
+      "No all-frame raw body image pixels/patch tensors",
+      "No start-of-window complete voxel map and VIO reference/submap/warp cache checkpoint"
+    ],
+    "minimum_new_interface": "Independent pure production component fixture; full mapper replay requires an explicit immutable full raw input sequence + initial serializable estimator/map/reference state with original scheduling, not Gazebo/native truth"
+  },
+  "immutable_reference_files": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/publication_ledger_v11/PROSPECTIVE_CRITERIA.json": "756ad4c3f78a68f42483c9d016a7caa49e2bcbfd22f41595de4ac1675acb480c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/profiles/l64_r30_c30_lockfree4_timing_detail3s_210.json": "593177580b3242a8c31cc5d25e46f452e55c0bca78cfff383b7b0f45b5c353f2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/profiles/l64_r30_c30_600.json": "af99c5f4fc8bffd9a6e357cd52904ec8c85e0a4cd4741279f4e1c385de7fb897",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/caller_diagnostic_schema.json": "a1d5c6681dc728e24f8962c35884037350befda919570b0ef39e7a42aa964c03",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/lio_diagnostic_schema.json": "9c2b2c143ee23979b31d86d2ab213b28054cbe42413e0b008e7666397b7211ae",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/vio_diagnostic_schema.json": "218e63d8018e3e1d66a2d3f662b4efa7c2665921bd19f41deb2857d36f3569e0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/boundary_timing_diagnostic_schema.json": "dc4b976d31e43dca65824be68d7b6504dea4db78b14c37e1bf448a9f86cee284",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/evaluate_completed_run.py": "69b73d4dca2a117308744712d43a9c5a54faff35bf39851ff5ed43393a99f772",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/publication_ledger_v11/audit_publication_ledger.py": "4d8ea27989cf14f9db397ca3d37bc7c1077fe253ea66909ebec45f655b8dcab6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/clock_hold_v9/pi_replay.py": "cfee1ad43734171f5dee850c9f860b4913c2ae0451602a51b6515f859b6985f0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_terrain_metadata.py": "1d464d0a70e9b7a5484a9535727683cd8118743a2d2282afa792ff302cb06c53",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_terrain_metadata_v2.py": "cb2e8aa4b383f5feb26b7ba154158062a289d266b081d2d76e417944c9267c94",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/sample_owned_cpu_v12.py": "43c3c7bc4bf033d7cc62399a1a2f3815fdc748026dab5c2bfd9bb6926d6c7cd6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/performance_proc_v12.py": "99c9fe5303c37a4c29540997c1c5a29d40135fbebfd7c6cc347e556601ec0030",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/performance_proc_full.py": "b9affbefdd4b1e0b2f506c5d51cace389b02889f7263592fbfc457b42ea7bcc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/analyze_sensor_experiment.py": "b7c530832339520e96260ceb3d4314de50e02e125cd9de6d21fb0bbd3cfc99da",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/lidar_density_rate_20261005/evaluation/audit_pipeline_ages.py": "4f35e6e4400abcf3b0496d69e893755fb44fc4bb4d64e94df5e460b7ee1c0c92",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/navigation_profile.json": "593177580b3242a8c31cc5d25e46f452e55c0bca78cfff383b7b0f45b5c353f2",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/navigation_scope.json": "6f33c4b65c594c6e8011a67637de422e3ef196c1191aa4aa440730bf03219226",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/navigation_source_snapshots.json": "eecc1650e6c91828d367cf721e271b7618f634eb2990de54c124878a6cdb956b",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/slam_loaded_binary.json": "c68e59e98b26740ef7b123ab7421a8cf2751ffe9b134f63afcbb25493862f161",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/summary_closed_loop_cascade_independent.json": "8850474a16fcf161e1dcd8f083a26d99175582e5cca323007b79e0e8b8b12dea",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/summary_closed_loop_clock_hold_independent.json": "a7cebd6e26a815212ade39fe89593d49a181a1d9862657d27a69a2616683d7c2",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_205309_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_timing_r1_0b8d/summary_closed_loop_ramp_independent.json": "b78e2132b0fcd8db6253304a380c42002937cdcd0354055a1d28a38065f83648",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_profile.json": "af99c5f4fc8bffd9a6e357cd52904ec8c85e0a4cd4741279f4e1c385de7fb897",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_scope.json": "1f4f9df18d94aa611f8cdd29d9af7e7202c6bb0e3066533de3f3fd1876df68d1",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/navigation_source_snapshots.json": "1de2412fefc5a935a9413f416185dec93071d441a10ee5f5e4b3c9079c5d0b81",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/slam_loaded_binary.json": "8b346be7b0abc318d61b634f2c843262cc031c0cda8bc246dd6274599bfb822f",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_cascade_independent.json": "d14292800d88fef70dece542c5f6bd452e9a6b328201d0883e2371e4889c523a",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_clock_hold_independent.json": "5a25158257ff5ddfec5caf8dd7bcd0e39d83d8da6b26c82435ac32a64a44e0c5",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_ramp_independent.json": "f818db44129b1014b97fe56957e866334792ccd14e32c691aef460c2497b5cba",
+    "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb/summary_closed_loop_terrain_metadata_join_independent_v2.json": "b07b0a4b4b5b80cbd1a48201e745d0241596fdba8c56b93d1cb6da5f85919d43"
+  },
+  "plan_generator_sha256": "a1f47ef2434032a3897842a3774195457c6b6d4c6707dd4a713417c08864efb1"
+}

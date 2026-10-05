@@ -1,0 +1,82 @@
+{
+  "schema": "teacher_champ_pid_navigation_evidence/v1",
+  "rule": "Missing or malformed actual data is unverified/failed; no successful result follows from a static schema or default stand.",
+  "common_required_files": [
+    "pid_navigation_protocol.json",
+    "pid_navigation_case.json",
+    "pid_navigation_freeze.json",
+    "navigation_scope.json",
+    "navigation_profile.json",
+    "navigation_anchor.json",
+    "navigation_request.json",
+    "navigation_slam_poses.jsonl",
+    "navigation_status.jsonl",
+    "navigation_command_history.jsonl",
+    "navigation_sensor_gate_history.jsonl",
+    "navigation_cloud_history.jsonl",
+    "navigation_pid_history.jsonl",
+    "runtime_manifest.json",
+    "source_manifest.json",
+    "world.sdf",
+    "navigation_pid_writer_receipt.json"
+  ],
+  "teacher_files": [
+    "telemetry.jsonl",
+    "actuator.jsonl",
+    "policy_manifest.json",
+    "worker_result.json",
+    "observations_actions.npz"
+  ],
+  "champ_files": [
+    "actuator.jsonl",
+    "telemetry.jsonl",
+    "champ_contract.json",
+    "policy_metadata.json",
+    "champ/joint_target_events.jsonl"
+  ],
+  "native_physics_step": {
+    "kind": "physics_step",
+    "t": "Gazebo actual native timestamp with explicit contract state_time_offset_s: Teacher PreUpdate=-.005; CHAMP PostUpdate=0. Never assume phases equal.",
+    "position": "world link origin xyz",
+    "quaternion_wxyz": "actual world quaternion",
+    "body_lin_vel_com": "COM velocity in body axes",
+    "body_ang_vel": "body angular velocity",
+    "q": "12 actual positions named injoint_order",
+    "qd": "12 measured velocities",
+    "tau": "12 actual applied torques, not requests",
+    "qtarget": "12 actual requested joint targets",
+    "contacts": "body,FR,FL,RR,RL actual sensor counts",
+    "contact_pairs": "actual collisions/point count/XYZ/normal/depth and raw wrench; no inferred force substitution",
+    "fault": "actual execution fault",
+    "body_pose_resets": "must be0 incontract"
+  },
+  "pid_required_fields": {
+    "schema": "teacher_pid_navigation_tick/v1 or declared frozenruntimeequivalent",
+    "sequence": "strictly increasing actual call sequence",
+    "control_pose_stamp_ns": "exact original SLAM stamp integer, no float reconstruction",
+    "compute_ros_clock_ns": "actual ROS simulation clock",
+    "compute_monotonic_wall": "actual monotonic wall",
+    "waypoint_index": "active immutable requestgoal index",
+    "phase": "drive/turn/protected/stop",
+    "pose": "raw measured SLAMxyz",
+    "yaw": "raw measured SLAMyaw",
+    "target": "checked SCANtarget",
+    "route": "actual checked SCANroute or archived float64hash reference",
+    "lateral_error_m": "signed routecross-track error",
+    "heading_error_rad": "raw SLAMmeasured error",
+    "pid_terms": "actual P/I/D + coefficients,dt/integrator/reset/antiwindup",
+    "raw_command": "unsaturated requested body vx/vy/wz",
+    "clipped_command": "actual limitsapplied",
+    "command": "afterouterPID slew; executionconsumer owns final TTLslew",
+    "source": "SLAM/SCAN only, exact source frames/stamps retained",
+    "actual_pid_world_direction": "Worlddirection of theactual after-slew output; nativeguardrows explicitlycarrypid_sequence and originalPIDcomputeclock/controlheader"
+  },
+  "runtime": {
+    "owned_processes": "actual ownrole,pid,returncode for every launchedprocess",
+    "launch_children": "exact actual launchchild exitlogs/receipt",
+    "sources": "perrun actual snapshotSHA + pre-run frozen sourceSHA; runtimecached module must matchactualloadedcopy"
+  },
+  "region_receipt": "region_arrivals in navigation_status: goal_id,start_stamp_ns,stamp_ns,protected=false,control_region_inside=true; exact rawSLAMposes must independently satisfy .17/.10/.6/.2gap.",
+  "parking": "Final arrival receipt first successful measured deadline +3s fixed following5s; not runtime model-position latch or late selectedstop.",
+  "no_champ_pass_from_missing_teacher_fields": true
+}

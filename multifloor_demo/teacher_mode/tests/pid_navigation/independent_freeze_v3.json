@@ -1,0 +1,33 @@
+{
+  "schema": "pid_navigation_independent_analysis_freeze/v3",
+  "scope": "Same approved protocol/cases/numerical criteria. New CHAMP V4 force phase proof is prospective before its actual run. Teacher V3 uses already-frozen correctedV1 numerical logic; extra cloudcallback count is diagnostic only. No retrospective new threshold or passage.",
+  "analyzer": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/analyze_pid_navigation_v3.py",
+  "analyzer_sha256": "80546c42036e29ea2860f06f9146e3ad146692bd925bcee3e7022a397f131762",
+  "archive": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/pid_navigation/analyzer_v3/analyze_pid_navigation_v3.py",
+  "protocol_sha256": "002a3847395159cc644914caa687cfb8a0f879802281bbfedee2cfe155a4bd13",
+  "cases_sha256": "445ff554cbc8ec85425603f7b50eb7d774b5971f137b650768a1b9cb97dca2d4",
+  "teacher_runtime_freeze": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pid_navigation_runtime_v3_freeze_20261004/v3.json",
+  "teacher_runtime_freeze_sha256": "90c904d9cb723b2186cda0952189a7820ae7cbe972e04389db85916e9a8a030c",
+  "champ_force_runtime_freeze": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/force_capture_v4/freeze.json",
+  "champ_force_runtime_freeze_sha256": "23c097f99aae7e7f52d7c1b7944f5c389793683b01179bc345cd362fc24d31cd",
+  "previous_analyzers": {
+    "original": "9d4ef434ba1940abbd204a2002a06bd8eb7e3be6ea1d8ee87771d3512b774c65",
+    "corrected_v1": "777b4706f09fd74065e1dc99af1fba326364d16f16c1addb01491ad082151753",
+    "force_v2": "0e64b47b6beee3eb52022731db2b59ad0e867582c9f1503e050ac37e63d3301f"
+  },
+  "newforce_schema_required": [
+    "actual same physics_iteration=force_capture_iteration",
+    "PreUpdate after CM write, before Physics Update priority1 after writer0",
+    "complete12finite actualJointForceCmd and12available1 from.1s",
+    "exactsimtime/dt and interval[t-dt,t]",
+    "postUpdate state remainsoffset0; clearedbuffer diagnostic only"
+  ],
+  "force_limit_Nm": 23.5000001,
+  "joint_velocity_limit_radps": 30.001,
+  "offline_checks_sha256": "59d1f2e9f819bbbb12076a14d505f32fd99350096c2da00537d3406c990ab774",
+  "offlinechecks_are_actual_pass": false,
+  "original_reports_and_receipts_kept": true,
+  "runtime_files_modified": false,
+  "newactual_default_output": "summary_pid_navigation_independent.json",
+  "oldactual_output_requires_suffix_to_preserve_bytes": ".corrected_v3"
+}

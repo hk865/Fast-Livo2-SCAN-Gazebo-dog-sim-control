@@ -1,0 +1,445 @@
+{
+  "schema_version": 1,
+  "scope": "Idle real-sensor forward repetitions; runtime/parking independent audit only",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080529_forward_resource_idle_actual_sensor_v2_r1_d6cd",
+      "status": "verified",
+      "checks": {
+        "cpu_actor_single_thread": true,
+        "same_frozen_model": true,
+        "all_five_owned_processes_clean_exit": true,
+        "runtime_and_policy_without_fault": true,
+        "complete_18s_50Hz_policy": true,
+        "complete_200Hz_physics_and_safe_termination": true,
+        "no_native_latched_fault": true,
+        "same_world_geometry_and_physics_bytes": true,
+        "same_frozen_motion_parking_thresholds": true,
+        "same_broker_and_observation_contract": true,
+        "same_native_actuator_binary": true,
+        "same_strict_source_ttl_and_activation": true,
+        "requested_direction_and_speed": true,
+        "steady_tracking_rmse": true,
+        "continuous_teacher_zero_command_stop": true,
+        "frozen_legacy_stop_metrics": true,
+        "additional_max_excursion_stop_check": true,
+        "no_unknown_or_body_contacts": true,
+        "independent_200Hz_body_clearance_and_attitude": true
+      },
+      "runtime_exit_codes": {
+        "worker": 0,
+        "gazebo": 0,
+        "bridge": 0,
+        "capture": 0,
+        "sensor_feedback": 0
+      },
+      "steady_window_s": [
+        5,
+        10
+      ],
+      "steady_command_mean": [
+        0.2999999999999986,
+        0.0,
+        0.0
+      ],
+      "actual_steady_mean": [
+        0.24359104570389817,
+        -0.0034971838112028636,
+        0.009635674828813183
+      ],
+      "steady_rmse": [
+        0.057827165274014075,
+        0.04353432247525251,
+        0.031429448967487304
+      ],
+      "position_delta_m": [
+        1.9077418344777248,
+        0.09776073897982829,
+        -0.09584521135891078
+      ],
+      "teacher_stop_window_s": [
+        15,
+        18
+      ],
+      "stop_endpoint_translation_m": 0.0006227761271005159,
+      "stop_max_translation_excursion_m": 0.0006339196813002964,
+      "stop_endpoint_yaw_rad": 0.031077673344339144,
+      "stop_max_yaw_excursion_rad": 0.031077673344339144,
+      "stop_velocity_rms": [
+        0.0002928752101447992,
+        0.0007153740066515819,
+        0.010385616727514844
+      ],
+      "thresholds": {
+        "motion_limits": {
+          "max_abs_roll_pitch_rad": 0.65,
+          "min_body_clearance_m": 0.18,
+          "body_contact_allowed": false
+        },
+        "tracking": {
+          "linear_rmse_mps": 0.15,
+          "yaw_rate_rmse_radps": 0.18,
+          "cross_linear_rms_mps": 0.12,
+          "cross_yaw_rms_radps": 0.18,
+          "minimum_requested_axis_ratio": 0.4
+        },
+        "stand_stop": {
+          "settling_seconds": 3.0,
+          "translation_drift_m": 0.15,
+          "yaw_drift_rad": 0.2,
+          "linear_rms_mps": 0.08,
+          "yaw_rate_rms_radps": 0.1
+        }
+      },
+      "callback_receive_interval_after_activation_s": {
+        "imu": {
+          "p50": 0.0050159620004706085,
+          "p95": 0.008738927077502009,
+          "max": 0.010554815991781652
+        },
+        "joints": {
+          "p50": 0.005027104984037578,
+          "p95": 0.008764948992757126,
+          "max": 0.010477800038643181
+        }
+      },
+      "independent_native_safety": {
+        "start_relative_s": 0.1,
+        "native_samples": 3581,
+        "minimum_support_clearance_m": 0.2756790134353936,
+        "maximum_abs_roll_pitch_rad": 0.11396342367014319,
+        "scope": "Independent all-static collision directly below actual base; never policy terrain input"
+      },
+      "gpu_sample_range": {
+        "MiB": [
+          855,
+          1060
+        ],
+        "percent": [
+          3,
+          21
+        ]
+      },
+      "source_hashes": {
+        "telemetry.jsonl": "c4bfa691055f13e78deaac38e03928a2a2888e1b963f0a3b399ba89e4b4fa89d",
+        "actuator.jsonl": "52dac5a47a11ba4d8b8f38fa180af41e6caa27607bddb87ad9930f1b350833d4",
+        "policy_manifest.json": "1e57d775b7b1090b14fa614b08853014a7961f4663c9df92e9f37a8947ce8dcb",
+        "runtime_manifest.json": "bb89d83affb379ae963010277492b754da72bfe8bcaed9fb0027ff7f30821926",
+        "worker_result.json": "ba4b2c76671891e6ac40376508f12af6f38438d322fc5fc162f31cb22897409d",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/policy/worker.py": "37cc9c163669b9429a1d9bc8a9df8708a2a865d01e21cf3e478b828e1da0c296",
+        "resources_before.json": "ee6a403cc16966878f42d6434884c6c774f696418b16e8ed298bea7206c0e8a3"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080735_forward_resource_idle_actual_sensor_v2_confirm_r1_dbb4",
+      "status": "verified",
+      "checks": {
+        "cpu_actor_single_thread": true,
+        "same_frozen_model": true,
+        "all_five_owned_processes_clean_exit": true,
+        "runtime_and_policy_without_fault": true,
+        "complete_18s_50Hz_policy": true,
+        "complete_200Hz_physics_and_safe_termination": true,
+        "no_native_latched_fault": true,
+        "same_world_geometry_and_physics_bytes": true,
+        "same_frozen_motion_parking_thresholds": true,
+        "same_broker_and_observation_contract": true,
+        "same_native_actuator_binary": true,
+        "same_strict_source_ttl_and_activation": true,
+        "requested_direction_and_speed": true,
+        "steady_tracking_rmse": true,
+        "continuous_teacher_zero_command_stop": true,
+        "frozen_legacy_stop_metrics": true,
+        "additional_max_excursion_stop_check": true,
+        "no_unknown_or_body_contacts": true,
+        "independent_200Hz_body_clearance_and_attitude": true
+      },
+      "runtime_exit_codes": {
+        "worker": 0,
+        "gazebo": 0,
+        "bridge": 0,
+        "capture": 0,
+        "sensor_feedback": 0
+      },
+      "steady_window_s": [
+        5,
+        10
+      ],
+      "steady_command_mean": [
+        0.2999999999999986,
+        0.0,
+        0.0
+      ],
+      "actual_steady_mean": [
+        0.24276267274988544,
+        -0.006329429068802715,
+        0.008512432389846312
+      ],
+      "steady_rmse": [
+        0.05883310080074118,
+        0.044148582967572216,
+        0.031565217382853804
+      ],
+      "position_delta_m": [
+        1.8912255619437666,
+        0.08108391326955022,
+        -0.09564297212183659
+      ],
+      "teacher_stop_window_s": [
+        15,
+        18
+      ],
+      "stop_endpoint_translation_m": 0.0003971003279587857,
+      "stop_max_translation_excursion_m": 0.0003971003279587857,
+      "stop_endpoint_yaw_rad": 0.02483343480561727,
+      "stop_max_yaw_excursion_rad": 0.02483343480561727,
+      "stop_velocity_rms": [
+        8.379823329973024e-05,
+        0.000582294380649453,
+        0.008333600064946193
+      ],
+      "thresholds": {
+        "motion_limits": {
+          "max_abs_roll_pitch_rad": 0.65,
+          "min_body_clearance_m": 0.18,
+          "body_contact_allowed": false
+        },
+        "tracking": {
+          "linear_rmse_mps": 0.15,
+          "yaw_rate_rmse_radps": 0.18,
+          "cross_linear_rms_mps": 0.12,
+          "cross_yaw_rms_radps": 0.18,
+          "minimum_requested_axis_ratio": 0.4
+        },
+        "stand_stop": {
+          "settling_seconds": 3.0,
+          "translation_drift_m": 0.15,
+          "yaw_drift_rad": 0.2,
+          "linear_rms_mps": 0.08,
+          "yaw_rate_rms_radps": 0.1
+        }
+      },
+      "callback_receive_interval_after_activation_s": {
+        "imu": {
+          "p50": 0.005015316506614909,
+          "p95": 0.008792092243675142,
+          "max": 0.009861461003310978
+        },
+        "joints": {
+          "p50": 0.005019162519602105,
+          "p95": 0.008798587706405668,
+          "max": 0.009881408012006432
+        }
+      },
+      "independent_native_safety": {
+        "start_relative_s": 0.1,
+        "native_samples": 3581,
+        "minimum_support_clearance_m": 0.2756790134353936,
+        "maximum_abs_roll_pitch_rad": 0.11396342367014319,
+        "scope": "Independent all-static collision directly below actual base; never policy terrain input"
+      },
+      "gpu_sample_range": {
+        "MiB": [
+          859,
+          1090
+        ],
+        "percent": [
+          3,
+          19
+        ]
+      },
+      "source_hashes": {
+        "telemetry.jsonl": "cb1f7cca53d588ee2834c4d9ad141b75c9b5e25b2ed18d981ac6e62031810aba",
+        "actuator.jsonl": "a3346694fa7a058ab7376cb4a1448348f6d0898cb1be4944cb468d66cc5a66e5",
+        "policy_manifest.json": "1e57d775b7b1090b14fa614b08853014a7961f4663c9df92e9f37a8947ce8dcb",
+        "runtime_manifest.json": "3ee1a9b5eb2368586c6a78523d0d887ab4a7b1c4a268ddc3950755829ce5d2b8",
+        "worker_result.json": "e6736206163a5fce6c2d4169b8154f6d6e473113e7b2c6678b41c48a7dce0b39",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/policy/worker.py": "37cc9c163669b9429a1d9bc8a9df8708a2a865d01e21cf3e478b828e1da0c296",
+        "resources_before.json": "b63106b0af9cffa35e4c96a857183ac2ee9e8cb86edf6d4a7450abdf9fa2f56e"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080850_forward_resource_idle_actual_sensor_v2_confirm2_r1_a843",
+      "status": "verified",
+      "checks": {
+        "cpu_actor_single_thread": true,
+        "same_frozen_model": true,
+        "all_five_owned_processes_clean_exit": true,
+        "runtime_and_policy_without_fault": true,
+        "complete_18s_50Hz_policy": true,
+        "complete_200Hz_physics_and_safe_termination": true,
+        "no_native_latched_fault": true,
+        "same_world_geometry_and_physics_bytes": true,
+        "same_frozen_motion_parking_thresholds": true,
+        "same_broker_and_observation_contract": true,
+        "same_native_actuator_binary": true,
+        "same_strict_source_ttl_and_activation": true,
+        "requested_direction_and_speed": true,
+        "steady_tracking_rmse": true,
+        "continuous_teacher_zero_command_stop": true,
+        "frozen_legacy_stop_metrics": true,
+        "additional_max_excursion_stop_check": true,
+        "no_unknown_or_body_contacts": true,
+        "independent_200Hz_body_clearance_and_attitude": true
+      },
+      "runtime_exit_codes": {
+        "worker": 0,
+        "gazebo": 0,
+        "bridge": 0,
+        "capture": 0,
+        "sensor_feedback": 0
+      },
+      "steady_window_s": [
+        5,
+        10
+      ],
+      "steady_command_mean": [
+        0.2999999999999986,
+        0.0,
+        0.0
+      ],
+      "actual_steady_mean": [
+        0.24571246783717898,
+        -0.00460822863813839,
+        0.0087150385264929
+      ],
+      "steady_rmse": [
+        0.05581422236520931,
+        0.043217234113121096,
+        0.029041117551438712
+      ],
+      "position_delta_m": [
+        1.9165450237050479,
+        0.08617942565975267,
+        -0.09588904136715387
+      ],
+      "teacher_stop_window_s": [
+        15,
+        18
+      ],
+      "stop_endpoint_translation_m": 0.0006732632767853901,
+      "stop_max_translation_excursion_m": 0.0006732632767853901,
+      "stop_endpoint_yaw_rad": 0.02381122759581304,
+      "stop_max_yaw_excursion_rad": 0.02381122759581304,
+      "stop_velocity_rms": [
+        0.00024168227659041432,
+        0.0006165390997884021,
+        0.008006169012584772
+      ],
+      "thresholds": {
+        "motion_limits": {
+          "max_abs_roll_pitch_rad": 0.65,
+          "min_body_clearance_m": 0.18,
+          "body_contact_allowed": false
+        },
+        "tracking": {
+          "linear_rmse_mps": 0.15,
+          "yaw_rate_rmse_radps": 0.18,
+          "cross_linear_rms_mps": 0.12,
+          "cross_yaw_rms_radps": 0.18,
+          "minimum_requested_axis_ratio": 0.4
+        },
+        "stand_stop": {
+          "settling_seconds": 3.0,
+          "translation_drift_m": 0.15,
+          "yaw_drift_rad": 0.2,
+          "linear_rms_mps": 0.08,
+          "yaw_rate_rms_radps": 0.1
+        }
+      },
+      "callback_receive_interval_after_activation_s": {
+        "imu": {
+          "p50": 0.005012023990275338,
+          "p95": 0.008920484723057598,
+          "max": 0.011713649961166084
+        },
+        "joints": {
+          "p50": 0.00502256749314256,
+          "p95": 0.00893737586447969,
+          "max": 0.011644818994682282
+        }
+      },
+      "independent_native_safety": {
+        "start_relative_s": 0.1,
+        "native_samples": 3581,
+        "minimum_support_clearance_m": 0.2756790134353936,
+        "maximum_abs_roll_pitch_rad": 0.11396342367014319,
+        "scope": "Independent all-static collision directly below actual base; never policy terrain input"
+      },
+      "gpu_sample_range": {
+        "MiB": [
+          865,
+          1029
+        ],
+        "percent": [
+          3,
+          21
+        ]
+      },
+      "source_hashes": {
+        "telemetry.jsonl": "3e04b67c8733afb3701a4a8d22d94195c090087dfe66d2e965110bf1104363e5",
+        "actuator.jsonl": "92da6256040cad4595638409cc4f4077deb448832a8550829de162fa0452113d",
+        "policy_manifest.json": "1e57d775b7b1090b14fa614b08853014a7961f4663c9df92e9f37a8947ce8dcb",
+        "runtime_manifest.json": "70ba2b2b5eb7a29511c2da45b19bfd2a929e18842c6db8268e9afd2ff4cef8af",
+        "worker_result.json": "092d722cf3153a0bc44a9d637b8ff64f62607f80a6acf1ce4be74c47766b2a3e",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/policy/worker.py": "37cc9c163669b9429a1d9bc8a9df8708a2a865d01e21cf3e478b828e1da0c296",
+        "resources_before.json": "1186801c407814b885dbfb2a938dd18ae9c9daf65e5538fe0feccc4acc402e40"
+      }
+    }
+  ],
+  "worker_diff_vs_prior_v2_failure": "--- \n+++ \n@@ -88,7 +88,13 @@\n         eligible=[v for v in data['histories'][key]if 0<=stamp_ns-int(v['stamp_ns'])<=25000000 and 0<=now-float(v['received_monotonic_wall'])<=.3]\n         if not eligible:\n             history=data['histories'][key];latest_stamp=int(history[-1]['stamp_ns'])if history else None\n-            raise ValueError('No causal fresh actual '+key+' sample; reference_ns='+str(stamp_ns)+' latest_ns='+str(latest_stamp)+' age_sim_s='+str((stamp_ns-latest_stamp)*1e-9 if latest_stamp is not None else None)+' broker_sequence='+str(data['broker_sequence']))\n+            latest_wall_age=now-float(history[-1]['received_monotonic_wall'])if history else None\n+            atomic_json(run/'sensor_feedback_rejection.json',{'schema_version':1,'reference_ns':stamp_ns,\n+                'read_monotonic_wall':now,'rejected_source':key,'broker_payload':data,\n+                'candidate_ages':[{'stamp_ns':int(v['stamp_ns']),'age_sim_s':(stamp_ns-int(v['stamp_ns']))*1e-9,\n+                    'age_wall_s':now-float(v['received_monotonic_wall'])}for v in history],\n+                'maximum_sim_age_s':.025,'maximum_wall_age_s':.3,'truth_fallback':False})\n+            raise ValueError('No causal fresh actual '+key+' sample; reference_ns='+str(stamp_ns)+' latest_ns='+str(latest_stamp)+' age_sim_s='+str((stamp_ns-latest_stamp)*1e-9 if latest_stamp is not None else None)+' age_wall_s='+str(latest_wall_age)+' broker_sequence='+str(data['broker_sequence']))\n         selected[key]=max(eligible,key=lambda v:int(v['stamp_ns']))\n     imu,joints=selected['imu'],selected['joints'];gyro=np.asarray(imu['gyro_body']);gravity=np.asarray(imu['gravity_body']);q=np.asarray(joints['q']);qd=np.asarray(joints['qd'])\n     if gyro.shape!=(3,)or gravity.shape!=(3,)or q.shape!=(12,)or qd.shape!=(12,)or not all(np.isfinite(v).all()for v in (gyro,gravity,q,qd)):\n",
+  "interrupted_run": {
+    "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080553_forward_resource_idle_actual_sensor_v2_r2_fe74",
+    "status": "runtime_unverified_not_counted",
+    "summary_present": false,
+    "runtime_manifest_present": false,
+    "receipt": {
+      "reason": "Runner session exited with SIGTERM (143) during second-run cleanup; sender not established",
+      "motion_completed": {
+        "completed": true,
+        "fault": null,
+        "samples": 901,
+        "physical_test_completion_time_s": null,
+        "last_sim_time": 18.0,
+        "cpu_forward_ms": {
+          "p50": 0.248489,
+          "p95": 0.29638,
+          "max": 0.569652
+        }
+      },
+      "original_runtime_manifest_missing": true,
+      "observed_orphans": [
+        {
+          "pid": 1723564,
+          "command": "/usr/bin/python3 /opt/ros/jazzy/bin/ros2 run ros_gz_bridge parameter_bridge --ros-args -p config_file:=/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080553_forward_resource_idle_actual_sensor_v2_r2_fe74/sensor_bridge.yaml ",
+          "pgid": 1723564
+        },
+        {
+          "pid": 1723565,
+          "command": "/usr/bin/python3 /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py --run /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080553_forward_resource_idle_actual_sensor_v2_r2_fe74 --topic /demo/teacher/overview --archive-stride 5 ",
+          "pgid": 1723565
+        },
+        {
+          "pid": 1723566,
+          "command": "/usr/bin/python3 /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/sensor_feedback.py --run /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_080553_forward_resource_idle_actual_sensor_v2_r2_fe74 ",
+          "pgid": 1723566
+        }
+      ],
+      "cleanup_scope": "Exact run-owned process groups only",
+      "all_observed_orphans_exited": true,
+      "do_not_count_as_complete_runtime_pass": true
+    },
+    "receipt_sha256": "3ff443560d31703e344d0b07903954ad9e58111387f297ca028d6f85689f2a83",
+    "worker_result_sha256": "5691a5a6cce017e2e4a193641d3eb5c5e844a55a518204c8c5b99b0e77fd5418",
+    "source_and_actor_audit": "Not included in clean source audit; no fabricated complete-runtime pass"
+  },
+  "limits": [
+    "Resources improved contemporaneously with repeated success; GPU utilization is correlated, not proved unique cause",
+    "Old wall-age failed trial retained; strict25ms/300msTTL and190privileged+27controller-known inputs retained",
+    "These trials only forward and stop; no other direction/terrain/complete perception or navigation conclusion"
+  ],
+  "analyzer_sha256": "1e8f3b816abb6cb213659e7c660cf1b80a91e6165abb670dfd8a21cd75969c6c"
+}

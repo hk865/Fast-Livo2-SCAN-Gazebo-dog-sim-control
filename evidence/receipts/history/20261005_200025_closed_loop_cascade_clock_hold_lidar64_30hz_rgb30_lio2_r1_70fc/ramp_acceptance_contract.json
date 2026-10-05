@@ -1,0 +1,93 @@
+{
+  "schema": "prospective_actual_SLAM_SCAN_complete_ramp_contract/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_200025_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lio2_r1_70fc",
+  "criteria": {
+    "native_physics_step_s": 0.005,
+    "maximum_native_gap_s": 0.005001,
+    "nominal_horizontal_ramp_span_m": 12.0,
+    "minimum_COM_distance_outside_each_seam_m": 0.25,
+    "contact_local_xy_margin_m": 0.005,
+    "top_contact_normal_distance_m": 0.015,
+    "minimum_abs_contact_normal_dot": 0.8,
+    "foot_sphere_center_height_tolerance_m": 0.025,
+    "each_foot_entry_ramp_exit_continuous_support_s": 0.1,
+    "exit_landing_any_foot_continuous_support_s": 0.6,
+    "exit_landing_simultaneous_four_foot_support_s": 0.1,
+    "ramp_coverage_bin_m": 1.0,
+    "minimum_bin_actual_support_s": 0.1,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "maximum_COM_lateral_ramp_axis_error_m": 0.45,
+    "minimum_origin_clearance_m": 0.18,
+    "maximum_roll_pitch_rad": 0.65,
+    "maximum_pose_origin_velocity_integral_error_m": 0.0001,
+    "region_dwell_s": 0.6,
+    "region_header_max_gap_s": 0.2,
+    "region_control_radius_m": 0.17,
+    "region_control_height_half_span_m": 0.1,
+    "goal_timeout_sim_s": 90.0,
+    "source_ttl_sim_and_wall_s": 0.3,
+    "gyro_pose_causal_max_gap_s": 0.02,
+    "parking_first_window_s": 5.0,
+    "parking_xy_drift_m": 0.05,
+    "parking_yaw_drift_rad": 0.1,
+    "parking_origin_speed_peak_mps": 0.08,
+    "parking_Euler_yawdot_and_body_wz_peak_radps": 0.1,
+    "body_world_height_gain_ratio_is_acceptance_gate": false
+  },
+  "fixtures": {
+    "ramp_12": {
+      "center_y_m": 2.0,
+      "slope_z_per_world_x": 0.1,
+      "low_x_landing": "floor_1",
+      "high_x_landing": "floor_2",
+      "landing_top_z_m": [
+        0.0,
+        1.2
+      ],
+      "world_x_seams_m": [
+        2.0,
+        14.0
+      ]
+    },
+    "ramp_23": {
+      "center_y_m": 7.0,
+      "slope_z_per_world_x": -0.1,
+      "low_x_landing": "floor_3",
+      "high_x_landing": "floor_2",
+      "landing_top_z_m": [
+        2.4,
+        1.2
+      ],
+      "world_x_seams_m": [
+        2.0,
+        14.0
+      ]
+    }
+  },
+  "segments": [
+    {
+      "ramp_model": "ramp_12",
+      "direction": "up",
+      "world_x_forward_sign": 1,
+      "entry_landing_model": "floor_1",
+      "exit_landing_model": "floor_2",
+      "destination_goal_index": 13
+    },
+    {
+      "ramp_model": "ramp_23",
+      "direction": "up",
+      "world_x_forward_sign": -1,
+      "entry_landing_model": "floor_2",
+      "exit_landing_model": "floor_3",
+      "destination_goal_index": 31
+    }
+  ],
+  "prepared_monotonic_wall": 444788.76141009,
+  "evaluator_sha256": "d7024636a84e59dfcc3d5e94b8cc79cedfb1b6cec85cdac2babad23ab2e17b89",
+  "common_evaluator_sha256": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e",
+  "world_sha256": "6b3a101ee38b01d721a2b5df10e7b71585e26f11816b067cac30bb523f2fb495",
+  "navigation_scope_sha256": "5f6b7abd05a0e8f9ef84538e879fbbcf1d0146f7aa9f1ce26411de0f526368ae",
+  "navigation_ground_truth_used": false,
+  "Gazebo_geometry_used_only_offline": true,
+  "scope": "Complete explicitly selected ramp(s), actual SLAM/IMU/SCAN control, active endpoint hold; no stairs/hardware/general mission claim"
+}

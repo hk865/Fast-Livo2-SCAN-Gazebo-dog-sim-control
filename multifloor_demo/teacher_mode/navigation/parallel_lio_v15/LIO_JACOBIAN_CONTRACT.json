@@ -1,0 +1,23 @@
+{
+  "schema": "lio_jacobian_parallel/v1",
+  "candidate": "parallel_lio_v15",
+  "baseline": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12",
+  "source_env_key": "FASTLIVO_LIO_JACOBIAN_THREADS",
+  "allowed_threads": [
+    1,
+    4
+  ],
+  "default_threads": 4,
+  "parallel_min_rows": 256,
+  "residual_threads": 4,
+  "VIO_parallel": false,
+  "canonical_state_writer_count": 1,
+  "row_operation_order": "original_V12",
+  "matrix_products": "original_Eigen_after_implicit_barrier",
+  "prior_state_dimensions": 19,
+  "reduction_order": "original_index_and_Eigen_products",
+  "new_floating_reduction": false,
+  "simulation_only": true,
+  "real_robot": false,
+  "actual_motion_verified": false
+}

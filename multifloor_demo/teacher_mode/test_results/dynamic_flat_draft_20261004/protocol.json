@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "experiment": "finite_flat_dynamic_stop_resume_v1",
+  "status": "prospective_unverified",
+  "world": "teacher_demo",
+  "allowed_entity": "moving_obstacle",
+  "service": "/world/teacher_demo/set_pose",
+  "box_size_m": [0.5, 0.5, 1.2],
+  "initial_position_world": [7.15, -1.6, 0.6],
+  "blocked_position_world": [7.15, -0.7, 0.6],
+  "motion_speed_mps": 0.25,
+  "request_rate_sim_hz": 10.0,
+  "blocking_duration_sim_s": 10.0,
+  "actual_pose_position_tolerance_m": 0.005,
+  "current_source_timeout_s": 0.3,
+  "trigger": {
+    "waypoint_index": 0,
+    "slam_along_min_m": 0.1,
+    "slam_body_forward_min_mps": 0.03,
+    "accepted_forward_min_mps": 0.08,
+    "continuous_sim_s": 1.0
+  },
+  "navigation_duration_sim_s": 240.0,
+  "goal_timeout_sim_s": 90.0,
+  "parking": {
+    "continuous_sim_s": 1.0,
+    "hold_duration_sim_s": 5.0,
+    "planar_speed_max_mps": 0.03,
+    "yaw_rate_max_radps": 0.05,
+    "xy_drift_max_m": 0.03,
+    "yaw_drift_max_rad": 0.1
+  },
+  "clear_corridor_sim_s": 1.0,
+  "post_resume_progress_min_m": 0.2,
+  "requires_new_scan_after_clear": true,
+  "navigation_ground_truth_used": false,
+  "model_pose_source_scope": "Gazebo actual moving_obstacle pose only, for fixture/evaluation; not connected to NAV",
+  "navigation_localization": "/demo/slam/body_odom and actual registered LiDAR only",
+  "forbidden_outputs": ["robot pose", "joint commands", "cmd_vel", "navigation stop", "navigation safety", "fake pointcloud", "fake SLAM"]
+}

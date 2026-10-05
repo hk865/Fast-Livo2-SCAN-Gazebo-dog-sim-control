@@ -1,0 +1,1801 @@
+<sdf version="1.9">
+  <world name="multifloor_demo">
+    <physics name="physics" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <gravity>0 0 -9.81</gravity>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu" />
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact" />
+    <scene>
+      <ambient>0.65 0.65 0.65 1</ambient>
+      <background>0.14 0.18 0.24 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <light name="sun" type="directional">
+      <pose>0 0 12 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>-0.3 -0.3 -1</direction>
+    </light>
+    <model name="floor_1">
+      <static>true</static>
+      <pose>7.5 3.5 -0.1 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>23 15 0.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>23 15 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.55 0.55 1</ambient>
+            <diffuse>0.55 0.55 0.55 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="floor_2">
+      <static>true</static>
+      <pose>16 4.5 1.1 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>4 9 0.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>4 9 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.6 0.55 1</ambient>
+            <diffuse>0.3 0.6 0.55 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="floor_3">
+      <static>true</static>
+      <pose>-0.5 4.5 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>5 9 0.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>5 9 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.4 0.5 0.8 1</ambient>
+            <diffuse>0.4 0.5 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ramp_12">
+      <static>true</static>
+      <pose>8 2 0.5502481404895005 0 -0.09966865249116204 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>12.099850745345067 2 0.1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>12.099850745345067 2 0.1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.55 0.35 1</ambient>
+            <diffuse>0.55 0.55 0.35 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ramp_23">
+      <static>true</static>
+      <pose>8 7 1.7502481404895005 0 0.09966865249116204 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>12.099850745345067 2 0.1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>12.099850745345067 2 0.1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.45 0.55 0.7 1</ambient>
+            <diffuse>0.45 0.55 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="wall_south">
+      <static>true</static>
+      <pose>7.5 -3.5 2 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>23 0.2 4</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>23 0.2 4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.75 1</ambient>
+            <diffuse>0.75 0.75 0.75 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="wall_north">
+      <static>true</static>
+      <pose>7.5 10.5 2 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>23 0.2 4</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>23 0.2 4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.75 1</ambient>
+            <diffuse>0.75 0.75 0.75 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="wall_-3.5">
+      <static>true</static>
+      <pose>-3.5 3.5 2 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 14 4</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.2 14 4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.72 1</ambient>
+            <diffuse>0.7 0.7 0.72 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="wall_18.5">
+      <static>true</static>
+      <pose>18.5 3.5 2 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 14 4</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.2 14 4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.7 0.72 1</ambient>
+            <diffuse>0.7 0.7 0.72 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_0">
+      <static>true</static>
+      <pose>-2.5 -3.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_1">
+      <static>true</static>
+      <pose>-1.0 -3.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_2">
+      <static>true</static>
+      <pose>0.5 -3.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_3">
+      <static>true</static>
+      <pose>2.0 -3.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_4">
+      <static>true</static>
+      <pose>3.5 -3.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_5">
+      <static>true</static>
+      <pose>5.0 -3.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_6">
+      <static>true</static>
+      <pose>6.5 -3.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_7">
+      <static>true</static>
+      <pose>8.0 -3.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_8">
+      <static>true</static>
+      <pose>9.5 -3.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_9">
+      <static>true</static>
+      <pose>11.0 -3.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_10">
+      <static>true</static>
+      <pose>12.5 -3.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_11">
+      <static>true</static>
+      <pose>14.0 -3.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_12">
+      <static>true</static>
+      <pose>15.5 -3.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_13">
+      <static>true</static>
+      <pose>17.0 -3.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_14">
+      <static>true</static>
+      <pose>-2.5 10.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_15">
+      <static>true</static>
+      <pose>-1.0 10.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_16">
+      <static>true</static>
+      <pose>0.5 10.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_17">
+      <static>true</static>
+      <pose>2.0 10.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_18">
+      <static>true</static>
+      <pose>3.5 10.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_19">
+      <static>true</static>
+      <pose>5.0 10.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_20">
+      <static>true</static>
+      <pose>6.5 10.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_21">
+      <static>true</static>
+      <pose>8.0 10.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_22">
+      <static>true</static>
+      <pose>9.5 10.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_23">
+      <static>true</static>
+      <pose>11.0 10.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_24">
+      <static>true</static>
+      <pose>12.5 10.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_25">
+      <static>true</static>
+      <pose>14.0 10.32 1.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_26">
+      <static>true</static>
+      <pose>15.5 10.32 2.3 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="panel_27">
+      <static>true</static>
+      <pose>17.0 10.32 1.0 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.65 0.15 0.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_0">
+      <static>true</static>
+      <pose>-2 -1 0.5 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_1">
+      <static>true</static>
+      <pose>4 -2 0.45 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.55 0.8 1</ambient>
+            <diffuse>0.15 0.55 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_2">
+      <static>true</static>
+      <pose>8 -2 0.65 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.65 0.12 1</ambient>
+            <diffuse>0.9 0.65 0.12 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_3">
+      <static>true</static>
+      <pose>12 -2 0.5 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.75 0.25 1</ambient>
+            <diffuse>0.3 0.75 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_4">
+      <static>true</static>
+      <pose>17.2 4.5 1.7 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.7 0.25 0.7 1</ambient>
+            <diffuse>0.7 0.25 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="landmark_5">
+      <static>true</static>
+      <pose>-2 5 2.9 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.15 1</ambient>
+            <diffuse>0.8 0.2 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="moving_obstacle">
+      <static>true</static>
+      <pose>1 4 0.6 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>50</mass>
+          <inertia>
+            <ixx>2</ixx>
+            <iyy>2</iyy>
+            <izz>2</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1.2</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 1.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.9 0.1 0.1 1</ambient>
+            <diffuse>0.9 0.1 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="teacher_low_step">
+      <static>true</static>
+      <pose>8 -.7 0.05 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>2 1.4 0.1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+  </world>
+</sdf>

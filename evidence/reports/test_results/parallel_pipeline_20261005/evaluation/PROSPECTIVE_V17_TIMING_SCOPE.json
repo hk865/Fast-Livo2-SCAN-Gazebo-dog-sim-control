@@ -1,0 +1,52 @@
+{
+  "schema": "prospective_v17_ingress_timing_semantics/v1",
+  "created_UTC": "2026-10-05T15:04:32.893154+00:00",
+  "original_plan_sha256": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+  "numeric_control_gate_changes": false,
+  "candidate_source_sha256": "39195ef48be4a72a01d988aba8c75d2b3fadb8c71c296d4cb8b6a9999427f727",
+  "active_pipeline_kind300_overrides": {
+    "8": {
+      "label": "main owner queue commit batch",
+      "same_interval_as_V12_spin_some": false
+    },
+    "9": {
+      "label": "main owner cloud commit excluding preprocessing",
+      "same_interval_as_V12_cloud_callback": false
+    },
+    "11": {
+      "label": "main owner image commit excluding decoding",
+      "same_interval_as_V12_image_callback": false
+    },
+    "12": {
+      "status": "N/A_ACTUAL_PREPROCESS_MOVED",
+      "reason": "Scope remains around deferred-error check/empty active branch; it does not observe worker Preprocess."
+    }
+  },
+  "other_kind300_boundary_math": "Existing scope unchanged; process CPU remains all concurrently executing process threads, not exclusive function CPU. Nested intervals must not be added.",
+  "ingress_pipeline_csv": {
+    "receipt_wall": "Original receiver callback entry steady clock, preserved in raw diagnostic payload.",
+    "decoded_wall": "Receiver completed attempted decode, exception captured without changing owner header guards.",
+    "pop_wall": "Owner time directly after queue pop (not producer enqueue).",
+    "commit_end_wall": "Owner completed original callback/timer.",
+    "receive_tid": "Actual receiver OS TID",
+    "owner_tid": "Actual owner OS TID",
+    "decode_cpu_begin_ns": "CLOCK_THREAD_CPUTIME_ID before worker decode",
+    "decode_cpu_end_ns": "CLOCK_THREAD_CPUTIME_ID after worker attempted decode",
+    "pending_after_pop_and_bytes": "Same-lock pop snapshot",
+    "source_ns": "Original integer message header, not refreshed owner clock"
+  },
+  "identified_spans": {
+    "receipt_to_decoded": "Receive + decode wrapper wall span; thread CPU delta separately available.",
+    "decoded_to_pop": "Includes push overhead and FIFO residence; exact enqueue time not recorded, so not pure queue time.",
+    "pop_to_commit_end": "Owner callback/timer span plus metadata wrapper; owner thread CPU not individually recorded in CSV.",
+    "receipt_to_Process2_begin": "Original complete receive-to-estimator path by original raw diagnostics, not assumed pure communication."
+  },
+  "limits": [
+    "No DDS sender transmit timestamps: cannot identify complete communication transit",
+    "Original QoS backlog is outside ready FIFO bounds",
+    "Failed commit has no normal completed row; delivered/committed/runtime failure must reject",
+    "No performance pass from zero/empty legacy preprocess timing",
+    "Disabled pipeline remains original kind300 semantics"
+  ],
+  "historical_data_unchanged": true
+}

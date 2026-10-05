@@ -1,0 +1,22 @@
+{
+  "test_kind": "ROS transport with synthetic fixtures; not SLAM accuracy",
+  "checks": {
+    "body_transport": true,
+    "lidar_transport": true,
+    "same_sensor_stamp": true,
+    "precise_lidar_offset": true,
+    "valid_body_velocity": true,
+    "reject_duplicate_timestamp": true,
+    "save_service_success": true,
+    "current_run_rgb_map": true,
+    "binary_size_and_real_colors": true,
+    "pcd_saved": true,
+    "no_reference_map_or_ground_truth": true,
+    "saved_sensor_health_evidence": true,
+    "message_staleness_detected": true,
+    "replay_cannot_refresh_camera_health": true,
+    "stale_map_save_rejected": true,
+    "last_good_pcd_preserved_after_rejected_save": true
+  },
+  "passed": true
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "actual_ramp_registration_slam_producer_freeze/v1",
+  "status": "offline_ready_actual_unverified",
+  "created_at_UTC": "2026-10-04T07:05:57.976784+00:00",
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/producer_profile.py": "266a13bad0f85ab3fbd51107adde736a6eee82d484219d32504b22ebbdb7e491",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/run_test.py": "915f743d789a3ce959df4bb192fc95f2821235a4c9b696587b4f52365e3241e6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/slam.launch.py": "1919ee7979ffc6729871923e95131a888eefc49d75664f529ffdfc706bfcbc12",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/sensor_relay.py": "765641bac4e90f4e36624fe750848935cb3336730dcb63ac86c4c246178b58f2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/ramp_registration/freeze.json": "94eb94fb2865df01aa2d7d88bc8dd0cee24f46d056ab55d9adbf28c51290029c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/ramp_registration_zero90.json": "e081cfb20bef9e61b41ecb62b367872ed96d37a6eff62e9324092ea002e49cca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/terrain_targets/lower12.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/slam/fastlivo.yaml": "6019b86bc6e3abab57dce3426fa71ac8c534fcd1c4cb1867e6b7983fa39e4cca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/camera_mode/slam/camera.yaml": "9def8d2c48b852ddc4e26055c6d23c544b095120f625bd1d13e68a53a564bbff",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/odom_adapter.py": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/self_echo_filter.py": "e613b634b7cb69a6bac25be97fcdb869f239af6b733d1064250297a56805b962",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/geometry.py": "7c293432e333f6e046390a399b49733e921f272f5f2bd988c9ab83de2cc2d3c5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/map_archive.py": "6bc9cc8735961735bc2a33dbadfe825adcf10525432ba776bcb383fbf5c142d9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/ros2_ws/install/fast_livo2_core/lib/libfast_livo2_core.so": "a007493e4a2331b7a601458e901d269a559a9ffcf5519432834032a5251478bb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/ros2_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping": "ea95f2b01401b0c530d329e4e4b6377ead9820ba94782d4ea0aac5575f23c323"
+  },
+  "registration_core_freeze_sha256": "94eb94fb2865df01aa2d7d88bc8dd0cee24f46d056ab55d9adbf28c51290029c",
+  "scope": {
+    "simulation_initialization_only": [
+      3.2,
+      2,
+      0.52,
+      0
+    ],
+    "command": [
+      0,
+      0,
+      0
+    ],
+    "duration_s": 90,
+    "camera": "vehicle80deg_640x480_10Hz",
+    "transport": "shm_64m",
+    "Actor_provider": "explicit_privileged_lower12",
+    "navigation_started": false,
+    "navigation_eligibility": false,
+    "geometry_input": "actual clouds/SLAM/IMU only"
+  },
+  "offline": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/ramp_registration_producer_prepare_20261004/checks.json",
+    "sha256": "565b70bf604d28563376631cc39092129cdb58628d84d5fde0d88d20b295523e",
+    "checks": 36,
+    "all_passed": true,
+    "starts_ROS": false,
+    "starts_simulation": false
+  },
+  "preservation": {
+    "registration_core_6_sources_unchanged": true,
+    "old_scoped_profile_unchanged": true,
+    "old_camera_assets_unchanged": true
+  },
+  "implementation": "Separate producer helper; original SLAM-only launch reads its config hash contract. No navigation scope/request/command is generated."
+}

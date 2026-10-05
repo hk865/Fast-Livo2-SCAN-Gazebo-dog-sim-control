@@ -1,0 +1,30 @@
+{
+  "scope": "Excluded strict slope component; only test walking yaw cap .08, actual initial SE3 + bounded .15 truth evaluation, feet/body/raw envelopes, real SCAN/NAV; dynamic disabled. No physical run started yet.",
+  "sha256": {
+    "run_slope_strength.py": "3b38bc7335c685b8a82b956718964d26baee1299b205490a0eb665d13082c70e",
+    "strength_stack.launch.py": "cfc87437e205f6519f84393a440c40de044965256fffe998a4e260592f2ad312",
+    "slope_strength.launch.py": "9fde604a0413db076ff54b2dce83e8709abe29a4bb794fcc9485f19a0a84b3a5",
+    "controller_strength_wrapper.py": "3c824bdce988ad3e0b8b439a9376cc3cf18e088ee213727b4049e4d5542b7be3",
+    "run_slope_strength.sh": "b87d8a707096993d70e0994324cb40cb634f58d82b9afcd3c493423b847ea024",
+    "probe_slope_strength.py": "f70d11f90eaa3fc1db0b2576c0f1d86749dea3d3aabb16f98812cd2284a5fb08",
+    "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011"
+  },
+  "spawn_world": [
+    4,
+    2,
+    0.5
+  ],
+  "relative_world_offset": [
+    3,
+    0,
+    0.3
+  ],
+  "nav_arrival_m": 0.22,
+  "arrival_stable_s": 0.4,
+  "joint_m": 0.3,
+  "NAV_timeout_sim_s": 90,
+  "cleanup_bound_sim_s": 105,
+  "test_only_walk_yaw_cap": 0.08,
+  "adapter": true,
+  "source_production_unchanged": true
+}

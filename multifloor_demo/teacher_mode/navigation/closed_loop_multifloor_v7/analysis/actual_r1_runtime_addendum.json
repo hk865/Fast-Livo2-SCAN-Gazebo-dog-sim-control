@@ -1,0 +1,75 @@
+{
+  "schema": "teacher_v7_runtime_health_addendum/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "first_original_bridge_failure": {
+    "sim_time": 133.13,
+    "monotonic_wall": 437206.194508883,
+    "slam_stamp_ns": 133099999999,
+    "reason": "Measured SLAM body pose left finite route fence; restart after review",
+    "registered_route_fence": {
+      "inside": false,
+      "segment": 16,
+      "fraction": 0.25071174715099637,
+      "nearest_camera_init_xyz": [
+        14.911260210934657,
+        2.542266438491282,
+        1.20575359602667
+      ],
+      "horizontal_error_m": 0.005145478865704646,
+      "height_error_m": 0.3034826113022563,
+      "horizontal_radius_m": 0.45,
+      "maximum_height_error_m": 0.3,
+      "navigation_ground_truth_used": false
+    },
+    "ages": {
+      "clock_wall_s": 1.2639793567359447e-06,
+      "pose_wall_s": 0.004962661012541503,
+      "command_wall_s": 0.011634918977506459,
+      "pose_sim_s": 0.030000001,
+      "command_sim_s": 0.015
+    },
+    "controller_source": {
+      "schema": "actual_SLAM_SCAN_cascade_command_source/v1",
+      "cascade_sequence": 2504,
+      "source_pose_stamp_ns": 133000000000,
+      "paired_imu_stamp_ns": 133000000000,
+      "control_stamp_ns": 133110000000,
+      "command_after_slew": [
+        0.2680835239484985,
+        0.01994095493293801,
+        -0.028827750973604634
+      ],
+      "navigation_ground_truth_used": false,
+      "source_pose_received_wall_ns": 437206098587603,
+      "source_imu_received_wall_ns": 437206063116065,
+      "source_pose_received_monotonic_wall": 437206.098587603,
+      "paired_imu_received_monotonic_wall": 437206.063116065,
+      "request_id": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf_registered_scene_route",
+      "trajectory_id": 42,
+      "waypoint_index": 16,
+      "goal_sha256": "b21f25132067a07ce248082744166b5f5df64eb88405016c18de5337d55e7925",
+      "path_sha256": "5ea29820508d2a11fb26f2a1bfe78c31c9242d3c2e3559cf91482ce3ea8d9ca7",
+      "cascade_mode": "drive",
+      "parking_hold_declared_pose_stamp_ns": null
+    }
+  },
+  "raw_IMU_callback_wall_gaps_over100ms": [
+    {
+      "previous_source_sim_s": 0.01,
+      "source_sim_s": 0.015000000000000001,
+      "callback_wall_gap_s": 0.45706657198024914
+    },
+    {
+      "previous_source_sim_s": 0.015000000000000001,
+      "source_sim_s": 0.02,
+      "callback_wall_gap_s": 0.5854901970014907
+    }
+  ],
+  "raw_IMU_callback_wall_gap_after3_7s_max_s": 0.08951626997441053,
+  "raw_IMU_callback_wall_gaps_after3_7s_over300ms": 0,
+  "interpretation": "Both raw IMU wall gaps exceeding300ms occurred at sim0.010-0.020s startup before accepted initialization; raw header spacings remain exactly5ms. During detail window logged pose/cloud/controller source and stage latencies remained below300ms. No isolated logging CPU-cost claim without matching disabled-logger run.",
+  "common_receipt": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/summary_closed_loop_cascade_independent.diagnostic_prefix_r1.json",
+  "common_receipt_sha256": "59bbc5e30560549da8bb8e2b29276473a9f10cc612bb365c0a9ccb4b380f891e",
+  "navigation_failure_preserved": true,
+  "full600s_and32_regions_passed": false
+}

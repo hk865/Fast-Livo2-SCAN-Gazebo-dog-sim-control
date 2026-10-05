@@ -1,0 +1,753 @@
+{
+  "schema": "teacher_closed_loop_runtime_plan/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_192802_closed_loop_cascade_lidar64_30hz_rgb30_r1_cb5c",
+  "simulation_only": true,
+  "real_robot": false,
+  "allowed": true,
+  "navigation_ground_truth_used": false,
+  "actor_privileged_dimensions": 232,
+  "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/profiles/l64_r30_c30_210.json",
+  "profile_sha256": "1e9e57709e0e8f3acac172903b09cb653c4b75e0a1567986676c799a95c8a8e7",
+  "profile": {
+    "schema_version": 1,
+    "experiment": "teacher_actual_SLAM_SCAN_lidar_sampling_l64_r30_c30_v8",
+    "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+    "distance_m": 13.6,
+    "max_speed_mps": 0.2,
+    "max_yaw_rate_radps": 0.6,
+    "arrival_radius_m": 0.22,
+    "arrival_height_half_span_m": 0.1,
+    "arrival_control_radius_m": 0.17,
+    "dwell_sim_s": 0.6,
+    "goal_timeout_sim_s": 90.0,
+    "pose_cloud_timeout_s": 0.3,
+    "sensor_warmup_sim_s": 2.0,
+    "interface_version": "navigation_v4_latest_clock_measured_transition",
+    "warmup_history": {
+      "imu": {
+        "min_samples": 600,
+        "min_span_sim_s": 2.9
+      },
+      "body_odom": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "cloud": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "raw_lidar": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "image": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      },
+      "camera_info": {
+        "min_samples": 10,
+        "min_span_sim_s": 2.0
+      }
+    },
+    "request_startup_timeout_sim_s": 90.0,
+    "request_startup_timeout_wall_s": 600.0,
+    "teacher_transition": {
+      "stop_window_sim_s": 0.3,
+      "stop_min_pose_samples": 3,
+      "stop_pose_gap_max_s": 0.2,
+      "gyro_pose_pair_max_s": 0.15,
+      "stop_planar_speed_mps": 0.03,
+      "stop_slam_yaw_rate_radps": 0.05,
+      "stop_body_gyro_radps": 0.05,
+      "turn_complete_rad": 0.1,
+      "drive_heading_max_rad": 0.2
+    },
+    "recovery_fresh_pose_samples": 2,
+    "recovery_min_pose_span_sim_s": 0.1,
+    "fence": {
+      "along_min_m": -0.45,
+      "along_max_m": 14.049999999999999,
+      "lateral_abs_m": 0.45,
+      "height_abs_m": 1.4
+    },
+    "navigation_ground_truth_used": false,
+    "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+    "excluded": [
+      "real_robot",
+      "true_stairs",
+      "full_46_region_mission",
+      "unbounded_dynamic_mission"
+    ],
+    "max_lateral_speed_mps": 0.2,
+    "arrival_stop_policy": "after_measured_dwell",
+    "clear_guard_gap_max_sim_s": 0.3,
+    "pid": {
+      "position_kp": 0.6,
+      "position_ki": 0.08,
+      "position_kd": 0.12,
+      "yaw_kp": 1.1,
+      "yaw_ki": 0.04,
+      "yaw_kd": 0.15,
+      "position_integral_limit": 0.4,
+      "yaw_integral_limit": 0.3,
+      "derivative_filter_tau_s": 0.2,
+      "header_gap_max_s": 0.3,
+      "slew_acceleration": [
+        0.3,
+        0.3,
+        0.25
+      ],
+      "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+      "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+    },
+    "selector": "multifloor12_23_segmented_turn06",
+    "route_height_delta_m": 2.4,
+    "return_to_origin": false,
+    "expected_asset": {
+      "terrain": "ramp_up",
+      "spawn": [
+        1.2,
+        2,
+        0.4,
+        0
+      ]
+    },
+    "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ],
+    "duration_s": 210,
+    "overview_pose": [
+      8,
+      -1,
+      2.5,
+      0,
+      0.45,
+      1.5707963267948966
+    ],
+    "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+    "controller_kind": "teacher",
+    "protocol_case_id": "ramp12_up_full",
+    "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+    "controller_selector": "lidar_sampling_v8",
+    "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v8",
+    "cascade": {
+      "desired_speed": 0.2,
+      "command_limits": [
+        0.6,
+        0.2,
+        0.6
+      ],
+      "external_heading_gate": true,
+      "base_com_offset": [
+        0.05523092034548942,
+        -0.001869001919385796,
+        0.006095299184261034
+      ],
+      "maximum_gyro_pair_gap_s": 0.02,
+      "goal_z_tolerance_m": 0.1,
+      "gains": {
+        "cross_kp": 0.8,
+        "cross_kd": 0.2,
+        "yaw_kp": 1.3,
+        "yaw_kd": 0.15,
+        "velocity_kp_x": 0.6,
+        "velocity_ki_x": 0.5,
+        "velocity_kp_y": 0.4,
+        "velocity_ki_y": 0.3,
+        "rate_kp": 0.3,
+        "rate_ki": 0.2
+      },
+      "command_slew_per_s": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "feedback_expected_hz": 30,
+      "feedback_ttl_sim_and_wall_s": 0.3,
+      "navigation_ground_truth_used": false,
+      "controller_source_file": "cascade_command_source.json",
+      "actual_navigation_verified": false
+    },
+    "pid_parent_profile": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+      "unchanged_fields": [
+        "warmup_history",
+        "teacher_transition",
+        "pose_cloud_timeout_s",
+        "pid",
+        "expected_asset",
+        "spawn",
+        "route_height_delta_m",
+        "terrain_target_manifest",
+        "arrival_radius_m",
+        "arrival_height_half_span_m",
+        "arrival_control_radius_m",
+        "dwell_sim_s"
+      ],
+      "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+    },
+    "registered_route_fence": {
+      "horizontal_radius_m": 0.45,
+      "height_error_m": 0.3,
+      "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+    },
+    "scene_initial_support_z": 0.0,
+    "scene_xy_anchor_uncertainty_m": 0.15,
+    "prospective_change": "LiDAR sampling64x480 at30Hz, vehicle camera30Hz; independent source-rate metadata/initial stationary pair capacity adapted; estimator geometry/weights/control laws and all gates unchanged; CPU Teacher",
+    "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+    "route_world_points": [
+      {
+        "goal_id": "lower_x02",
+        "xyz": [
+          2,
+          2,
+          0.0
+        ]
+      },
+      {
+        "goal_id": "lower_x03",
+        "xyz": [
+          3,
+          2,
+          0.1
+        ]
+      },
+      {
+        "goal_id": "lower_x04",
+        "xyz": [
+          4,
+          2,
+          0.2
+        ]
+      },
+      {
+        "goal_id": "lower_x05",
+        "xyz": [
+          5,
+          2,
+          0.30000000000000004
+        ]
+      },
+      {
+        "goal_id": "lower_x06",
+        "xyz": [
+          6,
+          2,
+          0.4
+        ]
+      },
+      {
+        "goal_id": "lower_x07",
+        "xyz": [
+          7,
+          2,
+          0.5
+        ]
+      },
+      {
+        "goal_id": "lower_x08",
+        "xyz": [
+          8,
+          2,
+          0.6000000000000001
+        ]
+      },
+      {
+        "goal_id": "lower_x09",
+        "xyz": [
+          9,
+          2,
+          0.7000000000000001
+        ]
+      },
+      {
+        "goal_id": "lower_x10",
+        "xyz": [
+          10,
+          2,
+          0.8
+        ]
+      },
+      {
+        "goal_id": "lower_x11",
+        "xyz": [
+          11,
+          2,
+          0.9
+        ]
+      },
+      {
+        "goal_id": "lower_x12",
+        "xyz": [
+          12,
+          2,
+          1.0
+        ]
+      },
+      {
+        "goal_id": "lower_x13",
+        "xyz": [
+          13,
+          2,
+          1.1
+        ]
+      },
+      {
+        "goal_id": "lower_x14",
+        "xyz": [
+          14,
+          2,
+          1.2000000000000002
+        ]
+      },
+      {
+        "goal_id": "lower_exit",
+        "xyz": [
+          14.8,
+          2,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_x",
+        "xyz": [
+          16,
+          2,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_mid",
+        "xyz": [
+          16,
+          4.5,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "connector_y",
+        "xyz": [
+          16,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_entry",
+        "xyz": [
+          14.8,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_x14",
+        "xyz": [
+          14,
+          7,
+          1.2
+        ]
+      },
+      {
+        "goal_id": "upper_x13",
+        "xyz": [
+          13,
+          7,
+          1.3
+        ]
+      },
+      {
+        "goal_id": "upper_x12",
+        "xyz": [
+          12,
+          7,
+          1.4
+        ]
+      },
+      {
+        "goal_id": "upper_x11",
+        "xyz": [
+          11,
+          7,
+          1.5
+        ]
+      },
+      {
+        "goal_id": "upper_x10",
+        "xyz": [
+          10,
+          7,
+          1.6
+        ]
+      },
+      {
+        "goal_id": "upper_x09",
+        "xyz": [
+          9,
+          7,
+          1.7
+        ]
+      },
+      {
+        "goal_id": "upper_x08",
+        "xyz": [
+          8,
+          7,
+          1.8
+        ]
+      },
+      {
+        "goal_id": "upper_x07",
+        "xyz": [
+          7,
+          7,
+          1.9
+        ]
+      },
+      {
+        "goal_id": "upper_x06",
+        "xyz": [
+          6,
+          7,
+          2.0
+        ]
+      },
+      {
+        "goal_id": "upper_x05",
+        "xyz": [
+          5,
+          7,
+          2.1
+        ]
+      },
+      {
+        "goal_id": "upper_x04",
+        "xyz": [
+          4,
+          7,
+          2.2
+        ]
+      },
+      {
+        "goal_id": "upper_x03",
+        "xyz": [
+          3,
+          7,
+          2.3
+        ]
+      },
+      {
+        "goal_id": "upper_x02",
+        "xyz": [
+          2,
+          7,
+          2.4000000000000004
+        ]
+      },
+      {
+        "goal_id": "floor3_stop",
+        "xyz": [
+          1.2,
+          7,
+          2.4
+        ]
+      }
+    ],
+    "ramp_segments": [
+      {
+        "model": "ramp_12",
+        "direction": "up",
+        "destination_goal_index": 13
+      },
+      {
+        "model": "ramp_23",
+        "direction": "up",
+        "destination_goal_index": 31
+      }
+    ],
+    "terrain_layer_switch": {
+      "initial_manifest": "tests/terrain_targets/lower12.json",
+      "alternate_manifest": "tests/terrain_targets/upper23.json",
+      "completed_goal_id": "connector_mid",
+      "alternate_include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+      "ray_equality_tolerance_m": 1e-09
+    },
+    "slam_imu_online_estimation": {
+      "gravity_est_en": true,
+      "ba_bg_est_en": true
+    },
+    "slam_visual_measurement_covariance": 1000,
+    "diagnostic_scope": {
+      "baseline_version": "closed_loop_multifloor_v7",
+      "route_controller_gates_unchanged": true,
+      "finite_horizon_s": 210,
+      "detail_window_sim_s": [
+        115,
+        165
+      ],
+      "navigation_outcome_is_not_full_route_pass": true,
+      "purpose": "sensor density/rate actual trial, no plane algorithm correction"
+    },
+    "sensor_sampling": {
+      "vertical_lines": 64,
+      "horizontal_samples": 480,
+      "lidar_hz": 30,
+      "camera_hz": 30,
+      "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+      "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+      "control_wall_tick_s": 0.05
+    }
+  },
+  "required_owned_roles": [
+    "worker",
+    "bridge",
+    "capture",
+    "navigation_stack",
+    "gazebo"
+  ],
+  "expected_launch_children": 11,
+  "scope_runtime": {
+    "required_owned_roles": [
+      "worker",
+      "bridge",
+      "capture",
+      "navigation_stack",
+      "gazebo"
+    ],
+    "expected_launch_children": 11
+  },
+  "duration_s": 210.0,
+  "real_time_factor": 1.0,
+  "wall_budget_s": 720.0,
+  "ramp_contract_sha256": "bdcf49b419ff65d1664ad7e1c9c0461ca93e25444dd042ea430f80342970d614",
+  "ros_domain": 88,
+  "actor_python": "/home/hyh001/isaacsim/kit/python/bin/python3",
+  "system_python": "/usr/bin/python3",
+  "actor_device": "cpu",
+  "actor_threads": 1,
+  "physics_step_s": 0.005,
+  "Actor_hz": 50,
+  "native_PD_hz": 200,
+  "exclusive_writer": "teacher_sim::TeacherActuator",
+  "checkpoint_path": "/home/hyh001/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt",
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "native_plugin_sha256": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+  "source_manifest_sha256": "6ef6dfecdc406c12d6b7d023603022120dffb761658ead56d162aaf7cb3df9ef",
+  "scope_sha256": "261029a127f7f5026070313dd374f1ad016aff25f97b71b032eafccc64c81616",
+  "world_sha256": "6b3a101ee38b01d721a2b5df10e7b71585e26f11816b067cac30bb523f2fb495",
+  "cloud_transport_manifest_sha256": "763af879510aefe89a40ff7c5817a01db25a53f1889bef9d302b80bfc4f52c10",
+  "runtime_started": true,
+  "renderer": "hardware/Ogre2",
+  "compatibility_motion_gate_applies": false,
+  "slam_binary_contract": {
+    "executable": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+      "sha256": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997"
+    },
+    "core": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+      "sha256": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107"
+    }
+  },
+  "navigation_stack_diagnostic_environment": {
+    "FASTLIVO_DIAGNOSTIC_DIR": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_192802_closed_loop_cascade_lidar64_30hz_rgb30_r1_cb5c/fastlivo_diagnostics",
+    "FASTLIVO_DIAGNOSTIC_BEGIN": "115",
+    "FASTLIVO_DIAGNOSTIC_END": "165"
+  },
+  "diagnostic_prefix_only": true,
+  "runtime_commands": {
+    "worker": [
+      "/home/hyh001/isaacsim/kit/python/bin/python3",
+      "-B",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/worker.py",
+      "--run",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_192802_closed_loop_cascade_lidar64_30hz_rgb30_r1_cb5c"
+    ],
+    "navigation_stack": [
+      "ros2",
+      "launch",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v8/stack.launch.py",
+      "run_dir:=/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_192802_closed_loop_cascade_lidar64_30hz_rgb30_r1_cb5c"
+    ]
+  },
+  "limitations": "Plan is launch provenance only, never a route/SLAM/Sim2Sim pass",
+  "error": null,
+  "owned_processes": [
+    {
+      "role": "worker",
+      "pid": 4086512,
+      "state": "R",
+      "ppid": 4086371,
+      "pgid": 4086512,
+      "session": 4086512,
+      "start_ticks": 44284672,
+      "returncode": 0
+    },
+    {
+      "role": "bridge",
+      "pid": 4086609,
+      "state": "R",
+      "ppid": 4086371,
+      "pgid": 4086609,
+      "session": 4086609,
+      "start_ticks": 44284767,
+      "returncode": 0
+    },
+    {
+      "role": "capture",
+      "pid": 4086610,
+      "state": "R",
+      "ppid": 4086371,
+      "pgid": 4086610,
+      "session": 4086610,
+      "start_ticks": 44284767,
+      "returncode": 0
+    },
+    {
+      "role": "navigation_stack",
+      "pid": 4086611,
+      "state": "R",
+      "ppid": 4086371,
+      "pgid": 4086611,
+      "session": 4086611,
+      "start_ticks": 44284767,
+      "returncode": 0
+    },
+    {
+      "role": "gazebo",
+      "pid": 4086817,
+      "state": "R",
+      "ppid": 4086371,
+      "pgid": 4086817,
+      "session": 4086817,
+      "start_ticks": 44284820,
+      "returncode": 0
+    }
+  ],
+  "cleanup": {
+    "navigation_stack": {
+      "started": true,
+      "sent_signals": [
+        2
+      ],
+      "returncode": 0,
+      "remaining_owned_group_members": []
+    },
+    "capture": {
+      "started": true,
+      "sent_signals": [
+        2
+      ],
+      "returncode": 0,
+      "remaining_owned_group_members": []
+    },
+    "bridge": {
+      "started": true,
+      "sent_signals": [
+        2
+      ],
+      "returncode": 0,
+      "remaining_owned_group_members": []
+    },
+    "gazebo": {
+      "started": true,
+      "sent_signals": [],
+      "returncode": 0,
+      "remaining_owned_group_members": []
+    },
+    "worker": {
+      "started": true,
+      "sent_signals": [],
+      "returncode": 0,
+      "remaining_owned_group_members": []
+    }
+  },
+  "slam_loaded_binary_verified": true,
+  "slam_loaded_binary_receipt_sha256": "f481853d3064a0b6e6b55a82e9de90748a0189fcea07c88eb1d48ee4a675e631",
+  "required_owned_roles_complete": true,
+  "all_owned_and_children_clean": true,
+  "launch_child_exit_evidence": {
+    "expected_children": 11,
+    "started_children": 11,
+    "children": [
+      {
+        "pid": 4086668,
+        "action": "python3-1",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086669,
+        "action": "python3-2",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086670,
+        "action": "parameter_blackboard-3",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086671,
+        "action": "fastlivo_mapping-4",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086672,
+        "action": "python3-5",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086673,
+        "action": "python3-6",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086674,
+        "action": "scan_planner_node-7",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086679,
+        "action": "python3-8",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086680,
+        "action": "python3-9",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086681,
+        "action": "python3-10",
+        "clean_exit": true
+      },
+      {
+        "pid": 4086682,
+        "action": "python3-11",
+        "clean_exit": true
+      }
+    ],
+    "died": [],
+    "all_expected_children_clean": true
+  },
+  "gazebo_partition": "teacher_closed_loop_20261005_192802_closed_loop_cascade_lidar64_30hz_rgb30_r1_cb5c",
+  "plugin_sha256": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+  "runtime_plan_sha256": "e17cd0563392d2a8e97fb628371edfd7e2c45a2b5c6dbaf9d59459e6565c2f48",
+  "gazebo_natural_exit_grace_expired": false,
+  "actual_sensors_ready": true,
+  "runtime_status": "completed_requires_independent_navigation_evaluation",
+  "training_processes_signaled": false,
+  "actor_started": true,
+  "navigation_controller_kind": "teacher",
+  "high_level_source": "Actual SLAM body pose and causal IMU gyro, actual registered cloud and SCAN checked path",
+  "truth_navigation_used": false,
+  "actual_feedback_hz": "Measured from unique source headers; nominal camera-driven source 30Hz; unchanged20Hz wall ticker is not new feedback"
+}

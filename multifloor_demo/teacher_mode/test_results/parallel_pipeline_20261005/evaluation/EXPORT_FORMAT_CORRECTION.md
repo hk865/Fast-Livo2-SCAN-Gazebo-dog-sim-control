@@ -1,0 +1,1 @@
+第一轮导出到 `real_lio_rows_v12/` 的 native binary magic 为 17 字节，却在文字格式中注明 16 字节。它未交付用于计算，保留为导出错误记录；其中 NPZ 数据不受此格式问题影响。后续正式 fixture 是 `real_lio_rows_v12_format16/`，magic 精确为 16 字节 `FLIVOJACROW0001\0`。两轮产物都保留，禁止读取器静默猜测两种格式。

@@ -1,0 +1,47 @@
+{
+  "schema": "manual_curve_campaign_pixel_QA/v1",
+  "status": "passed",
+  "inspected_actual_pixels": true,
+  "files": {
+    "actual_xy_all14.png": {
+      "sha256": "39896d2f5c4b7d0fc7b5a6a21473b6608983f640558ace48e0cf2bc9bfad2c52",
+      "size_pixels": [
+        2380,
+        2210
+      ],
+      "mode": "RGBA"
+    },
+    "S_frequency_errors_velocity.png": {
+      "sha256": "b60182a2e7b620d22890cbcc08365ffbea7da2ae2691beef99cc524e17b67c4d",
+      "size_pixels": [
+        2380,
+        1360
+      ],
+      "mode": "RGBA"
+    },
+    "actual_Euler_rate_and_PI.png": {
+      "sha256": "21c253839e53aa5db2ec1d8c68c0b0fb210af51f4cbadcbf9a66043c26bd53f0",
+      "size_pixels": [
+        2380,
+        1360
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "checks": [
+    "全部14索引/路径/Hz/原状态均可读，紧S25明确FAILED",
+    "坐标和单位齐全，14真实native轨迹与冻结参考线可区分",
+    "S比较只使用实际弧区，曲线/速度图有频率图例",
+    "原生cross/heading未平滑，速度与Euler图固定1秒均值有标签",
+    "偏航rate与虚线kappa*vFF及PI事件统计区分，非因果改善宣称",
+    "标题/图例/坐标未遮挡或截断重要内容"
+  ],
+  "notes": [
+    "轨迹等比例显示使S子图扁平且存在留白，曲线仍完整可读",
+    "重复紧圈轨迹和rate几乎重合，均保留各独立真实源证据",
+    "S heading图保留0.2原门限，细节较压缩，JSON/表给出弧区RMS和max",
+    "报告首段仅修正措辞：13/14是原整体结论，来源/测量重建14/14一致；没有更改任何数字或原门限"
+  ],
+  "original_receipts_unchanged": true,
+  "analysis_source_sha256": "9853ebe4336e0b5ee9c5b35712052820c8c64ba29064aa793aee265a183ff9de"
+}

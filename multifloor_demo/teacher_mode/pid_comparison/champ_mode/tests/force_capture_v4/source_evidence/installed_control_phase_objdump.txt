@@ -1,0 +1,522 @@
+
+/opt/ros/jazzy/lib/libgz_ros2_control-system.so:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000030b70 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base>:
+   30b70:	f3 0f 1e fa          	endbr64
+   30b74:	55                   	push   %rbp
+   30b75:	48 89 e5             	mov    %rsp,%rbp
+   30b78:	41 57                	push   %r15
+   30b7a:	41 56                	push   %r14
+   30b7c:	41 55                	push   %r13
+   30b7e:	41 54                	push   %r12
+   30b80:	53                   	push   %rbx
+   30b81:	48 81 ec 58 0a 00 00 	sub    $0xa58,%rsp
+   30b88:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+   30b8f:	00 00 
+   30b91:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+   30b95:	48 8b 47 20          	mov    0x20(%rdi),%rax
+   30b99:	48 83 78 40 00       	cmpq   $0x0,0x40(%rax)
+   30b9e:	0f 84 de 02 00 00    	je     30e82 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x312>
+   30ba4:	80 78 74 00          	cmpb   $0x0,0x74(%rax)
+   30ba8:	48 89 fb             	mov    %rdi,%rbx
+   30bab:	49 89 f5             	mov    %rsi,%r13
+   30bae:	4c 8d a5 b0 f5 ff ff 	lea    -0xa50(%rbp),%r12
+   30bb5:	0f 85 81 02 00 00    	jne    30e3c <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x2cc>
+   30bbb:	48 8b 76 10          	mov    0x10(%rsi),%rsi
+   30bbf:	4c 8d a5 b0 f5 ff ff 	lea    -0xa50(%rbp),%r12
+   30bc6:	4c 89 e7             	mov    %r12,%rdi
+   30bc9:	e8 52 78 fe ff       	call   18420 <rclcpp::Duration::Duration(std::chrono::duration<long, std::ratio<1l, 1000000000l> >)@plt>
+   30bce:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30bd2:	4c 89 e6             	mov    %r12,%rsi
+   30bd5:	48 8d 78 30          	lea    0x30(%rax),%rdi
+   30bd9:	e8 e2 7b fe ff       	call   187c0 <rclcpp::Duration::operator<(rclcpp::Duration const&) const@plt>
+   30bde:	84 c0                	test   %al,%al
+   30be0:	0f 84 c2 02 00 00    	je     30ea8 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x338>
+   30be6:	4c 8d bd 30 f6 ff ff 	lea    -0x9d0(%rbp),%r15
+   30bed:	4c 8d b5 40 f6 ff ff 	lea    -0x9c0(%rbp),%r14
+   30bf4:	4c 89 ff             	mov    %r15,%rdi
+   30bf7:	e8 04 76 fe ff       	call   18200 <std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@plt>
+   30bfc:	ba 22 00 00 00       	mov    $0x22,%edx
+   30c01:	48 8d 35 b8 3b 02 00 	lea    0x23bb8(%rip),%rsi        # 547c0 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb2f0>
+   30c08:	4c 89 f7             	mov    %r14,%rdi
+   30c0b:	e8 00 79 fe ff       	call   18510 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>
+   30c10:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30c14:	48 8d 78 30          	lea    0x30(%rax),%rdi
+   30c18:	e8 23 75 fe ff       	call   18140 <rclcpp::Duration::seconds() const@plt>
+   30c1d:	4c 89 f7             	mov    %r14,%rdi
+   30c20:	e8 db 7b fe ff       	call   18800 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+   30c25:	ba 31 00 00 00       	mov    $0x31,%edx
+   30c2a:	48 8d 35 b7 3b 02 00 	lea    0x23bb7(%rip),%rsi        # 547e8 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb318>
+   30c31:	48 89 c7             	mov    %rax,%rdi
+   30c34:	49 89 c6             	mov    %rax,%r14
+   30c37:	e8 d4 78 fe ff       	call   18510 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>
+   30c3c:	4c 89 e7             	mov    %r12,%rdi
+   30c3f:	e8 fc 74 fe ff       	call   18140 <rclcpp::Duration::seconds() const@plt>
+   30c44:	4c 89 f7             	mov    %r14,%rdi
+   30c47:	e8 b4 7b fe ff       	call   18800 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+   30c4c:	48 89 c7             	mov    %rax,%rdi
+   30c4f:	ba 04 00 00 00       	mov    $0x4,%edx
+   30c54:	48 8d 35 ec 54 02 00 	lea    0x254ec(%rip),%rsi        # 56147 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xcc77>
+   30c5b:	e8 b0 78 fe ff       	call   18510 <std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@plt>
+   30c60:	48 8b 05 c1 1d 03 00 	mov    0x31dc1(%rip),%rax        # 62a28 <g_rcutils_logging_initialized@Base>
+   30c67:	80 38 00             	cmpb   $0x0,(%rax)
+   30c6a:	0f 84 a0 03 00 00    	je     31010 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x4a0>
+   30c70:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30c74:	4c 8d b5 00 f6 ff ff 	lea    -0xa00(%rbp),%r14
+   30c7b:	4c 89 f7             	mov    %r14,%rdi
+   30c7e:	48 8b 70 08          	mov    0x8(%rax),%rsi
+   30c82:	e8 49 7c fe ff       	call   188d0 <rclcpp::Node::get_logger() const@plt>
+   30c87:	48 8b bd 00 f6 ff ff 	mov    -0xa00(%rbp),%rdi
+   30c8e:	48 85 ff             	test   %rdi,%rdi
+   30c91:	74 03                	je     30c96 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x126>
+   30c93:	48 8b 3f             	mov    (%rdi),%rdi
+   30c96:	be 28 00 00 00       	mov    $0x28,%esi
+   30c9b:	e8 a0 76 fe ff       	call   18340 <rcutils_logging_logger_is_enabled_for@plt>
+   30ca0:	4c 89 f7             	mov    %r14,%rdi
+   30ca3:	88 85 98 f5 ff ff    	mov    %al,-0xa68(%rbp)
+   30ca9:	e8 f2 27 ff ff       	call   234a0 <std::thread::_M_thread_deps_never_run()@@Base+0x17b0>
+   30cae:	0f b6 85 98 f5 ff ff 	movzbl -0xa68(%rbp),%eax
+   30cb5:	84 c0                	test   %al,%al
+   30cb7:	74 7f                	je     30d38 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x1c8>
+   30cb9:	48 8d 85 c0 fb ff ff 	lea    -0x440(%rbp),%rax
+   30cc0:	48 8d b5 48 f6 ff ff 	lea    -0x9b8(%rbp),%rsi
+   30cc7:	48 89 c7             	mov    %rax,%rdi
+   30cca:	48 89 85 98 f5 ff ff 	mov    %rax,-0xa68(%rbp)
+   30cd1:	e8 8a 75 fe ff       	call   18260 <std::__cxx11::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::str() const &@plt>
+   30cd6:	48 8b 85 c0 fb ff ff 	mov    -0x440(%rbp),%rax
+   30cdd:	4c 89 f7             	mov    %r14,%rdi
+   30ce0:	48 89 85 90 f5 ff ff 	mov    %rax,-0xa70(%rbp)
+   30ce7:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30ceb:	48 8b 70 08          	mov    0x8(%rax),%rsi
+   30cef:	e8 dc 7b fe ff       	call   188d0 <rclcpp::Node::get_logger() const@plt>
+   30cf4:	48 8b 95 00 f6 ff ff 	mov    -0xa00(%rbp),%rdx
+   30cfb:	48 85 d2             	test   %rdx,%rdx
+   30cfe:	74 03                	je     30d03 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x193>
+   30d00:	48 8b 12             	mov    (%rdx),%rdx
+   30d03:	4c 8b 85 90 f5 ff ff 	mov    -0xa70(%rbp),%r8
+   30d0a:	48 8d 0d 33 52 02 00 	lea    0x25233(%rip),%rcx        # 55f44 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xca74>
+   30d11:	be 28 00 00 00       	mov    $0x28,%esi
+   30d16:	31 c0                	xor    %eax,%eax
+   30d18:	48 8d 3d 31 30 03 00 	lea    0x33031(%rip),%rdi        # 63d50 <pluginlib::ClassLoader<gz_ros2_control::GazeboSimSystemInterface>::~ClassLoader()::__rcutils_logging_location@@Base+0x40>
+   30d1f:	e8 6c 71 fe ff       	call   17e90 <rcutils_log_internal@plt>
+   30d24:	4c 89 f7             	mov    %r14,%rdi
+   30d27:	e8 74 27 ff ff       	call   234a0 <std::thread::_M_thread_deps_never_run()@@Base+0x17b0>
+   30d2c:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   30d33:	e8 a8 be ff ff       	call   2cbe0 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::Configure(unsigned long const&, std::shared_ptr<sdf::v14::Element const> const&, gz::sim::v8::EntityComponentManager&, gz::sim::v8::EventManager&)@@Base+0x580>
+   30d38:	48 8b 05 69 1f 03 00 	mov    0x31f69(%rip),%rax        # 62ca8 <vtable for std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >@GLIBCXX_3.4.21>
+   30d3f:	48 8b bd 90 f6 ff ff 	mov    -0x970(%rbp),%rdi
+   30d46:	48 8d 50 18          	lea    0x18(%rax),%rdx
+   30d4a:	48 89 95 30 f6 ff ff 	mov    %rdx,-0x9d0(%rbp)
+   30d51:	48 8d 50 68          	lea    0x68(%rax),%rdx
+   30d55:	48 83 c0 40          	add    $0x40,%rax
+   30d59:	66 48 0f 6e c0       	movq   %rax,%xmm0
+   30d5e:	48 8b 05 6b 22 03 00 	mov    0x3226b(%rip),%rax        # 62fd0 <vtable for std::__cxx11::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >@GLIBCXX_3.4.21>
+   30d65:	48 89 95 b0 f6 ff ff 	mov    %rdx,-0x950(%rbp)
+   30d6c:	48 83 c0 10          	add    $0x10,%rax
+   30d70:	66 48 0f 6e c8       	movq   %rax,%xmm1
+   30d75:	48 8d 85 a0 f6 ff ff 	lea    -0x960(%rbp),%rax
+   30d7c:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
+   30d80:	0f 29 85 40 f6 ff ff 	movaps %xmm0,-0x9c0(%rbp)
+   30d87:	48 39 c7             	cmp    %rax,%rdi
+   30d8a:	74 10                	je     30d9c <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x22c>
+   30d8c:	48 8b 85 a0 f6 ff ff 	mov    -0x960(%rbp),%rax
+   30d93:	48 8d 70 01          	lea    0x1(%rax),%rsi
+   30d97:	e8 a4 76 fe ff       	call   18440 <operator delete(void*, unsigned long)@plt>
+   30d9c:	48 8b 05 fd 1d 03 00 	mov    0x31dfd(%rip),%rax        # 62ba0 <vtable for std::basic_streambuf<char, std::char_traits<char> >@GLIBCXX_3.4>
+   30da3:	48 8d bd 80 f6 ff ff 	lea    -0x980(%rbp),%rdi
+   30daa:	48 83 c0 10          	add    $0x10,%rax
+   30dae:	48 89 85 48 f6 ff ff 	mov    %rax,-0x9b8(%rbp)
+   30db5:	e8 16 79 fe ff       	call   186d0 <std::locale::~locale()@plt>
+   30dba:	48 8b 05 f7 1c 03 00 	mov    0x31cf7(%rip),%rax        # 62ab8 <VTT for std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >@GLIBCXX_3.4.21>
+   30dc1:	48 8d bd b0 f6 ff ff 	lea    -0x950(%rbp),%rdi
+   30dc8:	48 8b 50 08          	mov    0x8(%rax),%rdx
+   30dcc:	48 8b 48 30          	mov    0x30(%rax),%rcx
+   30dd0:	48 8b 52 e8          	mov    -0x18(%rdx),%rdx
+   30dd4:	48 89 8c 15 30 f6 ff 	mov    %rcx,-0x9d0(%rbp,%rdx,1)
+   30ddb:	ff 
+   30ddc:	48 8b 50 20          	mov    0x20(%rax),%rdx
+   30de0:	48 8b 48 28          	mov    0x28(%rax),%rcx
+   30de4:	48 89 95 40 f6 ff ff 	mov    %rdx,-0x9c0(%rbp)
+   30deb:	48 8b 52 e8          	mov    -0x18(%rdx),%rdx
+   30def:	48 89 8c 15 40 f6 ff 	mov    %rcx,-0x9c0(%rbp,%rdx,1)
+   30df6:	ff 
+   30df7:	48 8b 50 10          	mov    0x10(%rax),%rdx
+   30dfb:	48 8b 40 18          	mov    0x18(%rax),%rax
+   30dff:	48 89 95 30 f6 ff ff 	mov    %rdx,-0x9d0(%rbp)
+   30e06:	48 8b 52 e8          	mov    -0x18(%rdx),%rdx
+   30e0a:	48 89 84 15 30 f6 ff 	mov    %rax,-0x9d0(%rbp,%rdx,1)
+   30e11:	ff 
+   30e12:	48 8b 05 07 1c 03 00 	mov    0x31c07(%rip),%rax        # 62a20 <vtable for std::basic_ios<char, std::char_traits<char> >@GLIBCXX_3.4>
+   30e19:	48 c7 85 38 f6 ff ff 	movq   $0x0,-0x9c8(%rbp)
+   30e20:	00 00 00 00 
+   30e24:	48 83 c0 10          	add    $0x10,%rax
+   30e28:	48 89 85 b0 f6 ff ff 	mov    %rax,-0x950(%rbp)
+   30e2f:	e8 5c 71 fe ff       	call   17f90 <std::ios_base::~ios_base()@plt>
+   30e34:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30e38:	c6 40 74 01          	movb   $0x1,0x74(%rax)
+   30e3c:	49 8b 75 00          	mov    0x0(%r13),%rsi
+   30e40:	ba 01 00 00 00       	mov    $0x1,%edx
+   30e45:	4c 89 e7             	mov    %r12,%rdi
+   30e48:	4c 8d ad a0 f5 ff ff 	lea    -0xa60(%rbp),%r13
+   30e4f:	e8 9c 78 fe ff       	call   186f0 <rclcpp::Time::Time(long, rcl_clock_type_e)@plt>
+   30e54:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30e58:	4c 89 e6             	mov    %r12,%rsi
+   30e5b:	4c 89 ef             	mov    %r13,%rdi
+   30e5e:	48 8d 50 50          	lea    0x50(%rax),%rdx
+   30e62:	e8 e9 6f fe ff       	call   17e50 <rclcpp::Time::operator-(rclcpp::Time const&) const@plt>
+   30e67:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30e6b:	4c 89 ea             	mov    %r13,%rdx
+   30e6e:	4c 89 e6             	mov    %r12,%rsi
+   30e71:	48 8b 78 40          	mov    0x40(%rax),%rdi
+   30e75:	e8 36 6f fe ff       	call   17db0 <controller_manager::ControllerManager::write(rclcpp::Time const&, rclcpp::Duration const&)@plt>
+   30e7a:	4c 89 e7             	mov    %r12,%rdi
+   30e7d:	e8 ee 75 fe ff       	call   18470 <rclcpp::Time::~Time()@plt>
+   30e82:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
+   30e86:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+   30e8d:	00 00 
+   30e8f:	0f 85 5d 03 00 00    	jne    311f2 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x682>
+   30e95:	48 8d 65 d8          	lea    -0x28(%rbp),%rsp
+   30e99:	5b                   	pop    %rbx
+   30e9a:	41 5c                	pop    %r12
+   30e9c:	41 5d                	pop    %r13
+   30e9e:	41 5e                	pop    %r14
+   30ea0:	41 5f                	pop    %r15
+   30ea2:	5d                   	pop    %rbp
+   30ea3:	c3                   	ret
+   30ea4:	0f 1f 40 00          	nopl   0x0(%rax)
+   30ea8:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30eac:	4c 89 e6             	mov    %r12,%rsi
+   30eaf:	48 8d 78 30          	lea    0x30(%rax),%rdi
+   30eb3:	e8 98 76 fe ff       	call   18550 <rclcpp::Duration::operator>(rclcpp::Duration const&) const@plt>
+   30eb8:	84 c0                	test   %al,%al
+   30eba:	0f 84 74 ff ff ff    	je     30e34 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x2c4>
+   30ec0:	4c 8d bd 30 f6 ff ff 	lea    -0x9d0(%rbp),%r15
+   30ec7:	4c 89 ff             	mov    %r15,%rdi
+   30eca:	e8 31 73 fe ff       	call   18200 <std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::basic_stringstream()@plt>
+   30ecf:	48 8d bd 40 f6 ff ff 	lea    -0x9c0(%rbp),%rdi
+   30ed6:	48 8d 35 93 39 02 00 	lea    0x23993(%rip),%rsi        # 54870 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb3a0>
+   30edd:	e8 0e 75 fe ff       	call   183f0 <std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)@plt>
+   30ee2:	49 89 c6             	mov    %rax,%r14
+   30ee5:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30ee9:	48 8d 78 30          	lea    0x30(%rax),%rdi
+   30eed:	e8 4e 72 fe ff       	call   18140 <rclcpp::Duration::seconds() const@plt>
+   30ef2:	4c 89 f7             	mov    %r14,%rdi
+   30ef5:	e8 06 79 fe ff       	call   18800 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+   30efa:	48 89 c7             	mov    %rax,%rdi
+   30efd:	48 8d 35 94 39 02 00 	lea    0x23994(%rip),%rsi        # 54898 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb3c8>
+   30f04:	e8 e7 74 fe ff       	call   183f0 <std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)@plt>
+   30f09:	4c 89 e7             	mov    %r12,%rdi
+   30f0c:	49 89 c6             	mov    %rax,%r14
+   30f0f:	e8 2c 72 fe ff       	call   18140 <rclcpp::Duration::seconds() const@plt>
+   30f14:	4c 89 f7             	mov    %r14,%rdi
+   30f17:	e8 e4 78 fe ff       	call   18800 <std::ostream& std::ostream::_M_insert<double>(double)@plt>
+   30f1c:	48 89 c7             	mov    %rax,%rdi
+   30f1f:	48 8d 35 21 52 02 00 	lea    0x25221(%rip),%rsi        # 56147 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xcc77>
+   30f26:	e8 c5 74 fe ff       	call   183f0 <std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)@plt>
+   30f2b:	48 8b 05 f6 1a 03 00 	mov    0x31af6(%rip),%rax        # 62a28 <g_rcutils_logging_initialized@Base>
+   30f32:	80 38 00             	cmpb   $0x0,(%rax)
+   30f35:	0f 84 c6 01 00 00    	je     31101 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x591>
+   30f3b:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30f3f:	4c 8d b5 d0 f5 ff ff 	lea    -0xa30(%rbp),%r14
+   30f46:	4c 89 f7             	mov    %r14,%rdi
+   30f49:	48 8b 70 08          	mov    0x8(%rax),%rsi
+   30f4d:	e8 7e 79 fe ff       	call   188d0 <rclcpp::Node::get_logger() const@plt>
+   30f52:	48 8b bd d0 f5 ff ff 	mov    -0xa30(%rbp),%rdi
+   30f59:	48 85 ff             	test   %rdi,%rdi
+   30f5c:	74 03                	je     30f61 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x3f1>
+   30f5e:	48 8b 3f             	mov    (%rdi),%rdi
+   30f61:	be 1e 00 00 00       	mov    $0x1e,%esi
+   30f66:	e8 d5 73 fe ff       	call   18340 <rcutils_logging_logger_is_enabled_for@plt>
+   30f6b:	4c 89 f7             	mov    %r14,%rdi
+   30f6e:	88 85 98 f5 ff ff    	mov    %al,-0xa68(%rbp)
+   30f74:	e8 27 25 ff ff       	call   234a0 <std::thread::_M_thread_deps_never_run()@@Base+0x17b0>
+   30f79:	0f b6 85 98 f5 ff ff 	movzbl -0xa68(%rbp),%eax
+   30f80:	84 c0                	test   %al,%al
+   30f82:	74 7f                	je     31003 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x493>
+   30f84:	48 8d 85 c0 fb ff ff 	lea    -0x440(%rbp),%rax
+   30f8b:	48 8d b5 48 f6 ff ff 	lea    -0x9b8(%rbp),%rsi
+   30f92:	48 89 c7             	mov    %rax,%rdi
+   30f95:	48 89 85 98 f5 ff ff 	mov    %rax,-0xa68(%rbp)
+   30f9c:	e8 bf 72 fe ff       	call   18260 <std::__cxx11::basic_stringbuf<char, std::char_traits<char>, std::allocator<char> >::str() const &@plt>
+   30fa1:	48 8b 85 c0 fb ff ff 	mov    -0x440(%rbp),%rax
+   30fa8:	4c 89 f7             	mov    %r14,%rdi
+   30fab:	48 89 85 90 f5 ff ff 	mov    %rax,-0xa70(%rbp)
+   30fb2:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   30fb6:	48 8b 70 08          	mov    0x8(%rax),%rsi
+   30fba:	e8 11 79 fe ff       	call   188d0 <rclcpp::Node::get_logger() const@plt>
+   30fbf:	48 8b 95 d0 f5 ff ff 	mov    -0xa30(%rbp),%rdx
+   30fc6:	48 85 d2             	test   %rdx,%rdx
+   30fc9:	74 03                	je     30fce <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x45e>
+   30fcb:	48 8b 12             	mov    (%rdx),%rdx
+   30fce:	4c 8b 85 90 f5 ff ff 	mov    -0xa70(%rbp),%r8
+   30fd5:	48 8d 0d 68 4f 02 00 	lea    0x24f68(%rip),%rcx        # 55f44 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xca74>
+   30fdc:	be 1e 00 00 00       	mov    $0x1e,%esi
+   30fe1:	31 c0                	xor    %eax,%eax
+   30fe3:	48 8d 3d 46 2d 03 00 	lea    0x32d46(%rip),%rdi        # 63d30 <pluginlib::ClassLoader<gz_ros2_control::GazeboSimSystemInterface>::~ClassLoader()::__rcutils_logging_location@@Base+0x20>
+   30fea:	e8 a1 6e fe ff       	call   17e90 <rcutils_log_internal@plt>
+   30fef:	4c 89 f7             	mov    %r14,%rdi
+   30ff2:	e8 a9 24 ff ff       	call   234a0 <std::thread::_M_thread_deps_never_run()@@Base+0x17b0>
+   30ff7:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   30ffe:	e8 dd bb ff ff       	call   2cbe0 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::Configure(unsigned long const&, std::shared_ptr<sdf::v14::Element const> const&, gz::sim::v8::EntityComponentManager&, gz::sim::v8::EventManager&)@@Base+0x580>
+   31003:	4c 89 ff             	mov    %r15,%rdi
+   31006:	e8 65 72 fe ff       	call   18270 <std::__cxx11::basic_stringstream<char, std::char_traits<char>, std::allocator<char> >::~basic_stringstream()@plt>
+   3100b:	e9 24 fe ff ff       	jmp    30e34 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x2c4>
+   31010:	48 8d bd d0 f5 ff ff 	lea    -0xa30(%rbp),%rdi
+   31017:	e8 c4 73 fe ff       	call   183e0 <rcutils_get_default_allocator@plt>
+   3101c:	66 0f 6f 95 d0 f5 ff 	movdqa -0xa30(%rbp),%xmm2
+   31023:	ff 
+   31024:	48 83 ec 30          	sub    $0x30,%rsp
+   31028:	0f 11 14 24          	movups %xmm2,(%rsp)
+   3102c:	66 0f 6f 9d e0 f5 ff 	movdqa -0xa20(%rbp),%xmm3
+   31033:	ff 
+   31034:	0f 11 5c 24 10       	movups %xmm3,0x10(%rsp)
+   31039:	48 8b 85 f0 f5 ff ff 	mov    -0xa10(%rbp),%rax
+   31040:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+   31045:	e8 f6 71 fe ff       	call   18240 <rcutils_logging_initialize_with_allocator@plt>
+   3104a:	48 83 c4 30          	add    $0x30,%rsp
+   3104e:	85 c0                	test   %eax,%eax
+   31050:	0f 84 1a fc ff ff    	je     30c70 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x100>
+   31056:	4c 8b 35 83 1d 03 00 	mov    0x31d83(%rip),%r14        # 62de0 <stderr@GLIBC_2.2.5>
+   3105d:	ba 4b 00 00 00       	mov    $0x4b,%edx
+   31062:	be 01 00 00 00       	mov    $0x1,%esi
+   31067:	48 8d 3d b2 37 02 00 	lea    0x237b2(%rip),%rdi        # 54820 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb350>
+   3106e:	49 8b 0e             	mov    (%r14),%rcx
+   31071:	e8 0a 7a fe ff       	call   18a80 <fwrite@plt>
+   31076:	49 8b 06             	mov    (%r14),%rax
+   31079:	48 89 85 90 f5 ff ff 	mov    %rax,-0xa70(%rbp)
+   31080:	48 8d 85 c0 f7 ff ff 	lea    -0x840(%rbp),%rax
+   31087:	48 89 c7             	mov    %rax,%rdi
+   3108a:	48 89 85 98 f5 ff ff 	mov    %rax,-0xa68(%rbp)
+   31091:	e8 5a 71 fe ff       	call   181f0 <rcutils_get_error_string@plt>
+   31096:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   3109d:	e8 7e 6f fe ff       	call   18020 <strlen@plt>
+   310a2:	48 8d b5 c0 fb ff ff 	lea    -0x440(%rbp),%rsi
+   310a9:	48 89 f7             	mov    %rsi,%rdi
+   310ac:	48 89 85 88 f5 ff ff 	mov    %rax,-0xa78(%rbp)
+   310b3:	48 89 b5 98 f5 ff ff 	mov    %rsi,-0xa68(%rbp)
+   310ba:	e8 31 71 fe ff       	call   181f0 <rcutils_get_error_string@plt>
+   310bf:	48 8b 8d 90 f5 ff ff 	mov    -0xa70(%rbp),%rcx
+   310c6:	48 8b 95 88 f5 ff ff 	mov    -0xa78(%rbp),%rdx
+   310cd:	be 01 00 00 00       	mov    $0x1,%esi
+   310d2:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   310d9:	e8 a2 79 fe ff       	call   18a80 <fwrite@plt>
+   310de:	49 8b 0e             	mov    (%r14),%rcx
+   310e1:	ba 01 00 00 00       	mov    $0x1,%edx
+   310e6:	be 01 00 00 00       	mov    $0x1,%esi
+   310eb:	48 8d 3d f9 4d 02 00 	lea    0x24df9(%rip),%rdi        # 55eeb <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xca1b>
+   310f2:	e8 89 79 fe ff       	call   18a80 <fwrite@plt>
+   310f7:	e8 34 73 fe ff       	call   18430 <rcutils_reset_error@plt>
+   310fc:	e9 6f fb ff ff       	jmp    30c70 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x100>
+   31101:	48 8d bd 00 f6 ff ff 	lea    -0xa00(%rbp),%rdi
+   31108:	e8 d3 72 fe ff       	call   183e0 <rcutils_get_default_allocator@plt>
+   3110d:	66 0f 6f a5 00 f6 ff 	movdqa -0xa00(%rbp),%xmm4
+   31114:	ff 
+   31115:	48 83 ec 30          	sub    $0x30,%rsp
+   31119:	0f 11 24 24          	movups %xmm4,(%rsp)
+   3111d:	66 0f 6f ad 10 f6 ff 	movdqa -0x9f0(%rbp),%xmm5
+   31124:	ff 
+   31125:	0f 11 6c 24 10       	movups %xmm5,0x10(%rsp)
+   3112a:	48 8b 85 20 f6 ff ff 	mov    -0x9e0(%rbp),%rax
+   31131:	48 89 44 24 20       	mov    %rax,0x20(%rsp)
+   31136:	e8 05 71 fe ff       	call   18240 <rcutils_logging_initialize_with_allocator@plt>
+   3113b:	48 83 c4 30          	add    $0x30,%rsp
+   3113f:	85 c0                	test   %eax,%eax
+   31141:	0f 84 f4 fd ff ff    	je     30f3b <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x3cb>
+   31147:	4c 8b 35 92 1c 03 00 	mov    0x31c92(%rip),%r14        # 62de0 <stderr@GLIBC_2.2.5>
+   3114e:	ba 4b 00 00 00       	mov    $0x4b,%edx
+   31153:	be 01 00 00 00       	mov    $0x1,%esi
+   31158:	48 8d 3d 71 37 02 00 	lea    0x23771(%rip),%rdi        # 548d0 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xb400>
+   3115f:	49 8b 0e             	mov    (%r14),%rcx
+   31162:	e8 19 79 fe ff       	call   18a80 <fwrite@plt>
+   31167:	49 8b 06             	mov    (%r14),%rax
+   3116a:	48 89 85 90 f5 ff ff 	mov    %rax,-0xa70(%rbp)
+   31171:	48 8d 85 c0 f7 ff ff 	lea    -0x840(%rbp),%rax
+   31178:	48 89 c7             	mov    %rax,%rdi
+   3117b:	48 89 85 98 f5 ff ff 	mov    %rax,-0xa68(%rbp)
+   31182:	e8 69 70 fe ff       	call   181f0 <rcutils_get_error_string@plt>
+   31187:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   3118e:	e8 8d 6e fe ff       	call   18020 <strlen@plt>
+   31193:	48 8d b5 c0 fb ff ff 	lea    -0x440(%rbp),%rsi
+   3119a:	48 89 f7             	mov    %rsi,%rdi
+   3119d:	48 89 85 88 f5 ff ff 	mov    %rax,-0xa78(%rbp)
+   311a4:	48 89 b5 98 f5 ff ff 	mov    %rsi,-0xa68(%rbp)
+   311ab:	e8 40 70 fe ff       	call   181f0 <rcutils_get_error_string@plt>
+   311b0:	48 8b 8d 90 f5 ff ff 	mov    -0xa70(%rbp),%rcx
+   311b7:	48 8b 95 88 f5 ff ff 	mov    -0xa78(%rbp),%rdx
+   311be:	be 01 00 00 00       	mov    $0x1,%esi
+   311c3:	48 8b bd 98 f5 ff ff 	mov    -0xa68(%rbp),%rdi
+   311ca:	e8 b1 78 fe ff       	call   18a80 <fwrite@plt>
+   311cf:	49 8b 0e             	mov    (%r14),%rcx
+   311d2:	ba 01 00 00 00       	mov    $0x1,%edx
+   311d7:	be 01 00 00 00       	mov    $0x1,%esi
+   311dc:	48 8d 3d 08 4d 02 00 	lea    0x24d08(%rip),%rdi        # 55eeb <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xca1b>
+   311e3:	e8 98 78 fe ff       	call   18a80 <fwrite@plt>
+   311e8:	e8 43 72 fe ff       	call   18430 <rcutils_reset_error@plt>
+   311ed:	e9 49 fd ff ff       	jmp    30f3b <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base+0x3cb>
+   311f2:	e8 e9 72 fe ff       	call   184e0 <__stack_chk_fail@plt>
+   311f7:	f3 0f 1e fa          	endbr64
+   311fb:	48 89 c3             	mov    %rax,%rbx
+   311fe:	e9 f9 a8 fe ff       	jmp    1bafc <tinyxml2::XMLElement::GetText() const@plt+0x302c>
+   31203:	f3 0f 1e fa          	endbr64
+   31207:	48 89 c3             	mov    %rax,%rbx
+   3120a:	e9 f5 a8 fe ff       	jmp    1bb04 <tinyxml2::XMLElement::GetText() const@plt+0x3034>
+   3120f:	f3 0f 1e fa          	endbr64
+   31213:	48 89 c3             	mov    %rax,%rbx
+   31216:	e9 f5 a8 fe ff       	jmp    1bb10 <tinyxml2::XMLElement::GetText() const@plt+0x3040>
+   3121b:	f3 0f 1e fa          	endbr64
+   3121f:	48 89 c3             	mov    %rax,%rbx
+   31222:	e9 08 a9 fe ff       	jmp    1bb2f <tinyxml2::XMLElement::GetText() const@plt+0x305f>
+   31227:	f3 0f 1e fa          	endbr64
+   3122b:	48 89 c3             	mov    %rax,%rbx
+   3122e:	e9 59 a9 fe ff       	jmp    1bb8c <tinyxml2::XMLElement::GetText() const@plt+0x30bc>
+   31233:	f3 0f 1e fa          	endbr64
+   31237:	48 89 c3             	mov    %rax,%rbx
+   3123a:	e9 3b a9 fe ff       	jmp    1bb7a <tinyxml2::XMLElement::GetText() const@plt+0x30aa>
+   3123f:	f3 0f 1e fa          	endbr64
+   31243:	48 89 c3             	mov    %rax,%rbx
+   31246:	e9 39 a9 fe ff       	jmp    1bb84 <tinyxml2::XMLElement::GetText() const@plt+0x30b4>
+   3124b:	f3 0f 1e fa          	endbr64
+   3124f:	48 89 c3             	mov    %rax,%rbx
+   31252:	e9 ff a8 fe ff       	jmp    1bb56 <tinyxml2::XMLElement::GetText() const@plt+0x3086>
+   31257:	f3 0f 1e fa          	endbr64
+   3125b:	48 89 c3             	mov    %rax,%rbx
+   3125e:	e9 d4 a8 fe ff       	jmp    1bb37 <tinyxml2::XMLElement::GetText() const@plt+0x3067>
+   31263:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+   3126a:	00 00 00 00 
+   3126e:	66 90                	xchg   %ax,%ax
+
+0000000000031270 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base>:
+   31270:	f3 0f 1e fa          	endbr64
+   31274:	48 83 ef 10          	sub    $0x10,%rdi
+   31278:	e9 f3 f8 ff ff       	jmp    30b70 <gz_ros2_control::GazeboSimROS2ControlPlugin::PreUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager&)@@Base>
+   3127d:	90                   	nop
+   3127e:	66 90                	xchg   %ax,%ax
+
+0000000000031280 <gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base>:
+   31280:	f3 0f 1e fa          	endbr64
+   31284:	55                   	push   %rbp
+   31285:	48 89 e5             	mov    %rsp,%rbp
+   31288:	41 55                	push   %r13
+   3128a:	41 54                	push   %r12
+   3128c:	53                   	push   %rbx
+   3128d:	48 83 ec 38          	sub    $0x38,%rsp
+   31291:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+   31298:	00 00 
+   3129a:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
+   3129e:	48 8b 47 20          	mov    0x20(%rdi),%rax
+   312a2:	48 83 78 40 00       	cmpq   $0x0,0x40(%rax)
+   312a7:	0f 84 80 00 00 00    	je     3132d <gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xad>
+   312ad:	48 8b 36             	mov    (%rsi),%rsi
+   312b0:	4c 8d 65 c0          	lea    -0x40(%rbp),%r12
+   312b4:	48 89 fb             	mov    %rdi,%rbx
+   312b7:	ba 01 00 00 00       	mov    $0x1,%edx
+   312bc:	4c 89 e7             	mov    %r12,%rdi
+   312bf:	4c 8d 6d b0          	lea    -0x50(%rbp),%r13
+   312c3:	e8 28 74 fe ff       	call   186f0 <rclcpp::Time::Time(long, rcl_clock_type_e)@plt>
+   312c8:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   312cc:	4c 89 e6             	mov    %r12,%rsi
+   312cf:	4c 89 ef             	mov    %r13,%rdi
+   312d2:	48 8d 50 50          	lea    0x50(%rax),%rdx
+   312d6:	e8 75 6b fe ff       	call   17e50 <rclcpp::Time::operator-(rclcpp::Time const&) const@plt>
+   312db:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   312df:	4c 89 ef             	mov    %r13,%rdi
+   312e2:	48 8d 70 30          	lea    0x30(%rax),%rsi
+   312e6:	e8 a5 73 fe ff       	call   18690 <rclcpp::Duration::operator>=(rclcpp::Duration const&) const@plt>
+   312eb:	84 c0                	test   %al,%al
+   312ed:	74 36                	je     31325 <gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xa5>
+   312ef:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   312f3:	4c 89 e6             	mov    %r12,%rsi
+   312f6:	48 8d 78 50          	lea    0x50(%rax),%rdi
+   312fa:	e8 d1 70 fe ff       	call   183d0 <rclcpp::Time::operator=(rclcpp::Time const&)@plt>
+   312ff:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   31303:	4c 89 ea             	mov    %r13,%rdx
+   31306:	4c 89 e6             	mov    %r12,%rsi
+   31309:	48 8b 78 40          	mov    0x40(%rax),%rdi
+   3130d:	e8 5e 6c fe ff       	call   17f70 <controller_manager::ControllerManager::read(rclcpp::Time const&, rclcpp::Duration const&)@plt>
+   31312:	48 8b 43 20          	mov    0x20(%rbx),%rax
+   31316:	4c 89 ea             	mov    %r13,%rdx
+   31319:	4c 89 e6             	mov    %r12,%rsi
+   3131c:	48 8b 78 40          	mov    0x40(%rax),%rdi
+   31320:	e8 2b 70 fe ff       	call   18350 <controller_manager::ControllerManager::update(rclcpp::Time const&, rclcpp::Duration const&)@plt>
+   31325:	4c 89 e7             	mov    %r12,%rdi
+   31328:	e8 43 71 fe ff       	call   18470 <rclcpp::Time::~Time()@plt>
+   3132d:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+   31331:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+   31338:	00 00 
+   3133a:	75 0b                	jne    31347 <gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xc7>
+   3133c:	48 83 c4 38          	add    $0x38,%rsp
+   31340:	5b                   	pop    %rbx
+   31341:	41 5c                	pop    %r12
+   31343:	41 5d                	pop    %r13
+   31345:	5d                   	pop    %rbp
+   31346:	c3                   	ret
+   31347:	e8 94 71 fe ff       	call   184e0 <__stack_chk_fail@plt>
+   3134c:	f3 0f 1e fa          	endbr64
+   31350:	48 89 c3             	mov    %rax,%rbx
+   31353:	e9 4c a8 fe ff       	jmp    1bba4 <tinyxml2::XMLElement::GetText() const@plt+0x30d4>
+   31358:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+   3135f:	00 
+
+0000000000031360 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base>:
+   31360:	f3 0f 1e fa          	endbr64
+   31364:	48 83 ef 18          	sub    $0x18,%rdi
+   31368:	e9 13 ff ff ff       	jmp    31280 <gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base>
+   3136d:	90                   	nop
+   3136e:	66 90                	xchg   %ax,%ax
+   31370:	f3 0f 1e fa          	endbr64
+   31374:	55                   	push   %rbp
+   31375:	48 89 e5             	mov    %rsp,%rbp
+   31378:	41 57                	push   %r15
+   3137a:	41 56                	push   %r14
+   3137c:	41 55                	push   %r13
+   3137e:	41 54                	push   %r12
+   31380:	49 89 fc             	mov    %rdi,%r12
+   31383:	53                   	push   %rbx
+   31384:	48 81 ec 48 08 00 00 	sub    $0x848,%rsp
+   3138b:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+   31392:	00 00 
+   31394:	48 89 45 c8          	mov    %rax,-0x38(%rbp)
+   31398:	48 8d 05 09 06 03 00 	lea    0x30609(%rip),%rax        # 619a8 <typeinfo name for std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >@@Base+0x9148>
+   3139f:	48 89 07             	mov    %rax,(%rdi)
+   313a2:	48 8b 05 7f 16 03 00 	mov    0x3167f(%rip),%rax        # 62a28 <g_rcutils_logging_initialized@Base>
+   313a9:	80 38 00             	cmpb   $0x0,(%rax)
+   313ac:	0f 84 9e 01 00 00    	je     31550 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0x1f0>
+   313b2:	48 8d 1d 5a 4b 02 00 	lea    0x24b5a(%rip),%rbx        # 55f13 <std::_Function_handler<bool (char), std::__detail::_BracketMatcher<std::__cxx11::regex_traits<char>, true, true> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)@@Base+0xca43>
+   313b9:	be 0a 00 00 00       	mov    $0xa,%esi
+   313be:	48 89 df             	mov    %rbx,%rdi
+   313c1:	e8 7a 6f fe ff       	call   18340 <rcutils_logging_logger_is_enabled_for@plt>
+   313c6:	84 c0                	test   %al,%al
+   313c8:	0f 85 1a 01 00 00    	jne    314e8 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0x188>
+   313ce:	49 8d bc 24 b0 00 00 	lea    0xb0(%r12),%rdi
+   313d5:	00 
+   313d6:	e8 25 75 fe ff       	call   18900 <class_loader::MultiLibraryClassLoader::~MultiLibraryClassLoader()@plt>
+   313db:	49 8b bc 24 90 00 00 	mov    0x90(%r12),%rdi
+   313e2:	00 
+   313e3:	49 8d 84 24 a0 00 00 	lea    0xa0(%r12),%rax
+   313ea:	00 
+   313eb:	48 39 c7             	cmp    %rax,%rdi
+   313ee:	74 11                	je     31401 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xa1>
+   313f0:	49 8b 84 24 a0 00 00 	mov    0xa0(%r12),%rax
+   313f7:	00 
+   313f8:	48 8d 70 01          	lea    0x1(%rax),%rsi
+   313fc:	e8 3f 70 fe ff       	call   18440 <operator delete(void*, unsigned long)@plt>
+   31401:	49 8b 7c 24 70       	mov    0x70(%r12),%rdi
+   31406:	49 8d 84 24 80 00 00 	lea    0x80(%r12),%rax
+   3140d:	00 
+   3140e:	48 39 c7             	cmp    %rax,%rdi
+   31411:	74 11                	je     31424 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xc4>
+   31413:	49 8b 84 24 80 00 00 	mov    0x80(%r12),%rax
+   3141a:	00 
+   3141b:	48 8d 70 01          	lea    0x1(%rax),%rsi
+   3141f:	e8 1c 70 fe ff       	call   18440 <operator delete(void*, unsigned long)@plt>
+   31424:	49 8b 7c 24 50       	mov    0x50(%r12),%rdi
+   31429:	49 8d 44 24 60       	lea    0x60(%r12),%rax
+   3142e:	48 39 c7             	cmp    %rax,%rdi
+   31431:	74 0e                	je     31441 <non-virtual thunk to gz_ros2_control::GazeboSimROS2ControlPlugin::PostUpdate(gz::sim::v8::UpdateInfo const&, gz::sim::v8::EntityComponentManager const&)@@Base+0xe1>
+   31433:	49 8b 44 24 60       	mov    0x60(%r12),%rax
+   31438:	48 8d 70 01          	lea    0x1(%rax),%rsi
+   3143c:	e8                   	.byte 0xe8
+   3143d:	ff 6f fe             	ljmp   *-0x2(%rdi)

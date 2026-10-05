@@ -1,0 +1,93 @@
+{
+  "schema": "teacher_slam_fixed_route_candidate_freeze/v1",
+  "created_utc": "2026-10-04T17:16:12.928661+00:00",
+  "status": "ready_for_parent_prepare_only_then_independent_actual_validation",
+  "files": {
+    "adapter.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/adapter.py",
+      "sha256": "fa94b93b838d06c68d0045219d7b39a3440cc7c9a47c4779c95d4c1f9f6e3f4b"
+    },
+    "worker.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/worker.py",
+      "sha256": "ccb5b06c200b7ca960be1e0d182eecdaec74f9bea9f59511d01b2b7511c1ea9d"
+    },
+    "run.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/run.py",
+      "sha256": "35bdafdc1904b09d7e9c2dee8e8a0d47030bd4350150ae4fcb770de0a147d996"
+    },
+    "README.json": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/README.json",
+      "sha256": "bf678103574009e2caf9f992ec05f6275607379a715bb1cc06e66065bd350ac8"
+    },
+    "test_binding.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/test_binding.py",
+      "sha256": "0c97325eba6f54eb3288e7acbe21b365909c815337383d48001d811547804d77"
+    }
+  },
+  "selected_profile": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/selected_controller_v3_deployment.json",
+    "sha256": "0e85b8f1afb2db5c52d4fb784bafe39fc002cabdb79f3b11c0f9abf78bcee527",
+    "base_com_offset": [
+      0.05523092034548942,
+      -0.001869001919385796,
+      0.006095299184261034
+    ]
+  },
+  "frozen_controller": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/truth/core.py",
+    "sha256": "1f7f74df251833cd416cbaf308f59aa80747aa407f7f35e3b85f7b01c9a026e8"
+  },
+  "offline_validation": {
+    "pure_binding_tests": {
+      "passed": 14,
+      "failed": 0
+    },
+    "AST_syntax": "passed",
+    "README_json": "passed",
+    "initialization_exception_receipt_pure_test": "passed",
+    "sibling_host_and_interface_read_only_review": "no startup blocker found"
+  },
+  "control_scope": {
+    "route_source": "First actual SLAM body origin and heading, fixed 6m relative route; no live Gazebo pose or SCAN replanning",
+    "mapped_SLAM_fresh_expected_hz": 10,
+    "selected_truth_calibration_hz": 25,
+    "frequency_transfer_is_explicit": true,
+    "source_and_command_dual_TTL_s": 0.3,
+    "Actor": "unchanged CPU Teacher, privileged Gazebo observations clearly declared",
+    "single_executor": "teacher_sim::TeacherActuator sole JointForceCmd writer",
+    "robot_scope": "simulation only"
+  },
+  "rejection_logging": "Current attempted raw UTF8/byte SHA/decoded envelope saved separately from last accepted sequence watermark",
+  "cleanup": "Frozen-binding preflight, ROS dependency import, ROS initialization and partial Node construction failures produce cleanup receipt where output filesystem remains writable; initialization/cleanup errors exit nonzero",
+  "operator_prepare_argv": [
+    "python3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_slam/run.py",
+    "--profile",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/selected_controller_v3_deployment.json",
+    "--profile-sha256",
+    "0e85b8f1afb2db5c52d4fb784bafe39fc002cabdb79f3b11c0f9abf78bcee527",
+    "--controller",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/truth/core.py",
+    "--controller-sha256",
+    "1f7f74df251833cd416cbaf308f59aa80747aa407f7f35e3b85f7b01c9a026e8",
+    "--distance",
+    "6",
+    "--duration",
+    "180",
+    "--ros-domain",
+    "83",
+    "--allow-source-rate-reduction",
+    "--label",
+    "selected_v3_mapped_SLAM_transfer",
+    "--prepare-only"
+  ],
+  "writes_finished": true,
+  "actual_validation": "unverified; no ROS, Gazebo, simulation, training changes, process signals or actual launch performed by this agent",
+  "remaining_unverified": [
+    "Actual SLAM closed loop and measured arrival/parking",
+    "25Hz or higher fresh SLAM/IMU propagation",
+    "Absolute scene centerline map registration",
+    "Obstacle avoidance, ramps and multifloor",
+    "Real robot deployment"
+  ]
+}

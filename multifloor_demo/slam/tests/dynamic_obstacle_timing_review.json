@@ -1,0 +1,135 @@
+{
+  "scope": "Read-only source/schema and analogous actual ground-floor trajectory audit; no live obstacle/navigation component has been run for this proposed gate. No production change or pass claim.",
+  "existing_trigger": {
+    "radius_m": 1.4,
+    "scene_world_axis_offset": [
+      1,
+      2,
+      0
+    ],
+    "ideal_north_threshold_y_m": 1.020204102886729,
+    "entity": "moving_obstacle",
+    "entry_y": [
+      4,
+      2
+    ],
+    "entry_duration_s": 8,
+    "blocking_duration_s": 20,
+    "exit_y": [
+      2,
+      0
+    ],
+    "exit_duration_s": 8,
+    "complete_s": 36
+  },
+  "actual_analogous_run13": {
+    "run_id": "20260930_211958_41a297",
+    "route_scope": "exploration indices4/5 are the same ground-floor north2/east2 geometry; the real dynamic obstacle was disabled. Times below are a virtual trigger replay, not an actual obstacle activation.",
+    "frozen_scene_trigger_point": [
+      0.9243347285036754,
+      2.0360910341696163
+    ],
+    "virtual_first_radius_match_sim": 188.742,
+    "slam_at_virtual_trigger": [
+      0.051002756489348336,
+      0.9519113220483822,
+      -0.00018915866020375715
+    ],
+    "north_raw_waypoint_index_advanced_sim": 209.848,
+    "east_first_actual_walk_sim": 232.038,
+    "old_trigger_to_east_walk_s": 43.29600000000002,
+    "old_virtual_obstacle_clear_sim": 224.742,
+    "new_index_gate_to_east_walk_s": 22.189999999999998
+  },
+  "proposed_minimal_gate": {
+    "requirements": [
+      "existing stage==navigating and finite frozen non-GT scene reference remains",
+      "state.navigation is an object",
+      "navigation.state==running",
+      "navigation.waypoint_index is the exact integer1; reject booleans or strings",
+      "state.current_request is a nonempty string and navigation.request_id equals it",
+      "existing radius/fresh body and mission inputs unchanged"
+    ],
+    "schema_evidence": "mission_server.snapshot adds navigation from actual NAV callbacks and Mission.snapshot exposes current_request. NAV indices are zero-based:1 is east segment after north point raw arrival. No extra idealized waypoint success is generated.",
+    "reason": "Delay the actual obstacle cycle until the east segment has formally begun, avoiding north travel and its preceding turn consuming the entire36s cycle. Keep existing fixed scene location, geometry, trajectory, guard and strict evaluator.",
+    "once_started": "The gate applies only to first cycle start. Obstacle.tick continues its elapsed cycle after a later waypoint index change; no entity teleport/reset/cancel at goal boundaries."
+  },
+  "guard_timing_estimate": {
+    "stop_distance_m": 0.95,
+    "half_width_m": 0.42,
+    "entity_half_width_m": 0.25,
+    "north_raw_arrival_radius_m": 0.22,
+    "entry_first_possible_surface_in_east_corridor_s": "about5.3\u20137.1s depending on actual north arrival offset; estimate from y4\u21922 at.25m/s, not measured contact or LiDAR proof",
+    "actual_analogous_east_walk_delay_s": 22.189999999999998,
+    "guard_runs_during_alignment": true,
+    "caveat": "If a fresh obstacle prevents SCAN from supplying a progressive spline, samples=None/exhausted branches return before obstacle guard evaluation. Planner may stop safely without incrementing obstacle_hold. Actual component must verify both safe physical behavior and required hold/resume evidence.",
+    "ideal_commanded_quarter_turn_time_s": 14.256636056624139,
+    "turn_time_caveat": "This is an ideal command-integral estimate at maximum commanded yaw rate, plus two1s stops; actual physical yaw can differ. The analogous actual22.19s turn-to-walk delay is stronger evidence."
+  },
+  "minimal_actual_component_driver": {
+    "domain": 73,
+    "launch_prerequisite": "Wait for simulation owner to fully stop and clean the ongoing stance A/B. Never overlap physics or ROS recorders.",
+    "stack": "Production generic FAST-LIVO+actualRGB, actual1000Hz IMU, self-return filter, SCAN and NAV; chosen frozen production gait. Fresh flat spawn at origin. Test-only known initial south yaw at model creation is useful for realistic return orientation if independently supported; no runtime robot pose/reset service.",
+    "route_world_axis_offsets": [
+      [
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        2,
+        0
+      ]
+    ],
+    "route_frame": "Initial actual SLAM origin plus once-frozen IMU/SLAM heading; same calibration algorithm and gravity3degree threshold. No GT input to route generation.",
+    "mission_transport": "Driver publishes test-only mission stage=navigating/run_id/origin/heading_alignment/current_request and forwards the actual matching NAV status as navigation. Bool-enable only for this committed test request. Never fabricate running/index1 or waypoint success. Preserve source/runtime/control/asset manifests and per-run native logs.",
+    "record": [
+      "actual SLAM/rawIMU/GT evaluation channel",
+      "official sensor and feedback recorders",
+      "actual obstacle acknowledged entity positions and phase stamps",
+      "NAV index/phase/hold/stop/resume, plans and actuator commands",
+      "physical trunk contacts and safety bridge"
+    ],
+    "unchanged_limits": {
+      "per_waypoint_nav_timeout_sim_s": 90,
+      "raw_nav_arrival_m": 0.22,
+      "independent_joint_arrival_m": 0.3,
+      "obstacle_radius_m": 1.4,
+      "cycle_s": [
+        8,
+        20,
+        8
+      ]
+    },
+    "required_checks": [
+      "Only NAV publishes robot commands; no body pose service/reset calls",
+      "No trigger while index0 or mismatched/stale request; first actual start after north raw arrival and current index1",
+      "Both prescribed points reach in order at simultaneous SLAM and single-initial-SE3 GT errors<=.30; NAV itself succeeds at unchanged raw.22",
+      "Actual Gazebo obstacle acknowledgments move>=1m and record entering/blocking/leaving or clear",
+      "At least one actual registered-LiDAR obstacle_hold edge during active acknowledged motion, exact zero commands while held; fresh clear cloud for1s then resumed actual nonzero speed>.025",
+      "No trunk contacts; raw safety thresholds unchanged; complete coverage/RGB health and clean owned process group"
+    ],
+    "report_timeline": [
+      "route request",
+      "north raw arrival/index1",
+      "obstacle start and ack at corridor entry",
+      "east first turn/drive",
+      "hold start/zero interval",
+      "blocking end/leaving/clear",
+      "resume first actual walk",
+      "each raw/independent joint arrival",
+      "terminal state and cleanup"
+    ],
+    "failure_policy": "Safe planner stop without hold/resume, missed obstacle cycle, waypoint timeout, absent sensor evidence or contact all remain failed component results. This never counts as a full multi-floor demo pass."
+  },
+  "input_sha256": {
+    "multifloor_demo/simulation/obstacle_trigger.py": "4620ae15ff73f6beb28c40738eff50005b6240711ed47eabdca91c5bdcdd4e32",
+    "multifloor_demo/simulation/obstacle_controller.py": "c1d88a8ef754dbd0190e05e3ba340ca96162a96e2c492664b8b70179690d70d8",
+    "multifloor_demo/navigation/controller.py": "274b9beb1cb77447bc16e6cf6308618432dbf250535cdd00bc03c9ed1537f7a0",
+    "multifloor_demo/navigation/control_core.py": "98eb4702af719b92109f30f2b3f8f0c9cf161ce3cf67fc3062797b64d6df2646",
+    "multifloor_demo/scripts/mission_server.py": "e8524a0e767d53a07360c59cac9e8d11b8274f1cf5f42b78ce7d170c2bdca3f6",
+    "multifloor_demo/runs/20260930_211958_41a297/feedback_navigation.jsonl": "421302d253cf9f2793245be53a76dbcecf540192b1f7cd9b4f57a0ece901a259",
+    "multifloor_demo/runs/20260930_211958_41a297/mission.json": "f46a748e82101369a43c5812f179232ae0c4b66c8e6d7d359ef6bfc865f324c9"
+  }
+}

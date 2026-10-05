@@ -1,0 +1,91 @@
+{
+  "scope": "Excluded strict actual first-eight driver, no launch/ROS/physical execution by NAV agent",
+  "derived_from": "multifloor_demo/navigation/test_results/slope_strength_staging/probe_slope_strength.py",
+  "derived_from_SHA256": "f70d11f90eaa3fc1db0b2576c0f1d86749dea3d3aabb16f98812cd2284a5fb08",
+  "driver_SHA256": {
+    "probe_first_eight.py": "6639252fba6fb930d0ca4b0f4be76926bc3b84456a7b029b8b92e51aac573b62",
+    "held_command_contract.py": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011",
+    "test_first_eight_acceptance.py": "04f86ba2fc8da973b9f040fc44b8d15f68db34809722a4b952b2b0466df5f1ce"
+  },
+  "route": [
+    [
+      0,
+      -1,
+      0
+    ],
+    [
+      1,
+      -1,
+      0
+    ],
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      2,
+      0
+    ],
+    [
+      2,
+      2,
+      0
+    ],
+    [
+      5,
+      2,
+      0.3
+    ],
+    [
+      8,
+      2,
+      0.6
+    ]
+  ],
+  "original_limits": {
+    "each_waypoint_sim_s": 90,
+    "raw_arrival_m": 0.22,
+    "raw_dwell_sim_s": 0.4,
+    "joint_arrival_m": 0.3,
+    "truth_bracket_max_gap_sim_s": 0.15,
+    "walk_yaw_cap_rad_s": 0.08,
+    "pure_turn_cap_rad_s": 0.12,
+    "forward_speed_m_s": 0.12
+  },
+  "component_cleanup_sim_s": 750,
+  "driver_wall_cleanup_s": 900,
+  "dynamic_box_enabled": false,
+  "sole_body_command_publisher": "demo_navigation",
+  "fresh_spawn_world": [
+    0,
+    0,
+    0.3
+  ],
+  "GT_feedback_used": false,
+  "execution_owner": "demo_simulation, domain73 only after parent authorization",
+  "required_health_failure_behavior": "Aggregate /demo/control/safety failed immediately publishes actual NAV stop request, including pre-calibration; never publishes body Twist",
+  "precision_time_domain": "origin stamp through actual terminal NAV status/complete stamp; missing bounded truth anywhere inside fails coverage",
+  "feedback_mode_environment": "DEMO_TEST_BODY_FEEDBACK_ENABLED, required literal 0/1; candidate/baseline actual status enabled bool must agree",
+  "acceptance_contract_result": {
+    "passed": true,
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "scope": "Execute actual staged result/health methods without ROS or sensor publishers.",
+    "actual_staged_driver_SHA256": "6639252fba6fb930d0ca4b0f4be76926bc3b84456a7b029b8b92e51aac573b62"
+  },
+  "truth_subscription_evidence_only": {
+    "topic": "/demo/ground_truth",
+    "depth": 2000,
+    "reliability": "BEST_EFFORT",
+    "bounded_truth_gap_s": 0.15,
+    "production_unchanged": true
+  }
+}

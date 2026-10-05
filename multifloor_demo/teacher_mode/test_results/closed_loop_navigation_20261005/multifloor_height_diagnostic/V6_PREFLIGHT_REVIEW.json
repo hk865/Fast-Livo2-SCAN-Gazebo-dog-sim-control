@@ -1,0 +1,34 @@
+{
+  "schema": "readonly_visual_cov1000_preflight_review/v1",
+  "control_module_byteidentity": {
+    "bridge.py": true,
+    "cascade_core.py": true,
+    "controller.py": true,
+    "pid_core.py": true,
+    "pid_scope.py": false,
+    "pure_tests.py": true,
+    "request.py": true,
+    "route.py": true,
+    "route_fence.py": true,
+    "route_leg_heading.py": true,
+    "run.py": false,
+    "sensor_gate.py": true,
+    "shared_controller.py": true,
+    "stack.launch.py": true,
+    "teacher_wrapper.py": true,
+    "terrain_provider.py": true,
+    "transition_gate.py": true,
+    "worker.py": true
+  },
+  "actual_generated_yaml_changes_from_v5": [
+    [
+      "//**/ros__parameters/vio/img_point_cov",
+      100000000,
+      1000
+    ]
+  ],
+  "pid_scope_sha256": "e1e06185cac9cadd9074080f5a8de36d5fb2939fc4267fd3badaee3c164b22b1",
+  "navigation_is_verified": false,
+  "physics_launched_by_reviewer": false,
+  "note": "1000 is 100000 times stronger per-pixel information than current 1e8, still 10 times weaker than source default100; exact actual H/information and residual correctness still need physical run"
+}

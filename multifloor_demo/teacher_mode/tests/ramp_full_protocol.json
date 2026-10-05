@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+  "status": "frozen_before_first_full_ramp_run",
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "physics_dt_s": 0.005,
+  "policy_hz": 50,
+  "repetitions_required": 3,
+  "fixtures": {
+    "ramp_23": {
+      "ramp": "ramp_23",
+      "nominal_x_limits_m": [
+        2,
+        14
+      ],
+      "center_y_m": 7,
+      "width_m": 2,
+      "slope_z_per_world_x": -0.1,
+      "surface_equation": "z=2.6-0.1*x",
+      "floor_at_x_low": "floor_3",
+      "floor_at_x_high": "floor_2",
+      "floor_heights_m": [
+        2.4,
+        1.2
+      ]
+    },
+    "ramp_12": {
+      "ramp": "ramp_12",
+      "nominal_x_limits_m": [
+        2,
+        14
+      ],
+      "center_y_m": 2,
+      "width_m": 2,
+      "slope_z_per_world_x": 0.1,
+      "surface_equation": "z=0.1*x-0.2",
+      "floor_at_x_low": "floor_1",
+      "floor_at_x_high": "floor_2",
+      "floor_heights_m": [
+        0,
+        1.2
+      ]
+    }
+  },
+  "primary_cases": [
+    "ramp23_up_full",
+    "ramp23_down_full"
+  ],
+  "deferred_cases": [
+    "ramp12_up_full",
+    "ramp12_down_full"
+  ],
+  "command": {
+    "body_vx_mps": 0.3,
+    "body_vy_mps": 0,
+    "yaw_radps": 0,
+    "slew_acceleration": [
+      0.6,
+      0.6,
+      0.8
+    ]
+  },
+  "timing": {
+    "bootstrap_pd_s": 0.1,
+    "command_start_s": 3,
+    "maximum_forward_end_s": 75,
+    "maximum_duration_s": 86,
+    "post_completion_teacher_zero_command_s": 8,
+    "stop_settling_s": 3,
+    "stop_evaluation_s": 5
+  },
+  "completion": {
+    "horizontal_ramp_span_m": 12,
+    "start_landing_distance_from_nominal_seam_m": 0.8,
+    "finish_landing_distance_from_nominal_seam_m": 0.8,
+    "test_truth_scope": "Read native base X only to latch zero velocity command and end physical test. No position/body servo; never use this gate in navigation."
+  },
+  "contact": {
+    "actual_position_and_normal_required": true,
+    "surface_local_xy_margin_m": 0.005,
+    "surface_normal_distance_tolerance_m": 0.015,
+    "minimum_absolute_normal_dot_surface_normal": 0.8,
+    "foot_center_height_tolerance_m": 0.025,
+    "each_foot_initial_landing_support_s": 0.1,
+    "each_foot_active_ramp_support_s": 0.1,
+    "each_foot_final_landing_support_s": 0.1,
+    "final_simultaneous_four_foot_landing_support_s": 0.1,
+    "ramp_coverage_bin_m": 1,
+    "each_coverage_bin_any_foot_support_s": 0.1,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "max_native_sample_gap_s": 0.005001
+  },
+  "route": {
+    "maximum_base_center_lateral_deviation_m": 0.45,
+    "maximum_heading_deviation_rad": 0.35,
+    "require_active_command_whole_ramp_crossing": true,
+    "minimum_forward_progress_m": 13.2,
+    "rolling_window_s": 0.5,
+    "minimum_projected_world_forward_window_mean_mps": 0.05,
+    "minimum_positive_window_fraction": 0.9,
+    "minimum_requested_axis_ratio": 0.4
+  },
+  "safety": {
+    "audit_start_s": 0.1,
+    "max_abs_roll_pitch_rad": 0.65,
+    "minimum_body_above_support_m": 0.18,
+    "body_contact_allowed": false,
+    "missing_contact_evidence_allowed": false,
+    "latched_fault_allowed": false,
+    "pose_translation_integral_error_m": 0.0001
+  },
+  "stand_stop": {
+    "translation_drift_m": 0.15,
+    "yaw_drift_rad": 0.2,
+    "linear_rms_mps": 0.08,
+    "yaw_rate_rms_radps": 0.1,
+    "continuous_teacher_required": true,
+    "final_support_surface": "destination landing"
+  },
+  "body_world_height_gain": {
+    "used_as_pass_gate": false,
+    "role": "diagnostic_only; world height combines slope elevation and posture"
+  },
+  "observation": {
+    "source": "Gazebo privileged COM twist, quaternion, joint physics/applied torque and unchanged static SDF 187 vertical height rays at base_z+20m",
+    "ramp23_unrelated_overhead_expected": false,
+    "ramp12_overhead_warning": "floor_3 covers x[-3,2],y[0,9] above floor_1; its top z2.4 is the first hit for the archived +20m scan near the lower transition. Preserve and report rather than silently removing it."
+  },
+  "camera": {
+    "distortion": "actual CameraInfo D=0; archive actual CameraInfo",
+    "recommended_horizontal_fov_rad": 1.3962634015954636,
+    "rendering": "hardware Ogre2; actor CPU",
+    "actual_frames_only": true
+  },
+  "preservation": {
+    "existing_step_and_historical_protocols_unchanged": true,
+    "original_scene_geometry_unchanged": true,
+    "sole_controller": "teacher_sim::TeacherActuator",
+    "no_retraining": true,
+    "no_hardware": true
+  }
+}

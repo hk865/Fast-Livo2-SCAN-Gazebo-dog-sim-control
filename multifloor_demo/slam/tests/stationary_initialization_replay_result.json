@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "scope": "production C++ class contract and physical-recording replay; no new physics run",
+  "limits": {
+    "gyro_norm_rad_s": 0.03,
+    "acceleration_norm_error_m_s2": 1.2,
+    "acceleration_axis_std_m_s2": 0.4,
+    "max_sample_gap_s": 0.03,
+    "minimum_span_s": 2.9,
+    "consecutive_samples": 300
+  },
+  "recordings": {
+    "turn_raw_relaxed_startup": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 1.32,
+      "last_stamp": 4.31,
+      "span_s": 2.99,
+      "resets": 131,
+      "mean_acc": [
+        0.0288088447935,
+        0.00449927743632,
+        9.93868093895
+      ],
+      "acc_std": [
+        0.0627539289903,
+        0.0181683561513,
+        0.148066947272
+      ],
+      "max_gyro_norm": 0.0170700413933,
+      "input": "slam/test_results/turn_raw_relaxed/sensor_audit.jsonl",
+      "expected_ready": true,
+      "estimated_gravity_tilt_deg": 0.16809368936722782
+    },
+    "turn_raw_relaxed_turn_recovery": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 69.07,
+      "last_stamp": 72.06,
+      "span_s": 2.99,
+      "resets": 4662,
+      "mean_acc": [
+        0.0158524041282,
+        -0.0132456470731,
+        9.96720955239
+      ],
+      "acc_std": [
+        0.087460581582,
+        0.0252169619393,
+        0.130221749917
+      ],
+      "max_gyro_norm": 0.0293880258214,
+      "input": "slam/test_results/turn_raw_relaxed/sensor_audit.jsonl",
+      "expected_ready": true,
+      "estimated_gravity_tilt_deg": 0.11874985596389316
+    },
+    "turn_filtered_relaxed_v2_startup": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 1.34,
+      "last_stamp": 4.33,
+      "span_s": 2.99,
+      "resets": 133,
+      "mean_acc": [
+        0.00899244395976,
+        0.00231231383381,
+        9.72953728224
+      ],
+      "acc_std": [
+        0.0968063026757,
+        0.0181218057823,
+        0.301885130198
+      ],
+      "max_gyro_norm": 0.0178305142352,
+      "input": "slam/test_results/turn_filtered_relaxed_v2/sensor_audit.jsonl",
+      "expected_ready": true,
+      "estimated_gravity_tilt_deg": 0.05467782888230456
+    },
+    "turn_filtered_relaxed_v2_turn_recovery": {
+      "ready": false,
+      "count": 293,
+      "first_stamp": 76.09,
+      "last_stamp": 79.01,
+      "span_s": 2.92,
+      "resets": 5436,
+      "mean_acc": [
+        0.0832626633884,
+        0.00379155862817,
+        9.96697885616
+      ],
+      "acc_std": [
+        0.0615997402255,
+        0.0310534926995,
+        0.106970552674
+      ],
+      "max_gyro_norm": 0.0274013698557,
+      "input": "slam/test_results/turn_filtered_relaxed_v2/sensor_audit.jsonl",
+      "expected_ready": false,
+      "estimated_gravity_tilt_deg": 0.4791252861708999
+    },
+    "run10_post_recovery_stationary": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 16.6,
+      "last_stamp": 19.59,
+      "span_s": 2.99,
+      "resets": 0,
+      "mean_acc": [
+        0.03113134196,
+        0.0104713534233,
+        9.81458676667
+      ],
+      "acc_std": [
+        0.0505014184001,
+        0.0120253874633,
+        0.174166228672
+      ],
+      "max_gyro_norm": 0.00320929167994,
+      "input": "runs/20260930_185651_b1d6cb/fastlivo_imu.txt",
+      "expected_ready": true,
+      "estimated_gravity_tilt_deg": 0.19174383647207335
+    },
+    "turn_raw_relaxed_original_launch_window": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 10,
+      "last_stamp": 12.99,
+      "span_s": 2.99,
+      "resets": 0,
+      "mean_acc": [
+        0.0755495062894,
+        0.00321549127796,
+        9.94460463615
+      ],
+      "acc_std": [
+        0.0659817196077,
+        0.0173224101478,
+        0.155079773279
+      ],
+      "max_gyro_norm": 0.00622226967092
+    },
+    "turn_filtered_relaxed_v2_original_launch_window": {
+      "ready": true,
+      "count": 300,
+      "first_stamp": 10,
+      "last_stamp": 12.99,
+      "span_s": 2.99,
+      "resets": 0,
+      "mean_acc": [
+        0.0286360784348,
+        -0.000907720958726,
+        9.80995876675
+      ],
+      "acc_std": [
+        0.0910142029415,
+        0.0175895707403,
+        0.298005603591
+      ],
+      "max_gyro_norm": 0.00812186040613
+    }
+  }
+}

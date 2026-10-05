@@ -1,0 +1,1441 @@
+{
+  "schema": "actual_ramp_cloud_capture/v1",
+  "source_freeze": {
+    "source_hashes": {
+      "cloud.py": "4ab1b8f97a0ef15bf84ba0ca7ece0b48b736a146b41b09436d22a43a77a732f1",
+      "geometry.py": "06fdd1947e319b6a15dc7b6661e9ed927313e539b443c75398f879a44ecf6a06",
+      "capture.py": "c1d8093642af6ccc923efd159130759e6087e8d8e699a28d3b13b49feb97062a",
+      "analyze.py": "3b8ac167be3966e35326015f27415411469e151329f58d3d4b1fe46e50f5507d"
+    }
+  },
+  "status": "observation_complete",
+  "stop_reason": "duration_complete",
+  "errors": [],
+  "counts": {
+    "body_odom": 8,
+    "imu_slam_odom": 8,
+    "imu": 71,
+    "full_cloud": 1
+  },
+  "submitted": 88,
+  "processed": 88,
+  "writer_drained": true,
+  "peak_queue_bytes": 180448,
+  "archive_bytes": 1656,
+  "admitted_clouds": 1,
+  "recorded_clouds": 1,
+  "body_anchor": {
+    "stream": "body_odom",
+    "original_stamp_ns": 700000000,
+    "frame_id": "camera_init",
+    "received_monotonic_wall": 339088.897129521,
+    "received_ros_clock_ns": 710000000,
+    "received_clock_wall_age_s": 0.005,
+    "position": [
+      1.0,
+      0.0,
+      0.4
+    ],
+    "quaternion": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "body_linear_velocity": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "child_frame_id": "demo_slam_body",
+    "linear_acceleration": [
+      0.0,
+      0.0,
+      9.81
+    ],
+    "angular_velocity": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_covariance": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "twist_covariance": [
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.04
+    ],
+    "processed_monotonic_wall": 339090.200642456,
+    "background_queue_delay_wall_s": 1.3035129350028,
+    "pose_admitted": true
+  },
+  "gravity": {
+    "schema": "actual_slam_accelerometer_up/v1",
+    "up_camera_init": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "sources": [
+      "/livox/imu linear_acceleration",
+      "/aft_mapped_to_init SLAM IMU quaternion",
+      "/demo/slam/body_odom stationary velocity gate"
+    ],
+    "first_stamp_ns": 0,
+    "last_stamp_ns": 500000000,
+    "samples": 51,
+    "unique_slam_imu_pose_samples": 6,
+    "maximum_axis_deviation_rad": 0.0,
+    "frozen_once": true,
+    "calibration_sample_receipts": [
+      {
+        "imu_stamp_ns": 0,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 10000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 20000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 30000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 40000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 50000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 60000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 70000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 80000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 90000000,
+        "slam_imu_pose_stamp_ns": 0,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 100000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 110000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 120000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 130000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 140000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 150000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 160000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 170000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 180000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 190000000,
+        "slam_imu_pose_stamp_ns": 100000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 200000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 210000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 220000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 230000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 240000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 250000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 260000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 270000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 280000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 290000000,
+        "slam_imu_pose_stamp_ns": 200000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 300000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 310000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 320000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 330000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 340000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 350000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 360000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 370000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 380000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 390000000,
+        "slam_imu_pose_stamp_ns": 300000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 400000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 410000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 420000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 430000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 440000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 450000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 460000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 470000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 480000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 490000000,
+        "slam_imu_pose_stamp_ns": 400000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "imu_stamp_ns": 500000000,
+        "slam_imu_pose_stamp_ns": 500000000,
+        "transformed_up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "imu_orientation_field_used": false,
+    "ground_truth_used": false
+  },
+  "clouds": [
+    {
+      "stream": "full_cloud",
+      "original_stamp_ns": 700000000,
+      "frame_id": "camera_init",
+      "received_monotonic_wall": 339088.902129521,
+      "received_ros_clock_ns": 710000000,
+      "received_clock_wall_age_s": 0.005,
+      "position": [
+        1.0,
+        0.0,
+        0.4
+      ],
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "body_linear_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "child_frame_id": "aft_mapped",
+      "linear_acceleration": [
+        0.0,
+        0.0,
+        9.81
+      ],
+      "angular_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pose_covariance": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "twist_covariance": [
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04
+      ],
+      "width": 2,
+      "height": 2,
+      "point_step": 48,
+      "row_step": 112,
+      "is_bigendian": false,
+      "is_dense": false,
+      "fields": [
+        {
+          "name": "x",
+          "offset": 0,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "y",
+          "offset": 4,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "z",
+          "offset": 8,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "intensity",
+          "offset": 16,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "normal",
+          "offset": 20,
+          "datatype": 7,
+          "count": 3
+        },
+        {
+          "name": "ring",
+          "offset": 40,
+          "datatype": 4,
+          "count": 1
+        }
+      ],
+      "processed_monotonic_wall": 339090.200691249,
+      "background_queue_delay_wall_s": 1.2985617279773578,
+      "archive_file": "clouds/000001_700000000.npz",
+      "archive_sha256": "92d13388599a1d74b03654a8c735df771c97b235bbe26b597aaaed94b6c04e4c",
+      "raw_payload_sha256": "019052fda11ceffcea57b044f285795e3338addad5be31168e31aca56bc89b9f",
+      "raw_payload_bytes": 224,
+      "decoded_xyz_dtype": "<f8",
+      "decoded_xyz_shape": [
+        3,
+        3
+      ],
+      "decoded_xyz_sha256": "f42e65bca254c9c9b7181ad1978b7148f34bf70e0df2ca92cc653a5feb34c054",
+      "original_structured_dtype": [
+        [
+          "x",
+          "<f4"
+        ],
+        [
+          "y",
+          "<f4"
+        ],
+        [
+          "z",
+          "<f4"
+        ],
+        [
+          "",
+          "|V4"
+        ],
+        [
+          "intensity",
+          "<f4"
+        ],
+        [
+          "normal",
+          "<f4",
+          [
+            3
+          ]
+        ],
+        [
+          "",
+          "|V8"
+        ],
+        [
+          "ring",
+          "<u2"
+        ],
+        [
+          "",
+          "|V6"
+        ]
+      ],
+      "finite_points": 3,
+      "nonfinite_points": 1,
+      "decode_error": null,
+      "body_pose": {
+        "stream": "body_odom",
+        "original_stamp_ns": 700000000,
+        "frame_id": "camera_init",
+        "received_monotonic_wall": 339088.897129521,
+        "received_ros_clock_ns": 710000000,
+        "received_clock_wall_age_s": 0.005,
+        "position": [
+          1.0,
+          0.0,
+          0.4
+        ],
+        "quaternion": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "body_linear_velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "child_frame_id": "demo_slam_body",
+        "linear_acceleration": [
+          0.0,
+          0.0,
+          9.81
+        ],
+        "angular_velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pose_covariance": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "twist_covariance": [
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.04
+        ],
+        "processed_monotonic_wall": 339090.200642456,
+        "background_queue_delay_wall_s": 1.3035129350028,
+        "pose_admitted": true
+      },
+      "geometry_admitted": true,
+      "geometry_rejection_reasons": [],
+      "gravity_receipt": {
+        "schema": "actual_slam_accelerometer_up/v1",
+        "up_camera_init": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sources": [
+          "/livox/imu linear_acceleration",
+          "/aft_mapped_to_init SLAM IMU quaternion",
+          "/demo/slam/body_odom stationary velocity gate"
+        ],
+        "first_stamp_ns": 0,
+        "last_stamp_ns": 500000000,
+        "samples": 51,
+        "unique_slam_imu_pose_samples": 6,
+        "maximum_axis_deviation_rad": 0.0,
+        "frozen_once": true,
+        "calibration_sample_receipts": [
+          {
+            "imu_stamp_ns": 0,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 10000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 20000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 30000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 40000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 50000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 60000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 70000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 80000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 90000000,
+            "slam_imu_pose_stamp_ns": 0,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 100000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 110000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 120000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 130000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 140000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 150000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 160000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 170000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 180000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 190000000,
+            "slam_imu_pose_stamp_ns": 100000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 200000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 210000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 220000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 230000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 240000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 250000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 260000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 270000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 280000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 290000000,
+            "slam_imu_pose_stamp_ns": 200000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 300000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 310000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 320000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 330000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 340000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 350000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 360000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 370000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 380000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 390000000,
+            "slam_imu_pose_stamp_ns": 300000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 400000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 410000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 420000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 430000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 440000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 450000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 460000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 470000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 480000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 490000000,
+            "slam_imu_pose_stamp_ns": 400000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "imu_stamp_ns": 500000000,
+            "slam_imu_pose_stamp_ns": 500000000,
+            "transformed_up_camera_init": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          }
+        ],
+        "imu_orientation_field_used": false,
+        "ground_truth_used": false
+      },
+      "source_topic": "/cloud_registered_full",
+      "color_cloud_used": false,
+      "ground_truth_used": false
+    }
+  ],
+  "navigation_verified": false,
+  "control_outputs": 0,
+  "ground_truth_used": false,
+  "registration_readiness": "offline_analysis_required"
+}

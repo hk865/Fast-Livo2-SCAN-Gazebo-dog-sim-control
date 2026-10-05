@@ -1,0 +1,12 @@
+{
+  "status": "READY_static_correction_only_before_fresh_v2_physics",
+  "reason": "The original driver used runtime manifest key test_only which belongs to status messages. Actual artifact snapshot schema uses legacy_test_topics. Original preflight KeyError/no physics directory preserved.",
+  "checks": {
+    "runner_fixed_key_only_in_adapter_mode_guard": true,
+    "root_frozen_adapter_enabled_modern": true,
+    "ready_actual8sha_equal": true
+  },
+  "final_runner_sha256": "fdbec4a8690baad08fcd889811500994eb44b1c34a275bccdcf9c8fe4cd8d396",
+  "prior_static_review_limit": "Earlier read-only Ready did not catch the mismatched manifest-vs-status key; no physics was run with that version. All gates and failures are retained.",
+  "original_directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/test_results/20261001_final_cm_fourturn"
+}

@@ -1,0 +1,960 @@
+{
+  "schema": "teacher_turn_boundary_campaign_analysis/v1",
+  "status": "passed",
+  "completed_new_cases": 12,
+  "expected_new_cases": 12,
+  "selected_original_cases": 6,
+  "verified_original_and_new_receipts": 18,
+  "all_18_gates_passed_each_of_18_runs": true,
+  "boundaries": [
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 0.3,
+      "direction_sign": -1,
+      "requested_yaw_rate_radps": -0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020116_plant_radius_prepare_f01a/summary_radius_independent.json",
+        "sha256": "20395f4718ac96cc7fefbd52e4419ed1a8f067279e908a9d8616a2b521aa48bf"
+      },
+      "original_first_sweep_actual_radius_m": 0.36617654682577144,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020116_plant_radius_prepare_f01a",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020116_plant_radius_prepare_f01a/summary_radius_independent.json",
+          "source_sha256": "20395f4718ac96cc7fefbd52e4419ed1a8f067279e908a9d8616a2b521aa48bf",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.36617654682577144,
+          "circle_radial_RMSE_m": 0.003909443846990956,
+          "radius_subfit_CV": 0.00985641110537875,
+          "forward_MAE_mps": 0.016132404500492043,
+          "yaw_rate_MAE_radps": 0.02497055499396677,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0011472471853522651,
+            "peak_body_yaw_radps": 0.0043421708495570074,
+            "xy_max_drift_m": 0.0010125423944082016,
+            "yaw_max_unwrapped_drift_rad": 0.010661714056261928
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "e1cea64bffa9e61b5d868319b83f789a43d1e8cabc59c3cdfd275d470de19fa4",
+            "telemetry.jsonl": "fe552e829a31a43d81933b7ac1a42d900eb83d8319c6274eaac102fb1ce8a41d",
+            "plant_commands.jsonl": "6bab7f41984e5dd2e045263e474c84058218880b6c58eb329c0a18a93d3ccab3",
+            "observations_actions.npz": "fa1b894d88ad101b08d5d5937294841cd90e0026b1f1dff38860aaa19049fb40",
+            "runtime_manifest.json": "fe9d805c09958eb516521444666a07a03c3b4f26708d0484cce9d9ee28df2813",
+            "policy_manifest.json": "294dce1888e24d02f6ac48a7d02e544944c08c20db40a18d6ccdea06a2e61e4d",
+            "worker_result.json": "011fe3e6af654a660904f49aeef2f4f996442855c6439ca510b0b30d7de6798a",
+            "source_manifest.json": "a395edac039ced0264c78c2253a77514f729d93c1f8949335c84c458d37c529d",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "dac4afac4896cef0476fecd5dfb75480e5b662da774a39533fcca1bb1ccaf6f7",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021500_plant_radius_prepare_4f39",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021500_plant_radius_prepare_4f39/summary_radius_independent.json",
+          "source_sha256": "518788cccee9d3440d3d864c95dcf2c2fb843c3d4ea82bc9b3f40ef2f5e17294",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.36617654682577144,
+          "circle_radial_RMSE_m": 0.003909443846990956,
+          "radius_subfit_CV": 0.00985641110537875,
+          "forward_MAE_mps": 0.016132404500492043,
+          "yaw_rate_MAE_radps": 0.02497055499396677,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0011472471853522651,
+            "peak_body_yaw_radps": 0.0043421708495570074,
+            "xy_max_drift_m": 0.0010125423944082016,
+            "yaw_max_unwrapped_drift_rad": 0.010661714056261928
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "0404bba99ebbad0f53f1403177b676a44c6de93c8c3db672106a07cb53574f33",
+            "telemetry.jsonl": "38b36bee67d5c3fb1b2d510e97cdeb8ba3f0ee70b67896990532dc7432216605",
+            "plant_commands.jsonl": "6bab7f41984e5dd2e045263e474c84058218880b6c58eb329c0a18a93d3ccab3",
+            "observations_actions.npz": "fa1b894d88ad101b08d5d5937294841cd90e0026b1f1dff38860aaa19049fb40",
+            "runtime_manifest.json": "4289d6853103fbfe3df217c44b00a5796daf4fb87364d308db377434d8b58877",
+            "policy_manifest.json": "9a5fe6fdc54fc21b9b1f266d553bcfe284b409e5678ed7428ad2e05f529514b2",
+            "worker_result.json": "84a2528e456ce7b28e20f11f68e91a8b47ac66766b181fd554816884147b19d3",
+            "source_manifest.json": "c706369805ea9c17c8587c82e5c969369d25798a58c69263743c3dac8244e2d0",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "338fb138ceef2b7a8ac734ac21e450947f5c6a3d5bcda045042850896ead85b0",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021538_plant_radius_prepare_2b63",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021538_plant_radius_prepare_2b63/summary_radius_independent.json",
+          "source_sha256": "4a8e48e24a3d7e872f2d7fa4639c0d7a59b1216a23e193ec8f81ab47dd97fe27",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.36617654682577144,
+          "circle_radial_RMSE_m": 0.003909443846990956,
+          "radius_subfit_CV": 0.00985641110537875,
+          "forward_MAE_mps": 0.016132404500492043,
+          "yaw_rate_MAE_radps": 0.02497055499396677,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0011472471853522651,
+            "peak_body_yaw_radps": 0.0043421708495570074,
+            "xy_max_drift_m": 0.0010125423944082016,
+            "yaw_max_unwrapped_drift_rad": 0.010661714056261928
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "67ae0a5b2a93a7be9aee8e3f8a5b4b02efa787644d43b7b568b1cb78331c9226",
+            "telemetry.jsonl": "df9008fc6c5761963d037e03069d80fe122425e28adc89a7c951d1059b62572b",
+            "plant_commands.jsonl": "6bab7f41984e5dd2e045263e474c84058218880b6c58eb329c0a18a93d3ccab3",
+            "observations_actions.npz": "fa1b894d88ad101b08d5d5937294841cd90e0026b1f1dff38860aaa19049fb40",
+            "runtime_manifest.json": "a6ada38680a8a5cbd310084bf21efb68d81dde1493d97f6c9f495adba3fe4053",
+            "policy_manifest.json": "454d7a79f4d829d17619fc1125b5a614f547371ccc675b5dc5d77c8ef6b1f983",
+            "worker_result.json": "80bf1db16c7fded92e5f53525755b80580f0d1e16ffedac5f456dd27e53242f7",
+            "source_manifest.json": "4e5eddba1d379f51f18dd9f7a255fa8366170d320a2074e62b296e1e9026a0f8",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "589b5fed84943166c782003a449cb7c9d39a6ccfe94843957d66a3bbdeb2b4bc",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        0.36617654682577144,
+        0.36617654682577144
+      ],
+      "worst_passed_actual_radius_m": 0.36617654682577144,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 0.5492648202386572,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020116_plant_radius_prepare_f01a/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "20395f4718ac96cc7fefbd52e4419ed1a8f067279e908a9d8616a2b521aa48bf",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    },
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 0.3,
+      "direction_sign": 1,
+      "requested_yaw_rate_radps": 0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020307_plant_radius_prepare_0523/summary_radius_independent.json",
+        "sha256": "e936947a943c37dd6a54dc3e569423b0d13e0ba392ee68bedd486ec4f3cdb2e9"
+      },
+      "original_first_sweep_actual_radius_m": 0.35544846674778513,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020307_plant_radius_prepare_0523",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020307_plant_radius_prepare_0523/summary_radius_independent.json",
+          "source_sha256": "e936947a943c37dd6a54dc3e569423b0d13e0ba392ee68bedd486ec4f3cdb2e9",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.35544846674778513,
+          "circle_radial_RMSE_m": 0.0038025639451549744,
+          "radius_subfit_CV": 0.005535064645679654,
+          "forward_MAE_mps": 0.020100230366638036,
+          "yaw_rate_MAE_radps": 0.02511169695148407,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0022122903238570232,
+            "peak_body_yaw_radps": 0.0036088804403473663,
+            "xy_max_drift_m": 0.002188468062908416,
+            "yaw_max_unwrapped_drift_rad": 0.005132604638347971
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "13b1e142a01c74797df27c6d939d9861ca6d575a2d591b5c211b4013464a0915",
+            "telemetry.jsonl": "79745ff8b7531161b17a256b22966bb23f5b30da6513fe0b35950b6d47098de2",
+            "plant_commands.jsonl": "61b1f1739489b9d7941b1bed2019aacbe67272f9056a40f916bbe60cb13fff6b",
+            "observations_actions.npz": "a3c7fb816beceab905c1878e3eadfc241b502901b1ec7e5e51962284898cf888",
+            "runtime_manifest.json": "5a7ac8aecb0745a68f9d1f4ef3e2f71046117ac31ce66bfe70646bc7c4d5573d",
+            "policy_manifest.json": "2b66b17b86ca8c8990bc6af3581d4d55f561da5ef3e8df8c22d9533566505a7d",
+            "worker_result.json": "ccdfc80f3af2e64ee46a044a7fa56d32262a9713b0630ea5169174f5d71fd512",
+            "source_manifest.json": "9abee844f884d8c9ae8c18557b70190d4c06609cca69db0121f3ed90e9367f7f",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "77da1289745cd0c3677fd12108ca0b411280212e8b75fb9e3d9338a8b23caa82",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021615_plant_radius_prepare_c486",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021615_plant_radius_prepare_c486/summary_radius_independent.json",
+          "source_sha256": "73b251e2b9eb7569ee554f0ea16aaa2981db2e88ce1ab7c2508116b6bfa9ea89",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.35544846674778513,
+          "circle_radial_RMSE_m": 0.0038025639451549744,
+          "radius_subfit_CV": 0.005535064645679654,
+          "forward_MAE_mps": 0.020100230366638036,
+          "yaw_rate_MAE_radps": 0.02511169695148407,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0022122903238570232,
+            "peak_body_yaw_radps": 0.0036088804403473663,
+            "xy_max_drift_m": 0.002188468062908416,
+            "yaw_max_unwrapped_drift_rad": 0.005132604638347971
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "417a51c7356e81171faa0042130631d4b3a2400524b6d68951cb33ca8580bd87",
+            "telemetry.jsonl": "cddafeb3947ff17efce9a60dce62e693093eda86f7fe5b036742fd0adffc5eff",
+            "plant_commands.jsonl": "61b1f1739489b9d7941b1bed2019aacbe67272f9056a40f916bbe60cb13fff6b",
+            "observations_actions.npz": "a3c7fb816beceab905c1878e3eadfc241b502901b1ec7e5e51962284898cf888",
+            "runtime_manifest.json": "dd98f18b99316b90bfbc77a987b63a34bf3a77c6151d589596c03b075498b94b",
+            "policy_manifest.json": "6a115f66bfbe1f1b88aba126a78b02392d528e8016fbaf94fc1f6552c00338f4",
+            "worker_result.json": "58a143fae251257726c1daccb9f56f1483db7a97198398e16a7496ae3ad51e35",
+            "source_manifest.json": "695c05ed681c32ea225a885099e64ca416552639d59939c807b1af4e92343b24",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "076831c31cbc6fdb035df56b01821446dd53b0b4c32295dc94f9c1149d2b1095",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021652_plant_radius_prepare_463d",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021652_plant_radius_prepare_463d/summary_radius_independent.json",
+          "source_sha256": "35f1b85406e079a5f6886cd71c8e9758c6a8fd837090c851e05eabff391cc43f",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.35544846674778513,
+          "circle_radial_RMSE_m": 0.0038025639451549744,
+          "radius_subfit_CV": 0.005535064645679654,
+          "forward_MAE_mps": 0.020100230366638036,
+          "yaw_rate_MAE_radps": 0.02511169695148407,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0022122903238570232,
+            "peak_body_yaw_radps": 0.0036088804403473663,
+            "xy_max_drift_m": 0.002188468062908416,
+            "yaw_max_unwrapped_drift_rad": 0.005132604638347971
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "8a6893d4596cf7bcb8e2bca0fb37418bf9fb9096141db9cc7ad5f3341778c79b",
+            "telemetry.jsonl": "60b388275e35a82c0ddb8b14324cda9788de6186e9e374d11cdb5707ae9dd9c4",
+            "plant_commands.jsonl": "61b1f1739489b9d7941b1bed2019aacbe67272f9056a40f916bbe60cb13fff6b",
+            "observations_actions.npz": "a3c7fb816beceab905c1878e3eadfc241b502901b1ec7e5e51962284898cf888",
+            "runtime_manifest.json": "929b52ad14d464fecc1133e2ff49dcb4c9fb4ea04c5c4436cae7754659cc563d",
+            "policy_manifest.json": "65143e89cf3249e2d39d7cac9ca03743d332708fff797fb91271e3def85a9caa",
+            "worker_result.json": "c2bfb4c60bcbb0f155801624d80f8a2f23689de3942bd80ef6b69e08d79f6fc8",
+            "source_manifest.json": "efcb4e8017f271dc6b8e5d391412d41875766cca1fc27413c93b91facb51c149",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "505adb5ec17160c0747562884446db36212ce2bb7c1f6c6f503861ad3f34ad35",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        0.35544846674778513,
+        0.35544846674778513
+      ],
+      "worst_passed_actual_radius_m": 0.35544846674778513,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 0.5331727001216777,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020307_plant_radius_prepare_0523/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "e936947a943c37dd6a54dc3e569423b0d13e0ba392ee68bedd486ec4f3cdb2e9",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    },
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 0.5,
+      "direction_sign": -1,
+      "requested_yaw_rate_radps": -0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020535_plant_radius_prepare_1367/summary_radius_independent.json",
+        "sha256": "3b6781a7da1c76f7f915317974d8a793992b482d3a14ce6c6b384c3491f07a6f"
+      },
+      "original_first_sweep_actual_radius_m": 0.6180066955412397,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020535_plant_radius_prepare_1367",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020535_plant_radius_prepare_1367/summary_radius_independent.json",
+          "source_sha256": "3b6781a7da1c76f7f915317974d8a793992b482d3a14ce6c6b384c3491f07a6f",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6180066955412397,
+          "circle_radial_RMSE_m": 0.006660186095465987,
+          "radius_subfit_CV": 0.0036017581560076014,
+          "forward_MAE_mps": 0.02101657335158542,
+          "yaw_rate_MAE_radps": 0.038878892197108786,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0036947180952656743,
+            "peak_body_yaw_radps": 0.010765066741757147,
+            "xy_max_drift_m": 0.003626888835462024,
+            "yaw_max_unwrapped_drift_rad": 0.028509539896919733
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "63f91aa7b9dafe7db3c6d18357e0691aeadcbf73b2b318ad34df73fd557a4449",
+            "telemetry.jsonl": "3d6ab36512209b35062d39ed26d7de06c64026864388fe54e0fd8bbb8f305b55",
+            "plant_commands.jsonl": "82affb43daafd28b235d3de55753279a0f1dbe11a6aa74f08df19f0d0a564578",
+            "observations_actions.npz": "1d8b040d6c3f9493f68784691e284aa2e6281b1160f9f0e83e4a1525dfad34ca",
+            "runtime_manifest.json": "341537ee6e7ba9b68d864932f01f9758a87f435fc1f004813647859c97b724f7",
+            "policy_manifest.json": "3304ccbffc93d079e9352522a5a6dfbe7e08080b3ce98590f0818963c5b5b688",
+            "worker_result.json": "68df747d6b8e358f68f00e97fbd5cd8905ee9e94e7bcf57ce89c510759078865",
+            "source_manifest.json": "772add21e31e4db80efd10f340e1ae3f8001a164e842c7870165aa2142502d42",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "5865af81de802475a6068fa96a4afcccca65cfe377a05aa3b2b0404b9227da52",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021729_plant_radius_prepare_f3ec",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021729_plant_radius_prepare_f3ec/summary_radius_independent.json",
+          "source_sha256": "0c20f5085f6c2b34efe44d46235dad3122ab51dd305a1da182b4401b88c09691",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6180066955412397,
+          "circle_radial_RMSE_m": 0.006660186095465987,
+          "radius_subfit_CV": 0.0036017581560076014,
+          "forward_MAE_mps": 0.02101657335158542,
+          "yaw_rate_MAE_radps": 0.038878892197108786,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0036947180952656743,
+            "peak_body_yaw_radps": 0.010765066741757147,
+            "xy_max_drift_m": 0.003626888835462024,
+            "yaw_max_unwrapped_drift_rad": 0.028509539896919733
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "406e57905c1f089e21332f533584cc1fa945f9fc2044c39ccd142464466738c9",
+            "telemetry.jsonl": "037526feead47ad89fe0538fe2f7b5c4117fca8be2084edadc49982d9ab4767d",
+            "plant_commands.jsonl": "82affb43daafd28b235d3de55753279a0f1dbe11a6aa74f08df19f0d0a564578",
+            "observations_actions.npz": "1d8b040d6c3f9493f68784691e284aa2e6281b1160f9f0e83e4a1525dfad34ca",
+            "runtime_manifest.json": "6e2b7aa511bb93e6b4d9ce674c3f048c9fa22f2bd73ba9054a2c4d3fa62cbc65",
+            "policy_manifest.json": "f5c8e803a4bb90a4bf71f2bbabb81e1dba696b83bc3a1adb8cfe05e846682c0f",
+            "worker_result.json": "4bdc5172a6995b74f31e4c04a534e865b1bdec519d7399eb62e075127e8fd0a9",
+            "source_manifest.json": "690f4e946251e1fe98bbde8a7a642cd3089f29623b671ec9fa32560715cd0e41",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "395f5c03b9d2097be2341b2b60f5de26a3116a2f71353a0ed699bc3761f7e001",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021806_plant_radius_prepare_c1e1",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021806_plant_radius_prepare_c1e1/summary_radius_independent.json",
+          "source_sha256": "c99c6b892c7ed6cc925079749d50efa65f75f256ddfdfdda29ecdcb0b9d30202",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6180066955412397,
+          "circle_radial_RMSE_m": 0.006660186095465987,
+          "radius_subfit_CV": 0.0036017581560076014,
+          "forward_MAE_mps": 0.02101657335158542,
+          "yaw_rate_MAE_radps": 0.038878892197108786,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0036947180952656743,
+            "peak_body_yaw_radps": 0.010765066741757147,
+            "xy_max_drift_m": 0.003626888835462024,
+            "yaw_max_unwrapped_drift_rad": 0.028509539896919733
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "9518680d0cc431d4fd1f9aaadd845268d20b297743517f7d6b8699292615c4ec",
+            "telemetry.jsonl": "570c2d2b0b3cc87d4118fb4f1adba5f8c6346f48e1bee5dce385bd92d85f1477",
+            "plant_commands.jsonl": "82affb43daafd28b235d3de55753279a0f1dbe11a6aa74f08df19f0d0a564578",
+            "observations_actions.npz": "1d8b040d6c3f9493f68784691e284aa2e6281b1160f9f0e83e4a1525dfad34ca",
+            "runtime_manifest.json": "4f7a28b641e26ef73bd0ff38540731cef833b1f55408ec5d16602cd3a8f51ca2",
+            "policy_manifest.json": "9b1edf710f569750de7b04ec019bed86f26fef7dc9d0c496092015d9d2c9eb24",
+            "worker_result.json": "7a4cc3c4d9931c7286cdd72b534f2cdaafdc9849b009f62b709cf7c218bd1a69",
+            "source_manifest.json": "668a96413a2d92e9e6db309b1c44773ba4d5d145adb0c347a8204c30b4407bf9",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "32f6f7afd2209b8b03e8c66d25a99d16c559b8eeb99025662b52806e37626b53",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        0.6180066955412397,
+        0.6180066955412397
+      ],
+      "worst_passed_actual_radius_m": 0.6180066955412397,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 0.9270100433118595,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020535_plant_radius_prepare_1367/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "3b6781a7da1c76f7f915317974d8a793992b482d3a14ce6c6b384c3491f07a6f",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    },
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 0.5,
+      "direction_sign": 1,
+      "requested_yaw_rate_radps": 0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020803_plant_radius_prepare_af31/summary_radius_independent.json",
+        "sha256": "328aa269aa46ceb1c58c47979717a36c648f87614c3a9a29024a73b6ff437a11"
+      },
+      "original_first_sweep_actual_radius_m": 0.6028447830932689,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020803_plant_radius_prepare_af31",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020803_plant_radius_prepare_af31/summary_radius_independent.json",
+          "source_sha256": "328aa269aa46ceb1c58c47979717a36c648f87614c3a9a29024a73b6ff437a11",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6028447830932689,
+          "circle_radial_RMSE_m": 0.005008789906060742,
+          "radius_subfit_CV": 0.00274411559980255,
+          "forward_MAE_mps": 0.025081179858621763,
+          "yaw_rate_MAE_radps": 0.038745093205626094,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0021507274862838568,
+            "peak_body_yaw_radps": 0.0045933083451426176,
+            "xy_max_drift_m": 0.001947228175249508,
+            "yaw_max_unwrapped_drift_rad": 0.017564157769896838
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "2efb4919134d7aa66143377789843e8c76f20ae45fea6fe3c3b694f74f1608ac",
+            "telemetry.jsonl": "9986c7a64b57e3f4c5e2f40c711373a3c0244f1846da79207cbb9ba12e91096d",
+            "plant_commands.jsonl": "f8c32000330b0f22a45088b6974f687d1b6c6ca2e61e9c7d97ce7d27a433a20b",
+            "observations_actions.npz": "99806cf00fcea8a73292c0a826cc75ebbf83bbfb5576f3d95d28eba7737d0efa",
+            "runtime_manifest.json": "8068702d5aae490b304a527ec5a6417f5e81617110e9ca7cf6dfa3a47758ee91",
+            "policy_manifest.json": "908ac5aa64c733a957012bc2080119e4ad48083364f9dd923ce83758f0929684",
+            "worker_result.json": "bfe39af63c873d7fa9bb4da457436e1acc5fb6be243f2f2c351622960e6f1b3c",
+            "source_manifest.json": "0df4195f45b7f6b2baa6f91ca0f0d3a3c68a3328728b5e1a8067baed350acd34",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "c34fc1cbf55c0cc0286309fb6c61ad50f85e2f157f67494109a58a10afe1faee",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021843_plant_radius_prepare_07d0",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021843_plant_radius_prepare_07d0/summary_radius_independent.json",
+          "source_sha256": "3bca05ce2fc0a6c1ec4074d595039281b0df484b3e526fb1c88727fb1248eea5",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6028447830932689,
+          "circle_radial_RMSE_m": 0.005008789906060742,
+          "radius_subfit_CV": 0.00274411559980255,
+          "forward_MAE_mps": 0.025081179858621763,
+          "yaw_rate_MAE_radps": 0.038745093205626094,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0021507274862838568,
+            "peak_body_yaw_radps": 0.0045933083451426176,
+            "xy_max_drift_m": 0.001947228175249508,
+            "yaw_max_unwrapped_drift_rad": 0.017564157769896838
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "9a9fd5cc4617c3d7d1cead5cc276e4c09ed6974f5414ed00b54ee136d546c624",
+            "telemetry.jsonl": "3042ae194e8456ed7e8c9fe9c9eaabc7e8b90f82d8c31879f13dcd6c54ca127e",
+            "plant_commands.jsonl": "f8c32000330b0f22a45088b6974f687d1b6c6ca2e61e9c7d97ce7d27a433a20b",
+            "observations_actions.npz": "99806cf00fcea8a73292c0a826cc75ebbf83bbfb5576f3d95d28eba7737d0efa",
+            "runtime_manifest.json": "dc2742612728d5b38ed113432f8bd7ca38db0fe171cc1e65e9774febd56f8d0c",
+            "policy_manifest.json": "4b9689f6ff93605be5cee0dfaced38655613bbb3c72f5421de83bdc6221804b2",
+            "worker_result.json": "e805dcbaa713dc69d2aa377e8727fa13e1db59819d44d36f79b48beb381edd04",
+            "source_manifest.json": "81e242a537afdbed87174ed7cafb37b00bf609e97aa77e37256996d7810ad41e",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "1618d27c6660f00dfe427fda7e7475f064ba4d71b25821f030b93b3beccb94c7",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021920_plant_radius_prepare_df6c",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021920_plant_radius_prepare_df6c/summary_radius_independent.json",
+          "source_sha256": "5c1ed8065d35f63805337e9e988477ab3e3c6a9c1ef3fa86173ac14d1cc6c864",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 0.6028447830932689,
+          "circle_radial_RMSE_m": 0.005008789906060742,
+          "radius_subfit_CV": 0.00274411559980255,
+          "forward_MAE_mps": 0.025081179858621763,
+          "yaw_rate_MAE_radps": 0.038745093205626094,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.0021507274862838568,
+            "peak_body_yaw_radps": 0.0045933083451426176,
+            "xy_max_drift_m": 0.001947228175249508,
+            "yaw_max_unwrapped_drift_rad": 0.017564157769896838
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "6aae373230a0b46c2bada9936d42de444ed1b6d99a2793c923a00c4f8c775d62",
+            "telemetry.jsonl": "ebdbfc967f2ce29418e786d28abdb38e31be462767ac0685025285f0a1bf52c8",
+            "plant_commands.jsonl": "f8c32000330b0f22a45088b6974f687d1b6c6ca2e61e9c7d97ce7d27a433a20b",
+            "observations_actions.npz": "99806cf00fcea8a73292c0a826cc75ebbf83bbfb5576f3d95d28eba7737d0efa",
+            "runtime_manifest.json": "382840ba316d93e8d0a3c40130d5994a8b497f797bbf106b31615ec5365516c3",
+            "policy_manifest.json": "805f1a894a07a32865490e9e3687d4e10e4a3be5c4f24034da7d1ca2a0fc7bd3",
+            "worker_result.json": "123ad0d3f99c674257c6118ef12bc295c982c012abd44dd4bbe57f4bfb497d72",
+            "source_manifest.json": "97044d499128d82ffcd90687ca3f884131c82988b2c6f183e932fc152adcf4bc",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "018b6f06abc171f43e336a65938834288811409cd7f40e12571d38f90d43456b",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        0.6028447830932689,
+        0.6028447830932689
+      ],
+      "worst_passed_actual_radius_m": 0.6028447830932689,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 0.9042671746399034,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_020803_plant_radius_prepare_af31/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "328aa269aa46ceb1c58c47979717a36c648f87614c3a9a29024a73b6ff437a11",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    },
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 1.0,
+      "direction_sign": -1,
+      "requested_yaw_rate_radps": -0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021031_plant_radius_prepare_1e41/summary_radius_independent.json",
+        "sha256": "5ef383f512948680aab5f4f315d90af88ca84327eb26ac98d82428426ee92a71"
+      },
+      "original_first_sweep_actual_radius_m": 1.2966823734974031,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021031_plant_radius_prepare_1e41",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021031_plant_radius_prepare_1e41/summary_radius_independent.json",
+          "source_sha256": "5ef383f512948680aab5f4f315d90af88ca84327eb26ac98d82428426ee92a71",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2966823734974031,
+          "circle_radial_RMSE_m": 0.008278029243060916,
+          "radius_subfit_CV": 0.0026722390710757853,
+          "forward_MAE_mps": 0.034383968204261865,
+          "yaw_rate_MAE_radps": 0.0579203573077932,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.02034914689003883,
+            "peak_body_yaw_radps": 0.031542733418279977,
+            "xy_max_drift_m": 0.014774760299286113,
+            "yaw_max_unwrapped_drift_rad": 0.08354256639310265
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "c3d187a56b8590fffa41cb009f2010f97e1405a0ab18d0847a54a67f68f68067",
+            "telemetry.jsonl": "2ef1010303fa45ff41b9c6529d35a9ab89c53c75dc0f80617d689aef977e0157",
+            "plant_commands.jsonl": "be553ba95145ae1b5f697cecfe319d8b606f96ca52f6db2e33b07fbe57b43407",
+            "observations_actions.npz": "ca023a27e1de7e4194d18c4ec74d71e4188e3e1b744765c74a1a1632c36873aa",
+            "runtime_manifest.json": "b035b2cc89b2a940e8fc737bad353f1f8b78ba46fb479948087e0424c819f8cd",
+            "policy_manifest.json": "19250729b10fa6ad7c7c79512d1a6b5fb6bd590644e8df3112bc368f266fb64b",
+            "worker_result.json": "d904cde5c74dfa4d4476a0f704b8e60e0d3e6bd1c90f7d08fbcf2e53ff9859ea",
+            "source_manifest.json": "3a43ae5a6e29914c467aca229aac3e8e3df2e2b3061b13bb63213e930b0d8b48",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "639500738fdfc5a6e981fbeab1fa147e47c44a7159a20755ae13aca51da824cd",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021957_plant_radius_prepare_a898",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021957_plant_radius_prepare_a898/summary_radius_independent.json",
+          "source_sha256": "fd7b3b3a4850edbd1594f44613f90621ed465de441ae6e5d8e4e16569bc7e316",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2966823734974031,
+          "circle_radial_RMSE_m": 0.008278029243060916,
+          "radius_subfit_CV": 0.0026722390710757853,
+          "forward_MAE_mps": 0.034383968204261865,
+          "yaw_rate_MAE_radps": 0.0579203573077932,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.02034914689003883,
+            "peak_body_yaw_radps": 0.031542733418279977,
+            "xy_max_drift_m": 0.014774760299286113,
+            "yaw_max_unwrapped_drift_rad": 0.08354256639310265
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "538cba77d8f548159bb5ac4a90b0de005fb9af1a6fa427ace72e20e9480da662",
+            "telemetry.jsonl": "fd9b5bdb03c8a178e4235460c54bd6ae403ff959132448755140a178a1dce1ed",
+            "plant_commands.jsonl": "be553ba95145ae1b5f697cecfe319d8b606f96ca52f6db2e33b07fbe57b43407",
+            "observations_actions.npz": "ca023a27e1de7e4194d18c4ec74d71e4188e3e1b744765c74a1a1632c36873aa",
+            "runtime_manifest.json": "b86b4bac59e7c599d64e044a7365d67fb6e6a53870ce780824d6e4bbe6ff581c",
+            "policy_manifest.json": "0440e1ba859616c392547411134fdd5ac9962961233c2771f1199a57e03e41c9",
+            "worker_result.json": "36842d8e652c6dbe943ca223f665b4286401cb6449af91188bc8a7ddc59b7dbe",
+            "source_manifest.json": "738a5e79f37938423c063a8294e8ef20af7566fa339aeb1aa815a84dba995047",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "1cab5a5e784f4d4d141a47105f9fbcb5c96aa309be74a65774f6fbdb8001cfef",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022034_plant_radius_prepare_f11f",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022034_plant_radius_prepare_f11f/summary_radius_independent.json",
+          "source_sha256": "64cac07b363ea49b13f9e06c9510938cafd70acf8c169b7c263596a4c11211a7",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2966823734974031,
+          "circle_radial_RMSE_m": 0.008278029243060916,
+          "radius_subfit_CV": 0.0026722390710757853,
+          "forward_MAE_mps": 0.034383968204261865,
+          "yaw_rate_MAE_radps": 0.0579203573077932,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.02034914689003883,
+            "peak_body_yaw_radps": 0.031542733418279977,
+            "xy_max_drift_m": 0.014774760299286113,
+            "yaw_max_unwrapped_drift_rad": 0.08354256639310265
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "68082e39f1165a5c6feb03a8574342ef00e69c478775a95763eb3686b35ba859",
+            "telemetry.jsonl": "278fca7b585afa944e1b58c4deda955442394018df15e3147f6e019e5aaa1890",
+            "plant_commands.jsonl": "be553ba95145ae1b5f697cecfe319d8b606f96ca52f6db2e33b07fbe57b43407",
+            "observations_actions.npz": "ca023a27e1de7e4194d18c4ec74d71e4188e3e1b744765c74a1a1632c36873aa",
+            "runtime_manifest.json": "852e986286a0bcd5c01ed12565ddffdae96af95e14da963b236602b06baeabc1",
+            "policy_manifest.json": "bd134fd04c3a69135469d7b864349d4b0ddd20c47e57c710ccd5965260718146",
+            "worker_result.json": "af5466f9110c2b57ee72e66da57682c1418cae9af81f00805a95767ab46a2b8f",
+            "source_manifest.json": "bc74a2c18aab251e643bd2ff9cd7f5bb309f1d9f20551fb485943e1372a6f7f6",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "11d6e1f1ca22d169fcf5556d657a7defc39e16968fc8ebe35b56a4de2bce864b",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        1.2966823734974031,
+        1.2966823734974031
+      ],
+      "worst_passed_actual_radius_m": 1.2966823734974031,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 1.9450235602461046,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021031_plant_radius_prepare_1e41/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "5ef383f512948680aab5f4f315d90af88ca84327eb26ac98d82428426ee92a71",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    },
+    {
+      "schema": "teacher_tested_turn_boundary_three_repeat/v1",
+      "status": "passed",
+      "desired_speed_mps": 1.0,
+      "direction_sign": 1,
+      "requested_yaw_rate_radps": 0.8,
+      "repetitions": [
+        1,
+        2,
+        3
+      ],
+      "three_repeat_identity_checked": true,
+      "verified_pass_repeats": 3,
+      "original_sweep_minimum_receipt_unchanged": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021259_plant_radius_prepare_d209/summary_radius_independent.json",
+        "sha256": "2238819e40e94856b76b0d57397bdb65a8ca355557f32083184d2367d8269bb4"
+      },
+      "original_first_sweep_actual_radius_m": 1.2848692405814797,
+      "claim": "3/3 of one previously selected minimum-tested command at this speed/sign; not a global minimum, nor PID/SLAM curve tracking",
+      "global_minimum_claim": false,
+      "PID_curve_tracking": "unverified",
+      "SLAM_navigation": "unverified",
+      "footprint_and_obstacle_inflation": "Must be evaluated separately from the centerline-radius margin",
+      "source_receipts": [
+        {
+          "repetition": 1,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021259_plant_radius_prepare_d209",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021259_plant_radius_prepare_d209/summary_radius_independent.json",
+          "source_sha256": "2238819e40e94856b76b0d57397bdb65a8ca355557f32083184d2367d8269bb4",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2848692405814797,
+          "circle_radial_RMSE_m": 0.009584595958007442,
+          "radius_subfit_CV": 0.003405077174804086,
+          "forward_MAE_mps": 0.0334533994579042,
+          "yaw_rate_MAE_radps": 0.05731053826567791,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.014799421481344577,
+            "peak_body_yaw_radps": 0.007513476158589851,
+            "xy_max_drift_m": 0.009796178267346207,
+            "yaw_max_unwrapped_drift_rad": 0.03174337182319675
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "50bd3eb4f03490eb670256e4298ab2c7618495c2ea1ddc2db05cc722b3a1580e",
+            "telemetry.jsonl": "03aba8f6571f32f5659fbdbcb4483d8551ef7bc563957112f8e24967cc77de63",
+            "plant_commands.jsonl": "ef4ef5fd3ad41bb2300a4d9aaab06613fb09d321f8c8f0ac2ef099344e92d5df",
+            "observations_actions.npz": "77b3a36d8d411774ded1e1a7a85c5d309a13e3244f0258af81230aa460455a5f",
+            "runtime_manifest.json": "8b501f902e6cfd211894cfd33a0c1af6c818be26402e87843c6e92a425a5c8e1",
+            "policy_manifest.json": "cdf44f26187f4bf7d28f3888375412d1ce2e8538647f32c3e5d0d8544ab191d2",
+            "worker_result.json": "fa4efa70e81dd600ba20f3066598c75fe2d6c81448b384765cef13d71295056c",
+            "source_manifest.json": "d94f4a0d84080587fcbe49d7573095779ab5ad03af63e9a8dc40053029544bfd",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "260d0086a48149480e4e00dc7a115fd7dd91cea9932c7b09f1fe90165f499153",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 2,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022111_plant_radius_prepare_4b13",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022111_plant_radius_prepare_4b13/summary_radius_independent.json",
+          "source_sha256": "0963b91e9c9ca7f49869cdac918f91556a85bf8d6fd141e3e8dc6eb9e27e1108",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2848692405814797,
+          "circle_radial_RMSE_m": 0.009584595958007442,
+          "radius_subfit_CV": 0.003405077174804086,
+          "forward_MAE_mps": 0.0334533994579042,
+          "yaw_rate_MAE_radps": 0.05731053826567791,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.014799421481344577,
+            "peak_body_yaw_radps": 0.007513476158589851,
+            "xy_max_drift_m": 0.009796178267346207,
+            "yaw_max_unwrapped_drift_rad": 0.03174337182319675
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "876cd185854161d184a894614760990465a740ccd1cb7867783003fcb8215181",
+            "telemetry.jsonl": "0d0254dd3d95910a22f7085a7969395ea15ac967f8dcae703887b2214dee1ea2",
+            "plant_commands.jsonl": "ef4ef5fd3ad41bb2300a4d9aaab06613fb09d321f8c8f0ac2ef099344e92d5df",
+            "observations_actions.npz": "77b3a36d8d411774ded1e1a7a85c5d309a13e3244f0258af81230aa460455a5f",
+            "runtime_manifest.json": "4a5a31301123999a202270b795cb5efb7af0f890e004044f1e91cbbd69985227",
+            "policy_manifest.json": "ce60451b251d6733529ac4cfe4aebe848a27313124a09bea0fc615f8b664d419",
+            "worker_result.json": "cdabfdb9f793741b90e97ce0afbceb29c9d0c3d42840f9aec46bf37c8a26c679",
+            "source_manifest.json": "8b6791da1841dc5036edd49d8d37a9ba08ca9ce67c9b2f60b19379e4ce7f7e35",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "1b9eeb1bee104f8666454c07dfdd5f8eabd2b5d76e990ea2f447b8a647e90044",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        },
+        {
+          "repetition": 3,
+          "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022148_plant_radius_prepare_2277",
+          "source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_022148_plant_radius_prepare_2277/summary_radius_independent.json",
+          "source_sha256": "6728adfcd20907a454a5a355f0bbabf509d892cee01aa353e3387e99a68ee85a",
+          "integrity_status": "passed",
+          "plant_status": "passed",
+          "actual_fitted_radius_m": 1.2848692405814797,
+          "circle_radial_RMSE_m": 0.009584595958007442,
+          "radius_subfit_CV": 0.003405077174804086,
+          "forward_MAE_mps": 0.0334533994579042,
+          "yaw_rate_MAE_radps": 0.05731053826567791,
+          "fixed_parking": {
+            "fixed_window_s": [
+              28.0,
+              33.0
+            ],
+            "native_samples": 1001,
+            "policy_samples": 251,
+            "peak_planar_origin_mps": 0.014799421481344577,
+            "peak_body_yaw_radps": 0.007513476158589851,
+            "xy_max_drift_m": 0.009796178267346207,
+            "yaw_max_unwrapped_drift_rad": 0.03174337182319675
+          },
+          "original_input_hashes": {
+            "actuator.jsonl": "a8a31fbdba44eaddbeee00998a69c86d30492fa3ee6480b97739f5581b2565e9",
+            "telemetry.jsonl": "eeb378822a86f54ff420af1dc3758d822fca1d4328de8e2f0c8dd98f6fa419b8",
+            "plant_commands.jsonl": "ef4ef5fd3ad41bb2300a4d9aaab06613fb09d321f8c8f0ac2ef099344e92d5df",
+            "observations_actions.npz": "77b3a36d8d411774ded1e1a7a85c5d309a13e3244f0258af81230aa460455a5f",
+            "runtime_manifest.json": "15d331f0f4112db6ca3efc576ad16beeb0f8b89085fa7985b7d7f919bd7a39dc",
+            "policy_manifest.json": "77940009d4478b3bb124ef1a55ccf885ffe3e84fcd4b90d717eb5015939c1acc",
+            "worker_result.json": "def01a6b69af754787c3ca641aab2a6d2e9b8831d7f8dfc8771486b30f4af743",
+            "source_manifest.json": "318bcbd9ac537657295a0c000f216d2381561d7b533f9a849ac4d4b4fb5d6a98",
+            "fixture_manifest.json": "8370db19aa475780b9e1955f15a5a4daf4df8b2711c17b6ae2707aae46ccc220",
+            "curvature_plan.json": "507e582f0b8c57ae0918a2868ab7456b16270a7e5c6db8f94f71cee9bd96149f",
+            "protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847"
+          },
+          "nonpassing_gates": [],
+          "verification_error": null
+        }
+      ],
+      "actual_radius_range_m": [
+        1.2848692405814797,
+        1.2848692405814797
+      ],
+      "worst_passed_actual_radius_m": 1.2848692405814797,
+      "prospective_centerline_margin_factor": 1.5,
+      "suggested_planning_centerline_radius_at_least_m": 1.9273038608722195,
+      "conservative_planning_source_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_021259_plant_radius_prepare_d209/summary_radius_independent.json",
+      "conservative_planning_source_sha256": "2238819e40e94856b76b0d57397bdb65a8ca355557f32083184d2367d8269bb4",
+      "suggestion_status": "Prospective geometry only; actual circle/S tracking remains unverified"
+    }
+  ],
+  "source_hashes": {
+    "boundary_prospective_plan": "698714e91f3fb7fa0af3268eb768e0031e2b11fdc65c48895ece0addbcc30cbd",
+    "boundary_results": "20125ffe1482e7c8b0ddb258801897039ad834c1ad5d36bc9ec43fea67d67f9e",
+    "original_sweep_plan": "3ab9edcbe48105d13789f114c1b69237878f4a9e60f6c725a270abfd715d9421",
+    "original_sweep_results": "cb9c1338840a57264825e09ba7459ce1519259d86818f0dd0bdac7f23474c9e0",
+    "frozen_receipt_auditor": "fe3a6f81a3085a91a657a7dbc73c73523924fad733c328ab78faa1a1f88d4e87",
+    "analysis_script": "c9d45fe313d640a8924ec8aa7e789f798fe8b0acbfabe5a4c3746675f789beaf"
+  },
+  "original_sweep_minimum_receipts_rewritten": false,
+  "global_minimum_claim": false,
+  "outer_sweep_launcher_143_is_separate_preserved_note": true,
+  "scope": "Three repetitions at each speed/sign of the previously selected minimum-tested command; no tighter radius is tested",
+  "planning_advice": "Centerline R >=1.5*worst actual radius among three PASS repetitions; footprint, obstacle inflation, circle/S closed-loop feasibility separate"
+}

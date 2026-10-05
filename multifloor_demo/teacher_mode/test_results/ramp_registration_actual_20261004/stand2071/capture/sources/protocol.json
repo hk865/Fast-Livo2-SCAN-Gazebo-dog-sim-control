@@ -1,0 +1,56 @@
+{
+  "schema": "actual_ramp_registration_protocol/v1",
+  "mode": "read_only_shadow",
+  "ROS_DOMAIN_ID": 79,
+  "required_actual_cloud": "/cloud_registered_full",
+  "cloud_frame": "camera_init",
+  "actual_pose": "/demo/slam/body_odom",
+  "actual_slam_imu_pose": "/aft_mapped_to_init",
+  "actual_accelerometer_and_gyro": "/livox/imu",
+  "gravity": {
+    "source": "stationary actual accelerometer, transformed by actual SLAM IMU quaternion",
+    "pose_header_must_not_exceed_imu_header": true,
+    "maximum_source_pair_gap_s": 0.15,
+    "maximum_received_wall_pair_gap_s": 0.3,
+    "minimum_imu_samples": 50,
+    "minimum_span_s": 0.5,
+    "minimum_unique_slam_imu_poses": 4,
+    "maximum_measured_body_speed_mps": 0.05,
+    "maximum_measured_gyro_radps": 0.1,
+    "accelerometer_norm_mps2": [9.0, 10.6],
+    "maximum_axis_spread_deg": 3,
+    "frozen_once": true,
+    "imu_orientation_field_used": false
+  },
+  "cloud_admission": {
+    "maximum_sim_header_age_s": 0.3,
+    "maximum_actual_clock_receive_age_wall_s": 0.3,
+    "maximum_body_pose_receive_age_wall_s": 0.3,
+    "maximum_nearest_body_source_pair_gap_s": 0.15,
+    "body_pairing": "nearest already received SLAM body pose, including possible newer source header; wall-causal, not strict source-time causal",
+    "future_header_allowance_s": 0.05,
+    "strict_increasing_cloud_header": true
+  },
+  "evidence_limits": {
+    "queue_records": 512,
+    "queue_bytes": 67108864,
+    "frame_bytes": 33554432,
+    "archive_bytes": 8589934592,
+    "overflow": "failed evidence and nonzero exit, never silently complete",
+    "close_join_max_wall_s": 10
+  },
+  "geometry": {
+    "plane_normal_source": "fit original actual XYZ, raw normal fields unused",
+    "layers": "retain all measured support planes, current layer based on actual SLAM body/observed support relation",
+    "complete_edge_evidence": "both sides: interior support observations, actual external drop returns and fitted near-vertical side faces",
+    "complete_connection_evidence": "both actual adjacent horizontal platform seams and unique current-layer connection",
+    "unknown": "partial with full_route null",
+    "no_geometry_fill_sources": ["SDF", "Gazebo poses", "Actor height scan", "world heading", "opposite-edge width prior"],
+    "self_return_exclusion_body_box_m": {"x_abs": 0.55, "y_abs": 0.30, "z_range": [-0.40, 0.30]},
+    "offline_voxel_size_m": 0.04,
+    "offline_voxel_frame": "first actual SLAM body pose",
+    "full_candidate_is_locomotion_or_navigation_pass": false
+  },
+  "actuation": {"publishers": [], "service_clients": [], "joint_writes": false, "navigation_request_emitted": false},
+  "review_gate": "Registration candidates require independent review before a new request/profile/controller variant is authorized; this module never enables control."
+}

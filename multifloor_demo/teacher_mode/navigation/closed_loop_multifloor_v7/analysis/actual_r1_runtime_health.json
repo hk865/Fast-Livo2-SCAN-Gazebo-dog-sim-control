@@ -1,0 +1,2792 @@
+{
+  "actual_raw_IMU_callback": {
+    "count": 42001,
+    "first_last_sim_s": [
+      0.01,
+      210.01000000000002
+    ],
+    "sim_hz": 200.0,
+    "wall_hz": 197.99486516733634,
+    "source_gap_s": {
+      "count": 42000,
+      "min": 0.005,
+      "mean": 0.005,
+      "p50": 0.005,
+      "p95": 0.005,
+      "p99": 0.005,
+      "max": 0.005,
+      "over_300ms": 0
+    },
+    "callback_wall_gap_s": {
+      "count": 42000,
+      "min": 0.000256032042670995,
+      "mean": 0.005050636031165985,
+      "p50": 0.003834316012216732,
+      "p95": 0.013592513455660041,
+      "p99": 0.02470097348326819,
+      "max": 0.5854901970014907,
+      "over_300ms": 2
+    },
+    "duplicate_headers": 0,
+    "backward_headers": 0
+  },
+  "estimator_phase_latency": {
+    "detail_115_165": {
+      "IMU_propagation_wall_s": {
+        "count": 1002,
+        "min": 6.597023457288742e-06,
+        "mean": 0.00031891922035882854,
+        "p50": 0.000276165985269472,
+        "p95": 0.000699141004588455,
+        "p99": 0.0007194851484382525,
+        "max": 0.0008633189718239009,
+        "over_300ms": 0
+      },
+      "total_estimator_phase_wall_s": {
+        "count": 1002,
+        "min": 0.0018113600090146065,
+        "mean": 0.008366399551469911,
+        "p50": 0.006714763498166576,
+        "p95": 0.016385696158977225,
+        "p99": 0.017278655772097407,
+        "max": 0.018803588987793773,
+        "over_300ms": 0
+      },
+      "observation_stage_wall_s": {
+        "count": 1002,
+        "min": 0.0018021679716184735,
+        "mean": 0.008047480331111082,
+        "p50": 0.0064413594955112785,
+        "p95": 0.01571934887615498,
+        "p99": 0.016586048163007946,
+        "max": 0.01811224495759234,
+        "over_300ms": 0
+      }
+    },
+    "post_detail_165_end": {
+      "IMU_propagation_wall_s": {
+        "count": 899,
+        "min": 7.300986908376217e-06,
+        "mean": 0.00032214016199849535,
+        "p50": 0.0005280639743432403,
+        "p95": 0.0006989038083702326,
+        "p99": 0.0007178275031037628,
+        "max": 0.0007801210158504546,
+        "over_300ms": 0
+      },
+      "total_estimator_phase_wall_s": {
+        "count": 899,
+        "min": 0.0020315629662945867,
+        "mean": 0.006958961921852306,
+        "p50": 0.006250764010474086,
+        "p95": 0.013393986254232002,
+        "p99": 0.014369824138702825,
+        "max": 0.015278512029908597,
+        "over_300ms": 0
+      },
+      "observation_stage_wall_s": {
+        "count": 899,
+        "min": 0.0020197299891151488,
+        "mean": 0.00663682175985381,
+        "p50": 0.005715225008316338,
+        "p95": 0.012704538198886438,
+        "p99": 0.0136842592258472,
+        "max": 0.014592454012017697,
+        "over_300ms": 0
+      }
+    },
+    "pre_detail_10_115": {
+      "IMU_propagation_wall_s": {
+        "count": 2100,
+        "min": 7.561000529676676e-06,
+        "mean": 0.0003251043382555335,
+        "p50": 0.0002792215091176331,
+        "p95": 0.000711478226003237,
+        "p99": 0.0007276319176889955,
+        "max": 0.0007826840155757964,
+        "over_300ms": 0
+      },
+      "total_estimator_phase_wall_s": {
+        "count": 2100,
+        "min": 0.0010813060216605663,
+        "mean": 0.008167581559835178,
+        "p50": 0.004942007508361712,
+        "p95": 0.018608747259713707,
+        "p99": 0.021045350574422618,
+        "max": 0.02463659696513787,
+        "over_300ms": 0
+      },
+      "observation_stage_wall_s": {
+        "count": 2100,
+        "min": 0.0010714809759519994,
+        "mean": 0.007842477221579646,
+        "p50": 0.0046526270161848515,
+        "p95": 0.01795815300720278,
+        "p99": 0.020348099734983395,
+        "max": 0.023910973977763206,
+        "over_300ms": 0
+      }
+    },
+    "startup_0_10": {
+      "IMU_propagation_wall_s": {
+        "count": 198,
+        "min": 5.231006070971489e-06,
+        "mean": 0.0002121613984174951,
+        "p50": 1.2712524039670825e-05,
+        "p95": 0.000707080794381909,
+        "p99": 0.0007269496796652675,
+        "max": 0.0007401180337183177,
+        "over_300ms": 0
+      },
+      "total_estimator_phase_wall_s": {
+        "count": 198,
+        "min": 1.8599035684019327e-05,
+        "mean": 0.003657869064493688,
+        "p50": 0.0011202715104445815,
+        "p95": 0.01173204263614025,
+        "p99": 0.014133787815226243,
+        "max": 0.015079089964274317,
+        "over_300ms": 0
+      },
+      "observation_stage_wall_s": {
+        "count": 198,
+        "min": 9.030045475810766e-06,
+        "mean": 0.003445707666076193,
+        "p50": 0.0011077050294261426,
+        "p95": 0.011037600183044557,
+        "p99": 0.013426508718985134,
+        "max": 0.014435552002396435,
+        "over_300ms": 0
+      }
+    }
+  },
+  "estimator_stage_actual_header_hz": {
+    "2": 10.0,
+    "1": 10.0
+  },
+  "logger_exclusive_CPU_or_time_cost": "unverified: no otherwise-identical disabled-logger run; recorded stage times include original estimator and logging",
+  "navigation_pipeline": {
+    "detail_115_165": {
+      "cloud_callback_wall_s": {
+        "count": 501,
+        "min": 0.0012060659937560558,
+        "mean": 0.0015161467423084416,
+        "p50": 0.0015571939875371754,
+        "p95": 0.0017396510229445994,
+        "p99": 0.0019309280323795974,
+        "max": 0.001998674008063972,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_age_at_callback_s": {
+        "count": 501,
+        "min": 0.015000000000000001,
+        "mean": 0.02721556926147705,
+        "p50": 0.025000001,
+        "p95": 0.030000001000000002,
+        "p99": 0.030000001000000002,
+        "max": 0.030000001000000002,
+        "over_300ms": 0
+      },
+      "pose_source_sim_age_at_callback_s": {
+        "count": 501,
+        "min": 0.015,
+        "mean": 0.026626746906187628,
+        "p50": 0.025000001,
+        "p95": 0.030000001,
+        "p99": 0.030000001,
+        "max": 0.030000001,
+        "over_300ms": 0
+      },
+      "pose_sim_age_at_controller_s": {
+        "count": 364,
+        "min": 0.025,
+        "mean": 0.08240384655769231,
+        "p50": 0.070000001,
+        "p95": 0.125000001,
+        "p99": 0.125000001,
+        "max": 0.125000001,
+        "over_300ms": 0
+      },
+      "paired_imu_sim_age_at_controller_s": {
+        "count": 364,
+        "min": 0.025,
+        "mean": 0.08458791208791211,
+        "p50": 0.07500000000000001,
+        "p95": 0.13,
+        "p99": 0.13,
+        "max": 0.13,
+        "over_300ms": 0
+      },
+      "pose_wall_age_at_controller_s": {
+        "count": 364,
+        "min": 0.0022290549241006374,
+        "mean": 0.05939613478859518,
+        "p50": 0.05280868901172653,
+        "p95": 0.09905346829618793,
+        "p99": 0.10771547490847301,
+        "max": 0.17203578597400337,
+        "over_300ms": 0
+      },
+      "paired_imu_wall_age_at_controller_s": {
+        "count": 364,
+        "min": 0.027999007957987487,
+        "mean": 0.09001605554258676,
+        "p50": 0.08123667046311311,
+        "p95": 0.12994205513386986,
+        "p99": 0.13841737144161023,
+        "max": 0.19978154095588252,
+        "over_300ms": 0
+      },
+      "pose_source_sim_gap_s": {
+        "count": 501,
+        "min": 0.09999999899999068,
+        "mean": 0.09999999999999999,
+        "p50": 0.09999999999999432,
+        "p95": 0.10000000100001216,
+        "p99": 0.10000000100001216,
+        "max": 0.10000000100001216,
+        "over_300ms": 0
+      },
+      "pose_callback_wall_gap_s": {
+        "count": 501,
+        "min": 0.08915380801772699,
+        "mean": 0.1008542347166124,
+        "p50": 0.10005284298676997,
+        "p95": 0.10684535896871239,
+        "p99": 0.11530858604237437,
+        "max": 0.17378031101543456,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_gap_s": {
+        "count": 501,
+        "min": 0.09999999899999068,
+        "mean": 0.09999999999999999,
+        "p50": 0.09999999999999432,
+        "p95": 0.10000000100001216,
+        "p99": 0.10000000100001216,
+        "max": 0.10000000100001216,
+        "over_300ms": 0
+      },
+      "cloud_callback_wall_gap_s": {
+        "count": 501,
+        "min": 0.08953178400406614,
+        "mean": 0.10085373697802424,
+        "p50": 0.09993581398157403,
+        "p95": 0.1066418660338968,
+        "p99": 0.11540075100492686,
+        "max": 0.1732931390288286,
+        "over_300ms": 0
+      }
+    },
+    "post_detail_165_end": {
+      "cloud_callback_wall_s": {
+        "count": 450,
+        "min": 0.0012443570303730667,
+        "mean": 0.0015018704071796188,
+        "p50": 0.0015389059844892472,
+        "p95": 0.0017164644465083255,
+        "p99": 0.0018048986833309754,
+        "max": 0.0027452469803392887,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_age_at_callback_s": {
+        "count": 450,
+        "min": 0.01,
+        "mean": 0.024277778177777782,
+        "p50": 0.025,
+        "p95": 0.030000000000000002,
+        "p99": 0.030000001000000002,
+        "max": 0.035000001,
+        "over_300ms": 0
+      },
+      "pose_source_sim_age_at_callback_s": {
+        "count": 450,
+        "min": 0.01,
+        "mean": 0.02357777817777778,
+        "p50": 0.025,
+        "p95": 0.03,
+        "p99": 0.030000001,
+        "max": 0.035000001,
+        "over_300ms": 0
+      },
+      "pose_source_sim_gap_s": {
+        "count": 450,
+        "min": 0.09999999900000489,
+        "mean": 0.1,
+        "p50": 0.09999999999999432,
+        "p95": 0.10000000100001216,
+        "p99": 0.10000000100001216,
+        "max": 0.10000000100001216,
+        "over_300ms": 0
+      },
+      "pose_callback_wall_gap_s": {
+        "count": 450,
+        "min": 0.0867464899783954,
+        "mean": 0.10044175515106568,
+        "p50": 0.1002328020404093,
+        "p95": 0.10689094021799975,
+        "p99": 0.11251463326683733,
+        "max": 0.18044845503754914,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_gap_s": {
+        "count": 450,
+        "min": 0.09999999900000489,
+        "mean": 0.1,
+        "p50": 0.09999999999999432,
+        "p95": 0.10000000100001216,
+        "p99": 0.10000000100001216,
+        "max": 0.10000000100001216,
+        "over_300ms": 0
+      },
+      "cloud_callback_wall_gap_s": {
+        "count": 450,
+        "min": 0.0867246359703131,
+        "mean": 0.1004420682533075,
+        "p50": 0.10027898199041374,
+        "p95": 0.10698099556611851,
+        "p99": 0.11246221757202875,
+        "max": 0.18055408296640962,
+        "over_300ms": 0
+      }
+    },
+    "pre_detail_10_115": {
+      "cloud_callback_wall_s": {
+        "count": 1050,
+        "min": 0.001208211004268378,
+        "mean": 0.0015469962630110482,
+        "p50": 0.0015863710141275078,
+        "p95": 0.0017493324965471401,
+        "p99": 0.0018866566894575952,
+        "max": 0.002091343980282545,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_age_at_callback_s": {
+        "count": 1050,
+        "min": 0.01,
+        "mean": 0.02688571468571429,
+        "p50": 0.025000001,
+        "p95": 0.030000001000000002,
+        "p99": 0.035000001,
+        "max": 0.045000000000000005,
+        "over_300ms": 0
+      },
+      "pose_source_sim_age_at_callback_s": {
+        "count": 1050,
+        "min": 0.01,
+        "mean": 0.026123809923809527,
+        "p50": 0.025000001,
+        "p95": 0.030000001,
+        "p99": 0.035,
+        "max": 0.045,
+        "over_300ms": 0
+      },
+      "pose_sim_age_at_controller_s": {
+        "count": 2078,
+        "min": 0.01,
+        "mean": 0.07453079925120308,
+        "p50": 0.07500000100000001,
+        "p95": 0.12000000100000001,
+        "p99": 0.125000001,
+        "max": 0.130000001,
+        "over_300ms": 0
+      },
+      "paired_imu_sim_age_at_controller_s": {
+        "count": 2078,
+        "min": 0.01,
+        "mean": 0.07677333974975939,
+        "p50": 0.08,
+        "p95": 0.125,
+        "p99": 0.13,
+        "max": 0.135,
+        "over_300ms": 0
+      },
+      "pose_wall_age_at_controller_s": {
+        "count": 2078,
+        "min": 0.0016171929892152548,
+        "mean": 0.051058399390227126,
+        "p50": 0.05224808648927137,
+        "p95": 0.09735143264988436,
+        "p99": 0.10347491565858946,
+        "max": 0.1570468909922056,
+        "over_300ms": 0
+      },
+      "paired_imu_wall_age_at_controller_s": {
+        "count": 2078,
+        "min": 0.028207343944814056,
+        "mean": 0.08081016302612073,
+        "p50": 0.08307933545438573,
+        "p95": 0.12628511196817271,
+        "p99": 0.13378808475506956,
+        "max": 0.18913435394642875,
+        "over_300ms": 0
+      },
+      "pose_source_sim_gap_s": {
+        "count": 1050,
+        "min": 0.09999999899999068,
+        "mean": 0.1,
+        "p50": 0.10000000000000142,
+        "p95": 0.10000000099999795,
+        "p99": 0.10000000100000506,
+        "max": 0.10000000100000506,
+        "over_300ms": 0
+      },
+      "pose_callback_wall_gap_s": {
+        "count": 1050,
+        "min": 0.08512099197832868,
+        "mean": 0.10036015009047419,
+        "p50": 0.10013281751889735,
+        "p95": 0.10653009695233777,
+        "p99": 0.11035353994346224,
+        "max": 0.16432195500237867,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_gap_s": {
+        "count": 1050,
+        "min": 0.09999999899999068,
+        "mean": 0.1,
+        "p50": 0.10000000000000142,
+        "p95": 0.10000000099999795,
+        "p99": 0.10000000100000506,
+        "max": 0.10000000100000506,
+        "over_300ms": 0
+      },
+      "cloud_callback_wall_gap_s": {
+        "count": 1050,
+        "min": 0.0832005720003508,
+        "mean": 0.10034928139049692,
+        "p50": 0.10010193099151365,
+        "p95": 0.10668149000848644,
+        "p99": 0.10998370262735989,
+        "max": 0.16488349001156166,
+        "over_300ms": 0
+      }
+    },
+    "startup_0_10": {
+      "cloud_callback_wall_s": {
+        "count": 63,
+        "min": 0.0012678009807132185,
+        "mean": 0.0015171670487948827,
+        "p50": 0.0015774399507790804,
+        "p95": 0.0017136495211161672,
+        "p99": 0.0017695454822387548,
+        "max": 0.0018202720093540847,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_age_at_callback_s": {
+        "count": 63,
+        "min": 0.02,
+        "mean": 0.022857143269841264,
+        "p50": 0.020000001,
+        "p95": 0.025000001,
+        "p99": 0.03380000062000003,
+        "max": 0.04,
+        "over_300ms": 0
+      },
+      "pose_source_sim_age_at_callback_s": {
+        "count": 63,
+        "min": 0.015,
+        "mean": 0.021507936920634917,
+        "p50": 0.020000001,
+        "p95": 0.025000001,
+        "p99": 0.026900000620000013,
+        "max": 0.03,
+        "over_300ms": 0
+      },
+      "pose_sim_age_at_controller_s": {
+        "count": 62,
+        "min": 0.030000000000000002,
+        "mean": 0.05500000038709677,
+        "p50": 0.0550000005,
+        "p95": 0.080000001,
+        "p99": 0.080000001,
+        "max": 0.080000001,
+        "over_300ms": 0
+      },
+      "paired_imu_sim_age_at_controller_s": {
+        "count": 62,
+        "min": 0.030000000000000002,
+        "mean": 0.05725806451612903,
+        "p50": 0.0625,
+        "p95": 0.085,
+        "p99": 0.0889,
+        "max": 0.095,
+        "over_300ms": 0
+      },
+      "pose_wall_age_at_controller_s": {
+        "count": 62,
+        "min": 0.00438327994197607,
+        "mean": 0.033665424611817506,
+        "p50": 0.03401315747760236,
+        "p95": 0.06151180519373156,
+        "p99": 0.06264594856358599,
+        "max": 0.06303081096848473,
+        "over_300ms": 0
+      },
+      "paired_imu_wall_age_at_controller_s": {
+        "count": 62,
+        "min": 0.033266739977989346,
+        "mean": 0.06040956711888524,
+        "p50": 0.06598807498812675,
+        "p95": 0.08650198093382641,
+        "p99": 0.09257242699910422,
+        "max": 0.09851863194489852,
+        "over_300ms": 0
+      },
+      "pose_source_sim_gap_s": {
+        "count": 62,
+        "min": 0.09999999899999956,
+        "mean": 0.1,
+        "p50": 0.09999999999999964,
+        "p95": 0.10000000099999973,
+        "p99": 0.10000000099999973,
+        "max": 0.10000000099999973,
+        "over_300ms": 0
+      },
+      "pose_callback_wall_gap_s": {
+        "count": 62,
+        "min": 0.09351087699178606,
+        "mean": 0.1000153880158905,
+        "p50": 0.09998701847507618,
+        "p95": 0.1034866768255597,
+        "p99": 0.1046305313357152,
+        "max": 0.10485472402069718,
+        "over_300ms": 0
+      },
+      "cloud_source_sim_gap_s": {
+        "count": 62,
+        "min": 0.09999999899999956,
+        "mean": 0.1,
+        "p50": 0.09999999999999964,
+        "p95": 0.10000000099999973,
+        "p99": 0.10000000099999973,
+        "max": 0.10000000099999973,
+        "over_300ms": 0
+      },
+      "cloud_callback_wall_gap_s": {
+        "count": 62,
+        "min": 0.09345011302502826,
+        "mean": 0.1001668976612329,
+        "p50": 0.10004793351981789,
+        "p95": 0.10384237689431756,
+        "p99": 0.10834863380761818,
+        "max": 0.11418828397290781,
+        "over_300ms": 0
+      }
+    }
+  },
+  "cloud_callback_reasons": {
+    "accepted": 2064
+  },
+  "shared_resources": {
+    "samples": 105,
+    "system_load1": {
+      "count": 105,
+      "min": 1.09765625,
+      "mean": 3.1219633556547617,
+      "p50": 3.236328125,
+      "p95": 4.2002929687499995,
+      "p99": 4.5595703125,
+      "max": 4.5595703125
+    },
+    "logical_cpus": 20,
+    "GPU_used_MiB": {
+      "count": 105,
+      "min": 804.0,
+      "mean": 1058.895238095238,
+      "p50": 1097.0,
+      "p95": 1113.8,
+      "p99": 1137.4399999999998,
+      "max": 1146.0
+    },
+    "GPU_utilization_percent": {
+      "count": 105,
+      "min": 3.0,
+      "mean": 14.771428571428572,
+      "p50": 13.0,
+      "p95": 28.0,
+      "p99": 38.0,
+      "max": 40.0
+    },
+    "RAM_available_GiB": {
+      "count": 105,
+      "min": 47.518863677978516,
+      "mean": 47.844446127755305,
+      "p50": 47.676177978515625,
+      "p95": 48.30634307861328,
+      "p99": 49.030117645263665,
+      "max": 49.5229377746582
+    },
+    "CPU_percent_limit": "owned_resources samples record top-level owned PIDs; they do not measure all SLAM/Gazebo grandchildren CPU"
+  },
+  "offline_native_safety": {
+    "physics_samples": 42001,
+    "fault_codes": {
+      "0": 42001
+    },
+    "body_contact_samples": 0,
+    "joint_torque_abs_max_Nm": 15.161084591833935,
+    "joint_speed_abs_max_radps": 14.468576781882764,
+    "target_outside_hard_limit_samples": 0,
+    "telemetry_rows": 10501,
+    "telemetry_faults": {
+      "None": 10501
+    },
+    "last_telemetry_world_time_s": 210.01,
+    "body_clearance_m": {
+      "count": 10501,
+      "min": 0.27493333659120034,
+      "mean": 0.3000362674737879,
+      "p50": 0.3014562966433405,
+      "p95": 0.31373006243207324,
+      "p99": 0.3201611776140232,
+      "max": 0.39975475000000005
+    },
+    "roll_pitch_abs_rad": {
+      "count": 10501,
+      "min": 8.881784197001253e-20,
+      "mean": 0.024195682285252682,
+      "p50": 0.02530250293654601,
+      "p95": 0.03981596234838572,
+      "p99": 0.043854512090954256,
+      "max": 0.11382090518906512
+    },
+    "inference_ms": {
+      "count": 10501,
+      "min": 0.198668,
+      "mean": 0.28579884134844297,
+      "p50": 0.289854,
+      "p95": 0.329483,
+      "p99": 0.355442,
+      "max": 0.468137
+    },
+    "command_expired_frames": 4186,
+    "native_source_use": "offline physical safety only; no native pose used for navigation"
+  },
+  "navigation_status": {
+    "states": {
+      "idle": 35,
+      "running": 572,
+      "failed": 349
+    },
+    "first_failures": [
+      {
+        "time": 133.13,
+        "reason": null,
+        "failure": null
+      },
+      {
+        "time": 133.21,
+        "reason": null,
+        "failure": null
+      },
+      {
+        "time": 133.51,
+        "reason": null,
+        "failure": null
+      },
+      {
+        "time": 133.81,
+        "reason": null,
+        "failure": null
+      },
+      {
+        "time": 134.06,
+        "reason": null,
+        "failure": null
+      }
+    ],
+    "first20_post_warmup_sensor_holds": [
+      {
+        "time_s": 210.01000000000002,
+        "reason": "Actual simulation clock stale; raw_lidar missing/stale; image missing/stale; camera_info missing/stale; Vehicle image and actual CameraInfo are not paired within 50ms"
+      },
+      {
+        "time_s": 210.01000000000002,
+        "reason": "Actual simulation clock stale; imu missing/stale; raw_lidar missing/stale; image missing/stale; camera_info missing/stale; body_odom missing/stale; cloud missing/stale; Vehicle image and actual CameraInfo are not paired within 50ms"
+      },
+      {
+        "time_s": 210.01000000000002,
+        "reason": "Actual simulation clock stale; imu missing/stale; raw_lidar missing/stale; image missing/stale; camera_info missing/stale; body_odom missing/stale; cloud missing/stale; Vehicle image and actual CameraInfo are not paired within 50ms"
+      }
+    ]
+  },
+  "worker_result.json": {
+    "completed": true,
+    "fault": null,
+    "samples": 10501,
+    "physical_test_completion_time_s": null,
+    "last_sim_time": 210.0,
+    "cpu_forward_ms": {
+      "p50": 0.289854,
+      "p95": 0.329483,
+      "max": 0.468137
+    },
+    "controller_hold_observed_worker_elapsed_s": null,
+    "navigation_ground_truth_used": false,
+    "actor_observations_remain_privileged": true,
+    "last_closed_loop_read": {
+      "sim_time": 210.0,
+      "physics_clock_ns": 210010000000,
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rejected": true,
+      "reason": "SLAM/SCAN input unhealthy",
+      "actual_read_attempt": {
+        "read_clock_ns": 210010000000,
+        "read_monotonic_wall": 437283.514949486,
+        "raw_utf8": "{\n  \"state\": \"failed\",\n  \"healthy\": false,\n  \"stop_requested\": true,\n  \"reason\": \"Measured SLAM body pose left finite route fence; restart after review\",\n  \"requested\": [\n    0.0,\n    0.0,\n    0.0\n  ],\n  \"command\": [\n    0.0,\n    0.0,\n    0.0\n  ],\n  \"ages\": {\n    \"clock_wall_s\": 1.1280062608420849e-06,\n    \"pose_wall_s\": 0.06929736502934247,\n    \"command_wall_s\": 0.015377345029264688,\n    \"pose_sim_s\": 0.09,\n    \"command_sim_s\": 0.015\n  },\n  \"slam_valid_samples\": 2063,\n  \"command_received_monotonic_wall\": 437283.479128433,\n  \"command_received_ros_sim_time_ns\": 209975000000,\n  \"slam_stamp_ns\": 209900000000,\n  \"publisher_graph\": {\n    \"slam\": true,\n    \"command\": true,\n    \"details\": {\n      \"slam_publishers\": [\n        \"/demo_slam_odom_adapter\"\n      ],\n      \"command_publishers\": [\n        \"/demo_navigation\"\n      ]\n    }\n  },\n  \"controller_source\": null,\n  \"controller_source_receipt\": null,\n  \"registered_route_fence\": {\n    \"inside\": true,\n    \"segment\": 16,\n    \"fraction\": 0.28467473487331957,\n    \"nearest_camera_init_xyz\": [\n      14.914694036040057,\n      2.6271044440610867,\n      1.20575359602667\n    ],\n    \"horizontal_error_m\": 0.003627783061460849,\n    \"height_error_m\": 0.2560234436193566,\n    \"horizontal_radius_m\": 0.45,\n    \"maximum_height_error_m\": 0.3,\n    \"navigation_ground_truth_used\": false\n  },\n  \"controller_source_error\": null,\n  \"schema_version\": 1,\n  \"sequence\": 12271,\n  \"mode\": \"scan_slam\",\n  \"source\": \"scan_slam\",\n  \"monotonic_wall\": 437283.494505778,\n  \"sim_time\": 209.99,\n  \"stamp\": {\n    \"monotonic_wall\": 437283.494505778,\n    \"ros_sim_time_ns\": 209990000000,\n    \"ros_sim_time\": 209.99\n  },\n  \"valid_for_wall_s\": 0.3,\n  \"limits\": {\n    \"vx_mps\": 0.6,\n    \"vy_mps\": 0.2,\n    \"wz_radps\": 0.6\n  },\n  \"observation_source\": {\n    \"navigation_pose\": \"/demo/slam/body_odom\",\n    \"navigation_frame\": \"camera_init\",\n    \"navigation_ground_truth_used\": false,\n    \"velocity_request\": \"/demo/cmd_vel\",\n    \"policy_inputs\": \"Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only\"\n  },\n  \"acceptance\": {\n    \"path\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json\",\n    \"sha256\": \"64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257\",\n    \"run_dir\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf\",\n    \"profile\": {\n      \"schema_version\": 1,\n      \"experiment\": \"teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6\",\n      \"scope\": \"Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only\",\n      \"distance_m\": 13.6,\n      \"max_speed_mps\": 0.2,\n      \"max_yaw_rate_radps\": 0.6,\n      \"arrival_radius_m\": 0.22,\n      \"arrival_height_half_span_m\": 0.1,\n      \"arrival_control_radius_m\": 0.17,\n      \"dwell_sim_s\": 0.6,\n      \"goal_timeout_sim_s\": 90.0,\n      \"pose_cloud_timeout_s\": 0.3,\n      \"sensor_warmup_sim_s\": 2.0,\n      \"interface_version\": \"navigation_v4_latest_clock_measured_transition\",\n      \"warmup_history\": {\n        \"imu\": {\n          \"min_samples\": 600,\n          \"min_span_sim_s\": 2.9\n        },\n        \"body_odom\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"cloud\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"raw_lidar\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"image\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        },\n        \"camera_info\": {\n          \"min_samples\": 10,\n          \"min_span_sim_s\": 2.0\n        }\n      },\n      \"request_startup_timeout_sim_s\": 90.0,\n      \"request_startup_timeout_wall_s\": 600.0,\n      \"teacher_transition\": {\n        \"stop_window_sim_s\": 0.3,\n        \"stop_min_pose_samples\": 3,\n        \"stop_pose_gap_max_s\": 0.2,\n        \"gyro_pose_pair_max_s\": 0.15,\n        \"stop_planar_speed_mps\": 0.03,\n        \"stop_slam_yaw_rate_radps\": 0.05,\n        \"stop_body_gyro_radps\": 0.05,\n        \"turn_complete_rad\": 0.1,\n        \"drive_heading_max_rad\": 0.2\n      },\n      \"recovery_fresh_pose_samples\": 2,\n      \"recovery_min_pose_span_sim_s\": 0.1,\n      \"fence\": {\n        \"along_min_m\": -0.45,\n        \"along_max_m\": 14.049999999999999,\n        \"lateral_abs_m\": 0.45,\n        \"height_abs_m\": 1.4\n      },\n      \"navigation_ground_truth_used\": false,\n      \"policy_observations\": \"Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only\",\n      \"excluded\": [\n        \"real_robot\",\n        \"true_stairs\",\n        \"full_46_region_mission\",\n        \"unbounded_dynamic_mission\"\n      ],\n      \"max_lateral_speed_mps\": 0.2,\n      \"arrival_stop_policy\": \"after_measured_dwell\",\n      \"clear_guard_gap_max_sim_s\": 0.3,\n      \"pid\": {\n        \"position_kp\": 0.6,\n        \"position_ki\": 0.08,\n        \"position_kd\": 0.12,\n        \"yaw_kp\": 1.1,\n        \"yaw_ki\": 0.04,\n        \"yaw_kd\": 0.15,\n        \"position_integral_limit\": 0.4,\n        \"yaw_integral_limit\": 0.3,\n        \"derivative_filter_tau_s\": 0.2,\n        \"header_gap_max_s\": 0.3,\n        \"slew_acceleration\": [\n          0.3,\n          0.3,\n          0.25\n        ],\n        \"position_derivative_source\": \"actual SLAM body-origin twist transformed by the actual SLAM rotation\",\n        \"yaw_derivative_source\": \"actual body-transformed IMU gyro; no IMU yaw localization\"\n      },\n      \"selector\": \"multifloor12_23_segmented_turn06\",\n      \"route_height_delta_m\": 2.4,\n      \"return_to_origin\": false,\n      \"expected_asset\": {\n        \"terrain\": \"ramp_up\",\n        \"spawn\": [\n          1.2,\n          2,\n          0.4,\n          0\n        ]\n      },\n      \"review_basis\": \"explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation\",\n      \"spawn\": [\n        1.2,\n        2,\n        0.4,\n        0\n      ],\n      \"duration_s\": 210,\n      \"overview_pose\": [\n        8,\n        -1,\n        2.5,\n        0,\n        0.45,\n        1.5707963267948966\n      ],\n      \"terrain_target_manifest\": \"tests/terrain_targets/lower12.json\",\n      \"controller_kind\": \"teacher\",\n      \"protocol_case_id\": \"ramp12_up_full\",\n      \"pid_runtime_revision\": \"legacy PID fields preserved only for input compatibility; unused by cascade mathematics\",\n      \"controller_selector\": \"closed_loop_multifloor_v6\",\n      \"cascade_runtime_revision\": \"v6_same_controller_online_gravity_bias_visual_cov1000\",\n      \"cascade\": {\n        \"desired_speed\": 0.2,\n        \"command_limits\": [\n          0.6,\n          0.2,\n          0.6\n        ],\n        \"external_heading_gate\": true,\n        \"base_com_offset\": [\n          0.05523092034548942,\n          -0.001869001919385796,\n          0.006095299184261034\n        ],\n        \"maximum_gyro_pair_gap_s\": 0.02,\n        \"goal_z_tolerance_m\": 0.1,\n        \"gains\": {\n          \"cross_kp\": 0.8,\n          \"cross_kd\": 0.2,\n          \"yaw_kp\": 1.3,\n          \"yaw_kd\": 0.15,\n          \"velocity_kp_x\": 0.6,\n          \"velocity_ki_x\": 0.5,\n          \"velocity_kp_y\": 0.4,\n          \"velocity_ki_y\": 0.3,\n          \"rate_kp\": 0.3,\n          \"rate_ki\": 0.2\n        },\n        \"command_slew_per_s\": [\n          0.6,\n          0.6,\n          0.8\n        ],\n        \"feedback_expected_hz\": 10,\n        \"feedback_ttl_sim_and_wall_s\": 0.3,\n        \"navigation_ground_truth_used\": false,\n        \"controller_source_file\": \"cascade_command_source.json\",\n        \"actual_navigation_verified\": false\n      },\n      \"pid_parent_profile\": {\n        \"path\": \"/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json\",\n        \"unchanged_fields\": [\n          \"warmup_history\",\n          \"teacher_transition\",\n          \"pose_cloud_timeout_s\",\n          \"pid\",\n          \"expected_asset\",\n          \"spawn\",\n          \"route_height_delta_m\",\n          \"terrain_target_manifest\",\n          \"arrival_radius_m\",\n          \"arrival_height_half_span_m\",\n          \"arrival_control_radius_m\",\n          \"dwell_sim_s\"\n        ],\n        \"note\": \"Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only.\"\n      },\n      \"registered_route_fence\": {\n        \"horizontal_radius_m\": 0.45,\n        \"height_error_m\": 0.3,\n        \"scope\": \"tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback\"\n      },\n      \"scene_initial_support_z\": 0.0,\n      \"scene_xy_anchor_uncertainty_m\": 0.15,\n      \"prospective_change\": \"Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.\",\n      \"route_prior_source\": \"Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.\",\n      \"route_world_points\": [\n        {\n          \"goal_id\": \"lower_x02\",\n          \"xyz\": [\n            2,\n            2,\n            0.0\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x03\",\n          \"xyz\": [\n            3,\n            2,\n            0.1\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x04\",\n          \"xyz\": [\n            4,\n            2,\n            0.2\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x05\",\n          \"xyz\": [\n            5,\n            2,\n            0.30000000000000004\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x06\",\n          \"xyz\": [\n            6,\n            2,\n            0.4\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x07\",\n          \"xyz\": [\n            7,\n            2,\n            0.5\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x08\",\n          \"xyz\": [\n            8,\n            2,\n            0.6000000000000001\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x09\",\n          \"xyz\": [\n            9,\n            2,\n            0.7000000000000001\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x10\",\n          \"xyz\": [\n            10,\n            2,\n            0.8\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x11\",\n          \"xyz\": [\n            11,\n            2,\n            0.9\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x12\",\n          \"xyz\": [\n            12,\n            2,\n            1.0\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x13\",\n          \"xyz\": [\n            13,\n            2,\n            1.1\n          ]\n        },\n        {\n          \"goal_id\": \"lower_x14\",\n          \"xyz\": [\n            14,\n            2,\n            1.2000000000000002\n          ]\n        },\n        {\n          \"goal_id\": \"lower_exit\",\n          \"xyz\": [\n            14.8,\n            2,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_x\",\n          \"xyz\": [\n            16,\n            2,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_mid\",\n          \"xyz\": [\n            16,\n            4.5,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"connector_y\",\n          \"xyz\": [\n            16,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_entry\",\n          \"xyz\": [\n            14.8,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x14\",\n          \"xyz\": [\n            14,\n            7,\n            1.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x13\",\n          \"xyz\": [\n            13,\n            7,\n            1.3\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x12\",\n          \"xyz\": [\n            12,\n            7,\n            1.4\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x11\",\n          \"xyz\": [\n            11,\n            7,\n            1.5\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x10\",\n          \"xyz\": [\n            10,\n            7,\n            1.6\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x09\",\n          \"xyz\": [\n            9,\n            7,\n            1.7\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x08\",\n          \"xyz\": [\n            8,\n            7,\n            1.8\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x07\",\n          \"xyz\": [\n            7,\n            7,\n            1.9\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x06\",\n          \"xyz\": [\n            6,\n            7,\n            2.0\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x05\",\n          \"xyz\": [\n            5,\n            7,\n            2.1\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x04\",\n          \"xyz\": [\n            4,\n            7,\n            2.2\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x03\",\n          \"xyz\": [\n            3,\n            7,\n            2.3\n          ]\n        },\n        {\n          \"goal_id\": \"upper_x02\",\n          \"xyz\": [\n            2,\n            7,\n            2.4000000000000004\n          ]\n        },\n        {\n          \"goal_id\": \"floor3_stop\",\n          \"xyz\": [\n            1.2,\n            7,\n            2.4\n          ]\n        }\n      ],\n      \"ramp_segments\": [\n        {\n          \"model\": \"ramp_12\",\n          \"direction\": \"up\",\n          \"destination_goal_index\": 13\n        },\n        {\n          \"model\": \"ramp_23\",\n          \"direction\": \"up\",\n          \"destination_goal_index\": 31\n        }\n      ],\n      \"terrain_layer_switch\": {\n        \"initial_manifest\": \"tests/terrain_targets/lower12.json\",\n        \"alternate_manifest\": \"tests/terrain_targets/upper23.json\",\n        \"completed_goal_id\": \"connector_mid\",\n        \"alternate_include_models\": [\n          \"floor_2\",\n          \"ramp_23\",\n          \"floor_3\"\n        ],\n        \"source\": \"Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check\",\n        \"ray_equality_tolerance_m\": 1e-09\n      },\n      \"slam_imu_online_estimation\": {\n        \"gravity_est_en\": true,\n        \"ba_bg_est_en\": true\n      },\n      \"slam_visual_measurement_covariance\": 1000,\n      \"diagnostic_scope\": {\n        \"baseline_version\": \"closed_loop_multifloor_v6\",\n        \"route_controller_gates_unchanged\": true,\n        \"finite_horizon_s\": 210,\n        \"detail_window_sim_s\": [\n          115,\n          165\n        ],\n        \"navigation_outcome_is_not_full_route_pass\": true,\n        \"purpose\": \"acquire actual LIO/VIO constraints and IMU accel for height fault\"\n      }\n    },\n    \"controller_kind\": \"teacher\",\n    \"experimental\": true,\n    \"experiment\": \"teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6\",\n    \"navigation_is_verified\": false,\n    \"checkpoint_sha256\": \"bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34\",\n    \"scope\": \"Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed\"\n  },\n  \"navigation_validation\": \"unverified\",\n  \"health_scope\": \"SLAM/SCAN input health only; this does not establish actuator health or physical stopping\",\n  \"clock_source\": \"single rclpy ROS TimeSource /clock, KEEP_LAST depth=1\",\n  \"transport\": {\n    \"type\": \"latest_pending_atomic_file\",\n    \"superseded\": 12,\n    \"written\": 12258,\n    \"max_queue_delay_wall_s\": 0.0037422680179588497\n  }\n}\n",
+        "raw_bytes_sha256": "b502730a006203cf258747b5ee8551004e05ee01e9be888a02d67a5117244544",
+        "decoded_envelope": {
+          "state": "failed",
+          "healthy": false,
+          "stop_requested": true,
+          "reason": "Measured SLAM body pose left finite route fence; restart after review",
+          "requested": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "command": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "ages": {
+            "clock_wall_s": 1.1280062608420849e-06,
+            "pose_wall_s": 0.06929736502934247,
+            "command_wall_s": 0.015377345029264688,
+            "pose_sim_s": 0.09,
+            "command_sim_s": 0.015
+          },
+          "slam_valid_samples": 2063,
+          "command_received_monotonic_wall": 437283.479128433,
+          "command_received_ros_sim_time_ns": 209975000000,
+          "slam_stamp_ns": 209900000000,
+          "publisher_graph": {
+            "slam": true,
+            "command": true,
+            "details": {
+              "slam_publishers": [
+                "/demo_slam_odom_adapter"
+              ],
+              "command_publishers": [
+                "/demo_navigation"
+              ]
+            }
+          },
+          "controller_source": null,
+          "controller_source_receipt": null,
+          "registered_route_fence": {
+            "inside": true,
+            "segment": 16,
+            "fraction": 0.28467473487331957,
+            "nearest_camera_init_xyz": [
+              14.914694036040057,
+              2.6271044440610867,
+              1.20575359602667
+            ],
+            "horizontal_error_m": 0.003627783061460849,
+            "height_error_m": 0.2560234436193566,
+            "horizontal_radius_m": 0.45,
+            "maximum_height_error_m": 0.3,
+            "navigation_ground_truth_used": false
+          },
+          "controller_source_error": null,
+          "schema_version": 1,
+          "sequence": 12271,
+          "mode": "scan_slam",
+          "source": "scan_slam",
+          "monotonic_wall": 437283.494505778,
+          "sim_time": 209.99,
+          "stamp": {
+            "monotonic_wall": 437283.494505778,
+            "ros_sim_time_ns": 209990000000,
+            "ros_sim_time": 209.99
+          },
+          "valid_for_wall_s": 0.3,
+          "limits": {
+            "vx_mps": 0.6,
+            "vy_mps": 0.2,
+            "wz_radps": 0.6
+          },
+          "observation_source": {
+            "navigation_pose": "/demo/slam/body_odom",
+            "navigation_frame": "camera_init",
+            "navigation_ground_truth_used": false,
+            "velocity_request": "/demo/cmd_vel",
+            "policy_inputs": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only"
+          },
+          "acceptance": {
+            "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json",
+            "sha256": "64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257",
+            "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+            "profile": {
+              "schema_version": 1,
+              "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+              "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+              "distance_m": 13.6,
+              "max_speed_mps": 0.2,
+              "max_yaw_rate_radps": 0.6,
+              "arrival_radius_m": 0.22,
+              "arrival_height_half_span_m": 0.1,
+              "arrival_control_radius_m": 0.17,
+              "dwell_sim_s": 0.6,
+              "goal_timeout_sim_s": 90.0,
+              "pose_cloud_timeout_s": 0.3,
+              "sensor_warmup_sim_s": 2.0,
+              "interface_version": "navigation_v4_latest_clock_measured_transition",
+              "warmup_history": {
+                "imu": {
+                  "min_samples": 600,
+                  "min_span_sim_s": 2.9
+                },
+                "body_odom": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "cloud": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "raw_lidar": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "image": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                },
+                "camera_info": {
+                  "min_samples": 10,
+                  "min_span_sim_s": 2.0
+                }
+              },
+              "request_startup_timeout_sim_s": 90.0,
+              "request_startup_timeout_wall_s": 600.0,
+              "teacher_transition": {
+                "stop_window_sim_s": 0.3,
+                "stop_min_pose_samples": 3,
+                "stop_pose_gap_max_s": 0.2,
+                "gyro_pose_pair_max_s": 0.15,
+                "stop_planar_speed_mps": 0.03,
+                "stop_slam_yaw_rate_radps": 0.05,
+                "stop_body_gyro_radps": 0.05,
+                "turn_complete_rad": 0.1,
+                "drive_heading_max_rad": 0.2
+              },
+              "recovery_fresh_pose_samples": 2,
+              "recovery_min_pose_span_sim_s": 0.1,
+              "fence": {
+                "along_min_m": -0.45,
+                "along_max_m": 14.049999999999999,
+                "lateral_abs_m": 0.45,
+                "height_abs_m": 1.4
+              },
+              "navigation_ground_truth_used": false,
+              "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+              "excluded": [
+                "real_robot",
+                "true_stairs",
+                "full_46_region_mission",
+                "unbounded_dynamic_mission"
+              ],
+              "max_lateral_speed_mps": 0.2,
+              "arrival_stop_policy": "after_measured_dwell",
+              "clear_guard_gap_max_sim_s": 0.3,
+              "pid": {
+                "position_kp": 0.6,
+                "position_ki": 0.08,
+                "position_kd": 0.12,
+                "yaw_kp": 1.1,
+                "yaw_ki": 0.04,
+                "yaw_kd": 0.15,
+                "position_integral_limit": 0.4,
+                "yaw_integral_limit": 0.3,
+                "derivative_filter_tau_s": 0.2,
+                "header_gap_max_s": 0.3,
+                "slew_acceleration": [
+                  0.3,
+                  0.3,
+                  0.25
+                ],
+                "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+                "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+              },
+              "selector": "multifloor12_23_segmented_turn06",
+              "route_height_delta_m": 2.4,
+              "return_to_origin": false,
+              "expected_asset": {
+                "terrain": "ramp_up",
+                "spawn": [
+                  1.2,
+                  2,
+                  0.4,
+                  0
+                ]
+              },
+              "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+              "spawn": [
+                1.2,
+                2,
+                0.4,
+                0
+              ],
+              "duration_s": 210,
+              "overview_pose": [
+                8,
+                -1,
+                2.5,
+                0,
+                0.45,
+                1.5707963267948966
+              ],
+              "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+              "controller_kind": "teacher",
+              "protocol_case_id": "ramp12_up_full",
+              "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+              "controller_selector": "closed_loop_multifloor_v6",
+              "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
+              "cascade": {
+                "desired_speed": 0.2,
+                "command_limits": [
+                  0.6,
+                  0.2,
+                  0.6
+                ],
+                "external_heading_gate": true,
+                "base_com_offset": [
+                  0.05523092034548942,
+                  -0.001869001919385796,
+                  0.006095299184261034
+                ],
+                "maximum_gyro_pair_gap_s": 0.02,
+                "goal_z_tolerance_m": 0.1,
+                "gains": {
+                  "cross_kp": 0.8,
+                  "cross_kd": 0.2,
+                  "yaw_kp": 1.3,
+                  "yaw_kd": 0.15,
+                  "velocity_kp_x": 0.6,
+                  "velocity_ki_x": 0.5,
+                  "velocity_kp_y": 0.4,
+                  "velocity_ki_y": 0.3,
+                  "rate_kp": 0.3,
+                  "rate_ki": 0.2
+                },
+                "command_slew_per_s": [
+                  0.6,
+                  0.6,
+                  0.8
+                ],
+                "feedback_expected_hz": 10,
+                "feedback_ttl_sim_and_wall_s": 0.3,
+                "navigation_ground_truth_used": false,
+                "controller_source_file": "cascade_command_source.json",
+                "actual_navigation_verified": false
+              },
+              "pid_parent_profile": {
+                "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+                "unchanged_fields": [
+                  "warmup_history",
+                  "teacher_transition",
+                  "pose_cloud_timeout_s",
+                  "pid",
+                  "expected_asset",
+                  "spawn",
+                  "route_height_delta_m",
+                  "terrain_target_manifest",
+                  "arrival_radius_m",
+                  "arrival_height_half_span_m",
+                  "arrival_control_radius_m",
+                  "dwell_sim_s"
+                ],
+                "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+              },
+              "registered_route_fence": {
+                "horizontal_radius_m": 0.45,
+                "height_error_m": 0.3,
+                "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+              },
+              "scene_initial_support_z": 0.0,
+              "scene_xy_anchor_uncertainty_m": 0.15,
+              "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
+              "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+              "route_world_points": [
+                {
+                  "goal_id": "lower_x02",
+                  "xyz": [
+                    2,
+                    2,
+                    0.0
+                  ]
+                },
+                {
+                  "goal_id": "lower_x03",
+                  "xyz": [
+                    3,
+                    2,
+                    0.1
+                  ]
+                },
+                {
+                  "goal_id": "lower_x04",
+                  "xyz": [
+                    4,
+                    2,
+                    0.2
+                  ]
+                },
+                {
+                  "goal_id": "lower_x05",
+                  "xyz": [
+                    5,
+                    2,
+                    0.30000000000000004
+                  ]
+                },
+                {
+                  "goal_id": "lower_x06",
+                  "xyz": [
+                    6,
+                    2,
+                    0.4
+                  ]
+                },
+                {
+                  "goal_id": "lower_x07",
+                  "xyz": [
+                    7,
+                    2,
+                    0.5
+                  ]
+                },
+                {
+                  "goal_id": "lower_x08",
+                  "xyz": [
+                    8,
+                    2,
+                    0.6000000000000001
+                  ]
+                },
+                {
+                  "goal_id": "lower_x09",
+                  "xyz": [
+                    9,
+                    2,
+                    0.7000000000000001
+                  ]
+                },
+                {
+                  "goal_id": "lower_x10",
+                  "xyz": [
+                    10,
+                    2,
+                    0.8
+                  ]
+                },
+                {
+                  "goal_id": "lower_x11",
+                  "xyz": [
+                    11,
+                    2,
+                    0.9
+                  ]
+                },
+                {
+                  "goal_id": "lower_x12",
+                  "xyz": [
+                    12,
+                    2,
+                    1.0
+                  ]
+                },
+                {
+                  "goal_id": "lower_x13",
+                  "xyz": [
+                    13,
+                    2,
+                    1.1
+                  ]
+                },
+                {
+                  "goal_id": "lower_x14",
+                  "xyz": [
+                    14,
+                    2,
+                    1.2000000000000002
+                  ]
+                },
+                {
+                  "goal_id": "lower_exit",
+                  "xyz": [
+                    14.8,
+                    2,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_x",
+                  "xyz": [
+                    16,
+                    2,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_mid",
+                  "xyz": [
+                    16,
+                    4.5,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "connector_y",
+                  "xyz": [
+                    16,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_entry",
+                  "xyz": [
+                    14.8,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x14",
+                  "xyz": [
+                    14,
+                    7,
+                    1.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x13",
+                  "xyz": [
+                    13,
+                    7,
+                    1.3
+                  ]
+                },
+                {
+                  "goal_id": "upper_x12",
+                  "xyz": [
+                    12,
+                    7,
+                    1.4
+                  ]
+                },
+                {
+                  "goal_id": "upper_x11",
+                  "xyz": [
+                    11,
+                    7,
+                    1.5
+                  ]
+                },
+                {
+                  "goal_id": "upper_x10",
+                  "xyz": [
+                    10,
+                    7,
+                    1.6
+                  ]
+                },
+                {
+                  "goal_id": "upper_x09",
+                  "xyz": [
+                    9,
+                    7,
+                    1.7
+                  ]
+                },
+                {
+                  "goal_id": "upper_x08",
+                  "xyz": [
+                    8,
+                    7,
+                    1.8
+                  ]
+                },
+                {
+                  "goal_id": "upper_x07",
+                  "xyz": [
+                    7,
+                    7,
+                    1.9
+                  ]
+                },
+                {
+                  "goal_id": "upper_x06",
+                  "xyz": [
+                    6,
+                    7,
+                    2.0
+                  ]
+                },
+                {
+                  "goal_id": "upper_x05",
+                  "xyz": [
+                    5,
+                    7,
+                    2.1
+                  ]
+                },
+                {
+                  "goal_id": "upper_x04",
+                  "xyz": [
+                    4,
+                    7,
+                    2.2
+                  ]
+                },
+                {
+                  "goal_id": "upper_x03",
+                  "xyz": [
+                    3,
+                    7,
+                    2.3
+                  ]
+                },
+                {
+                  "goal_id": "upper_x02",
+                  "xyz": [
+                    2,
+                    7,
+                    2.4000000000000004
+                  ]
+                },
+                {
+                  "goal_id": "floor3_stop",
+                  "xyz": [
+                    1.2,
+                    7,
+                    2.4
+                  ]
+                }
+              ],
+              "ramp_segments": [
+                {
+                  "model": "ramp_12",
+                  "direction": "up",
+                  "destination_goal_index": 13
+                },
+                {
+                  "model": "ramp_23",
+                  "direction": "up",
+                  "destination_goal_index": 31
+                }
+              ],
+              "terrain_layer_switch": {
+                "initial_manifest": "tests/terrain_targets/lower12.json",
+                "alternate_manifest": "tests/terrain_targets/upper23.json",
+                "completed_goal_id": "connector_mid",
+                "alternate_include_models": [
+                  "floor_2",
+                  "ramp_23",
+                  "floor_3"
+                ],
+                "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+                "ray_equality_tolerance_m": 1e-09
+              },
+              "slam_imu_online_estimation": {
+                "gravity_est_en": true,
+                "ba_bg_est_en": true
+              },
+              "slam_visual_measurement_covariance": 1000,
+              "diagnostic_scope": {
+                "baseline_version": "closed_loop_multifloor_v6",
+                "route_controller_gates_unchanged": true,
+                "finite_horizon_s": 210,
+                "detail_window_sim_s": [
+                  115,
+                  165
+                ],
+                "navigation_outcome_is_not_full_route_pass": true,
+                "purpose": "acquire actual LIO/VIO constraints and IMU accel for height fault"
+              }
+            },
+            "controller_kind": "teacher",
+            "experimental": true,
+            "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+            "navigation_is_verified": false,
+            "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+            "scope": "Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed"
+          },
+          "navigation_validation": "unverified",
+          "health_scope": "SLAM/SCAN input health only; this does not establish actuator health or physical stopping",
+          "clock_source": "single rclpy ROS TimeSource /clock, KEEP_LAST depth=1",
+          "transport": {
+            "type": "latest_pending_atomic_file",
+            "superseded": 12,
+            "written": 12258,
+            "max_queue_delay_wall_s": 0.0037422680179588497
+          }
+        },
+        "status": "rejected",
+        "reason": "SLAM/SCAN input unhealthy"
+      },
+      "actual_original_envelope": {
+        "state": "failed",
+        "healthy": false,
+        "stop_requested": true,
+        "reason": "Measured SLAM body pose left finite route fence; restart after review",
+        "requested": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "ages": {
+          "clock_wall_s": 1.1280062608420849e-06,
+          "pose_wall_s": 0.06929736502934247,
+          "command_wall_s": 0.015377345029264688,
+          "pose_sim_s": 0.09,
+          "command_sim_s": 0.015
+        },
+        "slam_valid_samples": 2063,
+        "command_received_monotonic_wall": 437283.479128433,
+        "command_received_ros_sim_time_ns": 209975000000,
+        "slam_stamp_ns": 209900000000,
+        "publisher_graph": {
+          "slam": true,
+          "command": true,
+          "details": {
+            "slam_publishers": [
+              "/demo_slam_odom_adapter"
+            ],
+            "command_publishers": [
+              "/demo_navigation"
+            ]
+          }
+        },
+        "controller_source": null,
+        "controller_source_receipt": null,
+        "registered_route_fence": {
+          "inside": true,
+          "segment": 16,
+          "fraction": 0.28467473487331957,
+          "nearest_camera_init_xyz": [
+            14.914694036040057,
+            2.6271044440610867,
+            1.20575359602667
+          ],
+          "horizontal_error_m": 0.003627783061460849,
+          "height_error_m": 0.2560234436193566,
+          "horizontal_radius_m": 0.45,
+          "maximum_height_error_m": 0.3,
+          "navigation_ground_truth_used": false
+        },
+        "controller_source_error": null,
+        "schema_version": 1,
+        "sequence": 12271,
+        "mode": "scan_slam",
+        "source": "scan_slam",
+        "monotonic_wall": 437283.494505778,
+        "sim_time": 209.99,
+        "stamp": {
+          "monotonic_wall": 437283.494505778,
+          "ros_sim_time_ns": 209990000000,
+          "ros_sim_time": 209.99
+        },
+        "valid_for_wall_s": 0.3,
+        "limits": {
+          "vx_mps": 0.6,
+          "vy_mps": 0.2,
+          "wz_radps": 0.6
+        },
+        "observation_source": {
+          "navigation_pose": "/demo/slam/body_odom",
+          "navigation_frame": "camera_init",
+          "navigation_ground_truth_used": false,
+          "velocity_request": "/demo/cmd_vel",
+          "policy_inputs": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only"
+        },
+        "acceptance": {
+          "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/navigation_scope.json",
+          "sha256": "64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257",
+          "run_dir": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+          "profile": {
+            "schema_version": 1,
+            "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+            "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+            "distance_m": 13.6,
+            "max_speed_mps": 0.2,
+            "max_yaw_rate_radps": 0.6,
+            "arrival_radius_m": 0.22,
+            "arrival_height_half_span_m": 0.1,
+            "arrival_control_radius_m": 0.17,
+            "dwell_sim_s": 0.6,
+            "goal_timeout_sim_s": 90.0,
+            "pose_cloud_timeout_s": 0.3,
+            "sensor_warmup_sim_s": 2.0,
+            "interface_version": "navigation_v4_latest_clock_measured_transition",
+            "warmup_history": {
+              "imu": {
+                "min_samples": 600,
+                "min_span_sim_s": 2.9
+              },
+              "body_odom": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "cloud": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "raw_lidar": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "image": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              },
+              "camera_info": {
+                "min_samples": 10,
+                "min_span_sim_s": 2.0
+              }
+            },
+            "request_startup_timeout_sim_s": 90.0,
+            "request_startup_timeout_wall_s": 600.0,
+            "teacher_transition": {
+              "stop_window_sim_s": 0.3,
+              "stop_min_pose_samples": 3,
+              "stop_pose_gap_max_s": 0.2,
+              "gyro_pose_pair_max_s": 0.15,
+              "stop_planar_speed_mps": 0.03,
+              "stop_slam_yaw_rate_radps": 0.05,
+              "stop_body_gyro_radps": 0.05,
+              "turn_complete_rad": 0.1,
+              "drive_heading_max_rad": 0.2
+            },
+            "recovery_fresh_pose_samples": 2,
+            "recovery_min_pose_span_sim_s": 0.1,
+            "fence": {
+              "along_min_m": -0.45,
+              "along_max_m": 14.049999999999999,
+              "lateral_abs_m": 0.45,
+              "height_abs_m": 1.4
+            },
+            "navigation_ground_truth_used": false,
+            "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+            "excluded": [
+              "real_robot",
+              "true_stairs",
+              "full_46_region_mission",
+              "unbounded_dynamic_mission"
+            ],
+            "max_lateral_speed_mps": 0.2,
+            "arrival_stop_policy": "after_measured_dwell",
+            "clear_guard_gap_max_sim_s": 0.3,
+            "pid": {
+              "position_kp": 0.6,
+              "position_ki": 0.08,
+              "position_kd": 0.12,
+              "yaw_kp": 1.1,
+              "yaw_ki": 0.04,
+              "yaw_kd": 0.15,
+              "position_integral_limit": 0.4,
+              "yaw_integral_limit": 0.3,
+              "derivative_filter_tau_s": 0.2,
+              "header_gap_max_s": 0.3,
+              "slew_acceleration": [
+                0.3,
+                0.3,
+                0.25
+              ],
+              "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+              "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+            },
+            "selector": "multifloor12_23_segmented_turn06",
+            "route_height_delta_m": 2.4,
+            "return_to_origin": false,
+            "expected_asset": {
+              "terrain": "ramp_up",
+              "spawn": [
+                1.2,
+                2,
+                0.4,
+                0
+              ]
+            },
+            "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+            "spawn": [
+              1.2,
+              2,
+              0.4,
+              0
+            ],
+            "duration_s": 210,
+            "overview_pose": [
+              8,
+              -1,
+              2.5,
+              0,
+              0.45,
+              1.5707963267948966
+            ],
+            "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+            "controller_kind": "teacher",
+            "protocol_case_id": "ramp12_up_full",
+            "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+            "controller_selector": "closed_loop_multifloor_v6",
+            "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
+            "cascade": {
+              "desired_speed": 0.2,
+              "command_limits": [
+                0.6,
+                0.2,
+                0.6
+              ],
+              "external_heading_gate": true,
+              "base_com_offset": [
+                0.05523092034548942,
+                -0.001869001919385796,
+                0.006095299184261034
+              ],
+              "maximum_gyro_pair_gap_s": 0.02,
+              "goal_z_tolerance_m": 0.1,
+              "gains": {
+                "cross_kp": 0.8,
+                "cross_kd": 0.2,
+                "yaw_kp": 1.3,
+                "yaw_kd": 0.15,
+                "velocity_kp_x": 0.6,
+                "velocity_ki_x": 0.5,
+                "velocity_kp_y": 0.4,
+                "velocity_ki_y": 0.3,
+                "rate_kp": 0.3,
+                "rate_ki": 0.2
+              },
+              "command_slew_per_s": [
+                0.6,
+                0.6,
+                0.8
+              ],
+              "feedback_expected_hz": 10,
+              "feedback_ttl_sim_and_wall_s": 0.3,
+              "navigation_ground_truth_used": false,
+              "controller_source_file": "cascade_command_source.json",
+              "actual_navigation_verified": false
+            },
+            "pid_parent_profile": {
+              "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+              "unchanged_fields": [
+                "warmup_history",
+                "teacher_transition",
+                "pose_cloud_timeout_s",
+                "pid",
+                "expected_asset",
+                "spawn",
+                "route_height_delta_m",
+                "terrain_target_manifest",
+                "arrival_radius_m",
+                "arrival_height_half_span_m",
+                "arrival_control_radius_m",
+                "dwell_sim_s"
+              ],
+              "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+            },
+            "registered_route_fence": {
+              "horizontal_radius_m": 0.45,
+              "height_error_m": 0.3,
+              "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+            },
+            "scene_initial_support_z": 0.0,
+            "scene_xy_anchor_uncertainty_m": 0.15,
+            "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
+            "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+            "route_world_points": [
+              {
+                "goal_id": "lower_x02",
+                "xyz": [
+                  2,
+                  2,
+                  0.0
+                ]
+              },
+              {
+                "goal_id": "lower_x03",
+                "xyz": [
+                  3,
+                  2,
+                  0.1
+                ]
+              },
+              {
+                "goal_id": "lower_x04",
+                "xyz": [
+                  4,
+                  2,
+                  0.2
+                ]
+              },
+              {
+                "goal_id": "lower_x05",
+                "xyz": [
+                  5,
+                  2,
+                  0.30000000000000004
+                ]
+              },
+              {
+                "goal_id": "lower_x06",
+                "xyz": [
+                  6,
+                  2,
+                  0.4
+                ]
+              },
+              {
+                "goal_id": "lower_x07",
+                "xyz": [
+                  7,
+                  2,
+                  0.5
+                ]
+              },
+              {
+                "goal_id": "lower_x08",
+                "xyz": [
+                  8,
+                  2,
+                  0.6000000000000001
+                ]
+              },
+              {
+                "goal_id": "lower_x09",
+                "xyz": [
+                  9,
+                  2,
+                  0.7000000000000001
+                ]
+              },
+              {
+                "goal_id": "lower_x10",
+                "xyz": [
+                  10,
+                  2,
+                  0.8
+                ]
+              },
+              {
+                "goal_id": "lower_x11",
+                "xyz": [
+                  11,
+                  2,
+                  0.9
+                ]
+              },
+              {
+                "goal_id": "lower_x12",
+                "xyz": [
+                  12,
+                  2,
+                  1.0
+                ]
+              },
+              {
+                "goal_id": "lower_x13",
+                "xyz": [
+                  13,
+                  2,
+                  1.1
+                ]
+              },
+              {
+                "goal_id": "lower_x14",
+                "xyz": [
+                  14,
+                  2,
+                  1.2000000000000002
+                ]
+              },
+              {
+                "goal_id": "lower_exit",
+                "xyz": [
+                  14.8,
+                  2,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_x",
+                "xyz": [
+                  16,
+                  2,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_mid",
+                "xyz": [
+                  16,
+                  4.5,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "connector_y",
+                "xyz": [
+                  16,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_entry",
+                "xyz": [
+                  14.8,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_x14",
+                "xyz": [
+                  14,
+                  7,
+                  1.2
+                ]
+              },
+              {
+                "goal_id": "upper_x13",
+                "xyz": [
+                  13,
+                  7,
+                  1.3
+                ]
+              },
+              {
+                "goal_id": "upper_x12",
+                "xyz": [
+                  12,
+                  7,
+                  1.4
+                ]
+              },
+              {
+                "goal_id": "upper_x11",
+                "xyz": [
+                  11,
+                  7,
+                  1.5
+                ]
+              },
+              {
+                "goal_id": "upper_x10",
+                "xyz": [
+                  10,
+                  7,
+                  1.6
+                ]
+              },
+              {
+                "goal_id": "upper_x09",
+                "xyz": [
+                  9,
+                  7,
+                  1.7
+                ]
+              },
+              {
+                "goal_id": "upper_x08",
+                "xyz": [
+                  8,
+                  7,
+                  1.8
+                ]
+              },
+              {
+                "goal_id": "upper_x07",
+                "xyz": [
+                  7,
+                  7,
+                  1.9
+                ]
+              },
+              {
+                "goal_id": "upper_x06",
+                "xyz": [
+                  6,
+                  7,
+                  2.0
+                ]
+              },
+              {
+                "goal_id": "upper_x05",
+                "xyz": [
+                  5,
+                  7,
+                  2.1
+                ]
+              },
+              {
+                "goal_id": "upper_x04",
+                "xyz": [
+                  4,
+                  7,
+                  2.2
+                ]
+              },
+              {
+                "goal_id": "upper_x03",
+                "xyz": [
+                  3,
+                  7,
+                  2.3
+                ]
+              },
+              {
+                "goal_id": "upper_x02",
+                "xyz": [
+                  2,
+                  7,
+                  2.4000000000000004
+                ]
+              },
+              {
+                "goal_id": "floor3_stop",
+                "xyz": [
+                  1.2,
+                  7,
+                  2.4
+                ]
+              }
+            ],
+            "ramp_segments": [
+              {
+                "model": "ramp_12",
+                "direction": "up",
+                "destination_goal_index": 13
+              },
+              {
+                "model": "ramp_23",
+                "direction": "up",
+                "destination_goal_index": 31
+              }
+            ],
+            "terrain_layer_switch": {
+              "initial_manifest": "tests/terrain_targets/lower12.json",
+              "alternate_manifest": "tests/terrain_targets/upper23.json",
+              "completed_goal_id": "connector_mid",
+              "alternate_include_models": [
+                "floor_2",
+                "ramp_23",
+                "floor_3"
+              ],
+              "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+              "ray_equality_tolerance_m": 1e-09
+            },
+            "slam_imu_online_estimation": {
+              "gravity_est_en": true,
+              "ba_bg_est_en": true
+            },
+            "slam_visual_measurement_covariance": 1000,
+            "diagnostic_scope": {
+              "baseline_version": "closed_loop_multifloor_v6",
+              "route_controller_gates_unchanged": true,
+              "finite_horizon_s": 210,
+              "detail_window_sim_s": [
+                115,
+                165
+              ],
+              "navigation_outcome_is_not_full_route_pass": true,
+              "purpose": "acquire actual LIO/VIO constraints and IMU accel for height fault"
+            }
+          },
+          "controller_kind": "teacher",
+          "experimental": true,
+          "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+          "navigation_is_verified": false,
+          "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+          "scope": "Actual SLAM/IMU controller with actual SCAN path; privileged Actor disclosed"
+        },
+        "navigation_validation": "unverified",
+        "health_scope": "SLAM/SCAN input health only; this does not establish actuator health or physical stopping",
+        "clock_source": "single rclpy ROS TimeSource /clock, KEEP_LAST depth=1",
+        "transport": {
+          "type": "latest_pending_atomic_file",
+          "superseded": 12,
+          "written": 12258,
+          "max_queue_delay_wall_s": 0.0037422680179588497
+        }
+      },
+      "navigation_ground_truth_used": false,
+      "actor_terrain_provider": {
+        "schema": "teacher_actor_terrain_switch/v1",
+        "current_provider": "alternate",
+        "include_models": [
+          "floor_2",
+          "ramp_23",
+          "floor_3"
+        ],
+        "manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+        "switched": true,
+        "failure": null,
+        "event_sequence": 2,
+        "arrival_stamp_ns": 127900000000,
+        "pending_arrival_stamp_ns": null,
+        "navigation_ground_truth_used": false
+      }
+    },
+    "actor_terrain_provider": {
+      "schema": "teacher_actor_terrain_switch/v1",
+      "current_provider": "alternate",
+      "include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+      "switched": true,
+      "failure": null,
+      "event_sequence": 2,
+      "arrival_stamp_ns": 127900000000,
+      "pending_arrival_stamp_ns": null,
+      "navigation_ground_truth_used": false
+    },
+    "actor_terrain_switch_failed": false
+  },
+  "runtime_manifest.json": {
+    "schema": "teacher_closed_loop_runtime_plan/v1",
+    "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+    "simulation_only": true,
+    "real_robot": false,
+    "allowed": true,
+    "navigation_ground_truth_used": false,
+    "actor_privileged_dimensions": 232,
+    "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/profiles/multifloor_diagnostic210.json",
+    "profile_sha256": "de8e410fc05a50742a76e8375cc7c15a24d2e8e3bdc90f9a79e6143cb47c0938",
+    "profile": {
+      "schema_version": 1,
+      "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_visual_cov1000_v6",
+      "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+      "distance_m": 13.6,
+      "max_speed_mps": 0.2,
+      "max_yaw_rate_radps": 0.6,
+      "arrival_radius_m": 0.22,
+      "arrival_height_half_span_m": 0.1,
+      "arrival_control_radius_m": 0.17,
+      "dwell_sim_s": 0.6,
+      "goal_timeout_sim_s": 90.0,
+      "pose_cloud_timeout_s": 0.3,
+      "sensor_warmup_sim_s": 2.0,
+      "interface_version": "navigation_v4_latest_clock_measured_transition",
+      "warmup_history": {
+        "imu": {
+          "min_samples": 600,
+          "min_span_sim_s": 2.9
+        },
+        "body_odom": {
+          "min_samples": 10,
+          "min_span_sim_s": 2.0
+        },
+        "cloud": {
+          "min_samples": 10,
+          "min_span_sim_s": 2.0
+        },
+        "raw_lidar": {
+          "min_samples": 10,
+          "min_span_sim_s": 2.0
+        },
+        "image": {
+          "min_samples": 10,
+          "min_span_sim_s": 2.0
+        },
+        "camera_info": {
+          "min_samples": 10,
+          "min_span_sim_s": 2.0
+        }
+      },
+      "request_startup_timeout_sim_s": 90.0,
+      "request_startup_timeout_wall_s": 600.0,
+      "teacher_transition": {
+        "stop_window_sim_s": 0.3,
+        "stop_min_pose_samples": 3,
+        "stop_pose_gap_max_s": 0.2,
+        "gyro_pose_pair_max_s": 0.15,
+        "stop_planar_speed_mps": 0.03,
+        "stop_slam_yaw_rate_radps": 0.05,
+        "stop_body_gyro_radps": 0.05,
+        "turn_complete_rad": 0.1,
+        "drive_heading_max_rad": 0.2
+      },
+      "recovery_fresh_pose_samples": 2,
+      "recovery_min_pose_span_sim_s": 0.1,
+      "fence": {
+        "along_min_m": -0.45,
+        "along_max_m": 14.049999999999999,
+        "lateral_abs_m": 0.45,
+        "height_abs_m": 1.4
+      },
+      "navigation_ground_truth_used": false,
+      "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+      "excluded": [
+        "real_robot",
+        "true_stairs",
+        "full_46_region_mission",
+        "unbounded_dynamic_mission"
+      ],
+      "max_lateral_speed_mps": 0.2,
+      "arrival_stop_policy": "after_measured_dwell",
+      "clear_guard_gap_max_sim_s": 0.3,
+      "pid": {
+        "position_kp": 0.6,
+        "position_ki": 0.08,
+        "position_kd": 0.12,
+        "yaw_kp": 1.1,
+        "yaw_ki": 0.04,
+        "yaw_kd": 0.15,
+        "position_integral_limit": 0.4,
+        "yaw_integral_limit": 0.3,
+        "derivative_filter_tau_s": 0.2,
+        "header_gap_max_s": 0.3,
+        "slew_acceleration": [
+          0.3,
+          0.3,
+          0.25
+        ],
+        "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+        "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+      },
+      "selector": "multifloor12_23_segmented_turn06",
+      "route_height_delta_m": 2.4,
+      "return_to_origin": false,
+      "expected_asset": {
+        "terrain": "ramp_up",
+        "spawn": [
+          1.2,
+          2,
+          0.4,
+          0
+        ]
+      },
+      "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+      "spawn": [
+        1.2,
+        2,
+        0.4,
+        0
+      ],
+      "duration_s": 210,
+      "overview_pose": [
+        8,
+        -1,
+        2.5,
+        0,
+        0.45,
+        1.5707963267948966
+      ],
+      "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+      "controller_kind": "teacher",
+      "protocol_case_id": "ramp12_up_full",
+      "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+      "controller_selector": "closed_loop_multifloor_v6",
+      "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
+      "cascade": {
+        "desired_speed": 0.2,
+        "command_limits": [
+          0.6,
+          0.2,
+          0.6
+        ],
+        "external_heading_gate": true,
+        "base_com_offset": [
+          0.05523092034548942,
+          -0.001869001919385796,
+          0.006095299184261034
+        ],
+        "maximum_gyro_pair_gap_s": 0.02,
+        "goal_z_tolerance_m": 0.1,
+        "gains": {
+          "cross_kp": 0.8,
+          "cross_kd": 0.2,
+          "yaw_kp": 1.3,
+          "yaw_kd": 0.15,
+          "velocity_kp_x": 0.6,
+          "velocity_ki_x": 0.5,
+          "velocity_kp_y": 0.4,
+          "velocity_ki_y": 0.3,
+          "rate_kp": 0.3,
+          "rate_ki": 0.2
+        },
+        "command_slew_per_s": [
+          0.6,
+          0.6,
+          0.8
+        ],
+        "feedback_expected_hz": 10,
+        "feedback_ttl_sim_and_wall_s": 0.3,
+        "navigation_ground_truth_used": false,
+        "controller_source_file": "cascade_command_source.json",
+        "actual_navigation_verified": false
+      },
+      "pid_parent_profile": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+        "unchanged_fields": [
+          "warmup_history",
+          "teacher_transition",
+          "pose_cloud_timeout_s",
+          "pid",
+          "expected_asset",
+          "spawn",
+          "route_height_delta_m",
+          "terrain_target_manifest",
+          "arrival_radius_m",
+          "arrival_height_half_span_m",
+          "arrival_control_radius_m",
+          "dwell_sim_s"
+        ],
+        "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+      },
+      "registered_route_fence": {
+        "horizontal_radius_m": 0.45,
+        "height_error_m": 0.3,
+        "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+      },
+      "scene_initial_support_z": 0.0,
+      "scene_xy_anchor_uncertainty_m": 0.15,
+      "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
+      "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+      "route_world_points": [
+        {
+          "goal_id": "lower_x02",
+          "xyz": [
+            2,
+            2,
+            0.0
+          ]
+        },
+        {
+          "goal_id": "lower_x03",
+          "xyz": [
+            3,
+            2,
+            0.1
+          ]
+        },
+        {
+          "goal_id": "lower_x04",
+          "xyz": [
+            4,
+            2,
+            0.2
+          ]
+        },
+        {
+          "goal_id": "lower_x05",
+          "xyz": [
+            5,
+            2,
+            0.30000000000000004
+          ]
+        },
+        {
+          "goal_id": "lower_x06",
+          "xyz": [
+            6,
+            2,
+            0.4
+          ]
+        },
+        {
+          "goal_id": "lower_x07",
+          "xyz": [
+            7,
+            2,
+            0.5
+          ]
+        },
+        {
+          "goal_id": "lower_x08",
+          "xyz": [
+            8,
+            2,
+            0.6000000000000001
+          ]
+        },
+        {
+          "goal_id": "lower_x09",
+          "xyz": [
+            9,
+            2,
+            0.7000000000000001
+          ]
+        },
+        {
+          "goal_id": "lower_x10",
+          "xyz": [
+            10,
+            2,
+            0.8
+          ]
+        },
+        {
+          "goal_id": "lower_x11",
+          "xyz": [
+            11,
+            2,
+            0.9
+          ]
+        },
+        {
+          "goal_id": "lower_x12",
+          "xyz": [
+            12,
+            2,
+            1.0
+          ]
+        },
+        {
+          "goal_id": "lower_x13",
+          "xyz": [
+            13,
+            2,
+            1.1
+          ]
+        },
+        {
+          "goal_id": "lower_x14",
+          "xyz": [
+            14,
+            2,
+            1.2000000000000002
+          ]
+        },
+        {
+          "goal_id": "lower_exit",
+          "xyz": [
+            14.8,
+            2,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "connector_x",
+          "xyz": [
+            16,
+            2,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "connector_mid",
+          "xyz": [
+            16,
+            4.5,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "connector_y",
+          "xyz": [
+            16,
+            7,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "upper_entry",
+          "xyz": [
+            14.8,
+            7,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "upper_x14",
+          "xyz": [
+            14,
+            7,
+            1.2
+          ]
+        },
+        {
+          "goal_id": "upper_x13",
+          "xyz": [
+            13,
+            7,
+            1.3
+          ]
+        },
+        {
+          "goal_id": "upper_x12",
+          "xyz": [
+            12,
+            7,
+            1.4
+          ]
+        },
+        {
+          "goal_id": "upper_x11",
+          "xyz": [
+            11,
+            7,
+            1.5
+          ]
+        },
+        {
+          "goal_id": "upper_x10",
+          "xyz": [
+            10,
+            7,
+            1.6
+          ]
+        },
+        {
+          "goal_id": "upper_x09",
+          "xyz": [
+            9,
+            7,
+            1.7
+          ]
+        },
+        {
+          "goal_id": "upper_x08",
+          "xyz": [
+            8,
+            7,
+            1.8
+          ]
+        },
+        {
+          "goal_id": "upper_x07",
+          "xyz": [
+            7,
+            7,
+            1.9
+          ]
+        },
+        {
+          "goal_id": "upper_x06",
+          "xyz": [
+            6,
+            7,
+            2.0
+          ]
+        },
+        {
+          "goal_id": "upper_x05",
+          "xyz": [
+            5,
+            7,
+            2.1
+          ]
+        },
+        {
+          "goal_id": "upper_x04",
+          "xyz": [
+            4,
+            7,
+            2.2
+          ]
+        },
+        {
+          "goal_id": "upper_x03",
+          "xyz": [
+            3,
+            7,
+            2.3
+          ]
+        },
+        {
+          "goal_id": "upper_x02",
+          "xyz": [
+            2,
+            7,
+            2.4000000000000004
+          ]
+        },
+        {
+          "goal_id": "floor3_stop",
+          "xyz": [
+            1.2,
+            7,
+            2.4
+          ]
+        }
+      ],
+      "ramp_segments": [
+        {
+          "model": "ramp_12",
+          "direction": "up",
+          "destination_goal_index": 13
+        },
+        {
+          "model": "ramp_23",
+          "direction": "up",
+          "destination_goal_index": 31
+        }
+      ],
+      "terrain_layer_switch": {
+        "initial_manifest": "tests/terrain_targets/lower12.json",
+        "alternate_manifest": "tests/terrain_targets/upper23.json",
+        "completed_goal_id": "connector_mid",
+        "alternate_include_models": [
+          "floor_2",
+          "ramp_23",
+          "floor_3"
+        ],
+        "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+        "ray_equality_tolerance_m": 1e-09
+      },
+      "slam_imu_online_estimation": {
+        "gravity_est_en": true,
+        "ba_bg_est_en": true
+      },
+      "slam_visual_measurement_covariance": 1000,
+      "diagnostic_scope": {
+        "baseline_version": "closed_loop_multifloor_v6",
+        "route_controller_gates_unchanged": true,
+        "finite_horizon_s": 210,
+        "detail_window_sim_s": [
+          115,
+          165
+        ],
+        "navigation_outcome_is_not_full_route_pass": true,
+        "purpose": "acquire actual LIO/VIO constraints and IMU accel for height fault"
+      }
+    },
+    "required_owned_roles": [
+      "worker",
+      "bridge",
+      "capture",
+      "navigation_stack",
+      "gazebo"
+    ],
+    "expected_launch_children": 11,
+    "scope_runtime": {
+      "required_owned_roles": [
+        "worker",
+        "bridge",
+        "capture",
+        "navigation_stack",
+        "gazebo"
+      ],
+      "expected_launch_children": 11
+    },
+    "duration_s": 210.0,
+    "real_time_factor": 1.0,
+    "wall_budget_s": 720.0,
+    "ramp_contract_sha256": "bd7d08e952bb5a03a55b37e5edcb2b808c51e9cbc18549f5aaf39b04ff277f22",
+    "ros_domain": 87,
+    "actor_python": "/home/hyh001/isaacsim/kit/python/bin/python3",
+    "system_python": "/usr/bin/python3",
+    "actor_device": "cpu",
+    "actor_threads": 1,
+    "physics_step_s": 0.005,
+    "Actor_hz": 50,
+    "native_PD_hz": 200,
+    "exclusive_writer": "teacher_sim::TeacherActuator",
+    "checkpoint_path": "/home/hyh001/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt",
+    "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+    "native_plugin_sha256": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+    "source_manifest_sha256": "449573d7e4dd9c1543587401e9d3bfa7e590bcdf67d44e525628aac98961b26a",
+    "scope_sha256": "64b28a364f00f05b023ed4054263bb43a9885d7a03228e580a64ce693b12c257",
+    "world_sha256": "8e3460cff297a261cbedc7f860b842b810911f2a02a2ed23878f21ed13dbfd4b",
+    "cloud_transport_manifest_sha256": "a95da31fd6fdfbc600b131796d971e4754f14ddc3762bac2ef63aae2df1759d2",
+    "runtime_started": true,
+    "renderer": "hardware/Ogre2",
+    "compatibility_motion_gate_applies": false,
+    "slam_binary_contract": {
+      "executable": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+        "sha256": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997"
+      },
+      "core": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+        "sha256": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107"
+      }
+    },
+    "navigation_stack_diagnostic_environment": {
+      "FASTLIVO_DIAGNOSTIC_DIR": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf/fastlivo_diagnostics",
+      "FASTLIVO_DIAGNOSTIC_BEGIN": "115",
+      "FASTLIVO_DIAGNOSTIC_END": "165"
+    },
+    "diagnostic_prefix_only": true,
+    "runtime_commands": {
+      "worker": [
+        "/home/hyh001/isaacsim/kit/python/bin/python3",
+        "-B",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/worker.py",
+        "--run",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf"
+      ],
+      "navigation_stack": [
+        "ros2",
+        "launch",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/stack.launch.py",
+        "run_dir:=/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf"
+      ]
+    },
+    "limitations": "Plan is launch provenance only, never a route/SLAM/Sim2Sim pass",
+    "error": null,
+    "owned_processes": [
+      {
+        "role": "worker",
+        "pid": 3696106,
+        "state": "R",
+        "ppid": 3696065,
+        "pgid": 3696106,
+        "session": 3696106,
+        "start_ticks": 43706788,
+        "returncode": 0
+      },
+      {
+        "role": "bridge",
+        "pid": 3696108,
+        "state": "R",
+        "ppid": 3696065,
+        "pgid": 3696108,
+        "session": 3696108,
+        "start_ticks": 43706879,
+        "returncode": 0
+      },
+      {
+        "role": "capture",
+        "pid": 3696109,
+        "state": "R",
+        "ppid": 3696065,
+        "pgid": 3696109,
+        "session": 3696109,
+        "start_ticks": 43706879,
+        "returncode": 0
+      },
+      {
+        "role": "navigation_stack",
+        "pid": 3696110,
+        "state": "R",
+        "ppid": 3696065,
+        "pgid": 3696110,
+        "session": 3696110,
+        "start_ticks": 43706879,
+        "returncode": 0
+      },
+      {
+        "role": "gazebo",
+        "pid": 3696262,
+        "state": "R",
+        "ppid": 3696065,
+        "pgid": 3696262,
+        "session": 3696262,
+        "start_ticks": 43706932,
+        "returncode": 0
+      }
+    ],
+    "cleanup": {
+      "navigation_stack": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "capture": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "bridge": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "gazebo": {
+        "started": true,
+        "sent_signals": [],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "worker": {
+        "started": true,
+        "sent_signals": [],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      }
+    },
+    "slam_loaded_binary_verified": true,
+    "slam_loaded_binary_receipt_sha256": "32bdd56bf4f676a3d3dfe0e6b90b3642e0158db186dc5f7f6663fcb805b7f735",
+    "required_owned_roles_complete": true,
+    "all_owned_and_children_clean": true,
+    "launch_child_exit_evidence": {
+      "expected_children": 11,
+      "started_children": 11,
+      "children": [
+        {
+          "pid": 3696148,
+          "action": "python3-1",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696149,
+          "action": "python3-2",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696150,
+          "action": "parameter_blackboard-3",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696151,
+          "action": "fastlivo_mapping-4",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696152,
+          "action": "python3-5",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696153,
+          "action": "python3-6",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696154,
+          "action": "scan_planner_node-7",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696157,
+          "action": "python3-8",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696158,
+          "action": "python3-9",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696159,
+          "action": "python3-10",
+          "clean_exit": true
+        },
+        {
+          "pid": 3696160,
+          "action": "python3-11",
+          "clean_exit": true
+        }
+      ],
+      "died": [],
+      "all_expected_children_clean": true
+    },
+    "gazebo_partition": "teacher_closed_loop_20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+    "plugin_sha256": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+    "runtime_plan_sha256": "7ff320b0f9df36573354ba5bc4c21b50eeda121977aae1b70f567ab54e6dac9f",
+    "gazebo_natural_exit_grace_expired": false,
+    "actual_sensors_ready": true,
+    "runtime_status": "completed_requires_independent_navigation_evaluation",
+    "training_processes_signaled": false,
+    "actor_started": true,
+    "navigation_controller_kind": "teacher",
+    "high_level_source": "Actual SLAM body pose and causal IMU gyro, actual registered cloud and SCAN checked path",
+    "truth_navigation_used": false,
+    "actual_feedback_hz": "New mapped SLAM headers about10Hz; heartbeats are not new feedback"
+  },
+  "slam_loaded_binary.json": {
+    "schema": "teacher_v7_loaded_slam_binary/v1",
+    "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+    "expected": {
+      "executable": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+        "sha256": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997"
+      },
+      "core": {
+        "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+        "sha256": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107"
+      }
+    },
+    "navigation_group_identity": {
+      "pid": 3696110,
+      "state": "R",
+      "ppid": 3696065,
+      "pgid": 3696110,
+      "session": 3696110,
+      "start_ticks": 43706879
+    },
+    "verified": true,
+    "simulation_only": true,
+    "before_physics": true,
+    "mapping_identity": {
+      "pid": 3696151,
+      "state": "S",
+      "ppid": 3696110,
+      "pgid": 3696110,
+      "session": 3696110,
+      "start_ticks": 43706905
+    },
+    "actual_executable_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+    "core_mapping_rows": [
+      "7ab754800000-7ab754957000 r--p 00000000 103:09 10106000                  /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+      "7ab754957000-7ab754b66000 r-xp 00157000 103:09 10106000                  /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+      "7ab754b66000-7ab754bba000 r--p 00366000 103:09 10106000                  /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+      "7ab754bba000-7ab754bc5000 r--p 003b9000 103:09 10106000                  /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so",
+      "7ab754bc5000-7ab754bc9000 rw-p 003c4000 103:09 10106000                  /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so"
+    ],
+    "loaded_core_paths": [
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/slam_ws/install/fast_livo2_core/lib/libfast_livo2_core.so"
+    ],
+    "process_maps_sha256": "16801cc4b7bc75da916b25dd0fcef6bd8713d5cd9c3b286ceed873d067a64bab",
+    "actual_executable_sha256": "defed90c382bc7b81059493ef871ead4b2c5f4db7ad3fac22a0c52fbd03b6997",
+    "actual_core_sha256": "4f0f0727171c8c7185073f5757a3ef80aeb6dffa70bff61217260426a0b58107",
+    "witness_monotonic_wall_ns": 437069321206157
+  },
+  "fastlivo_diagnostics/writer_stats.json": {
+    "schema": "fastlivo_diagnostics/v1",
+    "final": true,
+    "attempted": 159757,
+    "written": 159757,
+    "dropped": 0,
+    "maximum_queue_records": 39,
+    "file_bytes": 6912621864,
+    "detail_begin_s": 115,
+    "detail_end_s": 165,
+    "writer_io_failed": false
+  },
+  "schema": "teacher_v7_runtime_health/v1",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "reader_sha256": "561734b5a58e780c452040807d1085836d4cdad2d18c89f5f85ad227e01fbeca",
+  "meaning": "Finite210s diagnostic prefix operational evidence; not a600s/full32-region navigation pass",
+  "record_kind_counts": {
+    "1": 42001,
+    "3": 2101,
+    "2": 2101,
+    "10": 4199,
+    "11": 4199,
+    "13": 2100,
+    "12": 2099,
+    "20": 41280,
+    "100": 8885,
+    "200": 8252,
+    "201": 17498,
+    "4": 501,
+    "101": 1002,
+    "102": 1002,
+    "14": 501,
+    "103": 442,
+    "202": 17586,
+    "203": 4008
+  }
+}

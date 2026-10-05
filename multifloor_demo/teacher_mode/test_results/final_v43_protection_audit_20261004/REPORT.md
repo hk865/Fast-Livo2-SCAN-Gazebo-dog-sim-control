@@ -1,0 +1,15 @@
+# V43实际运行后的保护/控制权审计
+
+北京时间2026-10-04 10:07:52完成只读审计。实际run为`20261004_100256_navigation_slam_scan_dynamic_flat_v43_turn20_r1_2f70`，240仿真秒。14组保护/来源/完整退出检查全部通过；主receipt `audit.json` SHA256为`50c05486cfcd1090ddee70a191f89ef0627437d1b1cf99df5718956079701ce2`。
+
+该“审计通过”仅指保护哈希、独占控制权、来源/日志完整性与清理。导航最终仍为failed：真实`navigation_status.json`停在out_1m、waypoint_index0/2、region_arrivals空，原因“当前航点超过仿真时间限制，停车”。原区域.17/.6与90秒deadline没有放宽，整体动态导航不能通过。turn20的0.2是独立scope配置，此次未完成出程、未进入返回大角度场景，不能宣称返回转向得到实际验证。
+
+保护资产保持一致：冻结checkpoint `bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34`，训练env/agent `b48ccebc1ef9ac7aa4d31451c720d38af040997fbc0c84c096cdd12b281e5d79` / `a5dbae28edf797729166044b2d3fda0afcc8812726295e28dfb580a39e862ec3`。原camera_rig/three_floors_camera为`ddd00f818081eef6746224b7ab96db97edb99f53152e47d71e7bb8e45ba65e33` / `7e5c74c27c0fb7dda94ab624e521c83154463f861542f096d40b3f8545d4ccbd`；原Demo两物理资产也匹配保护基线。native仍`3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2`，原全局acceptance仍`0250c047a09ada1b29ddaaa6f7251b3fbb57ad091f75f9ff0273f48ef08ba76c`，接口passed/运动failed/Sim2Sim failed/导航unverified/真机unverified均保持。
+
+V43实际scope所有引用、当前冻结源和实际归档源匹配V43冻结哈希。actor仍CPU单线程；关节唯一执行者为native TeacherActuator，CHAMP/body_stabilizer/ros2_control/JointTrajectoryController禁用；来源导航标记无真值反馈。协议和worker/物理未因采集/传输调整而放宽。此次导航Teacher策略仍保留特权观测，不能扩称真实30维替换或全感知部署验证。
+
+实际6个自有进程worker/gazebo/bridge/capture/shadow/navigation_stack全部returncode0；启动日志中15个launch child全部有对应clean退出，没有died或missing条目。只读/proc检查没有记录PID残留或引用该run的活动进程；不使用kill(pid,0)或其他信号探针。guard writer为drained、无queue_error、expected436条，实际436条且序号1..436齐全。该核对不替代点云clear几何或物理停车/恢复验收。
+
+结束后资源快照GPU940/16303MiB、利用率16%，CPU load3.80/3.25/2.26，没有训练候选进程。冻结训练checkpoint/归档与之前哈希一致；本脚本没有训练写入、启动或信号操作。当前无训练进程仅是只读瞬时事实，不能据此证明全部历史进程行为；runner原training_untouched声明另行保留。
+
+仅本新目录写入独立审计，不改run原日志、任何runtime、current_status/package/README/docs。此处的manifest只列本审计证据，不是root最后的包清单。主导航status SHA256为`91c5e99606d57cf2c54c105aa467b48b6d5083d6903b7ef7f9cb618bc927e28e`，原始状态未改写。

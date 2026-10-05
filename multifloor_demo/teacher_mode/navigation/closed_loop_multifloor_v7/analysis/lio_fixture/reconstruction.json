@@ -1,0 +1,61 @@
+{
+  "schema": "lio_synthetic_enabled_disabled_equivalence/v1",
+  "record_counts": {
+    "100": 3,
+    "101": 2,
+    "102": 2,
+    "103": 1
+  },
+  "writer_stats": {
+    "schema": "fastlivo_diagnostics/v1",
+    "final": true,
+    "attempted": 8,
+    "written": 8,
+    "dropped": 0,
+    "maximum_queue_records": 1,
+    "file_bytes": 1994712,
+    "detail_begin_s": 115,
+    "detail_end_s": 165,
+    "writer_io_failed": false
+  },
+  "checks": [
+    {
+      "sequence": 2,
+      "iteration": 0,
+      "K_maxabs_error": 4.235164736271502e-22,
+      "G_maxabs_error": 1.1102230246251565e-16,
+      "solution_maxabs_error": 1.734723475976807e-18
+    },
+    {
+      "sequence": 2,
+      "iteration": 0,
+      "kind101_rows": 729,
+      "M_maxabs_error": 3.3651303965598345e-11,
+      "HTz_maxabs_error": 1.3642420526593924e-12
+    },
+    {
+      "sequence": 2,
+      "iteration": 1,
+      "K_maxabs_error": 4.235164736271502e-22,
+      "G_maxabs_error": 1.1102230246251565e-16,
+      "solution_maxabs_error": 3.468864616802377e-20
+    },
+    {
+      "sequence": 2,
+      "iteration": 2,
+      "K_maxabs_error": 4.235164736271502e-22,
+      "G_maxabs_error": 1.1102230246251565e-16,
+      "solution_maxabs_error": 1.734723475976807e-18
+    },
+    {
+      "sequence": 2,
+      "iteration": 2,
+      "kind101_rows": 729,
+      "M_maxabs_error": 3.3651303965598345e-11,
+      "HTz_maxabs_error": 2.220446049250313e-16
+    }
+  ],
+  "all_reconstructions_pass": true,
+  "byte_identical": true,
+  "physical_navigation_pass_claimed": false
+}

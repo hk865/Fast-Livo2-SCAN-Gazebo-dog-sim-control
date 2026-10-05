@@ -1,0 +1,422 @@
+{
+  "schema": "independent_actual_v17_selected_semantic_fixtures/v1",
+  "status": "PASS_LIMITED_SEMANTICS",
+  "scope": "Selected actual production receive/commit callback data/header/error semantics. No complete estimator trajectory, performance, runtime queue order generalization or navigation pass.",
+  "build_receipt_sha256": "e7f7c99361dedeb162bd746b80a61d167fb70664560086583a6bf46397cb1323",
+  "config_sha256": "535f7e71443193c99d3b9bb8f760dbab1f69e799b5b6f9636db64f3965a96dd5",
+  "camera_sha256": "9def8d2c48b852ddc4e26055c6d23c544b095120f625bd1d13e68a53a564bbff",
+  "source_configuration_run": "/var/tmp/go2_teacher_simulation_20261005/20261005_211806_closed_loop_cascade_clock_hold_lidar64_30hz_rgb30_lockfree4_full_r1_fbcb",
+  "case_pairs": [
+    {
+      "case": "duplicate_bad",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "near_duplicate_bad",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "backward_bad",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "under_20ms_bad",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "fresh_bad",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "fresh_valid",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "fresh_empty",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    },
+    {
+      "case": "cloud_standard_filter",
+      "passed": true,
+      "scope": "Actual direct original callback branch vs worker decode + owner commit; selected source/header/error semantics only"
+    }
+  ],
+  "negative_guard": {
+    "case": "literal_hilti_configuration_rejected",
+    "passed": true,
+    "returncode": 0,
+    "execution_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "processes": [
+    {
+      "case": "duplicate_bad",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "duplicate_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/duplicate_bad_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "99069d91ced2d82bce35883d515b0dccd64d6cf9816ba1f3e5910bb5ad4645a1",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10000000000,
+      "raw_receipt_wall": 455948.282581359
+    },
+    {
+      "case": "duplicate_bad",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "duplicate_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/duplicate_bad_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "1f6d722ab39735f5252a2463b5cd41a632c5f0756302b5fdfb2ef667259eeaa2",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10000000000,
+      "raw_receipt_wall": 455948.498590989,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "near_duplicate_bad",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "near_duplicate_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/near_duplicate_bad_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "a06a449601644a737856f686fc9d690aac85ae9c3a37d2019dde66fde006fc21",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10000500000,
+      "raw_receipt_wall": 455948.707735573
+    },
+    {
+      "case": "near_duplicate_bad",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "near_duplicate_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/near_duplicate_bad_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "40ecd6af58f9b9df017d198e78d6092a6df79b8175e1e0e955ab96d410faee55",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10000500000,
+      "raw_receipt_wall": 455948.925100238,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "backward_bad",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "backward_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/backward_bad_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "e384c0cbcd3e61cfe1905d3af1759c1b672f0d8435bbf46e3f7da83bb87a857c",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 9000000000,
+      "raw_receipt_wall": 455949.138927499
+    },
+    {
+      "case": "backward_bad",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "backward_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/backward_bad_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "0d157c8480eefcec09ef2ffb32cb30745cb169028b1fe773487d845c0cbdd1f5",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 9000000000,
+      "raw_receipt_wall": 455949.355950643,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "under_20ms_bad",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "under_20ms_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/under_20ms_bad_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "592b809e78c3ede8814be77614707488da36b0966eb1d4dbeb18fa008c59e158",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10010000000,
+      "raw_receipt_wall": 455949.5674341
+    },
+    {
+      "case": "under_20ms_bad",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "under_20ms_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/under_20ms_bad_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "a2fb052a8ee633c0dd4235935b16df69de3be51fad042df0bc449259f0bf8bcc",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10010000000,
+      "raw_receipt_wall": 455949.789048732,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "fresh_bad",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "fresh_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_bad_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "162853d6dc33e2d65cfa7beb5935d87426a27508812afb035ea55115941f6f56",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "22d818ed52f52f29ea1c665533da5fd300371807fc062925e8c714b1b03f20a5",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455950.006081824
+    },
+    {
+      "case": "fresh_bad",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "fresh_bad",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_bad_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "dfbff70b120954439ee5a11f07f58335d3cfb4429e58ade81929c654c97b70d6",
+      "canonical_sha256": "b49ee99e2a1947568c4cea8aa12a2433dd3f72229eace8e9e5f0b42d78aa90d6",
+      "error_sha256": "22d818ed52f52f29ea1c665533da5fd300371807fc062925e8c714b1b03f20a5",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455950.224614475
+    },
+    {
+      "case": "fresh_valid",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "fresh_valid",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_valid_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "82aaeb9d51ccf8baf81b72c6b8545bd5448c5826a3f1597a7be8000136b57724",
+      "canonical_sha256": "6c52d55ca1709c18793cad0ca0e65f35a92bbe872e253e9f36286a74d0d24ca1",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455950.442513612
+    },
+    {
+      "case": "fresh_valid",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "fresh_valid",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_valid_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "d83f7fe69a38f03b3394e58580182274b25e7ac5c000869c5638b2a01b7fac8a",
+      "canonical_sha256": "6c52d55ca1709c18793cad0ca0e65f35a92bbe872e253e9f36286a74d0d24ca1",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455950.65919722,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "fresh_empty",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "fresh_empty",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_empty_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "e8c87a2691f8e6ac9dbf136439ec0f11909c559ada001700603e1c660539d0c9",
+      "canonical_sha256": "5b33a05abc3651d4c4702016e17bf0a4b9cc9f5966024a68b66c0b33dcb87125",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455950.875599995
+    },
+    {
+      "case": "fresh_empty",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "fresh_empty",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fresh_empty_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "d312e7f75c8142bf2983b45962acc26f12fbf62f155b59053660a4c763d377fb",
+      "canonical_sha256": "5b33a05abc3651d4c4702016e17bf0a4b9cc9f5966024a68b66c0b33dcb87125",
+      "error_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 10050000000,
+      "raw_receipt_wall": 455951.095937073,
+      "queued_original_source_and_receipt_exact": true
+    },
+    {
+      "case": "cloud_standard_filter",
+      "mode": "direct",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "direct",
+        "cloud_standard_filter",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/cloud_standard_filter_direct",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "5286f98fc404a4569c4690cea4e562f344bd9190aabba9aa57f54a5b5f733947",
+      "canonical_sha256": "2d1182e76d39e22eb09286b487b801b73f0c3540a1f0720d66ebeb97dc480314",
+      "error_sha256": null,
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 11000000000,
+      "raw_receipt_wall": 455951.306784085
+    },
+    {
+      "case": "cloud_standard_filter",
+      "mode": "queued",
+      "returncode": 0,
+      "command": [
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/fixture",
+        "queued",
+        "cloud_standard_filter",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/cloud_standard_filter_queued",
+        "--ros-args",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/navigation.yaml",
+        "--params-file",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v17_semantic_production_fixtures_precision17/camera.yaml"
+      ],
+      "execution_log_sha256": "b429b2da77ec302c7777ca1bcc3b9b5f7571344d3a3d2a5d6e31cbc0205dadd3",
+      "canonical_sha256": "2d1182e76d39e22eb09286b487b801b73f0c3540a1f0720d66ebeb97dc480314",
+      "error_sha256": null,
+      "raw_writer_final_lossless": true,
+      "raw_source_ns": 11000000000,
+      "raw_receipt_wall": 455951.52149123,
+      "queued_original_source_and_receipt_exact": true
+    }
+  ],
+  "physics_started": false,
+  "model_loaded": false,
+  "publishers_subscriptions_or_spin_initialized": false,
+  "evaluator_sha256": "4b71c28094dc411b1398e4c431d60e20febc50c37c69c028e39e829c82aa3441"
+}

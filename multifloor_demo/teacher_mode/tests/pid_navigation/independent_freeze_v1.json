@@ -1,0 +1,27 @@
+{
+  "schema": "pid_navigation_independent_freeze/v1",
+  "scope": "Prospective independent criteria and analyzer only. No actual motion or baseline pass asserted.",
+  "frozen_at_utc": "2026-10-04T04:50:00.602643+00:00",
+  "source_hashes": {
+    "scripts/analyze_pid_navigation.py": "9d4ef434ba1940abbd204a2002a06bd8eb7e3be6ea1d8ee87771d3512b774c65",
+    "tests/pid_navigation/protocol.json": "002a3847395159cc644914caa687cfb8a0f879802281bbfedee2cfe155a4bd13",
+    "tests/pid_navigation/cases.json": "445ff554cbc8ec85425603f7b50eb7d774b5971f137b650768a1b9cb97dca2d4",
+    "tests/pid_navigation/evidence_schema.json": "440de614a68cd58a9155586beaf717167019a766529c6ac05c66f8118e7df1e3"
+  },
+  "runtime_freeze": "test_results/pid_navigation_runtime_freeze_20261004/v2.json",
+  "runtime_freeze_sha256": "cf9cc1787d6b190346a97cd712a5a4d2e33c3c497796b9ab9092442fc6b1372e",
+  "strict_scope": {
+    "short": "90s pergoal/180s run",
+    "long": "120s pergoal/180s straight/300s roundtrip",
+    "ramp": "140s pergoal/190s run",
+    "command_limits": [
+      0.2,
+      0.1,
+      0.2
+    ],
+    "no_hot_runtime_changes": true,
+    "CHAMP_is_not_Teacher_DCMotor": true
+  },
+  "offline_boundary_checks": "raw .6dwell/.2gap/.17radius/protectedfalse rejects short/outside/gap, missing commands unverified, prior unrelated actualpass cannot enter campaign",
+  "actual_result": "unverified"
+}

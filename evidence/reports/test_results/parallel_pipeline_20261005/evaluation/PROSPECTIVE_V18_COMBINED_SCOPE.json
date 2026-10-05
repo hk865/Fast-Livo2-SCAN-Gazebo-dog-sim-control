@@ -1,0 +1,146 @@
+{
+  "schema": "prospective_V18_LIO4_VIO1_combined_actual_scope/v1",
+  "created_UTC": "2026-10-05T15:22:16.952764+00:00",
+  "parent_plan_sha256": "635dd1e8313fda490cbbda3cda5882d5fa7e18a4621e7372d9368d26265d3848",
+  "independent_batch_definition_sha256": "4722155ca36854b60ddfc38c559280a6fb173c75c297e4bd2e3bfa7ce6d2a845",
+  "component_V15_receipt_sha256": "460f7b84a9073202b7f04f2707a72d39d5cc000a4156176c54a4a88f1beb80cf",
+  "combination": "V15 per-constraint LIO rows four workers with frozen serial threshold256 plus V16 ordered VIO per-patch single worker",
+  "original_numeric_and_runtime_criteria": {
+    "source_ttl_sim_s": 0.3,
+    "source_ttl_wall_s": 0.3,
+    "producer_clock_future_tolerance_s": 0.05,
+    "gyro_to_pose_max_gap_s": 0.02,
+    "region_control_radius_m": 0.17,
+    "region_dwell_s": 0.6,
+    "region_max_source_gap_s": 0.2,
+    "goal_deadline_s": 90.0,
+    "native_step_s": 0.005,
+    "actor_step_s": 0.02,
+    "bootstrap_s": 0.1,
+    "flat_route_max_distance_m": 0.2,
+    "flat_route_rms_m": 0.08,
+    "drive_heading_max_rad": 0.2,
+    "speed_mean_abs_error_floor_mps": 0.05,
+    "speed_mean_abs_error_fraction": 0.25,
+    "maximum_roll_pitch_rad": 0.65,
+    "minimum_clearance_m": 0.18,
+    "maximum_tau_Nm": 23.50001,
+    "maximum_qd_radps": 30.001,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "parking_window_s": 5.0,
+    "parking_xy_drift_m": 0.05,
+    "parking_yaw_drift_rad": 0.1,
+    "parking_origin_speed_peak_mps": 0.08,
+    "parking_euler_yawdot_peak_radps": 0.1,
+    "parking_body_wz_peak_radps": 0.1,
+    "worker_slew_acceleration": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "dynamic_clear_s": 1.0,
+    "dynamic_guard_max_gap_s": 0.3
+  },
+  "original_publication_criterion_sha256": "756ad4c3f78a68f42483c9d016a7caa49e2bcbfd22f41595de4ac1675acb480c",
+  "unchanged_profile_semantics": {
+    "max_speed_mps": 0.2,
+    "max_yaw_rate_radps": 0.6,
+    "arrival_radius_m": 0.22,
+    "arrival_height_half_span_m": 0.1,
+    "arrival_control_radius_m": 0.17,
+    "dwell_sim_s": 0.6,
+    "goal_timeout_sim_s": 90.0,
+    "pose_cloud_timeout_s": 0.3,
+    "sensor_warmup_sim_s": 2.0,
+    "controller_kind": "teacher",
+    "arrival_stop_policy": "after_measured_dwell",
+    "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+    "terrain_layer_switch": {
+      "initial_manifest": "tests/terrain_targets/lower12.json",
+      "alternate_manifest": "tests/terrain_targets/upper23.json",
+      "completed_goal_id": "connector_mid",
+      "alternate_include_models": [
+        "floor_2",
+        "ramp_23",
+        "floor_3"
+      ],
+      "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+      "ray_equality_tolerance_m": 1e-09
+    },
+    "slam_imu_online_estimation": {
+      "gravity_est_en": true,
+      "ba_bg_est_en": true
+    },
+    "slam_visual_measurement_covariance": 1000,
+    "control_clock_contract": {
+      "schema": "teacher_control_clock_exact_zero_hold/v1",
+      "same_clock_policy": "exact_zero_before_math_and_native_geometry",
+      "freshness_sim_and_wall_s": 0.3,
+      "continuous_stale_fail_wall_s": 8.0,
+      "backward_clock_policy": "latch_failure",
+      "resume_policy": "actual_clock_advance_and_fresh_original_sources_and_native_geometry",
+      "short_hold_integral_and_dwell": "frozen",
+      "long_hold_integral_and_dwell": "protect_reset",
+      "source_receipt_refresh_permitted": false
+    },
+    "sensor_sampling": {
+      "vertical_lines": 64,
+      "horizontal_samples": 480,
+      "lidar_hz": 30,
+      "camera_hz": 30,
+      "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+      "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+      "control_wall_tick_s": 0.05
+    }
+  },
+  "fixed_runtime": {
+    "LiDAR_vertical_lines": 64,
+    "LiDAR_horizontal_samples": 480,
+    "LiDAR_Hz": 30,
+    "RGB_Hz": 30,
+    "native_dt_s": 0.005,
+    "Actor_decimation": 4,
+    "controller_wall_tick_s": 0.05,
+    "source_dual_TTL_s": 0.3,
+    "route_regions": 32,
+    "prefix_limit_s": 210,
+    "full_limit_s": 600,
+    "full_early_completion_allowed": true,
+    "prefix_boundary_timing": true,
+    "full_boundary_timing": false,
+    "diagnostic_detail_window_sim_s": [
+      115,
+      118
+    ],
+    "drop_or_missing_is_not_zero": true
+  },
+  "prospective_sequence": [
+    "New ordinary combined source build and frozen library, not old component library",
+    "New combined finite actual production729 LIO and41 VIO cases compare fresh frozenV12 numeric outputs/decisions/nonwall diagnostics bitwise",
+    "Same210s original32-route prefix with boundary timing, all original source/control/guard gates retained; incomplete route/parking/fullramp remain explicit",
+    "If no mandatory actual regression, same original static32 route full600upperbound; original full ramp+publication+metadata2 source closure retained",
+    "Separately V17 60s smoke with its already frozen strict lifecycle zero-loss gate"
+  ],
+  "attribution": "Actual prefix/full results apply to the combined V18 configuration only; no separate actual causal benefit attribution to V15 orV16; no component receipt replaces new combined numeric proof",
+  "component_failures_retained": [
+    "V15 small/medium wholeStatep95 regressions",
+    "V15 historical recordedHTH replay mismatch",
+    "V16four-thread large p95/median performance failures"
+  ],
+  "privileged_actor": {
+    "dimensions": 232,
+    "known_command_previous_actions": 15,
+    "device": "CPU",
+    "threads": 1,
+    "rate_hz": 50,
+    "navigation_feedback": "actual SLAM/IMU/SCAN; native only offline acceptance and explicitly privileged Actor safety/input"
+  },
+  "not_authorized_by_this_file": [
+    "physical launch",
+    "real robot",
+    "training stop or modification",
+    "deleting historic logs",
+    "changing any original acceptance threshold"
+  ],
+  "generator_sha256": "c26c5558a7e6bee938a626f5b3a0cb2ed6aa903c2e1a8f2000ac63b471f0f141"
+}

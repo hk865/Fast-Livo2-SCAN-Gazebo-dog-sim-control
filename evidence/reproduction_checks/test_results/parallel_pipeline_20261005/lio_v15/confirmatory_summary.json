@@ -1,0 +1,207 @@
+{
+  "statistics": "32 independent process batches/variant/scene; pooled1280 within-batch samples and batch-aggregate stats separately; NumPy linear percentiles",
+  "scenes": [
+    {
+      "scene": "actual_first_6196_rows",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.131445,
+          "pooled_p95_ms": 0.1357425,
+          "median_of_batch_medians_ms": 0.13135825,
+          "median_of_batch_p95_ms": 0.135033625,
+          "cpu_median_ms": 0.1320785,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.0362505,
+          "pooled_p95_ms": 0.05778709999999998,
+          "median_of_batch_medians_ms": 0.03619025,
+          "median_of_batch_p95_ms": 0.047154774999999996,
+          "cpu_median_ms": 0.137009,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": 0.7242154513294534,
+      "p95_no_worse": true,
+      "median_batch_p95_no_worse": true,
+      "all_output_bitexact": true
+    },
+    {
+      "scene": "actual_maximum_6339_rows",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.13533250000000002,
+          "pooled_p95_ms": 0.14125795,
+          "median_of_batch_medians_ms": 0.1352125,
+          "median_of_batch_p95_ms": 0.140389575,
+          "cpu_median_ms": 0.1360865,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.0371685,
+          "pooled_p95_ms": 0.05810514999999999,
+          "median_of_batch_medians_ms": 0.037039249999999996,
+          "median_of_batch_p95_ms": 0.04842232499999999,
+          "cpu_median_ms": 0.1403085,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": 0.7253542201614542,
+      "p95_no_worse": true,
+      "median_batch_p95_no_worse": true,
+      "all_output_bitexact": true
+    },
+    {
+      "scene": "actual_minimum_6068_rows",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.12909949999999998,
+          "pooled_p95_ms": 0.13419095,
+          "median_of_batch_medians_ms": 0.12906475,
+          "median_of_batch_p95_ms": 0.133216575,
+          "cpu_median_ms": 0.129782,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.0356645,
+          "pooled_p95_ms": 0.0509263,
+          "median_of_batch_medians_ms": 0.03564975,
+          "median_of_batch_p95_ms": 0.042663449999999985,
+          "cpu_median_ms": 0.13480550000000002,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": 0.723744088861692,
+      "p95_no_worse": true,
+      "median_batch_p95_no_worse": true,
+      "all_output_bitexact": true
+    },
+    {
+      "scene": "large24843",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.5681255000000001,
+          "pooled_p95_ms": 0.6428836499999999,
+          "median_of_batch_medians_ms": 0.56535775,
+          "median_of_batch_p95_ms": 0.626263475,
+          "cpu_median_ms": 0.5695625,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.140043,
+          "pooled_p95_ms": 0.22589579999999992,
+          "median_of_batch_medians_ms": 0.13969975,
+          "median_of_batch_p95_ms": 0.1634831,
+          "cpu_median_ms": 0.5462435,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": 0.7534998869087904,
+      "p95_no_worse": true,
+      "median_batch_p95_no_worse": true,
+      "all_output_bitexact": true,
+      "complete_synthetic_estimation": {
+        "baseline_V12": {
+          "median_ms": 21.87,
+          "p95_ms": 24.479509999999998
+        },
+        "candidate_V15_T4": {
+          "median_ms": 20.6352,
+          "p95_ms": 23.26256
+        }
+      },
+      "accepted_rows": [
+        24843
+      ]
+    },
+    {
+      "scene": "medium2883",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.057993,
+          "pooled_p95_ms": 0.060667099999999995,
+          "median_of_batch_medians_ms": 0.057964749999999995,
+          "median_of_batch_p95_ms": 0.060144474999999996,
+          "cpu_median_ms": 0.058452,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.018928,
+          "pooled_p95_ms": 0.02344565,
+          "median_of_batch_medians_ms": 0.01888925,
+          "median_of_batch_p95_ms": 0.0212718,
+          "cpu_median_ms": 0.0689085,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": 0.6736157812149742,
+      "p95_no_worse": true,
+      "median_batch_p95_no_worse": true,
+      "all_output_bitexact": true,
+      "complete_synthetic_estimation": {
+        "baseline_V12": {
+          "median_ms": 2.90853,
+          "p95_ms": 3.8492319999999993
+        },
+        "candidate_V15_T4": {
+          "median_ms": 2.76343,
+          "p95_ms": 4.3625215
+        }
+      },
+      "accepted_rows": [
+        2883
+      ]
+    },
+    {
+      "scene": "small147",
+      "statistics": {
+        "baseline_V12": {
+          "pooled_median_ms": 0.000969,
+          "pooled_p95_ms": 0.00098205,
+          "median_of_batch_medians_ms": 0.000968,
+          "median_of_batch_p95_ms": 0.000978575,
+          "cpu_median_ms": 0.001331,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        },
+        "candidate_V15_T4": {
+          "pooled_median_ms": 0.001137,
+          "pooled_p95_ms": 0.001194,
+          "median_of_batch_medians_ms": 0.0011335,
+          "median_of_batch_p95_ms": 0.0011857,
+          "cpu_median_ms": 0.001506,
+          "valid_within_batch": 1280,
+          "independent_process_batches": 32
+        }
+      },
+      "median_improvement_fraction": -0.17337461300309598,
+      "p95_no_worse": false,
+      "median_batch_p95_no_worse": false,
+      "all_output_bitexact": true,
+      "complete_synthetic_estimation": {
+        "baseline_V12": {
+          "median_ms": 0.1057865,
+          "p95_ms": 0.14271199999999998
+        },
+        "candidate_V15_T4": {
+          "median_ms": 0.0997285,
+          "p95_ms": 0.16245929999999997
+        }
+      },
+      "accepted_rows": [
+        48
+      ]
+    }
+  ],
+  "all_confirmatory_output_bitexact": true
+}

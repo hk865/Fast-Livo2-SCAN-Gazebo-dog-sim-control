@@ -1,0 +1,62 @@
+{
+  "schema": "actual_SLAM_V5_aggregate_pixel_QA/v1",
+  "status": "passed",
+  "figures": {
+    "actual_slam_trajectories.png": {
+      "dimensions_px": [
+        2240,
+        1280
+      ],
+      "sha256": "69eb6ea3b79c67c2699947593068199c838c5a08dea529c8bed9601eb0190316",
+      "pixel_review": "passed",
+      "checks": [
+        "All requested run labels readable",
+        "Original timestamps and units shown",
+        "Legend and bottom axes do not overlap",
+        "No clipped data/labels",
+        "Scope/ground truth diagnostic limitation explicit"
+      ],
+      "data_source": "Only original run raw SLAM, original command read attempts and original physical telemetry; no synthetic trajectory/frame"
+    },
+    "actual_com_velocity.png": {
+      "dimensions_px": [
+        2322,
+        1560
+      ],
+      "sha256": "146278ca8a9159ccfdd03be95f6c7379c74d6c89bf1863c58f9d7ccafb8f15b5",
+      "pixel_review": "passed",
+      "checks": [
+        "All requested run labels readable",
+        "Original timestamps and units shown",
+        "Legend and bottom axes do not overlap",
+        "No clipped data/labels",
+        "Scope/ground truth diagnostic limitation explicit"
+      ],
+      "data_source": "Only original run raw SLAM, original command read attempts and original physical telemetry; no synthetic trajectory/frame"
+    },
+    "actual_source_freshness.png": {
+      "dimensions_px": [
+        2322,
+        1560
+      ],
+      "sha256": "333491f60574d82fefaf083c468176b6d05331328e9e246aab44860e0071f56c",
+      "pixel_review": "passed",
+      "checks": [
+        "All requested run labels readable",
+        "Original timestamps and units shown",
+        "Legend and bottom axes do not overlap",
+        "No clipped data/labels",
+        "Scope/ground truth diagnostic limitation explicit"
+      ],
+      "data_source": "Only original run raw SLAM, original command read attempts and original physical telemetry; no synthetic trajectory/frame"
+    }
+  },
+  "first_layout_review": "Legend overlapped bottom axis labels; fixed only new aggregate plot layout. Old/new builder outputs retained in pre_plot_QA; no actual run edited.",
+  "numeric_aggregate_review": {
+    "six_passed": true,
+    "132_frozen_checks_passed": true,
+    "all_raw_input_hashes_match": true,
+    "source_clock_rate_10Hz_verified": true,
+    "old_receipts_unchanged": true
+  }
+}

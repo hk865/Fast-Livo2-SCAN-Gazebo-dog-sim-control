@@ -1,0 +1,2229 @@
+{
+  "scope": "excluded geometry-only open-loop decision replay",
+  "input_samples": 25,
+  "native_stamp_or_yaw_mismatches": [],
+  "current_source_thresholds": {
+    "turn_settle_error_rad": 0.1,
+    "drive_error_rad": 0.2,
+    "persistent_drive_error_duration_s": 0.5,
+    "severe_error_rad": 0.55,
+    "pure_turn_yaw_cap_rad_s": 0.12
+  },
+  "actual_first_hold_sim": 119.823,
+  "actual_first_fail_sim": 120.104,
+  "results": [
+    {
+      "rate_rad_s": 0.02,
+      "max_offset_rad": 0.3,
+      "coherence_rad": 0.05,
+      "persistence_ns": 350000000,
+      "first_hypothetical_settle_decision": null,
+      "trace": [
+        {
+          "input": {
+            "stamp_ns": 112900000000,
+            "control_stamp": 112.992,
+            "desired_heading": 2.940062484821691,
+            "yaw": 1.297337271102877,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0004586675023257353,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "bounded_update",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.6423194691632699,
+            "current_path_error": 1.642725213718814,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113200000000,
+            "control_stamp": 113.292,
+            "desired_heading": 2.935737827011338,
+            "yaw": 1.2354980248147371,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04458826411130365,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.7041587154514097,
+            "current_path_error": 1.700239802196601,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113500000000,
+            "control_stamp": 113.591,
+            "desired_heading": 2.912155484412044,
+            "yaw": 1.295628562392101,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.015101815875653412,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.644028177874046,
+            "current_path_error": 1.6165269220199432,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113799999999,
+            "control_stamp": 113.842,
+            "desired_heading": 2.9005802931421054,
+            "yaw": 1.3266400123162418,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03875860735197137,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.613016727949905,
+            "current_path_error": 1.5739402808258636,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114099999999,
+            "control_stamp": 114.141,
+            "desired_heading": 2.8755476216033338,
+            "yaw": 1.4887180106015299,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02510847817777363,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.450938729664617,
+            "current_path_error": 1.386829611001804,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114299999999,
+            "control_stamp": 114.39,
+            "desired_heading": 2.8655012873955217,
+            "yaw": 1.4944990518861188,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.029653032466089375,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.4451576883800281,
+            "current_path_error": 1.371002235509403,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114599999999,
+            "control_stamp": 114.689,
+            "desired_heading": 2.846541270396454,
+            "yaw": 1.638302956026069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03623848783686792,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.301353784240078,
+            "current_path_error": 1.208238314370385,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114900000000,
+            "control_stamp": 114.939,
+            "desired_heading": 2.8388163983440338,
+            "yaw": 1.5386761522793069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.07851071388254507,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.40098058798684,
+            "current_path_error": 1.300140246064727,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115200000000,
+            "control_stamp": 115.239,
+            "desired_heading": 2.84104891347191,
+            "yaw": 1.8093059910571758,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.027769073468777883,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.130350749208971,
+            "current_path_error": 1.031742922414734,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115400000000,
+            "control_stamp": 115.489,
+            "desired_heading": 2.8307979837313906,
+            "yaw": 1.7957890431612482,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02361953888529742,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.1438676971048987,
+            "current_path_error": 1.0350089405701424,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115700000000,
+            "control_stamp": 115.739,
+            "desired_heading": 2.8144750993336265,
+            "yaw": 1.9344052635933444,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.008799922490410322,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0052514766728025,
+            "current_path_error": 0.8800698357402821,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116000000000,
+            "control_stamp": 116.039,
+            "desired_heading": 2.7979807532003735,
+            "yaw": 1.8954709399524223,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.019641324604041763,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0441858003137245,
+            "current_path_error": 0.9025098132479512,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116299999999,
+            "control_stamp": 116.339,
+            "desired_heading": 2.7913231490186448,
+            "yaw": 1.990797994677403,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04522373065776012,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9488587455887438,
+            "current_path_error": 0.8005251543412417,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116599999999,
+            "control_stamp": 116.639,
+            "desired_heading": 2.776719809510146,
+            "yaw": 2.0295324754774726,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.011663925211493308,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9101242647886743,
+            "current_path_error": 0.7471873340326733,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116799999999,
+            "control_stamp": 116.889,
+            "desired_heading": 2.7788867120748395,
+            "yaw": 1.933422084514128,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.09172332297802736,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.006234655752019,
+            "current_path_error": 0.8454646275607116,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117099999999,
+            "control_stamp": 117.139,
+            "desired_heading": 2.7673835419848807,
+            "yaw": 2.014119808753732,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04373882949852864,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.925536931512415,
+            "current_path_error": 0.7532637332311487,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117400000000,
+            "control_stamp": 117.439,
+            "desired_heading": 2.7510874208051943,
+            "yaw": 1.9519706765532197,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.007559106175405826,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9876860637129272,
+            "current_path_error": 0.7991167442519747,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117700000000,
+            "control_stamp": 117.739,
+            "desired_heading": 2.7427455700961567,
+            "yaw": 2.033455468118674,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.018377736556891837,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9062012721474728,
+            "current_path_error": 0.7092901019774827,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117900000000,
+            "control_stamp": 117.988,
+            "desired_heading": 2.7362302669581418,
+            "yaw": 1.9660490483608042,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.022845534167981227,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9736076919053427,
+            "current_path_error": 0.7701812185973376,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118200000000,
+            "control_stamp": 118.238,
+            "desired_heading": 2.728452479616804,
+            "yaw": 2.1530019197146792,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.06859188058403409,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7866548205514676,
+            "current_path_error": 0.5754505599021247,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118500000000,
+            "control_stamp": 118.538,
+            "desired_heading": 2.726977891603123,
+            "yaw": 1.9504334806680563,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0711062576548841,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9892232595980905,
+            "current_path_error": 0.7765444109350668,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118799999999,
+            "control_stamp": 118.838,
+            "desired_heading": 2.733350470007411,
+            "yaw": 2.1898545791277644,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.12251078201942295,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7498021611383825,
+            "current_path_error": 0.5434958908796466,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119099999999,
+            "control_stamp": 119.138,
+            "desired_heading": 2.7186552339286894,
+            "yaw": 1.933164283605476,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.162195722265339,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0064924566606708,
+            "current_path_error": 0.7854909503232133,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119299999999,
+            "control_stamp": 119.388,
+            "desired_heading": 2.7071002337641232,
+            "yaw": 2.166697171039742,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.20111701613723323,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7729595692264049,
+            "current_path_error": 0.5404030627243812,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119599999999,
+            "control_stamp": 119.688,
+            "desired_heading": 2.6692785300343402,
+            "yaw": 2.558986905797327,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.16906390391636503,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.38066983446881997,
+            "current_path_error": 0.11029162423701333,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        }
+      ]
+    },
+    {
+      "rate_rad_s": 0.04,
+      "max_offset_rad": 0.3,
+      "coherence_rad": 0.05,
+      "persistence_ns": 350000000,
+      "first_hypothetical_settle_decision": null,
+      "trace": [
+        {
+          "input": {
+            "stamp_ns": 112900000000,
+            "control_stamp": 112.992,
+            "desired_heading": 2.940062484821691,
+            "yaw": 1.297337271102877,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0004586675023257353,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "bounded_update",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.6423194691632699,
+            "current_path_error": 1.642725213718814,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113200000000,
+            "control_stamp": 113.292,
+            "desired_heading": 2.935737827011338,
+            "yaw": 1.2354980248147371,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04458826411130365,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.7041587154514097,
+            "current_path_error": 1.700239802196601,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113500000000,
+            "control_stamp": 113.591,
+            "desired_heading": 2.912155484412044,
+            "yaw": 1.295628562392101,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.015101815875653412,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.644028177874046,
+            "current_path_error": 1.6165269220199432,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113799999999,
+            "control_stamp": 113.842,
+            "desired_heading": 2.9005802931421054,
+            "yaw": 1.3266400123162418,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03875860735197137,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.613016727949905,
+            "current_path_error": 1.5739402808258636,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114099999999,
+            "control_stamp": 114.141,
+            "desired_heading": 2.8755476216033338,
+            "yaw": 1.4887180106015299,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02510847817777363,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.450938729664617,
+            "current_path_error": 1.386829611001804,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114299999999,
+            "control_stamp": 114.39,
+            "desired_heading": 2.8655012873955217,
+            "yaw": 1.4944990518861188,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.029653032466089375,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.4451576883800281,
+            "current_path_error": 1.371002235509403,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114599999999,
+            "control_stamp": 114.689,
+            "desired_heading": 2.846541270396454,
+            "yaw": 1.638302956026069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03623848783686792,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.301353784240078,
+            "current_path_error": 1.208238314370385,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114900000000,
+            "control_stamp": 114.939,
+            "desired_heading": 2.8388163983440338,
+            "yaw": 1.5386761522793069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.07851071388254507,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.40098058798684,
+            "current_path_error": 1.300140246064727,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115200000000,
+            "control_stamp": 115.239,
+            "desired_heading": 2.84104891347191,
+            "yaw": 1.8093059910571758,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.027769073468777883,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.130350749208971,
+            "current_path_error": 1.031742922414734,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115400000000,
+            "control_stamp": 115.489,
+            "desired_heading": 2.8307979837313906,
+            "yaw": 1.7957890431612482,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02361953888529742,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.1438676971048987,
+            "current_path_error": 1.0350089405701424,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115700000000,
+            "control_stamp": 115.739,
+            "desired_heading": 2.8144750993336265,
+            "yaw": 1.9344052635933444,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.008799922490410322,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0052514766728025,
+            "current_path_error": 0.8800698357402821,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116000000000,
+            "control_stamp": 116.039,
+            "desired_heading": 2.7979807532003735,
+            "yaw": 1.8954709399524223,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.019641324604041763,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0441858003137245,
+            "current_path_error": 0.9025098132479512,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116299999999,
+            "control_stamp": 116.339,
+            "desired_heading": 2.7913231490186448,
+            "yaw": 1.990797994677403,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04522373065776012,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9488587455887438,
+            "current_path_error": 0.8005251543412417,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116599999999,
+            "control_stamp": 116.639,
+            "desired_heading": 2.776719809510146,
+            "yaw": 2.0295324754774726,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.011663925211493308,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9101242647886743,
+            "current_path_error": 0.7471873340326733,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116799999999,
+            "control_stamp": 116.889,
+            "desired_heading": 2.7788867120748395,
+            "yaw": 1.933422084514128,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.09172332297802736,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.006234655752019,
+            "current_path_error": 0.8454646275607116,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117099999999,
+            "control_stamp": 117.139,
+            "desired_heading": 2.7673835419848807,
+            "yaw": 2.014119808753732,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04373882949852864,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.925536931512415,
+            "current_path_error": 0.7532637332311487,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117400000000,
+            "control_stamp": 117.439,
+            "desired_heading": 2.7510874208051943,
+            "yaw": 1.9519706765532197,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.007559106175405826,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9876860637129272,
+            "current_path_error": 0.7991167442519747,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117700000000,
+            "control_stamp": 117.739,
+            "desired_heading": 2.7427455700961567,
+            "yaw": 2.033455468118674,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.018377736556891837,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9062012721474728,
+            "current_path_error": 0.7092901019774827,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117900000000,
+            "control_stamp": 117.988,
+            "desired_heading": 2.7362302669581418,
+            "yaw": 1.9660490483608042,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.022845534167981227,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9736076919053427,
+            "current_path_error": 0.7701812185973376,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118200000000,
+            "control_stamp": 118.238,
+            "desired_heading": 2.728452479616804,
+            "yaw": 2.1530019197146792,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.06859188058403409,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7866548205514676,
+            "current_path_error": 0.5754505599021247,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118500000000,
+            "control_stamp": 118.538,
+            "desired_heading": 2.726977891603123,
+            "yaw": 1.9504334806680563,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0711062576548841,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9892232595980905,
+            "current_path_error": 0.7765444109350668,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118799999999,
+            "control_stamp": 118.838,
+            "desired_heading": 2.733350470007411,
+            "yaw": 2.1898545791277644,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.12251078201942295,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7498021611383825,
+            "current_path_error": 0.5434958908796466,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119099999999,
+            "control_stamp": 119.138,
+            "desired_heading": 2.7186552339286894,
+            "yaw": 1.933164283605476,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.162195722265339,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0064924566606708,
+            "current_path_error": 0.7854909503232133,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119299999999,
+            "control_stamp": 119.388,
+            "desired_heading": 2.7071002337641232,
+            "yaw": 2.166697171039742,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.20111701613723323,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7729595692264049,
+            "current_path_error": 0.5404030627243812,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119599999999,
+            "control_stamp": 119.688,
+            "desired_heading": 2.6692785300343402,
+            "yaw": 2.558986905797327,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.16906390391636503,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.38066983446881997,
+            "current_path_error": 0.11029162423701333,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        }
+      ]
+    },
+    {
+      "rate_rad_s": 0.06,
+      "max_offset_rad": 0.3,
+      "coherence_rad": 0.05,
+      "persistence_ns": 350000000,
+      "first_hypothetical_settle_decision": null,
+      "trace": [
+        {
+          "input": {
+            "stamp_ns": 112900000000,
+            "control_stamp": 112.992,
+            "desired_heading": 2.940062484821691,
+            "yaw": 1.297337271102877,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0004586675023257353,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "bounded_update",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.6423194691632699,
+            "current_path_error": 1.642725213718814,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113200000000,
+            "control_stamp": 113.292,
+            "desired_heading": 2.935737827011338,
+            "yaw": 1.2354980248147371,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04458826411130365,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.7041587154514097,
+            "current_path_error": 1.700239802196601,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113500000000,
+            "control_stamp": 113.591,
+            "desired_heading": 2.912155484412044,
+            "yaw": 1.295628562392101,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.015101815875653412,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.644028177874046,
+            "current_path_error": 1.6165269220199432,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 113799999999,
+            "control_stamp": 113.842,
+            "desired_heading": 2.9005802931421054,
+            "yaw": 1.3266400123162418,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03875860735197137,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.613016727949905,
+            "current_path_error": 1.5739402808258636,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114099999999,
+            "control_stamp": 114.141,
+            "desired_heading": 2.8755476216033338,
+            "yaw": 1.4887180106015299,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02510847817777363,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.450938729664617,
+            "current_path_error": 1.386829611001804,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114299999999,
+            "control_stamp": 114.39,
+            "desired_heading": 2.8655012873955217,
+            "yaw": 1.4944990518861188,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.029653032466089375,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.4451576883800281,
+            "current_path_error": 1.371002235509403,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114599999999,
+            "control_stamp": 114.689,
+            "desired_heading": 2.846541270396454,
+            "yaw": 1.638302956026069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.03623848783686792,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.301353784240078,
+            "current_path_error": 1.208238314370385,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 114900000000,
+            "control_stamp": 114.939,
+            "desired_heading": 2.8388163983440338,
+            "yaw": 1.5386761522793069,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.07851071388254507,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.40098058798684,
+            "current_path_error": 1.300140246064727,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115200000000,
+            "control_stamp": 115.239,
+            "desired_heading": 2.84104891347191,
+            "yaw": 1.8093059910571758,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.027769073468777883,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.130350749208971,
+            "current_path_error": 1.031742922414734,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115400000000,
+            "control_stamp": 115.489,
+            "desired_heading": 2.8307979837313906,
+            "yaw": 1.7957890431612482,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.02361953888529742,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.1438676971048987,
+            "current_path_error": 1.0350089405701424,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 115700000000,
+            "control_stamp": 115.739,
+            "desired_heading": 2.8144750993336265,
+            "yaw": 1.9344052635933444,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.008799922490410322,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0052514766728025,
+            "current_path_error": 0.8800698357402821,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116000000000,
+            "control_stamp": 116.039,
+            "desired_heading": 2.7979807532003735,
+            "yaw": 1.8954709399524223,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.019641324604041763,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0441858003137245,
+            "current_path_error": 0.9025098132479512,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116299999999,
+            "control_stamp": 116.339,
+            "desired_heading": 2.7913231490186448,
+            "yaw": 1.990797994677403,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04522373065776012,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9488587455887438,
+            "current_path_error": 0.8005251543412417,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116599999999,
+            "control_stamp": 116.639,
+            "desired_heading": 2.776719809510146,
+            "yaw": 2.0295324754774726,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.011663925211493308,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9101242647886743,
+            "current_path_error": 0.7471873340326733,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 116799999999,
+            "control_stamp": 116.889,
+            "desired_heading": 2.7788867120748395,
+            "yaw": 1.933422084514128,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.09172332297802736,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.006234655752019,
+            "current_path_error": 0.8454646275607116,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117099999999,
+            "control_stamp": 117.139,
+            "desired_heading": 2.7673835419848807,
+            "yaw": 2.014119808753732,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.04373882949852864,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.925536931512415,
+            "current_path_error": 0.7532637332311487,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117400000000,
+            "control_stamp": 117.439,
+            "desired_heading": 2.7510874208051943,
+            "yaw": 1.9519706765532197,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.007559106175405826,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9876860637129272,
+            "current_path_error": 0.7991167442519747,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117700000000,
+            "control_stamp": 117.739,
+            "desired_heading": 2.7427455700961567,
+            "yaw": 2.033455468118674,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.018377736556891837,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9062012721474728,
+            "current_path_error": 0.7092901019774827,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 117900000000,
+            "control_stamp": 117.988,
+            "desired_heading": 2.7362302669581418,
+            "yaw": 1.9660490483608042,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.022845534167981227,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9736076919053427,
+            "current_path_error": 0.7701812185973376,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118200000000,
+            "control_stamp": 118.238,
+            "desired_heading": 2.728452479616804,
+            "yaw": 2.1530019197146792,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.06859188058403409,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7866548205514676,
+            "current_path_error": 0.5754505599021247,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118500000000,
+            "control_stamp": 118.538,
+            "desired_heading": 2.726977891603123,
+            "yaw": 1.9504334806680563,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.0711062576548841,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.9892232595980905,
+            "current_path_error": 0.7765444109350668,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 118799999999,
+            "control_stamp": 118.838,
+            "desired_heading": 2.733350470007411,
+            "yaw": 2.1898545791277644,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.12251078201942295,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7498021611383825,
+            "current_path_error": 0.5434958908796466,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119099999999,
+            "control_stamp": 119.138,
+            "desired_heading": 2.7186552339286894,
+            "yaw": 1.933164283605476,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.162195722265339,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 1.0064924566606708,
+            "current_path_error": 0.7854909503232133,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119299999999,
+            "control_stamp": 119.388,
+            "desired_heading": 2.7071002337641232,
+            "yaw": 2.166697171039742,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.20111701613723323,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "awaiting_direction_consistency",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.7729595692264049,
+            "current_path_error": 0.5404030627243812,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": false
+          }
+        },
+        {
+          "input": {
+            "stamp_ns": 119599999999,
+            "control_stamp": 119.688,
+            "desired_heading": 2.6692785300343402,
+            "yaw": 2.558986905797327,
+            "locked_heading": 2.939656740266147,
+            "raw_tilt_status": 0.16906390391636503,
+            "reference_key": [
+              "20261002_001559_882ddb:exploration:1",
+              "exploration:3",
+              11,
+              [
+                111,
+                792000000
+              ]
+            ]
+          },
+          "result": {
+            "reason": "observation_gap",
+            "reference_heading": 2.939656740266147,
+            "reference_offset": 0.0,
+            "reference_error": 0.38066983446881997,
+            "current_path_error": 0.11029162423701333,
+            "can_start_original_settle": false,
+            "needs_fresh_plan": false,
+            "caller_must_hold": true
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Recorded pose/heading trajectory remains the original commanded one",
+    "Feedback status snapshots omit some live control callbacks; first decision is a sampled upper timing bound",
+    "No synthetic body response or GT inputs",
+    "No proof earlier settle prevents fall",
+    "Original pre-turn/one-second settle and all actual motion/tilt/collision/arrival contracts are untouched"
+  ],
+  "sha256": {
+    "feedback_navigation.jsonl": "33b95142b18de445e18d0d73e31b66ed80929736e312aee47c95946196905322",
+    "pose_audit.jsonl": "b0fd3541200e7e95caf290c2f16f6639e0070cb6132162e806e4bb5898259e09"
+  }
+}

@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<!--
+  Perception Sensors (LiDAR + Camera)
+  - livox_link:   Livox Avia-style LiDAR (70° HFOV x 77° VFOV, 20Hz)
+  - fvl_cam_link: Forward-facing camera (1280x1024, 20Hz)
+
+  Extrinsics (relative to trunk / imu_link):
+    LiDAR → IMU:     [0.04165, 0.02326, -0.0284]
+    Camera → LiDAR:  [0.0194384, 0.104689, -0.0251952]
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- =========================================================
+       Livox LiDAR Link (FAST-LIVO2 用)
+       安装位置: trunk 前上方
+       相对于 IMU: x=0.04165, y=0.02326, z=-0.0284
+       ========================================================= -->
+  <link name="livox_link">
+    <inertial>
+      <mass value="0.1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.04"/>
+      </geometry>
+      <material name="livox_red">
+        <color rgba="0.8 0.2 0.2 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="livox_joint" type="fixed">
+    <parent link="trunk"/>
+    <child link="livox_link"/>
+    <!-- Livox Avia 相对于 IMU 的安装偏移 (单位: m) -->
+    <origin rpy="0 0 0" xyz="0.04165 0.02326 -0.0284"/>
+  </joint>
+
+  <!-- =========================================================
+       FAST-LIVO2 Camera Link
+       相对于 livox_link: Pcl = [0.0194384, 0.104689, -0.0251952]
+       ========================================================= -->
+  <link name="fvl_cam_link">
+    <inertial>
+      <mass value="0.05"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.03 0.03"/>
+      </geometry>
+      <material name="cam_blue">
+        <color rgba="0.2 0.2 0.8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="fvl_cam_joint" type="fixed">
+    <parent link="livox_link"/>
+    <child link="fvl_cam_link"/>
+    <origin rpy="0 0 0" xyz="0.0194384 0.104689 -0.0251952"/>
+  </joint>
+
+  <!-- =========================================================
+       Gazebo 传感器插件
+       ========================================================= -->
+
+  <!-- Perception LiDAR: gpu_lidar (non-repetitive scan)
+       70° HFOV, 77° VFOV, 20Hz, range 0.5~350m -->
+  <gazebo reference="livox_link">
+    <sensor name="livox_lidar_sensor" type="gpu_lidar">
+      <always_on>true</always_on>
+      <update_rate>20</update_rate>
+      <topic>/lidar/points</topic>
+      <gz_frame_id>livox_link</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>0.1</resolution>
+            <min_angle>-0.610865</min_angle>
+            <max_angle>0.610865</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>60</samples>
+            <resolution>0.2</resolution>
+            <min_angle>-0.671951</min_angle>
+            <max_angle>0.671951</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.5</min>
+          <max>350.0</max>
+          <resolution>0.02</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.02</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <!-- Perception Camera: 1280x1024, 80° HFOV, 20Hz  -->
+  <gazebo reference="fvl_cam_link">
+    <sensor name="fvl_camera_sensor" type="camera">
+      <always_on>true</always_on>
+      <update_rate>20</update_rate>
+      <topic>/camera/image</topic>
+      <gz_frame_id>fvl_cam_link</gz_frame_id>
+      <camera>
+        <horizontal_fov>1.39626</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>1024</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+
+</robot>

@@ -1,0 +1,38 @@
+{
+  "scope": "Excluded modern CM motion component preparation, no physical execution",
+  "drivers": {
+    "probe_slope_motion.py": {
+      "derived_from": "multifloor_demo/navigation/test_results/slope_strength_staging/probe_slope_strength.py",
+      "derived_from_sha256": "f70d11f90eaa3fc1db0b2576c0f1d86749dea3d3aabb16f98812cd2284a5fb08",
+      "sha256": "7ddb05b7c80ed6fb6171e4dbd238cc0f352fb56627c378b92458daf32de64e98"
+    },
+    "probe_dynamic_motion.py": {
+      "derived_from": "multifloor_demo/navigation/test_results/dynamic_strength_staging/probe_dynamic_navigation.py",
+      "derived_from_sha256": "ee1f8153b5d5f54d6191260f9e2ecc8fbcb115ea9181dea875739e4138823323",
+      "sha256": "a407f930c99993a2f28dc96ef112a780447e94a94b119254d8e1a0a8c3762f98"
+    }
+  },
+  "held_contract_sha256": "a9cdff648df3d40526e2624ca41c4d5cf08d0f640891f8d1b5d920cb56852011",
+  "production_strength_override": false,
+  "root_entry_variable": "DEMO_TEST_ROOT absolute multifloor_demo directory",
+  "runner_launch_owner": "demo_simulation",
+  "criteria": {
+    "arrival_raw_m": 0.22,
+    "arrival_dwell_sim_s": 0.4,
+    "waypoint_timeout_sim_s": 90,
+    "independent_joint_arrival_m": 0.3,
+    "bounded_truth_max_gap_s": 0.15,
+    "truth_queue_depth": 2000,
+    "truth_domain": "one initial SE3, origin through actual terminal; cleanup excluded",
+    "production_walk_yaw_cap": 0.08,
+    "modern_adapter_topic": "/demo/control/joint_stop_safety",
+    "dynamic_box_cycle_sim_s": [
+      8,
+      20,
+      8
+    ],
+    "dynamic_box_acknowledged_y_motion_min_m": 1.0
+  },
+  "contract_tests_sha256": "c4c85ffa4d5e16cdcaae6a4062f1f13ed15bf0da715ab21940e0651af7d82034",
+  "tests_passed": 10
+}

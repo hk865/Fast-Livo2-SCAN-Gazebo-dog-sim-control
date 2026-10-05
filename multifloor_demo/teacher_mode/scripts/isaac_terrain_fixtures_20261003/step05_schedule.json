@@ -1,0 +1,59 @@
+{
+  "description": "Same command/bootstrap/slew/spawn and exact world static collision geometry as Gazebo; PhysX CPU nominal training robot dynamics differ. Ramp travel is not stairs. Step ascent onto a tread is not a full obstacle traversal.",
+  "cases": [
+    {
+      "name": "step05",
+      "duration": 25,
+      "spawn_xyz_yaw": [
+        6,
+        -0.7,
+        0.4,
+        0
+      ],
+      "command_slew": [
+        0.6,
+        0.6,
+        0.8
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 0.1,
+          "command": [
+            0,
+            0,
+            0
+          ],
+          "mode": "pd_init"
+        },
+        {
+          "start": 0.1,
+          "end": 3,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 3,
+          "end": 14,
+          "command": [
+            0.3,
+            0,
+            0
+          ]
+        },
+        {
+          "start": 14,
+          "end": 25,
+          "command": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

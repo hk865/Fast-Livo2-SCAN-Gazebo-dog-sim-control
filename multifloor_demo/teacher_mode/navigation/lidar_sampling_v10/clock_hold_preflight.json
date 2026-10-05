@@ -1,0 +1,105 @@
+{
+  "schema": "teacher_clock_hold_prospective_preflight/v1",
+  "status": "PASS",
+  "simulation_started": false,
+  "ROS_started": false,
+  "actor_started": false,
+  "test_command": "python3 -B -m unittest -v clock_hold_tests pure_tests sampling_profile_tests",
+  "tests_passed": 35,
+  "test_output_sha256": "e556069edc10af1db6b027ea9bb88d0d880f836f1714e6b5db8110650c3b7344",
+  "all_v9_python_syntax_compiled_in_memory": true,
+  "protected_original_hashes_count": 103,
+  "protected_original_changes": [],
+  "v8_frozen_actual_scope_paths_count": 31,
+  "v8_frozen_actual_scope_changes": [],
+  "byte_identical_top_level_files": [
+    "bridge.py",
+    "caller_diagnostic_schema.json",
+    "cascade_core.py",
+    "diagnostic_baseline.json",
+    "diagnostic_preflight.json",
+    "lio_diagnostic_schema.json",
+    "pid_core.py",
+    "pure_tests.py",
+    "request.py",
+    "route.py",
+    "route_fence.py",
+    "route_leg_heading.py",
+    "scoped_profile.py",
+    "sensor_gate.py",
+    "shared_controller.py",
+    "slam.launch.py",
+    "stack.launch.py",
+    "teacher_wrapper.py",
+    "terrain_provider.py",
+    "transition_gate.py",
+    "vio_diagnostic_schema.json",
+    "worker.py"
+  ],
+  "changed_existing_top_level_files": {
+    "README.md": {
+      "v8_sha256": "b37b5e3ed489b0c48ed28181e2c1f8bdc5a2eb7c609792e95cf89171df61cb02",
+      "v9_sha256": "66761323e359a289c42fa60cf06761de35ff3496da21b8d86af35d4769f685d4"
+    },
+    "controller.py": {
+      "v8_sha256": "13f5cdc21a66ad6e5fac0c17e41e52cc8148ad62b9ba6bda5451435bdcf0b251",
+      "v9_sha256": "a2500ef645fca32e8f20ed74c35ba403f3844a190caa6a2afea9154ea2883bed"
+    },
+    "pid_scope.py": {
+      "v8_sha256": "69d331407dc5f88c9939e3b66be830e7d94cd7dfd47da68d0331ca6d4feaf3af",
+      "v9_sha256": "6443b65cbfa528f0c67bc5e108786f2dcea903789a925aec504d1a583a8e0fc0"
+    },
+    "run.py": {
+      "v8_sha256": "22398fbf9e0b5d8a7b747a17b792be0d35b8a97e1bf9b547135b4e8d620c76b1",
+      "v9_sha256": "332571080c657745f01cf2e977bee713e5c40a21b61c660642f2349bbe976514"
+    },
+    "sampling.py": {
+      "v8_sha256": "630a8e50176648d03a062d453e30f97308841fdc209584c4f1c23dd5348a6488",
+      "v9_sha256": "243b285660609404fc944dae049fac022e0e3a52b54e14bbb0148866db627708"
+    }
+  },
+  "new_python_files": [
+    "clock_hold.py",
+    "clock_hold_tests.py",
+    "sampling_profile_tests.py"
+  ],
+  "source_hashes": {
+    "bridge.py": "01c15c630c6df4fb0779c879b7b3cb799ad16f8629564756e06f5d3719948d94",
+    "cascade_core.py": "dccb1c8fc8ceeae1dc1aaabda8c39ada9a3fdb171e823a1ae09cc272e9461cc7",
+    "clock_hold.py": "3503750c26381557f2aa379949910296f814c132e6741ae00189e9bca0e0c8f7",
+    "clock_hold_tests.py": "0cba80148fe25c4a09648a10df79114ce2eb25a0ab56d29324a57639c88b12b1",
+    "controller.py": "a2500ef645fca32e8f20ed74c35ba403f3844a190caa6a2afea9154ea2883bed",
+    "pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "pid_scope.py": "6443b65cbfa528f0c67bc5e108786f2dcea903789a925aec504d1a583a8e0fc0",
+    "pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "request.py": "d837670da14368386fa4e74159b7314b3575d96d0b96f0c63d2221e4cd50d629",
+    "route.py": "79d9e80d427ecb513f9015dd7d3ef94e098d18087ef3b5bf64a60e495f827265",
+    "route_fence.py": "0cee6450f504cd9242651fbdcd55d76425da278f2764c0933f65e95e2a5ef49e",
+    "route_leg_heading.py": "61e89808f31e205e117f4b7060754e1dd0f7c605134a5f2785c0fe24ee3203cc",
+    "run.py": "332571080c657745f01cf2e977bee713e5c40a21b61c660642f2349bbe976514",
+    "sampling.py": "243b285660609404fc944dae049fac022e0e3a52b54e14bbb0148866db627708",
+    "sampling_profile_tests.py": "caf177636ae86e9d6564a53582c45c4fc4444bbe21052ab788639891905f5119",
+    "scoped_profile.py": "1e01b1dd2175ee6843012d7fb4a56fc4323e9e0cedd6845604d7d97ec9d9327f",
+    "sensor_gate.py": "77500a4ea80fd43f9039ea704de4feea84f1d3f55b8ece8faf96f11c2a54208e",
+    "shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "slam.launch.py": "bce2c0a154a417b198ffb0fa4d56cb66fe100752d491497f214aed59d0c7b0dd",
+    "stack.launch.py": "bba5203f1c2d03fd0b38d60141cff6c524771f3e5ac5b5654c62f58811e1a7d4",
+    "teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "terrain_provider.py": "cdb9baa9d326f378703b7a607c31489c48d2e0dd6d5b9c4926119038ad636c5f",
+    "transition_gate.py": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10",
+    "worker.py": "0e2e1e79d0142d01c54530e40ee236459afda66adcc90f714e48b2e43dffc087"
+  },
+  "profile_hashes": {
+    "l64_r10_c10_210.json": "f39515339e0c2c225ea419cf4d31df88f5892e4d640819f89d9490107b3544dd",
+    "l64_r20_c20_210.json": "2a3e2b8e5c8b705b44dd087232efddd6335b5e61007595f98fd08f04e8ed9282",
+    "l64_r20_c20_600.json": "bd6e3ab4185755b3db0deb48d0bd27b5f61a639ec122dcdf3e7c155540ec9333",
+    "l64_r30_c10_210.json": "e181a6aa668d05d83e1b22f19e334b163db6103bce7a201bfb96bb1dcbc9c032",
+    "l64_r30_c10_600.json": "2e721f57807d83a2f66afac61831f95e84c571317484a07b68d7275218209e09",
+    "l64_r30_c30_210.json": "5c74d63fc8306502800a020dc6b80ac93f9b96b8fa1cff1ca0e9778becca94b4",
+    "l64_r30_c30_600.json": "5a9076d24cdc98023cc46d6256466d0a41ded14d92b3bbca4cc720b079d807a1",
+    "l64_r30_c30_detail3s_210.json": "546d314526988978e537d5dc8d9c0efba6cabfb5ee7dad33a12057e94ef12425"
+  },
+  "estimator_control_math_unchanged": true,
+  "native_guard_contract": "original strict compute ROS clock increasing; no evaluator modification",
+  "prospective_acceptance_note": "Merge exact-zero clock-hold and PID history chronologically, including source-stale _protect and short-hold zero/slew start. Pure checks do not establish actual navigation pass"
+}

@@ -1,0 +1,1372 @@
+{
+  "schema_version": 1,
+  "profile_id": "ramp12_up_full",
+  "scope": "Complete original physical ramp locomotion and landing transition audit, not SLAM navigation or stairs",
+  "status": "failed",
+  "levels": {
+    "full_ramp_locomotion": "failed",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "checks": {
+    "prospective_frozen_protocol": {
+      "passed": true,
+      "actual_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+      "scheduled_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28"
+    },
+    "complete_continuous_runtime": {
+      "passed": false,
+      "duration_s": 36.04,
+      "policy_samples": 1803,
+      "native_samples": 7209,
+      "maximum_native_gap_s": 0.005000000000006111,
+      "main_exit_codes": {
+        "worker": 0,
+        "gazebo": 0,
+        "bridge": 0,
+        "capture": 0
+      },
+      "completion_time_s": null,
+      "required_stop_end_s": 83,
+      "worker_fault": "body_contact",
+      "runner_error": null
+    },
+    "continuous_cpu_teacher_exclusive_writer": {
+      "passed": true,
+      "target_action_max_error_rad": 0.0,
+      "writer_contract": "teacher_sim::TeacherActuator sole JointForceCmd writer",
+      "writer_plugins": 1,
+      "other_control_plugins": [],
+      "body_pose_resets": 0,
+      "actor_device": "cpu"
+    },
+    "native_dcmotor_execution": {
+      "passed": true,
+      "maximum_reconstructed_torque_error_Nm": 0.0,
+      "maximum_abs_applied_torque_Nm": 23.5
+    },
+    "scheduled_forward_then_teacher_zero": {
+      "passed": false,
+      "active_window_s": [
+        3,
+        75
+      ],
+      "stop_window_s": [
+        78,
+        83
+      ],
+      "stop_samples": 0,
+      "completion_source": "privileged base x only for test termination; no position servo or navigation localization"
+    },
+    "original_scene_complete_ramp_fixture": {
+      "passed": true,
+      "collision": "ramp_12::link::collision",
+      "ramp_center": [
+        8.0,
+        2.0,
+        0.5502481404895005
+      ],
+      "ramp_normal": [
+        -0.09950371902099893,
+        0.0,
+        0.9950371902099892
+      ],
+      "nominal_horizontal_span_m": 12,
+      "slope": 0.1,
+      "actual_landing_top_heights_m": {
+        "floor_1": 0.0,
+        "floor_2": 1.2000000000000002
+      }
+    },
+    "actual_contact_geometry_available": {
+      "passed": true,
+      "missing_or_malformed_contact_geometry_rows": 0,
+      "raw_points_examined": 23412,
+      "qualified_actual_top_points": {
+        "ramp_12": 18426,
+        "floor_1": 4982,
+        "floor_2": 0
+      },
+      "wrench_scope": "Raw wrenches are retained in actuator.jsonl; quantitative vertical bearing load is not inferred."
+    },
+    "physical_entry_ramp_exit_each_named_foot": {
+      "passed": false,
+      "feet": {
+        "FR": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 0.8550000000000004,
+          "ramp_interval_s": [
+            23.384999999999998,
+            24.24
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            9.216512067917293,
+            2.615068952258681,
+            0.7388066147235718
+          ]
+        },
+        "FL": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 1.2600000000000016,
+          "ramp_interval_s": [
+            25.729999999999997,
+            26.99
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            9.131578098394886,
+            2.82460468833972,
+            0.7320122745223407
+          ]
+        },
+        "RR": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 0.5999999999999979,
+          "ramp_interval_s": [
+            20.645,
+            21.244999999999997
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            9.023457052522177,
+            2.585768385251981,
+            0.9891019627775637
+          ]
+        },
+        "RL": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 1.5299999999999976,
+          "ramp_interval_s": [
+            22.68,
+            24.209999999999997
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            9.023506797545597,
+            2.7933918352782023,
+            0.7227753947877759
+          ]
+        }
+      },
+      "simultaneous_destination_support_s": 0.0,
+      "simultaneous_interval_s": null,
+      "all_four_terminal_destination_support": false
+    },
+    "entire_twelve_meter_ramp_contact_coverage": {
+      "passed": false,
+      "bins": [
+        {
+          "x_limits_m": [
+            2,
+            3
+          ],
+          "native_actual_support_seconds": 3.86
+        },
+        {
+          "x_limits_m": [
+            3,
+            4
+          ],
+          "native_actual_support_seconds": 3.81
+        },
+        {
+          "x_limits_m": [
+            4,
+            5
+          ],
+          "native_actual_support_seconds": 3.87
+        },
+        {
+          "x_limits_m": [
+            5,
+            6
+          ],
+          "native_actual_support_seconds": 4.025
+        },
+        {
+          "x_limits_m": [
+            6,
+            7
+          ],
+          "native_actual_support_seconds": 5.735
+        },
+        {
+          "x_limits_m": [
+            7,
+            8
+          ],
+          "native_actual_support_seconds": 3.62
+        },
+        {
+          "x_limits_m": [
+            8,
+            9
+          ],
+          "native_actual_support_seconds": 3.62
+        },
+        {
+          "x_limits_m": [
+            9,
+            10
+          ],
+          "native_actual_support_seconds": 0.925
+        },
+        {
+          "x_limits_m": [
+            10,
+            11
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            11,
+            12
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            12,
+            13
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            13,
+            14
+          ],
+          "native_actual_support_seconds": 0.0
+        }
+      ]
+    },
+    "complete_ramp_and_landing_progress": {
+      "passed": false,
+      "initial_median_position_m": [
+        1.2018359073896014,
+        2.0026845979782895,
+        0.31525661233479707
+      ],
+      "last_active_position_m": [
+        9.207760907071773,
+        2.7640622843027316,
+        0.8856345682575643
+      ],
+      "projected_forward_progress_m": 8.005924999682172,
+      "active_duration_s": 33.04,
+      "mean_projected_world_COM_vx_mps": 0.2422728316652042,
+      "positive_rolling_window_fraction": 1.0,
+      "rolling_windows": 6510,
+      "maximum_lateral_deviation_m": 0.7807271674756318,
+      "maximum_heading_deviation_rad": 0.3077530403553661,
+      "nominal_both_seams_crossed_during_active_command": false,
+      "landing_completion_time_s": null
+    },
+    "unassisted_native_safety": {
+      "passed": false,
+      "start_s": 0.1,
+      "native_samples": 7189,
+      "max_abs_roll_pitch_rad": 0.3211915932583192,
+      "minimum_support_clearance_m": 0.16411709212581294,
+      "body_contact_samples": 4,
+      "missing_contact_samples": 0,
+      "maximum_all_feet_unsupported_s": 0.0,
+      "unsupported_interval_s": null,
+      "maximum_pose_velocity_integral_error_m": 3.507858770616568e-13,
+      "attitude_source": "native actual quaternion at200Hz",
+      "clearance_definition": "actual base origin minus supporting collision directly below it, safety only"
+    },
+    "teacher_stop_on_destination_landing": {
+      "passed": false,
+      "window_s": [
+        78,
+        83
+      ],
+      "translation_drift_m": null,
+      "yaw_drift_rad": null,
+      "linear_rms_mps": [
+        null,
+        null
+      ],
+      "yaw_rate_rms_radps": null,
+      "native_samples": 0,
+      "strategy": "continuous learned Teacher with zero VELOCITY command; action remains inferred"
+    },
+    "archived_source_integrity": {
+      "passed": true,
+      "archived_files": 102,
+      "mismatches": []
+    }
+  },
+  "metrics": {
+    "contact_geometry": {
+      "missing_or_malformed_contact_geometry_rows": 0,
+      "raw_points_examined": 23412,
+      "qualified_actual_top_points": {
+        "ramp_12": 18426,
+        "floor_1": 4982,
+        "floor_2": 0
+      },
+      "wrench_scope": "Raw wrenches are retained in actuator.jsonl; quantitative vertical bearing load is not inferred."
+    },
+    "feet": {
+      "FR": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 0.8550000000000004,
+        "ramp_interval_s": [
+          23.384999999999998,
+          24.24
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          9.216512067917293,
+          2.615068952258681,
+          0.7388066147235718
+        ]
+      },
+      "FL": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 1.2600000000000016,
+        "ramp_interval_s": [
+          25.729999999999997,
+          26.99
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          9.131578098394886,
+          2.82460468833972,
+          0.7320122745223407
+        ]
+      },
+      "RR": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 0.5999999999999979,
+        "ramp_interval_s": [
+          20.645,
+          21.244999999999997
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          9.023457052522177,
+          2.585768385251981,
+          0.9891019627775637
+        ]
+      },
+      "RL": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 1.5299999999999976,
+        "ramp_interval_s": [
+          22.68,
+          24.209999999999997
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          9.023506797545597,
+          2.7933918352782023,
+          0.7227753947877759
+        ]
+      }
+    },
+    "route": {
+      "initial_median_position_m": [
+        1.2018359073896014,
+        2.0026845979782895,
+        0.31525661233479707
+      ],
+      "last_active_position_m": [
+        9.207760907071773,
+        2.7640622843027316,
+        0.8856345682575643
+      ],
+      "projected_forward_progress_m": 8.005924999682172,
+      "active_duration_s": 33.04,
+      "mean_projected_world_COM_vx_mps": 0.2422728316652042,
+      "positive_rolling_window_fraction": 1.0,
+      "rolling_windows": 6510,
+      "maximum_lateral_deviation_m": 0.7807271674756318,
+      "maximum_heading_deviation_rad": 0.3077530403553661,
+      "nominal_both_seams_crossed_during_active_command": false,
+      "landing_completion_time_s": null
+    },
+    "safety": {
+      "start_s": 0.1,
+      "native_samples": 7189,
+      "max_abs_roll_pitch_rad": 0.3211915932583192,
+      "minimum_support_clearance_m": 0.16411709212581294,
+      "body_contact_samples": 4,
+      "missing_contact_samples": 0,
+      "maximum_all_feet_unsupported_s": 0.0,
+      "unsupported_interval_s": null,
+      "maximum_pose_velocity_integral_error_m": 3.507858770616568e-13,
+      "attitude_source": "native actual quaternion at200Hz",
+      "clearance_definition": "actual base origin minus supporting collision directly below it, safety only"
+    },
+    "failure_diagnostics": {
+      "first_body_contact_s": 36.025,
+      "first_body_contact_position_m": [
+        9.203899576860163,
+        2.759674796369381,
+        0.8850692537901943
+      ],
+      "first_body_actual_contact_pairs": [
+        {
+          "group": 0,
+          "a": "go2::base_link::base_link_fixed_joint_lump__lidar_l1_link_collision_5",
+          "b": "ramp_12::link::collision",
+          "points": 20,
+          "max_depth_m": 0.0009652355054424883,
+          "geometry_source": "actual gz.msgs.Contact fields; absent fields remain empty",
+          "positions_world": [
+            [
+              9.490471049905215,
+              2.7913747152536805,
+              0.7495446235856267
+            ],
+            [
+              9.490873340527816,
+              2.7908141076680084,
+              0.7495848526478868
+            ],
+            [
+              9.490648568392398,
+              2.790756073635672,
+              0.7494715662692858
+            ],
+            [
+              9.488808476849869,
+              2.7919778431552658,
+              0.7493783662800919
+            ],
+            [
+              9.490066519396274,
+              2.791607474247967,
+              0.7495041705347324
+            ],
+            [
+              9.488342781753111,
+              2.7918721700400186,
+              0.7492039592594631
+            ],
+            [
+              9.490324661039065,
+              2.791531475391658,
+              0.7495299846990116
+            ],
+            [
+              9.488596868226017,
+              2.791136685682694,
+              0.7488814906263622
+            ],
+            [
+              9.48827558169821,
+              2.7920162340058643,
+              0.749325076764926
+            ],
+            [
+              9.48880026543506,
+              2.790330433085197,
+              0.7487778340075604
+            ],
+            [
+              9.488931211367833,
+              2.789563593230541,
+              0.7488871095272288
+            ],
+            [
+              9.490865114204615,
+              2.7907074232843114,
+              0.7495840300155665
+            ],
+            [
+              9.490776437974082,
+              2.7900339413322457,
+              0.7495751623925132
+            ],
+            [
+              9.49076490075143,
+              2.7899885060527327,
+              0.749574008670248
+            ],
+            [
+              9.488909461075021,
+              2.789558840660758,
+              0.748880306969132
+            ],
+            [
+              9.489484456757207,
+              2.788121479028288,
+              0.7494459642708258
+            ],
+            [
+              9.489249543601368,
+              2.787745112671214,
+              0.7494224729552418
+            ],
+            [
+              9.489234036245824,
+              2.7877274305909543,
+              0.7494209222196875
+            ],
+            [
+              9.486498950728963,
+              2.791496694337783,
+              0.7487352574343438
+            ],
+            [
+              9.484916809900925,
+              2.789576515605787,
+              0.7480191499077189
+            ]
+          ],
+          "normals_world": [
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ],
+            [
+              -0.09950371902099896,
+              0,
+              0.9950371902099892
+            ]
+          ],
+          "depths_m": [
+            1.3877787807814457e-17,
+            1.3877787807814457e-17,
+            9.035849644571659e-05,
+            0,
+            4.163336342344337e-17,
+            0.0001272030777021843,
+            1.3877787807814457e-17,
+            0.00047335390932078114,
+            0,
+            0.0005967348787783294,
+            0.000501031280030248,
+            0,
+            1.3877787807814457e-17,
+            0,
+            0.0005056358433006419,
+            0,
+            0,
+            0,
+            0.00041011078066620354,
+            0.0009652355054424883
+          ],
+          "wrenches_raw": [
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  -31.252617463427484,
+                  0,
+                  312.5261746342747
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  31.252617463427484,
+                  0,
+                  -312.5261746342747
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  0,
+                  0,
+                  0
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  -34.445292767322364,
+                  0,
+                  344.45292767322354
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  34.445292767322364,
+                  0,
+                  -344.45292767322354
+                ],
+                "torque": null
+              }
+            },
+            {
+              "body_1_name": "",
+              "body_2_name": "",
+              "body_1_wrench": {
+                "force": [
+                  -409.4740019430972,
+                  -359.4534993322583,
+                  -40.94740019430974
+                ],
+                "torque": null
+              },
+              "body_2_wrench": {
+                "force": [
+                  409.4740019430972,
+                  359.4534993322583,
+                  40.94740019430974
+                ],
+                "torque": null
+              }
+            }
+          ],
+          "wrench_frame_scope": "raw message body wrench fields; no inferred vertical load measurement"
+        }
+      ],
+      "feet_lateral_edges": {
+        "FR": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.29011021970278383,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": [
+            9.218408083038662,
+            2.6146733964564612,
+            0.7389632454961174
+          ]
+        },
+        "FL": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.14858716635419225,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": [
+            9.125874218084961,
+            2.8154774962937856,
+            0.7314064362390745
+          ]
+        },
+        "RR": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.30785982948695567,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": [
+            9.020307287208233,
+            2.5761238385920158,
+            0.9787690442197441
+          ]
+        },
+        "RL": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.08951851180893745,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": [
+            9.023207343263289,
+            2.795434178748152,
+            0.7226841911318633
+          ]
+        }
+      },
+      "edge_scope": "Sphere extent relative to actual ramp lateral edges; airborne swing at an edge is diagnostic, actual contact and body safety remain the acceptance evidence."
+    },
+    "stop": {
+      "window_s": [
+        78,
+        83
+      ],
+      "translation_drift_m": null,
+      "yaw_drift_rad": null,
+      "linear_rms_mps": [
+        null,
+        null
+      ],
+      "yaw_rate_rms_radps": null,
+      "native_samples": 0,
+      "strategy": "continuous learned Teacher with zero VELOCITY command; action remains inferred"
+    },
+    "height_change_diagnostic": {
+      "body_world_z_gain_m": null,
+      "support_surface_z_change_m": null,
+      "body_world_z_used_as_pass_gate": false,
+      "height_scan_overhead_points_total": 0,
+      "frames_with_overhead_height_scan": 0
+    }
+  },
+  "errors": [],
+  "protocol": {
+    "schema_version": 1,
+    "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+    "status": "frozen_before_first_full_ramp_run",
+    "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+    "physics_dt_s": 0.005,
+    "policy_hz": 50,
+    "repetitions_required": 3,
+    "fixtures": {
+      "ramp_23": {
+        "ramp": "ramp_23",
+        "nominal_x_limits_m": [
+          2,
+          14
+        ],
+        "center_y_m": 7,
+        "width_m": 2,
+        "slope_z_per_world_x": -0.1,
+        "surface_equation": "z=2.6-0.1*x",
+        "floor_at_x_low": "floor_3",
+        "floor_at_x_high": "floor_2",
+        "floor_heights_m": [
+          2.4,
+          1.2
+        ]
+      },
+      "ramp_12": {
+        "ramp": "ramp_12",
+        "nominal_x_limits_m": [
+          2,
+          14
+        ],
+        "center_y_m": 2,
+        "width_m": 2,
+        "slope_z_per_world_x": 0.1,
+        "surface_equation": "z=0.1*x-0.2",
+        "floor_at_x_low": "floor_1",
+        "floor_at_x_high": "floor_2",
+        "floor_heights_m": [
+          0,
+          1.2
+        ]
+      }
+    },
+    "primary_cases": [
+      "ramp23_up_full",
+      "ramp23_down_full"
+    ],
+    "deferred_cases": [
+      "ramp12_up_full",
+      "ramp12_down_full"
+    ],
+    "command": {
+      "body_vx_mps": 0.3,
+      "body_vy_mps": 0,
+      "yaw_radps": 0,
+      "slew_acceleration": [
+        0.6,
+        0.6,
+        0.8
+      ]
+    },
+    "timing": {
+      "bootstrap_pd_s": 0.1,
+      "command_start_s": 3,
+      "maximum_forward_end_s": 75,
+      "maximum_duration_s": 86,
+      "post_completion_teacher_zero_command_s": 8,
+      "stop_settling_s": 3,
+      "stop_evaluation_s": 5
+    },
+    "completion": {
+      "horizontal_ramp_span_m": 12,
+      "start_landing_distance_from_nominal_seam_m": 0.8,
+      "finish_landing_distance_from_nominal_seam_m": 0.8,
+      "test_truth_scope": "Read native base X only to latch zero velocity command and end physical test. No position/body servo; never use this gate in navigation."
+    },
+    "contact": {
+      "actual_position_and_normal_required": true,
+      "surface_local_xy_margin_m": 0.005,
+      "surface_normal_distance_tolerance_m": 0.015,
+      "minimum_absolute_normal_dot_surface_normal": 0.8,
+      "foot_center_height_tolerance_m": 0.025,
+      "each_foot_initial_landing_support_s": 0.1,
+      "each_foot_active_ramp_support_s": 0.1,
+      "each_foot_final_landing_support_s": 0.1,
+      "final_simultaneous_four_foot_landing_support_s": 0.1,
+      "ramp_coverage_bin_m": 1,
+      "each_coverage_bin_any_foot_support_s": 0.1,
+      "maximum_all_feet_unsupported_s": 0.3,
+      "max_native_sample_gap_s": 0.005001
+    },
+    "route": {
+      "maximum_base_center_lateral_deviation_m": 0.45,
+      "maximum_heading_deviation_rad": 0.35,
+      "require_active_command_whole_ramp_crossing": true,
+      "minimum_forward_progress_m": 13.2,
+      "rolling_window_s": 0.5,
+      "minimum_projected_world_forward_window_mean_mps": 0.05,
+      "minimum_positive_window_fraction": 0.9,
+      "minimum_requested_axis_ratio": 0.4
+    },
+    "safety": {
+      "audit_start_s": 0.1,
+      "max_abs_roll_pitch_rad": 0.65,
+      "minimum_body_above_support_m": 0.18,
+      "body_contact_allowed": false,
+      "missing_contact_evidence_allowed": false,
+      "latched_fault_allowed": false,
+      "pose_translation_integral_error_m": 0.0001
+    },
+    "stand_stop": {
+      "translation_drift_m": 0.15,
+      "yaw_drift_rad": 0.2,
+      "linear_rms_mps": 0.08,
+      "yaw_rate_rms_radps": 0.1,
+      "continuous_teacher_required": true,
+      "final_support_surface": "destination landing"
+    },
+    "body_world_height_gain": {
+      "used_as_pass_gate": false,
+      "role": "diagnostic_only; world height combines slope elevation and posture"
+    },
+    "observation": {
+      "source": "Gazebo privileged COM twist, quaternion, joint physics/applied torque and unchanged static SDF 187 vertical height rays at base_z+20m",
+      "ramp23_unrelated_overhead_expected": false,
+      "ramp12_overhead_warning": "floor_3 covers x[-3,2],y[0,9] above floor_1; its top z2.4 is the first hit for the archived +20m scan near the lower transition. Preserve and report rather than silently removing it."
+    },
+    "camera": {
+      "distortion": "actual CameraInfo D=0; archive actual CameraInfo",
+      "recommended_horizontal_fov_rad": 1.3962634015954636,
+      "rendering": "hardware Ogre2; actor CPU",
+      "actual_frames_only": true
+    },
+    "preservation": {
+      "existing_step_and_historical_protocols_unchanged": true,
+      "original_scene_geometry_unchanged": true,
+      "sole_controller": "teacher_sim::TeacherActuator",
+      "no_retraining": true,
+      "no_hardware": true
+    }
+  },
+  "schedule": {
+    "schema_version": 1,
+    "profile_id": "ramp12_up_full",
+    "duration_s": 86,
+    "commands": [
+      {
+        "start_s": 0,
+        "command": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "start_s": 3,
+        "command": [
+          0.3,
+          0,
+          0
+        ]
+      },
+      {
+        "start_s": 75,
+        "command": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+    "terrain": "ramp_up",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ],
+    "completion_stop": {
+      "axis": "x",
+      "comparison": "ge",
+      "threshold": 14.8,
+      "minimum_active_s": 3,
+      "settle_s": 8
+    },
+    "ramp": "ramp_12",
+    "start_landing": "floor_1",
+    "destination_landing": "floor_2",
+    "world_forward_sign": 1,
+    "acceptance_protocol": "tests/ramp_full_protocol.json",
+    "acceptance_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+    "priority": "deferred_overhead_observation_diagnostic"
+  },
+  "source_hashes": {
+    "world.sdf": "7eccdfe5a2d9bdac82b9b524a7915d1e1d86a3a1ad1652b547f0dcb9c340e766",
+    "actuator.jsonl": "1329a923a74d40d66450a68ef540b49068fa0a6560e630f79a0bf266d8f06e53",
+    "telemetry.jsonl": "c34a335c800bee0751d18f31335e2d1b053e60d0f2dc6167cf088d74e07d81b9",
+    "runtime_manifest.json": "a258106b009168dae03a771943e46e102593cf08e1b612aa7969ed13a5833c2e",
+    "policy_manifest.json": "51f6bf0a2d3bc50bd4ce89573902741f8e734359658fe86f74526e23849c95e9",
+    "worker_result.json": "1434eb140c06cc74d7a7ec8ec799fda83e9a73b4ee05f83bf41831697c57208d",
+    "independent_protocol.json": "abce8e4da38ceb9976ad82268a8d0867d019cd379573e8ef01d436a96463835d",
+    "sources/tests/ramp_full_protocol.json": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+    "sources/scripts/evaluate_step_functional.py": "e4cfe4c4b6e4c22213c77922ff289bd0ec59e9e9753069ab582b91fc8b8ec6b5",
+    "sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b"
+  },
+  "analyzer_sha256": "a5b903ba57e0e9eccd9bd1a58d0f6638f0c663d228c996d1f6fff4ca69fd5396",
+  "legacy_evaluation_diagnostic_only": {
+    "interface": "passed",
+    "motion": "failed",
+    "sim2sim": "unverified",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "privileged_truth_use": "actor observation and physical-test end latch/evaluation only; no position servo or navigation claim"
+}

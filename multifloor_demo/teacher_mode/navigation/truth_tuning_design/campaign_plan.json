@@ -1,0 +1,773 @@
+{
+  "schema_version": 1,
+  "campaign_id": "go2_truth_pid_calibration_v2_20261004",
+  "created_at": "2026-10-04T23:34:31.471749+08:00",
+  "status": "prospectively_registered_before_nine_trial_matrix",
+  "scope": "Gazebo truth feedback Teacher controller calibration only; existing SLAM/SCAN/camera results and old gate definitions remain immutable.",
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "CPU_actor_threads": 1,
+  "Teacher_Hz": 50,
+  "joint_PD_Hz": 200,
+  "source_refs_at_registration": {
+    "navigation/truth_tuning/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+    "navigation/truth_tuning/worker.py": "120ac848ed4e08be0005c0b9440240f2fd46e25716461c9fbb5a72f63e0be2ea",
+    "navigation/truth_tuning/run.py": "1207bf226084f8f12cfb41640c0b7e8ac201e5227b9df8d406d1ac8da11d616b",
+    "navigation/truth_tuning/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+    "navigation/truth_tuning/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8",
+    "navigation/truth_tuning/campaign.py": "f44513a96442b3b822d0dcb819f04baac3dfc8529643ebefcbff5783906322f9"
+  },
+  "source_freeze_requirement": "Root must freeze exact controller/evaluator/protocol and profile source before trial1. Later bugrepair starts a new campaign/source revision; old actualruns remain published as prior revision/pilots and cannot be selectively overwritten.",
+  "pilot_exclusion": {
+    "run": "20261004_232054_truth_pid_flat_line_path_pd_50hz_3170",
+    "reason": "Earliercorewithoutauditedsafetyfixes; onlysmoke/interfaceevidence. Notoneofthe9candidates or repeat ofnewcore."
+  },
+  "trials": [
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 10,
+      "design": "legacy_position",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_legacy_position_10hz",
+      "order": 1,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_legacy_position_10.json",
+      "profile_sha256": "39cd7f41cd0beb496f513d750f75c63fd3922deac8eabff43bfd3349b777fef8",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 25,
+      "design": "legacy_position",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_legacy_position_25hz",
+      "order": 2,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_legacy_position_25.json",
+      "profile_sha256": "d88cbcb28dc0626fd43617a47f08439baa85330352f0980d9e9998de255c3cdd",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 50,
+      "design": "legacy_position",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_legacy_position_50hz",
+      "order": 3,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_legacy_position_50.json",
+      "profile_sha256": "4918d749f64b43e02a728c60f42398cc61a9189dad57e44939775c7267ac7b89",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 10,
+      "design": "path_pd",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_path_pd_10hz",
+      "order": 4,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_path_pd_10.json",
+      "profile_sha256": "887a0a36587dcc7f4fe1a0fee4869bb4b3289a35bbac741258b1cb6ee7a691de",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 25,
+      "design": "path_pd",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_path_pd_25hz",
+      "order": 5,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_path_pd_25.json",
+      "profile_sha256": "b03dcdf9e4873f9152aae905b61d08cd99760bfaf412e127bafc08811b4376b9",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 50,
+      "design": "path_pd",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_path_pd_50hz",
+      "order": 6,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_path_pd_50.json",
+      "profile_sha256": "b15ec4ce47e92056082b836fe467ed7bba1005e4dc0d07c06779d01c3db565de",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 10,
+      "design": "cascade_pi",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_cascade_pi_10hz",
+      "order": 7,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_cascade_pi_10.json",
+      "profile_sha256": "f8b3121d58969d6cf89f423170a8b1f61c48cc16b4bc9aa65d73bc8b2bd4ae14",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 25,
+      "design": "cascade_pi",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_cascade_pi_25hz",
+      "order": 8,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_cascade_pi_25.json",
+      "profile_sha256": "2650bc0c91dade0b45dc022ef0f719e190de29808b34ef257d43f22d055900a2",
+      "camera": false,
+      "repeats_in_screen": 1
+    },
+    {
+      "schema": 2,
+      "scenario": "flat_line",
+      "terrain": "flat",
+      "spawn": [
+        4.0,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "route_world_xyz": [
+        [
+          4.0,
+          -0.7,
+          0.32
+        ],
+        [
+          10.0,
+          -0.7,
+          0.32
+        ]
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70,
+      "post_completion_s": 7.0,
+      "command_limits": [
+        1.0,
+        0.35,
+        0.8
+      ],
+      "gains": {},
+      "feedback_hz": 50,
+      "design": "cascade_pi",
+      "campaign_phase": "architecture_frequency",
+      "reference": "Fixed world route; no adaptive replanning; prospective protocol v2",
+      "feedback_source": "Gazebo native truth; calibration only",
+      "counts_as_SLAM_navigation": false,
+      "trial_id": "flat_line_v2_cascade_pi_50hz",
+      "order": 9,
+      "profile_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/flat_line_cascade_pi_50.json",
+      "profile_sha256": "ae13f8e91e2eeacca15026829c0bf19a159a05ea13caba1724acc33c9afc4006",
+      "camera": false,
+      "repeats_in_screen": 1
+    }
+  ],
+  "fairness": {
+    "same": "World/colliders/footfriction.7,initialpose/jointreset,archivedmodel/observations/terrainprovider/actiongain/motorPD,3szerocommandwarmup,Teacher50Hz/physics200Hz,slew.6/.6/.8,fixed6mroute andendpointdeceleration,protocol thresholds andanalysis windows.",
+    "truth": "Nativephysicalfeedback stamp=worldtime-.005,origintrackingconsistentvelocity viaCOMleverarm. Controllerfrequency10/25/50Hz isactualfreshdecimatedfeedback; 50HzouterreferenceenvelopeholdisnotanewPIDupdate.",
+    "isolating_frequency": "Compare frequencies ONLYwithinidenticaldesign/gains/saturation/filter/source version. Position/velocityfilter timeconstants inseconds, notsamplecount. Noindependenttimerscreatingduplicatefeedback.",
+    "structure_headroom_difference": "legacy_position forwardvxlimit=desired_speed=.3m/s asoldposition-to-commandbehavior; path_pd requestsactualreference.3withoutinnercorrection; cascade_pi maycommandabove.3withincommontraininglimits[1,.35,.8]tooffsetTeacherundertracking. Thisisintentionalstructuraldifference, notproofoffrequency superiority. Actualcommands/saturation/compensationmustbeplotted.",
+    "legacy_planar_note": "Confirmed repaired: legacy bodyvx andtotalplanar norm bothlimitedtoeffective_limits[0]=desired_speed; cascadecorrectionstillmayusecommontrainingheadroom. Comparefrequencyonlywithinstructure.",
+    "resource_control": "Runsequentially, notparallelPhysics. BareCPUphysicsscreenforall9. Recordbefore/afterCPU/GPU/processandactualwall/simtiming. Rendererheldoutdemonstrationisnewrunwithsamewinnerconfigandexplicitload. Neverstopothertraining/eval.",
+    "start_state": "Do nothotteleportorwriteposetoassisttracking. Eachtestisnewisolatedworldwithprospectivepose. Retainwarmupdriftasactualfeedback evidence.",
+    "all_evidence": "Archiveeveryrunincludingstartupfailure,timeout,fallen,parsefailure; analyzernooverwrites. Nochangingduration,route,threshold,parkingwindoworbaselinecapafterobserving aresult."
+  },
+  "eligibility_and_selection": {
+    "authority": "Archivedper-runprotocolandindependentevaluatorhashdefinepass. Atregistrationprotocolsha=e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8",
+    "all_gates_first": true,
+    "required_checks": "Everycheckmustbepassed; failed/unverified/parse-incomplete/runtime-error cannotenterPIDscoreorwinner selection. Asrecordedsafetydoesnotcertifyunrecorded200Hzextrema.",
+    "metrics": {
+      "route_max_xy_m": 0.2,
+      "route_RMS_m": 0.08,
+      "drive_heading_max_rad": 0.2,
+      "stable_speed_MAE_limit": "max(0.05, 0.25 * mean_reference_speed)",
+      "parking_XY_m": 0.05,
+      "parking_yaw_rad": 0.1,
+      "parking_window_s": 5.0
+    },
+    "rank_single_screen": "maximize 100/(1+normalizedrouteRMS+speedMAE+headingmax+parkingXY+parkingyaw)amongall-checkspassedonly. Failed/unverifiedcandidate scoremustnullandnotrankable; scoreisperarchivedprotocol.",
+    "top_repeat_rule": "Re-runbestprovisionalpasseddesign/frequency3timesunderidenticalfrozenprofile. Ifseveralwithin5%scoreofleader,repeatbothandrankusingmedianofall3, thenworstrepetitionrouteRMS,thenspeedMAE,thenlowercommandvariation. Nochoosingbestrepeat.",
+    "repeat_eligibility": "Finalchosenconfigurationmustpassallrequiredchecks3/3. Anyfailureexcludesrobustpassclaim andremainsvisible. Deterministicseed42not3differenttrainingmodels;repetitionsmeasureactualexecution variability.",
+    "no_pass_fallback": "Ifno9candidatespassallgates, noeligiblewinner exists. Reportexactcommonfailures andchooseexplicitengineeringdebugcandidatewithoutclaimingoptimal; anydesignrepair getsnewsource/protocolcampaign andfullrelevantbaseline rerun.",
+    "open_loop_exclusion": "open_loopisTeacherresponsecharacterization,neverPIDrank/winner/repeat. Itsfeedbackguard andactualresponse/window/stop evidence reportedseparately.",
+    "scope_of_optimal": "Onlybesttesteddesign/parametersonthisfrozenbenchmark; cannotclaimglobalmathematicalPIDoptimum, fullSim2Sim, multilevelnavigation orhardware readiness.",
+    "objective_direction": "maximize",
+    "score_null_excluded": true
+  },
+  "small_gain_screen_after_passed_structure": {
+    "entry": "Onlyaftera9trialcandidatepassedallgates; preserveitsfrequency/source/commandcaps. legacygainsarehardcodedandnotprofiletunable, soitneedsa newreviewedparameterinterfacebeforegain experiments.",
+    "method": "Onefactoratatimearoundpassedbaseline; atmost4outervariants and4innervariants,notfull Cartesianexplosion. Retainoriginalpassedbaselineascontrolrun.",
+    "outer_candidates": [
+      {
+        "cross_kp": 0.6
+      },
+      {
+        "cross_kp": 1.0
+      },
+      {
+        "cross_kd": 0.1
+      },
+      {
+        "cross_kd": 0.3
+      }
+    ],
+    "inner_cascade_only_candidates": [
+      {
+        "velocity_kp_x": 0.3
+      },
+      {
+        "velocity_kp_x": 0.9
+      },
+      {
+        "velocity_ki_x": 0.25
+      },
+      {
+        "velocity_ki_x": 0.75
+      }
+    ],
+    "yaw": "Onlytuneifyawgateorovershootconcernpersistsusingprespecified±20%aroundpassedgain; do notincreaseturnlimitwhilecallinggainonlycomparison.",
+    "integrals": "Keepouterposition/yawintegralszeroinitially. Assessslew/axis/normantiwindupfromactual appliedTeachercommandbeforeclaimingPIgainbenefit.",
+    "winner": "Allgateeligibilityand3repeatmedian/worst ruleasabove; gainchangesprofilehashdistinct, notreusebestoldsummary."
+  },
+  "heldout_validation": [
+    {
+      "id": "flat_corner",
+      "scenario": "flat_corner",
+      "terrain": "flat",
+      "route_world_xyz": [
+        [
+          4,
+          -0.7,
+          0.32
+        ],
+        [
+          7,
+          -0.7,
+          0.32
+        ],
+        [
+          7,
+          0.8,
+          0.32
+        ]
+      ],
+      "spawn": [
+        4,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 100.0,
+      "repeats": 3,
+      "additional": "Stop-before-turnmustactuallyhappen, orderedwaypoints andfinalpark; nofeedforwardpathrefthroughthecornerhiddenjump."
+    },
+    {
+      "id": "flat_roundtrip",
+      "scenario": "flat_roundtrip",
+      "terrain": "flat",
+      "route_world_xyz": [
+        [
+          4,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.32
+        ],
+        [
+          4,
+          -0.7,
+          0.32
+        ]
+      ],
+      "spawn": [
+        4,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 140.0,
+      "repeats": 3,
+      "additional": "180degmeasuredpre_turn/turn/settle andreturn. Initialorigincannotcountascompletedreturn."
+    },
+    {
+      "id": "speed_05",
+      "scenario": "flat_line_speed05",
+      "terrain": "flat",
+      "route_world_xyz": [
+        [
+          4,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.32
+        ]
+      ],
+      "spawn": [
+        4,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.5,
+      "duration_s": 70.0,
+      "repeats": 3,
+      "entry": "Selected.3configpassed3/3."
+    },
+    {
+      "id": "speed_07",
+      "scenario": "flat_line_speed07",
+      "terrain": "flat",
+      "route_world_xyz": [
+        [
+          4,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.32
+        ]
+      ],
+      "spawn": [
+        4,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.7,
+      "duration_s": 70.0,
+      "repeats": 3,
+      "entry": ".5speedstagepassed3/3, includingactualspeedandstop."
+    },
+    {
+      "id": "speed_10",
+      "scenario": "flat_line_speed10",
+      "terrain": "flat",
+      "route_world_xyz": [
+        [
+          4,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.32
+        ]
+      ],
+      "spawn": [
+        4,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 1.0,
+      "duration_s": 70.0,
+      "repeats": 3,
+      "entry": ".7speedstagepassed3/3. Maxcommand1m/smayprevent1m/sactualtracking; infeasibilityisretained, notfixedbyviolatingarchivedrange."
+    },
+    {
+      "id": "ramp12_up",
+      "scenario": "ramp12_up",
+      "terrain": "ramp_up",
+      "route_world_xyz": [
+        [
+          1.2,
+          2,
+          0.32
+        ],
+        [
+          2,
+          2,
+          0.32
+        ],
+        [
+          14,
+          2,
+          1.52
+        ],
+        [
+          14.8,
+          2,
+          1.52
+        ]
+      ],
+      "spawn": [
+        1.2,
+        2,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 110.0,
+      "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+      "repeats": 3,
+      "additional": "Originalgeometry12mrampsupportplusbothlandings. Actualnativefootcontactxyz/normalandcollidercoverageeach1mbin, notbodyheightgain. Priorunstablelanding spawnmustbemarkedpolicy/scene limitation."
+    },
+    {
+      "id": "ramp12_down",
+      "scenario": "ramp12_down",
+      "terrain": "ramp_down",
+      "route_world_xyz": [
+        [
+          14.8,
+          2,
+          1.52
+        ],
+        [
+          14,
+          2,
+          1.52
+        ],
+        [
+          2,
+          2,
+          0.32
+        ],
+        [
+          1.2,
+          2,
+          0.32
+        ]
+      ],
+      "spawn": [
+        14.8,
+        2,
+        1.6,
+        3.141592653589793
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 110.0,
+      "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+      "repeats": 3,
+      "additional": "Actualsamefullramp+bothlandings, descendingworldxwithpositivebodyforwardcommand; slopeyaw/bodyrateconversionaudited."
+    },
+    {
+      "id": "step05",
+      "scenario": "step05_continue",
+      "terrain": "step05_continue",
+      "route_world_xyz": [
+        [
+          6,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.37
+        ]
+      ],
+      "spawn": [
+        6,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70.0,
+      "repeats": 3,
+      "additional": "Original6mtreadfromx7to13; everyactualfootmustsupporttrue.05mtread andbodycontinue≥1mafteredge+.5; nostaticbodyheightgate."
+    },
+    {
+      "id": "step10",
+      "scenario": "step10_continue",
+      "terrain": "step10_continue",
+      "route_world_xyz": [
+        [
+          6,
+          -0.7,
+          0.32
+        ],
+        [
+          10,
+          -0.7,
+          0.42
+        ]
+      ],
+      "spawn": [
+        6,
+        -0.7,
+        0.4,
+        0.0
+      ],
+      "desired_speed": 0.3,
+      "duration_s": 70.0,
+      "repeats": 3,
+      "additional": "Samefunctionalprotocolbut.10mstep. Preservehistorical3/3asoldcontrollerresult, newwinnerneedsitsownphysicaltests."
+    }
+  ],
+  "heldout_freeze_requirement": "Rootgeometry/scope reviewer mustconfirmtheseplannedXYZroutesagainstactualgeneratedSDFbeforeanyheldoutlaunch. Profile/world/protocolhashesarchived beforemotion; ifadjustmentneeded,itmustprecedeactualheldoutresults andbe a newprofile revision.",
+  "exit_to_real_SLAM": "Onlyfreezecontroller aftereligiblephysicalvalidation. Nextswapfeedback torealSLAM+causalIMUpropagationwithitsownsource/freshness/delaybenchmarkandtruthofflinereference. NoGazebotruthonlinearrival/pathcorrectionclaimingSLAM success.",
+  "execution_plan": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/phase_A_architecture_frequency.json",
+    "sha256": "e92851486b40598c9f77a5e5908b57dbd5d8083d911a9f53608b6dd14057c973",
+    "immutable_order_authority": "Root phase_A_architecture_frequency profiles order; this design audit does not reorder launch plan."
+  }
+}

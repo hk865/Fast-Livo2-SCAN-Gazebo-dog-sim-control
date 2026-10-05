@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "as_of": "2026-10-04T05:20:52.507488+00:00",
+  "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_130256_navigation_champ_pid_v3_loader_r1_dd50",
+  "log_sha256": "81a03cea9f8baa871cf0ee7c0ed5ad7f216bc3ab938cc08db6ea2e4948649c5e",
+  "physics_rows": 37604,
+  "all_zero_tau_rows": 37604,
+  "all12_component_available_rows": 37599,
+  "first_t": 0.005,
+  "last_t": 188.02,
+  "first_all_available_t": 0.03,
+  "force_evidence_status": "UNVERIFIED",
+  "actual_effort_limit_pass": false,
+  "direct_diagnosis": "PostUpdate reads the pending command after Physics UpdateSim clears JointForceCmd, rather than the command used by the completed physics step.",
+  "exact_saved_raw_source_lines": {
+    "gz_ros2_control_plugin.cpp": {
+      "PreUpdate_calls_CM_write": 502,
+      "PostUpdate_calls_read_update": [
+        520,
+        521
+      ]
+    },
+    "gz_system.cpp": {
+      "writes_joint_effort_command_into_force_component": [
+        821,
+        822
+      ]
+    },
+    "Physics.cc": {
+      "Update_calls_UpdatePhysics_and_UpdateSim": [
+        947,
+        955
+      ],
+      "SetForce_from_command": 2360,
+      "clears_pending_JointForceCmd": 3676
+    },
+    "SimulationRunner.cc": {
+      "PreUpdate_loop_before_Update": [
+        604,
+        605,
+        606,
+        607,
+        608,
+        609,
+        610,
+        611,
+        612,
+        613,
+        614,
+        615,
+        616,
+        617,
+        618,
+        619,
+        620,
+        621
+      ]
+    },
+    "installed_System.hh": {
+      "lower_priority_first": [
+        68,
+        69,
+        70,
+        71,
+        72,
+        73
+      ]
+    }
+  },
+  "source_evidence_manifest": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/force_capture_v4/source_evidence/source_manifest.json",
+  "source_evidence_manifest_sha256": "852a1b5202f73119105a8e980c02449c380aa65340df336ddb670aa09d9a55e0",
+  "installed_binary_write_call_address": "0x30e75 CM::write in PreUpdate",
+  "binary_disassembly": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/tests/force_capture_v4/source_evidence/installed_control_phase_objdump.txt",
+  "limit_configuration": {
+    "URDF_effort_nm": 23.5,
+    "SDF_effort_nm": 23.5,
+    "velocity_rad_s": 30,
+    "CM_yaml_enforce_command_limits": true,
+    "private_CM_source_enforce_call": "multifloor_demo/simulation/ros2_control_ws/src/controller_manager/src/controller_manager.cpp:3503 in update, hardware write at3530",
+    "hardware_has_own_explicit_clamp": false,
+    "Teacher_DC_speed_torque_curve": false,
+    "actual_limit_effectiveness": "unverified until command-feed capture"
+  },
+  "existing_run_data_modified": false,
+  "sim_started": false,
+  "ROS_started": false,
+  "signals_sent": false
+}

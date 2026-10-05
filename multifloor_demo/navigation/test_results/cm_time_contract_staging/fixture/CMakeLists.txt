@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+project(cm_time_contract_fixture LANGUAGES CXX)
+find_package(controller_manager REQUIRED)
+find_package(control_toolbox REQUIRED)
+add_executable(cm_time_contract_fixture cm_time_contract_fixture.cpp)
+target_compile_features(cm_time_contract_fixture PRIVATE cxx_std_17)
+target_link_libraries(cm_time_contract_fixture PRIVATE controller_manager::controller_manager ${CMAKE_DL_LIBS})

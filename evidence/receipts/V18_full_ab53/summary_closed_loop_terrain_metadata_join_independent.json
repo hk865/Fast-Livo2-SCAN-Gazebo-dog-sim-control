@@ -1,0 +1,220 @@
+{
+  "schema": "independent_exact_terrain_status_payload_metadata_join/v1",
+  "run": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53",
+  "status": "passed",
+  "passed": true,
+  "checks": {
+    "all_other_original_common_v2_ramp_numeric_gates": {
+      "status": "passed",
+      "passed": true,
+      "original_common_nonflat_applicability_only": "unverified",
+      "original_ramp_terrain_causal_only": {
+        "status": "unverified",
+        "passed": null,
+        "reason": "MissingEvidence: Original provider status read not joined to raw status history"
+      },
+      "all_other_gates_passed": true,
+      "original_required_ramp_gates": [
+        "all_unchanged_original_common_gates",
+        "prospective_exact_ramp_contract",
+        "unchanged_first_active_hold_on_final_actual_landing",
+        "leg_0_ramp_12_complete_original_12m_fixture",
+        "leg_0_ramp_12_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_0_ramp_12_all_named_feet_ordered_actual_top_support",
+        "leg_0_ramp_12_first_destination_landing_continuous_support",
+        "leg_0_ramp_12_all_twelve_metre_bins_actual_support",
+        "leg_0_ramp_12_whole_traversal_real_support_and_axis_safety",
+        "leg_0_ramp_12_actual_original_SLAM_destination_region_on_correct_physical_floor",
+        "leg_1_ramp_23_complete_original_12m_fixture",
+        "leg_1_ramp_23_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_1_ramp_23_all_named_feet_ordered_actual_top_support",
+        "leg_1_ramp_23_first_destination_landing_continuous_support",
+        "leg_1_ramp_23_all_twelve_metre_bins_actual_support",
+        "leg_1_ramp_23_whole_traversal_real_support_and_axis_safety",
+        "leg_1_ramp_23_actual_original_SLAM_destination_region_on_correct_physical_floor"
+      ],
+      "all32_arrivals_preserved": true,
+      "fixed_first_five_second_parking_preserved": true
+    },
+    "frozen_exact_archival_metadata_addition": {
+      "status": "passed",
+      "passed": true,
+      "snapshot": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/navigation/combined_compute_v18/teacher_wrapper.py",
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+      "original_append_lineno": 51,
+      "original_atomic_lineno": 53,
+      "archival_fields_only": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "whole_payload": "Original **data exact expansion, followed by atomic JSON file of the same data; no mutation between calls",
+      "exact_archive_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='append', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.jsonl')), Dict(keys=[None, Constant(value='monotonic_wall'), Constant(value='ros_sim_time')], values=[Name(id='data', ctx=Load()), Call(func=Attribute(value=Name(id='time', ctx=Load()), attr='monotonic', ctx=Load()), args=[], keywords=[]), BinOp(left=Attribute(value=Call(func=Attribute(value=Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='get_clock', ctx=Load()), args=[], keywords=[]), attr='now', ctx=Load()), args=[], keywords=[]), attr='nanoseconds', ctx=Load()), op=Div(), right=Constant(value=1000000000.0))])], keywords=[])",
+      "exact_original_file_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='atomic', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.json')), Name(id='data', ctx=Load())], keywords=[])"
+    },
+    "exact_unique_full_payload_and_original_causal_join": {
+      "status": "passed",
+      "passed": true,
+      "original_history_index": 595,
+      "unique_original_payload_matches": 1,
+      "removed_archival_fields": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "removed_archival_values": {
+        "monotonic_wall": 458161.873677024,
+        "ros_sim_time": 127.41
+      },
+      "original_payload_field_count": 74,
+      "all_original_payload_fields_equal": true,
+      "original_payload_sha256": "95dfb0720b71f16736876b6965be0e473d543989c36796be4643fff493074a4c",
+      "original_whole_history_row_sha256": "24ec03bf738a50487660879dd486db845fbdf74b85c7c5365bb7e26a9a2038d5",
+      "original_causal_wall_order_s": [
+        458161.873677024,
+        458161.887845408,
+        458161.888339627,
+        458161.893536646
+      ],
+      "original_arrival_status_native_clock_ns": [
+        127120000000,
+        127410000000,
+        127430000000
+      ],
+      "source_receipts_or_clock_freshness_refreshed": false
+    },
+    "all_original_terrain_switch_ray_and_native_conditions": {
+      "status": "passed",
+      "passed": true,
+      "original_connector_arrival_stamp_ns": 127120000000,
+      "actual_native_request_clock_ns": 127430000000,
+      "effective_physics_clock_ns": 127425000000,
+      "initial_manifest_sha256": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+      "alternate_manifest_sha256": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+      "actual_187_ray_replay_errors_m": [
+        0.0,
+        0.0
+      ],
+      "max_actual_provider_hit_z_difference_m": 0.0,
+      "all_actual_rays_on_shared_floor2": true,
+      "identical_float64_bytes_diagnostic": true,
+      "native_state_only_checks_Actor_input_equivalence_and_is_not_navigation_feedback": true
+    }
+  },
+  "proofs": {
+    "all_original_gates_preserved": {
+      "original_common_nonflat_applicability_only": "unverified",
+      "original_ramp_terrain_causal_only": {
+        "status": "unverified",
+        "passed": null,
+        "reason": "MissingEvidence: Original provider status read not joined to raw status history"
+      },
+      "all_other_gates_passed": true,
+      "original_required_ramp_gates": [
+        "all_unchanged_original_common_gates",
+        "prospective_exact_ramp_contract",
+        "unchanged_first_active_hold_on_final_actual_landing",
+        "leg_0_ramp_12_complete_original_12m_fixture",
+        "leg_0_ramp_12_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_0_ramp_12_all_named_feet_ordered_actual_top_support",
+        "leg_0_ramp_12_first_destination_landing_continuous_support",
+        "leg_0_ramp_12_all_twelve_metre_bins_actual_support",
+        "leg_0_ramp_12_whole_traversal_real_support_and_axis_safety",
+        "leg_0_ramp_12_actual_original_SLAM_destination_region_on_correct_physical_floor",
+        "leg_1_ramp_23_complete_original_12m_fixture",
+        "leg_1_ramp_23_actual_COM_entryoutside_full_axis_exitoutside",
+        "leg_1_ramp_23_all_named_feet_ordered_actual_top_support",
+        "leg_1_ramp_23_first_destination_landing_continuous_support",
+        "leg_1_ramp_23_all_twelve_metre_bins_actual_support",
+        "leg_1_ramp_23_whole_traversal_real_support_and_axis_safety",
+        "leg_1_ramp_23_actual_original_SLAM_destination_region_on_correct_physical_floor"
+      ],
+      "all32_arrivals_preserved": true,
+      "fixed_first_five_second_parking_preserved": true
+    },
+    "frozen_status_producer": {
+      "snapshot": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/navigation/combined_compute_v18/teacher_wrapper.py",
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+      "original_append_lineno": 51,
+      "original_atomic_lineno": 53,
+      "archival_fields_only": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "whole_payload": "Original **data exact expansion, followed by atomic JSON file of the same data; no mutation between calls",
+      "exact_archive_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='append', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.jsonl')), Dict(keys=[None, Constant(value='monotonic_wall'), Constant(value='ros_sim_time')], values=[Name(id='data', ctx=Load()), Call(func=Attribute(value=Name(id='time', ctx=Load()), attr='monotonic', ctx=Load()), args=[], keywords=[]), BinOp(left=Attribute(value=Call(func=Attribute(value=Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='get_clock', ctx=Load()), args=[], keywords=[]), attr='now', ctx=Load()), args=[], keywords=[]), attr='nanoseconds', ctx=Load()), op=Div(), right=Constant(value=1000000000.0))])], keywords=[])",
+      "exact_original_file_AST": "Call(func=Attribute(value=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='node', ctx=Load()), attr='evidence', ctx=Load()), attr='atomic', ctx=Load()), args=[BinOp(left=Attribute(value=Name(id='self', ctx=Load()), attr='run', ctx=Load()), op=Div(), right=Constant(value='navigation_status.json')), Name(id='data', ctx=Load())], keywords=[])"
+    },
+    "exact_original_status_join": {
+      "original_history_index": 595,
+      "unique_original_payload_matches": 1,
+      "removed_archival_fields": [
+        "monotonic_wall",
+        "ros_sim_time"
+      ],
+      "removed_archival_values": {
+        "monotonic_wall": 458161.873677024,
+        "ros_sim_time": 127.41
+      },
+      "original_payload_field_count": 74,
+      "all_original_payload_fields_equal": true,
+      "original_payload_sha256": "95dfb0720b71f16736876b6965be0e473d543989c36796be4643fff493074a4c",
+      "original_whole_history_row_sha256": "24ec03bf738a50487660879dd486db845fbdf74b85c7c5365bb7e26a9a2038d5",
+      "original_causal_wall_order_s": [
+        458161.873677024,
+        458161.887845408,
+        458161.888339627,
+        458161.893536646
+      ],
+      "original_arrival_status_native_clock_ns": [
+        127120000000,
+        127410000000,
+        127430000000
+      ],
+      "source_receipts_or_clock_freshness_refreshed": false
+    }
+  },
+  "original_receipts": {
+    "summary_closed_loop_cascade_independent.json": {
+      "path": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_cascade_independent.json",
+      "sha256": "b986e4480e0b6f7db93eb87f97c998fa7abe6058d1c1b6d11e50f03a97d0317a",
+      "status": "unverified"
+    },
+    "summary_closed_loop_clock_hold_independent.json": {
+      "path": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_clock_hold_independent.json",
+      "sha256": "3ea8b069ab865e1fa830ff8856e795e59109782e82d5a4dc16abc00ac03acd62",
+      "status": "unverified"
+    },
+    "summary_closed_loop_ramp_independent.json": {
+      "path": "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_ramp_independent.json",
+      "sha256": "99068b1a8aa56079e3006bf7d6204598b16b091bd7ed438b6b72da3a96b0a01a",
+      "status": "unverified"
+    }
+  },
+  "verified_input_source_sha256": {
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_cascade_independent.json": "b986e4480e0b6f7db93eb87f97c998fa7abe6058d1c1b6d11e50f03a97d0317a",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_clock_hold_independent.json": "3ea8b069ab865e1fa830ff8856e795e59109782e82d5a4dc16abc00ac03acd62",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/summary_closed_loop_ramp_independent.json": "99068b1a8aa56079e3006bf7d6204598b16b091bd7ed438b6b72da3a96b0a01a",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/navigation_scope.json": "9902a81aadfd5ada8e05ad6c61da196eba08f4a0336172477b1b6aefac085c68",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/navigation_source_snapshots.json": "0fbf09b8837bf9df44e14da24d59b6ecff13547229ec25db20e48e992c9ce388",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/navigation_status.jsonl": "87109cd15057107ba45778f3647b765ad913bb8d9c00ac9957b25d89e8469bde",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/terrain_provider_events.jsonl": "69ff006aa5121b139348c7fcd5d7aa2cf0f20eaa1d267c5782d2ba5921e40849",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/terrain_provider_result.json": "08a4205cf57cc91c6ad28ab6c967516f328cf02723530bc218061982fbcb0a3c",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/ramp_acceptance_contract.json": "6fed95f3b4d6c224da314fd498e7fdedc4c9ce3f77621f8d76cc414c4b9a8f98",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/navigation_request.json": "c3da83c573b3f916ac316ba7ecf32c072585e3d383b4576dacd93e6359408f9d",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/telemetry.jsonl": "7f6a77e9a111601d1e0ab41622dcbeb5a41da39bc44e70968890320b0c45618e",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/actuator.jsonl": "3494b046f65c48f21619a90c276198be12ee9bf1f5cf7c54128c4e5ade967d34",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/terrain_target_manifest.json": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/alternate_terrain_target_manifest.json": "43a1841266924c8e85b90da08b724bc880ca0cc75e970a19dfc16af01345f67c",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/navigation/combined_compute_v18/teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py": "d7024636a84e59dfcc3d5e94b8cc79cedfb1b6cec85cdac2babad23ab2e17b89",
+    "/var/tmp/go2_teacher_parallel_20261005/20261005_234102_closed_loop_cascade_clock_hold_combined_v18_full_r1_ab53/sources/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e"
+  },
+  "evaluator_sha256": "1d464d0a70e9b7a5484a9535727683cd8118743a2d2282afa792ff302cb06c53",
+  "correction_scope": "Archive bookkeeping only: exact same whole original status payload plus frozen-producer two archival fields. No numeric/ray/phase/arrival/parking/source TTL/control criterion changes; original three receipts immutable.",
+  "retrospective_reader_correction_explicit": true,
+  "original_ramp_status_not_relabelled": true,
+  "navigation_ground_truth_used": false,
+  "limitations": [
+    "Static registered32-region route and two ramps plus first5s active hold only; no dynamic-obstacle or real-robot inference.",
+    "Actor observation inputs remain privileged and separate from sensor SLAM navigation feedback."
+  ]
+}

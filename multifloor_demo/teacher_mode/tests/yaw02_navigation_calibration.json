@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "profile_id": "positive_yaw_02_navigation_calibration",
+  "duration_s": 18.0,
+  "commands": [
+    {
+      "start_s": 0,
+      "command": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "start_s": 3,
+      "command": [
+        0,
+        0,
+        0.2
+      ]
+    },
+    {
+      "start_s": 12,
+      "command": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "scope": "Prospective Gazebo CPU frozen Teacher positive yaw0.2 calibration; no navigation/training/hardware",
+  "criteria": "Existing turn_positive evaluator: signed measured/requested yaw >=0.4 in5..10s; generic actual safety; Teacher stop15..18s unchanged protocol"
+}

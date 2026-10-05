@@ -1,0 +1,589 @@
+{
+  "schema": "independent_V16_runtime_FP_observation/v1",
+  "status": "PASS_FINITE_FP_METADATA_ONLY",
+  "created_UTC": "2026-10-05T15:26:57.542176+00:00",
+  "test_only": true,
+  "performance_eligible": false,
+  "timing_reason": "LD_PRELOAD adds observation overhead; no statistical benchmark rerun",
+  "numeric_originals_unchanged": true,
+  "main_enter_exit_all_P_cores_FE_TONEAREST_MXCSR8064": true,
+  "all_observed_workers_same_FP": true,
+  "numeric_receipt_sha256": "4500fac236cbe4f7700882f1ef6d0cfae5a7005cc8425902cc9370d6d9f1e9c1",
+  "fixture_build_receipt_sha256": "dd9f56493efe3160c5127c7e1712eaa884bf3d7e9c871700d55c54e12433357c",
+  "observer_source_sha256": "6348b73e90cd0de8f498d4388cac1ef83b2490d8c5dadfffcb31ae9f91fb4184",
+  "observer_library_sha256": "c84ab1c48e85a64a94b6563a9cf4dad9db61623d13c86f98ad5bcdc938f5374c",
+  "script_sha256": "f91c5dca116b924541354b5262cbe2a4354413c3be8316880a1758502ab51862",
+  "runs": [
+    {
+      "variant": "baseline_V12",
+      "case": "forward_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+        "forward",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/baseline_V12/forward_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "8303ec94d33a976bc8ac0940e9d3d213120ce4a035ea22385e07f301c019efed",
+      "executable_sha256": "7f57adf1bbf0f320e5f11b02ddf090a1b45d8e54d391be410e488df792eeacd3",
+      "output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "original_numeric_output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160865,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+          "cpu": 0,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160865,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+          "cpu": 0,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160865,
+          "executable": "/usr/bin/taskset",
+          "cpu": 13,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "b294ec50e2ab69e47e8c5d0281bb5cc35d7fb53e546c8032ee3002e1bc076c10",
+        "teams.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "execution.log": "0460cdcc964b269b5b24b7fdd80e526a102386c0c94892c9b9a3adfd33b53669",
+        "output.bin": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de"
+      }
+    },
+    {
+      "variant": "baseline_V12",
+      "case": "inverse_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+        "inverse",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/baseline_V12/inverse_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "8303ec94d33a976bc8ac0940e9d3d213120ce4a035ea22385e07f301c019efed",
+      "executable_sha256": "7f57adf1bbf0f320e5f11b02ddf090a1b45d8e54d391be410e488df792eeacd3",
+      "output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "original_numeric_output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160886,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160886,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/baseline_V12/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160886,
+          "executable": "/usr/bin/taskset",
+          "cpu": 19,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "1d1168ef3e6e6a8012ad098ab307a6fac5e46d7412e1f87caa4ce653efd5e019",
+        "teams.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "execution.log": "dae92237e211813c2f44ed6e96ebffe28b12bc5bf9f2b997bd2d1a6ab2d6da93",
+        "output.bin": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584"
+      }
+    },
+    {
+      "variant": "candidate_V16_t4",
+      "case": "forward_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+        "forward",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/candidate_V16_t4/forward_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "b98984378f144521956ee359e405c7a4d566f880904303f797c1fc5f861c8318",
+      "executable_sha256": "07c7735e680183afa87cb8570fe2d2e7e02c535e2ac5109e7bf7edb6f48561cc",
+      "output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "original_numeric_output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160905,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+          "cpu": 4,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160905,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+          "cpu": 4,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160905,
+          "executable": "/usr/bin/taskset",
+          "cpu": 17,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [
+        {
+          "sequence": 1,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 4,
+          "actual_team": 4,
+          "cpus": [
+            4,
+            6,
+            2,
+            0
+          ],
+          "fp_rounding_modes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064,
+            8064,
+            8064,
+            8064
+          ]
+        },
+        {
+          "sequence": 2,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 4,
+          "actual_team": 4,
+          "cpus": [
+            4,
+            6,
+            2,
+            0
+          ],
+          "fp_rounding_modes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064,
+            8064,
+            8064,
+            8064
+          ]
+        },
+        {
+          "sequence": 3,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 4,
+          "actual_team": 4,
+          "cpus": [
+            4,
+            6,
+            2,
+            0
+          ],
+          "fp_rounding_modes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064,
+            8064,
+            8064,
+            8064
+          ]
+        }
+      ],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "0cb10ed564c9700f56f63c6d5b01fd0ba7a974f49a542e80626b3cf0cb6962a9",
+        "teams.jsonl": "e018ef949d48f07055ed14cc3d8a419f221b9bda7082db30f9628f754abab40e",
+        "execution.log": "ccd821fd621fb38b96f07493fe7817287313f654638023872f60f3d98621175a",
+        "output.bin": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de"
+      }
+    },
+    {
+      "variant": "candidate_V16_t4",
+      "case": "inverse_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+        "inverse",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/candidate_V16_t4/inverse_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "b98984378f144521956ee359e405c7a4d566f880904303f797c1fc5f861c8318",
+      "executable_sha256": "07c7735e680183afa87cb8570fe2d2e7e02c535e2ac5109e7bf7edb6f48561cc",
+      "output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "original_numeric_output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160924,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160924,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t4/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160924,
+          "executable": "/usr/bin/taskset",
+          "cpu": 16,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [
+        {
+          "sequence": 1,
+          "caller": "_ZN10VIOManager18updateStateInverseEN2cv3MatEi",
+          "requested": 4,
+          "actual_team": 4,
+          "cpus": [
+            6,
+            4,
+            0,
+            4
+          ],
+          "fp_rounding_modes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064,
+            8064,
+            8064,
+            8064
+          ]
+        },
+        {
+          "sequence": 2,
+          "caller": "_ZN10VIOManager18updateStateInverseEN2cv3MatEi",
+          "requested": 4,
+          "actual_team": 4,
+          "cpus": [
+            6,
+            4,
+            4,
+            0
+          ],
+          "fp_rounding_modes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064,
+            8064,
+            8064,
+            8064
+          ]
+        }
+      ],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "1a1fdd0f21b9d42fc5b2a39822c3cb3947f223475475cfd12b452a43abe3a597",
+        "teams.jsonl": "46dc783f61a0eeb4278259182f5b9e9b4f3c67629be5b56b8c7170eca1f2b019",
+        "execution.log": "37a4726c9a26e83ab41b90c15d27bb7b675226beb0a332e69fcc0a35e5d1e687",
+        "output.bin": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584"
+      }
+    },
+    {
+      "variant": "candidate_V16_t1",
+      "case": "forward_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+        "forward",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/candidate_V16_t1/forward_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "e571a101cd7091601f55d49942c52563512823b8a6e2b17174548704bb6ed2c9",
+      "executable_sha256": "dc2a8659629666ccd9d57d28802f81c9d26fbd1c0e09362774dfedf0d280ab90",
+      "output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "original_numeric_output_sha256": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160946,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160946,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+          "cpu": 6,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160946,
+          "executable": "/usr/bin/taskset",
+          "cpu": 9,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [
+        {
+          "sequence": 1,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 1,
+          "actual_team": 1,
+          "cpus": [
+            6
+          ],
+          "fp_rounding_modes": [
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064
+          ]
+        },
+        {
+          "sequence": 2,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 1,
+          "actual_team": 1,
+          "cpus": [
+            6
+          ],
+          "fp_rounding_modes": [
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064
+          ]
+        },
+        {
+          "sequence": 3,
+          "caller": "_ZN10VIOManager11updateStateEN2cv3MatEi",
+          "requested": 1,
+          "actual_team": 1,
+          "cpus": [
+            6
+          ],
+          "fp_rounding_modes": [
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064
+          ]
+        }
+      ],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "d0bc9f814db6d4031c3e2686fe5d4d96dc9ee0334c84b6d869ee2ea3d3e3bc0d",
+        "teams.jsonl": "5606ab672dd3204f78bbfa33a1c4cc629bfb823ca6a8669e27a4c2796c8b604d",
+        "execution.log": "f0c51ef3cb4cfe7ea7aa2111bec1f3297868fab9c982ecd1d418d74cc741715c",
+        "output.bin": "9ea2e0008729bd0c6427260ea9e946489985ab4bc1bd24a04f5d17a0fcbdc2de"
+      }
+    },
+    {
+      "variant": "candidate_V16_t1",
+      "case": "inverse_large512",
+      "argv": [
+        "taskset",
+        "-c",
+        "0,2,4,6",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+        "inverse",
+        "512",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/evaluation/v16_FP_observation/candidate_V16_t1/inverse_large512/output.bin"
+      ],
+      "returncode": 0,
+      "library_sha256": "e571a101cd7091601f55d49942c52563512823b8a6e2b17174548704bb6ed2c9",
+      "executable_sha256": "dc2a8659629666ccd9d57d28802f81c9d26fbd1c0e09362774dfedf0d280ab90",
+      "output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "original_numeric_output_sha256": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584",
+      "main_FP": [
+        {
+          "phase": "main_enter",
+          "pid": 1160959,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+          "cpu": 4,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        },
+        {
+          "phase": "main_exit",
+          "pid": 1160959,
+          "executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/parallel_pipeline_20261005/vio_v16/candidate_V16_t1/fixture",
+          "cpu": 4,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "taskset_ignored": [
+        {
+          "phase": "main_enter",
+          "pid": 1160959,
+          "executable": "/usr/bin/taskset",
+          "cpu": 9,
+          "fp_rounding_mode": 0,
+          "mxcsr_control_mask": 8064
+        }
+      ],
+      "teams": [
+        {
+          "sequence": 1,
+          "caller": "_ZN10VIOManager18updateStateInverseEN2cv3MatEi",
+          "requested": 1,
+          "actual_team": 1,
+          "cpus": [
+            4
+          ],
+          "fp_rounding_modes": [
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064
+          ]
+        },
+        {
+          "sequence": 2,
+          "caller": "_ZN10VIOManager18updateStateInverseEN2cv3MatEi",
+          "requested": 1,
+          "actual_team": 1,
+          "cpus": [
+            4
+          ],
+          "fp_rounding_modes": [
+            0
+          ],
+          "mxcsr_control_masks": [
+            8064
+          ]
+        }
+      ],
+      "metadata_files_sha256": {
+        "main_fp.jsonl": "bd288013f0ea230005b37e6daca9b8e41d71bb879a3f7d850b8f31b2f95a7e8e",
+        "teams.jsonl": "e653bbeca1f63ca1bf6f54f321f62278ddf038a84937d0bef499dacd25ace8df",
+        "execution.log": "9900019fa5416de1331dc74b62fa3a03855710befafc79e7914b04305c1b6873",
+        "output.bin": "5131fd1a15a42eb51c839e99eb77d1bc6ccb0d77eaada44111c038cf5c4ce584"
+      }
+    }
+  ]
+}

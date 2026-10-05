@@ -1,0 +1,75 @@
+{
+  "scope": "actual-r1 offline VIO/caller/IMU analysis; original runtime and acceptance untouched",
+  "source_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+  "capture_complete": true,
+  "all_reconstruction_checks_passed": true,
+  "actual_navigation_result": "FAILED, not changed by this diagnostic",
+  "derived_files": {
+    "plot_vio_failure_sources.py": {
+      "bytes": 3069,
+      "sha256": "af2dc0dfb21b3ea298e2c6481b419eb21aa1e2b0e079db99f644900f913fb4b3"
+    },
+    "summary.json": {
+      "bytes": 41550,
+      "sha256": "eb9a28226f07077f1f46c849531eb83cb2d943af043b1d2e99fd871f58d10227"
+    },
+    "derive_event_windows.py": {
+      "bytes": 3156,
+      "sha256": "1e4e46654bba4c1837fe084c7754e83b7b6da387a72215706cb0fe7d1c7541fa"
+    },
+    "estimator_stages.csv": {
+      "bytes": 1237762,
+      "sha256": "28f8383a5c5abd36f72384937cd5f0e2f6778a9c4bb8c2b2a48133e458b3c8b3"
+    },
+    "lio_information_comparison.csv": {
+      "bytes": 2466828,
+      "sha256": "1c055cbf9cb6ea2aebdc02625facd9b40a13d9e4529caa61169a7b558270e7b1"
+    },
+    "failure_window_131_134.json": {
+      "bytes": 24911,
+      "sha256": "7f13d548e4d7ec2651a9615a474cae1fb89c3f630da553c8f0e341bd9942d367"
+    },
+    "raw_imu.csv": {
+      "bytes": 5333822,
+      "sha256": "2b9d50b2a5793c549009ecc44ebc2b3e105a3f9eb3c97f29b6da3090c0364e85"
+    },
+    "vio_retrieval.csv": {
+      "bytes": 243902,
+      "sha256": "c5b9e19644355ad9ce19df65ce6a5f94116911f167dc60b807cbd1853cb9dec8"
+    },
+    "vio_failure_sources.png": {
+      "bytes": 600872,
+      "sha256": "09373cf242e9d0112ee1c15afbaedcccdcf638084787f61edec2ae89378b7e6a"
+    },
+    "imu_pair_propagation.csv": {
+      "bytes": 11132867,
+      "sha256": "bc8f9a56fa85823b2e94f3204654c12ec04a56a21df5b171287f2bef656c2392"
+    },
+    "vio_iterations.csv": {
+      "bytes": 6279205,
+      "sha256": "ea73661b481ead89a2be839b1b9e5c657b9fa65af49c9f2c9dfc433710c79b4a"
+    },
+    "vio_map_management.csv": {
+      "bytes": 211461,
+      "sha256": "fd78e4a1a78cbc123bf05ef00b7b277295500357c69526fa3da6df58cf83515d"
+    },
+    "vio_tracks.csv": {
+      "bytes": 3536727,
+      "sha256": "68bcac2f9bf22b052b6c1aee8183ecc8eaca236af235ad7577b2d95caab4de72"
+    },
+    "plot_vio_failure_sources_before_label_correction.py": {
+      "bytes": 3065,
+      "sha256": "abfdac692edc0ce7893389488bb9ba38eb55fd33660060e2b8ab6ec2172c70c5"
+    },
+    "vio_failure_sources_before_label_correction.png": {
+      "bytes": 601677,
+      "sha256": "d771dfbb7ffc53ce53a5a3a88d4d788e5f65f89c2173ee0c5a6f3b5effdc452b"
+    }
+  },
+  "label_correction": {
+    "scope": "derived plot labels only; raw runtime and CSV/JSON analysis unchanged",
+    "state_label": "caller state is IMU state in camera_init; it is not the published body-origin pose",
+    "guard_label": "first guard at clock 133.13 s / source 133.1 s; later status is not first rejection",
+    "preserved_previous_plot": "vio_failure_sources_before_label_correction.png"
+  }
+}

@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "recorded_at_epoch": 1791040735.0629478,
+  "scope": "User-requested functional step reinterpretation: read existing6 historical Gazebo logs only; no new simulation/training or original log/source mutation.",
+  "analysis_rules": {
+    "kind": "read-only historical log audit; report is the only new file",
+    "command_window": "Use telemetry sim_time in[3,14) for old forward command; no parking displacement counted",
+    "edge_anchor": "Compare x>=7.5 first within command window; report both progress from fixed7.5 and actual first crossing x",
+    "contact_group_mapping": "Native group1FR,2FL,3RR,4RL foot-collision entities only; counterpart model teacher_low_step; pair identity does not establish top face or bearing force",
+    "continuity": "Consecutive native physical samples5ms with max gap.005001s; reset run start on any no-contact/invalid-time/gap; duration is last_timestamp-first_timestamp, does not add an unobserved dt",
+    "stance_window": "Last telemetry sim_time>=24 median position only diagnostic",
+    "no_backward_claim": "Historical numbers do not overwrite old42 acceptance and cannot replace upcoming6 longer-tread trials"
+  },
+  "analysis_rules_sha256": "df92f738dbe3736070666bb8f6f8597ff7cc8504592faf964b8dfca934da97c0",
+  "prospective_protocol": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/tests/step_functional_protocol.json",
+  "prospective_protocol_sha256": "8b7a43c74b21c063f5b56984e2b63256ee9bb0db88fda5c2f59944bb8b70f431",
+  "historical_observations": "Three deterministic repeats have identical motion/contact timing for each height; body height gain gate remains historical and is not reclassified as success.",
+  "rows": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_194006_step05_r1_7b46",
+      "source_hashes": {
+        "actuator.jsonl": "eb6c688fc20abc298be501b70bd3ad10d09a5c16c9df6aced46fbadf3881d6a5",
+        "telemetry.jsonl": "e6985ccb30e9f025c59bdf3e9ed9e3843c985590254d826920ab4ba627ad6c82",
+        "world.sdf": "e31c91a4070be3c103074b511a1fad4af04feeea40279b8cebae3ec7b054bf02",
+        "summary.json": "983c1330921e54324e6dbce015353f97dd6e48f49bd480b51e61836148b3c58c",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "native first snapshot position and12q match telemetry within1e-10",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.07,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.6749999999999989,
+        0.7850000000000001,
+        0.7449999999999992,
+        1.004999999999999
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.58,
+      "first_base_edge_plus_point5_cross_x_m": 7.502921439245806,
+      "commanded_motion_max_x_m": 8.566300044091406,
+      "commanded_x_progress_after_fixed7point5_m": 1.066300044091406,
+      "commanded_x_progress_after_actual_first_cross_m": 1.0633786048456004,
+      "last_settled_position_m": [
+        8.602327232072438,
+        -0.4832764591306998,
+        0.3414217382981449
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "failed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_194529_step05_r2_6f0b",
+      "source_hashes": {
+        "actuator.jsonl": "a3861f77d9061593f7453b7e05bad2f69d3a8574485a0b2decfe54e61752fbc1",
+        "telemetry.jsonl": "bafc5ed8601f9b0f2cff409780a63670f8822dc857e59b406723c6e63ecb9794",
+        "world.sdf": "e31c91a4070be3c103074b511a1fad4af04feeea40279b8cebae3ec7b054bf02",
+        "summary.json": "b80204a5c3c265e833a781917167c8ad230a2c648ffbed2fd17b9b89f1dcce11",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "logged_world_sim_time-minus-sim_time",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.07,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.6749999999999989,
+        0.7850000000000001,
+        0.7449999999999992,
+        1.004999999999999
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.58,
+      "first_base_edge_plus_point5_cross_x_m": 7.502921439245806,
+      "commanded_motion_max_x_m": 8.566300044091406,
+      "commanded_x_progress_after_fixed7point5_m": 1.066300044091406,
+      "commanded_x_progress_after_actual_first_cross_m": 1.0633786048456004,
+      "last_settled_position_m": [
+        8.602327232072438,
+        -0.4832764591306998,
+        0.3414217382981449
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "failed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_195052_step05_r3_b4ba",
+      "source_hashes": {
+        "actuator.jsonl": "6ff9d1d2c1b157cf63b732330bdaf22347a9adcd16bb4f19d80e7dc8741acc20",
+        "telemetry.jsonl": "8829f0344987b3e35b3ed7b7dfdbd20f289d81b4f07eaf00ee0d9da6cdec5cfd",
+        "world.sdf": "e31c91a4070be3c103074b511a1fad4af04feeea40279b8cebae3ec7b054bf02",
+        "summary.json": "4e39ceaeddaf1405ceda6508b977d38e7d9c81f37a35dbb29214caa1200918dd",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "logged_world_sim_time-minus-sim_time",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.07,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.6749999999999989,
+        0.7850000000000001,
+        0.7449999999999992,
+        1.004999999999999
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.58,
+      "first_base_edge_plus_point5_cross_x_m": 7.502921439245806,
+      "commanded_motion_max_x_m": 8.566300044091406,
+      "commanded_x_progress_after_fixed7point5_m": 1.066300044091406,
+      "commanded_x_progress_after_actual_first_cross_m": 1.0633786048456004,
+      "last_settled_position_m": [
+        8.602327232072438,
+        -0.4832764591306998,
+        0.3414217382981449
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "failed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_194035_step10_r1_b04c",
+      "source_hashes": {
+        "actuator.jsonl": "8e1134c5b8b8d2b1bbc11a5f76b23a4b2b6a42c5c9960aea75255dcd8d080ef4",
+        "telemetry.jsonl": "ae0e7c01cabdcc2f0eda7341b101c7f4a81491a267bb1a78092b17d316ef3121",
+        "world.sdf": "b35460f41b29d17ae47122028fdb7db47e6c89102fdb6d6ad5806b587db9229f",
+        "summary.json": "d39d6cb87c095de105f9e512d00fb2ad0639cbc631ea3c18e7a14f14335cd883",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "logged_world_sim_time-minus-sim_time",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.11,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.745000000000001,
+        0.6749999999999998,
+        0.6150000000000002,
+        0.6050000000000004
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.02,
+      "first_base_edge_plus_point5_cross_x_m": 7.504275941519009,
+      "commanded_motion_max_x_m": 8.687234432455504,
+      "commanded_x_progress_after_fixed7point5_m": 1.1872344324555044,
+      "commanded_x_progress_after_actual_first_cross_m": 1.1829584909364952,
+      "last_settled_position_m": [
+        8.812755476908883,
+        -0.5748154684455108,
+        0.37807908343706487
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "passed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_194558_step10_r2_8974",
+      "source_hashes": {
+        "actuator.jsonl": "9a97c5dfdbacca15227489b56ed087c95a2e6dd4f89ca63a8dadc4a6ce4deb4d",
+        "telemetry.jsonl": "bae6615b9c46c4387760ee3a6fbb1a1c2f1288cc52c5bd3bb926b8e5dc09e194",
+        "world.sdf": "b35460f41b29d17ae47122028fdb7db47e6c89102fdb6d6ad5806b587db9229f",
+        "summary.json": "68d06c95ecb7dc8768b698de99ccda693e9e93d9a379dcb3f4ce941bd8169e71",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "logged_world_sim_time-minus-sim_time",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.11,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.745000000000001,
+        0.6749999999999998,
+        0.6150000000000002,
+        0.6050000000000004
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.02,
+      "first_base_edge_plus_point5_cross_x_m": 7.504275941519009,
+      "commanded_motion_max_x_m": 8.687234432455504,
+      "commanded_x_progress_after_fixed7point5_m": 1.1872344324555044,
+      "commanded_x_progress_after_actual_first_cross_m": 1.1829584909364952,
+      "last_settled_position_m": [
+        8.812755476908883,
+        -0.5748154684455108,
+        0.37807908343706487
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "passed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261003_195120_step10_r3_18d2",
+      "source_hashes": {
+        "actuator.jsonl": "76f08da371b8ccc92b9711081dbf37dc05a03a78093ba75524e335cd6f4460c0",
+        "telemetry.jsonl": "604b4794d1c53d3856ddd3002d139818a7c602d5c420e7fd7448d33f3be69e1b",
+        "world.sdf": "b35460f41b29d17ae47122028fdb7db47e6c89102fdb6d6ad5806b587db9229f",
+        "summary.json": "0890a315734e21d9d68516dbcd4cfb3fe3d8c48723600d60792d17d710dc787b",
+        "sources/tests/protocol.json": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "sources/simulation/teacher_actuator.cpp": "f0ba8c50262b253a7dfe331fc2f5403636b7818ac646ba82ce44d475d219e3c5",
+        "sources/scripts/evaluate.py": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d"
+      },
+      "time_alignment": {
+        "method": "logged_world_sim_time-minus-sim_time",
+        "native_time_offset_s": 0.01
+      },
+      "historical_duration_s": 25.0,
+      "valid_motion_window_s": [
+        3,
+        14
+      ],
+      "box_pair_contact_first_all_four_active_s": 8.11,
+      "max_continuous_box_pair_contact_s_FR_FL_RR_RL": [
+        0.745000000000001,
+        0.6749999999999998,
+        0.6150000000000002,
+        0.6050000000000004
+      ],
+      "first_base_edge_plus_point5_cross_s": 9.02,
+      "first_base_edge_plus_point5_cross_x_m": 7.504275941519009,
+      "commanded_motion_max_x_m": 8.687234432455504,
+      "commanded_x_progress_after_fixed7point5_m": 1.1872344324555044,
+      "commanded_x_progress_after_actual_first_cross_m": 1.1829584909364952,
+      "last_settled_position_m": [
+        8.812755476908883,
+        -0.5748154684455108,
+        0.37807908343706487
+      ],
+      "unsupported_fields": {
+        "native_contact_point_xyz": false,
+        "native_contact_normal_xyz": false,
+        "native_contact_wrench": false,
+        "top_face_bearing_contact_directly_verified": false
+      },
+      "historical_acceptance_unchanged": {
+        "interface": "passed",
+        "motion": "passed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "functional_historical_conclusion": "Real measured forward progress and four foot-vs-step collision pairs; not merely in-place crouching. Top support load/surface evidence unavailable in historical logs, so no strict new-functional pass is asserted and no extended-platform continuation is fabricated."
+    }
+  ]
+}

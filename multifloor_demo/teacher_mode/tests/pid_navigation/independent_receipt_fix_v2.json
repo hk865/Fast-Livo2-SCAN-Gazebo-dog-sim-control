@@ -1,0 +1,26 @@
+{
+  "schema": "pid_navigation_independent_receipt_correction/v2",
+  "original_analyzer_sha256": "9d4ef434ba1940abbd204a2002a06bd8eb7e3be6ea1d8ee87771d3512b774c65",
+  "previous_corrected_analyzer_sha256": "777b4706f09fd74065e1dc99af1fba326364d16f16c1addb01491ad082151753",
+  "corrected_analyzer": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/analyze_pid_navigation_v2_force_phase.py",
+  "corrected_analyzer_sha256": "0e64b47b6beee3eb52022731db2b59ad0e867582c9f1503e050ac37e63d3301f",
+  "protocol_sha256": "002a3847395159cc644914caa687cfb8a0f879802281bbfedee2cfe155a4bd13",
+  "cases_sha256": "445ff554cbc8ec85425603f7b50eb7d774b5971f137b650768a1b9cb97dca2d4",
+  "changes": [
+    {
+      "field": "exclusive_actuator_and_no_body_servo",
+      "reason": "Known exact readonly champ_compare::NativeObserver was counted as an actuator because its name contains champ. It has no actuation API; require the source-frozen manifest observer_writes_joint_force=false plus independent model ownership1. Unexpected plugins continue to fail."
+    },
+    {
+      "field": "actual_joint_execution and native_force_and_joint_velocity_limits",
+      "reason": "Frozen CHAMP PostUpdate force logger sees JointForceCmd after Physics Update clears it. Component availability and zero values cannot satisfy the prospective complete200Hzforce requirement. Mark these unverified; q/qd and original ROS target evidence remain actual."
+    }
+  ],
+  "physical_force_phase_reference": {
+    "gz_sim": "gz-sim8_8.11.0 Physics.cc2164..2180 SetForce;3390..3395 zero pending force",
+    "gz_ros2_control": "1.2.19 gz_ros2_control_plugin.cpp435..466 PreUpdate CMwrite;468..483 PostUpdate read/update"
+  },
+  "criteria_unchanged": true,
+  "protocol_runtime_changed": false,
+  "old_receipts_kept": true
+}

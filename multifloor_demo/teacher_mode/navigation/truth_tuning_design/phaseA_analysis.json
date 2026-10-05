@@ -1,0 +1,1437 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-04T23:52:46.064549+08:00",
+  "status": "phase_A1_complete_all9_actual_curves_archival_only_no_final_selection",
+  "receipts_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/truth_pid_campaign_20261004/phase_A_architecture_frequency_results.jsonl",
+  "receipts_sha256": "8161981df64de2d19108a63682b6df307905aefa13c6e83c7c514b8c584e947a",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233514_truth_pid_flat_line_legacy_position_10hz_91cf",
+      "design": "legacy_position",
+      "feedback_hz": 10,
+      "formal_status": "passed",
+      "formal_score": 40.549879682588134,
+      "runtime_error": null,
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.008162639741159564,
+      "route_max_m": 0.02000760634618981,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.059009090576636246,
+      "protocol_mean_actual_projection_mps": 0.2405383951882974,
+      "parking": {
+        "window_s": [
+          30.025000000000002,
+          35.025000000000006
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.0025153785587037247,
+        "yaw_drift_rad": 0.03681104549614566,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.2999633396794984,
+        "mean_bodyCOM_vx_mps": 0.24263571845717113,
+        "static_mean_ratio": 0.8088845747497675,
+        "last_15_20s_mean_vx_mps": 0.24249389468437402,
+        "last_15_20s_reference_error_mps": 0.05750610531562597,
+        "actor_command_total_variation_mps_per_s": 0.07282022890598264
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4200000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.14000000000000012
+        },
+        "0.9": {
+          "velocity_cross_s": 4.0,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.5199999999999996
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "ff6b02ac6ba960321f50510ecd848a5b5cb6ca570722819fc197474f576ea21b",
+        "control.jsonl": "7941057e4723362fd93c92f5cce287fb92494eb0c5129c8661019a010b3e7c96",
+        "truth_profile.json": "c40b8f752819cdf6fce6f9191f4841d228b79b0e88b451e4987597246416994d",
+        "summary_truth_pid.json": "626f5b39bc4c176c119d82321ae80838f6bff4ef11651d3fbf59618ae0bcd09d",
+        "runtime_manifest.json": "85ea50a7de5b12c61f8d1088ae94298be78211411a1acbdacfedcd2ce46d2544",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233557_truth_pid_flat_line_legacy_position_25hz_e5fd",
+      "design": "legacy_position",
+      "feedback_hz": 25,
+      "formal_status": "failed",
+      "formal_score": null,
+      "runtime_error": "RuntimeError: Gazebo exited before controller",
+      "motion_nonpassed_checks_excluding_runtime": [
+        "declared_completion_and_termination",
+        "fixed_final_goal_parking"
+      ],
+      "route_RMS_m": 0.006758294566317496,
+      "route_max_m": 0.01977986848631974,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.06024040779470589,
+      "protocol_mean_actual_projection_mps": 0.23906433643438843,
+      "parking": null,
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.2999533990597552,
+        "mean_bodyCOM_vx_mps": 0.24211709806472892,
+        "static_mean_ratio": 0.8071823784083726,
+        "last_15_20s_mean_vx_mps": 0.23967465468610377,
+        "last_15_20s_reference_error_mps": 0.06032534531389622,
+        "actor_command_total_variation_mps_per_s": 0.08084548990379978
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4200000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.14000000000000012
+        },
+        "0.9": {
+          "velocity_cross_s": 4.0200000000000005,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.54
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.03999999999999204,
+        0.04000000000001336
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "22e5c56f2f77557fd709d54caef3dafc29a9a2e82c3c66422d4073062b717279",
+        "control.jsonl": "b2c0cce103d5f8bef18347510f0c295c8e56e615ad9bdbf2e27f4b30bdd300f3",
+        "truth_profile.json": "1afb38c3c037103bddcd6a42ca141d301cf28bba4655d1007cdbd0c85a30bff2",
+        "summary_truth_pid.json": "bd40f5af3b06480d9e615ef6b45bf09e01f6b1d1c2f2ba8e4e4102d42fd8d9ca",
+        "runtime_manifest.json": "87a5b6a5c821def086ea4f7ba5cd0172d55ecff828f1922d79b304a9d715edce",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233712_truth_pid_flat_line_legacy_position_50hz_8fa5",
+      "design": "legacy_position",
+      "feedback_hz": 50,
+      "formal_status": "passed",
+      "formal_score": 36.33662856473918,
+      "runtime_error": null,
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.008564891474930756,
+      "route_max_m": 0.023568481019962895,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.06045956929112173,
+      "protocol_mean_actual_projection_mps": 0.23895544980524266,
+      "parking": {
+        "window_s": [
+          31.885,
+          36.885000000000005
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.0173465938978882,
+        "yaw_drift_rad": 0.03326773055189682,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.2999429926886021,
+        "mean_bodyCOM_vx_mps": 0.24217132096888558,
+        "static_mean_ratio": 0.807391160560652,
+        "last_15_20s_mean_vx_mps": 0.24106119728308512,
+        "last_15_20s_reference_error_mps": 0.05893880271691487,
+        "actor_command_total_variation_mps_per_s": 0.08341906960127791
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4200000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.14000000000000012
+        },
+        "0.9": {
+          "velocity_cross_s": 4.04,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.5599999999999996
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.019999999999998685,
+        0.020000000000003126
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "f0f96a45d0df3347ef6be84bab46e574e800304477f65d7d0d8d5af523046528",
+        "control.jsonl": "256f7d658636cc0798878db77b47e24eae8b20220bd9e9b2f341a67eb75abf71",
+        "truth_profile.json": "f03870621abe531be0fb76a01170e237735130a9d023475ba66d50eccbd78eba",
+        "summary_truth_pid.json": "00ded94f2130c0f514c36bfcb7fd836847156e57ef4475b1b1b7b71f91fbe753",
+        "runtime_manifest.json": "2d2c4d6d278b191a6f56d8ce350f9c2ebd726aab58ddf0aa49c5a518dcb6f5f9",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233756_truth_pid_flat_line_path_pd_10hz_422e",
+      "design": "path_pd",
+      "feedback_hz": 10,
+      "formal_status": "passed",
+      "formal_score": 41.50394669282513,
+      "runtime_error": null,
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.006161110960698235,
+      "route_max_m": 0.01875112523196576,
+      "heading_max_rad": 0.031742523570860576,
+      "protocol_speed_MAE_mps": 0.056163644021428365,
+      "protocol_mean_actual_projection_mps": 0.24358316889190326,
+      "parking": {
+        "window_s": [
+          30.525000000000002,
+          35.525000000000006
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.00757960105009393,
+        "yaw_drift_rad": 0.027260977427614328,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.29999247749519814,
+        "mean_bodyCOM_vx_mps": 0.2427506318728225,
+        "static_mean_ratio": 0.8091890633381236,
+        "last_15_20s_mean_vx_mps": 0.24261705231778202,
+        "last_15_20s_reference_error_mps": 0.057382947682217966,
+        "actor_command_total_variation_mps_per_s": 0.09987416088354902
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4200000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.14000000000000012
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9400000000000004,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.45999999999999996
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "2948e54f57d02b841a43098332a951ce31a664c05a8b280f12661fae5c709e50",
+        "control.jsonl": "cecc853b68797ff53882cc7cd563584f3877d6348f79fb23e0c9d2fb3047c6b0",
+        "truth_profile.json": "87818d75997ff194e08a3e6505ac455c9623cb5417524f26a34e395ffc1e476f",
+        "summary_truth_pid.json": "7c887f498d32853daf453dedb70ccfec8846fc81b7df15ad117dc0422f416c8b",
+        "runtime_manifest.json": "fa3ab3eb92459c71814a20063ff080a12350b5e694d76bbb749d6c2fbc7489d3",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233838_truth_pid_flat_line_path_pd_25hz_b55c",
+      "design": "path_pd",
+      "feedback_hz": 25,
+      "formal_status": "passed",
+      "formal_score": 39.35199671042179,
+      "runtime_error": null,
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.007400049985500247,
+      "route_max_m": 0.02655914069053933,
+      "heading_max_rad": 0.03180255446528924,
+      "protocol_speed_MAE_mps": 0.0580136477508582,
+      "protocol_mean_actual_projection_mps": 0.24168832903895404,
+      "parking": {
+        "window_s": [
+          29.425,
+          34.425
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.004384220938893436,
+        "yaw_drift_rad": 0.042768481450633264,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.2999963200166114,
+        "mean_bodyCOM_vx_mps": 0.24099279257162917,
+        "static_mean_ratio": 0.8033191625760107,
+        "last_15_20s_mean_vx_mps": 0.23984883364353515,
+        "last_15_20s_reference_error_mps": 0.060151166356464836,
+        "actor_command_total_variation_mps_per_s": 0.11649061940488865
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4000000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.1200000000000001
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9400000000000004,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.45999999999999996
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.03999999999999915,
+        0.0400000000000027
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "b76042051ece82a504637848b4059e3a595599925a3e31b32aa5bb26116f9aba",
+        "control.jsonl": "2ae343b6ba8fa0b2ea694bfecba78e01afbbd947f474b9dfee231258e1dee746",
+        "truth_profile.json": "be9d5f44d231a213fdbb1038856fb8a315fb1e1b4ce3db77eaf72ec8ed21ad68",
+        "summary_truth_pid.json": "765e61c9235b1f1266ba7eee2212c8021b6f687db028e9f9431b39a2cce2f516",
+        "runtime_manifest.json": "332d56972e2b41ba44ee0511d66d0ef0f6397b590c13e99884a03f5a2160291b",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233919_truth_pid_flat_line_path_pd_50hz_db1d",
+      "design": "path_pd",
+      "feedback_hz": 50,
+      "formal_status": "failed",
+      "formal_score": null,
+      "runtime_error": "RuntimeError: Gazebo exited before controller",
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.008611498647366845,
+      "route_max_m": 0.02751460989279164,
+      "heading_max_rad": 0.031898723494912865,
+      "protocol_speed_MAE_mps": 0.05890163205507455,
+      "protocol_mean_actual_projection_mps": 0.24083327303164934,
+      "parking": {
+        "window_s": [
+          46.585,
+          51.585
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.013015680660408676,
+        "yaw_drift_rad": 0.0644238746811557,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.29999995777109695,
+        "mean_bodyCOM_vx_mps": 0.2403784279924544,
+        "static_mean_ratio": 0.8012615394295008,
+        "last_15_20s_mean_vx_mps": 0.23947321492865528,
+        "last_15_20s_reference_error_mps": 0.06052678507134471,
+        "actor_command_total_variation_mps_per_s": 0.1206987095123498
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.14,
+          "command_cross_s": 3.08,
+          "gap_s": 0.06000000000000005
+        },
+        "0.5": {
+          "velocity_cross_s": 3.4000000000000004,
+          "command_cross_s": 3.2800000000000002,
+          "gap_s": 0.1200000000000001
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9400000000000004,
+          "command_cross_s": 3.4800000000000004,
+          "gap_s": 0.45999999999999996
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.01999999999999602,
+        0.020000000000003126
+      ],
+      "PI_late_mean_terms": null,
+      "input_sha256": {
+        "telemetry.jsonl": "d8c1fc98820e61b239f338b6b50b19dc846d01911764b0de14a7fe26a42ff9d9",
+        "control.jsonl": "fc53159c5eaf4c70df3a335169b8c8903aa2da53e5f9cd1b225edacccafcead4",
+        "truth_profile.json": "4f1ac8848ce076669f403823e0c113ff89c3ce6ea9d063dad077f963aae91571",
+        "summary_truth_pid.json": "d4ad8853a24c790836213fd03e692490e32d25367a9c14c051121e46e6e222cf",
+        "runtime_manifest.json": "9111a1035010b84fd06e87089fe8b42c9687ceb0eaa2385713f404fe4ac2887a",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_234018_truth_pid_flat_line_cascade_pi_10hz_9e0f",
+      "design": "cascade_pi",
+      "feedback_hz": 10,
+      "formal_status": "failed",
+      "formal_score": null,
+      "runtime_error": "RuntimeError: Gazebo exited before controller",
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.005906890978440903,
+      "route_max_m": 0.014218256235603133,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.014554717251358276,
+      "protocol_mean_actual_projection_mps": 0.2956093692396889,
+      "parking": {
+        "window_s": [
+          26.025000000000002,
+          31.025000000000002
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.015410448157572098,
+        "yaw_drift_rad": 0.0364322609826024,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.35462258221854775,
+        "mean_bodyCOM_vx_mps": 0.29492253924916606,
+        "static_mean_ratio": 0.8316518857995637,
+        "last_15_20s_mean_vx_mps": 0.29950676912467683,
+        "last_15_20s_reference_error_mps": 0.0004932308753231585,
+        "actor_command_total_variation_mps_per_s": 0.3455091716181648
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.16,
+          "command_cross_s": 3.08,
+          "gap_s": 0.08000000000000007
+        },
+        "0.5": {
+          "velocity_cross_s": 3.8000000000000003,
+          "command_cross_s": 3.3200000000000003,
+          "gap_s": 0.48
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9200000000000004,
+          "command_cross_s": 3.56,
+          "gap_s": 0.3600000000000003
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.09999999999999787,
+        0.1000000000000032
+      ],
+      "PI_late_mean_terms": {
+        "P": [
+          0.00021022336412487166,
+          0.001359966803118816,
+          0.00044450833990364926
+        ],
+        "I": [
+          0.05844083485219334,
+          -0.001003331690571995,
+          -0.00753521220536698
+        ]
+      },
+      "input_sha256": {
+        "telemetry.jsonl": "da5256fb21f178b66cd5fa7652ea854a68657c9ecbd9bcdd68c0c60ec216e1e9",
+        "control.jsonl": "2593939f470e57fbff9886cc8158bb1bf2be3e4c78b85691ba4b44d3b6257110",
+        "truth_profile.json": "fc156943ae7bb7fd03e16aa0dd1be943f8c73d9b70781bd7983d42524c7efc20",
+        "summary_truth_pid.json": "7142c35788c5f1626bb9b2cae16b0b5b3187d7131515fc4378c67f4daa7064a4",
+        "runtime_manifest.json": "1153d0a72aeb445a8f9283069d3d71a118ae59874b20c0f6867727750273021f",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_234055_truth_pid_flat_line_cascade_pi_25hz_3f7c",
+      "design": "cascade_pi",
+      "feedback_hz": 25,
+      "formal_status": "failed",
+      "formal_score": null,
+      "runtime_error": "RuntimeError: Gazebo exited before controller",
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.005486393740767085,
+      "route_max_m": 0.011878851433044457,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.015790250023612624,
+      "protocol_mean_actual_projection_mps": 0.2955910871035468,
+      "parking": {
+        "window_s": [
+          25.025000000000002,
+          30.025000000000002
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.009672870217650254,
+        "yaw_drift_rad": 0.03279779123657501,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.35573876668909626,
+        "mean_bodyCOM_vx_mps": 0.2945393829665357,
+        "static_mean_ratio": 0.8279653795054426,
+        "last_15_20s_mean_vx_mps": 0.29870019107783263,
+        "last_15_20s_reference_error_mps": 0.0012998089221673559,
+        "actor_command_total_variation_mps_per_s": 0.3951057999891206
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.16,
+          "command_cross_s": 3.08,
+          "gap_s": 0.08000000000000007
+        },
+        "0.5": {
+          "velocity_cross_s": 3.8000000000000003,
+          "command_cross_s": 3.3200000000000003,
+          "gap_s": 0.48
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9200000000000004,
+          "command_cross_s": 3.56,
+          "gap_s": 0.3600000000000003
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.03999999999999915,
+        0.0400000000000027
+      ],
+      "PI_late_mean_terms": {
+        "P": [
+          0.0006409912819133336,
+          0.0006448810439033176,
+          -9.080656072736136e-05
+        ],
+        "I": [
+          0.05995109863288135,
+          0.002662324730540186,
+          -0.005546573933793777
+        ]
+      },
+      "input_sha256": {
+        "telemetry.jsonl": "156149dc2a87e18b9a50d579b5f83d4b654d16995cdda47a15f91a749b47bba6",
+        "control.jsonl": "712db1b5b9ee862288fa6941f6b24428a573b1628e3408671db69aeeaeac156a",
+        "truth_profile.json": "f6b55c3a59bdb4ff96ac6b92b5f765da5bb8d5d3806b5b2edb6b93fc8de703d8",
+        "summary_truth_pid.json": "f8d5357c7b0a11f6997f9080a66933aa99399b9ba2dd215d2a7161af78431c2f",
+        "runtime_manifest.json": "5089f029e99e0d65fa6994a8ac05db81e56d29016917f9cb90c38401b8f0dfa6",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_234132_truth_pid_flat_line_cascade_pi_50hz_cc03",
+      "design": "cascade_pi",
+      "feedback_hz": 50,
+      "formal_status": "passed",
+      "formal_score": 39.03840695399625,
+      "runtime_error": null,
+      "motion_nonpassed_checks_excluding_runtime": [],
+      "route_RMS_m": 0.005617686132486318,
+      "route_max_m": 0.012845866559599406,
+      "heading_max_rad": 0.03153421936985151,
+      "protocol_speed_MAE_mps": 0.015719712715360015,
+      "protocol_mean_actual_projection_mps": 0.2957057477591381,
+      "parking": {
+        "window_s": [
+          24.905,
+          29.905
+        ],
+        "telemetry_rows": 251,
+        "native_rows": 1001,
+        "complete_5s": true,
+        "xy_drift_m": 0.014676671491720793,
+        "yaw_drift_rad": 0.08303912649687327,
+        "continuous_requested_and_actor_command_zero": true,
+        "window_selection": "First eligible actual parking zero row after completed controller dwell; never a later quiet window",
+        "physical_pose_source": "Every original native 200Hz state; command zero coverage from original telemetry/causal control rows"
+      },
+      "measured_steady_5_20s": {
+        "mean_actor_vx_command_mps": 0.3561905095398005,
+        "mean_bodyCOM_vx_mps": 0.29480086962958685,
+        "static_mean_ratio": 0.8276494228059885,
+        "last_15_20s_mean_vx_mps": 0.30016703823326735,
+        "last_15_20s_reference_error_mps": -0.00016703823326735812,
+        "actor_command_total_variation_mps_per_s": 0.4152991671076271
+      },
+      "startup_causal100msfiltered": {
+        "0.1": {
+          "velocity_cross_s": 3.16,
+          "command_cross_s": 3.08,
+          "gap_s": 0.08000000000000007
+        },
+        "0.5": {
+          "velocity_cross_s": 3.8000000000000003,
+          "command_cross_s": 3.3200000000000003,
+          "gap_s": 0.48
+        },
+        "0.9": {
+          "velocity_cross_s": 3.9200000000000004,
+          "command_cross_s": 3.56,
+          "gap_s": 0.3600000000000003
+        }
+      },
+      "actual_fresh_interval_min_max_s": [
+        0.019999999999998685,
+        0.020000000000003126
+      ],
+      "PI_late_mean_terms": {
+        "P": [
+          2.5918110143919936e-05,
+          0.0004975423774570554,
+          -0.0001904789845275504
+        ],
+        "I": [
+          0.06180087438750777,
+          0.002567678306524677,
+          -0.0054337377859098495
+        ]
+      },
+      "input_sha256": {
+        "telemetry.jsonl": "1d3a70ce07c6298e7c37ff260806097f3701192894ef025c564874cb2ce03598",
+        "control.jsonl": "d29220ce486f7df7899c6d90c3257292c24e8cc241ef755cd47732d6eb4d5712",
+        "truth_profile.json": "592fee85242beaa9600d4590c5d4168d299c8c114af53b17da4dab4db0208f57",
+        "summary_truth_pid.json": "086f557eeab19c0596678f21c2d1d0476f14c12ef47ea6631a935a53b1050188",
+        "runtime_manifest.json": "b4d0350fa591271200666639ce56eb89247decb38081c68a38c8a4f687ce930c",
+        "sources/truth/core.py": "7a79f4d18a447eec6c423c7367852b29362b4b446d9db1d79da7c9915415722d",
+        "sources/truth/evaluate.py": "7e386d004e2d1187753609b73f6b9f419c417aa35c1a30147d28385ffcd9fb8a",
+        "sources/truth/protocol.json": "e2308b7b7585f933081cf741bd8670e950607cea495c3f4eca293e33ae7796a8"
+      }
+    }
+  ],
+  "terminal_legacy25": {
+    "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_233557_truth_pid_flat_line_legacy_position_25hz_e5fd",
+    "dwell_attempts": 57,
+    "max_continuous_sample_span_s": 0.5200000000000031,
+    "required_dwell_s": 0.6,
+    "reset_count": 56,
+    "reset_categories": {
+      "outside_r12": 56,
+      "speed_ge08": 0,
+      "yawrate_ge01": 0,
+      "heading_ge02": 0
+    },
+    "first6_resets": [
+      {
+        "elapsed_s": 30.4,
+        "distance_m": 0.1205496507812277,
+        "origin_body_speed_mps": 0.02312531676192959,
+        "yawrate_radps": 0.008132321838141315,
+        "heading_error_rad": -0.006979787752488006,
+        "restarted_command": [
+          0.10547635766385552,
+          0.0025923771034161965,
+          -0.013762793798273418
+        ]
+      },
+      {
+        "elapsed_s": 31.16,
+        "distance_m": 0.12054927462030715,
+        "origin_body_speed_mps": 0.0199307146979023,
+        "yawrate_radps": 0.004856006342879861,
+        "heading_error_rad": -0.00760506124837957,
+        "restarted_command": [
+          0.10619997467899653,
+          0.0029703155676234928,
+          -0.014953030331175806
+        ]
+      },
+      {
+        "elapsed_s": 31.919999999999998,
+        "distance_m": 0.12051757865572843,
+        "origin_body_speed_mps": 0.02022447502178268,
+        "yawrate_radps": 0.005172656415085337,
+        "heading_error_rad": -0.008379068833289802,
+        "restarted_command": [
+          0.10624053075042544,
+          0.002986612561067319,
+          -0.016083500989942476
+        ]
+      },
+      {
+        "elapsed_s": 32.64,
+        "distance_m": 0.12034902873112353,
+        "origin_body_speed_mps": 0.023556236130533977,
+        "yawrate_radps": 0.005524854213275593,
+        "heading_error_rad": -0.008832363166624689,
+        "restarted_command": [
+          0.10619741153723056,
+          0.003197804851818774,
+          -0.016818458834934283
+        ]
+      },
+      {
+        "elapsed_s": 33.36,
+        "distance_m": 0.1202303558406745,
+        "origin_body_speed_mps": 0.022712095544192283,
+        "yawrate_radps": 0.005481301399588942,
+        "heading_error_rad": -0.009354135240466407,
+        "restarted_command": [
+          0.10602267513097387,
+          0.0031259606395144445,
+          -0.017599887598890432
+        ]
+      },
+      {
+        "elapsed_s": 34.120000000000005,
+        "distance_m": 0.12085004607700768,
+        "origin_body_speed_mps": 0.020314902676373942,
+        "yawrate_radps": 0.005314506736275822,
+        "heading_error_rad": -0.009905567695296926,
+        "restarted_command": [
+          0.10647863767537355,
+          0.0030717804049826265,
+          -0.018515060204685577
+        ]
+      }
+    ],
+    "all_resets": [
+      {
+        "elapsed_s": 30.4,
+        "distance_m": 0.1205496507812277,
+        "origin_body_speed_mps": 0.02312531676192959,
+        "yawrate_radps": 0.008132321838141315,
+        "heading_error_rad": -0.006979787752488006,
+        "restarted_command": [
+          0.10547635766385552,
+          0.0025923771034161965,
+          -0.013762793798273418
+        ]
+      },
+      {
+        "elapsed_s": 31.16,
+        "distance_m": 0.12054927462030715,
+        "origin_body_speed_mps": 0.0199307146979023,
+        "yawrate_radps": 0.004856006342879861,
+        "heading_error_rad": -0.00760506124837957,
+        "restarted_command": [
+          0.10619997467899653,
+          0.0029703155676234928,
+          -0.014953030331175806
+        ]
+      },
+      {
+        "elapsed_s": 31.919999999999998,
+        "distance_m": 0.12051757865572843,
+        "origin_body_speed_mps": 0.02022447502178268,
+        "yawrate_radps": 0.005172656415085337,
+        "heading_error_rad": -0.008379068833289802,
+        "restarted_command": [
+          0.10624053075042544,
+          0.002986612561067319,
+          -0.016083500989942476
+        ]
+      },
+      {
+        "elapsed_s": 32.64,
+        "distance_m": 0.12034902873112353,
+        "origin_body_speed_mps": 0.023556236130533977,
+        "yawrate_radps": 0.005524854213275593,
+        "heading_error_rad": -0.008832363166624689,
+        "restarted_command": [
+          0.10619741153723056,
+          0.003197804851818774,
+          -0.016818458834934283
+        ]
+      },
+      {
+        "elapsed_s": 33.36,
+        "distance_m": 0.1202303558406745,
+        "origin_body_speed_mps": 0.022712095544192283,
+        "yawrate_radps": 0.005481301399588942,
+        "heading_error_rad": -0.009354135240466407,
+        "restarted_command": [
+          0.10602267513097387,
+          0.0031259606395144445,
+          -0.017599887598890432
+        ]
+      },
+      {
+        "elapsed_s": 34.120000000000005,
+        "distance_m": 0.12085004607700768,
+        "origin_body_speed_mps": 0.020314902676373942,
+        "yawrate_radps": 0.005314506736275822,
+        "heading_error_rad": -0.009905567695296926,
+        "restarted_command": [
+          0.10647863767537355,
+          0.0030717804049826265,
+          -0.018515060204685577
+        ]
+      },
+      {
+        "elapsed_s": 34.88,
+        "distance_m": 0.12082028380789854,
+        "origin_body_speed_mps": 0.02024002047055853,
+        "yawrate_radps": 0.00533794366039945,
+        "heading_error_rad": -0.010336936441737322,
+        "restarted_command": [
+          0.10642505925281039,
+          0.0030783039572784476,
+          -0.019271682837351426
+        ]
+      },
+      {
+        "elapsed_s": 35.6,
+        "distance_m": 0.1200929516927077,
+        "origin_body_speed_mps": 0.023644320278154565,
+        "yawrate_radps": 0.005572881305671019,
+        "heading_error_rad": -0.01034642123436799,
+        "restarted_command": [
+          0.1059579308975956,
+          0.0029428224041283804,
+          -0.01942194162560839
+        ]
+      },
+      {
+        "elapsed_s": 36.32,
+        "distance_m": 0.12038755113400457,
+        "origin_body_speed_mps": 0.024569502924762433,
+        "yawrate_radps": 0.006028061982011947,
+        "heading_error_rad": -0.011126284210277197,
+        "restarted_command": [
+          0.10624507926866143,
+          0.0034593221040544746,
+          -0.020860880850209453
+        ]
+      },
+      {
+        "elapsed_s": 37.04,
+        "distance_m": 0.12063088251150283,
+        "origin_body_speed_mps": 0.022974085247601306,
+        "yawrate_radps": 0.005883153964910998,
+        "heading_error_rad": -0.011221991525957114,
+        "restarted_command": [
+          0.10631001123556504,
+          0.003346269668404673,
+          -0.02108498726286096
+        ]
+      },
+      {
+        "elapsed_s": 37.760000000000005,
+        "distance_m": 0.12040876818430511,
+        "origin_body_speed_mps": 0.022788981112335772,
+        "yawrate_radps": 0.005724721538818945,
+        "heading_error_rad": -0.011179261863521186,
+        "restarted_command": [
+          0.10613225877143219,
+          0.003309801381200473,
+          -0.02129817298205281
+        ]
+      },
+      {
+        "elapsed_s": 38.480000000000004,
+        "distance_m": 0.12025474966168637,
+        "origin_body_speed_mps": 0.022915139198191502,
+        "yawrate_radps": 0.005747043403389988,
+        "heading_error_rad": -0.011074177012520349,
+        "restarted_command": [
+          0.10605476777057891,
+          0.0033607216300395168,
+          -0.021472821779230048
+        ]
+      },
+      {
+        "elapsed_s": 39.2,
+        "distance_m": 0.12062593369200171,
+        "origin_body_speed_mps": 0.023359252437760412,
+        "yawrate_radps": 0.0051353103025339785,
+        "heading_error_rad": -0.010566619542825095,
+        "restarted_command": [
+          0.10636785109620499,
+          0.003298264765152026,
+          -0.021167884066649455
+        ]
+      },
+      {
+        "elapsed_s": 39.92,
+        "distance_m": 0.12050460587167935,
+        "origin_body_speed_mps": 0.022825280743216297,
+        "yawrate_radps": 0.005876902552989332,
+        "heading_error_rad": -0.010547864311408778,
+        "restarted_command": [
+          0.10619619402936853,
+          0.0034493831770398813,
+          -0.021474039241545236
+        ]
+      },
+      {
+        "elapsed_s": 40.64,
+        "distance_m": 0.12057923462063902,
+        "origin_body_speed_mps": 0.02339834562606271,
+        "yawrate_radps": 0.006020693510533743,
+        "heading_error_rad": -0.010619309636081134,
+        "restarted_command": [
+          0.10630527133651643,
+          0.0037237555120575028,
+          -0.021837822291761465
+        ]
+      },
+      {
+        "elapsed_s": 41.36,
+        "distance_m": 0.12054571893791452,
+        "origin_body_speed_mps": 0.022913650055833366,
+        "yawrate_radps": 0.00590528032497855,
+        "heading_error_rad": -0.010560609977585995,
+        "restarted_command": [
+          0.10623530867324532,
+          0.0036863899088338922,
+          -0.02204186347928869
+        ]
+      },
+      {
+        "elapsed_s": 42.080000000000005,
+        "distance_m": 0.12043633436345871,
+        "origin_body_speed_mps": 0.022968130483946813,
+        "yawrate_radps": 0.005923955006566655,
+        "heading_error_rad": -0.01046215820590683,
+        "restarted_command": [
+          0.10616902674136301,
+          0.0037378250368243606,
+          -0.02220734707708909
+        ]
+      },
+      {
+        "elapsed_s": 42.800000000000004,
+        "distance_m": 0.12076502623798699,
+        "origin_body_speed_mps": 0.023584001626096317,
+        "yawrate_radps": 0.00577215876527429,
+        "heading_error_rad": -0.010273031663512528,
+        "restarted_command": [
+          0.10645811805048287,
+          0.0035865854881662776,
+          -0.022240077465303817
+        ]
+      },
+      {
+        "elapsed_s": 43.52,
+        "distance_m": 0.12069943725650131,
+        "origin_body_speed_mps": 0.022875746601983465,
+        "yawrate_radps": 0.006036518773701093,
+        "heading_error_rad": -0.010205366049713685,
+        "restarted_command": [
+          0.10631904454481239,
+          0.003787740247223873,
+          -0.022477998030684603
+        ]
+      },
+      {
+        "elapsed_s": 44.24,
+        "distance_m": 0.12086407541655583,
+        "origin_body_speed_mps": 0.02345443896499393,
+        "yawrate_radps": 0.0062922241316399055,
+        "heading_error_rad": -0.01064371801374268,
+        "restarted_command": [
+          0.10649293362302266,
+          0.0040272883435222276,
+          -0.02331138545493613
+        ]
+      },
+      {
+        "elapsed_s": 44.96,
+        "distance_m": 0.12079364542922026,
+        "origin_body_speed_mps": 0.022915534304217472,
+        "yawrate_radps": 0.006083838849191668,
+        "heading_error_rad": -0.01048676903969318,
+        "restarted_command": [
+          0.10638020670372454,
+          0.003997959538133298,
+          -0.02333580752411903
+        ]
+      },
+      {
+        "elapsed_s": 45.68,
+        "distance_m": 0.12066576479216788,
+        "origin_body_speed_mps": 0.02298620709093885,
+        "yawrate_radps": 0.0061029255440353284,
+        "heading_error_rad": -0.010308746305763224,
+        "restarted_command": [
+          0.10630476744500718,
+          0.004053367541705148,
+          -0.023406423172796103
+        ]
+      },
+      {
+        "elapsed_s": 46.36,
+        "distance_m": 0.12000174229408987,
+        "origin_body_speed_mps": 0.026261274219675026,
+        "yawrate_radps": 0.005912987692469771,
+        "heading_error_rad": -0.009812406684783807,
+        "restarted_command": [
+          0.1058405043925123,
+          0.0039543346140579255,
+          -0.02299831867009365
+        ]
+      },
+      {
+        "elapsed_s": 47.080000000000005,
+        "distance_m": 0.12086093620538278,
+        "origin_body_speed_mps": 0.023168968044043267,
+        "yawrate_radps": 0.006205965878962374,
+        "heading_error_rad": -0.009713879598451011,
+        "restarted_command": [
+          0.10648906202079618,
+          0.00413403073327289,
+          -0.0232284959800722
+        ]
+      },
+      {
+        "elapsed_s": 47.760000000000005,
+        "distance_m": 0.12001610149895517,
+        "origin_body_speed_mps": 0.026046736031701757,
+        "yawrate_radps": 0.006291111768985195,
+        "heading_error_rad": -0.009497248113721234,
+        "restarted_command": [
+          0.10581015896280667,
+          0.0044759307764731865,
+          -0.022929712865623928
+        ]
+      },
+      {
+        "elapsed_s": 48.480000000000004,
+        "distance_m": 0.12089791835323212,
+        "origin_body_speed_mps": 0.023232811438909224,
+        "yawrate_radps": 0.006246848260159638,
+        "heading_error_rad": -0.009509122381905537,
+        "restarted_command": [
+          0.10651830006990676,
+          0.0044011206603181445,
+          -0.023011754437906283
+        ]
+      },
+      {
+        "elapsed_s": 49.2,
+        "distance_m": 0.120851326202307,
+        "origin_body_speed_mps": 0.02304601836825509,
+        "yawrate_radps": 0.006254946362233602,
+        "heading_error_rad": -0.009521497000795513,
+        "restarted_command": [
+          0.10642463730376991,
+          0.004431278637313014,
+          -0.023032774202850284
+        ]
+      },
+      {
+        "elapsed_s": 49.88,
+        "distance_m": 0.12007884975346376,
+        "origin_body_speed_mps": 0.02613160426502013,
+        "yawrate_radps": 0.00610900937361975,
+        "heading_error_rad": -0.00890910418081246,
+        "restarted_command": [
+          0.10586079691920074,
+          0.004445196741586144,
+          -0.022222223279020414
+        ]
+      },
+      {
+        "elapsed_s": 50.6,
+        "distance_m": 0.12092874088854735,
+        "origin_body_speed_mps": 0.023233839294091466,
+        "yawrate_radps": 0.00632756240994455,
+        "heading_error_rad": -0.009090764647762794,
+        "restarted_command": [
+          0.1065312893142864,
+          0.004547589280172692,
+          -0.022569766569158326
+        ]
+      },
+      {
+        "elapsed_s": 51.28,
+        "distance_m": 0.1201854654013447,
+        "origin_body_speed_mps": 0.026145349656237268,
+        "yawrate_radps": 0.0065167385818291675,
+        "heading_error_rad": -0.009493136992281307,
+        "restarted_command": [
+          0.10593257260817311,
+          0.004766309171412084,
+          -0.023007111191279482
+        ]
+      },
+      {
+        "elapsed_s": 51.96,
+        "distance_m": 0.12008110192997888,
+        "origin_body_speed_mps": 0.025847877701398233,
+        "yawrate_radps": 0.0063336306917310126,
+        "heading_error_rad": -0.009363503259494223,
+        "restarted_command": [
+          0.1058737713054225,
+          0.004742155477102989,
+          -0.022801409424204923
+        ]
+      },
+      {
+        "elapsed_s": 52.68,
+        "distance_m": 0.12094200648970316,
+        "origin_body_speed_mps": 0.023340029506560403,
+        "yawrate_radps": 0.006390995996964828,
+        "heading_error_rad": -0.009515218739481366,
+        "restarted_command": [
+          0.10655374574056946,
+          0.004725831066671959,
+          -0.023044300949547257
+        ]
+      },
+      {
+        "elapsed_s": 53.4,
+        "distance_m": 0.12012621112094202,
+        "origin_body_speed_mps": 0.028620668116882002,
+        "yawrate_radps": 0.008520309498412915,
+        "heading_error_rad": -0.010471429385172079,
+        "restarted_command": [
+          0.10624899308716085,
+          0.004973916137764458,
+          -0.024171134088689022
+        ]
+      },
+      {
+        "elapsed_s": 54.080000000000005,
+        "distance_m": 0.12032312118018754,
+        "origin_body_speed_mps": 0.02625905785617592,
+        "yawrate_radps": 0.00871782426808482,
+        "heading_error_rad": -0.011017756778893722,
+        "restarted_command": [
+          0.10611116566050317,
+          0.004949017760062485,
+          -0.024794185391154668
+        ]
+      },
+      {
+        "elapsed_s": 54.760000000000005,
+        "distance_m": 0.12049586666459862,
+        "origin_body_speed_mps": 0.026763337070307806,
+        "yawrate_radps": 0.00872518363010194,
+        "heading_error_rad": -0.011942598457157963,
+        "restarted_command": [
+          0.10626231249505447,
+          0.0050647028497651765,
+          -0.02588053917677665
+        ]
+      },
+      {
+        "elapsed_s": 55.440000000000005,
+        "distance_m": 0.12049757496643419,
+        "origin_body_speed_mps": 0.026273700141531218,
+        "yawrate_radps": 0.00812339766041862,
+        "heading_error_rad": -0.01206219323113045,
+        "restarted_command": [
+          0.10620024596476105,
+          0.004940407774070713,
+          -0.0258952890583213
+        ]
+      },
+      {
+        "elapsed_s": 56.120000000000005,
+        "distance_m": 0.12048837625733509,
+        "origin_body_speed_mps": 0.026371116695627698,
+        "yawrate_radps": 0.00772716380480165,
+        "heading_error_rad": -0.011996198671015972,
+        "restarted_command": [
+          0.10619811098737506,
+          0.00489601541077948,
+          -0.02578148164619479
+        ]
+      },
+      {
+        "elapsed_s": 56.800000000000004,
+        "distance_m": 0.12056715146004586,
+        "origin_body_speed_mps": 0.02643899858287446,
+        "yawrate_radps": 0.007323708615083947,
+        "heading_error_rad": -0.01176955967724123,
+        "restarted_command": [
+          0.10625328826183783,
+          0.004887336986956791,
+          -0.025493054612620362
+        ]
+      },
+      {
+        "elapsed_s": 57.52,
+        "distance_m": 0.12072078858864288,
+        "origin_body_speed_mps": 0.029443778022462577,
+        "yawrate_radps": 0.006140523186660657,
+        "heading_error_rad": -0.010252959711894813,
+        "restarted_command": [
+          0.10672565454975584,
+          0.004761674619785704,
+          -0.02367483445691771
+        ]
+      },
+      {
+        "elapsed_s": 58.24,
+        "distance_m": 0.1210609020115782,
+        "origin_body_speed_mps": 0.029330920551457376,
+        "yawrate_radps": 0.007028151936098423,
+        "heading_error_rad": -0.009854094854157905,
+        "restarted_command": [
+          0.10692311446412946,
+          0.005032135699312358,
+          -0.023368176200994416
+        ]
+      },
+      {
+        "elapsed_s": 58.96,
+        "distance_m": 0.12089130152335444,
+        "origin_body_speed_mps": 0.02856481562281951,
+        "yawrate_radps": 0.006805131695752806,
+        "heading_error_rad": -0.009150782787773216,
+        "restarted_command": [
+          0.10670601544130956,
+          0.005092241771454344,
+          -0.02254530059708379
+        ]
+      },
+      {
+        "elapsed_s": 59.68,
+        "distance_m": 0.12070459266820781,
+        "origin_body_speed_mps": 0.028689821113125243,
+        "yawrate_radps": 0.006807607994058058,
+        "heading_error_rad": -0.008577927668860787,
+        "restarted_command": [
+          0.10660182187619902,
+          0.005185165891145538,
+          -0.02191934226553629
+        ]
+      },
+      {
+        "elapsed_s": 60.4,
+        "distance_m": 0.1206406950074892,
+        "origin_body_speed_mps": 0.028779105193335555,
+        "yawrate_radps": 0.006807776519940448,
+        "heading_error_rad": -0.00811871845740927,
+        "restarted_command": [
+          0.10657897764425306,
+          0.005285241650135142,
+          -0.021418193629760347
+        ]
+      },
+      {
+        "elapsed_s": 61.120000000000005,
+        "distance_m": 0.12079456614334726,
+        "origin_body_speed_mps": 0.029782962385195667,
+        "yawrate_radps": 0.007734305518985327,
+        "heading_error_rad": -0.007467944908787955,
+        "restarted_command": [
+          0.10674556466609333,
+          0.005140172137059876,
+          -0.020624342070187412
+        ]
+      },
+      {
+        "elapsed_s": 61.84,
+        "distance_m": 0.12119394090308934,
+        "origin_body_speed_mps": 0.029139425313112297,
+        "yawrate_radps": 0.008897615954720023,
+        "heading_error_rad": -0.008730987465864508,
+        "restarted_command": [
+          0.10697843354352272,
+          0.0062491676276836645,
+          -0.022302889046688396
+        ]
+      },
+      {
+        "elapsed_s": 62.56,
+        "distance_m": 0.12106047685354887,
+        "origin_body_speed_mps": 0.029296368197302945,
+        "yawrate_radps": 0.00938661482504653,
+        "heading_error_rad": -0.008930778000985318,
+        "restarted_command": [
+          0.1068995707993056,
+          0.005956951228029855,
+          -0.022433270296675814
+        ]
+      },
+      {
+        "elapsed_s": 63.28,
+        "distance_m": 0.12098879943689976,
+        "origin_body_speed_mps": 0.029372935021771282,
+        "yawrate_radps": 0.008898515103419132,
+        "heading_error_rad": -0.008910485919918556,
+        "restarted_command": [
+          0.10686404197834654,
+          0.005895037484670183,
+          -0.0223771103070002
+        ]
+      },
+      {
+        "elapsed_s": 64.0,
+        "distance_m": 0.12115798230789389,
+        "origin_body_speed_mps": 0.031272694175072654,
+        "yawrate_radps": 0.007823573984010063,
+        "heading_error_rad": -0.008305256857060619,
+        "restarted_command": [
+          0.10703881298753087,
+          0.005638967379100409,
+          -0.02144226694199553
+        ]
+      },
+      {
+        "elapsed_s": 64.67999999999999,
+        "distance_m": 0.12028888537170997,
+        "origin_body_speed_mps": 0.0326926542910821,
+        "yawrate_radps": 0.007421464881462148,
+        "heading_error_rad": -0.00792880417222106,
+        "restarted_command": [
+          0.10620958382169944,
+          0.0059005537345992315,
+          -0.021124933749191856
+        ]
+      },
+      {
+        "elapsed_s": 65.36,
+        "distance_m": 0.12035967058162357,
+        "origin_body_speed_mps": 0.03348764269168494,
+        "yawrate_radps": 0.007400478691444173,
+        "heading_error_rad": -0.00785747869488279,
+        "restarted_command": [
+          0.10636883759993884,
+          0.0060521058346473065,
+          -0.021095463308254202
+        ]
+      },
+      {
+        "elapsed_s": 66.03999999999999,
+        "distance_m": 0.12038699338556223,
+        "origin_body_speed_mps": 0.032994072296764376,
+        "yawrate_radps": 0.006878275324510394,
+        "heading_error_rad": -0.0072829293727862164,
+        "restarted_command": [
+          0.10633606517135302,
+          0.006002245228946058,
+          -0.02037295772018073
+        ]
+      },
+      {
+        "elapsed_s": 66.72,
+        "distance_m": 0.12040444090685085,
+        "origin_body_speed_mps": 0.032997571790785066,
+        "yawrate_radps": 0.00663656210101384,
+        "heading_error_rad": -0.006712299989902603,
+        "restarted_command": [
+          0.10634407262511004,
+          0.0060076425583521186,
+          -0.019730415497387896
+        ]
+      },
+      {
+        "elapsed_s": 67.39999999999999,
+        "distance_m": 0.12055847074241673,
+        "origin_body_speed_mps": 0.03370919724244868,
+        "yawrate_radps": 0.007352666064187327,
+        "heading_error_rad": -0.00602428378747498,
+        "restarted_command": [
+          0.1064790717691592,
+          0.005893818698790012,
+          -0.01894641964490473
+        ]
+      },
+      {
+        "elapsed_s": 68.08,
+        "distance_m": 0.12060266673346567,
+        "origin_body_speed_mps": 0.032686839148085754,
+        "yawrate_radps": 0.006549433798694574,
+        "heading_error_rad": -0.0057971699035709616,
+        "restarted_command": [
+          0.106432920501284,
+          0.006121587959458234,
+          -0.0187580963242254
+        ]
+      },
+      {
+        "elapsed_s": 68.75999999999999,
+        "distance_m": 0.12097650990515525,
+        "origin_body_speed_mps": 0.033499309227700565,
+        "yawrate_radps": 0.007137341743556751,
+        "heading_error_rad": -0.006299609001604884,
+        "restarted_command": [
+          0.10676378609269661,
+          0.006400944824689454,
+          -0.01943378496970965
+        ]
+      },
+      {
+        "elapsed_s": 69.44,
+        "distance_m": 0.12096779744758865,
+        "origin_body_speed_mps": 0.032741228107924805,
+        "yawrate_radps": 0.006757918625939745,
+        "heading_error_rad": -0.006144868758607122,
+        "restarted_command": [
+          0.10665168237178183,
+          0.006338607129413339,
+          -0.01917188004821649
+        ]
+      }
+    ],
+    "causal_interpretation": "Zero velocity Actor command letsbodybackoffacrossr=.12boundarybefore.6s; drive command~.106restarts; approximately.7srelaylimitcycle. Distinctfromlaternativeexit/workerarchive runnerbug; noangular/speed thresholdfailure."
+  },
+  "all_trials_retained": true,
+  "formal_counts": {
+    "passed": 5,
+    "failed": 4
+  },
+  "no_final_A1_ranking": "A1hasnaturalGazebo/workerarchive race; affectedrunswereSIGINTedafteractualmotionandoriginalreceiptsremainfailed. Formalpassedsubsetcannotbeusedforfairfinalarchitecture/frequencyranking becausefailureprobabilityisbasedonarchive/terminationtiming. A2uniformnewrunneranddwellarchitecture rerunrequired.",
+  "observed_mechanism": {
+    "position_only_undertracking": "Atsame.3m/sActorcommandlegacy/pathmeanCOMvx.2404-.2428; steadymeanratio.801-.809 in5..20s. HigherfreshHzdoesnotremove~20%staticresponse deficit.",
+    "cascade_compensation": "Cascadecommands.3546-.3562m/s,actualCOMvx.2945-.2949m/s; gain.828-.832. VelocityPIusestrainingcommandheadroomtooffsetundertracking; feedback50Hzdoesnotbyitselfcreatethiscompensation.",
+    "frequency": "Withinlegacy/path10→25→50HzspeedgainandrouteRMSdonotimprovemonotonically. Crossing/completion timing issensitive toterminalrelay/Teacherzero-commandgait. Straight.3m/s resultsdo notidentifynecessarybandwidthforcorners/disturbances/1m/s.",
+    "lag": "Forlegacy/pathcausal100mssmoothedvxinputandoutput,first10%cross gap~.06s,halfplateaucrossgap.12-.14s,90%gap.46-.56s. Inputrampsat.6m/s²: theseareapparentresponse thresholds,notpuredeadtime oropenloopplanttimeconstant. Cascaderampclosedloopandgaitresponse differ; do notfitits.48shalfcrossgapasanetworkdelay."
+  },
+  "tuning_recommendations": {
+    "first": "A2removeendpointrelayandrunnerfailureconfoundsbeforeanywinner selection. Thenrepeateligiblewinner3times; n=1directionaltrendsarenotfrequencyproof.",
+    "inner_gain_small_screen": "CurrentcascadeKpx=.6,Kix=.5already largelyremovessteadystateerror. SuggestedonefactorchangesKpx=.4/.8orKix=.4/.6,baselineincluded; avoidraisingbothatonce. Keepinnerfilter.1s andouter.2s identicalacrossHz.",
+    "outer_gain_small_screen": "CurrentcrossKp=.8/Kd=.2 alreadyyieldscentimeterflat tracking. Tuneonlyonheldoutfixedoffset/corner; crossKp=.6/1.0orKd=.1/.3 withouterI=0. ImprovingstraightRMSfrommmdoesnotjustifymoreaggressivegains.",
+    "higher_frequency": "10/25/50actualfeedbackisadmissible. Choose50Hzforprospectivehighspeed/disturbancecandidateonlyifitshowstighterworstcaseerror/overshootwithoutcommandnoise,notbecausehigherHzorindividualscorelooksbetter.",
+    "unreachable_speed": "If1m/sdesiredhitsfrozencmd1m/sandactualisbelow1,PIcannotresolveactuator/policycap; reportachievablevelocityenvelope insteadofwindingintegralorclaiming1m/sverified."
+  },
+  "truth_scope": {
+    "controller_feedback": "nativeGazebotruth",
+    "SLAM_navigation_verified": false,
+    "real_robot_verified": false,
+    "model_retrained": false
+  },
+  "figure": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/truth_tuning_design/phaseA_actual_velocity_curves.png",
+    "sha256": "c2cc78da7871124fce533ecb6cbd2a5bebd4d021c4ed056577daa0381a5cbeef",
+    "pixels": "2100x1400",
+    "filter": "Causal5sample100msmovingaverageforreadability; actual50HzsamplesandrequestedActorcommands unchanged."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "single_owner_ordered_ingress/v17",
+  "enabled": true,
+  "supported_input": "generic PointCloud2 lidar_type=0 + RGB image + IMU, GPS=false,HILTI=false",
+  "receiver_decoder_threads": 1,
+  "estimator_owner_threads": 1,
+  "ready_queue_max_items": 512,
+  "ready_queue_accounted_payload_bytes": 67108864,
+  "capacity_scope": "ready queue only; not total RSS or DDS/source/estimator buffers",
+  "overflow_policy": "explicit failure, no overwrite, no IMU thinning",
+  "callback_order": "observed single receiver executor order, not a claim of identical ROS interleaving to old spin_some",
+  "original_source_stamp_preserved": true,
+  "raw_diagnostic_receipt": "original receive-entry steady clock, never owner dequeue",
+  "decode_exceptions": "stored in packet; rethrow only at the original decode position after original header gates",
+  "state_map_sync_timer_owner": "main estimator thread only",
+  "sensor_decode_owner": "single background receiver executor; decoder can briefly delay its next receive",
+  "timing_semantics": {
+    "kind300.stage8": "owner commit work (was spin_some); not same segment as V12",
+    "kind300.stage12": "N/A for active pipeline; decoding moved outside original scope",
+    "csv.receipt_to_decoded": "receive+decode elapsed",
+    "csv.decoded_to_pop": "push plus FIFO wait, not an exact communication measurement",
+    "csv.pop_to_commit_end": "owner original callback work",
+    "csv.decode_cpu": "receiver thread CPU delta, no estimator CPU"
+  },
+  "original_control_ttl_s": 0.3,
+  "fixed_model_device": "CPU1",
+  "navigation_truth_allowed": false,
+  "real_robot": false,
+  "expected_actual_claim": "limited smoke only until separate full-route validation",
+  "physics_test_status": "NOT_RUN"
+}

@@ -1,0 +1,55 @@
+{
+  "schema": "teacher_continuous_turn_plant_plan/v1",
+  "speed_mps": 0.5,
+  "yaw_rate_radps": 0.6,
+  "command_radius_m": 0.8333333333333334,
+  "repetition": 1,
+  "timing": {
+    "stand_end_s": 3.0,
+    "ramp_end_s": 6.0,
+    "cruise_end_s": 26.0,
+    "duration_s": 33.0,
+    "parking_start_s": 28.0,
+    "parking_end_s": 33.0
+  },
+  "fixture": {
+    "name": "teacher_plant_ground",
+    "plane_size_m": [
+      60.0,
+      60.0
+    ],
+    "top_z_m": 0.0,
+    "spawn": [
+      0.0,
+      0.0,
+      0.4,
+      0.0
+    ],
+    "original_multifloor_geometry": false,
+    "robot_and_actuator_unchanged": true
+  },
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "protocol_sha256": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847",
+  "source_hashes": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/plant_worker.py": "6eceed3fea89d7cfb15060a63d42338188ccbe3a53796b369f0c11735dd293eb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/prepare_plan.py": "a03344d43b8cf73d391df3fbe26a4564ac9416a42f9d110977e4af06903722f0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/run.py": "38ecdfe5b42cf8824a6496de46c51ca9bb3b3b7660bf05fe527c37d548fe05ca",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/evaluate_radius.py": "c068c3d6fb95ca52b10b50ec8c4793a711314a22aed59a75b8a40b1fc378cc6d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/protocol.json": "2ad596f0c3815c8a12ba7f919b24f8087115ea9a510aa4fa7a8301300f459847",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/README.md": "b788bc05fc3c8c75524482e7b54602c051b165cbb69a99979ca29dd1af8ccf7f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/curvature_tuning/pure_tests.py": "a68a6502130f82cc7d52419d565b7f0ee1c592b2845ad4657f0ae609bd3e0825",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/policy/worker.py": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/prepare.py": "5136e9e51961ddeffaa61525d2638ee44572ecf528e118442aa4b5143265319f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/teacher_actuator.cpp": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/build/libteacher_actuator.so": "3a0ca63fb63c9e20c07639e2faf4d7509fba29a2bd5e987b8875dd50534a2ec2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py": "e395fd8a05438eadb9a32d434d8936eb5df473ba917b44493d85f271bd99476d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/go2_converted.sdf": "bc31d84d25cca05a58da367fb950d4385a6215f5d6dda2149f611a2f6b195924",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/generated/three_floors.sdf": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161"
+  },
+  "policy_source_directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_000700_truth_pid_flat_line_cascade_pi_25hz_5bb4/sources/policy",
+  "uses_navigation_truth": false,
+  "counts_as_SLAM_navigation": false,
+  "acceptance_scope": "Frozen Teacher continuous body-speed turn envelope on a new unobstructed simulation plane; no PID, SLAM, SCAN or multifloor acceptance"
+}

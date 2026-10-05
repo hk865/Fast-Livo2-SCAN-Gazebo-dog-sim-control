@@ -1,0 +1,17 @@
+# Functional step evaluator source correction and supplemental safety
+
+Six live low-step continue tests used the first cached Python evaluator module, SHA256 `e4cfe4c4b6e4c22213c77922ff289bd0ec59e9e9753069ab582b91fc8b8ec6b5`. After reporting the evaluator ready, the auditing agent edited the on-disk file to strengthen safety handling before learning that live execution had begun. The runner had already imported the original module, so its evaluation logic remained unchanged, while `digest(__file__)` read the changed disk file for later receipts. This was an agent error in source attribution. The original results and source snapshots are preserved; nothing is silently relabeled.
+
+The first run reported the correct module hash. The following five original summaries reported the modified disk hash. The archived snapshot hash also varies according to each run's snapshot time. `provenance_correction.json` lists the actual source, archive source, original reported hash and precise affected runs. `evaluate_step_functional.actually_loaded.py` and `evaluate_step_functional.after_ready_patch.py` preserve both versions. The root evaluator was restored to the actually loaded version and no actuator control code was altered.
+
+All six recorded cases have independently been reevaluated by loading the first run's frozen source file directly. Their `summary_functional.reproduced.json` and `functional_feet.reproduced.npz` are separate artifacts. The original `summary_functional.json` and `functional_feet.npz` were saved and restored byte for byte, with hashes checked. Every check, metric, protocol value and derived array matched exactly. All six reproduce a functional pass under the prospective frozen protocol. These are extended 6 m tread functional tests, not retroactive changes to the original 2 m platform results, not stair traversal, and not navigation acceptance.
+
+The frozen live evaluator's safety window started at 1.5 s and used 50 Hz telemetry attitude. Independent `supplemental_native_safety.json` receipts now check every native 200 Hz sample from bootstrap end at 0.1 s to 30 s. All six pass. Each includes 5,981 samples; maximum roll/pitch is 0.113963 rad, no body or unknown contact samples occur, minimum support clearance is 0.266428 m for 5 cm and 0.234574 m for 10 cm. The previously excluded early interval 0.1–1.5 s includes 280 native samples, maximum roll/pitch 0.113963 rad and minimum clearance 0.275679 m, with zero body contacts. Base world-Z gain remains a diagnostic and is never a capability acceptance gate.
+
+Reproduce and append both receipts (after live tests have ended):
+
+```bash
+python3 multifloor_demo/teacher_mode/scripts/audit_step_native_safety.py --reproduce multifloor_demo/teacher_mode/runs/*step*_continue_functional_retest_r*
+```
+
+Real raised-tread support requires actual contact point XYZ inside the tread by the frozen 5 mm margin, top-height tolerance, near-vertical contact normal, foot collider center entering from the front, and each foot's 0.1 s continuous active-command support. Continuation starts only after all feet have qualified and the body is at least 0.5 m beyond the edge; world-frame COM velocity, continued measured progress, duration and native unsupported spans are checked. Final parking requires simultaneous four-foot top support and continuous Teacher zero velocity command. Raw contact wrenches are archived but their coordinate conventions were not used to infer quantitative vertical load.

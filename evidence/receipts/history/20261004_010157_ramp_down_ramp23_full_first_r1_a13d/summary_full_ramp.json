@@ -1,0 +1,714 @@
+{
+  "schema_version": 1,
+  "profile_id": "ramp23_down_full",
+  "scope": "Complete original physical ramp locomotion and landing transition audit, not SLAM navigation or stairs",
+  "status": "failed",
+  "levels": {
+    "full_ramp_locomotion": "failed",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "checks": {
+    "prospective_frozen_protocol": {
+      "passed": true,
+      "actual_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+      "scheduled_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28"
+    },
+    "complete_continuous_runtime": {
+      "passed": false,
+      "duration_s": 25.479999999999997,
+      "policy_samples": 1275,
+      "native_samples": 5097,
+      "maximum_native_gap_s": 0.005000000000002558,
+      "main_exit_codes": {
+        "worker": 0,
+        "gazebo": 0,
+        "bridge": 0,
+        "capture": 0
+      },
+      "completion_time_s": null,
+      "required_stop_end_s": 83,
+      "worker_fault": "fallen_or_low_clearance",
+      "runner_error": null
+    },
+    "continuous_cpu_teacher_exclusive_writer": {
+      "passed": true,
+      "target_action_max_error_rad": 0.0,
+      "writer_contract": "teacher_sim::TeacherActuator sole JointForceCmd writer",
+      "writer_plugins": 1,
+      "other_control_plugins": [],
+      "body_pose_resets": 0,
+      "actor_device": "cpu"
+    },
+    "native_dcmotor_execution": {
+      "passed": true,
+      "maximum_reconstructed_torque_error_Nm": 0.0,
+      "maximum_abs_applied_torque_Nm": 20.64505946746111
+    },
+    "scheduled_forward_then_teacher_zero": {
+      "passed": false,
+      "active_window_s": [
+        3,
+        75
+      ],
+      "stop_window_s": [
+        78,
+        83
+      ],
+      "stop_samples": 0,
+      "completion_source": "privileged base x only for test termination; no position servo or navigation localization"
+    },
+    "original_scene_complete_ramp_fixture": {
+      "passed": true,
+      "collision": "ramp_23::link::collision",
+      "ramp_center": [
+        8.0,
+        7.0,
+        1.7502481404895005
+      ],
+      "ramp_normal": [
+        0.09950371902099893,
+        0.0,
+        0.9950371902099892
+      ],
+      "nominal_horizontal_span_m": 12,
+      "slope": -0.1,
+      "actual_landing_top_heights_m": {
+        "floor_3": 2.4,
+        "floor_2": 1.2000000000000002
+      }
+    },
+    "actual_contact_geometry_available": {
+      "passed": true,
+      "missing_or_malformed_contact_geometry_rows": 0,
+      "raw_points_examined": 18261,
+      "qualified_actual_top_points": {
+        "ramp_23": 12788,
+        "floor_3": 5323,
+        "floor_2": 0
+      },
+      "wrench_scope": "Raw wrenches are retained in actuator.jsonl; quantitative vertical bearing load is not inferred."
+    },
+    "physical_entry_ramp_exit_each_named_foot": {
+      "passed": false,
+      "feet": {
+        "FR": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 0.875,
+          "ramp_interval_s": [
+            23.65,
+            24.525
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            6.117670811002594,
+            7.599617996184667,
+            2.036379021580271
+          ]
+        },
+        "FL": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 0.879999999999999,
+          "ramp_interval_s": [
+            20.97,
+            21.849999999999998
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            6.106482815432561,
+            7.794071364718173,
+            2.005390144945384
+          ]
+        },
+        "RR": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 1.0500000000000007,
+          "ramp_interval_s": [
+            10.455,
+            11.505
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            5.797032132281424,
+            7.537754918007706,
+            2.1731178390332766
+          ]
+        },
+        "RL": {
+          "initial_landing_span_s": 1.495,
+          "initial_interval_s": [
+            1.5,
+            2.995
+          ],
+          "active_ramp_span_s": 0.7349999999999994,
+          "ramp_interval_s": [
+            21.369999999999997,
+            22.104999999999997
+          ],
+          "final_landing_span_s": 0.0,
+          "final_interval_s": null,
+          "final_collision_center_world": [
+            5.829310669857432,
+            7.77680897899605,
+            2.040403001889486
+          ]
+        }
+      },
+      "simultaneous_destination_support_s": 0.0,
+      "simultaneous_interval_s": null,
+      "all_four_terminal_destination_support": false
+    },
+    "entire_twelve_meter_ramp_contact_coverage": {
+      "passed": false,
+      "bins": [
+        {
+          "x_limits_m": [
+            2,
+            3
+          ],
+          "native_actual_support_seconds": 4.8500000000000005
+        },
+        {
+          "x_limits_m": [
+            3,
+            4
+          ],
+          "native_actual_support_seconds": 4.755
+        },
+        {
+          "x_limits_m": [
+            4,
+            5
+          ],
+          "native_actual_support_seconds": 4.78
+        },
+        {
+          "x_limits_m": [
+            5,
+            6
+          ],
+          "native_actual_support_seconds": 4.37
+        },
+        {
+          "x_limits_m": [
+            6,
+            7
+          ],
+          "native_actual_support_seconds": 0.025
+        },
+        {
+          "x_limits_m": [
+            7,
+            8
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            8,
+            9
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            9,
+            10
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            10,
+            11
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            11,
+            12
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            12,
+            13
+          ],
+          "native_actual_support_seconds": 0.0
+        },
+        {
+          "x_limits_m": [
+            13,
+            14
+          ],
+          "native_actual_support_seconds": 0.0
+        }
+      ]
+    },
+    "complete_ramp_and_landing_progress": {
+      "passed": false,
+      "initial_median_position_m": [
+        1.2018794060177203,
+        7.0026363376470115,
+        2.715214359066074
+      ],
+      "last_active_position_m": [
+        6.0088456834845045,
+        7.710675415062099,
+        2.145547480663153
+      ],
+      "projected_forward_progress_m": 4.806966277466785,
+      "active_duration_s": 22.479999999999997,
+      "mean_projected_world_COM_vx_mps": 0.21379871546423992,
+      "positive_rolling_window_fraction": 1.0,
+      "rolling_windows": 4398,
+      "maximum_lateral_deviation_m": 0.7108308567115786,
+      "maximum_heading_deviation_rad": 0.16003373245904925,
+      "nominal_both_seams_crossed_during_active_command": false,
+      "landing_completion_time_s": null
+    },
+    "unassisted_native_safety": {
+      "passed": false,
+      "start_s": 0.1,
+      "native_samples": 5077,
+      "max_abs_roll_pitch_rad": 0.25541286408153724,
+      "minimum_support_clearance_m": 0.1459345304164983,
+      "body_contact_samples": 0,
+      "missing_contact_samples": 0,
+      "maximum_all_feet_unsupported_s": 0.0,
+      "unsupported_interval_s": null,
+      "maximum_pose_velocity_integral_error_m": 3.510075545836783e-13,
+      "attitude_source": "native actual quaternion at200Hz",
+      "clearance_definition": "actual base origin minus supporting collision directly below it, safety only"
+    },
+    "teacher_stop_on_destination_landing": {
+      "passed": false,
+      "window_s": [
+        78,
+        83
+      ],
+      "translation_drift_m": null,
+      "yaw_drift_rad": null,
+      "linear_rms_mps": [
+        null,
+        null
+      ],
+      "yaw_rate_rms_radps": null,
+      "native_samples": 0,
+      "strategy": "continuous learned Teacher with zero VELOCITY command; action remains inferred"
+    },
+    "archived_source_integrity": {
+      "passed": true,
+      "archived_files": 70,
+      "mismatches": []
+    }
+  },
+  "metrics": {
+    "contact_geometry": {
+      "missing_or_malformed_contact_geometry_rows": 0,
+      "raw_points_examined": 18261,
+      "qualified_actual_top_points": {
+        "ramp_23": 12788,
+        "floor_3": 5323,
+        "floor_2": 0
+      },
+      "wrench_scope": "Raw wrenches are retained in actuator.jsonl; quantitative vertical bearing load is not inferred."
+    },
+    "feet": {
+      "FR": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 0.875,
+        "ramp_interval_s": [
+          23.65,
+          24.525
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          6.117670811002594,
+          7.599617996184667,
+          2.036379021580271
+        ]
+      },
+      "FL": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 0.879999999999999,
+        "ramp_interval_s": [
+          20.97,
+          21.849999999999998
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          6.106482815432561,
+          7.794071364718173,
+          2.005390144945384
+        ]
+      },
+      "RR": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 1.0500000000000007,
+        "ramp_interval_s": [
+          10.455,
+          11.505
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          5.797032132281424,
+          7.537754918007706,
+          2.1731178390332766
+        ]
+      },
+      "RL": {
+        "initial_landing_span_s": 1.495,
+        "initial_interval_s": [
+          1.5,
+          2.995
+        ],
+        "active_ramp_span_s": 0.7349999999999994,
+        "ramp_interval_s": [
+          21.369999999999997,
+          22.104999999999997
+        ],
+        "final_landing_span_s": 0.0,
+        "final_interval_s": null,
+        "final_collision_center_world": [
+          5.829310669857432,
+          7.77680897899605,
+          2.040403001889486
+        ]
+      }
+    },
+    "route": {
+      "initial_median_position_m": [
+        1.2018794060177203,
+        7.0026363376470115,
+        2.715214359066074
+      ],
+      "last_active_position_m": [
+        6.0088456834845045,
+        7.710675415062099,
+        2.145547480663153
+      ],
+      "projected_forward_progress_m": 4.806966277466785,
+      "active_duration_s": 22.479999999999997,
+      "mean_projected_world_COM_vx_mps": 0.21379871546423992,
+      "positive_rolling_window_fraction": 1.0,
+      "rolling_windows": 4398,
+      "maximum_lateral_deviation_m": 0.7108308567115786,
+      "maximum_heading_deviation_rad": 0.16003373245904925,
+      "nominal_both_seams_crossed_during_active_command": false,
+      "landing_completion_time_s": null
+    },
+    "safety": {
+      "start_s": 0.1,
+      "native_samples": 5077,
+      "max_abs_roll_pitch_rad": 0.25541286408153724,
+      "minimum_support_clearance_m": 0.1459345304164983,
+      "body_contact_samples": 0,
+      "missing_contact_samples": 0,
+      "maximum_all_feet_unsupported_s": 0.0,
+      "unsupported_interval_s": null,
+      "maximum_pose_velocity_integral_error_m": 3.510075545836783e-13,
+      "attitude_source": "native actual quaternion at200Hz",
+      "clearance_definition": "actual base origin minus supporting collision directly below it, safety only"
+    },
+    "failure_diagnostics": {
+      "first_body_contact_s": null,
+      "first_body_contact_position_m": null,
+      "first_body_actual_contact_pairs": [],
+      "feet_lateral_edges": {
+        "FR": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.3803820038153334,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": null
+        },
+        "FL": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.18592863528182726,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": null
+        },
+        "RR": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.43027746918674437,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": null
+        },
+        "RL": {
+          "minimum_active_lateral_sphere_clearance_to_ramp_edge_m": 0.1592284541375011,
+          "first_outside_lateral_edge_s": null,
+          "collision_center_at_first_body_contact_world": null
+        }
+      },
+      "edge_scope": "Sphere extent relative to actual ramp lateral edges; airborne swing at an edge is diagnostic, actual contact and body safety remain the acceptance evidence."
+    },
+    "stop": {
+      "window_s": [
+        78,
+        83
+      ],
+      "translation_drift_m": null,
+      "yaw_drift_rad": null,
+      "linear_rms_mps": [
+        null,
+        null
+      ],
+      "yaw_rate_rms_radps": null,
+      "native_samples": 0,
+      "strategy": "continuous learned Teacher with zero VELOCITY command; action remains inferred"
+    },
+    "height_change_diagnostic": {
+      "body_world_z_gain_m": null,
+      "support_surface_z_change_m": null,
+      "body_world_z_used_as_pass_gate": false,
+      "height_scan_overhead_points_total": 0,
+      "frames_with_overhead_height_scan": 0
+    }
+  },
+  "errors": [],
+  "protocol": {
+    "schema_version": 1,
+    "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+    "status": "frozen_before_first_full_ramp_run",
+    "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+    "physics_dt_s": 0.005,
+    "policy_hz": 50,
+    "repetitions_required": 3,
+    "fixtures": {
+      "ramp_23": {
+        "ramp": "ramp_23",
+        "nominal_x_limits_m": [
+          2,
+          14
+        ],
+        "center_y_m": 7,
+        "width_m": 2,
+        "slope_z_per_world_x": -0.1,
+        "surface_equation": "z=2.6-0.1*x",
+        "floor_at_x_low": "floor_3",
+        "floor_at_x_high": "floor_2",
+        "floor_heights_m": [
+          2.4,
+          1.2
+        ]
+      },
+      "ramp_12": {
+        "ramp": "ramp_12",
+        "nominal_x_limits_m": [
+          2,
+          14
+        ],
+        "center_y_m": 2,
+        "width_m": 2,
+        "slope_z_per_world_x": 0.1,
+        "surface_equation": "z=0.1*x-0.2",
+        "floor_at_x_low": "floor_1",
+        "floor_at_x_high": "floor_2",
+        "floor_heights_m": [
+          0,
+          1.2
+        ]
+      }
+    },
+    "primary_cases": [
+      "ramp23_up_full",
+      "ramp23_down_full"
+    ],
+    "deferred_cases": [
+      "ramp12_up_full",
+      "ramp12_down_full"
+    ],
+    "command": {
+      "body_vx_mps": 0.3,
+      "body_vy_mps": 0,
+      "yaw_radps": 0,
+      "slew_acceleration": [
+        0.6,
+        0.6,
+        0.8
+      ]
+    },
+    "timing": {
+      "bootstrap_pd_s": 0.1,
+      "command_start_s": 3,
+      "maximum_forward_end_s": 75,
+      "maximum_duration_s": 86,
+      "post_completion_teacher_zero_command_s": 8,
+      "stop_settling_s": 3,
+      "stop_evaluation_s": 5
+    },
+    "completion": {
+      "horizontal_ramp_span_m": 12,
+      "start_landing_distance_from_nominal_seam_m": 0.8,
+      "finish_landing_distance_from_nominal_seam_m": 0.8,
+      "test_truth_scope": "Read native base X only to latch zero velocity command and end physical test. No position/body servo; never use this gate in navigation."
+    },
+    "contact": {
+      "actual_position_and_normal_required": true,
+      "surface_local_xy_margin_m": 0.005,
+      "surface_normal_distance_tolerance_m": 0.015,
+      "minimum_absolute_normal_dot_surface_normal": 0.8,
+      "foot_center_height_tolerance_m": 0.025,
+      "each_foot_initial_landing_support_s": 0.1,
+      "each_foot_active_ramp_support_s": 0.1,
+      "each_foot_final_landing_support_s": 0.1,
+      "final_simultaneous_four_foot_landing_support_s": 0.1,
+      "ramp_coverage_bin_m": 1,
+      "each_coverage_bin_any_foot_support_s": 0.1,
+      "maximum_all_feet_unsupported_s": 0.3,
+      "max_native_sample_gap_s": 0.005001
+    },
+    "route": {
+      "maximum_base_center_lateral_deviation_m": 0.45,
+      "maximum_heading_deviation_rad": 0.35,
+      "require_active_command_whole_ramp_crossing": true,
+      "minimum_forward_progress_m": 13.2,
+      "rolling_window_s": 0.5,
+      "minimum_projected_world_forward_window_mean_mps": 0.05,
+      "minimum_positive_window_fraction": 0.9,
+      "minimum_requested_axis_ratio": 0.4
+    },
+    "safety": {
+      "audit_start_s": 0.1,
+      "max_abs_roll_pitch_rad": 0.65,
+      "minimum_body_above_support_m": 0.18,
+      "body_contact_allowed": false,
+      "missing_contact_evidence_allowed": false,
+      "latched_fault_allowed": false,
+      "pose_translation_integral_error_m": 0.0001
+    },
+    "stand_stop": {
+      "translation_drift_m": 0.15,
+      "yaw_drift_rad": 0.2,
+      "linear_rms_mps": 0.08,
+      "yaw_rate_rms_radps": 0.1,
+      "continuous_teacher_required": true,
+      "final_support_surface": "destination landing"
+    },
+    "body_world_height_gain": {
+      "used_as_pass_gate": false,
+      "role": "diagnostic_only; world height combines slope elevation and posture"
+    },
+    "observation": {
+      "source": "Gazebo privileged COM twist, quaternion, joint physics/applied torque and unchanged static SDF 187 vertical height rays at base_z+20m",
+      "ramp23_unrelated_overhead_expected": false,
+      "ramp12_overhead_warning": "floor_3 covers x[-3,2],y[0,9] above floor_1; its top z2.4 is the first hit for the archived +20m scan near the lower transition. Preserve and report rather than silently removing it."
+    },
+    "camera": {
+      "distortion": "actual CameraInfo D=0; archive actual CameraInfo",
+      "recommended_horizontal_fov_rad": 1.3962634015954636,
+      "rendering": "hardware Ogre2; actor CPU",
+      "actual_frames_only": true
+    },
+    "preservation": {
+      "existing_step_and_historical_protocols_unchanged": true,
+      "original_scene_geometry_unchanged": true,
+      "sole_controller": "teacher_sim::TeacherActuator",
+      "no_retraining": true,
+      "no_hardware": true
+    }
+  },
+  "schedule": {
+    "schema_version": 1,
+    "profile_id": "ramp23_down_full",
+    "duration_s": 86,
+    "commands": [
+      {
+        "start_s": 0,
+        "command": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "start_s": 3,
+        "command": [
+          0.3,
+          0,
+          0
+        ]
+      },
+      {
+        "start_s": 75,
+        "command": [
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "scope": "Prospective complete physical 12m ramp and both landing transitions. This is locomotion verification using privileged observation and truth solely for test termination/evaluation; not SLAM navigation, stairs or hardware.",
+    "terrain": "ramp_down",
+    "spawn": [
+      1.2,
+      7,
+      2.8,
+      0
+    ],
+    "completion_stop": {
+      "axis": "x",
+      "comparison": "ge",
+      "threshold": 14.8,
+      "minimum_active_s": 3,
+      "settle_s": 8
+    },
+    "ramp": "ramp_23",
+    "start_landing": "floor_3",
+    "destination_landing": "floor_2",
+    "world_forward_sign": 1,
+    "acceptance_protocol": "tests/ramp_full_protocol.json",
+    "acceptance_protocol_sha256": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+    "priority": "primary"
+  },
+  "source_hashes": {
+    "world.sdf": "49b52da71f0ecfeed467b849330742a158eda0adf6e6e0d01d00223099b9ec97",
+    "actuator.jsonl": "dffac7579abd385412223992ac1226d49d80c7ed8ff38e174d6f6c351ec4ccf6",
+    "telemetry.jsonl": "02877a4a9a93b2f02af8087c681088612d5d753b4d0fdc4c5e5967899a483166",
+    "runtime_manifest.json": "7242e533f821ed626267035f00d49c9f945e4c7cce6335580039ddba4d6bd69a",
+    "policy_manifest.json": "50426f74b80768b4317244397ed8727c825805895899c402cb139cc937cb1cfa",
+    "worker_result.json": "b5b29eb0958f6eb17cb0575a7cda81d3f7861e2fc254f47fa83ff991fdda8f3f",
+    "independent_protocol.json": "c251a96c77d5e09118deb42b2263a45f19cd9801f176f143fe0b61270f5ecafa",
+    "sources/tests/ramp_full_protocol.json": "1e7e1357604ca9d9ce6a9eb49eeef3079643867af777e26a1dee0954a7b8ce28",
+    "sources/scripts/evaluate_step_functional.py": "e4cfe4c4b6e4c22213c77922ff289bd0ec59e9e9753069ab582b91fc8b8ec6b5",
+    "sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b"
+  },
+  "analyzer_sha256": "a5b903ba57e0e9eccd9bd1a58d0f6638f0c663d228c996d1f6fff4ca69fd5396",
+  "legacy_evaluation_diagnostic_only": {
+    "interface": "passed",
+    "motion": "failed",
+    "sim2sim": "unverified",
+    "navigation": "unverified",
+    "real_robot": "unverified"
+  },
+  "privileged_truth_use": "actor observation and physical-test end latch/evaluation only; no position servo or navigation claim"
+}

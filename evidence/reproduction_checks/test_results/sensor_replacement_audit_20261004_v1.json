@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "scope": "Actual sensor replacement provenance/247/CPU actor audit; simulation only",
+  "runs": [
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_013552_stand_actual_imu_joints_replacement_r1_bcdc",
+      "audit_status": "source_and_replay_verified",
+      "checks": {
+        "cpu_frozen_actor": true,
+        "exactly_30_named_dimensions": true,
+        "activation_at_t3": true,
+        "causal_no_future_source": true,
+        "sim_age_at_most_25ms": true,
+        "wall_age_at_most_300ms": true,
+        "actual_callback_source_exists": true,
+        "no_truth_fallback": true,
+        "broker_hash_matches_archive": true,
+        "actual247_reconstructed": true,
+        "actual_sensor_terms_equal_callback_log": true,
+        "frame_rotation_verified": true,
+        "named_q_qd_mapping_verified": true,
+        "nonreplaced_217_dimensions_retained": true,
+        "cpu_actor_replay": true
+      },
+      "actual_motion_levels_unchanged": {
+        "interface": "passed",
+        "motion": "passed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "actual_motion_metrics": [
+        {
+          "name": "stand",
+          "status": "passed",
+          "reason": "",
+          "metrics": {
+            "duration_s": 15.0,
+            "samples": 751,
+            "max_abs_roll_pitch_rad": 0.0268547741931454,
+            "min_body_clearance_m": 0.3158756559558248,
+            "body_contact_samples": 0,
+            "unknown_contact_samples": 0,
+            "max_applied_torque_Nm": 12.984712298636794,
+            "position_delta_m": [
+              -0.0019594450364648353,
+              0.019528049699429118,
+              -0.07804720101419754
+            ],
+            "total_yaw_delta_rad": 0.10904310139969674,
+            "assisted_phase_counts": {
+              "support_capture": 0,
+              "support_hold": 0
+            },
+            "tracking": [],
+            "stop_teacher": {
+              "samples": 451,
+              "window_s": [
+                5.0,
+                14.0
+              ],
+              "translation_drift_m": 0.01090478503906459,
+              "yaw_drift_rad": 0.043626416885388514,
+              "velocity_rms": [
+                0.00030371518591531285,
+                0.0024432784902499384,
+                0.008615576490649054
+              ]
+            },
+            "stop_assisted": {
+              "samples": 0
+            },
+            "stop": {
+              "samples": 451,
+              "window_s": [
+                5.0,
+                14.0
+              ],
+              "translation_drift_m": 0.01090478503906459,
+              "yaw_drift_rad": 0.043626416885388514,
+              "velocity_rms": [
+                0.00030371518591531285,
+                0.0024432784902499384,
+                0.008615576490649054
+              ]
+            }
+          }
+        }
+      ],
+      "total_policy_rows": 751,
+      "actual_sensor_replaced_rows": 601,
+      "first_replacement_s": 3.0,
+      "actual_sensor_replaced_intervals": [
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          24,
+          36
+        ]
+      ],
+      "retained_217_note": "190 privileged dimensions = COM velocity3 + height187; remaining27 are controller command3, applied actuator command12 and last raw action12",
+      "maximum_observation_reconstruction_error": 0.0,
+      "maximum_nonreplaced_error": 0.0,
+      "maximum_selected_terms_vs_raw_callback_error": 0.0,
+      "maximum_frame_rotation_error": 0.0,
+      "maximum_named_joint_mapping_error": 0.0,
+      "maximum_cpu_actor_action_replay_error": 9.5367431640625e-07,
+      "source_age_sim_s": {
+        "imu": {
+          "min": 0.005,
+          "p50": 0.02,
+          "p95": 0.02,
+          "max": 0.02
+        },
+        "joints": {
+          "min": 0.01,
+          "p50": 0.02,
+          "p95": 0.02,
+          "max": 0.02
+        }
+      },
+      "source_age_wall_s": {
+        "imu": {
+          "min": 0.012937252002302557,
+          "p50": 0.02756315196165815,
+          "p95": 0.028206040966324508,
+          "max": 0.07527761597884819
+        },
+        "joints": {
+          "min": 0.015831262979190797,
+          "p50": 0.027455315983388573,
+          "p95": 0.02810712403152138,
+          "max": 0.07515412097563967
+        }
+      },
+      "avoidable_export_lag_vs_received_causal_callback_s": {
+        "imu": {
+          "frames_with_newer_actual_received_sample": 601,
+          "lag": {
+            "min": 0.005,
+            "p50": 0.02,
+            "p95": 0.02,
+            "max": 0.02
+          }
+        },
+        "joints": {
+          "frames_with_newer_actual_received_sample": 601,
+          "lag": {
+            "min": 0.01,
+            "p50": 0.02,
+            "p95": 0.02,
+            "max": 0.02
+          }
+        }
+      },
+      "broker_final_status": {
+        "alive": false,
+        "sources": {
+          "imu": {
+            "status": "stale_wall",
+            "wall_age_s": 0.6798166109947488,
+            "received": 3002,
+            "accepted": 3002,
+            "invalid": 0
+          },
+          "joints": {
+            "status": "stale_wall",
+            "wall_age_s": 0.6795695470063947,
+            "received": 3001,
+            "accepted": 3001,
+            "invalid": 0
+          }
+        },
+        "invalid_reasons": {}
+      },
+      "source_rejection": null,
+      "source_hashes": {
+        "telemetry.jsonl": "4667662d986c8c485c4017872447be1ad3353edbae0e167fd0668605ea4ad4c6",
+        "observations_actions.npz": "711e33261d28a5d6925f132c0d6ce62896b3fe117be030af9d73e2452b8717b5",
+        "actuator.jsonl": "7d4761bc1d498012fb1b5b125a9c4b4131abd406a2e570de2414de809d4d7e0b",
+        "policy_manifest.json": "aac7eebdd9c3163008cdfdcc7bc11fb7b13f3a24205bb68e715d75b7777da702",
+        "sensor_contract.json": "cea73b33406136996774dcb08ca149a61012833f3fc552f45adf77a2a574938c",
+        "asset_manifest.json": "1fcf19f58d060ef7618008e1696d54a5cdd4f2e64daabbdd07e1f2d1a0cbf66d",
+        "sensor_feedback.json": "fd30c58c3ff1fb04c0b876173375bc121304bf08e6c88c4cbdb043a284c32942",
+        "sensor_feedback_samples.jsonl": "66ac61490e9a4891cedd4dfd6a78a2dfe9d0aded44e469cbd66f2a77c6499236",
+        "sensor_feedback_events.jsonl": "7d143323c11bec1d4a22be34b892d2d0462c6b09daa1012fe734a2d5742a7983",
+        "summary.json": "95fe523c51c5b7d6b4237add6c9b6f0a063ba954fdb91caf901724c7ee501461",
+        "runtime_manifest.json": "10ae34adabb8f7a2f4e4393250c2850ef508d038d37b918110c1cecf8dc057d0",
+        "sources/scripts/sensor_feedback.py": "9d77e3f6be471abca4b9972f67d9b6864e67bf44882bb69ba81235ed00af3be8",
+        "sources/policy/worker.py": "683d82957008f2a6ad14ce70c4f781358987b8f088709903d55fd96ad0221b11",
+        "sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+        "sources/policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4"
+      },
+      "limits": [
+        "Only actual Gazebo IMU/joint substitution; no hardware attitude estimator validation",
+        "SLAM/cloud/COM velocity/height replacement not tested",
+        "Forward source rejection is an actual failed full-motion trial, even when source audit and fail-safe verify",
+        "No unique failure cause is inferred without fault-time candidate snapshot"
+      ]
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_013614_forward_actual_imu_joints_replacement_r1_1687",
+      "audit_status": "source_and_replay_verified",
+      "checks": {
+        "cpu_frozen_actor": true,
+        "exactly_30_named_dimensions": true,
+        "activation_at_t3": true,
+        "causal_no_future_source": true,
+        "sim_age_at_most_25ms": true,
+        "wall_age_at_most_300ms": true,
+        "actual_callback_source_exists": true,
+        "no_truth_fallback": true,
+        "broker_hash_matches_archive": true,
+        "actual247_reconstructed": true,
+        "actual_sensor_terms_equal_callback_log": true,
+        "frame_rotation_verified": true,
+        "named_q_qd_mapping_verified": true,
+        "nonreplaced_217_dimensions_retained": true,
+        "cpu_actor_replay": true,
+        "rejection_damps_without_truth_inference": true
+      },
+      "actual_motion_levels_unchanged": {
+        "interface": "failed",
+        "motion": "failed",
+        "sim2sim": "unverified",
+        "navigation": "unverified",
+        "real_robot": "unverified"
+      },
+      "actual_motion_metrics": [
+        {
+          "name": "forward",
+          "status": "failed",
+          "reason": "actual_sensor_source_rejected: No causal fresh actual imu sample; Operational interface checks failed: observation_action_dimensions; Test ended before required duration; Incomplete continuous Teacher stand/stop window",
+          "metrics": {
+            "duration_s": 7.3,
+            "samples": 366,
+            "max_abs_roll_pitch_rad": 0.04131062825343542,
+            "min_body_clearance_m": 0.2961946599163595,
+            "body_contact_samples": 0,
+            "unknown_contact_samples": 0,
+            "max_applied_torque_Nm": 12.984712298636794,
+            "position_delta_m": [
+              0.9877100148851747,
+              0.03153783142875366,
+              -0.10198255556095415
+            ],
+            "total_yaw_delta_rad": 0.07899724156993387,
+            "assisted_phase_counts": {
+              "support_capture": 0,
+              "support_hold": 0
+            },
+            "tracking": [
+              {
+                "window_s": [
+                  5,
+                  10
+                ],
+                "command_mean": [
+                  0.3000000000000002,
+                  0.0,
+                  0.0
+                ],
+                "measured_mean": [
+                  0.2430542463139754,
+                  -0.006025858463264767,
+                  0.011182196307511074
+                ],
+                "rmse": [
+                  0.058213190722104444,
+                  0.04561671396594649,
+                  0.02972377683495257
+                ]
+              }
+            ],
+            "stop_teacher": {
+              "samples": 0
+            },
+            "stop_assisted": {
+              "samples": 0
+            },
+            "stop": {
+              "samples": 0
+            }
+          }
+        }
+      ],
+      "total_policy_rows": 366,
+      "actual_sensor_replaced_rows": 215,
+      "first_replacement_s": 3.0,
+      "actual_sensor_replaced_intervals": [
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          12,
+          24
+        ],
+        [
+          24,
+          36
+        ]
+      ],
+      "retained_217_note": "190 privileged dimensions = COM velocity3 + height187; remaining27 are controller command3, applied actuator command12 and last raw action12",
+      "maximum_observation_reconstruction_error": 0.0,
+      "maximum_nonreplaced_error": 0.0,
+      "maximum_selected_terms_vs_raw_callback_error": 0.0,
+      "maximum_frame_rotation_error": 0.0,
+      "maximum_named_joint_mapping_error": 0.0,
+      "maximum_cpu_actor_action_replay_error": 1.8477439880371094e-06,
+      "source_age_sim_s": {
+        "imu": {
+          "min": 0.0,
+          "p50": 0.0,
+          "p95": 0.02,
+          "max": 0.02
+        },
+        "joints": {
+          "min": 0.0,
+          "p50": 0.0,
+          "p95": 0.02,
+          "max": 0.02
+        }
+      },
+      "source_age_wall_s": {
+        "imu": {
+          "min": 0.006746842002030462,
+          "p50": 0.007785730995237827,
+          "p95": 0.027782180137000977,
+          "max": 0.07581670401850715
+        },
+        "joints": {
+          "min": 0.006482492957729846,
+          "p50": 0.007801615982316434,
+          "p95": 0.027662119508022442,
+          "max": 0.07563417102210224
+        }
+      },
+      "avoidable_export_lag_vs_received_causal_callback_s": {
+        "imu": {
+          "frames_with_newer_actual_received_sample": 78,
+          "lag": {
+            "min": 0.0,
+            "p50": 0.0,
+            "p95": 0.02,
+            "max": 0.02
+          }
+        },
+        "joints": {
+          "frames_with_newer_actual_received_sample": 86,
+          "lag": {
+            "min": 0.0,
+            "p50": 0.0,
+            "p95": 0.02,
+            "max": 0.02
+          }
+        }
+      },
+      "broker_final_status": {
+        "alive": false,
+        "sources": {
+          "imu": {
+            "status": "stale_wall",
+            "wall_age_s": 0.4974983020219952,
+            "received": 1462,
+            "accepted": 1462,
+            "invalid": 0
+          },
+          "joints": {
+            "status": "stale_wall",
+            "wall_age_s": 0.49725685303565115,
+            "received": 1461,
+            "accepted": 1461,
+            "invalid": 0
+          }
+        },
+        "invalid_reasons": {}
+      },
+      "source_rejection": {
+        "time_s": 7.3,
+        "reason": "actual_sensor_source_rejected: No causal fresh actual imu sample",
+        "actor_inferred_on_rejected_frame": false,
+        "sensor_evidence_present": false,
+        "stored247_finite_on_rejected_frame": false,
+        "native_terminal_mode": 1,
+        "native_terminating": true,
+        "native_latched_fault_events": [],
+        "scope": "Rejected actual input stops inference and requests native damping; held logged raw action is not executed as privileged PD fallback"
+      },
+      "source_hashes": {
+        "telemetry.jsonl": "4a55593393c8a98ab26c0943038862345e32064739b28bc99156341036edfdf4",
+        "observations_actions.npz": "869d4f956f569d0ec2958827bef9c82fa977f0c1e03191e3b22b6cb84b86a74f",
+        "actuator.jsonl": "9f6826c68d57c407e488bbbf150115e7806cc3f12781fedcb6fba3e7f759ad1e",
+        "policy_manifest.json": "f893d8e39a0464fe03f491e7ec8818c396778af732b32f14c4aaf4c3b6c5e5d1",
+        "sensor_contract.json": "cea73b33406136996774dcb08ca149a61012833f3fc552f45adf77a2a574938c",
+        "asset_manifest.json": "1fcf19f58d060ef7618008e1696d54a5cdd4f2e64daabbdd07e1f2d1a0cbf66d",
+        "sensor_feedback.json": "6991ae0936ecbfd1fb3934f9ac82e0a0ae159e2807320d77cab2e6616037d680",
+        "sensor_feedback_samples.jsonl": "62ec450c8219eb411afc3aad798454b0a3c282eff925d82d50449873bb06b8b4",
+        "sensor_feedback_events.jsonl": "06921d91a2385e59d90e8171edb37ecfdaddb0ce2b21cdbd2acb322986842eb5",
+        "summary.json": "d2368554086d4c471a3b2e826a4bf54e44bb833e0be3635d663c88e22b2648d5",
+        "runtime_manifest.json": "4c0757a279e4114bc624eefcf016a66c91f38e04c4ca045e0891bd16bdaa1234",
+        "sources/scripts/sensor_feedback.py": "9d77e3f6be471abca4b9972f67d9b6864e67bf44882bb69ba81235ed00af3be8",
+        "sources/policy/worker.py": "683d82957008f2a6ad14ce70c4f781358987b8f088709903d55fd96ad0221b11",
+        "sources/policy/observation.py": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+        "sources/policy/contract.json": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4"
+      },
+      "limits": [
+        "Only actual Gazebo IMU/joint substitution; no hardware attitude estimator validation",
+        "SLAM/cloud/COM velocity/height replacement not tested",
+        "Forward source rejection is an actual failed full-motion trial, even when source audit and fail-safe verify",
+        "No unique failure cause is inferred without fault-time candidate snapshot"
+      ]
+    }
+  ],
+  "analyzer_sha256": "60e34c50a6db19ea5221f2e85fb5b6830fb59a6ceca4581b0cf9c61d22ef3d3c",
+  "analyzer": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/audit_sensor_replacement.py"
+}

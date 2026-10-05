@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "experiment": "teacher_real_SLAM_SCAN_ramp12_registered_turn06_v2",
+  "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
+  "distance_m": 13.6,
+  "max_speed_mps": 0.2,
+  "max_yaw_rate_radps": 0.6,
+  "arrival_radius_m": 0.22,
+  "arrival_height_half_span_m": 0.1,
+  "arrival_control_radius_m": 0.17,
+  "dwell_sim_s": 0.6,
+  "goal_timeout_sim_s": 90.0,
+  "pose_cloud_timeout_s": 0.3,
+  "sensor_warmup_sim_s": 2.0,
+  "interface_version": "navigation_v4_latest_clock_measured_transition",
+  "warmup_history": {
+    "imu": {
+      "min_samples": 600,
+      "min_span_sim_s": 2.9
+    },
+    "body_odom": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "cloud": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "raw_lidar": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "image": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    },
+    "camera_info": {
+      "min_samples": 10,
+      "min_span_sim_s": 2.0
+    }
+  },
+  "request_startup_timeout_sim_s": 90.0,
+  "request_startup_timeout_wall_s": 600.0,
+  "teacher_transition": {
+    "stop_window_sim_s": 0.3,
+    "stop_min_pose_samples": 3,
+    "stop_pose_gap_max_s": 0.2,
+    "gyro_pose_pair_max_s": 0.15,
+    "stop_planar_speed_mps": 0.03,
+    "stop_slam_yaw_rate_radps": 0.05,
+    "stop_body_gyro_radps": 0.05,
+    "turn_complete_rad": 0.1,
+    "drive_heading_max_rad": 0.2
+  },
+  "recovery_fresh_pose_samples": 2,
+  "recovery_min_pose_span_sim_s": 0.1,
+  "fence": {
+    "along_min_m": -0.45,
+    "along_max_m": 14.049999999999999,
+    "lateral_abs_m": 0.45,
+    "height_abs_m": 1.4
+  },
+  "navigation_ground_truth_used": false,
+  "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
+  "excluded": [
+    "real_robot",
+    "true_stairs",
+    "full_46_region_mission",
+    "unbounded_dynamic_mission"
+  ],
+  "max_lateral_speed_mps": 0.2,
+  "arrival_stop_policy": "after_measured_dwell",
+  "clear_guard_gap_max_sim_s": 0.3,
+  "pid": {
+    "position_kp": 0.6,
+    "position_ki": 0.08,
+    "position_kd": 0.12,
+    "yaw_kp": 1.1,
+    "yaw_ki": 0.04,
+    "yaw_kd": 0.15,
+    "position_integral_limit": 0.4,
+    "yaw_integral_limit": 0.3,
+    "derivative_filter_tau_s": 0.2,
+    "header_gap_max_s": 0.3,
+    "slew_acceleration": [
+      0.3,
+      0.3,
+      0.25
+    ],
+    "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
+    "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
+  },
+  "selector": "ramp12_registered_turn06",
+  "route_height_delta_m": 1.2,
+  "return_to_origin": false,
+  "expected_asset": {
+    "terrain": "ramp_up",
+    "spawn": [
+      1.2,
+      2,
+      0.4,
+      0
+    ]
+  },
+  "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
+  "spawn": [
+    1.2,
+    2,
+    0.4,
+    0
+  ],
+  "duration_s": 260,
+  "overview_pose": [
+    8,
+    -1,
+    2.5,
+    0,
+    0.45,
+    1.5707963267948966
+  ],
+  "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+  "controller_kind": "teacher",
+  "protocol_case_id": "ramp12_up_full",
+  "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
+  "controller_selector": "closed_loop_multifloor_v1",
+  "cascade_runtime_revision": "v2_frozen_sensor_scene_axis_seams_turn06",
+  "cascade": {
+    "desired_speed": 0.2,
+    "command_limits": [
+      0.6,
+      0.2,
+      0.6
+    ],
+    "external_heading_gate": true,
+    "base_com_offset": [
+      0.05523092034548942,
+      -0.001869001919385796,
+      0.006095299184261034
+    ],
+    "maximum_gyro_pair_gap_s": 0.02,
+    "goal_z_tolerance_m": 0.1,
+    "gains": {
+      "cross_kp": 0.8,
+      "cross_kd": 0.2,
+      "yaw_kp": 1.3,
+      "yaw_kd": 0.15,
+      "velocity_kp_x": 0.6,
+      "velocity_ki_x": 0.5,
+      "velocity_kp_y": 0.4,
+      "velocity_ki_y": 0.3,
+      "rate_kp": 0.3,
+      "rate_ki": 0.2
+    },
+    "command_slew_per_s": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "feedback_expected_hz": 10,
+    "feedback_ttl_sim_and_wall_s": 0.3,
+    "navigation_ground_truth_used": false,
+    "controller_source_file": "cascade_command_source.json",
+    "actual_navigation_verified": false
+  },
+  "pid_parent_profile": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+    "unchanged_fields": [
+      "warmup_history",
+      "teacher_transition",
+      "pose_cloud_timeout_s",
+      "pid",
+      "expected_asset",
+      "spawn",
+      "route_height_delta_m",
+      "terrain_target_manifest",
+      "arrival_radius_m",
+      "arrival_height_half_span_m",
+      "arrival_control_radius_m",
+      "dwell_sim_s"
+    ],
+    "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
+  },
+  "registered_route_fence": {
+    "horizontal_radius_m": 0.45,
+    "height_error_m": 0.3,
+    "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
+  },
+  "scene_initial_support_z": 0.0,
+  "scene_xy_anchor_uncertainty_m": 0.15,
+  "prospective_change": "Turn input cap .3\u2192.6 within archived Teacher boundary; only independent experimental simulation evidence. Gains/source/stop/native safety unchanged.",
+  "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+  "route_world_points": [
+    {
+      "goal_id": "lower_entry",
+      "xyz": [
+        2.0,
+        2.0,
+        0.0
+      ]
+    },
+    {
+      "goal_id": "lower_top",
+      "xyz": [
+        14.0,
+        2.0,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "lower_exit",
+      "xyz": [
+        14.8,
+        2.0,
+        1.2
+      ]
+    }
+  ],
+  "ramp_segments": [
+    {
+      "model": "ramp_12",
+      "direction": "up",
+      "destination_goal_index": 2
+    }
+  ]
+}
