@@ -4,7 +4,7 @@
 
 - [总实验报告](docs/EXPERIMENT_REPORT_20261006.md)：通过、失败及尚未验证范围。
 - [精简证据与曲线](evidence/INDEX.md)、[证据清单](evidence/EVIDENCE_MANIFEST.json)。
-- [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除350.9 GiB原始数据，见[删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
+- [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除351.5 GiB原始数据，见[清理总计](maintenance/CLEANUP_SUMMARY.json)及[首批删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
 - [原 Teacher 开发说明](multifloor_demo/teacher_mode/README.md)。旧路径与旧 PASS 均为历史记录；新机器必须重新构建和预检。
 
 ## 已有实验结果

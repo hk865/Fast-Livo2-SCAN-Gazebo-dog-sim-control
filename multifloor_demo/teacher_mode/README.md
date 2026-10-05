@@ -1,6 +1,6 @@
 # Go2 Frozen Teacher：Gazebo 适配与 Sim2Sim 验证
 
-> **存储更新（2026-10-06）：** 已按用户要求删除350.9 GiB原始实验记录。本文其余部分为历史开发记录，完整raw和录像不再可回放；参见 [清理说明](docs/RAW_DATA_CLEANUP_20261006.md) 与 `CURRENT_STORAGE_STATUS.json`。源码、精简报告、曲线和失败摘要已存远程仓库。
+> **存储更新（2026-10-06）：** 已按用户要求删除351.5 GiB原始实验记录。本文其余部分为历史开发记录，完整raw和录像不再可回放；参见 [清理说明](docs/RAW_DATA_CLEANUP_20261006.md) 与 `CURRENT_STORAGE_STATUS.json`。源码、精简报告、曲线和失败摘要已存远程仓库。
 
 这是独立仿真控制模式。冻结Teacher通过唯一关节力矩执行器实际控制Gazebo Go2；CPU单线程、策略50Hz、关节PD200Hz。没有重新训练、操作实体机器人、停止另一任务训练/评估或修改已通过的camera_mode。模型与逐轮执行源码、失败、配置、物理日志和相机均归档。
 
