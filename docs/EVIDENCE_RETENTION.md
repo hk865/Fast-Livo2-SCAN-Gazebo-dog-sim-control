@@ -1,6 +1,6 @@
 # 实验证据保留与原始数据清理边界
 
-用户已明确授权删除原始实验数据以释放空间，并要求保留实验报告和可复现源码。清理范围、实际删除结果和最终保留文件以本仓库根说明、[evidence索引](../evidence/INDEX.md)及[证据库存](../evidence/EVIDENCE_MANIFEST.json)为准；本文不把清理计划冒充已经执行的删除记录。
+用户已明确授权删除原始实验数据以释放空间，并要求保留实验报告和可复现源码。2026-10-06已实际删除299,394文件、350.884 GiB；[删除回执](../maintenance/PURGE_RECEIPT.json)与[核验](../maintenance/PURGE_VERIFICATION.json)记录真实执行结果。清理范围、实际删除结果和最终保留文件以本仓库根说明、[evidence索引](../evidence/INDEX.md)及[证据库存](../evidence/EVIDENCE_MANIFEST.json)为准；本文不把清理计划冒充已经执行的删除记录。
 
 精简证据目录为`evidence/{reports,receipts,curves,figures,history_manifests,reproduction_checks}`。主要运行分组是`V12_fbcb`、`V18_prefix_ac02`、`V18_full_ab53`、`V17_efde`和`height_failure_6fdf`。其中每0.2s的telemetry/SLAM派生JSONL和PNG只供曲线展示；不是完整200Hz安全、接触、关节目标/力矩、源因果或逐次publication验收输入。最终清单应保存来源、复制SHA、用途和抽样边界，不能把派生文件标为全raw替代。
 

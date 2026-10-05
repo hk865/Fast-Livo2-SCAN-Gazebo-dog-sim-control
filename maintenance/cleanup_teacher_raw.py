@@ -8,6 +8,8 @@ An immutable prior inventory SHA is provenance, not a fresh raw-file rehash.
 """
 import argparse,datetime,gzip,hashlib,json,os,stat,subprocess,time
 from pathlib import Path
+if not __debug__:
+ raise RuntimeError('Optimized Python is forbidden: safety assertions must remain enabled')
 WORKSPACE=Path('/home/hyh001/projects/1.Project/Ros2_fastlivo2_')
 TEACHER=WORKSPACE/'multifloor_demo/teacher_mode'
 ROOTS=[TEACHER/'runs',Path('/var/tmp/go2_teacher_simulation_20261005'),Path('/var/tmp/go2_teacher_parallel_20261005')]
@@ -60,9 +62,21 @@ def execute(expected,commit,evidence_manifest):
  path=OUT/'PURGE_PLAN.json';assert sha(path)==expected,'plan checksum mismatch'
  d=json.loads(path.read_text());assert d['authorization_quote']==AUTH and d['roots']==list(map(str,ROOTS))
  assert evidence_manifest.is_file(),'preserved evidence manifest missing'
- refs=subprocess.check_output(['git','ls-remote',REMOTE,'refs/heads/main'],text=True).split()
+ refs=subprocess.check_output(['git','ls-remote',REMOTE,'refs/heads/main'],text=True,timeout=60,env={**os.environ,'GIT_SSH_COMMAND':'ssh -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=2'}).split()
  assert refs and refs[0]==commit,'repository main is not the verified preserved commit'
+ evidence_rel=evidence_manifest.resolve().relative_to(REPO)
+ archived=subprocess.check_output(['git','-C',str(REPO),'show',commit+':'+str(evidence_rel)])
+ assert hashlib.sha256(archived).hexdigest()==sha(evidence_manifest),'evidence manifest differs from preserved remote commit'
  for item in d['prior_inventory']:assert sha(Path(item['path']))==item['sha256'],'prior manifest changed'
+ # Validate the entire immutable plan before the first irreversible unlink.
+ assert d['files']==len(d['items']) and d['logical_bytes']==sum(x['size_bytes']for x in d['items'])
+ assert len({x['path']for x in d['items']})==len(d['items']),'duplicate planned target'
+ for row in d['items']:
+  p=Path(row['path']);root=Path(row['root']);rel=p.relative_to(root)
+  assert root in ROOTS and not root.is_symlink() and candidate(rel)
+  assert not p.is_symlink() and sig(p)==row['stat_before'],'raw changed before any deletion: '+str(p)
+  assert p.resolve()==p,'symlink parent not permitted'
+ print(json.dumps({'predelete_all_targets_validated':len(d['items'])}),flush=True)
  journal=OUT/'PURGE_JOURNAL.jsonl';before=free();started=datetime.datetime.now(datetime.timezone.utc).isoformat();deleted=0;total=0
  with journal.open('x')as f:
   for row in d['items']:
