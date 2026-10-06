@@ -1,0 +1,82 @@
+{
+  "schema": "corridor_tracking_v20_control_review/v1",
+  "status": "DRAFT_AWAIT_FINAL_CORRIDOR_RUNTIME_AND_SOURCE_FREEZE",
+  "reviewed": false,
+  "actual_navigation_verified": false,
+  "new_reference_is_legacy_controller_byte_identity": false,
+  "original_geometry_timeout_dwell_or_safety_changed": false,
+  "review_scope": "Independent review of root-authored production wrapper and its interface to the spatial core; the reviewer authored spatial core, so this is not represented as an independent second implementation review of that core. Corridor runtime is still under implementation and excluded.",
+  "reviewed_source_sha256": {
+    "controller.py": "8f455493050e92e2d6844147b299c08202621fc1db88aaed04baad24756e7395",
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "spatial_reference.py": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469",
+    "controller_reference_tests.py": "5b945e523e6afa09709d469bda6334399a5f4d2441c721dea3d4d0b0bff325dd",
+    "spatial_reference_tests.py": "488258e31ef2d66d829e5ecdfe7c61afeef1c44d8b8ced077af2a0cc5f207180",
+    "pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "clock_hold_tests.py": "0cba80148fe25c4a09648a10df79114ce2eb25a0ab56d29324a57639c88b12b1",
+    "shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "transition_gate.py": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10",
+    "clock_hold.py": "a347c67ee3a634703b8e120b8ee3d4fdb5b387fe6d29e159e26185d7f624c9b3"
+  },
+  "unchanged_inherited_protection_sources": {
+    "shared_controller.py": true,
+    "teacher_wrapper.py": true,
+    "transition_gate.py": true,
+    "clock_hold.py": true
+  },
+  "finite_execution": {
+    "command": "python3 -B -m unittest controller_reference_tests spatial_reference_tests pure_tests clock_hold_tests",
+    "tests_run": 53,
+    "failures": 0,
+    "errors": 0,
+    "scope": "Offline mathematics, source-header/parking/fault invariants and extracted production wrapper methods; no ROS, Teacher, Gazebo, corridor dynamics or navigation run."
+  },
+  "interface_findings": [
+    {
+      "id": "shared_spatial_reference",
+      "status": "CHECKED",
+      "evidence": "Outer follow_checked_trajectory calls preview_reference; inner update calls the same reference builder. Fixed-goal short-tail heading rule is shared and preview does not mutate progress or PI."
+    },
+    {
+      "id": "external_turn_lock",
+      "status": "CHECKED",
+      "evidence": "During align, external_turn_heading remains the gate locked heading; after drive resumes the checked spatial reference is used. The TeacherHeadingGate code and original heading/stop thresholds are unchanged."
+    },
+    {
+      "id": "reference_exception_boundary",
+      "status": "CHECKED",
+      "evidence": "Inherited shared tick already catches exceptions and publishes zero. V20 control now also publishes same-tick zero before journaling a reference exception. Earlier preliminary missing-catch concern was withdrawn after checking the complete inheritance chain."
+    },
+    {
+      "id": "stale_reference_replan_flag",
+      "status": "FIXED_SOURCE_REVIEWED",
+      "evidence": "Flag resets on new request, accepted path, new goal, non-hold controller update and exception, avoiding a delayed replan for an old reference failure."
+    },
+    {
+      "id": "constraint_hold",
+      "status": "CHECKED",
+      "evidence": "Core mode reference_constraint_hold requests zero with frozen integral; wrapper exact-zero list includes it and requests a new plan after the existing three-second interval."
+    },
+    {
+      "id": "corridor_runtime",
+      "status": "PENDING",
+      "evidence": "Runtime corridor snapshot pairing/shadow lifecycle/worker protections are not yet available for final review."
+    }
+  ],
+  "static_screen": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/root_checks/V20_STATIC_104_EVENTS.json",
+    "sha256": "970450e26a3d2c2def10a48868babd811656694aa64e935578de72cd9dc9b18e",
+    "verified_original_events": 104,
+    "production_reference_over_0_2rad": 3,
+    "fallback_count": 0,
+    "navigation_or_closed_loop_reset_count_inferred": false
+  },
+  "open_limits": [
+    "The finite-arc heading chord is not a replacement checked collision path; final actual motion guards remain required.",
+    "Original raw projection/cross/grade remain separately recorded; reference z uses a stated local equal-height-normal assumption, not a terrain support proof.",
+    "Curvature feedforward/speed limits are separate default-off features and not experimentally identified plant bandwidth.",
+    "Copied V19 heading-reference tests contain seven legacy whole-state identity failures; new behavior regressions preserve commands, PI/filter, lock, protection and parking invariants without asserting V20 byte identity.",
+    "Pending final runtime review and new source-bound finite receipt before reviewed can become true."
+  ]
+}

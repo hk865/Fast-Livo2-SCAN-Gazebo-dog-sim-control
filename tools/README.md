@@ -1,5 +1,7 @@
 # Portable local rebuild and experiment entry
 
+The V20 branch is currently a source/evidence checkpoint only. Its copied runner and historical gates remain original-machine-bound; no V20 portable runtime entry has been added. See [V20 checkpoint boundary](../docs/V20_BRANCH_CHECKPOINT.md) before using any commands in the copied V20 README.
+
 This directory targets **Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic** on the same machine class as the recorded experiment. It does not promise cross-platform execution. Original experimental acceptance is historical evidence; it cannot authorize a newly built library.
 
 The Frozen Teacher weights stay outside Git. Supply `model_1000.pt` with SHA256 `bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34`. The actor uses the supplied Python interpreter with PyTorch and NumPy on CPU; its original single-thread configuration, 50 Hz policy, 300 ms source deadlines, joint mapping and sole actuator remain unchanged. No hardware interface is provided by these tools.

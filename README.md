@@ -7,7 +7,13 @@
 - [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除351.5 GiB原始数据，见[清理总计](maintenance/CLEANUP_SUMMARY.json)及[首批删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
 - [原 Teacher 开发说明](multifloor_demo/teacher_mode/README.md)。旧路径与旧 PASS 均为历史记录；新机器必须重新构建和预检。
 
-## 2026-10-06 V19最新实测
+## 2026-10-06 V20候选分支
+
+本分支保存有限弧长朝向参考、只读走廊观测及[轨迹选择修改方案](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/TRAJECTORY_SELECTION_PLAN.md)。实际前九区测试到达7区后因显存保护中止，九区任务和停车未完成；走廊400次观测0次认证，没有启用旧路径保留或主动走廊控制。详见[本轮报告](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/README.md)。
+
+这是可回滚的源码/证据检查点，main基线为`5237b886`。不包含大体积raw、模型或生成二进制；V20原机gate不授权clone运行，见[导出和回退说明](docs/V20_BRANCH_CHECKPOINT.md)。原46区、新闭环Sim2Sim和真机均不能据此记通过。
+
+## 2026-10-06 V19实测
 
 多线程接收/点云解码/图像解码流水线已在原工作区实现并实测；IMU→LIO→VIO共享状态仍由唯一owner顺序执行。同包1.5x单次容量对照的最大位姿滞后2.535 s→50 ms，1x ABBA未见明显时效改善，不能宣称所有场景同幅提速。
 

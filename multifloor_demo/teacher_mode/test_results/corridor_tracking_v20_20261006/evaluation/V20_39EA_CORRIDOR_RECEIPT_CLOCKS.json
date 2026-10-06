@@ -1,0 +1,3499 @@
+{
+  "schema": "teacher_corridor_independent_observation_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea",
+  "run_finished": true,
+  "status": "OBSERVATIONS_VERIFIED",
+  "inputs": 400,
+  "certificates": 400,
+  "frozen_source": {
+    "path": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+    "sha256": "386e62167f66fe593d3aee538ae162a58abdb01cbc08da32e9433058de795aee",
+    "manifest_key": "navigation/corridor_tracking_v20/corridor.py"
+  },
+  "counters": {
+    "certificate_status": {
+      "unavailable": 241,
+      "blocked": 159
+    },
+    "certificate_reason": {
+      "prefix_not_fully_verified": 379,
+      "verified_prefix_shorter_than_stopping_distance": 19,
+      "invalid_map_provenance": 2
+    },
+    "interval_failures": {
+      "unknown_body_sweep": 326,
+      "stale_free_body_sweep": 3091,
+      "outside_snapshot": 29,
+      "support:support_edge_or_incomplete_hull": 98,
+      "support:insufficient_measured_points": 1,
+      "occupied_body_sweep": 1349
+    },
+    "width_rejections": {},
+    "support_cell_failures": {
+      "support_edge_or_incomplete_hull": 61058,
+      "insufficient_measured_points": 58882,
+      "support_plane_residual": 729,
+      "support_observation_gap": 614,
+      "support_height": 319
+    },
+    "support_model_status": {
+      "measured_model": 379
+    },
+    "path_changed_by_result_receipt": {
+      "False": 351,
+      "True": 49
+    },
+    "snapshot_complete": {
+      "True": 398,
+      "False": 2
+    },
+    "snapshot_reason": {
+      "None": 398,
+      "awaiting_fusion_for_request": 2
+    },
+    "surface_complete": {
+      "True": 398,
+      "None": 2
+    },
+    "snapshot_voxel_observations": {
+      "0": 2272076,
+      "2": 525604,
+      "1": 4284610
+    },
+    "cloud_expired_at_result_receipt": {
+      "True": 372,
+      "False": 28
+    },
+    "pose_expired_at_result_receipt": {
+      "True": 348,
+      "False": 52
+    },
+    "status_by_route_layer": {
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:0|unavailable": 28,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:1|unavailable": 28,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:2|unavailable": 33,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:3|unavailable": 32,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:4|unavailable": 47,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:5|unavailable": 66,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:6|blocked": 73,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:6|unavailable": 2,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:7|unavailable": 5,
+      "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea:exploration_prefix9:1:7|blocked": 86
+    },
+    "incomplete_snapshot_metadata_issue": {
+      "missing_navigation_truth_flag": 2
+    },
+    "input_rejection_reason": {}
+  },
+  "distributions": {
+    "observed_planar_cells": {
+      "count": 379,
+      "min": 183,
+      "median": 453,
+      "p95": 488,
+      "max": 510,
+      "mean": 424.0738786279683
+    },
+    "compute_wall_ms": {
+      "count": 400,
+      "min": 0.138717,
+      "median": 378.66378199999997,
+      "p95": 473.021643,
+      "max": 652.858461,
+      "mean": 364.407977875
+    },
+    "worker_queue_wall_ms": {
+      "count": 400,
+      "min": 1.029654,
+      "median": 28.3033875,
+      "p95": 52.693635,
+      "max": 134.825879,
+      "mean": 31.386144425
+    },
+    "age_at_request_ms:stamp_ns": {
+      "count": 400,
+      "min": 0.0,
+      "median": 5.0,
+      "p95": 5.0,
+      "max": 10.0,
+      "mean": 3.0625
+    },
+    "age_at_request_ms:source_cloud_stamp_ns": {
+      "count": 400,
+      "min": 25.000001,
+      "median": 70.0,
+      "p95": 90.000001,
+      "max": 205.000001,
+      "mean": 70.1250004825
+    },
+    "age_at_request_ms:source_sensor_pose_stamp_ns": {
+      "count": 400,
+      "min": 25.000001,
+      "median": 65.000001,
+      "p95": 85.000001,
+      "max": 205.000001,
+      "mean": 67.3125004825
+    },
+    "age_at_request_ms:request_stamp_ns": {
+      "count": 400,
+      "min": 20.0,
+      "median": 230.0,
+      "p95": 405.0,
+      "max": 440.0,
+      "mean": 228.375
+    },
+    "snapshot_unknown_count": {
+      "count": 400,
+      "min": 0,
+      "median": 5612.5,
+      "p95": 7336,
+      "max": 8627,
+      "mean": 5680.19
+    },
+    "snapshot_free_count": {
+      "count": 400,
+      "min": 0,
+      "median": 11567.5,
+      "p95": 13050,
+      "max": 15501,
+      "mean": 10711.525
+    },
+    "snapshot_occupied_count": {
+      "count": 400,
+      "min": 0,
+      "median": 1313.5,
+      "p95": 1668,
+      "max": 1717,
+      "mean": 1314.01
+    },
+    "snapshot_free_fraction": {
+      "count": 398,
+      "min": 0.4324074074074074,
+      "median": 0.6336574784477298,
+      "p95": 0.6625816993464052,
+      "max": 0.6700680272108843,
+      "mean": 0.6023726259917358
+    },
+    "snapshot_stale_free_count": {
+      "count": 398,
+      "min": 44,
+      "median": 4465.5,
+      "p95": 6070,
+      "max": 6930,
+      "mean": 4008.608040201005
+    },
+    "snapshot_stale_free_fraction": {
+      "count": 398,
+      "min": 0.005888650963597431,
+      "median": 0.3988304677070413,
+      "p95": 0.46663977410246066,
+      "max": 0.4796600834054607,
+      "mean": 0.3590224186109238
+    },
+    "surface_point_count": {
+      "count": 398,
+      "min": 5319,
+      "median": 7444.5,
+      "p95": 8350,
+      "max": 9032,
+      "mean": 7443.040201005025
+    },
+    "cloud_age_at_result_receipt_ms": {
+      "count": 400,
+      "min": 85.0,
+      "median": 390.0,
+      "p95": 465.0,
+      "max": 620.000001,
+      "mean": 377.63750048249995
+    },
+    "pose_age_at_result_receipt_ms": {
+      "count": 400,
+      "min": 50.000001,
+      "median": 360.0,
+      "p95": 430.0,
+      "max": 585.000001,
+      "mean": 346.13750046
+    },
+    "source_clock_advance_during_async_ms": {
+      "count": 400,
+      "min": 15.0,
+      "median": 320.0,
+      "p95": 390.0,
+      "max": 500.0,
+      "mean": 307.5125
+    },
+    "snapshot_payload_bytes": {
+      "count": 400,
+      "min": 374,
+      "median": 547267.0,
+      "p95": 607983,
+      "max": 662317,
+      "mean": 542007.2825
+    },
+    "snapshot_gzip_bytes": {
+      "count": 400,
+      "min": 233,
+      "median": 231020.5,
+      "p95": 258939,
+      "max": 281672,
+      "mean": 229934.21
+    }
+  },
+  "worker_receipt": {
+    "submitted": 400,
+    "completed": 400,
+    "busy_diagnostic_snapshots": 37,
+    "control_authority": false,
+    "navigation_ground_truth_used": false
+  },
+  "busy_diagnostic_snapshots": 37,
+  "replay": {
+    "mode": "none",
+    "selected": [],
+    "completed": 0,
+    "all_selected_exact": null,
+    "receipts": []
+  },
+  "interpretation": [
+    "Unknown swept cells are a measured-map coverage gap; no free space was inferred from absence.",
+    "Previously free swept cells lack sufficiently recent individual observations; a fresh global cloud does not refresh those cells.",
+    "Support evidence is rejected by point coverage/edge/gap conditions; finite samples do not establish an unobserved floor.",
+    "Some local measured surfaces fail the configured planar, slope or body-height model; inspect retained clouds before changing any assumption.",
+    "Some asynchronous computations exceed 300 ms wall time; actual source-clock expiry at receipt must be checked separately. Wall duration includes scheduling/GIL, not isolated CPU cost."
+  ],
+  "errors": [],
+  "warnings": [],
+  "consumed_files": {
+    "corridor_inputs.jsonl": {
+      "sha256": "83bcf4843723d90bd6036b316979fa948568929933b3136a165b679f5c8294d0",
+      "bytes": 4733280
+    },
+    "corridor_certificates.jsonl": {
+      "sha256": "98990a47da089e4f10f98358bef6ce9ab4bd625be5f39b687daa85319f8caa34",
+      "bytes": 1485793
+    },
+    "corridor_worker_receipt.jsonl": {
+      "sha256": "c92fa0fcfd13774515f48f86392055365ec1fdf4043ff5a54ed5e7a0883d8fba",
+      "bytes": 137
+    },
+    "source_manifest.json": {
+      "sha256": "9102a28922e2a43d0885eca5db8af0280befcd5fffb16b6c2617bef46532c8d3",
+      "bytes": 95953
+    },
+    "runtime_manifest.json": {
+      "sha256": "3900ac31efb149747b939b2d9caaf138aafe92addca0c064d0c3079ce26c0031",
+      "bytes": 141411
+    }
+  },
+  "snapshot_receipts": [
+    {
+      "sequence": 1,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000001.json.gz",
+      "gzip_sha256": "12f1d5d1e6b0a49b92ff6a69d2fc5aea0e6428430764c3bc6b98fafe58219d91",
+      "raw_sha256": "6dcaa3bad9803e02a3145db96e106de5532e5b222fdc62c5f8df7b2ab70e120e",
+      "raw_bytes": 439333,
+      "gzip_bytes": 178844
+    },
+    {
+      "sequence": 2,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000002.json.gz",
+      "gzip_sha256": "bcafe3a53c787850898d7c31f3c82c02edcaaec3809bd8248da8f821fceb881c",
+      "raw_sha256": "566f58a55e3ad8391093b430278f40ffa6f68114c6907fc7f116ae914cef1eec",
+      "raw_bytes": 446808,
+      "gzip_bytes": 183115
+    },
+    {
+      "sequence": 3,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000003.json.gz",
+      "gzip_sha256": "a9dfbff211bf4738df32a567143ec939d23470a0d67b39d62a457a33efba1ae9",
+      "raw_sha256": "de9457986697752a9ce356c64f49e6544168a931072bd658574a4774dfe9b1b4",
+      "raw_bytes": 468231,
+      "gzip_bytes": 193284
+    },
+    {
+      "sequence": 4,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000004.json.gz",
+      "gzip_sha256": "926fe1a3ad719c6463ab7e08257101ecbf0ea5aeda236d421bdb823d1f766701",
+      "raw_sha256": "9f9aa80b47f78bd6717c629a3afc16a7a31006192e78fe68a9615f9f52938156",
+      "raw_bytes": 466390,
+      "gzip_bytes": 192231
+    },
+    {
+      "sequence": 5,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000005.json.gz",
+      "gzip_sha256": "e038d5bdbf5c300d30776d69babefbe623082bde7ad8ec002a43d0fc454792d0",
+      "raw_sha256": "f25e139b2c98e453e0501624f1e4b2b01199048787f9de24a79d520040056f07",
+      "raw_bytes": 477283,
+      "gzip_bytes": 197620
+    },
+    {
+      "sequence": 6,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000006.json.gz",
+      "gzip_sha256": "9347776aa957ff5435c3f44024fdcc0a8c0696b4a9f0446596c28ef966a21799",
+      "raw_sha256": "efa5ce1dcecb15004c439930a0297edba17fffa0eb010f54dbf4128a98f9c647",
+      "raw_bytes": 488221,
+      "gzip_bytes": 202507
+    },
+    {
+      "sequence": 7,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000007.json.gz",
+      "gzip_sha256": "5f9aa4869b7cac2f9a05f898961506ba04ee1af67868edd7a2247731333adace",
+      "raw_sha256": "d1ab5f406115f45cb1f56bd518967b9624743cff0e404e85f7a26bc04a915f1b",
+      "raw_bytes": 482804,
+      "gzip_bytes": 199992
+    },
+    {
+      "sequence": 8,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000008.json.gz",
+      "gzip_sha256": "5e87c6702faedf433c0f3f2680fc731f096dc64e0b1362e7711a528b7ffbfe8d",
+      "raw_sha256": "f2a343476885e16f6188ea595a12ffe844fe6d8ad8ca775d81274ac4a9df8ff3",
+      "raw_bytes": 485421,
+      "gzip_bytes": 201084
+    },
+    {
+      "sequence": 9,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000009.json.gz",
+      "gzip_sha256": "2e6b9a23001fd9e950621cf49ea58e4f7df49d510d198082d7018b341c9a5f5a",
+      "raw_sha256": "645bd59b74d12c64b498e59cadda5813e9687cdc6fda05d5227c6c70e83481b0",
+      "raw_bytes": 515124,
+      "gzip_bytes": 214803
+    },
+    {
+      "sequence": 10,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000010.json.gz",
+      "gzip_sha256": "979f6f111ce155b625bb6b45306cf59ecf4062245da6393f8e13103104703c32",
+      "raw_sha256": "a2cd31b486fcf53533c77e9f67eb2a5630f4591a8a49157f4d3b4838b98833dc",
+      "raw_bytes": 515712,
+      "gzip_bytes": 215139
+    },
+    {
+      "sequence": 11,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000011.json.gz",
+      "gzip_sha256": "035e85c14e2a936759058605be5f993a621aa39be1662360d2a00e87c818df0a",
+      "raw_sha256": "5816e3ddfddea7f86896812afbfdab05db9ee8bf4a4619a53f9fc7e7f3bdfba5",
+      "raw_bytes": 532185,
+      "gzip_bytes": 221573
+    },
+    {
+      "sequence": 12,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000012.json.gz",
+      "gzip_sha256": "dea23678cfd40862b6c36ecd568fda320531a178279d13d9a6a94a9ffa3f7445",
+      "raw_sha256": "22f1740fd5b8af99c64d481168fd4b2e4be761aa129971459d8302f92a54e650",
+      "raw_bytes": 537350,
+      "gzip_bytes": 223781
+    },
+    {
+      "sequence": 13,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000013.json.gz",
+      "gzip_sha256": "6e0c8bf5075a891640c810edacdb77394fd532146aa6f85a8516a071d05d4919",
+      "raw_sha256": "cf68518dcc15ca139237423ca59d7474290d9dcad3538b8b4f296a54e13ebf86",
+      "raw_bytes": 538917,
+      "gzip_bytes": 224705
+    },
+    {
+      "sequence": 14,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000014.json.gz",
+      "gzip_sha256": "9cb12548d1660bac9c4d1e0eb425cd45d1df0935cc482c8d1809be57a13fb970",
+      "raw_sha256": "189c5606bba71ed015bdc30693c9d3d53e495b511877587079696111424035aa",
+      "raw_bytes": 530627,
+      "gzip_bytes": 220807
+    },
+    {
+      "sequence": 15,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000015.json.gz",
+      "gzip_sha256": "3cce5cd5f985518c554ff8e1a3c491496dad48fbdb19694ff60f2c948241ae1c",
+      "raw_sha256": "fe6009f38c02164b9a02e92530e95af46d7da67950b8bb6be2c946f6f9e432cf",
+      "raw_bytes": 511979,
+      "gzip_bytes": 212419
+    },
+    {
+      "sequence": 16,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000016.json.gz",
+      "gzip_sha256": "f41d0c3d13ec346586495dfe355a30db951c8f26dd2a874052b6e7c5f8c58ce8",
+      "raw_sha256": "b0927c187335e32e80611054c4393d643fb316f4d8e03a9103672cdd95bce4d9",
+      "raw_bytes": 519928,
+      "gzip_bytes": 217962
+    },
+    {
+      "sequence": 17,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000017.json.gz",
+      "gzip_sha256": "4c2670351ccb3316d663f27481619de36a2013bb844fd1c36127214ff36285ef",
+      "raw_sha256": "3b0ab604f6e682e675a10f7722016047b5ea6a397b1cc294eb79d447ae403ef5",
+      "raw_bytes": 516515,
+      "gzip_bytes": 217063
+    },
+    {
+      "sequence": 18,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000018.json.gz",
+      "gzip_sha256": "06c20e21da354ac9896e83c4417e24b2bf62dc655015e1b92af3ed1c547877e3",
+      "raw_sha256": "cdfd3a4308b382035fd030c9d0f194618238d3c79a7527f20e6f48cccd05f59a",
+      "raw_bytes": 515788,
+      "gzip_bytes": 216715
+    },
+    {
+      "sequence": 19,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000019.json.gz",
+      "gzip_sha256": "baecf996b4a875c90d1e1816163689f6128abd4845a61d4150619ec088793e47",
+      "raw_sha256": "969ca53ec84bab6fd7eb4f209053c206477b273bd7f6eb37dc7e899127ef2bea",
+      "raw_bytes": 495155,
+      "gzip_bytes": 209109
+    },
+    {
+      "sequence": 20,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000020.json.gz",
+      "gzip_sha256": "a4fe63793fbabc8fd91374742dd7e00cbcecbe59bbaa8614e9d0ce052eb7fd4f",
+      "raw_sha256": "69208f6e07277ff3212c87620261f5cf967ad50150e57ae35743cda9249056bb",
+      "raw_bytes": 497011,
+      "gzip_bytes": 209990
+    },
+    {
+      "sequence": 21,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000021.json.gz",
+      "gzip_sha256": "fbd706d3bea731c74d6dc494456d85588eeae9b1d54f2994b0f755c6c7256f46",
+      "raw_sha256": "4048cff17009e896e0d23183fa189c33144f37cf689fa604f063621cf41e05ca",
+      "raw_bytes": 492973,
+      "gzip_bytes": 207982
+    },
+    {
+      "sequence": 22,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000022.json.gz",
+      "gzip_sha256": "adc55451995bd97686c40e025088ef77aeb72888c5839e9edaf2719b2e4cde6e",
+      "raw_sha256": "dbf0b50720b8d707c159a86de37737591e7eeadab8d533d0c15c58506d508f27",
+      "raw_bytes": 494638,
+      "gzip_bytes": 209193
+    },
+    {
+      "sequence": 23,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000023.json.gz",
+      "gzip_sha256": "0ad0e1a9121cb5fd5efd6bb228fcac7b9e26a1eafa1f767419cc4de8aa46b77a",
+      "raw_sha256": "9555d5cad5cccd89f266a25829c5ce408e1ac1fd9e0d228a5b5149b679c0776a",
+      "raw_bytes": 475427,
+      "gzip_bytes": 201378
+    },
+    {
+      "sequence": 24,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000024.json.gz",
+      "gzip_sha256": "c140426e5a683f42aec41550caf3d35bc8922cde9b74e2681dda2c6f1847afac",
+      "raw_sha256": "226739a467aa0b16d840e765031f8c4430055bddd54f664085219a487e172e58",
+      "raw_bytes": 458967,
+      "gzip_bytes": 193764
+    },
+    {
+      "sequence": 25,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000025.json.gz",
+      "gzip_sha256": "9de32c21eeeab13a5a2eaa1e028788e45824c259aea8ecccd4d35457bc3ac4f3",
+      "raw_sha256": "11ce6fc580995739ca59f7611d5bcb6e360230f85770addccc4a4f7e789741d0",
+      "raw_bytes": 454790,
+      "gzip_bytes": 192292
+    },
+    {
+      "sequence": 26,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000026.json.gz",
+      "gzip_sha256": "1e17e2e2839897b5db9104992a46ce5422e06acb1ce385a283c761613490dd2d",
+      "raw_sha256": "687f1524823b0fe0fca01bdafec33eeab20c0326adb0863309b06ae0e70a675e",
+      "raw_bytes": 458715,
+      "gzip_bytes": 194786
+    },
+    {
+      "sequence": 27,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000027.json.gz",
+      "gzip_sha256": "fc9aa53be4b0749cf1fcc35555c675920022142bcbdb7fd0fe14fa37c9ec9f4b",
+      "raw_sha256": "abd23d69bdf49509440e43b9e016c258762bffa4fd87d85ced466150ea7b9f3a",
+      "raw_bytes": 435309,
+      "gzip_bytes": 184814
+    },
+    {
+      "sequence": 28,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000028.json.gz",
+      "gzip_sha256": "6bb6fa5986192124f2456dcc6ff6892826df264c074609f55661b1b8cca4f0b1",
+      "raw_sha256": "ed51c7e6280f527e2bc9b5b8ac6de3fa3cc3efebc4a8addc30ba417ac56ad3d6",
+      "raw_bytes": 409821,
+      "gzip_bytes": 173208
+    },
+    {
+      "sequence": 29,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000029.json.gz",
+      "gzip_sha256": "ade35bc0e8056b07e1993a592e2a7a8617e8cfcc2a000ef1d9afdb9265861446",
+      "raw_sha256": "bb08d575fcf759e726cf73fe2558e84720631ae026cd6d817df71bcbfcedba01",
+      "raw_bytes": 398091,
+      "gzip_bytes": 167917
+    },
+    {
+      "sequence": 30,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000030.json.gz",
+      "gzip_sha256": "e8bcf2ef58f0b70aaa968809d74f788defabd7372b88bca8999237110a314ed6",
+      "raw_sha256": "c415c8a2cf07c359b8fa5955f9a3ce814e00f8bfe701bee62bbdddf922c94b75",
+      "raw_bytes": 519902,
+      "gzip_bytes": 216758
+    },
+    {
+      "sequence": 31,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000031.json.gz",
+      "gzip_sha256": "12cccb1d1456704a8742b29f10b999ac9c126f6a390d05b239c893bea0d1c54a",
+      "raw_sha256": "1407df9b582d1ecc887071ab091fa28662b912cd3765626df92ed5b22bfe83c8",
+      "raw_bytes": 523832,
+      "gzip_bytes": 218457
+    },
+    {
+      "sequence": 32,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000032.json.gz",
+      "gzip_sha256": "3173d96db43612e01bdd7f18fe9e307cb1c40e6896bce1350f1f30e3082975ef",
+      "raw_sha256": "19229bb01a7cba3cba5a1390e90166623e5e701e03e7bb01f76802d3383ed985",
+      "raw_bytes": 526127,
+      "gzip_bytes": 219755
+    },
+    {
+      "sequence": 33,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000033.json.gz",
+      "gzip_sha256": "5e28a793cc8faba93809a11db1c23139368f7e62b9c0b31635908a797fd8deb4",
+      "raw_sha256": "5acbe79ad6883e553d0c39702dbe288296db17971e0d0bc0b77a897255612643",
+      "raw_bytes": 528050,
+      "gzip_bytes": 220493
+    },
+    {
+      "sequence": 34,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000034.json.gz",
+      "gzip_sha256": "c194dff868ed2f79c28028b5e09a05f9f15ecde0acbb7ff765c6cc9bfab38028",
+      "raw_sha256": "cd96eb6d92fee7681f9cacb88fc655f5da67f9c16f0aff3a8f7ee70ca3bfdd12",
+      "raw_bytes": 527512,
+      "gzip_bytes": 220399
+    },
+    {
+      "sequence": 35,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000035.json.gz",
+      "gzip_sha256": "3fb2e7ea55599501ad1d85518f14ea1308c06a51da6fea826c2a09409e19f089",
+      "raw_sha256": "03fb79a2f5f484ed22998991da16528863fbe8661d1f85d1481ed16f2f485287",
+      "raw_bytes": 518744,
+      "gzip_bytes": 215978
+    },
+    {
+      "sequence": 36,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000036.json.gz",
+      "gzip_sha256": "3a0b5c8b393349dfb38a971856b1193513afd326b29d332facd75b8a0567bb2c",
+      "raw_sha256": "6f1a814984232141579171ab8d22c340b326276cf93a33489f1eb5af69cfa06e",
+      "raw_bytes": 533070,
+      "gzip_bytes": 223052
+    },
+    {
+      "sequence": 37,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000037.json.gz",
+      "gzip_sha256": "f8d422b24c8e7a20084a7e001b0c9d77e321e160bc2d11779ba64b5778a4343d",
+      "raw_sha256": "935d6578eeab8c87112081d1efe1fca7e88712bc495bf07317eae6c12e4255ad",
+      "raw_bytes": 535829,
+      "gzip_bytes": 224264
+    },
+    {
+      "sequence": 38,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000038.json.gz",
+      "gzip_sha256": "9943c17d389613e96955d51492e6d5b31128e1b77a6c024ffa6ad98a2ae31108",
+      "raw_sha256": "0c487fe54fa600337c8a49fe52ae12af290168a0f45d5c1afb9b6f5f2609a122",
+      "raw_bytes": 543108,
+      "gzip_bytes": 227728
+    },
+    {
+      "sequence": 39,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000039.json.gz",
+      "gzip_sha256": "d07f9b59045bb8e75feb97deac32347e1c864ce09df739e765dcd34dd2c80b90",
+      "raw_sha256": "8b9a691942b2e25ba58e2aa0fa6bf0e39f0e79920249cb293f7bc2aee2d25d5b",
+      "raw_bytes": 544401,
+      "gzip_bytes": 228005
+    },
+    {
+      "sequence": 40,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000040.json.gz",
+      "gzip_sha256": "b31f4e336644b12e53e4dc08f5c3513c503ca63fcd8f6ad8d754ba2e2d90bdae",
+      "raw_sha256": "8ab1fa7a0b5a22aec0370a110d1a8a9c4463ce1068d79ffb7ce093457c70ef20",
+      "raw_bytes": 547967,
+      "gzip_bytes": 230277
+    },
+    {
+      "sequence": 41,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000041.json.gz",
+      "gzip_sha256": "d889949529f7c1bd5172b0bbbd202825ce91ada0b040abea62d2ec776fe0ae8f",
+      "raw_sha256": "123ddea1f76ee9165bca32ba53344e9ee4e9d697499bfba815c2be9fa13bf02f",
+      "raw_bytes": 557454,
+      "gzip_bytes": 234435
+    },
+    {
+      "sequence": 42,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000042.json.gz",
+      "gzip_sha256": "7d1ba3c34f158101c38040a5b4f9966a4f2d428d39760bda40fcee90ea1379d4",
+      "raw_sha256": "023eb38cb5b0eecdd53eb1b390ef66ef01d426fc54e01b21bc561acc99a26fa5",
+      "raw_bytes": 559636,
+      "gzip_bytes": 235462
+    },
+    {
+      "sequence": 43,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000043.json.gz",
+      "gzip_sha256": "22d5f8ccd198dd8036873558ef5a0c9b3af63961b9a44f750ae141b9215a9b39",
+      "raw_sha256": "7516c8af7e89ff87e6b3209fbf8814ca7c5db002fdd176cdbcdeeb6de4cc492a",
+      "raw_bytes": 556485,
+      "gzip_bytes": 233839
+    },
+    {
+      "sequence": 44,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000044.json.gz",
+      "gzip_sha256": "03665a55d0a1659740486f3ac6f999bd1a44b08c4fd9959c47f0e1069552366b",
+      "raw_sha256": "2f45e49aff3072b4fb9a791d3d81c22014bbe6cc5e1b691f8eb26894485280f0",
+      "raw_bytes": 529859,
+      "gzip_bytes": 222356
+    },
+    {
+      "sequence": 45,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000045.json.gz",
+      "gzip_sha256": "ed91790e66fb23d67662536408c4344350c72a1b9051d005cc901691a1477652",
+      "raw_sha256": "ae0d7dd09e3e99440de87b09518e05e434c1d3bb9347ab35e4a4a25820a55f3f",
+      "raw_bytes": 521614,
+      "gzip_bytes": 219360
+    },
+    {
+      "sequence": 46,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000046.json.gz",
+      "gzip_sha256": "898ac3994576ae08d9ca0b11fd6a854a71c9837dfc71aacb1396b6cc07c305c7",
+      "raw_sha256": "d11b6cc6f58e73b3140a45283b75fcc34b4eed8fe760e3dd3348370e002e4209",
+      "raw_bytes": 526937,
+      "gzip_bytes": 222034
+    },
+    {
+      "sequence": 47,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000047.json.gz",
+      "gzip_sha256": "4cfc6e3630e5e3524693c075cda10ab31c0bcbfeac128e39a4cf769776ecd174",
+      "raw_sha256": "6a57567a76287f76ac8c7ab11310e9af0d0b182de5253e613a83d60c75a5fd34",
+      "raw_bytes": 520437,
+      "gzip_bytes": 219704
+    },
+    {
+      "sequence": 48,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000048.json.gz",
+      "gzip_sha256": "4cb91dc6c05f567e81e7e76297a1a7a13d4e7442946d8054ffeef9139eb82451",
+      "raw_sha256": "af3d93407b08f08e03140b16f138a804c692498f9888449f05c7d41e8530ec3f",
+      "raw_bytes": 505008,
+      "gzip_bytes": 213160
+    },
+    {
+      "sequence": 49,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000049.json.gz",
+      "gzip_sha256": "4aaf85df1d8fc8cc7ee41407bb3cdf1bd0e47a6955a0c499b53557de0859e65d",
+      "raw_sha256": "99cfc56205051b6a8e0deb15990a3ae49f7acb76faf60fef580a0933626bf5f1",
+      "raw_bytes": 481099,
+      "gzip_bytes": 203075
+    },
+    {
+      "sequence": 50,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000050.json.gz",
+      "gzip_sha256": "419e62297ef7e15086b8d229d477caecbb68871e7ad1a267d04d1f1f1a4ac19e",
+      "raw_sha256": "8b50165a3a896fcafa0c84c2965bc0c525924391482c5244f901e9bdf71c328b",
+      "raw_bytes": 480754,
+      "gzip_bytes": 203592
+    },
+    {
+      "sequence": 51,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000051.json.gz",
+      "gzip_sha256": "4037fcb58f0979393874e1318e34588890eadd83374450726ed32271e09a3f47",
+      "raw_sha256": "33db0be66dd713b12982d73c7f0b4612ab338dc4ab4cf95a63810a2c15135225",
+      "raw_bytes": 481983,
+      "gzip_bytes": 204837
+    },
+    {
+      "sequence": 52,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000052.json.gz",
+      "gzip_sha256": "a15aee467ae79f84cac48b7856e776918592bfda81738897b785b736d520571f",
+      "raw_sha256": "b0032ebb5c7ccf8552d512d99330c9f66cb74f6f0337117628390ffc7a84ede2",
+      "raw_bytes": 450163,
+      "gzip_bytes": 191209
+    },
+    {
+      "sequence": 53,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000053.json.gz",
+      "gzip_sha256": "514540aa1b36557697a0a834540b9e79939efa4b0846d1bb2a1f037526a4601d",
+      "raw_sha256": "2241386655c080bf4911577fb659a4eb4ba1f8535713ea8fa127dbfecd682ceb",
+      "raw_bytes": 439874,
+      "gzip_bytes": 186954
+    },
+    {
+      "sequence": 54,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000054.json.gz",
+      "gzip_sha256": "19dd5aa30e46806a0c9f4aa7c9be4f18192a7550552c5011567365700af13eee",
+      "raw_sha256": "572ef3d2de4e82bb842d674ad5c1355e7307db9f7e621a1b30e8e5f9f816da66",
+      "raw_bytes": 437801,
+      "gzip_bytes": 185805
+    },
+    {
+      "sequence": 55,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000055.json.gz",
+      "gzip_sha256": "1376eb0c14b6c416d00043254ebe4f2c44a1e2d2fcf82762ca7270aa40214486",
+      "raw_sha256": "2b93d167fe8defdac4b92eaaaa745473577e49742467a6f9de640b44f0f88203",
+      "raw_bytes": 423201,
+      "gzip_bytes": 179709
+    },
+    {
+      "sequence": 56,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000056.json.gz",
+      "gzip_sha256": "e540d988418151a0f20ab964895ec8b2e00667eb3919ab83b54e150143458fda",
+      "raw_sha256": "0b959f97d4b0f4eafcd46073bf5f1abfcce341b059a7a7a85a70c023315c9871",
+      "raw_bytes": 415571,
+      "gzip_bytes": 176909
+    },
+    {
+      "sequence": 57,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000057.json.gz",
+      "gzip_sha256": "84e91171d79cd79b7e5b4822e27c73c7419db56d43da29546bbc55991e338fc8",
+      "raw_sha256": "f7b3e0a565888226eaa1177c2aedf84a9c9754a28042f6487b91e219c013de0b",
+      "raw_bytes": 387589,
+      "gzip_bytes": 164707
+    },
+    {
+      "sequence": 58,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000058.json.gz",
+      "gzip_sha256": "ec49081cf4ac2c13677639676459ff20abd9db5b2ba8ca67a549d1ac6753bc3e",
+      "raw_sha256": "971c8f365fb2a7e961ce0d0aecd8b8a185c25f9fdd19299a5c29b2937ff002e2",
+      "raw_bytes": 518839,
+      "gzip_bytes": 218586
+    },
+    {
+      "sequence": 59,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000059.json.gz",
+      "gzip_sha256": "8be8c1a3e59e9ed35edf7807c893444c2acf5a7f7a92568bb6a9f86fa5a27d10",
+      "raw_sha256": "1afe98fe93ea29ebe8abaebb3421121b4b2f3ea71eb947747111139851f17747",
+      "raw_bytes": 520801,
+      "gzip_bytes": 219539
+    },
+    {
+      "sequence": 60,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000060.json.gz",
+      "gzip_sha256": "1fdf384333f5ebd94488d6d86f1cab237077e3eb4045a5ab3b722640e48f6fb1",
+      "raw_sha256": "f7c26dff353698fa73ad6b1e1551b3ff0aacf686eb2072f4a7114e567c3d0ca7",
+      "raw_bytes": 522641,
+      "gzip_bytes": 220559
+    },
+    {
+      "sequence": 61,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000061.json.gz",
+      "gzip_sha256": "46196353d5b223b3baece5a151072f3e92f9f4dae0e26c1584e8de2c956f901e",
+      "raw_sha256": "1466ac16d8e4810f5c350a26e1a348cba4d3f1bdd214489d5ed9345c74b60968",
+      "raw_bytes": 522468,
+      "gzip_bytes": 220305
+    },
+    {
+      "sequence": 62,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000062.json.gz",
+      "gzip_sha256": "a0ea2bd128f05d32012808971b5d6a0bcdb6c35817fb9df19095445ada712fc4",
+      "raw_sha256": "cacef639f0acd4fdac536519e326973fd84482e0ac79bb068b040c4e91f6ac34",
+      "raw_bytes": 524078,
+      "gzip_bytes": 221212
+    },
+    {
+      "sequence": 63,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000063.json.gz",
+      "gzip_sha256": "8aa21b669ba9d456f9bb52fa952ed59f3ecf75d37add73128de8ce4929136fb9",
+      "raw_sha256": "bf7ef0ca389fde407608f4d86b79d76c998cb9272f2a56af8c898fb0cb3be6b7",
+      "raw_bytes": 513980,
+      "gzip_bytes": 216686
+    },
+    {
+      "sequence": 64,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000064.json.gz",
+      "gzip_sha256": "6032f55e651bac02f9d6d5f20d34db49a18f5d2c51c89ff42783efe09eb17f62",
+      "raw_sha256": "253488a1b2cc15bd06be0b85ef2ca8b39a959c55eea53b4163396e9d3799fd34",
+      "raw_bytes": 533073,
+      "gzip_bytes": 225798
+    },
+    {
+      "sequence": 65,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000065.json.gz",
+      "gzip_sha256": "43ae78e951e907e84736f17c7a1169763721be9aa30b29c61adca94a75ba6e95",
+      "raw_sha256": "e1cd955164a6c560ef59c09d08069844c998dfe9ad2308cf192b9ebe45bb20dc",
+      "raw_bytes": 538534,
+      "gzip_bytes": 228139
+    },
+    {
+      "sequence": 66,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000066.json.gz",
+      "gzip_sha256": "6b7babb1d3b0adb228e9724ef7a599c88df1e8085dae441e61d9cb2e728e6223",
+      "raw_sha256": "62ec4fbe26b3350985bdf975e932657f9150fe8aca6be502879d4d0c682ebd3c",
+      "raw_bytes": 536157,
+      "gzip_bytes": 227000
+    },
+    {
+      "sequence": 67,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000067.json.gz",
+      "gzip_sha256": "5c35960d5a641d95a192b5bc115cac717dac1f92aebd0c7746da0771ee2e0e16",
+      "raw_sha256": "7cbb764f9534ec7b0022bbc20b7b05d89e3fae7b5aa87e66309a6e48055287bb",
+      "raw_bytes": 541891,
+      "gzip_bytes": 229702
+    },
+    {
+      "sequence": 68,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000068.json.gz",
+      "gzip_sha256": "9f4b730b3cbd5e42b05b64c885a6bd9ca85b853f3815be5061646b02426d3f55",
+      "raw_sha256": "3aa41605bd981beb86c09a865f4eee2a7f73efd4117e8c5c0efe911393e8af1f",
+      "raw_bytes": 550909,
+      "gzip_bytes": 233635
+    },
+    {
+      "sequence": 69,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000069.json.gz",
+      "gzip_sha256": "91f0422ae73ad95a10222a7e040173c4b9cc8ef84afaf687210e0c7b3e362a30",
+      "raw_sha256": "f82fce3d1f195908255340c8309b96d89890932a2dde59b7c9727d7fe273d15e",
+      "raw_bytes": 549986,
+      "gzip_bytes": 233667
+    },
+    {
+      "sequence": 70,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000070.json.gz",
+      "gzip_sha256": "d13f5f6d35ff7449ecbe02dc81645848e5eb989d8f64bd565224afb2dc758848",
+      "raw_sha256": "c0a7fb38cddac9275cabb177d3b811a50b7c4145324202f088176b3c045f75a7",
+      "raw_bytes": 548943,
+      "gzip_bytes": 232743
+    },
+    {
+      "sequence": 71,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000071.json.gz",
+      "gzip_sha256": "172e6bece70f637c875081dd3f82d960f92f43f3632bb7940c99f10d2c1abab6",
+      "raw_sha256": "a425c5529e32428f1eac42bf8cf88fcf5a0cdb60b448b97d201e8d969931ae29",
+      "raw_bytes": 544788,
+      "gzip_bytes": 230979
+    },
+    {
+      "sequence": 72,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000072.json.gz",
+      "gzip_sha256": "f40bcfc6a0c7f347b49658906705b2f42642b53c63a20a569241389dfdf278ea",
+      "raw_sha256": "c23283b5413d728c58527390b4d3e0ed1dab17c3a8ce7ef828ced52bab2eb7b8",
+      "raw_bytes": 545796,
+      "gzip_bytes": 231489
+    },
+    {
+      "sequence": 73,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000073.json.gz",
+      "gzip_sha256": "776ed95aeb470ba0662e357361e06d281bb313aa21f6b573919819c29d8dec30",
+      "raw_sha256": "650606982d16d7652b784bf081aa0a4e60139b70ccf4a4071af41c2d3f2ef3ad",
+      "raw_bytes": 535135,
+      "gzip_bytes": 226503
+    },
+    {
+      "sequence": 74,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000074.json.gz",
+      "gzip_sha256": "2fa909bf13da9df2f52d34250988229258a992fb9b20a121fbbf8228c4c95922",
+      "raw_sha256": "8f76825e37a485008a5e8025514876d5438dd707345f3147ede6a5580fad9b74",
+      "raw_bytes": 520327,
+      "gzip_bytes": 219638
+    },
+    {
+      "sequence": 75,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000075.json.gz",
+      "gzip_sha256": "81920722c851d91df2cf1b71734c61de22d7a89530b1a02f040d852421b1aca5",
+      "raw_sha256": "680587937b2f8e964a23488bf169b291e671d3290a00d5ad6f20ef6dca519762",
+      "raw_bytes": 540893,
+      "gzip_bytes": 229086
+    },
+    {
+      "sequence": 76,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000076.json.gz",
+      "gzip_sha256": "30164382ed5f50676fb846852a1ce0178ca77ade9821f39b4b664e128378c183",
+      "raw_sha256": "1dbe125cc5c7d1fc637f89d545b245b59d63590a656a4eed866e1e0057b11425",
+      "raw_bytes": 525864,
+      "gzip_bytes": 223971
+    },
+    {
+      "sequence": 77,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000077.json.gz",
+      "gzip_sha256": "99c7550bc822fc9e0d71036312765e89fbcc2c2ef6a05b3c5dfff2f81ebfea51",
+      "raw_sha256": "218852256c7b2159d3b6e843377ac8c206313ed1dd8048de113044bd140dbe70",
+      "raw_bytes": 535503,
+      "gzip_bytes": 227505
+    },
+    {
+      "sequence": 78,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000078.json.gz",
+      "gzip_sha256": "92b3c2277431901edbda0674fbe88aa9b12e4c9bc06694b8ffcb1afd02916822",
+      "raw_sha256": "04264665083280dae066ae22966f609df8931974a041c1b2e97cfd80aeac158c",
+      "raw_bytes": 514744,
+      "gzip_bytes": 217671
+    },
+    {
+      "sequence": 79,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000079.json.gz",
+      "gzip_sha256": "ede69d51be95b663c1b4faa099d66ea4e6fe46c83656e2d414c2c28857eb0262",
+      "raw_sha256": "167b8a8841ae875e0b4d0557c44cdd406e6f53e01b354e7735800bdcd1cc403b",
+      "raw_bytes": 501201,
+      "gzip_bytes": 213180
+    },
+    {
+      "sequence": 80,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000080.json.gz",
+      "gzip_sha256": "031dedc9494a13e86064c5ecb8908c6d708535958a98a50c7f676464876cf5ac",
+      "raw_sha256": "13499316e7c8556777a65eaa7ca1762a3fd3199c95c988a3ad3eae48a497769e",
+      "raw_bytes": 509240,
+      "gzip_bytes": 217981
+    },
+    {
+      "sequence": 81,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000081.json.gz",
+      "gzip_sha256": "b9bb29b57b3e6fe99530d28cfb80c473e872af8b2a88fc62f76bd7bc8d513198",
+      "raw_sha256": "72a2d50ea5e073f30c2663703fa345773977fe855192dc85049517b1f987d410",
+      "raw_bytes": 507163,
+      "gzip_bytes": 216939
+    },
+    {
+      "sequence": 82,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000082.json.gz",
+      "gzip_sha256": "504ede05a971589e675393fe7f7775e846d2ff20adee5b451a4c1842dafbd003",
+      "raw_sha256": "68b6e549470adbe216e9a6cd799972cdff6a8156e91ba3ddd7f791def5fdc0ad",
+      "raw_bytes": 488436,
+      "gzip_bytes": 208044
+    },
+    {
+      "sequence": 83,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000083.json.gz",
+      "gzip_sha256": "92ec1f29676a738c078a2e7070497fc750107dccccf438f205d4ac0cf249f306",
+      "raw_sha256": "8e33a41ea9d02e8d6f8cebb957c9b33f60f7b40774035a229acacc0e459ac1c4",
+      "raw_bytes": 475866,
+      "gzip_bytes": 202660
+    },
+    {
+      "sequence": 84,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000084.json.gz",
+      "gzip_sha256": "ad69a79e7a27f3c0e69e2e9fca6ccef5009936810cf870b5615df2a40058aa17",
+      "raw_sha256": "6009becf34da3d300e9a21656cd3bf03230bd144016ac4e540f997e6ca2bbb32",
+      "raw_bytes": 460657,
+      "gzip_bytes": 196462
+    },
+    {
+      "sequence": 85,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000085.json.gz",
+      "gzip_sha256": "ef0023d72e58ff92a127ab042b753ae7c40e8861a20332cd65110373cd5e5769",
+      "raw_sha256": "8d232ee281ab8d39d0e3ad381415b4a180e65e1abe5a154f9aec7092ebd3bb00",
+      "raw_bytes": 451578,
+      "gzip_bytes": 192983
+    },
+    {
+      "sequence": 86,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000086.json.gz",
+      "gzip_sha256": "112758f1de1d0fb5e7c08b82882ac1393d755cea8256ef1bb1f3c3eb32e54ca7",
+      "raw_sha256": "e6fb67fb34d6d4fde1ea40fde50dfe3736daba1a488b899f1a6358009514e30d",
+      "raw_bytes": 458597,
+      "gzip_bytes": 196995
+    },
+    {
+      "sequence": 87,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000087.json.gz",
+      "gzip_sha256": "61ecc4c57da673125af61031adc732044438179adf1e40ea862bbf73f94593c4",
+      "raw_sha256": "c54da7314bc0b25f4b54ac39394ad841d32905a3cd2380cf5d93dc41f1aae461",
+      "raw_bytes": 433744,
+      "gzip_bytes": 185196
+    },
+    {
+      "sequence": 88,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000088.json.gz",
+      "gzip_sha256": "f5db607ec7ce0e45690de568968ab1c9c0a70fb656e4d84f4fb13016ed29fa12",
+      "raw_sha256": "f7f545804f2ec5aed2ec0001eefc71a17b0328ff12eac5cea227f8656b5bf192",
+      "raw_bytes": 418796,
+      "gzip_bytes": 178256
+    },
+    {
+      "sequence": 89,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000089.json.gz",
+      "gzip_sha256": "bb8e4624f4d5f2e486770947759d2ff6d5329353fa16380fc3709a7c92cd3342",
+      "raw_sha256": "b5ba79e4a966e2e407b5fc95fa472430de40efe869fe88e80ade459d243b7dd0",
+      "raw_bytes": 401217,
+      "gzip_bytes": 170723
+    },
+    {
+      "sequence": 90,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000090.json.gz",
+      "gzip_sha256": "9d9a94e080189a4aa26cbf1a83cb9725dcf8556b84d4fcbfad0d904f33ba233b",
+      "raw_sha256": "bcccc24a866ee74df450a3d8fdab8a6506513bb2f26e31cc7c2f4275ddfa5459",
+      "raw_bytes": 410974,
+      "gzip_bytes": 176289
+    },
+    {
+      "sequence": 91,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000091.json.gz",
+      "gzip_sha256": "d11dbb04db1ee85b04f953b24c2d548a9a314696c34e48597cb88aaaeed670fb",
+      "raw_sha256": "18131c27629f8e4f29bc46738d94a28258c2be502321e8c9e790c0ed36c7b4a1",
+      "raw_bytes": 523441,
+      "gzip_bytes": 219139
+    },
+    {
+      "sequence": 92,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000092.json.gz",
+      "gzip_sha256": "4aca6c35c513122ea25b79b5ca9d3a5dfb35eb9d7aa8f9c4e603708d2ea9a7be",
+      "raw_sha256": "3c819ebc2d38442152df6171735b935a01694f7e967d219766e2f1465c961c5d",
+      "raw_bytes": 525132,
+      "gzip_bytes": 219994
+    },
+    {
+      "sequence": 93,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000093.json.gz",
+      "gzip_sha256": "8cb0003b4e72a1e307f08f88287b18acf0e4d80d157604c2acc8f82deb6c3621",
+      "raw_sha256": "0cc766a55a1dfdef8316889c005dd2dd8de7d3228aafda4a5790bae32f8b75bf",
+      "raw_bytes": 527126,
+      "gzip_bytes": 220817
+    },
+    {
+      "sequence": 94,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000094.json.gz",
+      "gzip_sha256": "74c5e7cdd51607e618e2de6545c437b76213dbf7d643f5054f76d71617be4ae3",
+      "raw_sha256": "db67bf563ba06a3679c5cff4a07b49f648f79cd84e07d3c3e8c9eced52c180cf",
+      "raw_bytes": 529063,
+      "gzip_bytes": 221960
+    },
+    {
+      "sequence": 95,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000095.json.gz",
+      "gzip_sha256": "2ede469928e4a967237aa681d7ff26bdd335ac2e1e14a0416c37d3c96f1453d1",
+      "raw_sha256": "3612bc204ecf2ae39d8f64dbea8ccac7be64a527b0f55f586d33df94a2621037",
+      "raw_bytes": 535756,
+      "gzip_bytes": 224954
+    },
+    {
+      "sequence": 96,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000096.json.gz",
+      "gzip_sha256": "ce93dab63ac0f91ddc6ab88f0157a6caca52476d70134b00f30f8f5d1dff90b2",
+      "raw_sha256": "8c2dc844920d600b48db1eff5166fbcfc51ad398559afde3e6c8110ab64d6571",
+      "raw_bytes": 528474,
+      "gzip_bytes": 221781
+    },
+    {
+      "sequence": 97,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000097.json.gz",
+      "gzip_sha256": "5f869d3f779f2bb5e5cc43909d108597dc28a065ed7c5ff5dc3f626cdcbcd43b",
+      "raw_sha256": "370e27e0568db02fd42cc7ae0a80bad7daf24dd14513752278d1c9de8a2732af",
+      "raw_bytes": 528902,
+      "gzip_bytes": 221908
+    },
+    {
+      "sequence": 98,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000098.json.gz",
+      "gzip_sha256": "53fccdb7a6d18281b1e65c845f0e4a6ec4222642131ab537540d666a91e829ba",
+      "raw_sha256": "28c9c64014e2654833c1084b5fc66dea344c19fc365356140ec209357b1d649a",
+      "raw_bytes": 535868,
+      "gzip_bytes": 225256
+    },
+    {
+      "sequence": 99,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000099.json.gz",
+      "gzip_sha256": "402304e2b8908f1b7dee4c597f5406e3d646b025e0731daf42719d5e314e061d",
+      "raw_sha256": "2913749b4365ef03662b372fec95fb271b6dad132c3e7c39e848a21516fc1f24",
+      "raw_bytes": 558416,
+      "gzip_bytes": 235868
+    },
+    {
+      "sequence": 100,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000100.json.gz",
+      "gzip_sha256": "9f80a82bbcfba0f306f1141fa48ab6f4b3b91cf0da1396ba554b1e3f12da9e1d",
+      "raw_sha256": "cd903bf7b15827b9167852b3bb7770a2d327d30e79397a05beae6c2377845203",
+      "raw_bytes": 556981,
+      "gzip_bytes": 234432
+    },
+    {
+      "sequence": 101,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000101.json.gz",
+      "gzip_sha256": "849faeb2cbe5a688e147c911f0a0163ba7c202384fa5b0562d6f59a4f5a81fdb",
+      "raw_sha256": "7ccba6a8fd7c52a236a08ee36245c73cc56706ae9c8902b74751264f9a0b12ec",
+      "raw_bytes": 550675,
+      "gzip_bytes": 231389
+    },
+    {
+      "sequence": 102,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000102.json.gz",
+      "gzip_sha256": "d58b71ed7aa74db520584874f9cceaa9a8ac7c5283b4969425ce45355e61a22d",
+      "raw_sha256": "58ed5dd07cd2198b5d0c21f9624de3b3607102155c2d45e5c952d6da19151f8a",
+      "raw_bytes": 556342,
+      "gzip_bytes": 234084
+    },
+    {
+      "sequence": 103,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000103.json.gz",
+      "gzip_sha256": "b60bc21669fca5ad38dfb7faf220a2d73c3fc9f0efd228e5f7f0d7f865a68f19",
+      "raw_sha256": "03d817ed07abdded0bbfe03bbd89f35ab273d97b8b6a2b66f3fe6c89d0584706",
+      "raw_bytes": 564388,
+      "gzip_bytes": 238074
+    },
+    {
+      "sequence": 104,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000104.json.gz",
+      "gzip_sha256": "8c62f42a2e130b3335e590524aae0cfbf2d3bfccb423dae2c64bb60401e57d64",
+      "raw_sha256": "962123f96fe09a991312b49d06e2ef439cfbc181417acf19c2380d3e57989ffb",
+      "raw_bytes": 565631,
+      "gzip_bytes": 238576
+    },
+    {
+      "sequence": 105,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000105.json.gz",
+      "gzip_sha256": "571a5458de4d752ff966b899158d779fe0bb03443eda2dce629fdf0276868f87",
+      "raw_sha256": "6bb52c4d16843dcbf1765732eb1a2a5f65f9e9a8af1083f7a7c805f8ff1e632d",
+      "raw_bytes": 567557,
+      "gzip_bytes": 239295
+    },
+    {
+      "sequence": 106,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000106.json.gz",
+      "gzip_sha256": "58dc35b5ff1234500d94b885f761f42e266e85ef6617c3d2d252a5fa0e438387",
+      "raw_sha256": "9ca8a57cc4af96ef0a3d7e0cfae3024e949e790fa989cdd09f4f720d84a922f4",
+      "raw_bytes": 564156,
+      "gzip_bytes": 237177
+    },
+    {
+      "sequence": 107,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000107.json.gz",
+      "gzip_sha256": "3c9c684cac8fb9cc6e8d3543c1eed3bf3fd970729510801c87c55aeb307f6dd8",
+      "raw_sha256": "21d8227b1ac088cb6961ac5f288a1c8b4a3cac2e9ad053368c3c9d333b06101b",
+      "raw_bytes": 534340,
+      "gzip_bytes": 222838
+    },
+    {
+      "sequence": 108,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000108.json.gz",
+      "gzip_sha256": "2e0ba8a1e4a6f1300ca200bdb52c2974b3ffb623bcebe078be049c4da8c433a2",
+      "raw_sha256": "9c2b66debe30a2cf87688552df005de1d9636f0e0f8b8fabb285a2d3959992f5",
+      "raw_bytes": 552001,
+      "gzip_bytes": 232087
+    },
+    {
+      "sequence": 109,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000109.json.gz",
+      "gzip_sha256": "16d4fe3c32dd161dc463d1d68aeb4e6ec14f0137e8ae879abea6e65d1a345e6d",
+      "raw_sha256": "a4ff4ef1670b3f430f9f9903bea6144e317e6f74c6273643073c1c56a14a369b",
+      "raw_bytes": 553577,
+      "gzip_bytes": 234452
+    },
+    {
+      "sequence": 110,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000110.json.gz",
+      "gzip_sha256": "6a54ce1e69377772037dca973450894691f587c443fc586a022807277f35fd95",
+      "raw_sha256": "fc77dd79d95297b4fc86309021464cbbf30f0f938b9e2c56b4050ba64b11e18f",
+      "raw_bytes": 533550,
+      "gzip_bytes": 225028
+    },
+    {
+      "sequence": 111,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000111.json.gz",
+      "gzip_sha256": "7a15d5c7c409478e3f9172e37736cab4808b68d0b7e5031a87ecf5d80766fc18",
+      "raw_sha256": "c6895bf1c1f479b3c42142cd213a386ffc1d53c6936898c32e1ab75d88e5abf1",
+      "raw_bytes": 527707,
+      "gzip_bytes": 222950
+    },
+    {
+      "sequence": 112,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000112.json.gz",
+      "gzip_sha256": "c0174d566ae345bfb83de05b9967f7bac398843f9d76d179e21bf2b6fb6b62c3",
+      "raw_sha256": "f384589718525ded82cc15888253b1b17a644d368d07f3761785362ac493c83d",
+      "raw_bytes": 521681,
+      "gzip_bytes": 220671
+    },
+    {
+      "sequence": 113,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000113.json.gz",
+      "gzip_sha256": "810c0760f4830a37c05f5725edc223411e0a60464a8155b1ca673df35aa54328",
+      "raw_sha256": "b12107b0251ac7e6908f49ec373f3624a2eab74c37497773059ed2e7961806ff",
+      "raw_bytes": 498128,
+      "gzip_bytes": 210191
+    },
+    {
+      "sequence": 114,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000114.json.gz",
+      "gzip_sha256": "5a97a7d200ca1265eedb47077c9b5ca540faadab9699b8a533e850b74415c76c",
+      "raw_sha256": "827df5e41de7462cac751a70f70b717feeafb1430b3237b9cb087523a0a00d9a",
+      "raw_bytes": 499569,
+      "gzip_bytes": 212081
+    },
+    {
+      "sequence": 115,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000115.json.gz",
+      "gzip_sha256": "004337b8c79f5078257e1b2145d016352ca735b6b265b9814d4a84eb4afcdcf5",
+      "raw_sha256": "2315c26114b0aaeb51320246107daaa15c976bba0aeb8d4a962d49244f42d91e",
+      "raw_bytes": 502493,
+      "gzip_bytes": 213119
+    },
+    {
+      "sequence": 116,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000116.json.gz",
+      "gzip_sha256": "dfa4ae03cc7f8fde7745aa041f548f598e42c22f66fed7c3fd3ecb50a5c63d14",
+      "raw_sha256": "7131b01b934641174a374ced33e65a5013fcdd959f3da3a1796ea110fae03699",
+      "raw_bytes": 484110,
+      "gzip_bytes": 205540
+    },
+    {
+      "sequence": 117,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000117.json.gz",
+      "gzip_sha256": "5cdaa31be85644797d977428121267a25f7ca83c99b2c6721bbead4c0b48a7fd",
+      "raw_sha256": "687687d6fb592f47d8f36f6b332528776c265c6600b74915aeaa93ccff4b6523",
+      "raw_bytes": 472354,
+      "gzip_bytes": 199995
+    },
+    {
+      "sequence": 118,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000118.json.gz",
+      "gzip_sha256": "c30390d9011f3198ff9a160b2080f309543c740dfebaa9a28172a613d19d4e25",
+      "raw_sha256": "6043ab899c33ccd9f75556e107882b9773bb65d515672838e9509d87a826175b",
+      "raw_bytes": 467578,
+      "gzip_bytes": 199386
+    },
+    {
+      "sequence": 119,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000119.json.gz",
+      "gzip_sha256": "fd13b191ab3004b33f92845db24cab5908ba7844ef58013a2b96396a865e3b4c",
+      "raw_sha256": "89af71704cba0685a0ae50ce3e85a1ae6671ccc2191b846b9c7503cf0c1627f8",
+      "raw_bytes": 463762,
+      "gzip_bytes": 198284
+    },
+    {
+      "sequence": 120,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000120.json.gz",
+      "gzip_sha256": "5f675da40aaabcd399355bf9fcebff7183fb825197fff6a87658535c5c7a2915",
+      "raw_sha256": "1323cf1d137505bb2c3bb1452cfdf04ac1aebb56a3f906b5576bd85522fcf4fa",
+      "raw_bytes": 424923,
+      "gzip_bytes": 180618
+    },
+    {
+      "sequence": 121,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000121.json.gz",
+      "gzip_sha256": "483416e8c4dfdf3e44660691efb3fb3f8e89638a85437e32ef36713c85b7680b",
+      "raw_sha256": "d72a2abb6b72cf91b7e39e68146ba150a119b299fca532cfa14b0bbacd465a2b",
+      "raw_bytes": 407897,
+      "gzip_bytes": 173762
+    },
+    {
+      "sequence": 122,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000122.json.gz",
+      "gzip_sha256": "9e2ea0ae1d232858513312152f44f0b69907dca052d08d225ce3919eeb0ecd98",
+      "raw_sha256": "b06a13a0a245f3366f604fd2911e5671e6667ad613d7ce1f7543f55413f3d261",
+      "raw_bytes": 502159,
+      "gzip_bytes": 207404
+    },
+    {
+      "sequence": 123,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000123.json.gz",
+      "gzip_sha256": "7f4cf06effcc0a3a6bd0a4795361b763dd429a4494a938cf0c16ca72391f2fb3",
+      "raw_sha256": "728ae002bfb30f8050b777b65d10ceedf908415b43272c4c96c4d182416105d1",
+      "raw_bytes": 510628,
+      "gzip_bytes": 211456
+    },
+    {
+      "sequence": 124,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000124.json.gz",
+      "gzip_sha256": "dc075e2ac10c15e614284face122701e9f182606d99ab9bdc96b01ba09aeb8a9",
+      "raw_sha256": "2e448f26e1618231a81b0e9c6fc8ca994e1980edb0d4d8466b647d11f061e3d8",
+      "raw_bytes": 513266,
+      "gzip_bytes": 212768
+    },
+    {
+      "sequence": 125,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000125.json.gz",
+      "gzip_sha256": "6f971742581d5a819de138a26803435f0bd35a4e822b5f7353969f20ce2a6f96",
+      "raw_sha256": "3ff346013cc18a4292a991cc074f5da6bfbc97ab9c67d9e21bf2b2136cc34920",
+      "raw_bytes": 517489,
+      "gzip_bytes": 214653
+    },
+    {
+      "sequence": 126,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000126.json.gz",
+      "gzip_sha256": "007e29435ab31488aef44e53fe096d3c3885b9bcd7ea7cd463ff7009fbc3283a",
+      "raw_sha256": "802f8c66d619c07dfc4c73126d56f8192828594793baea68f56911669e8b84f3",
+      "raw_bytes": 511012,
+      "gzip_bytes": 211297
+    },
+    {
+      "sequence": 127,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000127.json.gz",
+      "gzip_sha256": "fca863724bb7c76a7105bb144c505f153edbec773ac55f5bda87010d287cddb6",
+      "raw_sha256": "f0787fe69d86509d39064e35a76ba93eb416d91778e6a532a1290df211e6cd2b",
+      "raw_bytes": 504340,
+      "gzip_bytes": 208580
+    },
+    {
+      "sequence": 128,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000128.json.gz",
+      "gzip_sha256": "de2f986d70b444e7fe0f679e88c8366d0e6e46585cfce600cc640009474aaa3f",
+      "raw_sha256": "b3ce5907da0cac79740da6598d25a017145f8d9ac2e019629957cf7c386cab31",
+      "raw_bytes": 537758,
+      "gzip_bytes": 224182
+    },
+    {
+      "sequence": 129,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000129.json.gz",
+      "gzip_sha256": "75fa717bf4cf7cfc15639e3f3fcf4921348d1edc1a20ffc4531ef064b140b1fe",
+      "raw_sha256": "7c2301c02f5997273468dd906ea202863b02136276566529ff26da90951204f2",
+      "raw_bytes": 539101,
+      "gzip_bytes": 224722
+    },
+    {
+      "sequence": 130,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000130.json.gz",
+      "gzip_sha256": "804e9b1cad107a5dbb30649da8ac75f674763e64dcb87435907ab5f8149d2480",
+      "raw_sha256": "d432fbe6d214adb6305573b9ca95476d77872aa137a7b367609a1fb76af6b211",
+      "raw_bytes": 541394,
+      "gzip_bytes": 225851
+    },
+    {
+      "sequence": 131,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000131.json.gz",
+      "gzip_sha256": "9c582271ab9b4cf2022d0b5438c2028d6ecce216291d32b3213296fcf8d8168d",
+      "raw_sha256": "8f8455d64d2770e8db249a86cd1e4c644c067c95e1102e9b6e671721cd3f831c",
+      "raw_bytes": 534720,
+      "gzip_bytes": 222513
+    },
+    {
+      "sequence": 132,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000132.json.gz",
+      "gzip_sha256": "ea512ce41accd4c15ee21ce6d6c37e26a536ca467e8e2b0a3eb101b3fb52cf32",
+      "raw_sha256": "a34a43847e0ab56514b46f38e3011e9bc7fabc13877dd5cc04f89d3693418477",
+      "raw_bytes": 539338,
+      "gzip_bytes": 224902
+    },
+    {
+      "sequence": 133,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000133.json.gz",
+      "gzip_sha256": "24ba7ca7738cdb37b80c02a07978c743a13c14e0a3ca0efb210a884fb459927a",
+      "raw_sha256": "ab18193d58863f90521d03d4647c7230a60d06d2741a711f52a322cc05865ce0",
+      "raw_bytes": 541657,
+      "gzip_bytes": 225826
+    },
+    {
+      "sequence": 134,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000134.json.gz",
+      "gzip_sha256": "ddddabf96ee68bafb95943cd0736f722c11e1e2f40c45b32422dd59dd1f03cca",
+      "raw_sha256": "9b5b447261e14e6c7a1d5bcacd2835208843ab15c24c1ea7f47533b179146c2c",
+      "raw_bytes": 537323,
+      "gzip_bytes": 223526
+    },
+    {
+      "sequence": 135,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000135.json.gz",
+      "gzip_sha256": "14b8a9c1f872bff09a5405bd993e3442b190cb6604dcb0674384f27cb31f37ff",
+      "raw_sha256": "2b71982da471d2962f957685e7c4946422e60e06e5fde392c6582b80ddd88bdf",
+      "raw_bytes": 568660,
+      "gzip_bytes": 238188
+    },
+    {
+      "sequence": 136,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000136.json.gz",
+      "gzip_sha256": "4407cf27799003109ad808898863b2e5d0474ddcd7a9a72f22305297f6289185",
+      "raw_sha256": "8019dc626d00d24f6dadf7e094558cdb5f4889b8b51c1f0092dce865a82a38af",
+      "raw_bytes": 570975,
+      "gzip_bytes": 239565
+    },
+    {
+      "sequence": 137,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000137.json.gz",
+      "gzip_sha256": "52fe44613af0451d53be49b2a98e3a00aa33ae35273a32a410a88718b0ce429a",
+      "raw_sha256": "48b442e865671e416050ee26c9202fb174db4fc4465ecf6c909573124ccc5479",
+      "raw_bytes": 556524,
+      "gzip_bytes": 233691
+    },
+    {
+      "sequence": 138,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000138.json.gz",
+      "gzip_sha256": "3baf50bbc1851f2422bd3d707259968ef1ee97581b667d447c67a13f642f8d91",
+      "raw_sha256": "755dfd17e47b1ef5db4b216e2b3e57784cd2fc01e8351f177b40014718940dfa",
+      "raw_bytes": 527627,
+      "gzip_bytes": 220704
+    },
+    {
+      "sequence": 139,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000139.json.gz",
+      "gzip_sha256": "038329525a90b74bce95c58df57132e6a8b305dbdffb9803ca0f1b679715cc13",
+      "raw_sha256": "028fd27392fe464d96659052f5c6bb3570141ccfb3c35ee7eb27c40dcb93c407",
+      "raw_bytes": 539542,
+      "gzip_bytes": 226317
+    },
+    {
+      "sequence": 140,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000140.json.gz",
+      "gzip_sha256": "d3ab5cad86a766e7e1e36c726cf0d6f0ac9d2ce1e8b58e1822b6d3c59ea34c0e",
+      "raw_sha256": "b3e7c24ff32c1a9ad4ddaadf834f312542e17c4d420439dc3d39f2eaf49428eb",
+      "raw_bytes": 548095,
+      "gzip_bytes": 229917
+    },
+    {
+      "sequence": 141,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000141.json.gz",
+      "gzip_sha256": "4999bc6f0a59ea14fbd8c8abcab5b3c9c861d5e336bb3fea1cee5fe2b0139ec0",
+      "raw_sha256": "3579e758622446f7f918c37d26e576a86beb0736c477ac66483fc0c1f0febce8",
+      "raw_bytes": 550851,
+      "gzip_bytes": 231656
+    },
+    {
+      "sequence": 142,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000142.json.gz",
+      "gzip_sha256": "9ca6f6f46c05b51342497cb89545cc9c7f012f1c52493c6147e9f058033646db",
+      "raw_sha256": "0cf2260272092c10bc9344b74d27a082fb0d9405a14366e94ee04d091b8c62c0",
+      "raw_bytes": 534307,
+      "gzip_bytes": 224187
+    },
+    {
+      "sequence": 143,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000143.json.gz",
+      "gzip_sha256": "f503afbc6d658024e224e71fb6a8548eee5be58ae84853653d13053ad302b181",
+      "raw_sha256": "2686c4911db0bc206c979f0def2b69594734d20b4c8e8dedac05dd0c028d552b",
+      "raw_bytes": 561299,
+      "gzip_bytes": 236822
+    },
+    {
+      "sequence": 144,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000144.json.gz",
+      "gzip_sha256": "2297999fec10f5a02916c584bf96466a77b3db1d3173397b43ee955994cda4fa",
+      "raw_sha256": "36187125c54f16822f005f94e82ec6ef5542c06cc0aaf8471bf500f2c3f9d42c",
+      "raw_bytes": 554703,
+      "gzip_bytes": 232809
+    },
+    {
+      "sequence": 145,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000145.json.gz",
+      "gzip_sha256": "ff2099d06b8d586582cd810ebcfedab9e9bb7abfccc9d375e281db4937d3c557",
+      "raw_sha256": "0f2898e663f065f351ca42efb2a29f49e6879c9534236166d790cb97fb68cc1f",
+      "raw_bytes": 542623,
+      "gzip_bytes": 227240
+    },
+    {
+      "sequence": 146,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000146.json.gz",
+      "gzip_sha256": "0e3c595342191efa75328198ce47b558295e24967894e10d1ac250cc453ad94d",
+      "raw_sha256": "07aea8136047d4948b60e7038d88ccc0ecf6cb98c69f8fe12dc8580f699b7cda",
+      "raw_bytes": 552953,
+      "gzip_bytes": 232823
+    },
+    {
+      "sequence": 147,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000147.json.gz",
+      "gzip_sha256": "15d4257c62054cc4a7a92d1df198913f96e4dab1552ed8e435e68c7c912631cb",
+      "raw_sha256": "15da7be52a4b65d8208cd63cb6ee7051f6a65afdd7f5d4588630ae87b0c385ee",
+      "raw_bytes": 532610,
+      "gzip_bytes": 223108
+    },
+    {
+      "sequence": 148,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000148.json.gz",
+      "gzip_sha256": "aae5acb9e5cfc8ec24b712bfe6368dcff72df5cb935f80a54718ca0fa5862267",
+      "raw_sha256": "2bdc96619911015f463772f5e698368685c7c27c9e57dcecda10731457f19301",
+      "raw_bytes": 536765,
+      "gzip_bytes": 225266
+    },
+    {
+      "sequence": 149,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000149.json.gz",
+      "gzip_sha256": "6b03370e0b3c507acc6c15c16f98d36e08282d30d7d2975ed2a44514342a3f04",
+      "raw_sha256": "425749630081b77fc9f8e97c64a0e8fb06c67f4a9843e3fd2dd5626f7009dc04",
+      "raw_bytes": 552965,
+      "gzip_bytes": 232217
+    },
+    {
+      "sequence": 150,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000150.json.gz",
+      "gzip_sha256": "7cb5f079ce9bfd14594878a2b5d4c7de7c3104eb71b25ff32874851a82c4b6e0",
+      "raw_sha256": "0fba81a357c2e867fc871fc81043ab8d1d53439ca53d20ba379745aa98ce8243",
+      "raw_bytes": 539321,
+      "gzip_bytes": 225743
+    },
+    {
+      "sequence": 151,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000151.json.gz",
+      "gzip_sha256": "7f3d427ebc9b2853ab5bc870c2bb4ae5ad23ff2ec9031f0972c45a97fcb3666b",
+      "raw_sha256": "b6a6a26767fa73577ed1a2099b0b66615d2bc3e94d9b5a1bf9ba7c3f29cb329b",
+      "raw_bytes": 548722,
+      "gzip_bytes": 230377
+    },
+    {
+      "sequence": 152,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000152.json.gz",
+      "gzip_sha256": "14c32a8834f26ccc2f1d3d6270a3707719e757cf02b3f4d2e5346d463dc4dbed",
+      "raw_sha256": "35d7a38ee90d7c7841fbf3f58eb89378ae5fe185ab2e96fe9b02e5b7c2f90e12",
+      "raw_bytes": 550818,
+      "gzip_bytes": 231819
+    },
+    {
+      "sequence": 153,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000153.json.gz",
+      "gzip_sha256": "7a656909af3b738768539ab81e1393258392f23c04aa8e4116efa29999e755a2",
+      "raw_sha256": "923f8be460682d50f018028a2d586b00b1aab58e519e849a4d7aa01e57606e72",
+      "raw_bytes": 532477,
+      "gzip_bytes": 223150
+    },
+    {
+      "sequence": 154,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000154.json.gz",
+      "gzip_sha256": "ee0553e4dae21e425bbf2ab0cf4236bd47fafd71ed69e90a3d2425b14f536ece",
+      "raw_sha256": "6156344c06c7b5030bea446da2ca11f310de382379a876eab57669353125d538",
+      "raw_bytes": 527898,
+      "gzip_bytes": 221672
+    },
+    {
+      "sequence": 155,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000155.json.gz",
+      "gzip_sha256": "bca13d5415e198dc12da10a640cc4b5c2d4c26ec32effde0efe6d3a26a27be72",
+      "raw_sha256": "c7e1cfdeff424143efc0c373f32ac8f27a9ea61b35651b3279df63818ab9fa27",
+      "raw_bytes": 529900,
+      "gzip_bytes": 223399
+    },
+    {
+      "sequence": 156,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000156.json.gz",
+      "gzip_sha256": "1063dd54dbf710c146151b0153457df306f32eb54fabe124c1e086d289c66b2c",
+      "raw_sha256": "2cf4b7c1ff59254798a7c5f7ce122a8cf06df75e9e1438e6aec6d9f909602eed",
+      "raw_bytes": 527813,
+      "gzip_bytes": 222404
+    },
+    {
+      "sequence": 157,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000157.json.gz",
+      "gzip_sha256": "a4519c71a8ef2475af2d3903f7437e0e520dcccd1c1dfef85539ad13e405f2df",
+      "raw_sha256": "2b3a4c148c7b661618b14aa7d43ead37871ac3aee4a7e892b32d019709bb6ce0",
+      "raw_bytes": 518813,
+      "gzip_bytes": 218734
+    },
+    {
+      "sequence": 158,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000158.json.gz",
+      "gzip_sha256": "e6e24b2d90cf835fdd9d0d3d27ae257cd598195e58ec173a72e4d5576ec1dc56",
+      "raw_sha256": "4688d1cc24e5ea3c75cda97037a8922b9851ddc0e115ad3379a41d82361f6ebc",
+      "raw_bytes": 511859,
+      "gzip_bytes": 215642
+    },
+    {
+      "sequence": 159,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000159.json.gz",
+      "gzip_sha256": "49c5c1f186806347de711c2604a71c8486d00ddaf27e597165cf1c1ccbfbc5b4",
+      "raw_sha256": "6ea409bd3b45edb613d32b5345f8272aa0ce64459d81eaa02e67a1613c604388",
+      "raw_bytes": 495747,
+      "gzip_bytes": 208730
+    },
+    {
+      "sequence": 160,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000160.json.gz",
+      "gzip_sha256": "e18518266995a870c4588180125c4751d6ba1bb6e9ea58c3fbc0d44ef0bdf03c",
+      "raw_sha256": "2047a9861b27aa9a62e84eb7b51a2e29e7efa95b71a0f376e81c2a922bcd546d",
+      "raw_bytes": 488875,
+      "gzip_bytes": 206051
+    },
+    {
+      "sequence": 161,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000161.json.gz",
+      "gzip_sha256": "1b93bef3bbe0ae296ba0c62b8f83e6cf139e73f1fe478501ac2d0118584b986e",
+      "raw_sha256": "a6e7b2582e6b6518fe8735ee81e644c47e599b765c52b445a42c5e43e64d908a",
+      "raw_bytes": 479115,
+      "gzip_bytes": 203452
+    },
+    {
+      "sequence": 162,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000162.json.gz",
+      "gzip_sha256": "2fbd190b435144b06e4e97282d9ad2c73b1724896b82194416b90a69d53fb1cf",
+      "raw_sha256": "503f2a296ea93adebf05b6b2b14d4723d2b884ce2d942b4b65acf4169c22ec93",
+      "raw_bytes": 465990,
+      "gzip_bytes": 197489
+    },
+    {
+      "sequence": 163,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000163.json.gz",
+      "gzip_sha256": "8239ce19b894f2f0083012fb373417fe9e6804588f4f51e800e09914377e9ca2",
+      "raw_sha256": "ca97469e7419f8eeeed05c9656008bc88dffe28c0bce78fbea3a4330ce05a672",
+      "raw_bytes": 463559,
+      "gzip_bytes": 196700
+    },
+    {
+      "sequence": 164,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000164.json.gz",
+      "gzip_sha256": "d6200571e2687668f0f13b15df6f138fd87708929d8f1f00c5b85354517e0de5",
+      "raw_sha256": "d2f096b6958c13db4e7d70d54b684db51248b5e90a7d8a5c327a55ee7f9ddb91",
+      "raw_bytes": 462074,
+      "gzip_bytes": 196559
+    },
+    {
+      "sequence": 165,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000165.json.gz",
+      "gzip_sha256": "6f9cefd8f6cbb48f34c3a9995bf27769d67b96ca8eab91df88e0ef1dd1358caa",
+      "raw_sha256": "8f4ed17e3dd5b795ac3c23f6412a3257c5f16b136572541d4459925257f3d23b",
+      "raw_bytes": 455148,
+      "gzip_bytes": 193250
+    },
+    {
+      "sequence": 166,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000166.json.gz",
+      "gzip_sha256": "fc62843de5da5f993539f600a035dd9e559543a44dfacaabe911a1a4aef99595",
+      "raw_sha256": "bbcdab0315c668795c35a8ecb764a794bae89be4921d4030d44ba1fe7fc4b11d",
+      "raw_bytes": 443286,
+      "gzip_bytes": 188577
+    },
+    {
+      "sequence": 167,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000167.json.gz",
+      "gzip_sha256": "5550ed11347a6a2e6f065a8828841454b2bd10123fe363597dc240a99dc8b403",
+      "raw_sha256": "b2d9af7d63e3a1f700d0a3397b8ab5f2feb84f4297b91b2a2aa3fbe65befd485",
+      "raw_bytes": 436475,
+      "gzip_bytes": 186157
+    },
+    {
+      "sequence": 168,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000168.json.gz",
+      "gzip_sha256": "308496c4b81f7146a18d086a27b6bd1b8a472b4b10f3881b80eaeaabc6ab9182",
+      "raw_sha256": "6b2d3355b62d646efdacdd75569c9e05c7847f51278c6b59eace7d3d4775c805",
+      "raw_bytes": 401869,
+      "gzip_bytes": 170572
+    },
+    {
+      "sequence": 169,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000169.json.gz",
+      "gzip_sha256": "cd7d1deeabcbf88396546b6b68957aa5e16e5e85753be2633028afc8efb6f305",
+      "raw_sha256": "0fc126b405bcff317d6eecb62d9eac3fd0acfa2efbe1b7984b28781a9bd47ee4",
+      "raw_bytes": 414522,
+      "gzip_bytes": 176828
+    },
+    {
+      "sequence": 170,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000170.json.gz",
+      "gzip_sha256": "f36f4e9b09872030753776390b8c945bdad533c50e8a603a227a79a7502d0c79",
+      "raw_sha256": "e6edb86266c73a01ec31ed7040408c74951f185dcffe13efd6aa2a4252c33327",
+      "raw_bytes": 510874,
+      "gzip_bytes": 212029
+    },
+    {
+      "sequence": 171,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000171.json.gz",
+      "gzip_sha256": "d995d079ac4bf929e568ad1eee279b66efb271b2304961657f04de2371397e7a",
+      "raw_sha256": "dd8e72f64ed393bf3db614db42749e0a49a517cd8ec439e33a5186d63b538aa6",
+      "raw_bytes": 518566,
+      "gzip_bytes": 215523
+    },
+    {
+      "sequence": 172,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000172.json.gz",
+      "gzip_sha256": "e0eb7819e5d09f4ba575ef9ebfc55360312a06f66ed412fa8b22437e6013ed82",
+      "raw_sha256": "455fb8366c10dd54becc1ad85d22aae8496aca768e630f007870fd73f4c21d5a",
+      "raw_bytes": 518113,
+      "gzip_bytes": 215591
+    },
+    {
+      "sequence": 173,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000173.json.gz",
+      "gzip_sha256": "c8d9e5993dc95a0d89bc31f50107d8a479c6c429e26c4aeabfe76a99628e5ddb",
+      "raw_sha256": "e07822e399656ca714bc46cfc686305b372a7e7fc6f25d4238968956d6664097",
+      "raw_bytes": 520067,
+      "gzip_bytes": 216021
+    },
+    {
+      "sequence": 174,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000174.json.gz",
+      "gzip_sha256": "dbaf49f6397a21dabc00eb082f70a113a80356f2b3dbab8bef8eef0bec5d896a",
+      "raw_sha256": "54f9be380f0f2a8a6db6435964bb4470472903eca911263c3895ce492318b466",
+      "raw_bytes": 516560,
+      "gzip_bytes": 214496
+    },
+    {
+      "sequence": 175,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000175.json.gz",
+      "gzip_sha256": "9b322e39317612c20983c9ebe4e1119f45a4550753e17c627378e32d4b729ea4",
+      "raw_sha256": "b648e8d206638dceaa67034a48a940bae432830594d579ef28ec2257b952e60c",
+      "raw_bytes": 517332,
+      "gzip_bytes": 214957
+    },
+    {
+      "sequence": 176,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000176.json.gz",
+      "gzip_sha256": "0ffbbe41c7f3839959788b6fbc2bab4735c09bf57bbc7f8c5de0f88a5cc90505",
+      "raw_sha256": "05800b03fef470fd893395bb3cdd2cb4e7d02bb45edb949652b4290b87b12462",
+      "raw_bytes": 530394,
+      "gzip_bytes": 221112
+    },
+    {
+      "sequence": 177,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000177.json.gz",
+      "gzip_sha256": "1712917caf4fc2270f0bb400dbd8d138193a7e06faa73fb25fc3dc81f9664265",
+      "raw_sha256": "4766acbf94ebf9a979a52ba9612652bf9a9fbb41017fad9e59044f6ad15c0271",
+      "raw_bytes": 535085,
+      "gzip_bytes": 223346
+    },
+    {
+      "sequence": 178,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000178.json.gz",
+      "gzip_sha256": "88d4decd5fc3ef7d3e9b2fa2e11825dd5850e263b7fe567fb1ed6d6d8c3a09da",
+      "raw_sha256": "3867f9ed5f725d9176f265df7cfd38fc411f91bc48f67de26b1cb130cdaad924",
+      "raw_bytes": 527367,
+      "gzip_bytes": 219719
+    },
+    {
+      "sequence": 179,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000179.json.gz",
+      "gzip_sha256": "b29e796e5830eaec0df3db530ecc1d0b229c373cc0bebafc516fbbca05a0f22b",
+      "raw_sha256": "895ee78113bd9c7f5bae4e13c83de3b0a5379e0ba1a654ba51bc39d38f5a6648",
+      "raw_bytes": 520817,
+      "gzip_bytes": 216534
+    },
+    {
+      "sequence": 180,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000180.json.gz",
+      "gzip_sha256": "6a250491ac5fae19fbc57acefa3e918148c2ef5c2992354f1bd7c0fb37279180",
+      "raw_sha256": "9c6a627f30ac1f7d90d9bb46e7d9d9eae087cfad22919774802f47705e1248fa",
+      "raw_bytes": 525726,
+      "gzip_bytes": 219172
+    },
+    {
+      "sequence": 181,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000181.json.gz",
+      "gzip_sha256": "714a10aeaeaa007a427a7a3aa00b9ba0d20ec4aff1c74feb908556d733e9bdc6",
+      "raw_sha256": "41e1bae79776d2f69a61db5698f251c221f44f53f4d8ee701a87de7619107b83",
+      "raw_bytes": 542384,
+      "gzip_bytes": 226576
+    },
+    {
+      "sequence": 182,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000182.json.gz",
+      "gzip_sha256": "7ea6236e01a7e76ed674f9777d6e59e247e2ca16f57c4cc137e447cd3a9a770c",
+      "raw_sha256": "0625b35bb9b6108e2c191dd2e12b8f362983247452b69b3efe12b006f0419eae",
+      "raw_bytes": 549578,
+      "gzip_bytes": 229439
+    },
+    {
+      "sequence": 183,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000183.json.gz",
+      "gzip_sha256": "9eca71520cd39c3da6351eac100a0997cb33f64a0d9c65dce41afff846146689",
+      "raw_sha256": "3d0d6599fd4ca90ba83ebfe70a5c2eb1f81490523c92c8220286ade3a4225e98",
+      "raw_bytes": 544093,
+      "gzip_bytes": 227241
+    },
+    {
+      "sequence": 184,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000184.json.gz",
+      "gzip_sha256": "1b5c002b37c3134cd67c80fd8246da39c0132c9a5731b62c8acf217650915aaa",
+      "raw_sha256": "31cabf683cee7c9ba0c8ece3e45c44c78c8489fce2d6df492508fcda239c948c",
+      "raw_bytes": 541845,
+      "gzip_bytes": 226566
+    },
+    {
+      "sequence": 185,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000185.json.gz",
+      "gzip_sha256": "5bec71c7d3ce0df2c2fb582e1af671c200a38bff878c7f8e8b9e27f71cb3d9ad",
+      "raw_sha256": "909f1e52acb074ede1b554c75ef533c3dd9db6049bdec0af6adeaf8fb9811895",
+      "raw_bytes": 550255,
+      "gzip_bytes": 230368
+    },
+    {
+      "sequence": 186,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000186.json.gz",
+      "gzip_sha256": "049a1babf1c2ad9a50cfb98d3b716581b0ec43b6e6b7d45d2fd9ea8974300d54",
+      "raw_sha256": "e4f7201d9a0d07fe90c8e0a48e48dca6e503a83ac72cf227392768decd096606",
+      "raw_bytes": 551438,
+      "gzip_bytes": 230828
+    },
+    {
+      "sequence": 187,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000187.json.gz",
+      "gzip_sha256": "2e23bf6e3990da282a9abe2f0c7c9e3b5b8e2183fead072703f3e66cde599d20",
+      "raw_sha256": "9100f633207660a67960e9350e6f6fac2b9bc31e63974ac81c8fe05aa7f80cf7",
+      "raw_bytes": 518086,
+      "gzip_bytes": 216518
+    },
+    {
+      "sequence": 188,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000188.json.gz",
+      "gzip_sha256": "e69051ab2f79c8e7e40fd0abe2901a943a8cbf06bfc9844eb0f0823e94d72d61",
+      "raw_sha256": "87dfad1f4669924e1227b4534cd2fd6d772994c4f096f24d4213653fe608b568",
+      "raw_bytes": 530175,
+      "gzip_bytes": 221533
+    },
+    {
+      "sequence": 189,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000189.json.gz",
+      "gzip_sha256": "c7539c72c6b1f604c8811d8b62d9aa1cd52bcc58ee9954f0b549ad0afe630b36",
+      "raw_sha256": "effa1db626dcfe864006dcbea7533ed150734967d2149caaa7f003204a588075",
+      "raw_bytes": 538156,
+      "gzip_bytes": 225626
+    },
+    {
+      "sequence": 190,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000190.json.gz",
+      "gzip_sha256": "6597e356cf862a3d99d67f475bb08cff7327479e990b24fc36526e0a06011a4e",
+      "raw_sha256": "3ede29e1ab1746afb5ba8ae4c7f8a6b2bbeeeaeb1a9dad0b4136be7399f55221",
+      "raw_bytes": 539892,
+      "gzip_bytes": 226977
+    },
+    {
+      "sequence": 191,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000191.json.gz",
+      "gzip_sha256": "23ed540113430a2deeefbf257b1182b08dc85cf623248ba085ef46065a5b5627",
+      "raw_sha256": "0abd4e37cb44ac2ec5067b7d37fdac48305ce0bc2ef1d7826847ba6e82d65d0a",
+      "raw_bytes": 545344,
+      "gzip_bytes": 229720
+    },
+    {
+      "sequence": 192,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000192.json.gz",
+      "gzip_sha256": "1a30b10e24b477e520254a5ec39b24e395171003574731190a6c34c3119ad5a6",
+      "raw_sha256": "ec018d646c76d55e37e93dd1c0201920a24f38a1052bf33a7570b78246f909b0",
+      "raw_bytes": 545376,
+      "gzip_bytes": 229514
+    },
+    {
+      "sequence": 193,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000193.json.gz",
+      "gzip_sha256": "98beb04856484651ffb34b4df05f376dcc55ca4f32eaf2624d8549a278ba0942",
+      "raw_sha256": "1be46e6740627df8344aa321ef4dd9b858a2621965e031f713932751103b9d0e",
+      "raw_bytes": 542959,
+      "gzip_bytes": 228030
+    },
+    {
+      "sequence": 194,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000194.json.gz",
+      "gzip_sha256": "030f98898396025677b742a3bf50767e51c63394ce95e60060cef4b5d6cb0255",
+      "raw_sha256": "47373709ed5bffa0336f6b1b0241d0a44d3186ca04c6103dd3545442b66f062e",
+      "raw_bytes": 561252,
+      "gzip_bytes": 237382
+    },
+    {
+      "sequence": 195,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000195.json.gz",
+      "gzip_sha256": "c489aa08601ef3fe21226d38c0eb5049893717d25560bd73d9d287ad645a6312",
+      "raw_sha256": "184e93a8d8517590d6544c24be7ef91e368ad8bb01904d2a52089858e5504f17",
+      "raw_bytes": 565360,
+      "gzip_bytes": 238438
+    },
+    {
+      "sequence": 196,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000196.json.gz",
+      "gzip_sha256": "4d96400ce5c11b86e3371520869daf0816f0e2228ee29c57e2ec75d1a23c7e5e",
+      "raw_sha256": "2ee1c34dfc41b258f96c529cef17d36b0b62039eb6fd09da1ca562cb0d24bee9",
+      "raw_bytes": 559437,
+      "gzip_bytes": 235835
+    },
+    {
+      "sequence": 197,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000197.json.gz",
+      "gzip_sha256": "3c438df6c6428acf8f5e0cea39e7eacbd4a0a2002117e247ef9f01d75905cd90",
+      "raw_sha256": "32f0ff0454e7312a1273bfacb2727f21b6a118d21f848c2bbbbffbdb101ff977",
+      "raw_bytes": 554190,
+      "gzip_bytes": 233548
+    },
+    {
+      "sequence": 198,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000198.json.gz",
+      "gzip_sha256": "24f4aab2a66257b822e227c430b9b6cff3e0706d214954af72d210e4472d6de2",
+      "raw_sha256": "380f46b45448b825b3f37d4fdf25aba1cc3ad1ecc100f5226b2069d300239d06",
+      "raw_bytes": 551397,
+      "gzip_bytes": 232166
+    },
+    {
+      "sequence": 199,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000199.json.gz",
+      "gzip_sha256": "aeb7eaf19b7e3aca70267d5720adb5b4c798cedccd07fd60f3e35b124d9103ee",
+      "raw_sha256": "7da28a53e97ec01253b807f720c9039ae0190e2aa95ea67482506b3311d97c08",
+      "raw_bytes": 549885,
+      "gzip_bytes": 231215
+    },
+    {
+      "sequence": 200,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000200.json.gz",
+      "gzip_sha256": "619f674b1c72fc9125adb465385f285a1a8f36af0c7894e3420f6ebc6de58230",
+      "raw_sha256": "d55dc3a659a48c228a3096b6cc2eddb5b5363346f9db44fe48001bcf23e30d2f",
+      "raw_bytes": 549000,
+      "gzip_bytes": 231010
+    },
+    {
+      "sequence": 201,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000201.json.gz",
+      "gzip_sha256": "1e99b71c11b92db3ebcd3cb91e1b51bddefefbc9e013cdbc5bb7113a0f00fcd1",
+      "raw_sha256": "24203ddb15eb9e0e821e05298201eebf9cfe87b8df33ecdb1761c2113209b8ac",
+      "raw_bytes": 552731,
+      "gzip_bytes": 233362
+    },
+    {
+      "sequence": 202,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000202.json.gz",
+      "gzip_sha256": "78b4a9e20c73658e5fd3484077dd77457454af2af0a85da4f507adb1b5d25119",
+      "raw_sha256": "bc30419549798dea646fcc6ad60dad181b1b06fab2e1a9b9b5c06370e5e37507",
+      "raw_bytes": 545831,
+      "gzip_bytes": 230158
+    },
+    {
+      "sequence": 203,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000203.json.gz",
+      "gzip_sha256": "7f11c672008bc0c2425b2d21315dfc9300701e1c33fbfc88e2369dcaedd96ffe",
+      "raw_sha256": "e05c365df4dfd2c66c235f90ebb14be186bbbe58ec758b61a8a82bcca766ee74",
+      "raw_bytes": 555039,
+      "gzip_bytes": 234430
+    },
+    {
+      "sequence": 204,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000204.json.gz",
+      "gzip_sha256": "622640ed2e9d344bb24fb2648e6a31f785a844242b31d73b77048a4ad47a909a",
+      "raw_sha256": "a8fd1e8503b033c66a6fd4819f2fb6bd8f21349592ae09c7ce1dc768e30e9c60",
+      "raw_bytes": 559496,
+      "gzip_bytes": 236806
+    },
+    {
+      "sequence": 205,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000205.json.gz",
+      "gzip_sha256": "bf7561a8ed5ae7e039066aa302f61c7b1e4c137fcd17dc757aec9f6c426961a8",
+      "raw_sha256": "73818d858d2be397ae85911cb0ca6f51f898b38283a87b916002979f3a48009e",
+      "raw_bytes": 564452,
+      "gzip_bytes": 238423
+    },
+    {
+      "sequence": 206,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000206.json.gz",
+      "gzip_sha256": "20df43e76e52125dd01d3cd8950761312410c3cf5b1b62f649a85efc8e860abb",
+      "raw_sha256": "50baa59cdf7df2611531a7d0c9d672339bd1602df50284e068d0f3fa0f9b7684",
+      "raw_bytes": 557730,
+      "gzip_bytes": 235938
+    },
+    {
+      "sequence": 207,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000207.json.gz",
+      "gzip_sha256": "f109571f0e508dfd897266c2987a4382599d21937ff4b7d08707b23f13a1fcdc",
+      "raw_sha256": "771996d9592c75e1f9cbea8e078e6ff8a6f006e4c2874ffeab243a96de1d100e",
+      "raw_bytes": 553743,
+      "gzip_bytes": 233407
+    },
+    {
+      "sequence": 208,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000209.json.gz",
+      "gzip_sha256": "5d60609a71262c5290386c0ea20ce7bc569925829ec128bca2685406cb80342e",
+      "raw_sha256": "ea3634514f387ad23ed00d89365fe0bf0ad68b0fd43aedde9b2554406a503612",
+      "raw_bytes": 563348,
+      "gzip_bytes": 237673
+    },
+    {
+      "sequence": 209,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000210.json.gz",
+      "gzip_sha256": "694a2e9be2b77018ed8de7549e645d9e761cbdc373d4bd4d5f5054e9398353aa",
+      "raw_sha256": "7e07285ce13c3c3f06361aa40418e7f391ebfb4df870606c350dca070259dc92",
+      "raw_bytes": 552606,
+      "gzip_bytes": 232672
+    },
+    {
+      "sequence": 210,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000211.json.gz",
+      "gzip_sha256": "b3572072921326d44a6394a8a70610b52f7af3b9a40624e85e0605231090c983",
+      "raw_sha256": "6ce1ec0a667eac356df4976625b915bb48903a1bc4fa01d21ba41d91b41551ab",
+      "raw_bytes": 565059,
+      "gzip_bytes": 238034
+    },
+    {
+      "sequence": 211,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000212.json.gz",
+      "gzip_sha256": "6731bf215c06d8db9666b4ae9a91e6687a3e17fc53f73b1137defce2419a2bc2",
+      "raw_sha256": "1d272240e52fd52a003eff761b5579d59fa42f782769c91a0bf58b48b2c958f8",
+      "raw_bytes": 570578,
+      "gzip_bytes": 241418
+    },
+    {
+      "sequence": 212,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000213.json.gz",
+      "gzip_sha256": "e9bcf63b4cd10522017a61b9ae8db63d0727e0a6ac1a04e2d6ea8c306baca1f8",
+      "raw_sha256": "b547ccab820af7d053d4ac3e07be9fb76797874ecc82e3194dbb78f73a732c0e",
+      "raw_bytes": 574678,
+      "gzip_bytes": 243040
+    },
+    {
+      "sequence": 213,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000214.json.gz",
+      "gzip_sha256": "4bbb9085a9b3ae1f8230b13b7f136df28f45dcaac81d303852b1575a828cbf9f",
+      "raw_sha256": "5e82c29d93f576c5ffb5aaad77da32870489e4cb1355c30b7ea45a518af10329",
+      "raw_bytes": 570514,
+      "gzip_bytes": 241210
+    },
+    {
+      "sequence": 214,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000215.json.gz",
+      "gzip_sha256": "3fdb4c7a888c5f396ec2f6c9a68594178c8422b86af7cda7d419b294ebea9410",
+      "raw_sha256": "afe4ac16db44d88720150a40561d97e60cba6f3c5426a34baca7284ee1327b92",
+      "raw_bytes": 566419,
+      "gzip_bytes": 239192
+    },
+    {
+      "sequence": 215,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000216.json.gz",
+      "gzip_sha256": "c1d72aa6e250bac08e8a0b4d6e41b4949d942ac752c01d4e7e6709f4800fdb01",
+      "raw_sha256": "7e80ebae0f8b83e423c2aac5cffd251ec6a167712abe5910000af0a491d87e20",
+      "raw_bytes": 568511,
+      "gzip_bytes": 239994
+    },
+    {
+      "sequence": 216,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000217.json.gz",
+      "gzip_sha256": "54f5000826577ed4083bb21e86e0500a3fdb5a5648e8b86b583798c46552baa1",
+      "raw_sha256": "563fde075a11947d7238af33a8d1b6e4c91a0c9ee3c8600986db43265cb38ce6",
+      "raw_bytes": 536718,
+      "gzip_bytes": 225612
+    },
+    {
+      "sequence": 217,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000218.json.gz",
+      "gzip_sha256": "780bfc10f5beebb5bac13a04ada43e42c4ab59fb1bb025a3947b230fdab69c20",
+      "raw_sha256": "eb7345c5307613c2874849d1db7218a69ffa04270966eb0d94c16212ab602326",
+      "raw_bytes": 541092,
+      "gzip_bytes": 228572
+    },
+    {
+      "sequence": 218,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000219.json.gz",
+      "gzip_sha256": "a0510d0da89c9a2371f5053b913dcc2b7a083879f367053bd48570a54e795e16",
+      "raw_sha256": "057ea6fd4b7b5916229d5c3feff3ed12d6bd8c051c7fc4332626799356738324",
+      "raw_bytes": 549363,
+      "gzip_bytes": 232099
+    },
+    {
+      "sequence": 219,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000220.json.gz",
+      "gzip_sha256": "34dbe44472026358b437e697ed3c29dc987144aa242abc01fd7bc5f02bd8371f",
+      "raw_sha256": "1788c074b758d86280e0d82bf199e8077c45fa82106cdc0d7dc1739ececbc48d",
+      "raw_bytes": 545057,
+      "gzip_bytes": 231004
+    },
+    {
+      "sequence": 220,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000221.json.gz",
+      "gzip_sha256": "abc294c0ae6b5f7a7e57c367f92fcc62fb4f29c3c7f7ec2b5da39b38c60f05fe",
+      "raw_sha256": "958d7cf368e80becfcb7e1e147ad7914a33539aa49ec29c97130d309782c240d",
+      "raw_bytes": 543138,
+      "gzip_bytes": 231031
+    },
+    {
+      "sequence": 221,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000222.json.gz",
+      "gzip_sha256": "d173715bfd6bb37ecf45f19c4c507ec463b2997676f38221268408eb1778c26c",
+      "raw_sha256": "5b924ddcf2ea9beeea8c6af1a6804f63e91b6f1dccfde4a0ec2597c939449d6d",
+      "raw_bytes": 534639,
+      "gzip_bytes": 227821
+    },
+    {
+      "sequence": 222,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000223.json.gz",
+      "gzip_sha256": "a7b81c9c2714595bd6fb7a5be68ab24a107c46b54241c17d5daee6de87ef0392",
+      "raw_sha256": "bc6f810a03a50e89508f852e6d29f0c7408fefca37c3c2164a69dbb0b1b62ad2",
+      "raw_bytes": 533151,
+      "gzip_bytes": 227290
+    },
+    {
+      "sequence": 223,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000224.json.gz",
+      "gzip_sha256": "cc3f4e0feef1c6c707c6e2a68318e7be5ecbb6a39163b8e8c9776dae70b1ccdb",
+      "raw_sha256": "7321913ee450393981de8d26d5b4aaf94db0774c155dc9001079db466da3c11c",
+      "raw_bytes": 546567,
+      "gzip_bytes": 233943
+    },
+    {
+      "sequence": 224,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000225.json.gz",
+      "gzip_sha256": "da380b794f1b71e6f17f738a3c5c17905ace157341d30461f8bd1f723e5ca8f6",
+      "raw_sha256": "1499e6993001e51b02a3c2816c294c195646dfcc8cb76408677e09f53a5b7529",
+      "raw_bytes": 535119,
+      "gzip_bytes": 229205
+    },
+    {
+      "sequence": 225,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000226.json.gz",
+      "gzip_sha256": "150913577013634412b6392675ab770e676b0360b4a9f63bc90ffe9263027ae4",
+      "raw_sha256": "545738a8e775edf74272746126b84942302bd7236fbb00a087ba1fae0f3f09cf",
+      "raw_bytes": 536900,
+      "gzip_bytes": 230955
+    },
+    {
+      "sequence": 226,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000227.json.gz",
+      "gzip_sha256": "768d9c25e86b4c8132f05f48040326f4d4ffa41cf6eb28d82c91a37617aafbd5",
+      "raw_sha256": "b92ba5e025d13af113b770309ddde7c4b42da7df6653d778947f688bbc6ab91f",
+      "raw_bytes": 524996,
+      "gzip_bytes": 225439
+    },
+    {
+      "sequence": 227,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000228.json.gz",
+      "gzip_sha256": "a6465eaaac735939cc98bbab61c9ad50a5f44ba9e4a53a0e6096c6f3bbcb75bc",
+      "raw_sha256": "9e45fa2d2e07f7375ebaf80630891ee5dd1916993f303552b9384fcfc2bf03be",
+      "raw_bytes": 507882,
+      "gzip_bytes": 217987
+    },
+    {
+      "sequence": 228,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000229.json.gz",
+      "gzip_sha256": "eb297ca7f3f44c199d260dea6f337637d2475e0ee379aad0422a3e9cbe3b83e5",
+      "raw_sha256": "93ba2420dd655c95d56add47136ec79a762b84137bc1997fcecc179da3902c02",
+      "raw_bytes": 500497,
+      "gzip_bytes": 216521
+    },
+    {
+      "sequence": 229,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000230.json.gz",
+      "gzip_sha256": "a44060c155aa52ad9affa8a77e92c4259e1c8939c7805dbd380ae513ac454a53",
+      "raw_sha256": "c779941dab7b4701061380983891900b37388a3b9cff91495b0fd0c7d74b275c",
+      "raw_bytes": 496741,
+      "gzip_bytes": 215398
+    },
+    {
+      "sequence": 230,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000231.json.gz",
+      "gzip_sha256": "868fb98036d0ba1c5bfe23fcb563817b0817897598a140c5168acb5334fac274",
+      "raw_sha256": "02f6c9a263db4bc80c5c61e188abc80c2bb93bfe9dcd32ce7d2fd64024ca9d76",
+      "raw_bytes": 478598,
+      "gzip_bytes": 206932
+    },
+    {
+      "sequence": 231,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000232.json.gz",
+      "gzip_sha256": "38d1f62bacd1884aaa945e4e0bbe7f34aaee9b01f7564b8af3427e761b644ea3",
+      "raw_sha256": "aa1dfcd2d98c54882b25e64fc429d536069efb372974f74b018f715f2dc7791c",
+      "raw_bytes": 500403,
+      "gzip_bytes": 217787
+    },
+    {
+      "sequence": 232,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000233.json.gz",
+      "gzip_sha256": "c13953a68973122feb7d4b3d348f00a79ae7bab9809767db77bc0d8250b57c85",
+      "raw_sha256": "1d4f5a0ba90fe33b7b8b096424beceb1791cba346ec28b5e75ecf25f1da6348e",
+      "raw_bytes": 466124,
+      "gzip_bytes": 202598
+    },
+    {
+      "sequence": 233,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000234.json.gz",
+      "gzip_sha256": "411864c9faf99f4d94af4c528f945d4d318203a75dee750f3828e29852e26bc5",
+      "raw_sha256": "4e955a695cab2bb231065625de8c0d4ef968e184525a46e272a8cdc6da31e790",
+      "raw_bytes": 453740,
+      "gzip_bytes": 196976
+    },
+    {
+      "sequence": 234,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000235.json.gz",
+      "gzip_sha256": "b24c37cb533b4280ad65bf86d04f9b47bb3d69175bedeb106d8050c03cae929d",
+      "raw_sha256": "805a2e5077176a2b1770567453e4039cad704f3045513b8d9a2322b1bb1de189",
+      "raw_bytes": 439572,
+      "gzip_bytes": 190967
+    },
+    {
+      "sequence": 235,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000236.json.gz",
+      "gzip_sha256": "301c02151e0acc5b9a6d9394d032a498965a3fcac828900bed76fe07a1b2179e",
+      "raw_sha256": "ce1b9f952679c63d28554af525ab0c8bd22332ad915cac529ab43aaa90a7e3bf",
+      "raw_bytes": 579228,
+      "gzip_bytes": 248004
+    },
+    {
+      "sequence": 236,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000237.json.gz",
+      "gzip_sha256": "5f6b8adabc7ae0b0b899588c043e791a7729e6fa1688e5cd10076db604ff30dd",
+      "raw_sha256": "41ad006cff9d33e2627b3b5be0d0415f442a150deb4fc980e5fa010d810e51db",
+      "raw_bytes": 584408,
+      "gzip_bytes": 250052
+    },
+    {
+      "sequence": 237,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000238.json.gz",
+      "gzip_sha256": "704ce457fccb75cc0ca1897423ddfafa4d18466b63113897923883947e2ac0c2",
+      "raw_sha256": "30860df607b2f77fac6a2a87e29cf1209555bb3e9652d26523a5452c2b2e47a6",
+      "raw_bytes": 581574,
+      "gzip_bytes": 248730
+    },
+    {
+      "sequence": 238,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000239.json.gz",
+      "gzip_sha256": "40f7a3a844019faf3c1d2175088a7cf9fa685ec3409e78e64ecee03efc655984",
+      "raw_sha256": "01258c52bc01936d6d081fb5ad9243c6101e80e277236fbcd2576372769caeb7",
+      "raw_bytes": 574923,
+      "gzip_bytes": 245572
+    },
+    {
+      "sequence": 239,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000240.json.gz",
+      "gzip_sha256": "572c60b9ecfcd7e247ff6ec0594e2b73c314102e00e2d1ff8238a0279f73ed25",
+      "raw_sha256": "33ba089ac53cf618b1879041e3256de2df2c5042abb5c69970d230ec7349854e",
+      "raw_bytes": 571271,
+      "gzip_bytes": 244294
+    },
+    {
+      "sequence": 240,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000241.json.gz",
+      "gzip_sha256": "ba243c98526fa71188541b96c7d5f7a020cb3e7332a5f550b26fec3d1129b166",
+      "raw_sha256": "2e228642de1476fa0ae4ad89165d13fc9d89d8feb212c8f0be1db9dfa7e11274",
+      "raw_bytes": 578991,
+      "gzip_bytes": 246449
+    },
+    {
+      "sequence": 241,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000242.json.gz",
+      "gzip_sha256": "f9a3b419ae3c8766b26b155d2b58c1f23110b125d89fafc550bab9bfe0f6b232",
+      "raw_sha256": "ed023cd82460f968ddb56c3663c850d17975202c6b142bd3ed58f2f9f91fab9e",
+      "raw_bytes": 592369,
+      "gzip_bytes": 252601
+    },
+    {
+      "sequence": 242,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000243.json.gz",
+      "gzip_sha256": "ec68d9615608fdc56bd06667c3702a494c45479166c6f4b4e2710b99a7db8f65",
+      "raw_sha256": "2e32e863ad6a5cf40b5ff2cb28a8b94af71999933a3939231f3c43967b241018",
+      "raw_bytes": 586087,
+      "gzip_bytes": 250156
+    },
+    {
+      "sequence": 243,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000244.json.gz",
+      "gzip_sha256": "c87cd9397512263cbc2064c7f843e8147ba031da29ab2aa446e3f37df045441b",
+      "raw_sha256": "b2a13b856b5b3c85747d7183c6ce1cc48c363ec0f4e03e8ea65f7f153f13c4cb",
+      "raw_bytes": 594247,
+      "gzip_bytes": 253956
+    },
+    {
+      "sequence": 244,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000245.json.gz",
+      "gzip_sha256": "249ee8124a56ee658cae1183e20dbd044bab14cc0eaf2bda253ed1722b6c9434",
+      "raw_sha256": "b6663f1de8fd29035a9de1401733f8323bd071547a0b56c1d1b9b05d63c20482",
+      "raw_bytes": 587030,
+      "gzip_bytes": 251652
+    },
+    {
+      "sequence": 245,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000246.json.gz",
+      "gzip_sha256": "ca8cc542f90efd3c2c8336a74628b72e753d65136b04fb3d29da1b7ee9f5c368",
+      "raw_sha256": "075bef359e037c77a27b81e350251de3daf2577236b5fe6b093e9eff86c441fa",
+      "raw_bytes": 594477,
+      "gzip_bytes": 254430
+    },
+    {
+      "sequence": 246,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000247.json.gz",
+      "gzip_sha256": "0fa9a88cd303ce3c1292514069f31764b4939df87ef6ee310b7907a17e5521ee",
+      "raw_sha256": "9358660ae402fb8d174648fe74d20f009589f9aff0e06f438fbc1407815a2fc5",
+      "raw_bytes": 588317,
+      "gzip_bytes": 251950
+    },
+    {
+      "sequence": 247,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000248.json.gz",
+      "gzip_sha256": "1cc0658465242687c1b49f63c59f9407ace428e96b0677336f9172c19e84cc65",
+      "raw_sha256": "8b0a554e27b68200a73bee306cb27e2707fda2309ec7385a1d94830dc6b6c706",
+      "raw_bytes": 595157,
+      "gzip_bytes": 255296
+    },
+    {
+      "sequence": 248,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000249.json.gz",
+      "gzip_sha256": "b40e8066d57d8b8f4f4e98ad303020ec8359dd6cb33a935bc7dcac39f5e4212b",
+      "raw_sha256": "b5ec0d98819d9da353c8e15c48dfcf09666f0915b305dcae0148636601e8f26b",
+      "raw_bytes": 613276,
+      "gzip_bytes": 264462
+    },
+    {
+      "sequence": 249,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000250.json.gz",
+      "gzip_sha256": "08eae3fb10e7a07c1a7eef3f2608ce779c39bf6fba3e67ad67a2d98d1c9edcf6",
+      "raw_sha256": "c8f779ed1f223ba0be3e6307ed4506120e89eea4d415acc4c5bb97a52749c84b",
+      "raw_bytes": 603129,
+      "gzip_bytes": 258845
+    },
+    {
+      "sequence": 250,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000251.json.gz",
+      "gzip_sha256": "e3eb2ae1da54ca062b3aeeb0ec0d247f0c58bcb14f91fed96f03336daa050a81",
+      "raw_sha256": "689ef32cbaf9120068967175714c02d8378e092a5bbfa5dfcd362ee2b3c16a2f",
+      "raw_bytes": 606376,
+      "gzip_bytes": 259677
+    },
+    {
+      "sequence": 251,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000252.json.gz",
+      "gzip_sha256": "f3c11560cb260e203a3ac499889dbd5a4065a61cecab30999a4b767f12c34d62",
+      "raw_sha256": "b5cccae4cc52d07effa3558f5484fc8f25812aae3ec58649fb3a0acfbcb176fc",
+      "raw_bytes": 593847,
+      "gzip_bytes": 255419
+    },
+    {
+      "sequence": 252,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000253.json.gz",
+      "gzip_sha256": "aca235feeb75f909495e51a2aeaa0bbd30333643c9cd8ec523a30d9b145c74ef",
+      "raw_sha256": "2c0e6ba058121075ea0dca4d16612bb283e62f8cac927a2a2639398b0f3bebec",
+      "raw_bytes": 587759,
+      "gzip_bytes": 251623
+    },
+    {
+      "sequence": 253,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000254.json.gz",
+      "gzip_sha256": "a45c12dd5193bc63501f2a100ce24c8b17e578a13671bb0ebe001105432e7cbd",
+      "raw_sha256": "c6be9fcf90652a89d9044418a0574e376e880bd72db0bdf8e0b44d1bc985b857",
+      "raw_bytes": 595818,
+      "gzip_bytes": 256190
+    },
+    {
+      "sequence": 254,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000255.json.gz",
+      "gzip_sha256": "a29876036a57ed5dbe72b3be3ddb2353468d9b3e1eb249038169a5f0cd4be786",
+      "raw_sha256": "e31acae8c1b115e81234993eec380ddded716359b87936d5f5a14b63c60ce1c6",
+      "raw_bytes": 598635,
+      "gzip_bytes": 257260
+    },
+    {
+      "sequence": 255,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000256.json.gz",
+      "gzip_sha256": "031035324919f1ee55eee608b8d3569f6e7240a4218010f1d739dac02de87821",
+      "raw_sha256": "82a4909e895b41290a06239625e3fd8f017ece3b6dfbacf5ac2cd67e6724a4db",
+      "raw_bytes": 600245,
+      "gzip_bytes": 257896
+    },
+    {
+      "sequence": 256,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000257.json.gz",
+      "gzip_sha256": "3d21bc8595ffbc4a66e6988e9be1b54cef93ef487f243e2c5b720a36feca533a",
+      "raw_sha256": "4b5aa5e0c60be9c30f5780b0e25e813c46cb91bb0a1da032644ba7ecc76b732f",
+      "raw_bytes": 598908,
+      "gzip_bytes": 258103
+    },
+    {
+      "sequence": 257,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000258.json.gz",
+      "gzip_sha256": "26e625acdbb0cd3bae77d4957247794581b5bec9b92ae8532e3474274a77ad58",
+      "raw_sha256": "5bed876d53a435cc239e1d3b42a8e76bdc315b0fa08a6fa8935aae91950b532b",
+      "raw_bytes": 662317,
+      "gzip_bytes": 281672
+    },
+    {
+      "sequence": 258,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000260.json.gz",
+      "gzip_sha256": "688f5066838fd95b8f3752ba6103b27f7d92e326cf93779885a6d79ba26ef465",
+      "raw_sha256": "f8f09d612b0a6658e346210edd2ce85f86dcb73003ef212464cbf5b6dd4061e7",
+      "raw_bytes": 654503,
+      "gzip_bytes": 279231
+    },
+    {
+      "sequence": 259,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000262.json.gz",
+      "gzip_sha256": "8075c2408772984ff663189d5d429d69a5e7c2bc66e9c76324bc204964986419",
+      "raw_sha256": "0505120619a20e5b24217d97ba0950e78a55b66e8768054e1a5a1258465aa61a",
+      "raw_bytes": 648862,
+      "gzip_bytes": 276475
+    },
+    {
+      "sequence": 260,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000263.json.gz",
+      "gzip_sha256": "f2e3c9b9e469fbaaa5f11d45d486a0c389daddd0053b43ea6c2cd7dc43703e05",
+      "raw_sha256": "c5571bb79576e8eed319f6aa290c935a7bf8e2d61b896ba055729cc24b4eaba3",
+      "raw_bytes": 647178,
+      "gzip_bytes": 275580
+    },
+    {
+      "sequence": 261,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000265.json.gz",
+      "gzip_sha256": "f3abbe1dcb8bb381d587c89b2302cb44a579bfe2624219d48ef02cb4f5d98bc0",
+      "raw_sha256": "2d9b37e255cb471f312b8d75b893d00668969aa1fef881beab4336af604fc36d",
+      "raw_bytes": 646503,
+      "gzip_bytes": 275463
+    },
+    {
+      "sequence": 262,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000267.json.gz",
+      "gzip_sha256": "eafcfccab9e72dd125b48a4c99bce4998e6d542268406d7ef1cd79b2729ac27a",
+      "raw_sha256": "efd9bf43b79b0673ecbf1e74472904d512bdb70d0a3ec4061ec35a1d82a21274",
+      "raw_bytes": 657923,
+      "gzip_bytes": 279513
+    },
+    {
+      "sequence": 263,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000268.json.gz",
+      "gzip_sha256": "e4c751519ab52727143cda8d5f82cff9dafd78c1d0411c28ec3e28d48d191bd2",
+      "raw_sha256": "0779cd3af0fc1345a5331e69992a82cd956369e42dcbe546816428e3be657cec",
+      "raw_bytes": 591035,
+      "gzip_bytes": 252555
+    },
+    {
+      "sequence": 264,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000269.json.gz",
+      "gzip_sha256": "fbb9549aa87b3c3fd5b018f0130b0ad39b579a2147ac0b35049a885dec01569e",
+      "raw_sha256": "934836a4a97c1121bfce1f37683775ce107fb2160600e73d95623d8efe44f61a",
+      "raw_bytes": 590943,
+      "gzip_bytes": 252402
+    },
+    {
+      "sequence": 265,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000270.json.gz",
+      "gzip_sha256": "34071af126af8b112f78b0d2fcba35e084209bda7cf7c4c173ff2c829408f278",
+      "raw_sha256": "04e66368284686b55bc923aca6d8ffaaf63d21f27589f3b6c07cfc21608f05b6",
+      "raw_bytes": 592062,
+      "gzip_bytes": 252970
+    },
+    {
+      "sequence": 266,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000271.json.gz",
+      "gzip_sha256": "9de70d73ad9283f63a1e754721e878d53667c42c81d306f851738982a29c5da1",
+      "raw_sha256": "47e1dc775382ca2c3c493d177bb89d78b0841126d9804d6ccabde4b7a128cfe0",
+      "raw_bytes": 593721,
+      "gzip_bytes": 253899
+    },
+    {
+      "sequence": 267,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000272.json.gz",
+      "gzip_sha256": "4e949c6e0112fdff17de45b7942e837e0b1290e2be8704beffd426d25cd29a1e",
+      "raw_sha256": "5b0e172cc9c9ceb4232d01289642a4238a71c679e7328116e17d82be57272aa4",
+      "raw_bytes": 593412,
+      "gzip_bytes": 253770
+    },
+    {
+      "sequence": 268,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000273.json.gz",
+      "gzip_sha256": "6d6bc151f9bd70357e41a0c11748377033a230c937c074923832a64ab3a10e00",
+      "raw_sha256": "e1d0e638da6bfeb619ee460d4b4b7370dffce5932a3cbaf9f2affd5d8d557793",
+      "raw_bytes": 594146,
+      "gzip_bytes": 254062
+    },
+    {
+      "sequence": 269,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000274.json.gz",
+      "gzip_sha256": "95a315e986c8d76110523a84c937a95016b79240e4dac5eebe8198290c426f87",
+      "raw_sha256": "28aa2b511998c65445f9126453dad8c64cb9e99aafef9fbb6cdba672b8fb011c",
+      "raw_bytes": 594135,
+      "gzip_bytes": 253977
+    },
+    {
+      "sequence": 270,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000275.json.gz",
+      "gzip_sha256": "ca5dd25f57e1e8ec8455d2d83fbbe84672ecbbb9ef8c1902aaf30d8332166bf4",
+      "raw_sha256": "ee0a1f7771c3fff04d6c7cb65292ba8f9c8c16db54e68e34eac296677f485b2d",
+      "raw_bytes": 592523,
+      "gzip_bytes": 253806
+    },
+    {
+      "sequence": 271,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000276.json.gz",
+      "gzip_sha256": "2e3b440dafc45cc210a0f3f22fd1b527805c30bcde784bb1d86a1e73760b381f",
+      "raw_sha256": "e2161ac837f3d3e967971d79e0fa4e39df2a2fb91724dbc892852b70a7c90966",
+      "raw_bytes": 589217,
+      "gzip_bytes": 252447
+    },
+    {
+      "sequence": 272,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000277.json.gz",
+      "gzip_sha256": "262a2da0981e95a564f573015cfbe50b909ee5fa7422735e38ab16289823c7f4",
+      "raw_sha256": "c81afc87b67b2d68077798f6b1de40c838cd26a8c73517f777929fa47f56b7d5",
+      "raw_bytes": 589902,
+      "gzip_bytes": 252810
+    },
+    {
+      "sequence": 273,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000278.json.gz",
+      "gzip_sha256": "9caa5aabf02dd3158a26cf8f21158ca3dd3cbfac376f913cc9632f48938d6fce",
+      "raw_sha256": "d34d2e1e16520a342d0cce190142637b567de110b5ceeda2b028f912b4f16cfb",
+      "raw_bytes": 591204,
+      "gzip_bytes": 253330
+    },
+    {
+      "sequence": 274,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000279.json.gz",
+      "gzip_sha256": "e71478af70345230ffa0d1a0ed8a661607c7e2d37fd1c5309a497cd215cdd418",
+      "raw_sha256": "27315421aa49c3019ba770273944b18fb757d4917a659bc097868e27b971ff99",
+      "raw_bytes": 612946,
+      "gzip_bytes": 262450
+    },
+    {
+      "sequence": 275,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000280.json.gz",
+      "gzip_sha256": "53dc2b62bf266d49934dbd4e452b73df07bbc0824ee90135cc7239b92ad50f48",
+      "raw_sha256": "8436e308178f145edbb86c01b0e9abe32944ed5a6daf5de276e31310863a7009",
+      "raw_bytes": 617571,
+      "gzip_bytes": 264562
+    },
+    {
+      "sequence": 276,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000281.json.gz",
+      "gzip_sha256": "bf5ff571913d8ca2b07330e3503a2163d0bee8fd742c9ac940e9314a84c3e407",
+      "raw_sha256": "765cdebd9e93892b216da23fd57042ab02c2697ebb1bb13b6586b3550f91d464",
+      "raw_bytes": 598867,
+      "gzip_bytes": 256210
+    },
+    {
+      "sequence": 277,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000283.json.gz",
+      "gzip_sha256": "bd0bce91a976040522ab06a542acd15bd9e7244e4d4a28ebc0fa6e18dea8066e",
+      "raw_sha256": "70c197631c47ac7d8e2db8deab74ef4d27a5f37ddfbe9893408b72e4e07d2659",
+      "raw_bytes": 593180,
+      "gzip_bytes": 253938
+    },
+    {
+      "sequence": 278,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000284.json.gz",
+      "gzip_sha256": "5b404f5a08974b60156885a176f1d0bb7c9d57ceae921e1d75cea96e5b64e558",
+      "raw_sha256": "eb16cc2b0db7cc7c8615d4e5ad90aedb852ca2e5e49a19bd60eff96caf780f75",
+      "raw_bytes": 595523,
+      "gzip_bytes": 255184
+    },
+    {
+      "sequence": 279,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000285.json.gz",
+      "gzip_sha256": "7aaf73c901421f53e7e6283537523fa314c546ceb3b75cbf9ee059a411266639",
+      "raw_sha256": "4ad0bd94e0d4ff25b041fc88ff8e503000466b65b281b785caf09c6a59eec6ce",
+      "raw_bytes": 598420,
+      "gzip_bytes": 254567
+    },
+    {
+      "sequence": 280,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000286.json.gz",
+      "gzip_sha256": "a1710acaa8f66f310ae14b44ecf4058f2cbe551f98f3ed0c17ccc9c8a0429334",
+      "raw_sha256": "c742765eaf84f997a88d4662621de94491bcafbc5063763af1a545cc0e995f07",
+      "raw_bytes": 608082,
+      "gzip_bytes": 259160
+    },
+    {
+      "sequence": 281,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000287.json.gz",
+      "gzip_sha256": "a0227a617fabdb038493513dc29d5137acc2aa6f5af8662874fd3fce533f37c6",
+      "raw_sha256": "d620feef32bbea421cebd27caa5293c5aedfa05c218fc820643e215650c80fef",
+      "raw_bytes": 607133,
+      "gzip_bytes": 258827
+    },
+    {
+      "sequence": 282,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000288.json.gz",
+      "gzip_sha256": "713f96db82e19a1956fb1c40ff2d8afc58ddc42d0cd29ac9542c2ebe3e805073",
+      "raw_sha256": "fbbf1a990b0fe0b18bb895290b44257227c12bdb5e8098d641f41843004ebda7",
+      "raw_bytes": 607983,
+      "gzip_bytes": 259865
+    },
+    {
+      "sequence": 283,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000290.json.gz",
+      "gzip_sha256": "629464cbe6ee26b13591f647b591a5c824affae8d998ffdf3a96ae4083ae82df",
+      "raw_sha256": "ad01f793343e67f4b181568db84b96dbf047f2c00e5897567eced0ef8ae7182a",
+      "raw_bytes": 590908,
+      "gzip_bytes": 253728
+    },
+    {
+      "sequence": 284,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000291.json.gz",
+      "gzip_sha256": "68fc6ef1233ef4e7c0c35ed05858aa4b05b46c46d36aaae96a418d9297c32469",
+      "raw_sha256": "3c746025f109b2839268d99c7c5768b27e4e0e9cdcfe394847f8e64e3303dd59",
+      "raw_bytes": 592224,
+      "gzip_bytes": 253286
+    },
+    {
+      "sequence": 285,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000293.json.gz",
+      "gzip_sha256": "ab414f8461305ce6a8b1c27e001f04004dd4ecab43421d06747c6b21c1c4f007",
+      "raw_sha256": "195e9427c5b8beca31d98c42eaf7a6343d2a6635103abb7e019180195def6784",
+      "raw_bytes": 597426,
+      "gzip_bytes": 256181
+    },
+    {
+      "sequence": 286,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000295.json.gz",
+      "gzip_sha256": "03da2fdbf57c643dbe239595e3fb71992d9f2ce4c2ef53d0521d81517f031ac4",
+      "raw_sha256": "a81029280490519ba6b7a4155035bc0cea75326c971cd34e790b2508c4774419",
+      "raw_bytes": 596629,
+      "gzip_bytes": 255464
+    },
+    {
+      "sequence": 287,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000296.json.gz",
+      "gzip_sha256": "b0e1de9400c493e8683d5f0e18c556a1d7c7fbb0b558d52521b12eff5346c58f",
+      "raw_sha256": "c19ce310ef9a1cc794a1da7de69f88dc8d3afac3fd94805c637e961db3183e7e",
+      "raw_bytes": 597295,
+      "gzip_bytes": 256410
+    },
+    {
+      "sequence": 288,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000297.json.gz",
+      "gzip_sha256": "7a049421cef9eef1dd58481864a81f8227650882b888df427be6afe458ed9451",
+      "raw_sha256": "245a1eaa7f495c46fbf3cb65200be614b5f2f1609cf4276b4d8c3d70ec3583c1",
+      "raw_bytes": 599102,
+      "gzip_bytes": 256534
+    },
+    {
+      "sequence": 289,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000298.json.gz",
+      "gzip_sha256": "bad64d036c1bba6368692b0680316afecdba7c4e213a26865167a3ca9dbdbca7",
+      "raw_sha256": "f805d535c7cbc82808bc23cf02ae1bc61243883f1f38a94065c29a57b9e057b2",
+      "raw_bytes": 603899,
+      "gzip_bytes": 258709
+    },
+    {
+      "sequence": 290,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000299.json.gz",
+      "gzip_sha256": "c8223ae4af43acb05d344b4cd15837f89f67ea9af8d56d822c2a3c32ff12c239",
+      "raw_sha256": "26f60462c2c08af97edbd4f7ddf8b25d1185f680b839a02a35d2ee7db84fc50e",
+      "raw_bytes": 590710,
+      "gzip_bytes": 253091
+    },
+    {
+      "sequence": 291,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000300.json.gz",
+      "gzip_sha256": "19220650ac88630cc545fb2a2ba9c7908a6e9174013b53a35415a964004ff58f",
+      "raw_sha256": "299410fdea81388ed867ba352960857a5bc1af2ebdc4b2ffb33e868c77b56065",
+      "raw_bytes": 600617,
+      "gzip_bytes": 256826
+    },
+    {
+      "sequence": 292,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000301.json.gz",
+      "gzip_sha256": "bd8821a09c0fa8778192e44b6dc4658a54298af390c0cab2b36d1669e8897214",
+      "raw_sha256": "a3302288f1d1ac806631d1c8ffaa0abe01af535b200bcd4e897fca82558db893",
+      "raw_bytes": 604557,
+      "gzip_bytes": 258498
+    },
+    {
+      "sequence": 293,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000302.json.gz",
+      "gzip_sha256": "7a00fd370cf4f31fe9180b0285bc81aa04de9a2d425e10e5d0d0c535f8180ff4",
+      "raw_sha256": "e97c398b8c5951515d270775532bafa8986324a9044df4effe009385ca54bb2d",
+      "raw_bytes": 584320,
+      "gzip_bytes": 249483
+    },
+    {
+      "sequence": 294,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000303.json.gz",
+      "gzip_sha256": "f9b394817ad3f5d69af0c6b7078e972fbbbf99cc549f8557696086b7d9321c8e",
+      "raw_sha256": "51caaa710a533b234500c783a3aa9fbfe7a927d0c5276a29c3cb1fbaae7b09e3",
+      "raw_bytes": 598273,
+      "gzip_bytes": 256364
+    },
+    {
+      "sequence": 295,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000304.json.gz",
+      "gzip_sha256": "bd83b93a2e8bf0ed42129bd72173c96717e5d296df11e7d6df8096934ffed940",
+      "raw_sha256": "85d22525daf2febecd99d8575b7b6cd2b44778fab9e7479c98b2797b38ebb51e",
+      "raw_bytes": 591872,
+      "gzip_bytes": 255075
+    },
+    {
+      "sequence": 296,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000305.json.gz",
+      "gzip_sha256": "c5eb2711dbfca5cecdfc439a2def86e74e61ed8c3f18b876525077e03327c02e",
+      "raw_sha256": "3ec161806618a4821e83345ef500a6db4c209d4834c4c859a3f18ea7ec0911f7",
+      "raw_bytes": 556412,
+      "gzip_bytes": 239112
+    },
+    {
+      "sequence": 297,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000306.json.gz",
+      "gzip_sha256": "0e3308e4d221dc226aba0155bc4c42a949c7dc19283ae4e1cf1bbc897fb978a3",
+      "raw_sha256": "c28a566f4b5f70bae698d4ef3d408ebb3e6a887c812ad8cfbb4769f102ded967",
+      "raw_bytes": 564627,
+      "gzip_bytes": 243687
+    },
+    {
+      "sequence": 298,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000307.json.gz",
+      "gzip_sha256": "de5e5250a911906f860b6cd27acbddbf3c1a71b22c68003c2ba9c7b59cc0a07a",
+      "raw_sha256": "9e82db1f6fa5411c0b12c0f805fc2c455d415c58618c09048fea904edbb0087b",
+      "raw_bytes": 567813,
+      "gzip_bytes": 246059
+    },
+    {
+      "sequence": 299,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000308.json.gz",
+      "gzip_sha256": "99f51871910662efdb2aedc4091d30e676e718b66d3283491f1e69e873c8c17f",
+      "raw_sha256": "834345f6abdfc18256e42310209e9294cf7b3fbb7d575cf776e4a9ef38d4360b",
+      "raw_bytes": 553744,
+      "gzip_bytes": 240295
+    },
+    {
+      "sequence": 300,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000309.json.gz",
+      "gzip_sha256": "5b65bcea6431deabff0646ac58d878c041e62db7da5761e6cf425aeafbdb5b8a",
+      "raw_sha256": "956937dcca4cbe6cfb225d50c52d9e8098ee7f2e2c4248b4fb9ecd6896ef6685",
+      "raw_bytes": 554564,
+      "gzip_bytes": 240955
+    },
+    {
+      "sequence": 301,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000310.json.gz",
+      "gzip_sha256": "073182fa46646c49690b71a6e877ba7570e44b3f5f348ce22e42a8f1a5b1a549",
+      "raw_sha256": "ca3a52f0fadb59303612c911fc7de2d0c0a5cdb3e9a677913f32a32aced762f0",
+      "raw_bytes": 555386,
+      "gzip_bytes": 242126
+    },
+    {
+      "sequence": 302,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000311.json.gz",
+      "gzip_sha256": "e3a926944ef2abc3449552c5cecbc4e53def7fa759345c48fde28ac8bdfff8cc",
+      "raw_sha256": "476ac98ad0a7534962e9fc0eb829f737c6970c50502782976aeb83552fdec838",
+      "raw_bytes": 543750,
+      "gzip_bytes": 237317
+    },
+    {
+      "sequence": 303,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000312.json.gz",
+      "gzip_sha256": "1ff3a2815de41f317607230c4dccf1f664177bdc0e667bb1cc403d4bb4ae7ec6",
+      "raw_sha256": "aacefbe7993bdbff68ab5278bbf7a259c240f4f98606c447091acd9f272b684d",
+      "raw_bytes": 541824,
+      "gzip_bytes": 236377
+    },
+    {
+      "sequence": 304,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000313.json.gz",
+      "gzip_sha256": "d7b0786cfde467f9c2d0860f20a600f641daf4b44d4854981d2e3cb8e606ffff",
+      "raw_sha256": "04a888aa1500f9411bbaeb65d9bc8e448484f93039028b5e91258c0a84b9fddf",
+      "raw_bytes": 519672,
+      "gzip_bytes": 225998
+    },
+    {
+      "sequence": 305,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000314.json.gz",
+      "gzip_sha256": "d1721470f3c89d82cbc4ab1432af23317d1f4faaad5fb38a088f0d806d67ffd5",
+      "raw_sha256": "9c5a4108a93dbc324b35b864acc694d95f3c10106f93cdc57d71caea03bc7444",
+      "raw_bytes": 522321,
+      "gzip_bytes": 227964
+    },
+    {
+      "sequence": 306,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000315.json.gz",
+      "gzip_sha256": "e93541aa76395e28460c14fceab2c9922f748519fc90ff0528f8bd0d4b5f02b5",
+      "raw_sha256": "162fc51b1aaa2ec183f9ba4ab23b6d3d5f229542910325b7cf8889c5ca2e6305",
+      "raw_bytes": 510169,
+      "gzip_bytes": 222920
+    },
+    {
+      "sequence": 307,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000316.json.gz",
+      "gzip_sha256": "dd6b2d8f7e140a59435bdd56259c88e7d303894faa694d7bcda254089c57ee0e",
+      "raw_sha256": "d67ded63b2ba179a2459beb2ec4810f8b2a0956c768566a70826dec76459be44",
+      "raw_bytes": 498116,
+      "gzip_bytes": 218006
+    },
+    {
+      "sequence": 308,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000317.json.gz",
+      "gzip_sha256": "51f4b2d07c1169674b4b419de93c24ea6fde7124d2b5cacb1835050e18929c36",
+      "raw_sha256": "5e82b289b71efd0215c40d76d0a53a88cb8f1158cad12d6fafead86c6f0d66bb",
+      "raw_bytes": 484258,
+      "gzip_bytes": 211993
+    },
+    {
+      "sequence": 309,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000318.json.gz",
+      "gzip_sha256": "50d23faf50b5a902966df6d78b4e7c928f73553b1fdc853d5b781788f06ee363",
+      "raw_sha256": "aad8bfb0f1e20cbc7c67656e7dd969cc1e14b6ff32af0f12ebc37ed30ccd6b63",
+      "raw_bytes": 468858,
+      "gzip_bytes": 205417
+    },
+    {
+      "sequence": 310,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000319.json.gz",
+      "gzip_sha256": "dc95371053c30d2851fbfcea0cb92fa7b0f90b94f2e9a37f16bbe6f7a277c60c",
+      "raw_sha256": "a83659dd787fd4b33efebdf21051dd7136358771e85cb4f806a581294ea564f4",
+      "raw_bytes": 462364,
+      "gzip_bytes": 202305
+    },
+    {
+      "sequence": 311,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000320.json.gz",
+      "gzip_sha256": "6edd619fd38f91d17d85c276ff85ba9715c0d7609d90b64ca0d51c3c8df94436",
+      "raw_sha256": "0a46eccd4dba488cc1f01d2f3c2ef18b1723dc9c0f31e835814c26496576af76",
+      "raw_bytes": 450649,
+      "gzip_bytes": 196717
+    },
+    {
+      "sequence": 312,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000321.json.gz",
+      "gzip_sha256": "5127927553fd66d1482a0e544efbbb8a50d6c56bea323e24c03ad710091c5cdb",
+      "raw_sha256": "970128447d5d366bdeb2c05f2f05491666b4796f70f4bf9ab94f3c3f309c93d2",
+      "raw_bytes": 631831,
+      "gzip_bytes": 267849
+    },
+    {
+      "sequence": 313,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000322.json.gz",
+      "gzip_sha256": "09e9785b3f496f70cc975765b5f417852927b00ba03b3fa56460e1d1d0d76757",
+      "raw_sha256": "f2978247416c1df4cbaf65077b3292a79515bd1adf275f3fda058197e661411d",
+      "raw_bytes": 636927,
+      "gzip_bytes": 270420
+    },
+    {
+      "sequence": 314,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000324.json.gz",
+      "gzip_sha256": "758b2f7f64de0daf3c23f8f152d8da8a0c937171373757fe05aa3fb0a6289302",
+      "raw_sha256": "cbba4a03a1dd6469546dd3ebcf632258a74dad6473ef5430dfd424a4731ce6fc",
+      "raw_bytes": 595124,
+      "gzip_bytes": 256166
+    },
+    {
+      "sequence": 315,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000325.json.gz",
+      "gzip_sha256": "8eb493746e3960ee0eecd098a9c9e9eaeb976ca8201719722b697eb731567b21",
+      "raw_sha256": "baf1e491130d75a39cf9dcd0db16c14f463276044649360f7ae445035ad3de12",
+      "raw_bytes": 593503,
+      "gzip_bytes": 255537
+    },
+    {
+      "sequence": 316,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000326.json.gz",
+      "gzip_sha256": "e6ba0a29c375860ea4a975792e412b60c20f35b0258648ee554cd00ce3e89856",
+      "raw_sha256": "07fa4236f26543bb1bb43265d42d48cf7ab43e78466b3faaa1912c40660f203e",
+      "raw_bytes": 591775,
+      "gzip_bytes": 254650
+    },
+    {
+      "sequence": 317,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000327.json.gz",
+      "gzip_sha256": "83415391ef6d24e20d416d9d6c7ff6d30b9247e52f863696d8cb0eff3a86d1f8",
+      "raw_sha256": "15903d28721fbc2de7cf1cdb5b66923446767ef714495778ae3fa7e64456409d",
+      "raw_bytes": 588761,
+      "gzip_bytes": 253255
+    },
+    {
+      "sequence": 318,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000328.json.gz",
+      "gzip_sha256": "bf4445a74beff27acd9d70b0f466853bb7d8253f9fdefeace59d0f11c3f6a518",
+      "raw_sha256": "b70d3b0fee3c09da4cf3084b12e876a1ed6172f275224201664643ac52f1a44e",
+      "raw_bytes": 585667,
+      "gzip_bytes": 251735
+    },
+    {
+      "sequence": 319,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000330.json.gz",
+      "gzip_sha256": "c5b5b5959e8ee157ab9dfa003c7b199524772a63f499597ce58d4a654851225f",
+      "raw_sha256": "27cdaf329fd0fa866d052d840d83fa72b4bb98e686397d59cc9290b1a9eed371",
+      "raw_bytes": 591899,
+      "gzip_bytes": 254803
+    },
+    {
+      "sequence": 320,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000331.json.gz",
+      "gzip_sha256": "9f5db3e467e3600b6533bcdabc6b668f5f352f001c8768bd7c3018a8b9ccd47b",
+      "raw_sha256": "18cdddc30e67ff3f3bb967b3f808aed60c9cc64ea33af9b401fb349fb2d4a1f0",
+      "raw_bytes": 596805,
+      "gzip_bytes": 256830
+    },
+    {
+      "sequence": 321,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000333.json.gz",
+      "gzip_sha256": "5b644f6e98128b94250a05aa1e975ce7827b6248a2716c9c89c1b49e65f52690",
+      "raw_sha256": "b84fc199f18d05d4038733ad7eb3d3f18008faad72889a0ebb8f155147b04813",
+      "raw_bytes": 597159,
+      "gzip_bytes": 256874
+    },
+    {
+      "sequence": 322,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000335.json.gz",
+      "gzip_sha256": "301c5ab0dda2622c2bf48cdd00e7f5bb7b04c8bc96d1284f7d3d0de9cfec6343",
+      "raw_sha256": "4e2a18996c0574ab9129e2ee854c4ed6e8b1ecd578d972cd008346da2a037b2e",
+      "raw_bytes": 608917,
+      "gzip_bytes": 261744
+    },
+    {
+      "sequence": 323,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000337.json.gz",
+      "gzip_sha256": "e11cdbe0e4f60138dc394605dac64bffed6d8215ecd5e85496ab68a774fb0253",
+      "raw_sha256": "3c61f31ed0fa66b3442d77ee50e5df1a9564071424a259fa956f38717fc83e79",
+      "raw_bytes": 607312,
+      "gzip_bytes": 258612
+    },
+    {
+      "sequence": 324,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000339.json.gz",
+      "gzip_sha256": "c0bea2510504a9f83f7c15b0390de78b2994bbffc419caa7a69b03f71dc1e4d2",
+      "raw_sha256": "a49326829c57aee7425abf9480876884ff688a1a1f41c163a0d4609b2045c4e1",
+      "raw_bytes": 624477,
+      "gzip_bytes": 266676
+    },
+    {
+      "sequence": 325,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000341.json.gz",
+      "gzip_sha256": "321c5a0162c613647e3a51bf22204d0db6c6139cd9f68ca9da6d8a8eede11202",
+      "raw_sha256": "375b6d0c474b2f0eb5b4cae4a9e6471101d84e44fd9d9b9371f7cc1412a7443d",
+      "raw_bytes": 621817,
+      "gzip_bytes": 265108
+    },
+    {
+      "sequence": 326,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000343.json.gz",
+      "gzip_sha256": "6ea80b3a9d5eda583887ee228ad68806c273043a820ca0bc49f93c81fcedf068",
+      "raw_sha256": "5667d464ee5c8c745b2805cee7fdeb81fd2c9de08fbf7f9a54f8bc66a4ca08bd",
+      "raw_bytes": 606225,
+      "gzip_bytes": 258135
+    },
+    {
+      "sequence": 327,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000344.json.gz",
+      "gzip_sha256": "998712ba165bd7f25d0b2f583feb4cf1daf8dd1aed14df03e2b614709b4ca32e",
+      "raw_sha256": "60efadd6dde0abd42bf157eff17a82ad83d4a8ab493e779c1c63f9471726d377",
+      "raw_bytes": 608671,
+      "gzip_bytes": 259328
+    },
+    {
+      "sequence": 328,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000345.json.gz",
+      "gzip_sha256": "2598549734b16389173ef0d499a5e864848dca00684f37c8596d6ef8b9cf41ee",
+      "raw_sha256": "17a672760df6da6464b14f994f39b40a50ffafbf121664678cf236e18163d190",
+      "raw_bytes": 615625,
+      "gzip_bytes": 258812
+    },
+    {
+      "sequence": 329,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000347.json.gz",
+      "gzip_sha256": "6e05d0e006c36ad8ad9c50974671b3940c4b86cc67389107101258818ee3ff5f",
+      "raw_sha256": "2b3ba48f8546815eeec2f93a3e526aedd023f1b7e3cebf7924bcce1cc6f89796",
+      "raw_bytes": 601870,
+      "gzip_bytes": 255824
+    },
+    {
+      "sequence": 330,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000349.json.gz",
+      "gzip_sha256": "ffac52c9700007e520e251c2a5a5b122ed5861bf63a6e8197e679aa071dead78",
+      "raw_sha256": "a8b14fed31931d4e858ae6742a82975d4b9ec7933218de3507b8d0ab52cc8f8a",
+      "raw_bytes": 600057,
+      "gzip_bytes": 254981
+    },
+    {
+      "sequence": 331,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000350.json.gz",
+      "gzip_sha256": "96ed94368807b9bdafbf8ca2df63e4d96ff603a8d225eabd366942ae200ed293",
+      "raw_sha256": "b1287a7bcdff76dd611bb083ac5f36be2c37adc90abcef6413b3c23eb791e0bb",
+      "raw_bytes": 601127,
+      "gzip_bytes": 255546
+    },
+    {
+      "sequence": 332,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000351.json.gz",
+      "gzip_sha256": "75d76ff19f44513a54be79fc5e2f29621ba7685f2dc8d6be02b16556c8bb7818",
+      "raw_sha256": "b4f411b7a71acda45cde8887401cd4984981164c6af10505fbb34de4975aa958",
+      "raw_bytes": 602602,
+      "gzip_bytes": 257368
+    },
+    {
+      "sequence": 333,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000352.json.gz",
+      "gzip_sha256": "19f993d7ad32cae83b63ecabed72665032540a87cf1a74c9ee1ea3784654b984",
+      "raw_sha256": "f79da3e4cd5a13ac5ddcf55a1efef965c5c07033ffccb73ccd7f3685b52d6356",
+      "raw_bytes": 572954,
+      "gzip_bytes": 245613
+    },
+    {
+      "sequence": 334,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000353.json.gz",
+      "gzip_sha256": "4dbed55e9d00af6920d247dbe83137b6650fcd2de2fa9901f7249f6d361378da",
+      "raw_sha256": "4291acce185f0b5c36c3cb0ff2033131e968abf41bbd873815295781fd81ec87",
+      "raw_bytes": 584048,
+      "gzip_bytes": 250823
+    },
+    {
+      "sequence": 335,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000354.json.gz",
+      "gzip_sha256": "adeb0c28fc985c169e2bc206dbf6a349f597042979086a4d44ba6ae53cc28dac",
+      "raw_sha256": "ff0bf412a1dd36eb12273f3264f8f4b0d67390109a199e79cf8ba9221cc21218",
+      "raw_bytes": 585466,
+      "gzip_bytes": 251538
+    },
+    {
+      "sequence": 336,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000355.json.gz",
+      "gzip_sha256": "6589ff6848bf36cacbeca36ed82a1a73a1e5e9535381776af046a323eca8431f",
+      "raw_sha256": "4d6a0550c472e4c2910fe617a0ba96767f15cb168d6dedb186b6c0756a8569a6",
+      "raw_bytes": 589788,
+      "gzip_bytes": 253736
+    },
+    {
+      "sequence": 337,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000357.json.gz",
+      "gzip_sha256": "7e65042929d38f445763f10cf8f9d4abfc9cd23e599e82f8a89e7b5602fb1cdd",
+      "raw_sha256": "21a623e3edac174df099f3a6beda70d52b8ba949aa221b64fa98016c1ee88d92",
+      "raw_bytes": 593152,
+      "gzip_bytes": 255193
+    },
+    {
+      "sequence": 338,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000358.json.gz",
+      "gzip_sha256": "a8325364bf72cbd9c9e6c12c89e3a2f0f22c651241a6a5fd2343329ec3da4917",
+      "raw_sha256": "61c9f990e2da2b3ebdfdc485aa876ae27db25bd67255041cad05527c687dd44b",
+      "raw_bytes": 593257,
+      "gzip_bytes": 255157
+    },
+    {
+      "sequence": 339,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000360.json.gz",
+      "gzip_sha256": "02e13b0b3cfdc60c21e64f098cc858ab645ef7d3bcc009d65c93d78eea84a03c",
+      "raw_sha256": "b07c24b22cbf3293d1144f5543566cb43fc47c47d4bffaef005b14c662cc7e2d",
+      "raw_bytes": 592420,
+      "gzip_bytes": 254905
+    },
+    {
+      "sequence": 340,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000361.json.gz",
+      "gzip_sha256": "81493affec1a7e631f96249200be36110e9b8fd167d31009a09081cadf1fe262",
+      "raw_sha256": "077cc77518463e4c4b42896e550806543f2bbefdad76967509b430fbc834a729",
+      "raw_bytes": 591490,
+      "gzip_bytes": 254203
+    },
+    {
+      "sequence": 341,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000362.json.gz",
+      "gzip_sha256": "20737d574cfbdd8d80a64a6b6a72d805b6b555e953142fe1f7401d904548d794",
+      "raw_sha256": "ad33497d72301411a011d97f5097b8fe0dca869c0857a8593263a0d10a034827",
+      "raw_bytes": 595262,
+      "gzip_bytes": 256067
+    },
+    {
+      "sequence": 342,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000363.json.gz",
+      "gzip_sha256": "ac1a2908d2ca86b65e953061ebdbe63496307ff5d857e582fde14ccf7e7794f1",
+      "raw_sha256": "9decc815545a57fc59fc81d464473833dccaa17142920ce822d0001c40a7f36f",
+      "raw_bytes": 593024,
+      "gzip_bytes": 255144
+    },
+    {
+      "sequence": 343,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000364.json.gz",
+      "gzip_sha256": "ab79b7862a98ab63cf2af9329d22341ca455d67adb908b222774bfb520cc169c",
+      "raw_sha256": "44b9478c219411866cec1f8342853e0a97d594cb2172ff014cbcb0aa58a8af6f",
+      "raw_bytes": 588955,
+      "gzip_bytes": 252884
+    },
+    {
+      "sequence": 344,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000365.json.gz",
+      "gzip_sha256": "ddbad6458ccf9e897c2048ac2d54a2b190cfdfcf69d9e5c23b6bddd614feb0de",
+      "raw_sha256": "9bac94121f7ee76b53c19091ef6688c24949354c3f92dbc0cc76f191a3908e49",
+      "raw_bytes": 598361,
+      "gzip_bytes": 256372
+    },
+    {
+      "sequence": 345,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000366.json.gz",
+      "gzip_sha256": "04bedf2c1dbdee7edda578ca56c9d1148a7214aff44e8a56959d45cf576dbb1d",
+      "raw_sha256": "4304aeeb739a2dbed89a57918968b9b5793b963a02d5ad80d11bb2fbb060f9be",
+      "raw_bytes": 607442,
+      "gzip_bytes": 261029
+    },
+    {
+      "sequence": 346,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000367.json.gz",
+      "gzip_sha256": "d6b3715a192b2d4b7f4eeb28fe83987baca6358668df052357145d217cda40e5",
+      "raw_sha256": "4f8e3e6ffc997160f9434eafc17f5dbd56be94bc20c1e4981f8d245108bc5c6f",
+      "raw_bytes": 603890,
+      "gzip_bytes": 258939
+    },
+    {
+      "sequence": 347,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000368.json.gz",
+      "gzip_sha256": "9bf69d16b42bade690e17a9158444011b2ad01ee2cac6e2809e06200beef7cba",
+      "raw_sha256": "61fe1c4b12ab8135d6d751faed528774481f2c23196a8efc703b5f07b550fe44",
+      "raw_bytes": 590564,
+      "gzip_bytes": 252671
+    },
+    {
+      "sequence": 348,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000369.json.gz",
+      "gzip_sha256": "3e41b87372a2287a5499ece3266ed848c9e53b5296a4e440abbabca9169e375d",
+      "raw_sha256": "8476b031a6b3d6db6b426165788d84e7d88d209d172c5e173595e1d6a0bf86d8",
+      "raw_bytes": 599744,
+      "gzip_bytes": 257130
+    },
+    {
+      "sequence": 349,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000371.json.gz",
+      "gzip_sha256": "a72d4b40dc981be26927174aed86197831af6c16309f3a6ed52050df18f78ab6",
+      "raw_sha256": "c09692aa37c99f38010643f026787e6de2c27f5360c428ef4fafa168eb4923b6",
+      "raw_bytes": 610306,
+      "gzip_bytes": 258895
+    },
+    {
+      "sequence": 350,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000373.json.gz",
+      "gzip_sha256": "f75ae7a77507480dc16a84c600ae4731500d534c6e988ce62cb4c6edac80fd0a",
+      "raw_sha256": "48abf8debb972126a5a36b5083ffea4dea14b5ab7dfd8de9f1bdbd7293071b45",
+      "raw_bytes": 602149,
+      "gzip_bytes": 258117
+    },
+    {
+      "sequence": 351,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000375.json.gz",
+      "gzip_sha256": "c9924894b4c39da2e816279217b6cb05020019ad5de98c9394c235008ef910fd",
+      "raw_sha256": "6cef75c2ec43f19659a7abe76fc91933ce13146297503fe9607acb85cd2bff36",
+      "raw_bytes": 588484,
+      "gzip_bytes": 252076
+    },
+    {
+      "sequence": 352,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000377.json.gz",
+      "gzip_sha256": "f2a21c0f20567e13429d22d288e545fe8577f47b49b27b6b69db5ccb506b5721",
+      "raw_sha256": "398430a117300c81c4270acebbf753bc45fc3da583f009674d1e05dcd8cf0d2d",
+      "raw_bytes": 598874,
+      "gzip_bytes": 254224
+    },
+    {
+      "sequence": 353,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000378.json.gz",
+      "gzip_sha256": "75c47576612f5d5a68e20edf29e1f2badfeaba4e217cf7db6305b48e4bc74632",
+      "raw_sha256": "d1050fffa263fcff33befc0bf008d41c58769f4fdf4fa1924916f3da64b5c055",
+      "raw_bytes": 598636,
+      "gzip_bytes": 254872
+    },
+    {
+      "sequence": 354,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000379.json.gz",
+      "gzip_sha256": "06bf91be35abf57f223560346d7a8edf4d5dc49519d124d40053789629471c8e",
+      "raw_sha256": "a78007e524e062182d2d65b7e65e039659bc1bb0086d8be9bc372e678d049d1a",
+      "raw_bytes": 602986,
+      "gzip_bytes": 255832
+    },
+    {
+      "sequence": 355,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000380.json.gz",
+      "gzip_sha256": "23cc1897731c5167b51416cc711aa4964036428bb4cb8425b9892ad3b4d32c7d",
+      "raw_sha256": "dc40007bfc038f256505f781ac35f235e02b3f0547fd06cdaf978a839441d9e6",
+      "raw_bytes": 588339,
+      "gzip_bytes": 249896
+    },
+    {
+      "sequence": 356,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000381.json.gz",
+      "gzip_sha256": "a0b918fe78442b9280d1908a50aff068a30585662a3ed7bd9f10b47abff36391",
+      "raw_sha256": "ddb31a74467be71e33edfb89c10c629c8e556be8ee038fa791cb9ec11c89c1c1",
+      "raw_bytes": 602004,
+      "gzip_bytes": 255204
+    },
+    {
+      "sequence": 357,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000382.json.gz",
+      "gzip_sha256": "18224e47e648efe9494d7119f864b61312e11e92ca6f074adb4dc13039b6ce65",
+      "raw_sha256": "dd55458ce246c0573755be6f40603457fd83f28271b19054277bb27e97e6c06f",
+      "raw_bytes": 603221,
+      "gzip_bytes": 252307
+    },
+    {
+      "sequence": 358,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000383.json.gz",
+      "gzip_sha256": "f41082fe0ad3b06c945251efbaac2816b666fa2acd166b267e30f4fd72fec5a9",
+      "raw_sha256": "28c35787ff424504524b771c9d644258785d8cc4bcf6726836abf6f9094df283",
+      "raw_bytes": 605715,
+      "gzip_bytes": 257772
+    },
+    {
+      "sequence": 359,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000385.json.gz",
+      "gzip_sha256": "2f5bae7fc6f8480e76e3f46e088589a14c23ded0231d0a66b77f6e3d9c020cfb",
+      "raw_sha256": "cd652c55572746d2a6abe10c2df42ecce889d2a8be575604b52129c39609c5a5",
+      "raw_bytes": 599314,
+      "gzip_bytes": 253771
+    },
+    {
+      "sequence": 360,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000387.json.gz",
+      "gzip_sha256": "6e616cfa05d33fd84d2b2d38995f03b79143ecef808fd41afd2742cb52babcbb",
+      "raw_sha256": "346572e7df9804cc48b9adb9cf850b161982fc315a38807572064c81cc4b0d99",
+      "raw_bytes": 591004,
+      "gzip_bytes": 251574
+    },
+    {
+      "sequence": 361,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000388.json.gz",
+      "gzip_sha256": "314df92faea4e414b1d6082d94bc31701573522848e3afcf64a5ad363857d622",
+      "raw_sha256": "e85a98a286ffd6b3edfde9fd1b7c144c9f24051369a42dc3b6e246d272e3e1da",
+      "raw_bytes": 591492,
+      "gzip_bytes": 251369
+    },
+    {
+      "sequence": 362,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000390.json.gz",
+      "gzip_sha256": "6f58801197232bf37a0bf2d826c54924b64ad89f49db68e66a6b7db0d951dd7f",
+      "raw_sha256": "d191c901ce8b6375e065ac02cbb2c333066347b0246a980001f3da5e72c2de74",
+      "raw_bytes": 586446,
+      "gzip_bytes": 249674
+    },
+    {
+      "sequence": 363,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000391.json.gz",
+      "gzip_sha256": "97f660742a54d5690e2e2f45fd50ab6d79ad5b95a673229e06f54d0591b943cf",
+      "raw_sha256": "b59769449ca32bc77a20c78357b81ac3eb263bfb11b6d3109ec545be459086c7",
+      "raw_bytes": 584946,
+      "gzip_bytes": 248311
+    },
+    {
+      "sequence": 364,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000392.json.gz",
+      "gzip_sha256": "8b4bed37ff954c26a3155390decd7e063a0f424a0950f647f7c778773c416c06",
+      "raw_sha256": "65a8b99008665dae898c46a88e539fc39be7da9fa4ec3cdcb139f0cb026d7f62",
+      "raw_bytes": 596692,
+      "gzip_bytes": 253130
+    },
+    {
+      "sequence": 365,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000393.json.gz",
+      "gzip_sha256": "a801cdd7fc3336295b94f1f64f62f562108ecf9de7bdbf701b4177d570715e6c",
+      "raw_sha256": "b4aa4fd8366c61eef21db2259c6f67f2eee0b9c044a6a7359aef6b472892e690",
+      "raw_bytes": 597717,
+      "gzip_bytes": 254727
+    },
+    {
+      "sequence": 366,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000395.json.gz",
+      "gzip_sha256": "afb8c20ef92e231dcdecdba41f68c2ff95807a59615e5bf2e2e5c4215236e3ff",
+      "raw_sha256": "e77602ea5d3019f51ee786027b7a4ae1b00e1aa5553352e73826a619da4aa7e8",
+      "raw_bytes": 608390,
+      "gzip_bytes": 258033
+    },
+    {
+      "sequence": 367,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000397.json.gz",
+      "gzip_sha256": "ee5b0c4055c4869943aa97365a86cbd567cd7dfa22e121bd9d5531503a489595",
+      "raw_sha256": "b46acd1f6fd5ef082d15a71037b87e40e462b4cd11635a28ec0553dfdcd9e971",
+      "raw_bytes": 597508,
+      "gzip_bytes": 251896
+    },
+    {
+      "sequence": 368,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000398.json.gz",
+      "gzip_sha256": "db2abae84cdb37de31b323177954197934a8f8b2d83ebe1bf8638976104d0fa1",
+      "raw_sha256": "4576f51704dd411e209b0615359cdd759b99de708aee0ed758d59cbbf85e390c",
+      "raw_bytes": 589307,
+      "gzip_bytes": 248243
+    },
+    {
+      "sequence": 369,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000399.json.gz",
+      "gzip_sha256": "1e3bb2493ec8e4392e0ebe403bd96efc01d5139b83d79ff625ba13a78a6be163",
+      "raw_sha256": "48e9fc86972770503fefc4f810676d5e5dfdc3982a2c60692d13d7155c8dcd16",
+      "raw_bytes": 598248,
+      "gzip_bytes": 252961
+    },
+    {
+      "sequence": 370,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000401.json.gz",
+      "gzip_sha256": "fb393908372ac9ee5d137f0edbfade6890032ac5fc3d527f0a4139037368fd1c",
+      "raw_sha256": "5561ebb865b47a2f62ffd4fc0a87c614e42865d7c06acaf2bc3cdbba35c62740",
+      "raw_bytes": 579840,
+      "gzip_bytes": 244439
+    },
+    {
+      "sequence": 371,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000403.json.gz",
+      "gzip_sha256": "8691f125a13629cc748b52922b8702aa9e4f27eb265250379696527593cb5710",
+      "raw_sha256": "d9a656be7ed33b9bd2d45c928e225363e2371b78f4d400a74d9f320c2cbe45bc",
+      "raw_bytes": 586061,
+      "gzip_bytes": 248436
+    },
+    {
+      "sequence": 372,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000405.json.gz",
+      "gzip_sha256": "716ce6109fe35f13e5df6d896636698c1ca34ab014b2b184e08b8f23763d27b2",
+      "raw_sha256": "fed6779d4905f2322730ff82e2a0d4bee3dcb52fc157d40e18b83ba65b7c7069",
+      "raw_bytes": 573211,
+      "gzip_bytes": 241478
+    },
+    {
+      "sequence": 373,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000406.json.gz",
+      "gzip_sha256": "98eca17cc6d5607afc8ca5e38e74a1d46f0cbb00907bdb6b323a0fb369497209",
+      "raw_sha256": "bc277cd4eb8cb1504ccc70e50fcf830d97d45c4022bbc892a41181df52ef74fa",
+      "raw_bytes": 584728,
+      "gzip_bytes": 246697
+    },
+    {
+      "sequence": 374,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000408.json.gz",
+      "gzip_sha256": "598d96c56f5b936c3e937e1c83057ff7480d97ded0d6ecf85d5552ee9675c80b",
+      "raw_sha256": "ea7bd96b604d1146409ba3d6d3155ff09550c5a51bdcc6a5fba08af5a4ce67af",
+      "raw_bytes": 590179,
+      "gzip_bytes": 250113
+    },
+    {
+      "sequence": 375,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000409.json.gz",
+      "gzip_sha256": "eb7b360217acba26e8d51f93c058caffa85ef6f30d0d4134b613b89a30b33db1",
+      "raw_sha256": "a7b98aa70be0fda28a2dfeba85c9440993ee6092ed1fa0bfc6ac53cb2cdbdc99",
+      "raw_bytes": 585470,
+      "gzip_bytes": 246615
+    },
+    {
+      "sequence": 376,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000410.json.gz",
+      "gzip_sha256": "48de03e45920c00c99e8f52fb5bad233e242fbd233027da14ed95d04f5ea208e",
+      "raw_sha256": "6035b76986dc86de767252a504d85558f3a3423bf93fdbe1521e971181bf640e",
+      "raw_bytes": 602989,
+      "gzip_bytes": 254934
+    },
+    {
+      "sequence": 377,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000412.json.gz",
+      "gzip_sha256": "c7c79c2e0099736a6f56b3c9817e97b11c868699cdaa9999a9e1838c69ef606c",
+      "raw_sha256": "0898d44b9e86296d50455c93d662f6e52f4c944ea3564f791ce1121d1dcf9fa6",
+      "raw_bytes": 613139,
+      "gzip_bytes": 260302
+    },
+    {
+      "sequence": 378,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000414.json.gz",
+      "gzip_sha256": "8a9e077e428e902ebec5de769a0d7f85148739645d2ddeb6ca3b473dfbb18dba",
+      "raw_sha256": "21859d380ef32e66d580ab2e5fb05715814ff356582e2ef42a5592b35a2a4515",
+      "raw_bytes": 598964,
+      "gzip_bytes": 253798
+    },
+    {
+      "sequence": 379,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000415.json.gz",
+      "gzip_sha256": "d0203b543e5be0e874898175a843217cb532dd1985c2da6344ce54f882aaa0fa",
+      "raw_sha256": "8d500dfe6ed7e62989f7e45a787a3effafe9b86da20acc68ac350d6e8aa7de53",
+      "raw_bytes": 583098,
+      "gzip_bytes": 246070
+    },
+    {
+      "sequence": 380,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000416.json.gz",
+      "gzip_sha256": "4fa6ad790d80dca9918d65898a3d78b5d8887bd46bd0d56d9279bf332c452e40",
+      "raw_sha256": "afdd162a05a95dc7cfdf549f8cbfe60746383e209c1417dd8466b998fba77b1b",
+      "raw_bytes": 590897,
+      "gzip_bytes": 250533
+    },
+    {
+      "sequence": 381,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000417.json.gz",
+      "gzip_sha256": "3c931c77dd6559cded5665d0716cba235ded28c8de162e9306f74fd919a6ee60",
+      "raw_sha256": "23ff8c73f47f3be483394460265f76f7d0cee5340ac8cb8f62ea5a4af218ab4d",
+      "raw_bytes": 596689,
+      "gzip_bytes": 253859
+    },
+    {
+      "sequence": 382,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000418.json.gz",
+      "gzip_sha256": "a51ff963bb7c232f6cd34e45bee6048477068305b1e75e2fce3d0324342ac532",
+      "raw_sha256": "b761af5a1016a14e86557352743c3a679ddc1698d7469d52d5b7cdf4042a66a4",
+      "raw_bytes": 597067,
+      "gzip_bytes": 254215
+    },
+    {
+      "sequence": 383,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000419.json.gz",
+      "gzip_sha256": "310c4c720db0059a828e6f68135457ebca118af2e3d69157092386d207b03445",
+      "raw_sha256": "a0acb8004173141bcff65c9eb9fbb849b7406e9ef3721abf9eece0dfc9cb34a1",
+      "raw_bytes": 589712,
+      "gzip_bytes": 250646
+    },
+    {
+      "sequence": 384,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000420.json.gz",
+      "gzip_sha256": "b8bc3fdcac289fb2d16ffddf9aab5baed2f6546bae74f975942250d1dc40aa85",
+      "raw_sha256": "735ad55ba698e479a4c70366a868b82b94052e8f5117aaf53b63f4ca467fd8e1",
+      "raw_bytes": 558959,
+      "gzip_bytes": 236846
+    },
+    {
+      "sequence": 385,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000421.json.gz",
+      "gzip_sha256": "5c1264f76d94eaec6bf5307b3163126fe880476115f27ea868a9522da7d25125",
+      "raw_sha256": "a0628cbc48fac8d2a9ab7750473763c7a597c16355b892b1348a377701953ac0",
+      "raw_bytes": 567730,
+      "gzip_bytes": 241741
+    },
+    {
+      "sequence": 386,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000422.json.gz",
+      "gzip_sha256": "dad2da2bde3159180f59a5f7123b54d1fe16aa60936cd0283f96a853a738a57d",
+      "raw_sha256": "591a7e8a94fd2f97cb6e1b6b6e526eb77ff98c29070407c5a5ed104763e691b3",
+      "raw_bytes": 583968,
+      "gzip_bytes": 249548
+    },
+    {
+      "sequence": 387,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000423.json.gz",
+      "gzip_sha256": "f7f86713daff6a737bf3adf6903e9a3ab468f8319dc2cb821343d482b66e8cee",
+      "raw_sha256": "c7b2d4608d7a39fd8a062c1c021166a022132c36446b09a1ba496a6aed06bdd1",
+      "raw_bytes": 374,
+      "gzip_bytes": 233
+    },
+    {
+      "sequence": 388,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000424.json.gz",
+      "gzip_sha256": "8ea7d435a2728d89b2779b186e23a0c3032cf8d69b1783325842cc7f1b57b575",
+      "raw_sha256": "64252733de1ef10819ecfe598d8b66a8d1e927ef6243b52d076b24c2770f12b9",
+      "raw_bytes": 567749,
+      "gzip_bytes": 241790
+    },
+    {
+      "sequence": 389,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000425.json.gz",
+      "gzip_sha256": "d89bed525cee2b2e9f35bc4d2d3b8853b4ef0d5e416e8d9e90fed445bad07411",
+      "raw_sha256": "ce641525938dce0ed3337e1bc2ce06b4ba42da72e02c0d585db39dbb14d5eda2",
+      "raw_bytes": 562972,
+      "gzip_bytes": 240428
+    },
+    {
+      "sequence": 390,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000426.json.gz",
+      "gzip_sha256": "a93e9ca1f27a6be8028697d9a656b59d671abac19b2125afda4063676b84cfcb",
+      "raw_sha256": "9c170907e6c5c69eb0130d407b0f19ab1ab82d46b059a871d67fccad5ed5fe94",
+      "raw_bytes": 557660,
+      "gzip_bytes": 240646
+    },
+    {
+      "sequence": 391,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000427.json.gz",
+      "gzip_sha256": "113f584517eefc122a13fb5271be666f4bf731b9bbe3c3f1a225366abb8ffc4a",
+      "raw_sha256": "1c83b9fb0a3b49199bff7b1255f4292cc5634e42483660c3600be5a6d738fb90",
+      "raw_bytes": 562297,
+      "gzip_bytes": 242697
+    },
+    {
+      "sequence": 392,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000429.json.gz",
+      "gzip_sha256": "8e48c8521150f51570cde7d2f8745413218573277a5f9944472f642eada66018",
+      "raw_sha256": "fb6490c8be95c2e106dd4f3b2367c680188b5d99155532a680789c9b2fcb4a9a",
+      "raw_bytes": 555147,
+      "gzip_bytes": 239171
+    },
+    {
+      "sequence": 393,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000430.json.gz",
+      "gzip_sha256": "20b3e1c4548de7d204af5e8bfd8575e3951e84104b30df874d3a04747ff6dd19",
+      "raw_sha256": "cbc6dc91d0962b047dcc475b4fddd5b8193d0fea31ef84c4f8238684d690f9ea",
+      "raw_bytes": 525717,
+      "gzip_bytes": 226296
+    },
+    {
+      "sequence": 394,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000431.json.gz",
+      "gzip_sha256": "f045fb104f301106d683c8af212b2a5e8d9b4af189ba0f3844c2ad2db095b229",
+      "raw_sha256": "1fadea4c6852eddb18ca02419d0d871e185cb70bb70cad379bf5d3e20553766a",
+      "raw_bytes": 535163,
+      "gzip_bytes": 231339
+    },
+    {
+      "sequence": 395,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000432.json.gz",
+      "gzip_sha256": "ff1723fff57e2e141365f38181460d0e761caf2a312f94a34661042906283f01",
+      "raw_sha256": "d3f4e33fdb2f8cf879f3d39ff46904158ccc07a8cb7c6a4045a9c73ab6b2f6b0",
+      "raw_bytes": 535070,
+      "gzip_bytes": 231158
+    },
+    {
+      "sequence": 396,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000433.json.gz",
+      "gzip_sha256": "502bbf2d0e0a3e4eff20539ab386bee2190e5fc55772b1d4c53cf17baa427b75",
+      "raw_sha256": "155e3c722ebb6b90c50f0339890bcf7210d4b67c816652dbab7fb28b3453f1ad",
+      "raw_bytes": 502084,
+      "gzip_bytes": 216391
+    },
+    {
+      "sequence": 397,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000434.json.gz",
+      "gzip_sha256": "09db96d9e1796f08718ce51dbb167f13435c729c05a5058df5708abbb982c8ee",
+      "raw_sha256": "87536d3870278c2e9726ac0ff6a8e75669fbcd51488a49dd3979ecf688674277",
+      "raw_bytes": 488309,
+      "gzip_bytes": 210542
+    },
+    {
+      "sequence": 398,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000435.json.gz",
+      "gzip_sha256": "f8a06510c60a09579c8cec1f8b10fd8f5fe6b11f3692e7fd7aec648ae3c94462",
+      "raw_sha256": "b3973c8509433df74b27312c26b2f96f8c8d57bccdb88a77e22fe72946bc347e",
+      "raw_bytes": 488014,
+      "gzip_bytes": 211097
+    },
+    {
+      "sequence": 399,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000436.json.gz",
+      "gzip_sha256": "9198a85f13f0a345b0f36010e807fbc3490d7fa001d919bce8fb77e4dab9392f",
+      "raw_sha256": "946e8fafa0a4fd8a928d23b1ff8deb4590204cac892d713285fd59712cc6e014",
+      "raw_bytes": 466897,
+      "gzip_bytes": 201973
+    },
+    {
+      "sequence": 400,
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/corridor_snapshots/000437.json.gz",
+      "gzip_sha256": "6d4bcdcc450a5e190a11f6ba742c935c629cceedde21188841560bcc0a847fd5",
+      "raw_sha256": "50b0d61ea52a51c8654cd715903dfcfbf5aa13e117be863481edaedd87795532",
+      "raw_bytes": 374,
+      "gzip_bytes": 237
+    }
+  ],
+  "navigation_acceptance": "UNVERIFIED",
+  "control_authority": false,
+  "exclusions": [
+    "No simulator truth consumed",
+    "No new free/support observations created",
+    "No actuator/physics replay",
+    "Snapshot voxel counts include the exported AABB, not just the body sweep",
+    "A geometric certified result is not a guarantee of foot contact, braking performance or locomotion stability"
+  ]
+}

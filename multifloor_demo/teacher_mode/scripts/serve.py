@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Only these task-owned recording roots are external storage exceptions.
 EXTERNAL_RUN_STORAGE = Path('/var/tmp/go2_teacher_simulation_20261005')
 PARALLEL_RUN_STORAGE = Path('/var/tmp/go2_teacher_parallel_20261005')
+PIPELINE_RUN_STORAGE = Path('/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs')
 EXTERNAL_RUN_NAME = re.compile(r'^[0-9]{8}_[0-9]{6}_closed_loop_cascade_[A-Za-z0-9_-]+_[0-9a-f]{4}$')
 
 
@@ -34,7 +35,7 @@ def recording_path(path, local_runs):
         resolved = path.resolve()
         if resolved.is_relative_to(local_runs):
             return resolved
-        root = next((candidate for candidate in (EXTERNAL_RUN_STORAGE, PARALLEL_RUN_STORAGE)
+        root = next((candidate for candidate in (EXTERNAL_RUN_STORAGE, PARALLEL_RUN_STORAGE, PIPELINE_RUN_STORAGE)
                      if resolved.is_relative_to(candidate)), None)
         if root is None:
             return None
@@ -68,7 +69,7 @@ def recording_read_allowed(path):
     # Guard fixed recording JSON/telemetry paths against escaping symlinks.
     path = Path(path).absolute()
     local_runs = ROOT / 'runs'
-    if any(path.is_relative_to(root) for root in (local_runs, EXTERNAL_RUN_STORAGE, PARALLEL_RUN_STORAGE)):
+    if any(path.is_relative_to(root) for root in (local_runs, EXTERNAL_RUN_STORAGE, PARALLEL_RUN_STORAGE, PIPELINE_RUN_STORAGE)):
         return recording_path(path, local_runs) is not None
     return True
 
@@ -982,6 +983,42 @@ def pipeline_view(directory):
             'display_note': '所选运行的输入流水线与排空记录；正常退出不认证运动或导航。'}
 
 
+def corridor_shadow_view(directory):
+    """Read one complete bounded display record; never authorize its use."""
+    profile = read_json(directory / 'navigation_scope.json').get('profile') or {}
+    if not isinstance(profile, dict) or profile.get('controller_selector') != 'corridor_tracking_v20':
+        return {}
+    view = dict(schema='teacher_corridor_shadow_dashboard/v1', record_valid_for_selected_run=False,
+        status='unavailable', control_authority=False, independent_acceptance=False,
+        display_note='V20 走廊仅作 shadow 诊断，不控制路径保留或停车；这里只读原始记录，不代表独立验收或 46 区域通过。')
+    path = directory / 'corridor_certificates.jsonl'
+    try:
+        if not recording_read_allowed(path):
+            raise ValueError('corridor recording path escapes allowed roots')
+        with path.open('rb') as stream:
+            stream.seek(0, os.SEEK_END)
+            size = stream.tell()
+            offset = max(0, size - (256 << 10))
+            stream.seek(offset)
+            lines = stream.read(256 << 10).split(b'\n')
+        # The final fragment is either empty or an in-progress record. Never
+        # parse that fragment, and never parse a truncated first line.
+        complete = lines[1:-1] if offset else lines[:-1]
+        record = json.loads(next(line for line in reversed(complete) if line))
+        binding = record.get('binding') or {}
+        if (record.get('schema') != 'teacher_corridor_certificate/v1'
+                or record.get('shadow_only') is not True
+                or record.get('control_authority') is not False
+                or record.get('navigation_ground_truth_used') is not False
+                or not str(binding.get('path_id', '')).startswith(directory.name + ':')):
+            raise ValueError('unsupported or foreign shadow record')
+        view.update(record_valid_for_selected_run=True, status=record.get('status', 'unavailable'),
+                    raw=record, filename=path.name, display_tail_bytes=min(size, 256 << 10))
+    except (OSError, ValueError, TypeError, StopIteration, AttributeError) as error:
+        view['display_error'] = str(error)
+    return view
+
+
 # The historical page is kept unchanged on disk. This additive read-only
 # renderer understands the new receipt types without altering archived pages,
 # camera selection, D/K display, RGB sources, or the actual SLAM/SCAN plot.
@@ -1117,6 +1154,13 @@ MISSION46_PAGE_SCRIPT = r'''
    p.append(make('p',`模式 ${s.mode||c.mode||'等待记录'} · 图像复制选项 ${s.image_copy_opt??c.image_copy_opt??'—'} · accepted / delivered / committed：${s.accepted??'—'} / ${s.delivered??'—'} / ${s.committed??'—'} · pending ${s.pending??'—'}`));
    p.append(make('p',`${s.normal_completed===true?'正常排空记录已写入':s.failure?'流水线失败：'+s.failure:'等待最终排空记录'}。${pipeline.display_note}`,'caption'));
   }else if($('pipelineV19Panel'))$('pipelineV19Panel').hidden=true;
+  const corridor=data.corridor_v20||{};
+  if(Object.keys(corridor).length){
+   const cp=panel('corridorV20Panel','V20 走廊 · 只读 shadow 诊断'),r=corridor.raw||{};
+   cp.append(make('p',`最后完整记录：${corridor.record_valid_for_selected_run?corridor.status:'未验证来源'} · ${r.reason||corridor.display_error||'等待记录'} · sim ${fmt((r.recorded_clock_ns||0)/1e9,2)} s`));
+   cp.append(make('p',corridor.display_note,'caption'));
+   const detail=make('details');detail.append(make('summary','走廊原始诊断（不执行）'),make('pre',JSON.stringify(r,null,2)));cp.append(detail);
+  }else if($('corridorV20Panel'))$('corridorV20Panel').hidden=true;
   const m=data.mission46||{};
   if(!Object.keys(m).length){if($('mission46Panel'))$('mission46Panel').hidden=true;return;}
   const p=panel('mission46Panel','本轮 Teacher46 · 原始多层任务');
@@ -1391,6 +1435,7 @@ class Dashboard:
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
                 'closed_loop_result': closed_loop_receipt_view(directory),
                 'pipeline_v19': pipeline,
+                'corridor_v20': corridor_shadow_view(directory),
                 'mission46': mission46_view(directory),
                 'pid_navigation': pid_display,
                 'pid_navigation_original': pid_original,

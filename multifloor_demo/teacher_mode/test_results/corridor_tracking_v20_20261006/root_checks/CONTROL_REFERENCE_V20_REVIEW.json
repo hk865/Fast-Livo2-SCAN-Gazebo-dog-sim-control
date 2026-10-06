@@ -1,0 +1,100 @@
+{
+  "schema": "corridor_tracking_v20_control_review/v1",
+  "status": "PASS_LIMITED_REFERENCE_AND_SHADOW_RUNTIME",
+  "reviewed": true,
+  "actual_navigation_verified": false,
+  "runtime_authorized_by_this_review": false,
+  "original_geometry_timeout_dwell_or_safety_changed": false,
+  "new_reference_is_legacy_controller_byte_identity": false,
+  "candidate_root": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20",
+  "reviewed_source_sha256": {
+    "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "spatial_reference.py": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469",
+    "corridor.py": "386e62167f66fe593d3aee538ae162a58abdb01cbc08da32e9433058de795aee",
+    "corridor_runtime.py": "223f4b82c8ff7b79bf412944b6f12a13aa4aa51aaae024d44df8e953cd557851",
+    "pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "clock_hold.py": "a347c67ee3a634703b8e120b8ee3d4fdb5b387fe6d29e159e26185d7f624c9b3",
+    "shared_controller.py": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+    "teacher_wrapper.py": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+    "transition_gate.py": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10",
+    "corridor_runtime_tests.py": "4ade502c0285a5b4132b2882c8c251d48c63fa974022baf40e418688a80f5cd3",
+    "controller_reference_tests.py": "5b945e523e6afa09709d469bda6334399a5f4d2441c721dea3d4d0b0bff325dd",
+    "spatial_reference_tests.py": "488258e31ef2d66d829e5ecdfe7c61afeef1c44d8b8ced077af2a0cc5f207180",
+    "pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "clock_hold_tests.py": "0cba80148fe25c4a09648a10df79114ce2eb25a0ab56d29324a57639c88b12b1",
+    "corridor_tests.py": "80767bdb4a347224e8fdd6b8680adec8e1a0ca69bf9a3b63ec200f8321f64d43"
+  },
+  "review_responsibility": {
+    "independent_wrapper_runtime_review": "corridor_tracker_design_audit reviewed root-authored controller/corridor_runtime and wrote independent negative, ownership, shutdown and authority tests.",
+    "independent_core_cross_review": "Root independently read spatial/cascade projection and handoff, curve budgets, duplicate protections, zero-mode/PI behavior, chord-deviation semantics, grade assumptions and corridor raycast/support logic after the author tests.",
+    "scope": "Cross-review and finite software checks only; no navigation or physical plant acceptance."
+  },
+  "finite_receipt": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/root_checks/FINAL_FINITE81_RECEIPT.json",
+    "sha256": "b546a213b1a89e8a81940373f55a741ef17bc73428282dbb21dd2007f5ab01a6",
+    "tests_run": 81
+  },
+  "unchanged_inherited_protection_sources": {
+    "shared_controller.py": true,
+    "teacher_wrapper.py": true,
+    "transition_gate.py": true,
+    "clock_hold.py": true
+  },
+  "reviewed_findings": [
+    {
+      "id": "shared_spatial_reference",
+      "resolution": "Outer preview and inner core use the same finite-arc heading; fixed-goal tail rule, active turn lock and geometry evidence are preserved."
+    },
+    {
+      "id": "original_projection_and_handoff",
+      "resolution": "Original 3D projection/normal/cross/grade remain audit fields; control cross uses the new normal. New path uses real SLAM pose with 3D floor discrimination; PI/filter/command states remain owned and retained."
+    },
+    {
+      "id": "constraint_hold",
+      "resolution": "Default-off curvature switches are independent; enabling an infeasible reference budget returns exact zero and freezes integration; wrapper holds and requests new planning."
+    },
+    {
+      "id": "stale_replan_flag",
+      "resolution": "Root fixed resets on new request/path/goal, non-hold updates and exceptions."
+    },
+    {
+      "id": "same_tick_exception_stop",
+      "resolution": "Inherited shared tick already stopped on exceptions; V20 adds explicit zero-before-journal handling and finite wrapper fault coverage."
+    },
+    {
+      "id": "snapshot_finiteness_and_bounds",
+      "resolution": "Root fixed overflowed JSON numbers and bounded nesting. Finite tests cover NaN/Inf/1e309, size/shape/state/point limits, and nonincreasing revisions."
+    },
+    {
+      "id": "bounded_owned_shadow_worker",
+      "resolution": "At most one future exists, busy snapshots are counted rather than queued. Input tuple and limits are copied per job; observation provenance is separately copied before worker evaluation."
+    },
+    {
+      "id": "worker_errors_and_provenance",
+      "resolution": "Root extended error handling to invalid/nonfinite result construction and future errors; errors are unavailable shadow diagnostics. Normal worker failures retain original path/state bindings."
+    },
+    {
+      "id": "shadow_lifecycle_and_authority",
+      "resolution": "Root isolated shadow polling exceptions and protected shutdown draining. Tests prove normal close drains, close failure retains original writer/ROS cleanup, arbitrary certificate contents cannot replace commands, and active/retain modes are rejected."
+    }
+  ],
+  "static_screen": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/root_checks/V20_STATIC_104_EVENTS.json",
+    "sha256": "970450e26a3d2c2def10a48868babd811656694aa64e935578de72cd9dc9b18e",
+    "verified_original_events": 104,
+    "over_0_2rad": 3,
+    "fallback_count": 0,
+    "dynamic_inference": false
+  },
+  "limits": [
+    "Only shadow corridor observation is implemented. Neither old-plan retention nor corridor-based command control is enabled or validated.",
+    "The .03m chord-deviation threshold is a reference-shape fallback parameter, not obstacle clearance. Chords do not replace the checked path.",
+    "The new z reference explicitly assumes the original path normal is an equal-height direction; it is not measured terrain or foot-support proof.",
+    "Curve feedforward and speed supervisor are default-off; command slew and reference budgets do not establish Teacher physical bandwidth.",
+    "The worker has no direct control authority. Shared CPU/evidence-queue contention and live ROS callback timing still need an actual scoped experiment; original evidence-failure protections remain active.",
+    "The original 104-event screen retains fixed poses and projections; it cannot predict new gate reset counts, handoff dynamics, collision safety or navigation success.",
+    "No Gazebo, real robot, SLAM/SCAN continuous curve integration or original46 success is claimed."
+  ],
+  "remaining_blocking_findings": []
+}

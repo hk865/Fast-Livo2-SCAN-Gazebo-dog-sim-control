@@ -1,0 +1,70 @@
+{
+  "schema": "teacher_corridor_v20_prospective_criteria/v1",
+  "created_utc": "2026-10-06T04:46:14.077403+00:00",
+  "simulation_only": true,
+  "frozen_teacher_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "navigation_sources": "actual SLAM / IMU / registered cloud; Gazebo truth only offline evaluation",
+  "preserved": {
+    "source_timeout_s": 0.3,
+    "original46_regions": 46,
+    "goal_timeout_s": 90,
+    "original_region_dwell_sim_s": 0.4,
+    "single_actuator": true,
+    "teacher_device": "cpu",
+    "teacher_threads": 1,
+    "policy_hz": 50,
+    "physics_hz": 200
+  },
+  "stages": [
+    {
+      "name": "software",
+      "requires": [
+        "finite-arc direction and consistent outer/inner reference",
+        "original geometry and clocks intact",
+        "handoff preserves integrals and measured velocity",
+        "unknown/outside/support gaps reject corridor",
+        "fresh source, command ACK, exact zero and real parking protections"
+      ]
+    },
+    {
+      "name": "original46_prefix9",
+      "requires": [
+        "original first9 sensor-SLAM regions reached with original geometry/dwell",
+        "no Actor fault or body contact in recorded native samples",
+        "freshness and unique executor preserved",
+        "first5s final hold independently evaluated"
+      ],
+      "not_equivalent_to": "full46 or whole-physics/Sim2Sim pass"
+    },
+    {
+      "name": "corridor_shadow",
+      "requires": [
+        "atomic real raycast map provenance",
+        "measured support coverage/residual/slope diagnostics",
+        "unknown and stale results retained"
+      ],
+      "no_control_authority": true
+    },
+    {
+      "name": "bounded_corridor_control",
+      "requires": [
+        "fresh matching path/frame/map binding",
+        "clearance and measured support model for predicted footprint",
+        "native pointcloud / source / tilt protections remain",
+        "infeasibility decelerates or stops; no relaxed region test"
+      ]
+    },
+    {
+      "name": "original46",
+      "requires": [
+        "18 exploration +14return +currentRGBsave +14navigation",
+        "original dynamic obstacle stop/recovery",
+        "original floor/ramp transitions",
+        "final5s activeparking"
+      ],
+      "ramp_is_not_stairs": true
+    }
+  ],
+  "result_status": "NOT_RUN",
+  "hardware_deployment": "NOT_TESTED"
+}
