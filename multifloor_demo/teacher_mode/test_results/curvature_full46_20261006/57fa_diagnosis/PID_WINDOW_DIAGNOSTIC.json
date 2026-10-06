@@ -1,0 +1,1227 @@
+{
+  "schema": "v23_tenth_region_failure_PID_diagnosis/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa",
+  "raw_source_sha256": "eaf713bc1b7c2ae4bb27bba97bd28e442cdedbd5bcbcb0412aa56d07d197635d",
+  "compact": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/57fa_diagnosis/NINTH_TENTH_PID_COMPACT.json.gz",
+  "compact_sha256": "3d153812af6513650e830265d967f629e3781eeac6cf095cf9b66bc8082e55c7",
+  "read_passes": 1,
+  "regions": {
+    "8": {
+      "rows": 1882,
+      "fresh_math": 1413,
+      "clock_begin": 119.97,
+      "clock_end": 185.725,
+      "pose_begin": [
+        7.905100002511599,
+        1.9158551289927526,
+        0.5759648036433076
+      ],
+      "pose_end": [
+        10.843962778936628,
+        1.8768338798680106,
+        0.8856480309964619
+      ],
+      "goal_distance_begin": 3.119337842175302,
+      "goal_distance_end": 0.18149588938097472,
+      "mode_counts": {
+        "drive": 493,
+        "reference_constraint_hold": 11,
+        "turn": 909
+      },
+      "phase_counts": {
+        "drive": 504,
+        "align": 909
+      },
+      "mode_phase_fresh_dt_s": {
+        "('drive', 'drive')": 18.340000000000018,
+        "('turn', 'align')": 32.37000000100023,
+        "('reference_constraint_hold', 'drive')": 0.310000001
+      },
+      "path_changes": 124,
+      "unique_paths": 125,
+      "transition_count": 27,
+      "transitions": [
+        {
+          "pid_sequence": 3060,
+          "clock_ns": 119970000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.00460484045141515,
+          "yaw": 0.061321619496352425,
+          "reference_yaw": -0.00460484045141515,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.39372142690283074,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:50:51"
+        },
+        {
+          "pid_sequence": 3189,
+          "clock_ns": 124575000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.1583030056070097,
+          "yaw": 0.002305861019792244,
+          "reference_yaw": -0.1583030056070097,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.2719988936901252,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -1.2767564783189288e-14,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:51:52"
+        },
+        {
+          "pid_sequence": 3219,
+          "clock_ns": 125705000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.45018838059602984,
+          "SCAN_heading": 0.45018838059602984,
+          "yaw": -0.020826518501589075,
+          "reference_yaw": 0.45018838059602984,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:56:58"
+        },
+        {
+          "pid_sequence": 4135,
+          "clock_ns": 158130000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.005521836960975024,
+          "yaw": 0.1048446427850863,
+          "reference_yaw": -0.005521836960975024,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.3310601079853835,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:142:144"
+        },
+        {
+          "pid_sequence": 4148,
+          "clock_ns": 158590000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.11225482642309888,
+          "yaw": 0.07911502509176065,
+          "reference_yaw": -0.11225482642309888,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.2416639510617145,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:143:145"
+        },
+        {
+          "pid_sequence": 4149,
+          "clock_ns": 158620000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.10789810134183232,
+          "yaw": 0.07563251262484603,
+          "reference_yaw": -0.10789810134183232,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.022185725382689418,
+            "yaw_rate_budget_radps": 0.25099106447823655,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:143:145"
+        },
+        {
+          "pid_sequence": 4154,
+          "clock_ns": 158795000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.012822221302535776,
+          "yaw": 0.06551917287536049,
+          "reference_yaw": -0.012822221302535776,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3857505119259249,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.10991544696832058,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:144:146"
+        },
+        {
+          "pid_sequence": 4155,
+          "clock_ns": 158830000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.011481948282381289,
+          "yaw": 0.06403801317244741,
+          "reference_yaw": -0.011481948282381289,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.11305862077983395,
+            "yaw_rate_budget_radps": 0.38853247876312735,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:144:146"
+        },
+        {
+          "pid_sequence": 4246,
+          "clock_ns": 162060000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.2048840324702328,
+          "yaw": 0.008485734551761317,
+          "reference_yaw": 0.2048840324702328,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.2259648086558947,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -0.018114928847741338,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:147:149"
+        },
+        {
+          "pid_sequence": 4285,
+          "clock_ns": 163450000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": -0.5442227021202493,
+          "SCAN_heading": -0.5443757743439834,
+          "yaw": 0.05164852830708976,
+          "reference_yaw": -0.5442227021202493,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:148:150"
+        },
+        {
+          "pid_sequence": 4431,
+          "clock_ns": 168610000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.006617770450987966,
+          "yaw": -0.09706861369573465,
+          "reference_yaw": -0.006617770450987966,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3585566309634297,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:163:165"
+        },
+        {
+          "pid_sequence": 4439,
+          "clock_ns": 168910000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.006168287803366622,
+          "yaw": -0.09022986684855379,
+          "reference_yaw": -0.006168287803366622,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.37514220784327607,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.024871601682236098,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:169:171"
+        },
+        {
+          "pid_sequence": 4440,
+          "clock_ns": 168950000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.006184627375259455,
+          "yaw": -0.08590798254727956,
+          "reference_yaw": -0.006184627375259455,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.38256952503977204,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:169:171"
+        },
+        {
+          "pid_sequence": 4468,
+          "clock_ns": 169950000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.6125432548005766,
+          "SCAN_heading": 0.6125432548005766,
+          "yaw": -0.07212160627977429,
+          "reference_yaw": 0.6125432548005766,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:172:174"
+        },
+        {
+          "pid_sequence": 4640,
+          "clock_ns": 176010000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.008002910612880306,
+          "yaw": 0.09431028311925486,
+          "reference_yaw": 0.008002910612880306,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": -0.0,
+            "yaw_rate_budget_radps": 0.36289606799031077,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:193:195"
+        },
+        {
+          "pid_sequence": 4654,
+          "clock_ns": 176515000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.03706569498287595,
+          "yaw": 0.06715854783912052,
+          "reference_yaw": -0.03706569498287595,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3541765503558172,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -0.0025735540428176835,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:194:196"
+        },
+        {
+          "pid_sequence": 4655,
+          "clock_ns": 176555000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.01629616341644433,
+          "yaw": 0.06430935666438926,
+          "reference_yaw": -0.01629616341644433,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.08978846854819883,
+            "yaw_rate_budget_radps": 0.38527027284734516,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:195:197"
+        },
+        {
+          "pid_sequence": 4808,
+          "clock_ns": 181960000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.01066997905061973,
+          "yaw": 0.006944688162202064,
+          "reference_yaw": 0.01066997905061973,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.47117015814650054,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.06038054703245321,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:198:200"
+        },
+        {
+          "pid_sequence": 4809,
+          "clock_ns": 181995000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.025204583122086077,
+          "yaw": 0.008327285458658379,
+          "reference_yaw": 0.025204583122086077,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.45478364314920294,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:199:201"
+        },
+        {
+          "pid_sequence": 4818,
+          "clock_ns": 182310000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.008924205066079867,
+          "yaw": 0.023469151505775325,
+          "reference_yaw": -0.008924205066079867,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.43218835290093893,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 8.593563043446071e-05,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:200:202"
+        },
+        {
+          "pid_sequence": 4819,
+          "clock_ns": 182345000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.04616792766506383,
+          "yaw": 0.02192065596876397,
+          "reference_yaw": -0.04616792766506383,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.02057481291033325,
+            "yaw_rate_budget_radps": 0.3873558047233522,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:201:203"
+        },
+        {
+          "pid_sequence": 4822,
+          "clock_ns": 182450000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.020600369941187545,
+          "yaw": 0.018031529353705323,
+          "reference_yaw": 0.020600369941187545,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.4752916865514224,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0003368231614631668,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:204:206"
+        },
+        {
+          "pid_sequence": 4823,
+          "clock_ns": 182490000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.011675838013284529,
+          "yaw": 0.018182340544027738,
+          "reference_yaw": 0.011675838013284529,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.026565459421959006,
+            "yaw_rate_budget_radps": 0.47097662959865905,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:205:207"
+        },
+        {
+          "pid_sequence": 4830,
+          "clock_ns": 182735000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.03526233500920538,
+          "yaw": 0.02871984904802411,
+          "reference_yaw": 0.03526233500920538,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.47476130397442373,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.00390635535110338,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:212:214"
+        },
+        {
+          "pid_sequence": 4831,
+          "clock_ns": 182770000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.027783688477955686,
+          "yaw": 0.02863992437716111,
+          "reference_yaw": 0.027783688477955686,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.03287565817748195,
+            "yaw_rate_budget_radps": 0.4744639324980764,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:213:215"
+        },
+        {
+          "pid_sequence": 4833,
+          "clock_ns": 182840000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.024490989474358033,
+          "yaw": 0.027739556497371,
+          "reference_yaw": 0.024490989474358033,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.473242484346298,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0006365837421696517,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:215:217"
+        },
+        {
+          "pid_sequence": 4834,
+          "clock_ns": 182875000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.03073203906056039,
+          "yaw": 0.027522220050034085,
+          "reference_yaw": 0.03073203906056039,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.027956245949616536,
+            "yaw_rate_budget_radps": 0.4772002464298718,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:8:215:217"
+        }
+      ]
+    },
+    "9": {
+      "rows": 2539,
+      "fresh_math": 1606,
+      "clock_begin": 186.85,
+      "clock_end": 275.785,
+      "pose_begin": [
+        10.855393060252144,
+        1.8781910910647168,
+        0.8855810316480393
+      ],
+      "pose_end": [
+        11.646520310852178,
+        1.8303288209119186,
+        0.9745511049981137
+      ],
+      "goal_distance_begin": 3.1688437940069587,
+      "goal_distance_end": 2.377934349152083,
+      "mode_counts": {
+        "turn": 1438,
+        "drive": 161,
+        "reference_constraint_hold": 7
+      },
+      "phase_counts": {
+        "align": 1438,
+        "drive": 168
+      },
+      "mode_phase_fresh_dt_s": {
+        "('turn', 'align')": 52.06500000099963,
+        "('drive', 'drive')": 5.735000003000008,
+        "('reference_constraint_hold', 'drive')": 0.20499999900000002
+      },
+      "path_changes": 328,
+      "unique_paths": 329,
+      "transition_count": 27,
+      "transitions": [
+        {
+          "pid_sequence": 4944,
+          "clock_ns": 186850000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.5588152728467778,
+          "SCAN_heading": 0.5587995904809383,
+          "yaw": 0.07559791213869282,
+          "reference_yaw": 0.5588152728467778,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:223:225"
+        },
+        {
+          "pid_sequence": 5192,
+          "clock_ns": 195680000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.0006142881639604259,
+          "yaw": -0.06754992075532974,
+          "reference_yaw": -0.0006142881639604259,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.3967579762376289,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:270:272"
+        },
+        {
+          "pid_sequence": 5196,
+          "clock_ns": 195820000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.002215269920815824,
+          "yaw": -0.06311461920003575,
+          "reference_yaw": -0.002215269920815824,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.40546033198654774,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -0.019847857719918295,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:274:276"
+        },
+        {
+          "pid_sequence": 5197,
+          "clock_ns": 195855000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.0038953104398813765,
+          "yaw": -0.06058424396469829,
+          "reference_yaw": -0.0038953104398813765,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.12209720118046594,
+            "yaw_rate_budget_radps": 0.41200479261506073,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:275:277"
+        },
+        {
+          "pid_sequence": 5215,
+          "clock_ns": 196490000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.5344785828231728,
+          "SCAN_heading": 0.5344785828231728,
+          "yaw": -0.032095327380372365,
+          "reference_yaw": 0.5344785828231728,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:281:283"
+        },
+        {
+          "pid_sequence": 5349,
+          "clock_ns": 201255000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.0029732073144825124,
+          "yaw": 0.08532435549655888,
+          "reference_yaw": -0.0029732073144825124,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.36375946770661943,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:301:304"
+        },
+        {
+          "pid_sequence": 5359,
+          "clock_ns": 201600000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.006706968149844714,
+          "yaw": 0.06722345586198511,
+          "reference_yaw": -0.006706968149844714,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3928620170834055,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -0.03030133893917983,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:311:314"
+        },
+        {
+          "pid_sequence": 5401,
+          "clock_ns": 203075000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": -0.6302043939456001,
+          "SCAN_heading": -0.0021852235407396193,
+          "yaw": 0.05954651779338945,
+          "reference_yaw": -0.6302043939456001,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:313:316"
+        },
+        {
+          "pid_sequence": 5561,
+          "clock_ns": 208685000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.0031142305149329847,
+          "yaw": -0.09355843396665527,
+          "reference_yaw": -0.0031142305149329847,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.359855307919987,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:328:331"
+        },
+        {
+          "pid_sequence": 5568,
+          "clock_ns": 208910000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.010786681722688403,
+          "yaw": -0.09260167675601728,
+          "reference_yaw": 0.010786681722688403,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.34581963362580626,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -6.01578511945487e-14,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:337:340"
+        },
+        {
+          "pid_sequence": 5569,
+          "clock_ns": 208950000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.00939284398215224,
+          "yaw": -0.0908241514271671,
+          "reference_yaw": 0.00939284398215224,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.10056308464856523,
+            "yaw_rate_budget_radps": 0.3510149515598825,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:337:340"
+        },
+        {
+          "pid_sequence": 5572,
+          "clock_ns": 209060000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.01267144196678201,
+          "yaw": -0.08851143383249056,
+          "reference_yaw": 0.01267144196678201,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3504850902995421,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -3.4542970965762546e-14,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:340:343"
+        },
+        {
+          "pid_sequence": 5573,
+          "clock_ns": 209090000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.025274961669116764,
+          "yaw": -0.08743784798659793,
+          "reference_yaw": 0.025274961669116764,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.04166670533717616,
+            "yaw_rate_budget_radps": 0.33614185762089366,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:341:344"
+        },
+        {
+          "pid_sequence": 5576,
+          "clock_ns": 209200000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.01682442128559724,
+          "yaw": -0.08246634804232646,
+          "reference_yaw": 0.01682442128559724,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3553928502904711,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": -5.422150904130911e-14,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:344:347"
+        },
+        {
+          "pid_sequence": 5577,
+          "clock_ns": 209235000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.037165826624867865,
+          "yaw": -0.08106448439540719,
+          "reference_yaw": 0.037165826624867865,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.030196409551743974,
+            "yaw_rate_budget_radps": 0.3309815482751047,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:345:348"
+        },
+        {
+          "pid_sequence": 5593,
+          "clock_ns": 209810000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.4583225137179005,
+          "SCAN_heading": 0.4583225137179005,
+          "yaw": -0.07775135795977946,
+          "reference_yaw": 0.4583225137179005,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:348:351"
+        },
+        {
+          "pid_sequence": 5830,
+          "clock_ns": 218220000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.0038604044951298815,
+          "yaw": 0.17311312887872932,
+          "reference_yaw": -0.0038604044951298815,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.24350931050968888,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:395:398"
+        },
+        {
+          "pid_sequence": 5872,
+          "clock_ns": 219675000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": -0.09786793005648882,
+          "SCAN_heading": -0.09747920364766904,
+          "yaw": 0.09748719356918528,
+          "reference_yaw": -0.09786793005648882,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:396:399"
+        },
+        {
+          "pid_sequence": 5907,
+          "clock_ns": 220930000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.01022341639235289,
+          "yaw": -0.008787500337977563,
+          "reference_yaw": -0.01022341639235289,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.47646766680483554,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:397:400"
+        },
+        {
+          "pid_sequence": 5919,
+          "clock_ns": 221370000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": -0.5239343591148834,
+          "SCAN_heading": -0.5239870129099174,
+          "yaw": -0.00409802390139175,
+          "reference_yaw": -0.5239343591148834,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:399:402"
+        },
+        {
+          "pid_sequence": 6094,
+          "clock_ns": 227595000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.35873295827057455,
+          "yaw": -0.269547420252775,
+          "reference_yaw": -0.35873295827057455,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.36253431172102635,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:410:413"
+        },
+        {
+          "pid_sequence": 6123,
+          "clock_ns": 228615000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": -0.47524158978038894,
+          "yaw": -0.2846486306208281,
+          "reference_yaw": -0.47524158978038894,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.23091636190108222,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.05281046828531527,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:411:414"
+        },
+        {
+          "pid_sequence": 6157,
+          "clock_ns": 229835000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.012925039302977701,
+          "SCAN_heading": 0.012925039302977701,
+          "yaw": -0.2969562398624679,
+          "reference_yaw": 0.012925039302977701,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:439:442"
+        },
+        {
+          "pid_sequence": 6212,
+          "clock_ns": 231790000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.011562593152909322,
+          "yaw": -0.08073667737193022,
+          "reference_yaw": 0.011562593152909322,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.2,
+            "yaw_rate_budget_radps": 0.35772585586393435,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": false,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:478:481"
+        },
+        {
+          "pid_sequence": 6250,
+          "clock_ns": 233145000000,
+          "mode": "reference_constraint_hold",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.1075570745799148,
+          "yaw": -0.014179061500055387,
+          "reference_yaw": 0.1075570745799148,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.0,
+            "yaw_rate_budget_radps": 0.3229180053223065,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.03646523369400924,
+            "reference_budget_feasible": false,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:481:484"
+        },
+        {
+          "pid_sequence": 6251,
+          "clock_ns": 233185000000,
+          "mode": "drive",
+          "phase": "drive",
+          "locked_heading": null,
+          "SCAN_heading": 0.10578983132457184,
+          "yaw": -0.011558814723844079,
+          "reference_yaw": 0.10578983132457184,
+          "budget": {
+            "enabled": true,
+            "requested_speed_mps": 0.2,
+            "limited_speed_mps": 0.15121351949711268,
+            "yaw_rate_budget_radps": 0.3309907382578785,
+            "yaw_acceleration_budget_radps2": 0.6000000000000001,
+            "reference_acceleration_checked": true,
+            "temporal_yaw_slew_checked": true,
+            "previous_curvature_yaw_reference_radps": 0.0,
+            "reference_budget_feasible": true,
+            "physical_response_verified": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:481:484"
+        },
+        {
+          "pid_sequence": 6374,
+          "clock_ns": 237570000000,
+          "mode": "turn",
+          "phase": "align",
+          "locked_heading": 0.7160015813421832,
+          "SCAN_heading": 0.7160015813421832,
+          "yaw": 0.010391089477354525,
+          "reference_yaw": 0.7160015813421832,
+          "budget": {
+            "enabled": false
+          },
+          "path_id": "20261006_165823_closed_loop_cascade_clock_hold_curvature_on_V23_full46_r1_57fa:exploration:1:9:508:512"
+        }
+      ]
+    }
+  }
+}
