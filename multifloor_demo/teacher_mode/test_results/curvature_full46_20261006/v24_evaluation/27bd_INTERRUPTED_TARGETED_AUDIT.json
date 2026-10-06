@@ -1,0 +1,3169 @@
+{
+  "schema": "v24_interrupted_targeted_arrival_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+  "run_id": "20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+  "status": "INTERRUPTED_PARTIAL_EVIDENCE_ONLY",
+  "full46_passed": false,
+  "functional46_limited_pass": false,
+  "full22_evaluation": {
+    "completed": false,
+    "status": "UNVERIFIED_INCOMPLETE_EVALUATION",
+    "blocking_missing_file": "worker_result.json",
+    "frozen_reader_or_run_files_modified": false
+  },
+  "original_runtime_check": {
+    "status": "failed",
+    "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups",
+    "all_owned_and_children_clean": false,
+    "worker_result_present": false,
+    "worker_returncode": -2
+  },
+  "signal_attribution": {
+    "sender_verified": false,
+    "exact_signal_verified": false,
+    "statement": "Runner records a shared InterruptedError path. SIGINT versus SIGTERM and sender cannot be established from this audit."
+  },
+  "targeted_original_arrivals": {
+    "passed": true,
+    "verified_count": 11,
+    "recorded_count": 11,
+    "exploration_required": 18,
+    "fullmission_required": 46,
+    "source_checks_passed": true,
+    "source_frame_errors": [],
+    "conflicting_pose_stamps": [],
+    "status_errors": [],
+    "latest_atomic_status_matches": true,
+    "request_exact_original_geometry": true,
+    "goals_definition_sha256": "ceb8f2fecaa6f5bdac738d6a6afa2c5015052b9d5e479cab4e9c0e703dea212a",
+    "receipts": [
+      {
+        "goal_id": "exploration:0",
+        "ordinal": 1,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 19010000000,
+        "end_stamp_ns": 19440000000,
+        "activation_ns": 9605000000,
+        "dwell_s": 0.43,
+        "activation_to_arrival_s": 9.835,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.009020416854781763,
+          0.2492115139820824,
+          0.023637797841075264
+        ],
+        "terminal_raw_position": [
+          -0.009508996595932056,
+          -0.8021736022465706,
+          -0.011705546723035382
+        ],
+        "terminal_center_error_xyz": [
+          -0.0017392437323116988,
+          0.18457575133626336,
+          -0.015322579479043754
+        ],
+        "terminal_center_error_m": 0.18521882839495052,
+        "window_source_rows": [
+          {
+            "stamp_ns": 19010000000,
+            "position": [
+              -0.002150737154405902,
+              -0.7375839620047128,
+              -0.007427526814051076
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 471404,
+            "source_line": 466,
+            "raw_line_sha256": "63f0798be619a0976e7736cc8a128f0ce38ae0dfa6bccf8b754862fc8a2fbda4"
+          },
+          {
+            "stamp_ns": 19045000000,
+            "position": [
+              -0.003741307598845685,
+              -0.7439895905006537,
+              -0.008474274084382847
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 472407,
+            "source_line": 467,
+            "raw_line_sha256": "05b5ba3b4ae027692d5b6eb592e0de578315a0391bdd003eae27d9b640cebc91"
+          },
+          {
+            "stamp_ns": 19074999999,
+            "position": [
+              -0.005029547848076598,
+              -0.7493676252752587,
+              -0.009376114668111678
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 473411,
+            "source_line": 468,
+            "raw_line_sha256": "1eade6cc7e782c531dc8b2fc2f2a95ead626f1df66980c09c7c75c41b12a9832"
+          },
+          {
+            "stamp_ns": 19109999999,
+            "position": [
+              -0.006483174638783569,
+              -0.7548156633048558,
+              -0.010147551378805447
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 474423,
+            "source_line": 469,
+            "raw_line_sha256": "21cf3dfff36b94eef99e869d360ff2ae9050b76474db038f04ec0fa5dc8157df"
+          },
+          {
+            "stamp_ns": 19144999999,
+            "position": [
+              -0.008008851889792942,
+              -0.760346697653269,
+              -0.010660069281435721
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 475435,
+            "source_line": 470,
+            "raw_line_sha256": "93e03bb3cfa251f0e3ca1db1be0d378021ffa38a36b4643edd04122f7ff90d07"
+          },
+          {
+            "stamp_ns": 19175000000,
+            "position": [
+              -0.009855028924833453,
+              -0.7644436689064874,
+              -0.01159300365798538
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 476442,
+            "source_line": 471,
+            "raw_line_sha256": "f4099dcad46450c02a4c4ac2bedd81fc3a810673f05e3011cc2e6ed94c5777eb"
+          },
+          {
+            "stamp_ns": 19210000000,
+            "position": [
+              -0.011071446499272272,
+              -0.7690594464702721,
+              -0.014770382863562874
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 477447,
+            "source_line": 472,
+            "raw_line_sha256": "6aefa2b907aa7e92ddb7528c928ecd9d963911e8f5df4bcc8af1092f0582c09c"
+          },
+          {
+            "stamp_ns": 19239999999,
+            "position": [
+              -0.01223517495555059,
+              -0.7729397795048832,
+              -0.01800233431246556
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 478450,
+            "source_line": 473,
+            "raw_line_sha256": "d6b10bde2951771e255a88ab538707696263786d329acf189ac49148187b6faa"
+          },
+          {
+            "stamp_ns": 19274999999,
+            "position": [
+              -0.013456595660560311,
+              -0.777474365578014,
+              -0.020020765085066894
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 479460,
+            "source_line": 474,
+            "raw_line_sha256": "5e36a2bfdf3421bf6441b0a7b883d28b5065d5fb2e544ce41f2dd342cae7b6f3"
+          },
+          {
+            "stamp_ns": 19309999999,
+            "position": [
+              -0.01450331055673955,
+              -0.7828184110572768,
+              -0.019986131439929146
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 480467,
+            "source_line": 475,
+            "raw_line_sha256": "24efdc0f10c0aba9c29b8436e64963ea31588c335c80572da2301e404d40b2ac"
+          },
+          {
+            "stamp_ns": 19339999999,
+            "position": [
+              -0.014641764211963247,
+              -0.7875893592610093,
+              -0.018868347086666695
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 481479,
+            "source_line": 476,
+            "raw_line_sha256": "60314b69f11da748ac102d82ed787682f5034e15a0775d5c6af0ac366dd93078"
+          },
+          {
+            "stamp_ns": 19375000000,
+            "position": [
+              -0.013737445734268163,
+              -0.7924913955902898,
+              -0.016712424650609087
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 482491,
+            "source_line": 477,
+            "raw_line_sha256": "e6bad12d55df8850f618448dfac530b687d0864e293cfd850e7024e63a946fdb"
+          },
+          {
+            "stamp_ns": 19405000000,
+            "position": [
+              -0.01199779756485675,
+              -0.7970211654151712,
+              -0.014467912897264793
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 483493,
+            "source_line": 478,
+            "raw_line_sha256": "26fa23c7f8751388d3c287a10be1f0e4d11993fa6d94cbede7a35065fcff3c9d"
+          },
+          {
+            "stamp_ns": 19440000000,
+            "position": [
+              -0.009508996595932056,
+              -0.8021736022465706,
+              -0.011705546723035382
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 484495,
+            "source_line": 479,
+            "raw_line_sha256": "804c00aa7ca8c349c6f1bf123b593cfd9117d72aeb6d10c64e1535332bd538e9"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 6998412,
+          "source_line": 122,
+          "raw_line_sha256": "374bc98bec4e30c540f25f7e7e132afaf57a82f0a11afd6152d19ec01f951e83"
+        }
+      },
+      {
+        "goal_id": "exploration:1",
+        "ordinal": 2,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 29175000000,
+        "end_stamp_ns": 29605000000,
+        "activation_ns": 19510000000,
+        "dwell_s": 0.43,
+        "activation_to_arrival_s": 10.095,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.2455637650746374,
+          0.041574725569380605,
+          0.028834234640181772
+        ],
+        "terminal_raw_position": [
+          0.8180590385503955,
+          -0.9799282473016278,
+          -0.016480906095153094
+        ],
+        "terminal_center_error_xyz": [
+          -0.17411300193010704,
+          0.017610449344584445,
+          -0.020097938851161463
+        ],
+        "terminal_center_error_m": 0.17615161796956808,
+        "window_source_rows": [
+          {
+            "stamp_ns": 29175000000,
+            "position": [
+              0.7470711328283686,
+              -0.9533169192972509,
+              -0.010577827218329039
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 781852,
+            "source_line": 774,
+            "raw_line_sha256": "1f0ac734a477491b1206924e91236a30c6623009c7668d7f8b8deb2192a37443"
+          },
+          {
+            "stamp_ns": 29210000000,
+            "position": [
+              0.7537160803927695,
+              -0.9561372868330433,
+              -0.00863473977217969
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 782848,
+            "source_line": 775,
+            "raw_line_sha256": "8489403f044190466312ca5ec066c6400dd68ab589a4d4f800c804af071846ca"
+          },
+          {
+            "stamp_ns": 29239999999,
+            "position": [
+              0.7594359736320861,
+              -0.9591890081484681,
+              -0.007204133426353604
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 783843,
+            "source_line": 776,
+            "raw_line_sha256": "87c5737b7e2446d4a4eee2d28a1a4b85da724fcd585270bdae16eb6ba6624a31"
+          },
+          {
+            "stamp_ns": 29274999999,
+            "position": [
+              0.7654745042628954,
+              -0.9624984667151917,
+              -0.006247030962569239
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 784850,
+            "source_line": 777,
+            "raw_line_sha256": "9475c7a408278049b469d4b64555b9b0b4525b19a4422e54aaa8a2123bdbf10b"
+          },
+          {
+            "stamp_ns": 29304999999,
+            "position": [
+              0.7708094715648723,
+              -0.9655911392294887,
+              -0.006406971175000756
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 785855,
+            "source_line": 778,
+            "raw_line_sha256": "b17a8e338158d7c7f4fc7e8f47e0adfdd7653bf299c12c4dabae60d5c6368a62"
+          },
+          {
+            "stamp_ns": 29339999999,
+            "position": [
+              0.7765015470761347,
+              -0.9694025426794126,
+              -0.007786976341217633
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 786863,
+            "source_line": 779,
+            "raw_line_sha256": "b72fe05d3ef03e0326fd1397b28580e56e8685f143966e1f5dc2ea5ce6b97237"
+          },
+          {
+            "stamp_ns": 29375000000,
+            "position": [
+              0.7813045765910621,
+              -0.9727658916461634,
+              -0.011542219243634886
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 787868,
+            "source_line": 780,
+            "raw_line_sha256": "f04fbdbaef6a9146d0d50aed024d11f3a940a5fab758e05c572b9dfacee2c8a0"
+          },
+          {
+            "stamp_ns": 29405000000,
+            "position": [
+              0.7852424210917631,
+              -0.9749352728712889,
+              -0.01729358895449921
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 788868,
+            "source_line": 781,
+            "raw_line_sha256": "08c898359dfe1800fd4b8caee21f7de184ce2c5b7f850257ad86f41f57c017ad"
+          },
+          {
+            "stamp_ns": 29440000000,
+            "position": [
+              0.789985607635616,
+              -0.978028680703585,
+              -0.02313326841117855
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 789867,
+            "source_line": 782,
+            "raw_line_sha256": "1688a1eab8e867b725b357934cedf017c1f6b375da16f259488d1e5cdb5e0eaf"
+          },
+          {
+            "stamp_ns": 29469999999,
+            "position": [
+              0.7943088985775427,
+              -0.9803742039864713,
+              -0.024993469400060205
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 790866,
+            "source_line": 783,
+            "raw_line_sha256": "372845120ae13ed4161d8b9f45cb5a83114b4e47255b8f0b9bbd16c9f554a1a7"
+          },
+          {
+            "stamp_ns": 29504999999,
+            "position": [
+              0.7995580869847663,
+              -0.9812277244624299,
+              -0.025217201884173403
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 791874,
+            "source_line": 784,
+            "raw_line_sha256": "bcedb11f4eea812fd22f5920845305f2c6874b9418e2adfdd0db36053b8eb4aa"
+          },
+          {
+            "stamp_ns": 29539999999,
+            "position": [
+              0.8057419523103777,
+              -0.981375227155669,
+              -0.022790634833182676
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 792884,
+            "source_line": 785,
+            "raw_line_sha256": "b741eca5646be5756be87fb79057e6c7035799df67fe5b7cac748893c9520058"
+          },
+          {
+            "stamp_ns": 29570000000,
+            "position": [
+              0.8111437711681143,
+              -0.9810116250011818,
+              -0.020086670726126098
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 793891,
+            "source_line": 786,
+            "raw_line_sha256": "3b2ea4e4960de491789e6424a6e1cf4b4079a652c860d2c4048b1a405b97216d"
+          },
+          {
+            "stamp_ns": 29605000000,
+            "position": [
+              0.8180590385503955,
+              -0.9799282473016278,
+              -0.016480906095153094
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 794889,
+            "source_line": 787,
+            "raw_line_sha256": "21642678bb7d8de527494db3f214ae0f891fb3c610e15c783edb1334eceaaec4"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 11923025,
+          "source_line": 191,
+          "raw_line_sha256": "3bcf5b7ae8b2a7c93b2ce88740f5a896442996a939492d0d9d17942fc0c8e651"
+        }
+      },
+      {
+        "goal_id": "exploration:2",
+        "ordinal": 3,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 41155000000,
+        "end_stamp_ns": 41585000000,
+        "activation_ns": 29685000000,
+        "dwell_s": 0.43,
+        "activation_to_arrival_s": 11.9,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.0454511732217748,
+          0.23938058731390338,
+          0.016461553976459563
+        ],
+        "terminal_raw_position": [
+          0.9721805293177486,
+          -0.16007904681586635,
+          -0.01150573447501277
+        ],
+        "terminal_center_error_xyz": [
+          -0.03078085422613208,
+          -0.16248214351377713,
+          -0.015122767231021142
+        ],
+        "terminal_center_error_m": 0.16606205477605565,
+        "window_source_rows": [
+          {
+            "stamp_ns": 41155000000,
+            "position": [
+              0.9549300966036621,
+              -0.23647316877200045,
+              -0.007172252173121732
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1147236,
+            "source_line": 1137,
+            "raw_line_sha256": "b9b2b51a997761d637f3008aec39fe2f0c03e6ddb9116c1a9ede821a5d5f2ddd"
+          },
+          {
+            "stamp_ns": 41185000000,
+            "position": [
+              0.9579031882478752,
+              -0.2308989687604044,
+              -0.009380615486974213
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1148239,
+            "source_line": 1138,
+            "raw_line_sha256": "c84306b01aa51d90c07bb255d8989a72143d0c00a7ebaec090b2791956aee20b"
+          },
+          {
+            "stamp_ns": 41219999999,
+            "position": [
+              0.9611951937318457,
+              -0.2245449376240624,
+              -0.012387130871318678
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1149240,
+            "source_line": 1139,
+            "raw_line_sha256": "5c0b892c5058aa12aa1b0c30b94aba1bb4a1f9074e5cbfe1f2607431fa30142c"
+          },
+          {
+            "stamp_ns": 41255000000,
+            "position": [
+              0.9641976050332215,
+              -0.21841931846853704,
+              -0.012844521220451191
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1150244,
+            "source_line": 1140,
+            "raw_line_sha256": "39586c7a7cfb4f4a85265af604224a11964f418fc8b23cd0764469564a7cdc2d"
+          },
+          {
+            "stamp_ns": 41284999999,
+            "position": [
+              0.966935539465143,
+              -0.2122694537454718,
+              -0.01177435230956788
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1151248,
+            "source_line": 1141,
+            "raw_line_sha256": "e94038f1975d2cc03f3b8d0d6b3a004ae4488228c517944dad4cd1ecf4d94cde"
+          },
+          {
+            "stamp_ns": 41320000000,
+            "position": [
+              0.9694991456523524,
+              -0.20483125684187653,
+              -0.009815460411398212
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1152255,
+            "source_line": 1142,
+            "raw_line_sha256": "9b0506995ae53735fb5e6cfeaf37ea364a2b72f086302b8e7cd8f0fc0f6df9ae"
+          },
+          {
+            "stamp_ns": 41350000000,
+            "position": [
+              0.9710661101632124,
+              -0.19821243207179978,
+              -0.008678889029634464
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1153262,
+            "source_line": 1143,
+            "raw_line_sha256": "884a101da5c1293089743868143218f584d6d161b29156ffee5d0fa54c88fa7e"
+          },
+          {
+            "stamp_ns": 41384999999,
+            "position": [
+              0.9718966872461017,
+              -0.1906425185936628,
+              -0.008418638714294524
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1154267,
+            "source_line": 1144,
+            "raw_line_sha256": "561f124a5ba20bf8af054759b0926626d0df5313bb464adade18f896c1772096"
+          },
+          {
+            "stamp_ns": 41420000000,
+            "position": [
+              0.9718963729455835,
+              -0.18354115427771525,
+              -0.008120381113138089
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1155279,
+            "source_line": 1145,
+            "raw_line_sha256": "712154ad825366afd540ffe1bb63083b3dd306e35155a3e384047fef32682977"
+          },
+          {
+            "stamp_ns": 41450000000,
+            "position": [
+              0.9723420107827818,
+              -0.17801677759102366,
+              -0.008007814921068602
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1156280,
+            "source_line": 1146,
+            "raw_line_sha256": "c6e08bc9c92b850d481a5332b72d49bc783682c69af90a52b2eeb8db3b78883a"
+          },
+          {
+            "stamp_ns": 41484999999,
+            "position": [
+              0.9725088304758269,
+              -0.17239224643052223,
+              -0.008481985252989611
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1157283,
+            "source_line": 1147,
+            "raw_line_sha256": "8bad34729b6a4a9a6f9f4018816e01c0b564a0194332af8e830455859b704058"
+          },
+          {
+            "stamp_ns": 41515000000,
+            "position": [
+              0.9723886515370409,
+              -0.16803132906911908,
+              -0.009119512266049866
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1158296,
+            "source_line": 1148,
+            "raw_line_sha256": "c63bb3956d82fc118624cbf1608fd4ffb08d85ca0aacb3873e9399fae30adb84"
+          },
+          {
+            "stamp_ns": 41549999999,
+            "position": [
+              0.9723831768251318,
+              -0.16385781515215012,
+              -0.010285653848925201
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1159300,
+            "source_line": 1149,
+            "raw_line_sha256": "63e71248a433b2c5a7679a640673d1ef4c03f901e3f1fa1e40182b5f62c353a7"
+          },
+          {
+            "stamp_ns": 41585000000,
+            "position": [
+              0.9721805293177486,
+              -0.16007904681586635,
+              -0.01150573447501277
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1160304,
+            "source_line": 1150,
+            "raw_line_sha256": "5303dbb59e09dfd0508148554c443daad95eb01132a51ed3cb69f522031f66d9"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 17561427,
+          "source_line": 269,
+          "raw_line_sha256": "1c6e23a0a12ac927eaf1956b253c754ad76fc18b6f219eb94117efcd0b48e576"
+        }
+      },
+      {
+        "goal_id": "exploration:3",
+        "ordinal": 4,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 51679999999,
+        "end_stamp_ns": 52109999999,
+        "activation_ns": 41650000000,
+        "dwell_s": 0.43,
+        "activation_to_arrival_s": 10.459999999,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.23495612102798732,
+          0.03162756488252297,
+          0.01640702225431928
+        ],
+        "terminal_raw_position": [
+          0.1746839955869209,
+          -0.019666543113378218,
+          -0.012717200236087536
+        ],
+        "terminal_center_error_xyz": [
+          0.17166440538716313,
+          -0.03285898287466714,
+          -0.016334232992095906
+        ],
+        "terminal_center_error_m": 0.17554255324543397,
+        "window_source_rows": [
+          {
+            "stamp_ns": 51679999999,
+            "position": [
+              0.23765253839519898,
+              -0.018026331376172478,
+              -0.00960628858275323
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1468472,
+            "source_line": 1456,
+            "raw_line_sha256": "60fbbba1384169291249c4d588526e4a7bc76c428f8fb0d65989c94c01445dde"
+          },
+          {
+            "stamp_ns": 51715000000,
+            "position": [
+              0.22990114860434485,
+              -0.017135122356032838,
+              -0.00829354880264019
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1469492,
+            "source_line": 1457,
+            "raw_line_sha256": "5bdbea7de40ecfecf85cd3f6089fadc79012481d929b7f06ce2fd8d5350cb3c1"
+          },
+          {
+            "stamp_ns": 51744999999,
+            "position": [
+              0.22284570287486738,
+              -0.016681358580390118,
+              -0.007581589429960598
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1470503,
+            "source_line": 1458,
+            "raw_line_sha256": "1c1037ed277cf80d247f5f5cdf76d2be4fdfc5fc8863f0a321e4352adbc0f0f9"
+          },
+          {
+            "stamp_ns": 51780000000,
+            "position": [
+              0.21491831628460778,
+              -0.016439930781603784,
+              -0.007134429771469159
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1471519,
+            "source_line": 1459,
+            "raw_line_sha256": "dc6ad9e7ead541b5f8548fa84702067ebd3c9ca1e230130fc54684ca6e32c92c"
+          },
+          {
+            "stamp_ns": 51814999999,
+            "position": [
+              0.20727371404089653,
+              -0.016724379862435877,
+              -0.007015290456782883
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1472525,
+            "source_line": 1460,
+            "raw_line_sha256": "7b62a928c484b9edeec3dc7e4571ad40246629fe974707e04a8f4fa1de6c3af3"
+          },
+          {
+            "stamp_ns": 51844999999,
+            "position": [
+              0.20101478779433837,
+              -0.01729122437118048,
+              -0.007284618660153182
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1473539,
+            "source_line": 1461,
+            "raw_line_sha256": "89a70f49210ee7c80265d536a4799c0f13d1e25b64281dc03800a8a9592e7d60"
+          },
+          {
+            "stamp_ns": 51880000000,
+            "position": [
+              0.19488894210471885,
+              -0.018213105280938027,
+              -0.008017582048399804
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1474549,
+            "source_line": 1462,
+            "raw_line_sha256": "337a36410270b634c85f33887ee97140bc21ce9beb80be11f98bf85679a47d44"
+          },
+          {
+            "stamp_ns": 51909999999,
+            "position": [
+              0.19017086445257178,
+              -0.019430556171190053,
+              -0.008888503227368576
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1475560,
+            "source_line": 1463,
+            "raw_line_sha256": "cddb9ce9dca2479ef8e871e9c123ef56924009c07f84dd8216fb8b6723922a2c"
+          },
+          {
+            "stamp_ns": 51945000000,
+            "position": [
+              0.1860163545910889,
+              -0.020022064230424855,
+              -0.010178950760629428
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1476575,
+            "source_line": 1464,
+            "raw_line_sha256": "43338a7e94e77d26c04d172de22734ea4854edcd40702d672cd294ff30a400c3"
+          },
+          {
+            "stamp_ns": 51979999999,
+            "position": [
+              0.1826696498685256,
+              -0.020303714596248898,
+              -0.011359429403004467
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1477580,
+            "source_line": 1465,
+            "raw_line_sha256": "7cfd0527bf28c3c2c51a8ff7887089affbd6f5c7f3c1d009ef92809cb8de5c36"
+          },
+          {
+            "stamp_ns": 52009999999,
+            "position": [
+              0.18057728192095643,
+              -0.020352808527479057,
+              -0.01225277223013498
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1478587,
+            "source_line": 1466,
+            "raw_line_sha256": "4b84f29299c6c6d79105224111d66c3933de0266073303263ab0d2d913a89946"
+          },
+          {
+            "stamp_ns": 52045000000,
+            "position": [
+              0.1782908965048676,
+              -0.02030930714661611,
+              -0.012738398101600261
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1479597,
+            "source_line": 1467,
+            "raw_line_sha256": "0f785a8f23be67f32d08b29187973170b3589a8ddfedf629596b338bfa156aaf"
+          },
+          {
+            "stamp_ns": 52075000000,
+            "position": [
+              0.1763433936829317,
+              -0.019879178954829265,
+              -0.01278998949831091
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1480604,
+            "source_line": 1468,
+            "raw_line_sha256": "776800df65b31d497cdbf1e33bddc49cbd54b8a06b6931ca35313f7f00f2fe33"
+          },
+          {
+            "stamp_ns": 52109999999,
+            "position": [
+              0.1746839955869209,
+              -0.019666543113378218,
+              -0.012717200236087536
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1481615,
+            "source_line": 1469,
+            "raw_line_sha256": "023e30dc3ca22e5d16194a4f8db2a707e6599e7c2030b15e81684a1733ad7d36"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 22651414,
+          "source_line": 338,
+          "raw_line_sha256": "9d6033cfa1edf863218407e0896aa17781ccf379e75bffb284dfc55a0ffdad34"
+        }
+      },
+      {
+        "goal_id": "exploration:4",
+        "ordinal": 5,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 68114999999,
+        "end_stamp_ns": 68545000000,
+        "activation_ns": 52185000000,
+        "dwell_s": 0.430000001,
+        "activation_to_arrival_s": 16.36,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.02089633139983662,
+          0.24301624528272844,
+          0.025296457212772336
+        ],
+        "terminal_raw_position": [
+          0.028257150984230303,
+          1.8309674266315128,
+          -0.01129783302112147
+        ],
+        "terminal_center_error_xyz": [
+          0.003658874657716263,
+          -0.18210859981802208,
+          -0.01491486577712984
+        ],
+        "terminal_center_error_m": 0.18275497999395582,
+        "window_source_rows": [
+          {
+            "stamp_ns": 68114999999,
+            "position": [
+              0.04287140578045037,
+              1.7698484686415292,
+              -0.007285543741198528
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1969793,
+            "source_line": 1954,
+            "raw_line_sha256": "eac6713dc93cc504bee7b93fba9eb742b5c4bc27198dd01c98b575fd3b789f8a"
+          },
+          {
+            "stamp_ns": 68150000000,
+            "position": [
+              0.039965937316809426,
+              1.7768803963868613,
+              -0.007736086663349555
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1970801,
+            "source_line": 1955,
+            "raw_line_sha256": "544a819317b97101a0412b9206589f5541af30ed7fe3ff5a9c3ae2c54c3fe17d"
+          },
+          {
+            "stamp_ns": 68180000000,
+            "position": [
+              0.0373111174959565,
+              1.7827864585066129,
+              -0.007988482227413574
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1971806,
+            "source_line": 1956,
+            "raw_line_sha256": "bd4ea76840f3af859d0fac28e66974d3f3f4ff8158e1a819627c9c426da1af75"
+          },
+          {
+            "stamp_ns": 68215000000,
+            "position": [
+              0.03443372670810098,
+              1.7892575462416869,
+              -0.009041184479145216
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1972807,
+            "source_line": 1957,
+            "raw_line_sha256": "3cda983c3bba3f4afb410d3e92210e656f87d203bd86ace8587761b5ffdebdd3"
+          },
+          {
+            "stamp_ns": 68245000000,
+            "position": [
+              0.032146382270112586,
+              1.794454740147142,
+              -0.011853996961790396
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1973807,
+            "source_line": 1958,
+            "raw_line_sha256": "808e3dbbbd7a2914809cd5b73e587b191cd5e51e23ccf453b6478e41858f6e39"
+          },
+          {
+            "stamp_ns": 68280000000,
+            "position": [
+              0.029314415947426974,
+              1.7997153412067952,
+              -0.016854509037326684
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1974807,
+            "source_line": 1959,
+            "raw_line_sha256": "f7d3317706b2737f075e18af837adfdcc6ec1a879fad2f17f2da137927f0c1ef"
+          },
+          {
+            "stamp_ns": 68314999999,
+            "position": [
+              0.026548371536800827,
+              1.804594312846765,
+              -0.020655177451607793
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1975802,
+            "source_line": 1960,
+            "raw_line_sha256": "76ece63999b4e6f7fecbd9b87b845780d2094f6a665b05369dcf16f3599d73ad"
+          },
+          {
+            "stamp_ns": 68344999999,
+            "position": [
+              0.024707315558285925,
+              1.808112857004269,
+              -0.021679424456763966
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1976802,
+            "source_line": 1961,
+            "raw_line_sha256": "2ae7c4753a353b8041194a46394f022520da6d243d3b49650b75b670c0dc9ca2"
+          },
+          {
+            "stamp_ns": 68379999999,
+            "position": [
+              0.023671033710310565,
+              1.8121891078722572,
+              -0.021443447199541176
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1977806,
+            "source_line": 1962,
+            "raw_line_sha256": "20f0e782d4ae28591ffef93fd1004e40b1408e52483cd2ca5f0d0096d020be5c"
+          },
+          {
+            "stamp_ns": 68409999999,
+            "position": [
+              0.023257243251276812,
+              1.8154925174859586,
+              -0.019788218495969696
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1978813,
+            "source_line": 1963,
+            "raw_line_sha256": "de0981b8117565fe339e6c618015ed3c7b6f78af64b8ee31433a55e2e8a9b4cf"
+          },
+          {
+            "stamp_ns": 68444999999,
+            "position": [
+              0.023594365900349912,
+              1.8195878621987949,
+              -0.016909176251577646
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1979816,
+            "source_line": 1964,
+            "raw_line_sha256": "b6a80a681c6ae04c1afe69653c5e7432d36fe853192335bdd05b1e42bc0deeba"
+          },
+          {
+            "stamp_ns": 68480000000,
+            "position": [
+              0.024898083920536364,
+              1.823656099006324,
+              -0.014383975253547692
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1980821,
+            "source_line": 1965,
+            "raw_line_sha256": "676cbc8a001f6d9ada04014f148e2b4daf82f76eb4fabcc49b77f0e7c26643e5"
+          },
+          {
+            "stamp_ns": 68510000000,
+            "position": [
+              0.026315265328008063,
+              1.8268989203225434,
+              -0.012603329637077339
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1981821,
+            "source_line": 1966,
+            "raw_line_sha256": "d419ec5f5969526a5a3825939a162b536a88a1aac64295f0f4e718d30ac01402"
+          },
+          {
+            "stamp_ns": 68545000000,
+            "position": [
+              0.028257150984230303,
+              1.8309674266315128,
+              -0.01129783302112147
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 1982827,
+            "source_line": 1967,
+            "raw_line_sha256": "e998f68c3174b055e555083da64b0b5320d3fd7ea77f8037833a5ee7b6600b00"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 31031808,
+          "source_line": 448,
+          "raw_line_sha256": "47a3924ce2496a925de95bcaba5b49b1ef66f4a21d72ddc8998d86868a17ca37"
+        }
+      },
+      {
+        "goal_id": "exploration:5",
+        "ordinal": 6,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 83954999999,
+        "end_stamp_ns": 84385000000,
+        "activation_ns": 68625000000,
+        "dwell_s": 0.430000001,
+        "activation_to_arrival_s": 15.76,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "oriented_box",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9949792724226738,
+              -0.010735797605995415,
+              0.09950371902099893
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              -0.09949792724226739,
+              0.0010735797605995415,
+              0.9950371902099893
+            ]
+          ],
+          "half_extents_m": [
+            0.25,
+            0.2,
+            0.07
+          ]
+        },
+        "window_max_abs_local_xyz": [
+          0.2499124097882409,
+          0.021249708832541802,
+          0.02189708518895043
+        ],
+        "terminal_raw_position": [
+          1.8308665632415089,
+          1.9863498238170887,
+          0.0015105522112192082
+        ],
+        "terminal_center_error_xyz": [
+          -0.19361529977325098,
+          -0.0051475165056897865,
+          -0.0021064805447891626
+        ],
+        "terminal_center_error_m": 0.1936951689969261,
+        "window_source_rows": [
+          {
+            "stamp_ns": 83954999999,
+            "position": [
+              1.773498916889091,
+              1.9729544932819272,
+              -0.0002888806944338896
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2452350,
+            "source_line": 2434,
+            "raw_line_sha256": "8553d32eb07f1ebe564d21bf48e7c82632caa91d58bfad698e4b4e4cc912f31c"
+          },
+          {
+            "stamp_ns": 83989999999,
+            "position": [
+              1.7800865597577606,
+              1.9743507058826184,
+              -0.004293367375987944
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2453355,
+            "source_line": 2435,
+            "raw_line_sha256": "be0baed58b6960e6963141334e9a170835d1ccabdcc5fd78b2d6c4b5364f96ed"
+          },
+          {
+            "stamp_ns": 84019999999,
+            "position": [
+              1.785654709655525,
+              1.9747246976831117,
+              -0.006325301201890601
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2454360,
+            "source_line": 2436,
+            "raw_line_sha256": "112167900c43de4a6573b2a6c4ade78b11e86d92348ce12cc9363bb12932b6a9"
+          },
+          {
+            "stamp_ns": 84055000000,
+            "position": [
+              1.7913018080104737,
+              1.9751218302875815,
+              -0.005805234678250584
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2455366,
+            "source_line": 2437,
+            "raw_line_sha256": "a72b0f3053964c665e4dda08d06751f9a997d9c3700932816584cfeebacaf429"
+          },
+          {
+            "stamp_ns": 84084999999,
+            "position": [
+              1.7950447610124411,
+              1.9750194043705276,
+              -0.0034574190861261065
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2456367,
+            "source_line": 2438,
+            "raw_line_sha256": "167f40e881da1a0bed40e1f4e270f29c43687205f894cac9d22f0b6ce692ac32"
+          },
+          {
+            "stamp_ns": 84120000000,
+            "position": [
+              1.7987331261334873,
+              1.9758121065315617,
+              -0.0004760487767881745
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2457375,
+            "source_line": 2439,
+            "raw_line_sha256": "30dbae7261637266cda57e903e01f5afc854acd2cf923fe127afe36f9fe95a70"
+          },
+          {
+            "stamp_ns": 84155000000,
+            "position": [
+              1.8026341149001812,
+              1.9771766500603725,
+              0.0020792281207532076
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2458379,
+            "source_line": 2440,
+            "raw_line_sha256": "cf710ca196d8cfcb9de9965762cc962d5278aa855dc83012d66355e2948a010d"
+          },
+          {
+            "stamp_ns": 84185000000,
+            "position": [
+              1.8054308564810968,
+              1.9782420348367409,
+              0.003733806990531643
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2459380,
+            "source_line": 2441,
+            "raw_line_sha256": "454dcd285e51c62906773fae7d4c5ae6b629aeccdf44346ba9ebadb618748498"
+          },
+          {
+            "stamp_ns": 84219999999,
+            "position": [
+              1.8084131023656953,
+              1.9796781545322617,
+              0.0031946241244384227
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2460378,
+            "source_line": 2442,
+            "raw_line_sha256": "0a7b16c01fa4bda44ba4318551f3db3865b0c28019c922a057128536bffaf5f6"
+          },
+          {
+            "stamp_ns": 84250000000,
+            "position": [
+              1.8110773647880531,
+              1.981054300820586,
+              0.0010170143162042612
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2461390,
+            "source_line": 2443,
+            "raw_line_sha256": "bde7422f31d4a32b9d8c5548dba5b14a53c020ea06bfbec957aeb16442a58caf"
+          },
+          {
+            "stamp_ns": 84284999999,
+            "position": [
+              1.8149416349489162,
+              1.9829393423584738,
+              -0.0015027197467753104
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2462390,
+            "source_line": 2444,
+            "raw_line_sha256": "1771a5526b5e67c8b4306daa5294e85f6d13744f0e64f3a41a0d3cb66b50fdcb"
+          },
+          {
+            "stamp_ns": 84319999999,
+            "position": [
+              1.8195450910947366,
+              1.9843270918762939,
+              -0.0020950903133481504
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2463395,
+            "source_line": 2445,
+            "raw_line_sha256": "ed5f4cbe8222260e80f2be5c1106489ae35709bcc214ae94ff2ef4dd304b3d9c"
+          },
+          {
+            "stamp_ns": 84349999999,
+            "position": [
+              1.8242162564710382,
+              1.9853090053960234,
+              -0.0012190292817585468
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2464403,
+            "source_line": 2446,
+            "raw_line_sha256": "146b3415e672ed029ee094f5d40df85c19dfb68dd7c7e97df6e04650e76b995f"
+          },
+          {
+            "stamp_ns": 84385000000,
+            "position": [
+              1.8308665632415089,
+              1.9863498238170887,
+              0.0015105522112192082
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 2465411,
+            "source_line": 2447,
+            "raw_line_sha256": "07fba9670ce04ee67da29f798be5ef81bc7e5851917de50e291301dcf0f46fd3"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 39160922,
+          "source_line": 553,
+          "raw_line_sha256": "f3e122f1f9fdb8bb95337fa071e2c14faa31e96eacadb680134a035cc55ade0c"
+        }
+      },
+      {
+        "goal_id": "exploration:6",
+        "ordinal": 7,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 103060000000,
+        "end_stamp_ns": 103489999999,
+        "activation_ns": 84450000000,
+        "dwell_s": 0.429999999,
+        "activation_to_arrival_s": 19.039999999,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "oriented_box",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9949792724226738,
+              -0.010735797605995415,
+              0.09950371902099893
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              -0.09949792724226739,
+              0.0010735797605995415,
+              0.9950371902099893
+            ]
+          ],
+          "half_extents_m": [
+            0.25,
+            0.2,
+            0.07
+          ]
+        },
+        "window_max_abs_local_xyz": [
+          0.24026647629845252,
+          0.004570814285582942,
+          0.02207453419130372
+        ],
+        "terminal_raw_position": [
+          4.860140391267308,
+          1.9617122250363257,
+          0.27413203158278826
+        ],
+        "terminal_center_error_xyz": [
+          -0.1641668517798207,
+          0.002582913903681705,
+          -0.029485001173220116
+        ],
+        "terminal_center_error_m": 0.16681364441111,
+        "window_source_rows": [
+          {
+            "stamp_ns": 103060000000,
+            "position": [
+              4.786790231212327,
+              1.9581419135560165,
+              0.26389416395791165
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3033259,
+            "source_line": 3013,
+            "raw_line_sha256": "ffdd1d4cb317f28775040c7c2e71c142eea53d38235381715f2c966ae649579f"
+          },
+          {
+            "stamp_ns": 103094999999,
+            "position": [
+              4.792035281758874,
+              1.9591248277047966,
+              0.26390017438372904
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3034263,
+            "source_line": 3014,
+            "raw_line_sha256": "90f8fc0f86009919e73a5986bd6e5945effa497133e9c5b509d13fb26c07d815"
+          },
+          {
+            "stamp_ns": 103129999999,
+            "position": [
+              4.79742100427336,
+              1.9601317333086856,
+              0.2644117939452308
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3035272,
+            "source_line": 3015,
+            "raw_line_sha256": "a2da8ced5799472711bb3fc8fe32e34889e3a62304a46eb48bc0a5a412ffe88b"
+          },
+          {
+            "stamp_ns": 103159999999,
+            "position": [
+              4.801838300783299,
+              1.9607346126320135,
+              0.2650568281146355
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3036282,
+            "source_line": 3016,
+            "raw_line_sha256": "9c74c653349acb976fe3c44d368ccc7b02eae588156777f61f59e1c2afaecc58"
+          },
+          {
+            "stamp_ns": 103194999999,
+            "position": [
+              4.807040966121438,
+              1.9615023077903504,
+              0.26612839995700543
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3037296,
+            "source_line": 3017,
+            "raw_line_sha256": "7046f09517648c8f4385ab761c8a327b41127cd44c39b59b6a54a1b3de4796dd"
+          },
+          {
+            "stamp_ns": 103224999999,
+            "position": [
+              4.811901009176003,
+              1.9620167927638967,
+              0.2672987085840089
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3038307,
+            "source_line": 3018,
+            "raw_line_sha256": "85cc8786c94da8fa2e89217f93d41a0f1a84495401bb37fd1b626ae9018240ad"
+          },
+          {
+            "stamp_ns": 103260000000,
+            "position": [
+              4.817733353242537,
+              1.9627324696794437,
+              0.2677909069956454
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3039315,
+            "source_line": 3019,
+            "raw_line_sha256": "a975c49e7301c42f9feff5169b37cfbb422a71ebd93027f0733765fd2d2b1fc7"
+          },
+          {
+            "stamp_ns": 103295000000,
+            "position": [
+              4.823779583999014,
+              1.963303642170751,
+              0.2668246167644497
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3040318,
+            "source_line": 3020,
+            "raw_line_sha256": "9d7169705ced72d204cca5fa66b14eb4de00533ba3392d33cba58c2539f6ca20"
+          },
+          {
+            "stamp_ns": 103325000000,
+            "position": [
+              4.829086070053341,
+              1.9640053328484954,
+              0.2644470041610744
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3041323,
+            "source_line": 3021,
+            "raw_line_sha256": "894a79518420f0d782c225b4b0c687c5a945a75ce395024190421f428c41535e"
+          },
+          {
+            "stamp_ns": 103359999999,
+            "position": [
+              4.836081945743584,
+              1.9652798955233655,
+              0.2626043302439832
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3042326,
+            "source_line": 3022,
+            "raw_line_sha256": "360fcd056f0db611834f704015cc9445b7c463cf553d620042825e8f0bf80cf7"
+          },
+          {
+            "stamp_ns": 103390000000,
+            "position": [
+              4.841599831922122,
+              1.9656717991734263,
+              0.2638955041480626
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3043332,
+            "source_line": 3023,
+            "raw_line_sha256": "4cff4fc7abd43f363848df35bc7932da9d59a980daba8e95797d114288261f56"
+          },
+          {
+            "stamp_ns": 103424999999,
+            "position": [
+              4.848322166195359,
+              1.9651933979509544,
+              0.2672197371713475
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3044329,
+            "source_line": 3024,
+            "raw_line_sha256": "98f4819a02ce5a72bdf1f46410d7d045bb0a5c6a918082cfb1cbd246443ccf6f"
+          },
+          {
+            "stamp_ns": 103459999999,
+            "position": [
+              4.854510173259662,
+              1.9634577701345461,
+              0.27112839916384157
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3045332,
+            "source_line": 3025,
+            "raw_line_sha256": "2ebaff9b810ef5b13296591cb467bae7adf7f31f99d28431212e11f7a1bcd729"
+          },
+          {
+            "stamp_ns": 103489999999,
+            "position": [
+              4.860140391267308,
+              1.9617122250363257,
+              0.27413203158278826
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3046336,
+            "source_line": 3026,
+            "raw_line_sha256": "93baab4d2d05cfcf2534f5227c9564636d8cae854c3219901f6bb7f88e234f64"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 49527853,
+          "source_line": 683,
+          "raw_line_sha256": "976d0f7bec4d327decb774d3cca90f22ee2ef945fc8c7bb5761a73b5a4fa515b"
+        }
+      },
+      {
+        "goal_id": "exploration:7",
+        "ordinal": 8,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 121079999999,
+        "end_stamp_ns": 121510000000,
+        "activation_ns": 103555000000,
+        "dwell_s": 0.430000001,
+        "activation_to_arrival_s": 17.955,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "oriented_box",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9949792724226738,
+              -0.010735797605995415,
+              0.09950371902099893
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              -0.09949792724226739,
+              0.0010735797605995415,
+              0.9950371902099893
+            ]
+          ],
+          "half_extents_m": [
+            0.25,
+            0.2,
+            0.07
+          ]
+        },
+        "window_max_abs_local_xyz": [
+          0.24481236999432113,
+          0.013719731596920077,
+          0.013944986755690216
+        ],
+        "terminal_raw_position": [
+          7.843849277299919,
+          1.9279210058681302,
+          0.5715739580379016
+        ],
+        "terminal_center_error_xyz": [
+          -0.1802833457795785,
+          0.0011597239256206926,
+          -0.032043074718106745
+        ],
+        "terminal_center_error_m": 0.18311250192833065,
+        "window_source_rows": [
+          {
+            "stamp_ns": 121079999999,
+            "position": [
+              7.781792564136869,
+              1.9430966544007642,
+              0.568305174558575
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3581853,
+            "source_line": 3559,
+            "raw_line_sha256": "92dac2e8fc54c962d510f81804b56691cbeadf3424d441c57440cd9399cbc059"
+          },
+          {
+            "stamp_ns": 121114999999,
+            "position": [
+              7.7865955133390345,
+              1.9413912024764628,
+              0.5717367402665647
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3582860,
+            "source_line": 3560,
+            "raw_line_sha256": "826e67d613187183bcdbdfb04ece96b7858e76a99535973f13624c86ebf8d232"
+          },
+          {
+            "stamp_ns": 121144999999,
+            "position": [
+              7.790102287833493,
+              1.9388064523814323,
+              0.5726237424984276
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3583870,
+            "source_line": 3561,
+            "raw_line_sha256": "59697b22c3abb0622914dc4487cda56a9c87a6f4de51b1d3495491241179df80"
+          },
+          {
+            "stamp_ns": 121180000000,
+            "position": [
+              7.793151732887985,
+              1.9358678717518734,
+              0.5714639537975641
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3584877,
+            "source_line": 3562,
+            "raw_line_sha256": "e6743cdc49770bdd4c549816a8282d55e6dec9a951554b2e30d86e07b951a8fe"
+          },
+          {
+            "stamp_ns": 121209999999,
+            "position": [
+              7.796175767867978,
+              1.9333662066432586,
+              0.5697011538659978
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3585883,
+            "source_line": 3563,
+            "raw_line_sha256": "089b76546ad08f04a4a81eef66685071f400c01b9d2b594e170e545b079280ba"
+          },
+          {
+            "stamp_ns": 121245000000,
+            "position": [
+              7.798773653290045,
+              1.930057832297727,
+              0.5683617596215119
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3586889,
+            "source_line": 3564,
+            "raw_line_sha256": "52108c45a5a7e1780cf5617e0ad25945c446aaf2ddfcfa18904e9a8cc3137d51"
+          },
+          {
+            "stamp_ns": 121280000000,
+            "position": [
+              7.801931635466073,
+              1.927965745205623,
+              0.5681319762998805
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3587892,
+            "source_line": 3565,
+            "raw_line_sha256": "b28b2ae160ecd2859fefdbf2b99d266686392d1ed36bb716b61ff37fd72d3ddb"
+          },
+          {
+            "stamp_ns": 121310000000,
+            "position": [
+              7.805802528068435,
+              1.9268606126691188,
+              0.5685133214308276
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3588893,
+            "source_line": 3566,
+            "raw_line_sha256": "f277b70e90dd322543b40ff20193f410318badb714bff53b79d542c70da3d828"
+          },
+          {
+            "stamp_ns": 121344999999,
+            "position": [
+              7.811676946244499,
+              1.9261636711269223,
+              0.5698025804069308
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3589898,
+            "source_line": 3567,
+            "raw_line_sha256": "d70fb809c3c6cba3e281b41ffd8b26734f59bf6502891586a0163200ac5155ca"
+          },
+          {
+            "stamp_ns": 121375000000,
+            "position": [
+              7.817225337997387,
+              1.9261907432549474,
+              0.5710620715481798
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3590909,
+            "source_line": 3568,
+            "raw_line_sha256": "df44cc3ccb25f53f1c0bc46d83608d9beb1c8a58b99500dc3da0ff7d2da3f739"
+          },
+          {
+            "stamp_ns": 121409999999,
+            "position": [
+              7.824110305058594,
+              1.926159514243517,
+              0.5719270410667114
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3591913,
+            "source_line": 3569,
+            "raw_line_sha256": "78a67ba30f14f4bf179146aa80fc88dabbf43c87c693fa0fc34318c36b425045"
+          },
+          {
+            "stamp_ns": 121444999999,
+            "position": [
+              7.8310131690052565,
+              1.9266795643620318,
+              0.5719647088639636
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3592925,
+            "source_line": 3570,
+            "raw_line_sha256": "9ba5dfa97e13b9ab224d082e2e56d7971fbc600d519753bf6e14733bb5f0d4dd"
+          },
+          {
+            "stamp_ns": 121474999999,
+            "position": [
+              7.83720246489166,
+              1.9271969548002252,
+              0.5716616511339552
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3593931,
+            "source_line": 3571,
+            "raw_line_sha256": "284aa17d81cf393a62f7a16a045f955c56c69cfb882a0fb51fbf55c7414e4d5e"
+          },
+          {
+            "stamp_ns": 121510000000,
+            "position": [
+              7.843849277299919,
+              1.9279210058681302,
+              0.5715739580379016
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 3594943,
+            "source_line": 3572,
+            "raw_line_sha256": "05a584c8eaa37c84ae8d2d96c0c6920b5472014522189930ead6aa49e268d8bc"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 59403028,
+          "source_line": 804,
+          "raw_line_sha256": "f89d7e21ff8523ff151b91c26f829a1b633b31858bdeb1d0c052453691d5148f"
+        }
+      },
+      {
+        "goal_id": "exploration:8",
+        "ordinal": 9,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 153585000000,
+        "end_stamp_ns": 154044999999,
+        "activation_ns": 121585000000,
+        "dwell_s": 0.459999999,
+        "activation_to_arrival_s": 32.459999999,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 15,
+        "maximum_source_gap_ns": 35000000,
+        "control_geometry": {
+          "type": "oriented_box",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9949792724226738,
+              -0.010735797605995415,
+              0.09950371902099893
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              -0.09949792724226739,
+              0.0010735797605995415,
+              0.9950371902099893
+            ]
+          ],
+          "half_extents_m": [
+            0.25,
+            0.2,
+            0.07
+          ]
+        },
+        "window_max_abs_local_xyz": [
+          0.24129365941479766,
+          0.03783445108624584,
+          0.004690192240332035
+        ],
+        "terminal_raw_position": [
+          10.856310567523167,
+          1.9028919137668794,
+          0.8823007493219758
+        ],
+        "terminal_center_error_xyz": [
+          -0.16764743558869988,
+          0.008498661014504139,
+          -0.02131628343403258
+        ],
+        "terminal_center_error_m": 0.16921073795107314,
+        "window_source_rows": [
+          {
+            "stamp_ns": 153585000000,
+            "position": [
+              10.784495807206863,
+              1.9348136963598015,
+              0.8774894439144433
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4570543,
+            "source_line": 4544,
+            "raw_line_sha256": "fe58dad667d55637eb4f15541e616390377bc2038e5d3550d012f6cc5094d147"
+          },
+          {
+            "stamp_ns": 153620000000,
+            "position": [
+              10.792915135988912,
+              1.932918634571668,
+              0.8805591531162699
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4571541,
+            "source_line": 4545,
+            "raw_line_sha256": "b07bc764cfcd740ed3b355ad0206924b8bf925385a304344ce896744e1bbb322"
+          },
+          {
+            "stamp_ns": 153650000000,
+            "position": [
+              10.800068748296573,
+              1.931143303736583,
+              0.8826593143771829
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4572540,
+            "source_line": 4546,
+            "raw_line_sha256": "4c4c30665bc947382b6b83ddbe83f95cd90b1b329e3689696e18a44dd20455c5"
+          },
+          {
+            "stamp_ns": 153685000000,
+            "position": [
+              10.807853949645947,
+              1.92832480453145,
+              0.8845766843379825
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4573539,
+            "source_line": 4547,
+            "raw_line_sha256": "84120032ef3b98cc8a462b31f4b3b61a567432f779784b038c2b8c6a85fd36fb"
+          },
+          {
+            "stamp_ns": 153715000000,
+            "position": [
+              10.81408267503764,
+              1.9256932795254864,
+              0.8861451779227613
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4574540,
+            "source_line": 4548,
+            "raw_line_sha256": "b3025375519acd7bc356875374119cd92da018e44f88cb5c482543e264ae64f6"
+          },
+          {
+            "stamp_ns": 153750000000,
+            "position": [
+              10.820344368208874,
+              1.9227496768221755,
+              0.8877468033077767
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4575539,
+            "source_line": 4549,
+            "raw_line_sha256": "2507c57274a8ce512c3e7053b46e2d4e71c041e9e6ccbafc31e1df57be6ecd99"
+          },
+          {
+            "stamp_ns": 153784999999,
+            "position": [
+              10.825792946807676,
+              1.9195131150456926,
+              0.8884881627623628
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4576541,
+            "source_line": 4550,
+            "raw_line_sha256": "e39a88fe3292afef4bb8b7f77f466b77af20e30d5a8131f1a1bdfa96c887cef2"
+          },
+          {
+            "stamp_ns": 153814999999,
+            "position": [
+              10.830537506107165,
+              1.9169542852255983,
+              0.8887856708977682
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4577549,
+            "source_line": 4551,
+            "raw_line_sha256": "abc20b04fe8330868133eea99934bb2fa702a593b90366b51cbfd1697c291782"
+          },
+          {
+            "stamp_ns": 153849999999,
+            "position": [
+              10.835547508067137,
+              1.9141556788387355,
+              0.8889936877315406
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4578559,
+            "source_line": 4552,
+            "raw_line_sha256": "62b2fc55cc922091424fa9bfb9584945753b1db92fc98ccea91abacb0bbcda0c"
+          },
+          {
+            "stamp_ns": 153879999999,
+            "position": [
+              10.839262211750544,
+              1.9119761131862971,
+              0.8890352210925946
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4579562,
+            "source_line": 4553,
+            "raw_line_sha256": "7b51135e8f08b6b19577897e67c79de5977008c9e55659519ea1eb3bf6e0de63"
+          },
+          {
+            "stamp_ns": 153914999999,
+            "position": [
+              10.8433343778169,
+              1.909816492501349,
+              0.8881331011042978
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4580569,
+            "source_line": 4554,
+            "raw_line_sha256": "038b5666b2bc0be7544b56c952f056ac3b5b5c503b80ce7ede2384732c049cc3"
+          },
+          {
+            "stamp_ns": 153949999999,
+            "position": [
+              10.84718629828759,
+              1.9075713100102198,
+              0.8873107484902945
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4581576,
+            "source_line": 4555,
+            "raw_line_sha256": "2c732326f8a50776d4c15d6f15d5c2d5df1a030638987c59bf0f6333edd69519"
+          },
+          {
+            "stamp_ns": 153979999999,
+            "position": [
+              10.850308644205377,
+              1.9056984114972688,
+              0.8866466133463222
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4582587,
+            "source_line": 4556,
+            "raw_line_sha256": "94cf7250007dc1466620321e40f3bafcc3e2d7e8b07649d2cb715041bd8e4a85"
+          },
+          {
+            "stamp_ns": 154014999999,
+            "position": [
+              10.853676336952992,
+              1.903985255319547,
+              0.8849311958632253
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4583594,
+            "source_line": 4557,
+            "raw_line_sha256": "e2c5cd424ab03488e5f25a4716b604e2939525bc20b332337708b8c394ee764f"
+          },
+          {
+            "stamp_ns": 154044999999,
+            "position": [
+              10.856310567523167,
+              1.9028919137668794,
+              0.8823007493219758
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 4584600,
+            "source_line": 4558,
+            "raw_line_sha256": "c5d57a88d48bf93c672f88114bde553d549869ecf8e8c708a2c65dd8ad19aabc"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 77697244,
+          "source_line": 1024,
+          "raw_line_sha256": "59b31dfcd708fb56bb31bcb05880da2173e72ba55c8f2c61be10651e56368a85"
+        }
+      },
+      {
+        "goal_id": "exploration:9",
+        "ordinal": 10,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 205264999999,
+        "end_stamp_ns": 205689999999,
+        "activation_ns": 154100000000,
+        "dwell_s": 0.425,
+        "activation_to_arrival_s": 51.589999999,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000001,
+        "control_geometry": {
+          "type": "oriented_box",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9949792724226738,
+              -0.010735797605995415,
+              0.09950371902099893
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              -0.09949792724226739,
+              0.0010735797605995415,
+              0.9950371902099893
+            ]
+          ],
+          "half_extents_m": [
+            0.25,
+            0.2,
+            0.07
+          ]
+        },
+        "window_max_abs_local_xyz": [
+          0.24908147907467398,
+          0.05591509304293893,
+          0.020050276046538296
+        ],
+        "terminal_raw_position": [
+          13.85426274012962,
+          1.9131799372117828,
+          1.1818888872798654
+        ],
+        "terminal_center_error_xyz": [
+          -0.1695206430146161,
+          0.05115471364954205,
+          -0.02172814547614288
+        ],
+        "terminal_center_error_m": 0.17839889417394936,
+        "window_source_rows": [
+          {
+            "stamp_ns": 205264999999,
+            "position": [
+              13.778352089097318,
+              1.9205917679978386,
+              1.1608681770506746
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6147889,
+            "source_line": 6110,
+            "raw_line_sha256": "78d86ecac7f7bf7b1bceb269812fe455b3667424e9d722d3aec6be8ec3a3754a"
+          },
+          {
+            "stamp_ns": 205294999999,
+            "position": [
+              13.783343429828486,
+              1.9181068457765094,
+              1.1599778107197323
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6148900,
+            "source_line": 6111,
+            "raw_line_sha256": "9d3b0fc07e27dd2798a8c072d1ccc7a1da42090f8e206f53f66842945d5eaed0"
+          },
+          {
+            "stamp_ns": 205330000000,
+            "position": [
+              13.789021159764298,
+              1.9153835620550017,
+              1.1599343287047954
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6149908,
+            "source_line": 6112,
+            "raw_line_sha256": "1c40d80e9efc6c0f449140694c1dec253ca97d4991f856e8ed739c7348fd658a"
+          },
+          {
+            "stamp_ns": 205360000000,
+            "position": [
+              13.794315195186993,
+              1.9140546999208752,
+              1.1626805528206476
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6150907,
+            "source_line": 6113,
+            "raw_line_sha256": "813382693a29e3a58773e960a25456ec24b3ee75559f51160e9e7a16c0471f54"
+          },
+          {
+            "stamp_ns": 205395000000,
+            "position": [
+              13.800980396955627,
+              1.9130176269843449,
+              1.1668457710682278
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6151904,
+            "source_line": 6114,
+            "raw_line_sha256": "98f6bf83ab0b4e46e4b76df0ed97f80254fa48218d681c4932e861c9191e8897"
+          },
+          {
+            "stamp_ns": 205430000000,
+            "position": [
+              13.808726401761033,
+              1.912514267595044,
+              1.1717364872781895
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6152906,
+            "source_line": 6115,
+            "raw_line_sha256": "2485776a651120a52934e109a0aa9dd5ff863cb246ae40874610ad2b6cebd29f"
+          },
+          {
+            "stamp_ns": 205460000000,
+            "position": [
+              13.815797123322627,
+              1.9122748306066109,
+              1.1755245583143825
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6153899,
+            "source_line": 6116,
+            "raw_line_sha256": "0b99d0556f108e4200e64def6eb58840497ee13ef1485d43245d48fd6b2ad673"
+          },
+          {
+            "stamp_ns": 205495000000,
+            "position": [
+              13.823797319773552,
+              1.9124460858032217,
+              1.1793020542106907
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6154894,
+            "source_line": 6117,
+            "raw_line_sha256": "1f4949bcd58aa3ad0202b08c92aaee11fe0b3c1b1f25b4efcb70f514b1181ed1"
+          },
+          {
+            "stamp_ns": 205525000000,
+            "position": [
+              13.830081542565079,
+              1.912778066522525,
+              1.1816901124456416
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6155894,
+            "source_line": 6118,
+            "raw_line_sha256": "a0c079500cb1e8e0892c09055a21dbdeb110b592b3d9b97acc371c89c11846e7"
+          },
+          {
+            "stamp_ns": 205560000000,
+            "position": [
+              13.836513416994636,
+              1.9130131473873988,
+              1.1815716747367302
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6156894,
+            "source_line": 6119,
+            "raw_line_sha256": "2c100e9faccf233e378e9c5a1e1b72b2610500fc0b295c859e8ba5f988b68050"
+          },
+          {
+            "stamp_ns": 205594999999,
+            "position": [
+              13.842342361244734,
+              1.9138642179559273,
+              1.180360320743015
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6157896,
+            "source_line": 6120,
+            "raw_line_sha256": "e933ee69efd3cae3f2f279c24ec768560c5f704be766eff72ec8d9eac710d9b6"
+          },
+          {
+            "stamp_ns": 205625000000,
+            "position": [
+              13.846386799682067,
+              1.9139342777560913,
+              1.1800803630965577
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6158895,
+            "source_line": 6121,
+            "raw_line_sha256": "9ea6c32ef3bd43cd2f4142de69bc8576169798a2608785d051338abeb09b264f"
+          },
+          {
+            "stamp_ns": 205659999999,
+            "position": [
+              13.851009837945577,
+              1.9140400871298975,
+              1.1814337558495918
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6159890,
+            "source_line": 6122,
+            "raw_line_sha256": "c9b905537ea6e0cb88e7ec20428a1ed87098ce56f3e9f5816d4955a4f72c808a"
+          },
+          {
+            "stamp_ns": 205689999999,
+            "position": [
+              13.85426274012962,
+              1.9131799372117828,
+              1.1818888872798654
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6160894,
+            "source_line": 6123,
+            "raw_line_sha256": "07298f1834636f1295a3eff1e7e411b120009d875dfdc6f6065dfb1665c81f5c"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 107093009,
+          "source_line": 1372,
+          "raw_line_sha256": "bcd62e8e66703623f0e08d028630ace84292bc5d3842ac93d420cb00c5dead2a"
+        }
+      },
+      {
+        "goal_id": "exploration:10",
+        "ordinal": 11,
+        "passed": true,
+        "checks": {
+          "identity": true,
+          "original_arrival_definition": true,
+          "measured_arrival_flags": true,
+          "endpoint_sources": true,
+          "original_dwell": true,
+          "source_gap": true,
+          "original_3D_control_region": true,
+          "exact_terminal_raw_pose": true,
+          "original_deadline": true
+        },
+        "start_stamp_ns": 218960000000,
+        "end_stamp_ns": 219384999999,
+        "activation_ns": 205770000000,
+        "dwell_s": 0.424999999,
+        "activation_to_arrival_s": 13.614999999,
+        "original_timeout_s": 90.0,
+        "actual_source_count": 14,
+        "maximum_source_gap_ns": 35000000,
+        "control_geometry": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        },
+        "window_max_abs_local_xyz": [
+          0.249515918106065,
+          0.010843743240791088,
+          0.03218958060453847
+        ],
+        "terminal_raw_position": [
+          15.85409631094008,
+          1.8496152145927718,
+          1.2306248610315522
+        ],
+        "terminal_center_error_xyz": [
+          -0.16957065889240397,
+          0.009168677157287197,
+          0.027007828275543933
+        ],
+        "terminal_center_error_m": 0.1719525974976239,
+        "window_source_rows": [
+          {
+            "stamp_ns": 218960000000,
+            "position": [
+              15.774110168423066,
+              1.8380036235031059,
+              1.218212618702802
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6565367,
+            "source_line": 6525,
+            "raw_line_sha256": "09584e582e3831b3d7957ad357241957750a47642de7ef2e43fd6d92fa1deea5"
+          },
+          {
+            "stamp_ns": 218990000000,
+            "position": [
+              15.779617650968955,
+              1.8379832239448006,
+              1.2183965502380083
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6566367,
+            "source_line": 6526,
+            "raw_line_sha256": "76b2cef5f4c1b65ed9278c3bb4b2432eac31cf96e43d823058ff6b28c83de25c"
+          },
+          {
+            "stamp_ns": 219025000000,
+            "position": [
+              15.786508594906621,
+              1.8394975671257239,
+              1.220830230800134
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6567368,
+            "source_line": 6527,
+            "raw_line_sha256": "4f188bf9b86636df21abc7643995e86719d7ecdc72385d8c878a59532748dbaf"
+          },
+          {
+            "stamp_ns": 219055000000,
+            "position": [
+              15.793067418419472,
+              1.8414793738511883,
+              1.2247655523444245
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6568368,
+            "source_line": 6528,
+            "raw_line_sha256": "923bace143242a872df2f61fe37fed03e6d353dbd1960fb6594bda9e15df8d11"
+          },
+          {
+            "stamp_ns": 219090000000,
+            "position": [
+              15.800333842320962,
+              1.8434029580157514,
+              1.229092720779391
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6569368,
+            "source_line": 6529,
+            "raw_line_sha256": "3f9f40d344d45496c181756704f18151725a2bfe7b5b4b807b1f86d9f3e77c31"
+          },
+          {
+            "stamp_ns": 219125000000,
+            "position": [
+              15.808027607601447,
+              1.8455335167781517,
+              1.2336099849205266
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6570366,
+            "source_line": 6530,
+            "raw_line_sha256": "879f652f2636d00df621353e9589425caf640d93c8c9cbfcffd249a267d19180"
+          },
+          {
+            "stamp_ns": 219155000000,
+            "position": [
+              15.81437266058201,
+              1.848047694246734,
+              1.2358066133605468
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6571370,
+            "source_line": 6531,
+            "raw_line_sha256": "b8cd18036765c2f2b80623a375fc7de112671e4f131ef5e29e113ad733e85e1a"
+          },
+          {
+            "stamp_ns": 219189999999,
+            "position": [
+              15.821433513570442,
+              1.8497623312747709,
+              1.2349414207188838
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6572371,
+            "source_line": 6532,
+            "raw_line_sha256": "77598b5a5276205dfb3d6e12f2ca4b46e4a973068b6c4607ea27a0a3f5183dff"
+          },
+          {
+            "stamp_ns": 219219999999,
+            "position": [
+              15.82699664860293,
+              1.851152986470447,
+              1.2332531219111365
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6573380,
+            "source_line": 6533,
+            "raw_line_sha256": "9d954087f264ae05eaf626cac32488920999be0d7192b0d8095565b9eba5ddb6"
+          },
+          {
+            "stamp_ns": 219254999999,
+            "position": [
+              15.832945582759859,
+              1.8527390766636738,
+              1.2314945150633274
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6574383,
+            "source_line": 6534,
+            "raw_line_sha256": "b894ee1891d4815d2898682822734c5d14a2e474934c862ff8b9f454dd6d5d83"
+          },
+          {
+            "stamp_ns": 219289999999,
+            "position": [
+              15.838545810566782,
+              1.8532883638516546,
+              1.2287942349530891
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6575383,
+            "source_line": 6535,
+            "raw_line_sha256": "08991024c679ca139ff45330959528cc2996a85ae22f367452e9f891576b1144"
+          },
+          {
+            "stamp_ns": 219319999999,
+            "position": [
+              15.843156647602793,
+              1.852933402248792,
+              1.2274916726462166
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6576391,
+            "source_line": 6536,
+            "raw_line_sha256": "c817a044ed15192281484665a963362df86cf8f871a382adcd945d1af5df7b42"
+          },
+          {
+            "stamp_ns": 219354999999,
+            "position": [
+              15.84927240287841,
+              1.8516629728709821,
+              1.2286986198641259
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6577396,
+            "source_line": 6537,
+            "raw_line_sha256": "7b4c876fdd591dceec386e42c2e6baedcd772d28d792dcfb69fb77840f7eb14e"
+          },
+          {
+            "stamp_ns": 219384999999,
+            "position": [
+              15.85409631094008,
+              1.8496152145927718,
+              1.2306248610315522
+            ],
+            "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+            "source_offset": 6578399,
+            "source_line": 6538,
+            "raw_line_sha256": "82201e24e2a448a460346d175fc2564fb8fd3c4e55890f02cd0e6a1b891eb9e8"
+          }
+        ],
+        "first_receipt_status_source": {
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+          "source_offset": 115124086,
+          "source_line": 1466,
+          "raw_line_sha256": "a927b943bddb1b14b872344e74734f58049ecc065b7bc9f169909841f6af8fd6"
+        }
+      }
+    ],
+    "tenth_region": {
+      "goal_id": "exploration:9",
+      "ordinal": 10,
+      "passed": true,
+      "checks": {
+        "identity": true,
+        "original_arrival_definition": true,
+        "measured_arrival_flags": true,
+        "endpoint_sources": true,
+        "original_dwell": true,
+        "source_gap": true,
+        "original_3D_control_region": true,
+        "exact_terminal_raw_pose": true,
+        "original_deadline": true
+      },
+      "start_stamp_ns": 205264999999,
+      "end_stamp_ns": 205689999999,
+      "activation_ns": 154100000000,
+      "dwell_s": 0.425,
+      "activation_to_arrival_s": 51.589999999,
+      "original_timeout_s": 90.0,
+      "actual_source_count": 14,
+      "maximum_source_gap_ns": 35000001,
+      "control_geometry": {
+        "type": "oriented_box",
+        "dwell_sim_s": 0.4,
+        "axes": [
+          [
+            0.9949792724226738,
+            -0.010735797605995415,
+            0.09950371902099893
+          ],
+          [
+            0.010789343063378132,
+            0.9999417933441229,
+            0.0
+          ],
+          [
+            -0.09949792724226739,
+            0.0010735797605995415,
+            0.9950371902099893
+          ]
+        ],
+        "half_extents_m": [
+          0.25,
+          0.2,
+          0.07
+        ]
+      },
+      "window_max_abs_local_xyz": [
+        0.24908147907467398,
+        0.05591509304293893,
+        0.020050276046538296
+      ],
+      "terminal_raw_position": [
+        13.85426274012962,
+        1.9131799372117828,
+        1.1818888872798654
+      ],
+      "terminal_center_error_xyz": [
+        -0.1695206430146161,
+        0.05115471364954205,
+        -0.02172814547614288
+      ],
+      "terminal_center_error_m": 0.17839889417394936,
+      "window_source_rows": [
+        {
+          "stamp_ns": 205264999999,
+          "position": [
+            13.778352089097318,
+            1.9205917679978386,
+            1.1608681770506746
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6147889,
+          "source_line": 6110,
+          "raw_line_sha256": "78d86ecac7f7bf7b1bceb269812fe455b3667424e9d722d3aec6be8ec3a3754a"
+        },
+        {
+          "stamp_ns": 205294999999,
+          "position": [
+            13.783343429828486,
+            1.9181068457765094,
+            1.1599778107197323
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6148900,
+          "source_line": 6111,
+          "raw_line_sha256": "9d3b0fc07e27dd2798a8c072d1ccc7a1da42090f8e206f53f66842945d5eaed0"
+        },
+        {
+          "stamp_ns": 205330000000,
+          "position": [
+            13.789021159764298,
+            1.9153835620550017,
+            1.1599343287047954
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6149908,
+          "source_line": 6112,
+          "raw_line_sha256": "1c40d80e9efc6c0f449140694c1dec253ca97d4991f856e8ed739c7348fd658a"
+        },
+        {
+          "stamp_ns": 205360000000,
+          "position": [
+            13.794315195186993,
+            1.9140546999208752,
+            1.1626805528206476
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6150907,
+          "source_line": 6113,
+          "raw_line_sha256": "813382693a29e3a58773e960a25456ec24b3ee75559f51160e9e7a16c0471f54"
+        },
+        {
+          "stamp_ns": 205395000000,
+          "position": [
+            13.800980396955627,
+            1.9130176269843449,
+            1.1668457710682278
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6151904,
+          "source_line": 6114,
+          "raw_line_sha256": "98f6bf83ab0b4e46e4b76df0ed97f80254fa48218d681c4932e861c9191e8897"
+        },
+        {
+          "stamp_ns": 205430000000,
+          "position": [
+            13.808726401761033,
+            1.912514267595044,
+            1.1717364872781895
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6152906,
+          "source_line": 6115,
+          "raw_line_sha256": "2485776a651120a52934e109a0aa9dd5ff863cb246ae40874610ad2b6cebd29f"
+        },
+        {
+          "stamp_ns": 205460000000,
+          "position": [
+            13.815797123322627,
+            1.9122748306066109,
+            1.1755245583143825
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6153899,
+          "source_line": 6116,
+          "raw_line_sha256": "0b99d0556f108e4200e64def6eb58840497ee13ef1485d43245d48fd6b2ad673"
+        },
+        {
+          "stamp_ns": 205495000000,
+          "position": [
+            13.823797319773552,
+            1.9124460858032217,
+            1.1793020542106907
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6154894,
+          "source_line": 6117,
+          "raw_line_sha256": "1f4949bcd58aa3ad0202b08c92aaee11fe0b3c1b1f25b4efcb70f514b1181ed1"
+        },
+        {
+          "stamp_ns": 205525000000,
+          "position": [
+            13.830081542565079,
+            1.912778066522525,
+            1.1816901124456416
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6155894,
+          "source_line": 6118,
+          "raw_line_sha256": "a0c079500cb1e8e0892c09055a21dbdeb110b592b3d9b97acc371c89c11846e7"
+        },
+        {
+          "stamp_ns": 205560000000,
+          "position": [
+            13.836513416994636,
+            1.9130131473873988,
+            1.1815716747367302
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6156894,
+          "source_line": 6119,
+          "raw_line_sha256": "2c100e9faccf233e378e9c5a1e1b72b2610500fc0b295c859e8ba5f988b68050"
+        },
+        {
+          "stamp_ns": 205594999999,
+          "position": [
+            13.842342361244734,
+            1.9138642179559273,
+            1.180360320743015
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6157896,
+          "source_line": 6120,
+          "raw_line_sha256": "e933ee69efd3cae3f2f279c24ec768560c5f704be766eff72ec8d9eac710d9b6"
+        },
+        {
+          "stamp_ns": 205625000000,
+          "position": [
+            13.846386799682067,
+            1.9139342777560913,
+            1.1800803630965577
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6158895,
+          "source_line": 6121,
+          "raw_line_sha256": "9ea6c32ef3bd43cd2f4142de69bc8576169798a2608785d051338abeb09b264f"
+        },
+        {
+          "stamp_ns": 205659999999,
+          "position": [
+            13.851009837945577,
+            1.9140400871298975,
+            1.1814337558495918
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6159890,
+          "source_line": 6122,
+          "raw_line_sha256": "c9b905537ea6e0cb88e7ec20428a1ed87098ce56f3e9f5816d4955a4f72c808a"
+        },
+        {
+          "stamp_ns": 205689999999,
+          "position": [
+            13.85426274012962,
+            1.9131799372117828,
+            1.1818888872798654
+          ],
+          "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl",
+          "source_offset": 6160894,
+          "source_line": 6123,
+          "raw_line_sha256": "07298f1834636f1295a3eff1e7e411b120009d875dfdc6f6065dfb1665c81f5c"
+        }
+      ],
+      "first_receipt_status_source": {
+        "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+        "source_offset": 107093009,
+        "source_line": 1372,
+        "raw_line_sha256": "bcd62e8e66703623f0e08d028630ace84292bc5d3842ac93d420cb00c5dead2a"
+      }
+    },
+    "latest_status": {
+      "state": "running",
+      "waypoint_index": 11,
+      "pose": [
+        16.07405534697134,
+        6.79554887514014,
+        1.0315578522647209
+      ],
+      "source": {
+        "source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl",
+        "source_offset": 142558167,
+        "source_line": 1780,
+        "raw_line_sha256": "01470d24d5fb3909a109e4be5c46dfe0c78289ef74de279d2a93ad0dc933f77e"
+      },
+      "active_original_goal": {
+        "arrival": {
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "control_band": {
+            "axes": [
+              [
+                0.9999417933441229,
+                -0.010789343063378132,
+                0.0
+              ],
+              [
+                0.010789343063378132,
+                0.9999417933441229,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "dwell_sim_s": 0.4,
+            "height_half_span_m": 0.1,
+            "radius_m": 0.25,
+            "type": "disc_prism"
+          },
+          "dwell_sim_s": 0.4,
+          "height_half_span_m": 0.1,
+          "radius_m": 0.35,
+          "type": "disc_prism"
+        },
+        "center": [
+          16.077613685149373,
+          6.840155504156099,
+          1.2036170327560083
+        ],
+        "goal_id": "exploration:11",
+        "legacy": false,
+        "route_surface_id": "floor_2",
+        "timeout_sim_s": 90.0
+      },
+      "center_error_xyz": [
+        -0.003558338178034859,
+        -0.04460662901595924,
+        -0.17205918049128743
+      ],
+      "inside_original_control_region": false,
+      "interpretation": "Observed last source pose relative to uncompleted goal; not a demonstrated causal explanation for the external interruption or an original region timeout."
+    }
+  },
+  "unverified_scopes": [
+    "whole46 mission completion",
+    "remaining original regions",
+    "native/physical safety and faults",
+    "terrain switching causality",
+    "current-run RGB save",
+    "original dynamic obstacle recovery",
+    "final first5s parking",
+    "heading/PI/command replay",
+    "complete200Hz actuator trace and all SCAN geometry replay"
+  ],
+  "source_bindings": {
+    "small_files": {
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_scope.json": {
+        "sha256": "57f6285779ddcdc02a01f3d224a9bcbe86044d093527330c68377d2f906e6df0",
+        "bytes": 241838
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_source_snapshots.json": {
+        "sha256": "c2bbf50e1be53a5b12057141989c1b87ea40734dbfdaeeba094b785650137792",
+        "bytes": 134313
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/source_manifest.json": {
+        "sha256": "85cc337baf9552d0435e93736188a43064c3e23e9fd8f6f85158ef9421d6ee4d",
+        "bytes": 99841
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_profile.json": {
+        "sha256": "4320393c265e66a25dbc448b88605fb7515426cb88765fea17da014bc1b7468c",
+        "bytes": 83602
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_anchor.json": {
+        "sha256": "1fbf1b187b0d9c48bf695ba7a7c20b6b01176495ca02257feab021894fac5459",
+        "bytes": 51506
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_scene_axis_registration.json": {
+        "sha256": "da630f5309563ed2cfd676975361aaa19cabad930ac63355d92aa50a343537f1",
+        "bytes": 46983
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/runtime_manifest.json": {
+        "sha256": "59f46f9913a0f4fe3fc702d34d4630a9768de3b7f842ba55a63ac04aba5cdd5e",
+        "bytes": 116620
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/run_result.json": {
+        "sha256": "29ebc03af55fd2cdfe39e6991e54b256957bb35ee8e2ee22396c8ed3bf493f86",
+        "bytes": 449
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/mission46_status.json": {
+        "sha256": "d9831bb89fdf1b587ad9025814be110baf1cbb4863dd5f660cb6d887f730195d",
+        "bytes": 103747
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.json": {
+        "sha256": "f401b5606abfe8a6e208ac3ce944b0e703779723d6d63ad1766fdecbf20eeec0",
+        "bytes": 87650
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/mission46_requests/exploration_1.json": {
+        "sha256": "5934e772f25e68ff792e474947db7e444d0aff48a150b8da2c4a0226d122cfd4",
+        "bytes": 11820
+      }
+    },
+    "streams": {
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_slam_poses.jsonl": {
+        "sha256": "9856c4c0a83e00b5b5841c5f6e5de5ab8dbe8330a7b798813c8a66ef597420a3",
+        "bytes": 8005818,
+        "rows": 7957,
+        "read_passes": 1,
+        "unchanged_during_read": true
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.jsonl": {
+        "sha256": "892bbe7bee18c0c59bd33b578263edc6d6a8aa64a973fcdea0a3e3e1582e60c0",
+        "bytes": 142645877,
+        "rows": 1780,
+        "read_passes": 1,
+        "unchanged_during_read": true
+      }
+    },
+    "pure_geometry": [
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/mission46_profile.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/mission46_profile.py",
+        "sha256": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0"
+      },
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/473ff9705c0bcb4c_state_machine.py",
+        "sha256": "473ff9705c0bcb4ca6544e7051044ce32df7bae2cb0d956941a2c8609c7f3c97"
+      },
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/3106744419bd49f3_route_regions.py",
+        "sha256": "3106744419bd49f32bc30076a5d742b2673599b4eed162034abcec04df92a751"
+      },
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/64dd44490624852c_goal_regions.py",
+        "sha256": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021"
+      }
+    ],
+    "five_direct_helpers": {
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/route.py": {
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/route.py",
+        "sha256": "08cc6aad5fcff84fda2e15e20654ce9a26240edd477c5a449881b131cdd0996a"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/prefix_contract.py": {
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/prefix_contract.py",
+        "sha256": "1e148ed90ec21a3294a7736111c496afa1b5e9ee79604045156325a61240d7c0"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/mission46_profile.py": {
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/mission46_profile.py",
+        "sha256": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py": {
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/64dd44490624852c_goal_regions.py",
+        "sha256": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py": {
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/3106744419bd49f3_route_regions.py",
+        "sha256": "3106744419bd49f32bc30076a5d742b2673599b4eed162034abcec04df92a751"
+      }
+    },
+    "repair_source_closure": [
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/shared_controller.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/shared_controller.py",
+        "sha256": "c0ca3dccd85d0be81844eed64db1e3493f87f8cbffd7ed474397bfae6c92ee75"
+      },
+      {
+        "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/replan_policy.py",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/replan_policy.py",
+        "sha256": "db1c66c970b5277c1e50478108a8faef1fac99332290717621bb0ef810f2ae0f"
+      }
+    ],
+    "reader": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/audit_interrupted_v24.py",
+      "sha256": "18b6d8473ebe95154fba2b5cc7a05549579ecd88095ff0a9bcdc4fc811ec6474"
+    },
+    "full46_adapter": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/evaluate_full46_v24.py",
+      "sha256": "91198ade1b51972caab0677100e054ad022b7c70bb2288ecd4d31665ad679658"
+    }
+  },
+  "scope": {
+    "raw_streams_read": [
+      "navigation_slam_poses.jsonl",
+      "navigation_status.jsonl"
+    ],
+    "raw_stream_read_passes_each": 1,
+    "PID_native_cloud_or_array_read": false,
+    "runtime_Controller_called": false,
+    "navigation_ground_truth_used": false,
+    "real_robot_verified": false
+  }
+}

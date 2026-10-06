@@ -1,0 +1,105 @@
+{
+  "schema": "recovery_replan_v24_patch_scope/v1",
+  "actual_navigation_verified": false,
+  "old_V23_failure_preserved": true,
+  "shared_code_change": "Independent ordinary shared_controller copy: added pure replan predicate only to old low-command >3s heuristic. Intentional recovery/protection zeros do not clear samples; genuine original cascade path_end_hold (<.05m remaining, endpoint not goal), steering exhaustion or original spline geometric invalidity still replan.",
+  "shared_controller_old_sha256": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+  "shared_controller_new_sha256": "c0ca3dccd85d0be81844eed64db1e3493f87f8cbffd7ed474397bfae6c92ee75",
+  "new_pure_helper_sha256": "db1c66c970b5277c1e50478108a8faef1fac99332290717621bb0ef810f2ae0f",
+  "profile_changed_top_keys": [
+    "controller_selector",
+    "mission46_required_source_files",
+    "profile_version",
+    "prospective_change"
+  ],
+  "profile_cascade_byte_equal_as_JSON": true,
+  "protected_production": {
+    "controller.py": {
+      "identical": true,
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d"
+    },
+    "cascade_core.py": {
+      "identical": true,
+      "sha256": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82"
+    },
+    "spatial_reference.py": {
+      "identical": true,
+      "sha256": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7"
+    },
+    "teacher_wrapper.py": {
+      "identical": true,
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e"
+    },
+    "transition_gate.py": {
+      "identical": true,
+      "sha256": "eceb0089fff75cad32f3b3198c767540dddbb341e2543e068ab7285236d7ec10"
+    },
+    "clock_hold.py": {
+      "identical": true,
+      "sha256": "a347c67ee3a634703b8e120b8ee3d4fdb5b387fe6d29e159e26185d7f624c9b3"
+    },
+    "bridge.py": {
+      "identical": true,
+      "sha256": "2a064170944619b4b7176fca3e9c8df543d6076ff5ffaf4fbb8ef6f77426fb4e"
+    },
+    "worker.py": {
+      "identical": true,
+      "sha256": "6dc07ffbac8ac26d5dfda9e1898b22a8129b82ad108d385b36f8854fff1e4ff5"
+    },
+    "route_fence.py": {
+      "identical": true,
+      "sha256": "0cee6450f504cd9242651fbdcd55d76425da278f2764c0933f65e95e2a5ef49e"
+    },
+    "publication_ledger.py": {
+      "identical": true,
+      "sha256": "9e564e433a1297e8fa32106b9995aa4bb6bfb8c79114f922bf019ec3e26f9465"
+    },
+    "mission46_guard.py": {
+      "identical": true,
+      "sha256": "594a42a63a339c9492c16febbbd2990bfe150097efe7964bd29b8426ae1b13d3"
+    },
+    "mission46.py": {
+      "identical": true,
+      "sha256": "ad70fdf29d2af465df48e6b12be39b42031e4c2cc8234a4e58d3a082a85b9e90"
+    },
+    "mission46_profile.py": {
+      "identical": true,
+      "sha256": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0"
+    },
+    "mission46_runtime.py": {
+      "identical": true,
+      "sha256": "cecd87b3fb33e5b25772370d22104620504891e63d8b66ffdbc1ecba6bcd3eb6"
+    },
+    "mission46_obstacle_runtime.py": {
+      "identical": true,
+      "sha256": "5c0d302ba172b8c31b1dd76c5d0b4a8e724ca3c3a08576bbd265b24997cc2ef8"
+    },
+    "mission46_terrain.py": {
+      "identical": true,
+      "sha256": "3d8840715730e72dffa88b487395f707c45a6b9bfafccedbcf9d438e067142b5"
+    },
+    "geometry_archive.py": {
+      "identical": true,
+      "sha256": "c8aa78ef362d8263525d4a3e9a9c684dede020792fe60f3b938ac875d60c7f15"
+    },
+    "route.py": {
+      "identical": true,
+      "sha256": "08cc6aad5fcff84fda2e15e20654ce9a26240edd477c5a449881b131cdd0996a"
+    },
+    "prefix_contract.py": {
+      "identical": true,
+      "sha256": "1e148ed90ec21a3294a7736111c496afa1b5e9ee79604045156325a61240d7c0"
+    }
+  },
+  "CPP_rebuilt": false,
+  "Teacher_checkpoint_or_training_modified": false,
+  "SCAN_selector": "protected_baseline",
+  "new_selector": "v24_recovery_replan_full46",
+  "new_gate_will_not_inherit_actual_navigation_PASS": true,
+  "limitations": [
+    "Geometric progress is the existing entire checked-spline arc/extent predicate, not a claim of actual temporal motion.",
+    "SCAN autonomous replan geometry can still change; this finite patch does not prove full46 success.",
+    "Shadow corridor has no command authority."
+  ],
+  "local_path_end_original_05m_vs_legacy_025m_boundary_preserved": true
+}

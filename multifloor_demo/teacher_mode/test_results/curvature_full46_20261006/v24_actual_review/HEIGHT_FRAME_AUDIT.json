@@ -1,0 +1,492 @@
+{
+  "schema": "v24_27bd_height_frame_small_evidence_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+  "status": "INITIAL_YAW_ONLY_TILT_INSUFFICIENT_TO_EXPLAIN_HEIGHT_ERROR",
+  "observed_goal_error": {
+    "goal_id": "exploration:11",
+    "SLAM_position_camera_init": [
+      16.07405534697134,
+      6.79554887514014,
+      1.0315578522647209
+    ],
+    "registered_goal_camera_init": [
+      16.077613685149373,
+      6.840155504156099,
+      1.2036170327560083
+    ],
+    "delta_xyz_m": [
+      -0.003558338178034859,
+      -0.04460662901595924,
+      -0.17205918049128743
+    ],
+    "horizontal_distance_m": 0.044748330949396065,
+    "original_height_half_span_m": 0.1,
+    "inside_control_region": false
+  },
+  "registration": {
+    "implemented_transform": "p_camera_init=initial_measured_body_origin+Rz(frozen_yaw)*original_scene_offset; axes use same yaw transform",
+    "yaw_only": true,
+    "full3D_attitudes_used_to_validate_gravity_and_estimate_yaw": true,
+    "raw_pair_count": 26,
+    "max_pair_gap_ns": 4999999,
+    "max_initial_gravity_residual_rad": 0.001891329079037088,
+    "max_initial_gravity_residual_deg": 0.10836517389919005,
+    "original_allowed_residual_deg": 3.0,
+    "pairs": [
+      {
+        "slam_stamp_ns": 5844999999,
+        "imu_stamp_ns": 5840000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0013902999455933209,
+          -0.0007744004649217207,
+          -0.010920076272091222
+        ],
+        "gravity_residual_rad": 0.0015914238966371493,
+        "full3D_minus_yaw_target_z_m": 0.022120980188628663
+      },
+      {
+        "slam_stamp_ns": 5875000000,
+        "imu_stamp_ns": 5875000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0013962952823602902,
+          -0.0007743918867519906,
+          -0.011055408549395946
+        ],
+        "gravity_residual_rad": 0.0015966600482910916,
+        "full3D_minus_yaw_target_z_m": 0.02216280022609992
+      },
+      {
+        "slam_stamp_ns": 5910000000,
+        "imu_stamp_ns": 5910000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.001383650503659014,
+          -0.0007973339701956572,
+          -0.011058930782434686
+        ],
+        "gravity_residual_rad": 0.001596944011637168,
+        "full3D_minus_yaw_target_z_m": 0.022441359390245944
+      },
+      {
+        "slam_stamp_ns": 5945000000,
+        "imu_stamp_ns": 5945000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.001375221485575861,
+          -0.0008224818788702404,
+          -0.011036051507162283
+        ],
+        "gravity_residual_rad": 0.0016024077431975293,
+        "full3D_minus_yaw_target_z_m": 0.022784712061079786
+      },
+      {
+        "slam_stamp_ns": 5974999999,
+        "imu_stamp_ns": 5970000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0013445300329825742,
+          -0.0008349775814791016,
+          -0.01088120518143286
+        ],
+        "gravity_residual_rad": 0.001582702932064262,
+        "full3D_minus_yaw_target_z_m": 0.022769840897053036
+      },
+      {
+        "slam_stamp_ns": 6009999999,
+        "imu_stamp_ns": 6005000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0013457027737582066,
+          -0.0008284829568390162,
+          -0.010852795237588374
+        ],
+        "gravity_residual_rad": 0.0015802847734105554,
+        "full3D_minus_yaw_target_z_m": 0.022674140753940836
+      },
+      {
+        "slam_stamp_ns": 6040000000,
+        "imu_stamp_ns": 6040000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.001384136369345812,
+          -0.0008119926214729123,
+          -0.010944232008789688
+        ],
+        "gravity_residual_rad": 0.0016047322226067058,
+        "full3D_minus_yaw_target_z_m": 0.022679283714754892
+      },
+      {
+        "slam_stamp_ns": 6075000000,
+        "imu_stamp_ns": 6075000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.001398663494310031,
+          -0.0008107018108489683,
+          -0.010922998202844453
+        ],
+        "gravity_residual_rad": 0.001616631373080871,
+        "full3D_minus_yaw_target_z_m": 0.022760297505730675
+      },
+      {
+        "slam_stamp_ns": 6110000000,
+        "imu_stamp_ns": 6110000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0014034782259156478,
+          -0.0008244454541670443,
+          -0.01091004655622864
+        ],
+        "gravity_residual_rad": 0.0016277166330525834,
+        "full3D_minus_yaw_target_z_m": 0.02301387711337406
+      },
+      {
+        "slam_stamp_ns": 6139999999,
+        "imu_stamp_ns": 6135000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0014095116150523897,
+          -0.0008367489759382174,
+          -0.010780083295816515
+        ],
+        "gravity_residual_rad": 0.001639168033394152,
+        "full3D_minus_yaw_target_z_m": 0.023252944514588363
+      },
+      {
+        "slam_stamp_ns": 6174999999,
+        "imu_stamp_ns": 6170000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.001430904325833475,
+          -0.0008376166883823366,
+          -0.010800857876776307
+        ],
+        "gravity_residual_rad": 0.0016580376673482253,
+        "full3D_minus_yaw_target_z_m": 0.023416539343359098
+      },
+      {
+        "slam_stamp_ns": 6205000000,
+        "imu_stamp_ns": 6205000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0014766102742120339,
+          -0.000830254518818796,
+          -0.010902484464398742
+        ],
+        "gravity_residual_rad": 0.001694019028207053,
+        "full3D_minus_yaw_target_z_m": 0.023618613556176362
+      },
+      {
+        "slam_stamp_ns": 6240000000,
+        "imu_stamp_ns": 6240000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015010161992073424,
+          -0.000848369009149863,
+          -0.010885357879923651
+        ],
+        "gravity_residual_rad": 0.001724175050848601,
+        "full3D_minus_yaw_target_z_m": 0.024079224518948266
+      },
+      {
+        "slam_stamp_ns": 6275000000,
+        "imu_stamp_ns": 6275000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015258025296729953,
+          -0.0008827860549727173,
+          -0.010871962998782677
+        ],
+        "gravity_residual_rad": 0.0017627775181260977,
+        "full3D_minus_yaw_target_z_m": 0.024803320016829528
+      },
+      {
+        "slam_stamp_ns": 6304999999,
+        "imu_stamp_ns": 6300000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015254200990688447,
+          -0.000902945943414668,
+          -0.010732069970360867
+        ],
+        "gravity_residual_rad": 0.0017726302082984508,
+        "full3D_minus_yaw_target_z_m": 0.025123180001111193
+      },
+      {
+        "slam_stamp_ns": 6339999999,
+        "imu_stamp_ns": 6335000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015363824467045165,
+          -0.0009190986803522261,
+          -0.010723747380229758
+        ],
+        "gravity_residual_rad": 0.0017903109804631595,
+        "full3D_minus_yaw_target_z_m": 0.025458322041550928
+      },
+      {
+        "slam_stamp_ns": 6370000000,
+        "imu_stamp_ns": 6370000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015765737981279556,
+          -0.0009237321011006383,
+          -0.010831054867563451
+        ],
+        "gravity_residual_rad": 0.0018272563956783427,
+        "full3D_minus_yaw_target_z_m": 0.025813715503819747
+      },
+      {
+        "slam_stamp_ns": 6405000000,
+        "imu_stamp_ns": 6405000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015752764704025299,
+          -0.0009513514584078564,
+          -0.010811847821860461
+        ],
+        "gravity_residual_rad": 0.0018402623605395531,
+        "full3D_minus_yaw_target_z_m": 0.026246514842309998
+      },
+      {
+        "slam_stamp_ns": 6440000000,
+        "imu_stamp_ns": 6440000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015638382869359287,
+          -0.0009721668971336417,
+          -0.010759575026070473
+        ],
+        "gravity_residual_rad": 0.0018413849851590387,
+        "full3D_minus_yaw_target_z_m": 0.02649949185947473
+      },
+      {
+        "slam_stamp_ns": 6469999999,
+        "imu_stamp_ns": 6465000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015281156385571317,
+          -0.0010206985081397946,
+          -0.010572660800055145
+        ],
+        "gravity_residual_rad": 0.0018376514493563987,
+        "full3D_minus_yaw_target_z_m": 0.02702594685259281
+      },
+      {
+        "slam_stamp_ns": 6504999999,
+        "imu_stamp_ns": 6500000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015005174756334274,
+          -0.0010611976366761144,
+          -0.010523229570699587
+        ],
+        "gravity_residual_rad": 0.001837850135013267,
+        "full3D_minus_yaw_target_z_m": 0.02748074485878984
+      },
+      {
+        "slam_stamp_ns": 6535000000,
+        "imu_stamp_ns": 6535000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015178089525555152,
+          -0.0010745843644575093,
+          -0.010606608017331286
+        ],
+        "gravity_residual_rad": 0.0018596977100577986,
+        "full3D_minus_yaw_target_z_m": 0.02781592389231831
+      },
+      {
+        "slam_stamp_ns": 6570000000,
+        "imu_stamp_ns": 6570000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015059813693905086,
+          -0.001101877271898033,
+          -0.010589291640538373
+        ],
+        "gravity_residual_rad": 0.0018660421772502258,
+        "full3D_minus_yaw_target_z_m": 0.028169802717271684
+      },
+      {
+        "slam_stamp_ns": 6605000000,
+        "imu_stamp_ns": 6605000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0015029133029757806,
+          -0.0011122882964307301,
+          -0.010582645547224129
+        ],
+        "gravity_residual_rad": 0.0018697415999646438,
+        "full3D_minus_yaw_target_z_m": 0.028314894166763787
+      },
+      {
+        "slam_stamp_ns": 6634999999,
+        "imu_stamp_ns": 6630000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0014852970803080241,
+          -0.0011420770766201738,
+          -0.01047616970238333
+        ],
+        "gravity_residual_rad": 0.0018736188154779038,
+        "full3D_minus_yaw_target_z_m": 0.028668191944868745
+      },
+      {
+        "slam_stamp_ns": 6669999999,
+        "imu_stamp_ns": 6665000000,
+        "relative_roll_pitch_yaw_rad": [
+          0.0014841765984818286,
+          -0.001172324831149707,
+          -0.010496971376743965
+        ],
+        "gravity_residual_rad": 0.001891329079037088,
+        "full3D_minus_yaw_target_z_m": 0.029144271963729096
+      }
+    ],
+    "hypothetical_same_origin_full3D_target_z_change_m": {
+      "min": 0.022120980188628663,
+      "max": 0.029144271963729096,
+      "mean": 0.02493611286328501
+    }
+  },
+  "initialization": {
+    "IMU_world_reference": {
+      "body_imu_quaternion": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "custom_parent_frame": "world",
+      "description": "actual generated SDF IMU CUSTOM/world reference",
+      "localization": "CUSTOM",
+      "world_quaternion": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "world_rpy": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "body_IMU_translation_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "body_IMU_rpy_rad": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "stationary_proof_IMU_samples": 640,
+    "proof_imu_span_ns": [
+      4010000000,
+      7205000000
+    ],
+    "mean_sensor_acceleration_mps2": [
+      -0.3818010254458877,
+      -0.05366211329770794,
+      9.803979766507123
+    ],
+    "mean_IMU_orientation_rotated_world_acceleration_mps2": [
+      0.001285073876068016,
+      0.0009827558779403674,
+      9.81161865550315
+    ],
+    "gravity_align_en": true,
+    "gravity_est_en": true,
+    "bias_estimation_en": true,
+    "hidden_estimator_gravity_bias_history_observed": false,
+    "proof_window_is_not_claimed_as_exact_internal_filter_initialization_samples": true
+  },
+  "native_position_semantics": {
+    "source": "base_link.WorldPose().Pos() -> request[1:4] -> policy state.position; body velocity alone uses COM offset",
+    "position_is_link_origin": true,
+    "extra_COM_to_origin_subtraction_applied": false,
+    "world_position": [
+      16.019609932808578,
+      6.977550283122958,
+      1.5017094643515156
+    ],
+    "native_physics_stamp_s": 267.185,
+    "SLAM_last_control_feedback_stamp_s": 266.214999999,
+    "stamp_separation_s": 0.9700000010000167,
+    "world_to_camera_translation_available_from_small_initial_native_proof": false,
+    "initial_native_proof_contains_position": false,
+    "initial_native_proof_contains_quaternion": false
+  },
+  "conclusions": [
+    "The actual initial roll/pitch residual omitted by yaw-only route registration is small: applying each full recorded initial attitude pair would raise the twelfth goal by 22–29 mm, not account for the observed negative172 mm error.",
+    "Initial body pitch is not a reason to tilt scene floors: world/body IMU and SLAM body attitudes are compared and the relative gravity-axis residual is measured.",
+    "The implementation gravity-aligns position/orientation/velocity/gravity once after IMU initialization; later gravity/bias estimation remains enabled. Small receipts do not establish whether late height error is estimator drift, gravity evolution, map error or physical motion.",
+    "state.position is a native base-link world origin; its velocity is COM-based. It cannot be directly subtracted from camera_init SLAM z, nor should a COM position offset be subtracted again.",
+    "No signal-sender or interruption-cause inference is made, and no original region/deadline/acceptance bound is changed."
+  ],
+  "missing_for_strict_late_comparison": [
+    "Initial same-time native base-link full world position/quaternion paired with SLAM pose, to determine one fixed SE3 translation/rotation. Initialization safety proof omits native position and quaternion.",
+    "Late same-time SLAM pose/quaternion, IMU attitude/gravity/bias state and native base-link position/quaternion; current small final native and last cascade feedback are about0.97s apart.",
+    "Synchronized gravity/bias and map/IMU residual history around the turn from region11 to12 to distinguish attitude-frame drift from other localization error; do not infer it from this single final z."
+  ],
+  "source_bindings": {
+    "small_files": {
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_scene_axis_registration.json": "da630f5309563ed2cfd676975361aaa19cabad930ac63355d92aa50a343537f1",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_anchor.json": "1fbf1b187b0d9c48bf695ba7a7c20b6b01176495ca02257feab021894fac5459",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/mission46_initialization_receipt.json": "0042486d2026dff3f670a906319f179afa1b621a6410ac90b9d93055eaa037c8",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/mission46_initialization_evidence.json": "e774b0f64c2e06bf42e729766fec9106bed18ba8ba41ee90631291a75ff41720",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sensor_contract.json": "a829e85688b3e73224fb0449a1c152360ae181d1e62919323209841e8553d2b4",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_fastlivo.yaml": "535f7e71443193c99d3b9bb8f760dbab1f69e799b5b6f9636db64f3965a96dd5",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/state.json": "6f5c51feb859c4c70a7cc042158e415819374f566a4fe32935fea8a85b573d47",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_status.json": "f401b5606abfe8a6e208ac3ce944b0e703779723d6d63ad1766fdecbf20eeec0",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/asset_manifest.json": "c54b5fefceb4246f6aafc3b7f15aeba2c0b85f56ee2084df25b8f5221c7c0feb",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_source_snapshots.json": "c2bbf50e1be53a5b12057141989c1b87ea40734dbfdaeeba094b785650137792",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_scope.json": "57f6285779ddcdc02a01f3d224a9bcbe86044d093527330c68377d2f906e6df0",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/navigation_profile.json": "4320393c265e66a25dbc448b88605fb7515426cb88765fea17da014bc1b7468c"
+    },
+    "frozen_sources": {
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/heading_alignment.py": {
+        "sha256": "8c1cace7a83ca1e4ffbb2abf5d0a2193d42011611fa62eff32c0c00142cb692e",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/8c1cace7a83ca1e4_heading_alignment.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/geometry.py": {
+        "sha256": "7c293432e333f6e046390a399b49733e921f272f5f2bd988c9ab83de2cc2d3c5",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/7c293432e333f6e0_geometry.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/odom_adapter.py": {
+        "sha256": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/23f901e6702be4d2_odom_adapter.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py": {
+        "sha256": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/64dd44490624852c_goal_regions.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py": {
+        "sha256": "3106744419bd49f32bc30076a5d742b2673599b4eed162034abcec04df92a751",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/external/3106744419bd49f3_route_regions.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/simulation/teacher_actuator.cpp": {
+        "sha256": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/simulation/teacher_actuator.cpp"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/policy/worker.py": {
+        "sha256": "b3164695cefb6f468c49e43eff8c34d6ccdfde364084633c76c42477ebd89ce8",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/policy/worker.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/request.py": {
+        "sha256": "d837670da14368386fa4e74159b7314b3575d96d0b96f0c63d2221e4cd50d629",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/request.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/mission46_runtime.py": {
+        "sha256": "cecd87b3fb33e5b25772370d22104620504891e63d8b66ffdbc1ecba6bcd3eb6",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/mission46_runtime.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/mission46_runtime_evidence.py": {
+        "sha256": "99daa86f451c3962b82cbfff9ada0f1e7a8f69e02c46313ca5f5c3164cbe9552",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/corridor_tracking_v24_recovery_replan/mission46_runtime_evidence.py"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp": {
+        "sha256": "8e18913e83cef499989984c15770b09172ab9d623030e82e9bb1b60c3b7cff9f",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/IMU_Processing.cpp"
+      },
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp": {
+        "sha256": "58e371ae72661f58890581fb25b38736920df4c70ce14215feb35961e1e877c0",
+        "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sources/navigation/pipeline_v19/slam_ws/src/fast_livo2_core/src/LIVMapper.cpp"
+      }
+    },
+    "targeted_report": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/27bd_INTERRUPTED_TARGETED_AUDIT.json",
+      "sha256": "574778d83713d3f075700944c2839c9656b44333216fca032548700c4a314f16"
+    },
+    "script": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_review/height_frame_audit.py",
+      "sha256": "92b41d82d3eec9f15effdc28dd73a5606872e6030570882e6fb8a5e939d99684"
+    }
+  },
+  "scope": {
+    "actual_raw_JSONL_or_cloud_or_telemetry_read": false,
+    "active_R2_files_read": false,
+    "source_or_gate_or_original_report_modified": false,
+    "full46_pass": false,
+    "physical_replay": false
+  }
+}

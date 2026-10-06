@@ -1,0 +1,46 @@
+{
+  "schema": "teacher_curvature_v24_scoped_status/v1",
+  "finalized": true,
+  "simulation_only": true,
+  "version": "V24",
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "navigation_ground_truth_used": false,
+  "actor_privileged_dimensions": 232,
+  "full46_status": "FAILED",
+  "full46_arrivals": 12,
+  "full46_total": 46,
+  "formal_checks": {
+    "passed": 10,
+    "failed": 4,
+    "unverified": 8
+  },
+  "interrupted_run_27bd": "11 actualSLAM original arrivals verified; full22 impossible missing worker receipt",
+  "a87e_report_sha256": "9a54197d68fc7c8bd8c09d5bbee97aa6d08b78b9db34f60e97a070d931d0f848",
+  "new_V25_status": "NOT_YET_TESTED",
+  "levels_by_scope": {
+    "interface": {
+      "status": "passed",
+      "description": "Frozen CPU Teacher/source/mapping interface, sole native writer; actual source witnessed"
+    },
+    "basic_motion": {
+      "status": "passed",
+      "description": "Original designated flat/low-step cases retained; V24 actualSLAM first12 arrival function checked"
+    },
+    "full_sim2sim": {
+      "status": "unverified",
+      "description": "No matched Isaac closed-loop fullscene; complete200Hz/PI/SCAN geometry replays unverified"
+    },
+    "finite_navigation": {
+      "status": "passed",
+      "description": "V22 original prefix9 finitePASS retained; V24 first12 functional arrivals, full46 FAILED at13 after terrain-event TypeError"
+    },
+    "full46_navigation": {
+      "status": "failed",
+      "description": "Original full46 attempted, 12 arrived, region13 timeout; all original gates unchanged"
+    },
+    "real_robot": {
+      "status": "unverified",
+      "description": "Simulation only"
+    }
+  }
+}

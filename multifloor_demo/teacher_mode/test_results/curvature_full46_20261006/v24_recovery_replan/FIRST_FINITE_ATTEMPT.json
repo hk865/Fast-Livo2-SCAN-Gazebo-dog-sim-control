@@ -1,0 +1,12 @@
+{
+  "status": "FAILED_FINITE_WRAPPER_CONFIGURATION",
+  "executed_tests": 59,
+  "passed_tests": 57,
+  "error_tests": 2,
+  "errors": [
+    "mission46_tests.ProfileTests.test_original_46_profile",
+    "mission46_tests.ProfileTests.test_budget_and_duration_not_relaxed"
+  ],
+  "cause": "Copied inactive pipeline_staged_600.json was unnecessarily removed, but unchanged mission46_profile.build_profile uses it as the original fixture baseline. It was restored byte-identically; the exact new gate will reject it as a runnable profile.",
+  "additional_setup_error": "An initial preflight-edit Python command had a cwd-relative FileNotFoundError before any file edit; corrected with the absolute candidate path."
+}

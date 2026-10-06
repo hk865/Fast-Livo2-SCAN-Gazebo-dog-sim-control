@@ -1,0 +1,25 @@
+--- /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v23_curvature_full46/shared_controller.py
++++ /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/shared_controller.py
+@@ -37,6 +37,7 @@
+ from goal_regions import (parse_request as parse_goal_request, definitions_sha256,
+                           contains as goal_contains, contains_control as goal_contains_control, ArrivalWindow)
+ import control_core
++from replan_policy import low_command_is_exhausted_path
+ 
+ 
+ class Navigation(Node):
+@@ -720,7 +721,13 @@
+             return
+         # If upstream ends its trajectory before measured arrival, request a new
+         # trajectory from measured pose instead of declaring time-based success.
+-        if not self.alignment_hold and np.linalg.norm(velocity) < 0.015 and abs(yaw_rate) < 0.05 and now-self.last_reference > 3.0:
++        if (not self.alignment_hold and np.linalg.norm(velocity) < 0.015 and abs(yaw_rate) < 0.05
++                and now-self.last_reference > 3.0
++                and low_command_is_exhausted_path(
++                    cascade_mode=getattr(self,'cascade_last_row',{}).get('mode'),
++                    exhausted=self.steering['exhausted'],
++                    has_geometric_progress=trajectory_has_progress(
++                        self.samples,self.pose,goal,self.arrival_radius))):
+             self.samples = None
+             self.publish_command()
+             self.request_plan()

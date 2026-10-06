@@ -1,0 +1,60 @@
+{
+  "schema": "recovery_replan_v24_ready/v1",
+  "status": "READY_LIMITED_FULL46_SIMULATION_ATTEMPT",
+  "candidate": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan",
+  "gate_sha256": "2dd153f395f9342a338084470f90e8f2ca0e2ac886ac780eeeb5e026802e4fd5",
+  "profile": "curvature_original46_on",
+  "profile_sha256": "669724fb78a89b66703e99af8defe322fe158940135d75f78ced2f336772b837",
+  "prepare_only_run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173302_closed_loop_cascade_clock_hold_v24_recovery_replan_prepare_09f7",
+  "source_manifest_sha256": "85cc337baf9552d0435e93736188a43064c3e23e9fd8f6f85158ef9421d6ee4d",
+  "navigation_scope_sha256": "59433a5a5e82d4cb40422e16e8ac65a340f6bd8f835811ad912f3d6c1401ada3",
+  "runtime_plan_sha256": "557a5330485f994e978cfe7f7ceedfba7a4892f9431fea435f6a3db06629ca23",
+  "actual_navigation_verified": false,
+  "V23_result_remains_FAILED": true,
+  "core_CPP_rebuilt": false,
+  "control_numeric_gains_or_limits_changed": false,
+  "expected_child_roles": 13,
+  "Teacher_device": "cpu",
+  "Teacher_threads": 1,
+  "actual_loaded_SLAM_SCAN_witness": "Required by unchanged execute path before physics; prepare-only not a loaded runtime witness.",
+  "commands": {
+    "prepare_only": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/run.py",
+      "--profile",
+      "curvature_original46_on",
+      "--label",
+      "v24_recovery_replan_prepare",
+      "--domain",
+      "89",
+      "--run-storage-root",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs",
+      "--prepare-only"
+    ],
+    "actual_root_only": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/run.py",
+      "--profile",
+      "curvature_original46_on",
+      "--label",
+      "curvature_on_V24_full46_r1",
+      "--domain",
+      "89",
+      "--run-storage-root",
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs"
+    ]
+  },
+  "receipts_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/RECOVERY_REPLAN_V24_PREFLIGHT.json": "2dd153f395f9342a338084470f90e8f2ca0e2ac886ac780eeeb5e026802e4fd5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/profiles/curvature_original46_on.json": "669724fb78a89b66703e99af8defe322fe158940135d75f78ced2f336772b837",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_recovery_replan/FINITE_RECEIPT.json": "07c5fb66ca97d312ef9dda8ad95620a38d2a60db598da98c3b9448ab4d49874f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_recovery_replan/PREPARE_ONLY_RECEIPT.json": "bb65042c29cc3b8e14ab25609c0fe669ffbc7c8830976c5473c0dbe337974ab0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_recovery_replan/PATCH_SCOPE.json": "b15a5952715c165b5f08cdf05eeb7d909b151386df6eac38dbe0e96fe5a15593",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_review/FULL46_REVIEW_R2.json": "c83e2a16a1e00ecb1cb85117d709a7131ac260010bc99838b32837c29c8db66e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_review/PREPARE_SOURCE_CLOSURE.json": "b8839a149a85dde94014797d2af91901392def1403a9fe1a1f942af60a9aaf58"
+  },
+  "limited_evidence": "61 fresh finite tests + independent 22 tests/36 truth cases/6 actual cascade end-boundary positions, 14 missing/modified source gate negatives, direct geometry/full-source prepare closure. No new actual motion was run.",
+  "limitation": "Only confirmed recovery-zero false replanning is repaired; autonomous SCAN reference changes and actual full46 success remain to test."
+}

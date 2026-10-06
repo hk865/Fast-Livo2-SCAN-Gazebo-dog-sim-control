@@ -1,0 +1,769 @@
+{
+  "schema": "teacher_v24_terminal_readonly_forensics/v1",
+  "observation_only": true,
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+  "run_id": "20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+  "timestamp_utc": "2026-10-06T09:48:19.267878+00:00",
+  "source_bindings": {
+    "runtime_manifest.json": {
+      "sha256": "59f46f9913a0f4fe3fc702d34d4630a9768de3b7f842ba55a63ac04aba5cdd5e",
+      "bytes": 116620,
+      "mtime_ns": 1791279711539295095
+    },
+    "pipeline_normal_stop.json": {
+      "sha256": "4f06f82843ef2d23b9bd5f82ea55adca4323c29da84c55b3540ae5f82bffab57",
+      "bytes": 1344,
+      "mtime_ns": 1791279709438367909
+    },
+    "mission46_status.json": {
+      "sha256": "d9831bb89fdf1b587ad9025814be110baf1cbb4863dd5f660cb6d887f730195d",
+      "bytes": 103747,
+      "mtime_ns": 1791279709463749757
+    },
+    "mission46_control.json": {
+      "sha256": "a37327c56da996bae36c4a063cb44f68c6c52ad8f2843afbd7b95aabec21ef20",
+      "bytes": 484,
+      "mtime_ns": 1791279709403232106
+    },
+    "navigation_status.json": {
+      "sha256": "f401b5606abfe8a6e208ac3ce944b0e703779723d6d63ad1766fdecbf20eeec0",
+      "bytes": 87650,
+      "mtime_ns": 1791279709251445488
+    },
+    "state.json": {
+      "sha256": "6f5c51feb859c4c70a7cc042158e415819374f566a4fe32935fea8a85b573d47",
+      "bytes": 195591,
+      "mtime_ns": 1791279710571524354
+    },
+    "resources_before.json": {
+      "sha256": "7df14456049d6a00e1743804cc32746e89054ebf5e638da65e0654aa90a0e356",
+      "bytes": 768,
+      "mtime_ns": 1791279310842895845
+    },
+    "resources_after.json": {
+      "sha256": "194ba88aefd7650fc1bb085ea32b0f1e536daf3e9b4da0209bcb2a8ca70d558b",
+      "bytes": 344,
+      "mtime_ns": 1791279711560106051
+    },
+    "summary_closed_loop_navigation.json": {
+      "sha256": "32caada40fa6d11d52129b665c1ac976d537af90df38119850c01ef52fbabfa3",
+      "bytes": 785,
+      "mtime_ns": 1791279711560182590
+    },
+    "owned_processes_started.json": {
+      "sha256": "691043321adda8312a3dbc7489a0b27df2423839d0acb2a3012a7ed7f814d475",
+      "bytes": 850,
+      "mtime_ns": 1791279312518972795
+    }
+  },
+  "runtime": {
+    "runtime_status": "failed",
+    "error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups",
+    "owned_processes": [
+      {
+        "role": "worker",
+        "pid": 60263,
+        "state": "R",
+        "ppid": 60123,
+        "pgid": 60263,
+        "session": 60263,
+        "start_ticks": 52247386,
+        "returncode": -2
+      },
+      {
+        "role": "bridge",
+        "pid": 60370,
+        "state": "R",
+        "ppid": 60123,
+        "pgid": 60370,
+        "session": 60370,
+        "start_ticks": 52247491,
+        "returncode": 0
+      },
+      {
+        "role": "capture",
+        "pid": 60371,
+        "state": "R",
+        "ppid": 60123,
+        "pgid": 60371,
+        "session": 60371,
+        "start_ticks": 52247492,
+        "returncode": 0
+      },
+      {
+        "role": "navigation_stack",
+        "pid": 60372,
+        "state": "R",
+        "ppid": 60123,
+        "pgid": 60372,
+        "session": 60372,
+        "start_ticks": 52247492,
+        "returncode": 0
+      },
+      {
+        "role": "gazebo",
+        "pid": 60538,
+        "state": "R",
+        "ppid": 60123,
+        "pgid": 60538,
+        "session": 60538,
+        "start_ticks": 52247546,
+        "returncode": null
+      }
+    ],
+    "cleanup": {
+      "navigation_stack": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "capture": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "bridge": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": 0,
+        "remaining_owned_group_members": []
+      },
+      "gazebo": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": null,
+        "remaining_owned_group_members": []
+      },
+      "worker": {
+        "started": true,
+        "sent_signals": [
+          2
+        ],
+        "returncode": -2,
+        "remaining_owned_group_members": []
+      }
+    },
+    "pipeline_normal_completed": true,
+    "all_owned_and_children_clean": false,
+    "launch_child_exit_evidence": {
+      "expected_children": 13,
+      "started_children": 13,
+      "children": [
+        {
+          "pid": 60445,
+          "action": "python3-1",
+          "clean_exit": true
+        },
+        {
+          "pid": 60446,
+          "action": "python3-2",
+          "clean_exit": true
+        },
+        {
+          "pid": 60447,
+          "action": "parameter_blackboard-3",
+          "clean_exit": true
+        },
+        {
+          "pid": 60448,
+          "action": "fastlivo_mapping-4",
+          "clean_exit": true
+        },
+        {
+          "pid": 60449,
+          "action": "python3-5",
+          "clean_exit": true
+        },
+        {
+          "pid": 60450,
+          "action": "python3-6",
+          "clean_exit": true
+        },
+        {
+          "pid": 60451,
+          "action": "scan_planner_node-7",
+          "clean_exit": true
+        },
+        {
+          "pid": 60454,
+          "action": "python3-8",
+          "clean_exit": true
+        },
+        {
+          "pid": 60455,
+          "action": "python3-9",
+          "clean_exit": true
+        },
+        {
+          "pid": 60456,
+          "action": "python3-10",
+          "clean_exit": true
+        },
+        {
+          "pid": 60457,
+          "action": "python3-11",
+          "clean_exit": true
+        },
+        {
+          "pid": 60460,
+          "action": "parameter_bridge-12",
+          "clean_exit": true
+        },
+        {
+          "pid": 60461,
+          "action": "python3-13",
+          "clean_exit": true
+        }
+      ],
+      "died": [],
+      "all_expected_children_clean": true
+    },
+    "training_processes_signaled": false
+  },
+  "pipeline_stop": {
+    "schema": "teacher_pipeline_v19_stop_request/v1",
+    "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd",
+    "signal_sent": true,
+    "normal_completed": true,
+    "started_monotonic_wall": 522872.139300931,
+    "error": null,
+    "saved_identity": {
+      "pid": 60448,
+      "state": "R",
+      "ppid": 60372,
+      "pgid": 60372,
+      "session": 60372,
+      "start_ticks": 52247534
+    },
+    "signal": 10,
+    "sent_monotonic_wall": 522872.139528153,
+    "summary_sha256": "eecad4d933d1c8cb36d25470eb712a3d6cf8e71fa3895905a7437fa24bacb633",
+    "summary": {
+      "schema": "staged_input_pipeline_v19/v1",
+      "mode": "staged",
+      "image_copy_opt": 0,
+      "count_limit": 512,
+      "byte_limit": 67108864,
+      "trace_schema": "pipeline_v19_events/v1",
+      "trace_columns": 23,
+      "normal_completed": true,
+      "context_valid_at_drain": true,
+      "accepted": 168464,
+      "delivered": 168464,
+      "committed": 168464,
+      "pending": 0,
+      "inflight": 0,
+      "ready": 0,
+      "bytes": 0,
+      "peak_pending": 17,
+      "peak_bytes": 41271380,
+      "canceled": 0,
+      "rejected_capacity": 0,
+      "closed_rejections": 0,
+      "failure": "",
+      "uncommitted_packets": [],
+      "rejected_packet": null
+    },
+    "gate_errors": [],
+    "ended_monotonic_wall": 522872.382030464
+  },
+  "mission_terminal": {
+    "stage": "failed",
+    "message": "Mission46 coordinator terminated before whole mission completion",
+    "sim_ns": 266425000000,
+    "functional_sequence_completed": false,
+    "formal_acceptance": "independent_actual_run_evaluation_required",
+    "sequence": 3948,
+    "current_request": null,
+    "completed_region_count": 0
+  },
+  "navigation_terminal": {
+    "state": "running",
+    "waypoint_index": 11,
+    "request_id": "20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd:exploration:1",
+    "current_goal": {
+      "goal_id": "exploration:11",
+      "center": [
+        16.077613685149373,
+        6.840155504156099,
+        1.2036170327560083
+      ],
+      "arrival": {
+        "type": "disc_prism",
+        "dwell_sim_s": 0.4,
+        "axes": [
+          [
+            0.9999417933441229,
+            -0.010789343063378132,
+            0.0
+          ],
+          [
+            0.010789343063378132,
+            0.9999417933441229,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "radius_m": 0.35,
+        "height_half_span_m": 0.1,
+        "control_band": {
+          "type": "disc_prism",
+          "dwell_sim_s": 0.4,
+          "axes": [
+            [
+              0.9999417933441229,
+              -0.010789343063378132,
+              0.0
+            ],
+            [
+              0.010789343063378132,
+              0.9999417933441229,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "radius_m": 0.25,
+          "height_half_span_m": 0.1
+        }
+      },
+      "timeout_sim_s": 90.0,
+      "route_surface_id": "floor_2",
+      "legacy": false
+    },
+    "last_error": null
+  },
+  "actual_arrival_receipts_observed": 11,
+  "last_observed_arrival": {
+    "request_id": "20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd:exploration:1",
+    "goal_id": "exploration:10",
+    "waypoint_index": 10,
+    "goals_definition_sha256": "ceb8f2fecaa6f5bdac738d6a6afa2c5015052b9d5e479cab4e9c0e703dea212a",
+    "goal_activated_ros_clock_ns": 205770000000,
+    "segment_start_pose_stamp_ns": 205724999999,
+    "stamp_ns": 219384999999,
+    "start_stamp_ns": 218960000000,
+    "dwell_ns": 424999999,
+    "raw_position": [
+      15.85409631094008,
+      1.8496152145927718,
+      1.2306248610315522
+    ],
+    "center_error_m": 0.1719525974976239,
+    "region_inside": true,
+    "control_region_inside": true,
+    "protected": false,
+    "reason": "arrived",
+    "max_observation_gap_ns": 200000000,
+    "arrival_definition": {
+      "type": "disc_prism",
+      "dwell_sim_s": 0.4,
+      "axes": [
+        [
+          0.9999417933441229,
+          -0.010789343063378132,
+          0.0
+        ],
+        [
+          0.010789343063378132,
+          0.9999417933441229,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "radius_m": 0.35,
+      "height_half_span_m": 0.1,
+      "control_band": {
+        "type": "disc_prism",
+        "dwell_sim_s": 0.4,
+        "axes": [
+          [
+            0.9999417933441229,
+            -0.010789343063378132,
+            0.0
+          ],
+          [
+            0.010789343063378132,
+            0.9999417933441229,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "radius_m": 0.25,
+        "height_half_span_m": 0.1
+      }
+    },
+    "control_arrival_definition": {
+      "type": "disc_prism",
+      "dwell_sim_s": 0.4,
+      "axes": [
+        [
+          0.9999417933441229,
+          -0.010789343063378132,
+          0.0
+        ],
+        [
+          0.010789343063378132,
+          0.9999417933441229,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "radius_m": 0.25,
+      "height_half_span_m": 0.1
+    }
+  },
+  "small_state_clock": {
+    "fault": null,
+    "command_expired": true
+  },
+  "last_owned_resource_samples": [
+    {
+      "monotonic_wall": 522867.337698387,
+      "logical_cpus": 20,
+      "load_1_5_15": [
+        8.14697265625,
+        6.61328125,
+        4.78515625
+      ],
+      "memory_KiB": {
+        "MemTotal": 65444560,
+        "MemAvailable": 46010156
+      },
+      "gpu_raw": "1465, 16303, 8",
+      "gpu": {
+        "used_MiB": 1465.0,
+        "total_MiB": 16303.0,
+        "utilization_percent": 8.0
+      },
+      "owned_processes": "    PID    PPID %CPU %MEM   RSS COMMAND\n  60263   60123 44.4  1.6 1073860 /home/hyh001/isaacsim/kit/python/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/worker.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --socket /tmp/teacher_closed_loop_d9a5a8a25cf5.sock\n  60370   60123  8.4  0.2 144600 /opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args -r __node:=ros_gz_bridge -p config_file:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sensor_bridge.yaml\n  60371   60123  7.9  0.2 163960 /usr/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --topic /demo/teacher/overview --archive-stride 1\n  60372   60123  1.1  0.1 89812 /usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/stack.launch.py run_dir:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd\n  60538   60123 44.4  1.4 956420 gz sim -s -r /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/world.sdf\n",
+      "storage": {
+        "monotonic_wall": 522867.378533757,
+        "available_bytes": 159807389696,
+        "budget": {
+          "max_run_bytes": 128849018880,
+          "minimum_start_available_bytes": 161061273600,
+          "minimum_runtime_available_bytes": 32212254720
+        },
+        "size_check_interval_wall_s": 15,
+        "size_is_logical_bytes_not_allocated_blocks": true
+      }
+    },
+    {
+      "monotonic_wall": 522869.380201603,
+      "logical_cpus": 20,
+      "load_1_5_15": [
+        8.14697265625,
+        6.61328125,
+        4.78515625
+      ],
+      "memory_KiB": {
+        "MemTotal": 65444560,
+        "MemAvailable": 45959952
+      },
+      "gpu_raw": "1466, 16303, 7",
+      "gpu": {
+        "used_MiB": 1466.0,
+        "total_MiB": 16303.0,
+        "utilization_percent": 7.0
+      },
+      "owned_processes": "    PID    PPID %CPU %MEM   RSS COMMAND\n  60263   60123 44.4  1.6 1074280 /home/hyh001/isaacsim/kit/python/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/worker.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --socket /tmp/teacher_closed_loop_d9a5a8a25cf5.sock\n  60370   60123  8.4  0.2 144600 /opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args -r __node:=ros_gz_bridge -p config_file:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sensor_bridge.yaml\n  60371   60123  7.9  0.2 163960 /usr/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --topic /demo/teacher/overview --archive-stride 1\n  60372   60123  1.1  0.1 89812 /usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/stack.launch.py run_dir:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd\n  60538   60123 44.4  1.4 956420 gz sim -s -r /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/world.sdf\n",
+      "storage": {
+        "monotonic_wall": 522869.421586205,
+        "available_bytes": 159679823872,
+        "budget": {
+          "max_run_bytes": 128849018880,
+          "minimum_start_available_bytes": 161061273600,
+          "minimum_runtime_available_bytes": 32212254720
+        },
+        "size_check_interval_wall_s": 15,
+        "size_is_logical_bytes_not_allocated_blocks": true,
+        "observed_run_bytes": 27047441905,
+        "observed_files": 25075
+      }
+    },
+    {
+      "monotonic_wall": 522871.387901527,
+      "logical_cpus": 20,
+      "load_1_5_15": [
+        7.974609375,
+        6.60302734375,
+        4.7919921875
+      ],
+      "memory_KiB": {
+        "MemTotal": 65444560,
+        "MemAvailable": 45972064
+      },
+      "gpu_raw": "1463, 16303, 8",
+      "gpu": {
+        "used_MiB": 1463.0,
+        "total_MiB": 16303.0,
+        "utilization_percent": 8.0
+      },
+      "owned_processes": "    PID    PPID %CPU %MEM   RSS COMMAND\n  60263   60123 44.3  1.6 1077056 /home/hyh001/isaacsim/kit/python/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/worker.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --socket /tmp/teacher_closed_loop_d9a5a8a25cf5.sock\n  60370   60123  8.4  0.2 144600 /opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge --ros-args -r __node:=ros_gz_bridge -p config_file:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/sensor_bridge.yaml\n  60371   60123  7.9  0.2 163964 /usr/bin/python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/scripts/capture.py --run /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd --topic /demo/teacher/overview --archive-stride 1\n  60372   60123  1.1  0.1 89812 /usr/bin/python3 /opt/ros/jazzy/bin/ros2 launch /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan/stack.launch.py run_dir:=/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd\n  60538   60123 44.4  1.4 956420 gz sim -s -r /home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd/world.sdf\n",
+      "storage": {
+        "monotonic_wall": 522871.426195664,
+        "available_bytes": 159574319104,
+        "budget": {
+          "max_run_bytes": 128849018880,
+          "minimum_start_available_bytes": 161061273600,
+          "minimum_runtime_available_bytes": 32212254720
+        },
+        "size_check_interval_wall_s": 15,
+        "size_is_logical_bytes_not_allocated_blocks": true
+      }
+    }
+  ],
+  "termination_log_tails": {
+    "worker.log": {
+      "source_bytes": 1508,
+      "tail_bytes": 1508,
+      "tail_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/worker.log.terminal_tail.txt",
+      "tail_sha256": "c8bb3a6b04044bb170bb4f4cb7f861f62858fdf5ff41d933b960c58feed40636"
+    },
+    "bridge.log": {
+      "source_bytes": 1736,
+      "tail_bytes": 1736,
+      "tail_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/bridge.log.terminal_tail.txt",
+      "tail_sha256": "e4da41ffd342d6ffc00d02eacf932d973224c390ef13cdcaff9ff8356f4b19dc"
+    },
+    "capture.log": {
+      "source_bytes": 298,
+      "tail_bytes": 298,
+      "tail_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/capture.log.terminal_tail.txt",
+      "tail_sha256": "d0c6dbbb71782b39a3c46afb0d94f19ae53d1b65a4c54892a93302aa413f52e9"
+    },
+    "gazebo.log": {
+      "source_bytes": 2653,
+      "tail_bytes": 2653,
+      "tail_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/gazebo.log.terminal_tail.txt",
+      "tail_sha256": "d3e2f9380f4b48c73c2948caa4b24d0da1bbdd7d03d60e666a114c65182f10e9"
+    },
+    "navigation_stack.log": {
+      "source_bytes": 3694872,
+      "tail_bytes": 6000,
+      "tail_file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/navigation_stack.log.terminal_tail.txt",
+      "tail_sha256": "a7e291668d7b270dbe3b63c2e23b63c48a5e34fa42064b38d77100a2087e60f3"
+    }
+  },
+  "post_exit_resource": {
+    "timestamp_utc": "2026-10-06T09:48:19.267878+00:00",
+    "monotonic_wall": 523262.211652692,
+    "loadavg": "3.63 4.25 4.31 4/3953 137233",
+    "meminfo": {
+      "MemTotal": "65444560 kB",
+      "MemAvailable": "50798264 kB",
+      "SwapTotal": "8388604 kB",
+      "SwapFree": "1673884 kB"
+    },
+    "disk": {
+      "/home": {
+        "total": 804270948352,
+        "free": 159507116032,
+        "used": 603833876480
+      },
+      "/var/tmp": {
+        "total": 200449576960,
+        "free": 89123266560,
+        "used": 101069508608
+      },
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_173509_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r1_27bd": {
+        "total": 804270948352,
+        "free": 159507116032,
+        "used": 603833876480
+      }
+    },
+    "owned_pid_status": [
+      {
+        "pid": 60263,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "worker"
+      },
+      {
+        "pid": 60370,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "bridge"
+      },
+      {
+        "pid": 60371,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "capture"
+      },
+      {
+        "pid": 60372,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "navigation_stack"
+      },
+      {
+        "pid": 60538,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "gazebo"
+      }
+    ],
+    "launch_child_pid_status": [
+      {
+        "pid": 60445,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-1"
+      },
+      {
+        "pid": 60446,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-2"
+      },
+      {
+        "pid": 60447,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "parameter_blackboard-3"
+      },
+      {
+        "pid": 60448,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "fastlivo_mapping-4"
+      },
+      {
+        "pid": 60449,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-5"
+      },
+      {
+        "pid": 60450,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-6"
+      },
+      {
+        "pid": 60451,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "scan_planner_node-7"
+      },
+      {
+        "pid": 60454,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-8"
+      },
+      {
+        "pid": 60455,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-9"
+      },
+      {
+        "pid": 60456,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-10"
+      },
+      {
+        "pid": 60457,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-11"
+      },
+      {
+        "pid": 60460,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "parameter_bridge-12"
+      },
+      {
+        "pid": 60461,
+        "present": false,
+        "saved_identity_matches": false,
+        "role": "python3-13"
+      }
+    ],
+    "runner_pid_status": {
+      "pid": 60123,
+      "present": false,
+      "saved_identity_matches": false
+    },
+    "gpu": {
+      "returncode": 0,
+      "stdout": "0, 1297, 16303, 7, 1",
+      "stderr": "",
+      "time_scope": "post_exit snapshot, not causal resource trace"
+    }
+  },
+  "observer_operation_audit": {
+    "source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/observe_small_status.py",
+    "sha256": "f02d0e0a07f8314e42e934acc86005379589a48e630eabfe5240afc113ad7b26",
+    "imports": [
+      "datetime",
+      "hashlib",
+      "json",
+      "pathlib",
+      "time"
+    ],
+    "forbidden_signal_process_or_ros_calls": [],
+    "source_has_no_process_signals_or_runtime_control": true,
+    "tool_session": 71295,
+    "tool_session_natural_exit_code": 0,
+    "own_writes_only_observation_directory": true
+  },
+  "causality": {
+    "proven_signal_handler_path": true,
+    "registered_signals": [
+      "SIGINT",
+      "SIGTERM"
+    ],
+    "signal_number_recorded": false,
+    "signal_sender_recorded": false,
+    "external_signal_sender": "UNVERIFIED",
+    "source_protection_as_interrupt_origin": "NO_EVIDENCE_IN_THIS_SMALL_RECORD",
+    "cleanup_SIGINT_is_after_exception": true,
+    "worker_keyboard_interrupt_during_npz_save_is_cleanup_effect": true,
+    "region12_timeout": "NOT_OBSERVED",
+    "region12_control_success": "UNVERIFIED",
+    "full46_status": "FAILED_RUNTIME_INCOMPLETE",
+    "post_stop_expired_is_not_original_cause": true,
+    "all_saved_owned_and_launch_pids_currently_absent": true
+  },
+  "limits": [
+    "No active native/PID telemetry scanned",
+    "No signals or process mutations were sent by observer or forensic collection",
+    "Post-exit resource snapshot cannot prove pre-exit hardware headroom",
+    "No sender/signal-number receipt exists for initiating runner exception"
+  ]
+}

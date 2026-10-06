@@ -1,5 +1,12 @@
 # Go2 Frozen Teacher：Gazebo 适配与 Sim2Sim 验证
 
+## V24：第10区实际通过，完整任务仍单独验证
+
+独立修复恢复保护零速度误触发重规划，保留真实路径末端换路。曲率前馈和限速均开启，跨帧解耦本轮不做。第一轮27bd的原SLAM1–11区三维到达独立核验通过，第10区原框内驻留0.425秒、51.59秒到达；随后信号中断，完整46区及正常退出未通过/未完成。原worker收据缺失保留，不补造文件。原完整22门无法完成，不能用部分目标核验升级整体结论。
+
+已启动同冻结来源的隔离进程组第二轮；原90秒期限、300 ms保护、唯一CPU执行器和已通过camera_mode均保持。第12区末帧约-17 cm的SLAM高度差仍需独立诊断。[V24源码/实测报告](test_results/curvature_full46_20261006/V24_REPORT.md)、[原SLAM部分目标核验](test_results/curvature_full46_20261006/v24_evaluation/27bd_INTERRUPTED_TARGETED_AUDIT.json)。原V23失败和V22前九区有限通过不回填。
+
+
 > **存储更新（2026-10-06 下午）：** 在较早351.5 GiB清理之外，本轮按要求清理旧raw 68.51 GiB、过期pip缓存8.81 GiB，共77.32 GiB。最新401b/dc50两次运行原始数据保留；旧raw不能再完整回放。精确边界见[本轮清理](test_results/corridor_tracking_v20_continue_20261006/cleanup/README.md)、[历史清理说明](docs/RAW_DATA_CLEANUP_20261006.md)和 `CURRENT_STORAGE_STATUS.json`。
 
 这是独立仿真控制模式。冻结Teacher通过唯一关节力矩执行器实际控制Gazebo Go2；CPU单线程、策略50Hz、关节PD200Hz。没有重新训练、操作实体机器人、停止另一任务训练/评估或修改已通过的camera_mode。模型与逐轮执行源码、失败、配置、物理日志和相机均归档。

@@ -1,0 +1,74 @@
+{
+  "schema": "v24_27bd_lossless_tool_independent_review/v1",
+  "reviewed": true,
+  "status": "PASS_FINITE_CLOSED_RUN_ARCHIVE_TOOL_ONLY",
+  "blocking_findings": [],
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/lossless_v24_27bd_clouds.py": "65f374092794df9c4f1ca3aad8160d14250d124e5b8961bd1a4f0954bb39d298",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/lossless_v23_57fa_clouds.py": "466bfc69b42663393791cb32533527496d76c00d135925b74acad4f47f26f41a",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/lossless_v24_27bd_clouds_tests.py": "241f9a2fe30fb5fee5a175823950d68cef5fb65e9b165f38834768a85ca5a441",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_observation/LOSSLESS_27BD_TOOL_RECEIPT.json": "69e14aa57dded7f35d8c1f8534157bf30fcba1b482066f324c86cc48dfe27811",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/27bd_INTERRUPTED_TARGETED_AUDIT.json": "574778d83713d3f075700944c2839c9656b44333216fca032548700c4a314f16",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_review/lossless_independent_finite17.log": "6232b853cffce5de2e80457aed083e04db5bc610e8b25aa0932f629d1744cb20"
+  },
+  "critical_function_AST_equality": {
+    "require": true,
+    "real_dir": true,
+    "ident": true,
+    "source_stat": true,
+    "source_open": true,
+    "hash_stream": true,
+    "file_hash": true,
+    "atomic_json": true,
+    "live_identity": true,
+    "DigestReader": true,
+    "verify_archive": true,
+    "load_manifest": true,
+    "prune": true,
+    "restore": true
+  },
+  "archive_AST_unchanged_except_filename_and_explicit_failed_scope_fields": true,
+  "independent_finite": {
+    "tests": 17,
+    "exit_code": 0,
+    "temporary_fixtures_only": true,
+    "log": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_actual_review/lossless_independent_finite17.log",
+    "log_sha256": "6232b853cffce5de2e80457aed083e04db5bc610e8b25aa0932f629d1744cb20"
+  },
+  "actual_closed_small_metadata_verified": {
+    "run_result.json": "29ebc03af55fd2cdfe39e6991e54b256957bb35ee8e2ee22396c8ed3bf493f86",
+    "runtime_manifest.json": "59f46f9913a0f4fe3fc702d34d4630a9768de3b7f842ba55a63ac04aba5cdd5e",
+    "pipeline_normal_stop.json": "4f06f82843ef2d23b9bd5f82ea55adca4323c29da84c55b3540ae5f82bffab57",
+    "owned_processes_started.json": "691043321adda8312a3dbc7489a0b27df2423839d0acb2a3012a7ed7f814d475",
+    "slam_loaded_binary.json": "8b66298eaf15d6058833df717f1b0cf2b45b98310cf18c3424ef949e8ba3ae1a"
+  },
+  "targeted_audit": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/27bd_INTERRUPTED_TARGETED_AUDIT.json",
+    "sha256": "574778d83713d3f075700944c2839c9656b44333216fca032548700c4a314f16",
+    "verified_original_arrivals": 11,
+    "full46_pass": false
+  },
+  "closed_run_review": [
+    "Exact fixed27bd failed InterruptedError run/result and missing worker_result required; no fabricated success file",
+    "Five saved roles require original PID/PGID/start_ticks match and no live saved identity; cleanup role sets complete",
+    "13 launch children require clean exits and current PID absence; no recorded child startticks means conservative PID-present rejection",
+    "Loaded SLAM mapping identity must match drained pipeline saved identity, and runtime/normal-stop hashes bind clean staged drain"
+  ],
+  "archive_prune_review": [
+    "Fixed immediate .bin/.npy name scope; single-link regular files; real directories and private owned archive root",
+    "O_NOFOLLOW opens and dev/inode/size/mtime/ctime/nlink checks reject source changes before and after reads",
+    "All archive members are decompressed and matched by name, size and SHA before manifest, and again before any prune",
+    "Prune revalidates archive hash, closed metadata, targeted audit hash, each original SHA and final identity before individual unlink",
+    "Deletion journal flush/fsync follows each unlink; interruption between unlink and journal completion causes next prune to reject the missing unjournaled source, requiring inspection/restore rather than silent continuation",
+    "Restore verifies all archive bytes, refuses mismatched existing files, and writes temporary file then rename"
+  ],
+  "scope": {
+    "actual_cloud_files_read_or_hashed_by_reviewer": false,
+    "actual_archive_or_prune_executed_by_reviewer": false,
+    "actual_archive_completion_verified": false,
+    "prune_authorization": "Owner may proceed only after the running archive command completes successfully and produces its verified manifest; this source review does not claim that completion.",
+    "runtime_clean_pass": false,
+    "navigation_pass": false,
+    "source_or_run_metadata_modified": false
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "fastlivo_lio_lockfree_residual/v1",
+  "simulation_only": true,
+  "baseline_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/slam_ws",
+  "candidate_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/slam_ws",
+  "status": "PREPARED_LIMITED_NUMERIC_PASS_ACTUAL_UNVERIFIED",
+  "changes": [
+    "Per-index byte flags instead of packed vector<bool>; remove matching flag/result mutex; no shared writable word",
+    "Existing LIO residual OpenMP team defaults to four; original final index-order serial merge",
+    "Optional read-only boundary timing, off by default, independently selected by profile"
+  ],
+  "lio_residual_loop_threads": 4,
+  "VIO_MP_EN": false,
+  "teacher_cpu_threads": 1,
+  "affinity_enabled_by_default": false,
+  "numeric_status": "PASS_LIMITED_SYNTHETIC_SAME_CORE_TYPE",
+  "physical_navigation_status": "UNVERIFIED",
+  "source_observer_proof": {
+    "status": "PASS_SOURCE_OBSERVER_REMOVAL",
+    "removal_rule": "Remove complete BOUNDARY_TIMING_BEGIN name through matching END name inclusive. Original bytes restored except explicit vector bool to unsigned char and associated mutex lines in voxel_map.cpp",
+    "source_rows": {
+      "IMU_Processing.cpp": {
+        "V11_sha256": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+        "V12_sha256": "8e18913e83cef499989984c15770b09172ab9d623030e82e9bb1b60c3b7cff9f",
+        "stripped_sha256": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+        "expected_lockfree_sha256": "00cc6834d1e559ea217cd48baefaf2657c1985b2bb3dc135d6d681d4178fce06",
+        "stripped_matches_exact_expected": true
+      },
+      "LIVMapper.cpp": {
+        "V11_sha256": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+        "V12_sha256": "d3da3c8d743d5525fff0a84682bab2d313be0ca6dc41d3ef1e18e600459cf442",
+        "stripped_sha256": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+        "expected_lockfree_sha256": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+        "stripped_matches_exact_expected": true
+      },
+      "voxel_map.cpp": {
+        "V11_sha256": "d333313f1ea964761ceec780ad005ae708c1fa5151361e50a3ec476319a63108",
+        "V12_sha256": "ec0106925e5f3d62902fcdac1a601a124ea086e03451ccbfaa7bef0e51cfcbf2",
+        "stripped_sha256": "5e8bbbb38f62a10f0f74826df6351082727f95ce63926ef4c3eb92727e5d2abd",
+        "expected_lockfree_sha256": "5e8bbbb38f62a10f0f74826df6351082727f95ce63926ef4c3eb92727e5d2abd",
+        "stripped_matches_exact_expected": true
+      }
+    },
+    "source_changes_not_a_gazebo_pass": true,
+    "production_math_unchanged_after_index_flag_storage_rewrite": true
+  },
+  "core_library_sha256": "8303ec94d33a976bc8ac0940e9d3d213120ce4a035ea22385e07f301c019efed",
+  "mapping_executable_sha256": "c7f2391cb49dffecf3518c7e826ec2e4d7fa0856ef65a35bb6cb254fb794e77b",
+  "thread_matrix_sha256": "c0934e58eca68b26ebf0972abb1f5bc09651265691242a1a0b5a48d567eed19d"
+}
