@@ -26,3 +26,5 @@ git clone --single-branch --branch codex/v25-code-reports-only-20261006 \
 上游各源码与资产保留各自来源及现有许可证，本文没有统一变更其许可。静态网格属于运行资产，不是传感器采集数据。历史分支仍用于追溯。
 
 [回环与局部匹配接线审计](multifloor_demo/teacher_mode/docs/LOOP_HEIGHT_LOCAL_ADAPTATION_AUDIT_20261006.md)列出当前阶段边界、快照接口和坐标版本方案；后端尚未实现。
+
+[高度误差与后端候选调研](multifloor_demo/teacher_mode/docs/LOOP_HEIGHT_BACKEND_RESEARCH_20261006.md)包含固定上游源码审计与局部匹配/回环的分步验收。当前代码冻结提交为`8cdd80c7e99acd5045746b7a9b76cd2ff769d58d`；后续提交只补文字报告，未接入后端或更改实际控制。
