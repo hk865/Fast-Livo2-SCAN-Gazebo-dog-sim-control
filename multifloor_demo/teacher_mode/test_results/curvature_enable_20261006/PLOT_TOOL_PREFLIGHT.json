@@ -1,0 +1,56 @@
+{
+  "schema": "curvature_compact_plot_finite_tool_receipt/v1",
+  "status": "PASS_DESCRIPTIVE_PLOT_TOOL_ONLY",
+  "actual_raw_reopened": false,
+  "simulation_started": false,
+  "existing_tool_or_runtime_modified": false,
+  "tests": {
+    "passed": 4,
+    "total": 4,
+    "cases": [
+      "missing_not_zero",
+      "fresh_math_drive_only",
+      "body_z_not_Euler",
+      "gaps_break_lines"
+    ]
+  },
+  "visual_review": [
+    "drive_errors.png",
+    "commands_velocity.png"
+  ],
+  "final_output_directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/plots_off97a7_final",
+  "preliminary_output_directory": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/plots_off97a7",
+  "preliminary_output_limit": "Replaced label actual PID publication with precise recorded PID after-slew command in final figures. No numerical metric changed.",
+  "region_markers": "Activation control clocks from actual segment journal. Last region label spans plotting horizon, including any later hold; no arrival time is inferred from that label.",
+  "inputs": {
+    "series": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_CURVATURE_SERIES.json.gz",
+    "series_sha256": "1f11b5c69e8e7d2f9af98b9fc6dcb753bf7772ebca590f803d01d5afb79c9016",
+    "diagnostic": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_CURVATURE_DIAGNOSTICS.json",
+    "diagnostic_sha256": "0fa1ea1252da3579e605b4bc3912bfd5aa7e9b6e7ff92910a4a080b01772abea"
+  },
+  "metrics_scope": "Descriptive sample-weighted metrics on fresh_math=true AND mode=drive AND phase=drive; no native/SLAM timestamp join.",
+  "whole_prefix_or_full46_acceptance_inferred": false,
+  "inputs_acceptance": {
+    "report": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_PREFIX9_ACTUAL_EVALUATION.json",
+    "sha256": "a23a3ab81db6ee5f0e489df694aef8691c8387dd8cf093082ca1d08c22bce1d7",
+    "prefix9_limited_pass": false,
+    "result_status": "not_passed",
+    "checks": {
+      "immutable_source_archive": true,
+      "original_geometry_and_slam": true,
+      "all_original_nine_dwells": true,
+      "first_fixed5s_parking": false,
+      "sampled_native_safety": true,
+      "execution_contract": true,
+      "actual_pose_provenance": true,
+      "source_read_errors_absent": true
+    }
+  },
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/plot_curvature_ab.py": "39c9ae066d11ac0d6924341c81f9c4d00e51caf3b8a8f52cf1a1e1417eb201fc",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/plot_curvature_ab_tests.py": "668a277717251fcde1d483fab502bfec06d46b4f5c2639f285eb0d91b7db2f04"
+  },
+  "summary_sha256": "dd7c8c3d540cccf4b8e8182db240dbb5f9a4938b2270c0f0c8c64dd962dc25c3",
+  "command_OFF_only": "python3 -B plot_curvature_ab.py --off-series actual/<OFF_ID>_CURVATURE_SERIES.json.gz --off-diagnostic actual/<OFF_ID>_CURVATURE_DIAGNOSTICS.json --output plots_off_NEW",
+  "command_after_ON": "python3 -B plot_curvature_ab.py --off-series actual/<OFF_ID>_CURVATURE_SERIES.json.gz --off-diagnostic actual/<OFF_ID>_CURVATURE_DIAGNOSTICS.json --on-series actual/<ON_ID>_CURVATURE_SERIES.json.gz --on-diagnostic actual/<ON_ID>_CURVATURE_DIAGNOSTICS.json --output plots_AB_NEW"
+}

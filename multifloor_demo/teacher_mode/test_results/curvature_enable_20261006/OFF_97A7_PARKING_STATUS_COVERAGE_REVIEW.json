@@ -1,0 +1,126 @@
+{
+  "schema": "curvature_OFF_parking_recording_failure_review/v1",
+  "reviewed": true,
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7",
+  "formal_acceptance": "not_passed",
+  "original_report_modified": false,
+  "diagnostic": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/OFF_97A7_PARKING_STATUS_COVERAGE.json",
+    "sha256": "33246653c77e4180b58da8dab0994389006dea0b8bd323ae2eac7cf1503706c3"
+  },
+  "formal_report": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_PREFIX9_ACTUAL_EVALUATION.json",
+    "sha256": "a23a3ab81db6ee5f0e489df694aef8691c8387dd8cf093082ca1d08c22bce1d7"
+  },
+  "source_bindings": [
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/sources/navigation/corridor_tracking_v20/shared_controller.py",
+      "sha256": "36560ca8354cc45194251ac4fac571a53502e3f519c9e9a1cebcecad39e0ce0b",
+      "bytes": 43565
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/sources/navigation/corridor_tracking_v20/teacher_wrapper.py",
+      "sha256": "a2dc95ff0bd6ff1ceb8701e7859e176c6bceea89f0a0b832807f0738278c1e8e",
+      "bytes": 24504
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/sources/navigation/corridor_tracking_v20/bridge.py",
+      "sha256": "2a064170944619b4b7176fca3e9c8df543d6076ff5ffaf4fbb8ef6f77426fb4e",
+      "bytes": 32118
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/evaluate_prefix9.py",
+      "sha256": "812946d475141e2bd2c71fb925cadb75b6b1086027167fb53d8a318b25c3481b"
+    }
+  ],
+  "established": {
+    "failure_kind": "Status timestamp strict-increase gate, not a >300ms recording gap.",
+    "first5s_window_ns": [
+      179015000000,
+      184015000000
+    ],
+    "status_records": 31,
+    "distinct_ROS_stamps": 30,
+    "first_delay_ns": 0,
+    "last_gap_ns": 155000000,
+    "maximum_positive_internal_gap_ns": 225000000,
+    "sole_violation": {
+      "from_ns": 183460000000,
+      "to_ns": 183460000000,
+      "gap_ns": 0,
+      "wall_gap_s": 0.007787643990013748,
+      "from_source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1144,
+        "offset": 82148350,
+        "length": 75387,
+        "sha256": "95f5690afcd16cf312f4c305e15e65de8fc42c5f51d6c0eb3910c4fe959383a4"
+      },
+      "to_source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1145,
+        "offset": 82223737,
+        "length": 75393,
+        "sha256": "f45ded9a5823ed6aefd97abbb31f819445f105d10d1fbe5155b8aeec11eaaf57"
+      }
+    },
+    "two_same_clock_records_differ": {
+      "ROS_clock_ns": 183460000000,
+      "wall_gap_s": 0.007787643990013748,
+      "command_publication_counts": [
+        5107,
+        5108
+      ],
+      "cascade_feedback_pose_stamp_ns": [
+        183384999999,
+        183414999999
+      ],
+      "state": [
+        "succeeded",
+        "succeeded"
+      ],
+      "mode": [
+        "active_hold",
+        "active_hold"
+      ],
+      "bridge_state": [
+        "ready",
+        "ready"
+      ]
+    },
+    "recorded_parking_thresholds_all_passed": true,
+    "parking_metrics": {
+      "slam_xy_drift_max_m": 0.004750221481022046,
+      "slam_yaw_drift_max_rad": 0.0019482137400326349,
+      "native_planar_speed_max_mps": 0.007338040159391014,
+      "native_wz_max_radps": 0.007193557380071097,
+      "native_yaw_dot_max_radps": 0.007096399104549608
+    },
+    "original_nine_dwells_passed": true,
+    "sampled_native_safety_passed": true,
+    "sampled_body_contacts": 0
+  },
+  "source_semantics": {
+    "frozen_evaluator": "coverage() at lines 99-103 requires 0 < b-a <= max_gap. Status call at line198 uses 300ms and at least20 observations.",
+    "status_producer": "shared_controller.py lines516-526 publishes periodically using wall time, with additional immediate event/retransmission publication e.g. lines318-321. teacher_wrapper.py lines50-52 stamps every publication with the then-current ROS clock.",
+    "runtime_freshness": "bridge.py line28 TIMEOUT=.300 and lines281-285 check source ages and inhibit unhealthy commands. This differs from strict ordering of status publication clocks.",
+    "inference": "Different wall-time callbacks can legitimately publish different status content at the same ROS clock. The observed records fit this mechanism; exact publication callsite is not recorded and is not established."
+  },
+  "interpretation": "The original limited prefix acceptance remains NOT_PASS. All checked physical parking thresholds and sampled native safety passed; this single status-ordering failure does not establish a physical drift or contact failure. Complete200Hz physics remains unverified.",
+  "prospective_recording_improvements": [
+    "Add a monotonically increasing publication sequence and explicit trigger/callsite to every status event; preserve all original events even when ROS clock repeats.",
+    "Capture ROS clock, monotonic wall timestamp and source-header/sequence identifiers once for a coherent status snapshot; do not synthesize epsilon time increments.",
+    "For a future independently versioned coverage stream, emit one well-defined sample per distinct ROS clock with bounded simulation-time gaps, while keeping concurrent events separately and failing on any unsafe state within a clock group.",
+    "Add finite cases for duplicate ROS clock with identical content, changed content, an unsafe event in a same-clock group, backwards time and true >300ms gaps. Review semantics prospectively; do not retrofit a PASS by deleting a row or relaxing this run's frozen evaluator."
+  ],
+  "read_scope": {
+    "raw_status_rows_read_by_seek": 31,
+    "raw_status_bytes_read": 2336359,
+    "raw_native_PID_or_SLAM_reads": 0,
+    "full_raw_scan": false
+  },
+  "source_or_reader_edits": false,
+  "raw_native_PID_replay": false,
+  "full46_pass": false,
+  "whole_200hz_physical_acceptance": false
+}

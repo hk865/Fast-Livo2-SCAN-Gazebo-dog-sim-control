@@ -1,0 +1,74 @@
+{
+  "schema": "curvature_v22_archive_prospective_review_checklist/v1",
+  "created_at": "2026-10-06T08:25:06.500135+00:00",
+  "reviewed": false,
+  "status": "AWAITING_V22_SOURCE_AND_GATE",
+  "physical_run_started": false,
+  "actual_navigation_verified": false,
+  "baseline_root": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature",
+  "baseline_sources": {
+    "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "spatial_reference.py": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7",
+    "route.py": "08cc6aad5fcff84fda2e15e20654ce9a26240edd477c5a449881b131cdd0996a",
+    "prefix_contract.py": "1e148ed90ec21a3294a7736111c496afa1b5e9ee79604045156325a61240d7c0",
+    "mission46_profile.py": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0",
+    "worker.py": "6dc07ffbac8ac26d5dfda9e1898b22a8129b82ad108d385b36f8854fff1e4ff5",
+    "bridge.py": "2a064170944619b4b7176fca3e9c8df543d6076ff5ffaf4fbb8ef6f77426fb4e",
+    "clock_hold.py": "a347c67ee3a634703b8e120b8ee3d4fdb5b387fe6d29e159e26185d7f624c9b3",
+    "publication_ledger.py": "9e564e433a1297e8fa32106b9995aa4bb6bfb8c79114f922bf019ec3e26f9465",
+    "pipeline_lifecycle.py": "65d88a4ccec079a678b2ad66a431db085b0f2d05edeea7db1bab9d108fe428c8"
+  },
+  "required_helper_baseline": [
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/route.py",
+      "sha256": "08cc6aad5fcff84fda2e15e20654ce9a26240edd477c5a449881b131cdd0996a"
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/prefix_contract.py",
+      "sha256": "1e148ed90ec21a3294a7736111c496afa1b5e9ee79604045156325a61240d7c0"
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/mission46_profile.py",
+      "sha256": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0"
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py",
+      "sha256": "64dd44490624852c914a1a4033801297b9ea236bee5608a092c87ced68e9a021"
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py",
+      "sha256": "3106744419bd49f32bc30076a5d742b2673599b4eed162034abcec04df92a751"
+    }
+  ],
+  "frozen_acceptance": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/evaluate_prefix9.py",
+    "sha256": "812946d475141e2bd2c71fb925cadb75b6b1086027167fb53d8a318b25c3481b",
+    "required_checks": [
+      "immutable_source_archive",
+      "original_geometry_and_slam",
+      "all_original_nine_dwells",
+      "first_fixed5s_parking",
+      "sampled_native_safety",
+      "execution_contract",
+      "actual_pose_provenance",
+      "source_read_errors_absent"
+    ],
+    "change_allowed": false
+  },
+  "requirements": [
+    "Five helpers directly bound by V22 preflight, not merely mentioned in a nested historical gate.",
+    "All five helpers required by runtime_files even when mission46_required is false.",
+    "Every helper must have an immutable source snapshot entry, confined to run/sources, with source and archived bytes matching the expected SHA.",
+    "Each helper must have an archived relative source_manifest binding and original absolute alias.",
+    "Removing any helper binding or snapshot, wrong source bytes, and orphan aliases must fail closed.",
+    "Controller, cascade, spatial reference and inherited protection/math sources remain byte-identical to V21.",
+    "Deep profile comparison permits only explicit version/selector/source-root metadata; all numerical control, geometry, arrival, dwell, timeout, source TTL and curvature flag values remain identical.",
+    "The original eight actual acceptance checks and fixed first5s parking coverage remain unchanged.",
+    "Only new bounded ON profile is authorized; historical V20/V21 finite gates do not authorize V22."
+  ],
+  "large_raw_read": false,
+  "limitations": [
+    "Prospective checklist only; candidate review and finite receipts follow after source freeze."
+  ]
+}

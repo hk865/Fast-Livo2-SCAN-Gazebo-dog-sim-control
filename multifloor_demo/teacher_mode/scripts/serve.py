@@ -985,6 +985,11 @@ def pipeline_view(directory):
 
 PREFIX9_REPORT_SCHEMA = 'independent_original46_prefix9_actual_run/v1'
 PREFIX9_REPORT_INDEX = 'test_results/corridor_tracking_v20_continue_20261006/viewer/PREFIX9_REPORT_INDEX.json'
+PREFIX9_CANDIDATE_ROOTS = {
+    'corridor_tracking_v20': 'navigation/corridor_tracking_v20',
+    'v21_curvature_serialization': 'navigation/corridor_tracking_v21_curvature',
+    'v22_curvature_archive': 'navigation/corridor_tracking_v22_curvature_archive',
+}
 PREFIX9_REQUIRED_CHECKS = frozenset(('immutable_source_archive', 'original_geometry_and_slam',
     'all_original_nine_dwells', 'first_fixed5s_parking', 'sampled_native_safety',
     'execution_contract', 'actual_pose_provenance', 'source_read_errors_absent'))
@@ -1013,7 +1018,7 @@ def prefix9_view(directory):
     directory = Path(directory).resolve()
     profile = read_json(directory / 'navigation_profile.json')
     if (not isinstance(profile, dict) or profile.get('original46_prefix_regions') != 9
-            or profile.get('controller_selector') != 'corridor_tracking_v20'):
+            or profile.get('controller_selector') not in PREFIX9_CANDIDATE_ROOTS):
         return {}
     view = dict(schema='teacher_prefix9_limited_dashboard/v1', status='unverified',
         valid_for_selected_run=False, limited_prefix9_pass=False, full46_pass=False,
@@ -1091,9 +1096,9 @@ def prefix9_view(directory):
         baseline = Path(baseline_name).resolve() if isinstance(baseline_name, str) else None
         if baseline is not None:
             require(recording_path(baseline, ROOT / 'runs') == baseline, 'Comparison run is outside allowed recordings')
-        helpers = {str((ROOT / name).resolve()) for name in (
-            'navigation/corridor_tracking_v20/route.py', 'navigation/corridor_tracking_v20/prefix_contract.py',
-            'navigation/corridor_tracking_v20/mission46_profile.py')}
+        candidate = ROOT / PREFIX9_CANDIDATE_ROOTS[profile['controller_selector']]
+        helpers = {str((candidate / name).resolve()) for name in (
+            'route.py', 'prefix_contract.py', 'mission46_profile.py')}
         helpers |= {str((ROOT.parent / name).resolve()) for name in ('navigation/goal_regions.py', 'mission/route_regions.py')}
         seen = set()
         for binding in bindings:
@@ -1110,6 +1115,7 @@ def prefix9_view(directory):
             track(source)
             require(source_file_sha256(source) == digest, 'Bound source bytes changed: ' + str(source))
         required = {str((directory / name).resolve()) for name in PREFIX9_RUN_SOURCES}
+        required |= helpers
         if claimed: required.add(str((directory / 'worker_result.json').resolve()))
         require(required.issubset(seen), 'Mandatory selected-run raw sources are missing from report bindings')
         for source, identity in dependencies.items():
@@ -1220,7 +1226,10 @@ CLOSED_LOOP_PAGE_SCRIPT = r'''
  const closedLoopCaption = data => {
   const result=data.closed_loop_result;if(!result||!Object.keys(result).length)return;
   const nav=data.navigation||{},state=nav.state||{};
-  $('navigationCaption').textContent=`实际 SLAM ${nav.poses?.records||0} 条 · SCAN ${nav.scan?.hash_verified?'样条 '+nav.scan.trajectory_id+'（原始数组哈希已核对）':'暂无已核对样条'} · 本轮独立验收：${status(result.status)[0]}。原始最后运行状态：${state.status??state.state??'等待状态'}（可能包含进程清理，不替代验收）。此图不使用 Gazebo 真值；规划曲线不代表已实际到达。`;
+  const prefix=data.prefix9_result||{};
+  const prefixScope=prefix.valid_for_selected_run===true
+    ? (prefix.limited_prefix9_pass===true?'；原前9区＋首固定5s停车独立有限通过（不代表全任务）':'；原前9区独立有限验收未通过') : '';
+  $('navigationCaption').textContent=`实际 SLAM ${nav.poses?.records||0} 条 · SCAN ${nav.scan?.hash_verified?'样条 '+nav.scan.trajectory_id+'（原始数组哈希已核对）':'暂无已核对样条'} · 整任务独立验收：${status(result.status)[0]}${prefixScope}。原始最后运行状态：${state.status??state.state??'等待状态'}（可能包含进程清理，不替代验收）。此图不使用 Gazebo 真值；规划曲线不代表已实际到达。`;
  };
  const originalNavigationPlot=navigationPlot;
  navigationPlot=()=>{originalNavigationPlot();if(current)closedLoopCaption(current);};

@@ -1,0 +1,146 @@
+{
+  "schema": "curvature_v21_serialization_finite_repair/v1",
+  "created_at": "2026-10-06T08:06:13.176327+00:00",
+  "status": "PASS_FINITE_REPAIR_ONLY",
+  "passed": true,
+  "actual_navigation_verified": false,
+  "physical_run_started": false,
+  "execution": {
+    "command": "python3 -B -m unittest curvature_scalar_tests spatial_reference_tests controller_reference_tests pure_tests -v",
+    "cwd": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature",
+    "exit_code": 0,
+    "test_count": 46,
+    "failures": 0,
+    "errors": 0,
+    "reported_duration_s": 1.112,
+    "completion": "Ran 46 tests in 1.112s; OK",
+    "tool_session_id": 35889,
+    "completion_chunk_id": "629297"
+  },
+  "test_ids": [
+    "curvature_scalar_tests.CurvatureScalarChecks.test_actual_evidence_append_accepts_new_row_and_rejects_old",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_direct_budget_math_equivalent_to_old_float_and_numpy_truth_values",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_frozen_v20_reproduces_numpy_false_identity_and_json_failure",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_numpy_scalar_inputs_return_only_native_json_scalar_values",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_optional_previous_values_keep_json_contract",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_production_profile_old_misses_hold_new_exact_zero_freezes_pi",
+    "curvature_scalar_tests.CurvatureScalarChecks.test_wrapper_production_selection_stops_numpy_reversal_before_slew",
+    "spatial_reference_tests.SpatialReferenceChecks.test_circle_curvature_and_s_curvature_sign_are_spatial",
+    "spatial_reference_tests.SpatialReferenceChecks.test_cross_control_uses_its_own_normal_raw_cross_remains",
+    "spatial_reference_tests.SpatialReferenceChecks.test_curve_feature_flags_are_separate_and_corner_hold_freezes_pi",
+    "spatial_reference_tests.SpatialReferenceChecks.test_disabled_reference_preserves_original_segment_direction",
+    "spatial_reference_tests.SpatialReferenceChecks.test_fixed_goal_tail_heading_is_identical_inside_and_outside",
+    "spatial_reference_tests.SpatialReferenceChecks.test_handoff_and_preview_do_not_jump_to_same_xy_lower_floor",
+    "spatial_reference_tests.SpatialReferenceChecks.test_handoff_maps_real_pose_and_preserves_command_pi_and_filter",
+    "spatial_reference_tests.SpatialReferenceChecks.test_invalid_configuration_and_handoff_are_rejected",
+    "spatial_reference_tests.SpatialReferenceChecks.test_invalid_external_turn_reference_remains_fatal_before_duplicate_reuse",
+    "spatial_reference_tests.SpatialReferenceChecks.test_microsegment_changes_heading_without_replacing_path",
+    "spatial_reference_tests.SpatialReferenceChecks.test_original_hold_capture_and_straight_commands_are_preserved",
+    "spatial_reference_tests.SpatialReferenceChecks.test_ramp_microsegment_vertical_reference_matches_declared_gradient",
+    "spatial_reference_tests.SpatialReferenceChecks.test_replan_during_external_turn_keeps_lock_then_drive_uses_spatial_reference",
+    "spatial_reference_tests.SpatialReferenceChecks.test_reversal_chord_cancellation_is_explicit",
+    "spatial_reference_tests.SpatialReferenceChecks.test_speed_budget_rate_acceleration_and_infeasible_transition",
+    "spatial_reference_tests.SpatialReferenceChecks.test_true_corner_is_not_silently_rounded_into_diagonal_path",
+    "controller_reference_tests.WrapperReferenceChecks.test_heading_uses_same_finite_arc_as_inner_controller",
+    "controller_reference_tests.WrapperReferenceChecks.test_invalid_reference_stops_same_tick_and_records_failure",
+    "controller_reference_tests.WrapperReferenceChecks.test_new_path_receives_actual_pose_at_atomic_handoff",
+    "controller_reference_tests.WrapperReferenceChecks.test_original_guard_target_is_not_replaced_with_unchecked_chord",
+    "controller_reference_tests.WrapperReferenceChecks.test_repeated_previews_do_not_mutate_progress_integrals_or_filters",
+    "controller_reference_tests.WrapperReferenceChecks.test_tail_heading_agrees_with_fixed_goal_capture",
+    "pure_tests.PureChecks.test_3d_projection_separates_overlapping_floors",
+    "pure_tests.PureChecks.test_ack_residual_antiwindup_not_guessed_slew",
+    "pure_tests.PureChecks.test_capture_hold_fixed_target_first_window_and_integral",
+    "pure_tests.PureChecks.test_cross_sign_and_grade_are_geometric",
+    "pure_tests.PureChecks.test_euler_yawrate_and_com_lever",
+    "pure_tests.PureChecks.test_fixed_goal_is_copied_and_wrong_floor_cannot_capture",
+    "pure_tests.PureChecks.test_full_loop_cannot_complete_at_initial_endpoint",
+    "pure_tests.PureChecks.test_future_gyro_or_ack_rejected_then_recoverable",
+    "pure_tests.PureChecks.test_limits_and_turn_do_not_integrate_unactuated_xy",
+    "pure_tests.PureChecks.test_math_update_is_header_event_not_heartbeat_rate",
+    "pure_tests.PureChecks.test_nan_and_backwards_pose_latch_failure",
+    "pure_tests.PureChecks.test_repeated_header_cannot_refresh_receipt",
+    "pure_tests.PureChecks.test_scan_replan_preserves_integral_and_filter",
+    "pure_tests.PureChecks.test_static_checked_path_does_not_expire_with_source_ttl",
+    "pure_tests.PureChecks.test_true_receipt_gap_checked_before_new_measurement",
+    "pure_tests.PureChecks.test_two_fresh_recovery_and_hold_does_not_integrate",
+    "pure_tests.PureChecks.test_verified_gains_are_preserved"
+  ],
+  "source_sha256": {
+    "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "spatial_reference.py": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7"
+  },
+  "source_bindings": [
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/controller.py",
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+      "bytes": 36560
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/cascade_core.py",
+      "sha256": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+      "bytes": 36652
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/spatial_reference.py",
+      "sha256": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7",
+      "bytes": 9320
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/curvature_scalar_tests.py",
+      "sha256": "da5499348f80c3f7a88fa7f8dde3d2f20075bff5521cfadbf1afcdfe4f56a4e1",
+      "bytes": 9328
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/spatial_reference_tests.py",
+      "sha256": "488258e31ef2d66d829e5ecdfe7c61afeef1c44d8b8ced077af2a0cc5f207180",
+      "bytes": 14467
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/controller_reference_tests.py",
+      "sha256": "5b945e523e6afa09709d469bda6334399a5f4d2441c721dea3d4d0b0bff325dd",
+      "bytes": 5620
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/pure_tests.py",
+      "sha256": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+      "bytes": 9766
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/pid_core.py",
+      "sha256": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+      "bytes": 6218
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/runtime_io.py",
+      "sha256": "0ce262de267fabb2d3816b280e377299619a1a5053fac8ebaf1fa7b16ebd68e0",
+      "bytes": 6023
+    },
+    {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/profiles/pipeline_staged_original46.json",
+      "sha256": "0a70f3c6842cb56ead6f5fc9c2106d92fa08219a61297c889291fe190c4d7c25",
+      "bytes": 83387
+    }
+  ],
+  "reproduction": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/v21_scalar_fix/V20_NUMPY_BOOL_FAILURE_REPRODUCTION.json",
+    "sha256": "4413e80534de76c6fd8ea79b94afcd84339bdf4f958f08f116c6b7fca783d2fb",
+    "bytes": 6980
+  },
+  "checks": {
+    "frozen_numpy_false_and_json_defect_reproduced": true,
+    "native_json_scalar_contract": true,
+    "numerical_equivalence_grid_cases": 270,
+    "numerical_equivalence_tolerance": 1e-12,
+    "production_profile_infeasible_exact_zero": true,
+    "translation_PI_frozen": true,
+    "actual_EvidenceWriter_append_passed": true,
+    "wrapper_exact_zero_bypasses_prior_nonzero_slew": true,
+    "original_spatial_and_controller_regressions_passed": true
+  },
+  "limitations": [
+    "Finite mocked-source checks only; no real-navigation PASS.",
+    "Curvature limits certify a reference budget, not full physical response or total feedback acceleration.",
+    "Cross-frame planning/selection behavior is unchanged."
+  ]
+}

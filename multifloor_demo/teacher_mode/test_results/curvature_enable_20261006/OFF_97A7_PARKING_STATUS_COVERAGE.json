@@ -1,0 +1,1829 @@
+{
+  "schema": "curvature_OFF_first5s_status_coverage_diagnostic/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7",
+  "run_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7",
+  "formal_result_unchanged": "not_passed",
+  "formal_prefix9_limited_pass": false,
+  "formal_report": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_PREFIX9_ACTUAL_EVALUATION.json",
+    "sha256": "a23a3ab81db6ee5f0e489df694aef8691c8387dd8cf093082ca1d08c22bce1d7"
+  },
+  "compact": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/actual/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7_CURVATURE_SERIES.json.gz",
+    "sha256": "1f11b5c69e8e7d2f9af98b9fc6dcb753bf7772ebca590f803d01d5afb79c9016"
+  },
+  "window_ns": [
+    179015000000,
+    184015000000
+  ],
+  "original_coverage_gate": {
+    "maximum_gap_ns": 300000000,
+    "minimum_samples": 20,
+    "requires_strictly_increasing": true,
+    "first_sample_within_300ms": true,
+    "last_sample_within_300ms": true
+  },
+  "coverage_components": {
+    "samples": 31,
+    "count_pass": true,
+    "first_sample_ns": 179015000000,
+    "last_sample_ns": 183860000000,
+    "first_delay_ns": 0,
+    "last_gap_ns": 155000000,
+    "first_endpoint_pass": true,
+    "last_endpoint_pass": true,
+    "internal_gaps_pass": false
+  },
+  "violating_gaps": [
+    {
+      "from_ns": 183460000000,
+      "to_ns": 183460000000,
+      "gap_ns": 0,
+      "wall_gap_s": 0.007787643990013748,
+      "from_source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1144,
+        "offset": 82148350,
+        "length": 75387,
+        "sha256": "95f5690afcd16cf312f4c305e15e65de8fc42c5f51d6c0eb3910c4fe959383a4"
+      },
+      "to_source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1145,
+        "offset": 82223737,
+        "length": 75393,
+        "sha256": "f45ded9a5823ed6aefd97abbb31f819445f105d10d1fbe5155b8aeec11eaaf57"
+      }
+    }
+  ],
+  "all_status_rows_verified_by_exact_offset_and_line_sha": [
+    {
+      "clock_ns": 179015000000,
+      "wall": 515185.682145317,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 178995000000,
+      "counts": {
+        "odom": 5314,
+        "cloud": 5314,
+        "imu": 30887,
+        "bspline": 268,
+        "commands": 4983
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 178960000000,
+        "sim_time": 179.005,
+        "monotonic_wall": 515185.654700082,
+        "ages": {
+          "clock_wall_s": 1.4660181477665901e-06,
+          "pose_wall_s": 0.03384156903484836,
+          "command_wall_s": 0.025788713013753295,
+          "pose_sim_s": 0.045,
+          "command_sim_s": 0.015
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1117,
+        "offset": 80113592,
+        "length": 75466,
+        "sha256": "0e4d778bdb5d0b1dbcd84f4af9074448443a39912d092d5fa910d7b94abd5dac"
+      }
+    },
+    {
+      "clock_ns": 179230000000,
+      "wall": 515185.979957749,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179194999999,
+      "counts": {
+        "odom": 5320,
+        "cloud": 5320,
+        "imu": 30926,
+        "bspline": 268,
+        "commands": 4989
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179159999999,
+        "sim_time": 179.215,
+        "monotonic_wall": 515185.954633869,
+        "ages": {
+          "clock_wall_s": 1.167994923889637e-06,
+          "pose_wall_s": 0.047630102024413645,
+          "command_wall_s": 0.026398474990855902,
+          "pose_sim_s": 0.055000001,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1118,
+        "offset": 80189058,
+        "length": 75483,
+        "sha256": "58c3e79f1604b4b00d418e96b40b2d7edc7ddafb76cc8a21135952697d045bcc"
+      }
+    },
+    {
+      "clock_ns": 179445000000,
+      "wall": 515186.280825405,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179389999999,
+      "counts": {
+        "odom": 5326,
+        "cloud": 5326,
+        "imu": 30967,
+        "bspline": 268,
+        "commands": 4995
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179389999999,
+        "sim_time": 179.43,
+        "monotonic_wall": 515186.254753518,
+        "ages": {
+          "clock_wall_s": 1.4059478417038918e-06,
+          "pose_wall_s": 0.015831606986466795,
+          "command_wall_s": 0.026698388974182308,
+          "pose_sim_s": 0.040000001,
+          "command_sim_s": 0.02
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1119,
+        "offset": 80264541,
+        "length": 75420,
+        "sha256": "748769e7d318e0ee3934c4c6c36ee01848658ae4a9d9a4ab0cd98da26445b831"
+      }
+    },
+    {
+      "clock_ns": 179570000000,
+      "wall": 515186.530368917,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179520000000,
+      "counts": {
+        "odom": 5330,
+        "cloud": 5330,
+        "imu": 30990,
+        "bspline": 268,
+        "commands": 5000
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179520000000,
+        "sim_time": 179.53,
+        "monotonic_wall": 515186.477177018,
+        "ages": {
+          "clock_wall_s": 0.08236420102184638,
+          "pose_wall_s": 0.07508499000687152,
+          "command_wall_s": 9.432027582079172e-06,
+          "pose_sim_s": 0.01,
+          "command_sim_s": 0.0
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1120,
+        "offset": 80339961,
+        "length": 74044,
+        "sha256": "4d956e3e5be56d90adf5026e32de7f498b606a0df6601710164f406f90ff5e28"
+      }
+    },
+    {
+      "clock_ns": 179640000000,
+      "wall": 515186.624340537,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179555000000,
+      "counts": {
+        "odom": 5333,
+        "cloud": 5332,
+        "imu": 31005,
+        "bspline": 268,
+        "commands": 5001
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179590000000,
+        "sim_time": 179.62,
+        "monotonic_wall": 515186.594824961,
+        "ages": {
+          "clock_wall_s": 2.2539752535521984e-06,
+          "pose_wall_s": 0.005861855985131115,
+          "command_wall_s": 0.016757084988057613,
+          "pose_sim_s": 0.03,
+          "command_sim_s": 0.01
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1121,
+        "offset": 80414005,
+        "length": 75401,
+        "sha256": "1897f522f281ade1b6df3f332d7210556a4206963e383a1ba22520b47298296d"
+      }
+    },
+    {
+      "clock_ns": 179750000000,
+      "wall": 515186.77980151,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179719999999,
+      "counts": {
+        "odom": 5336,
+        "cloud": 5336,
+        "imu": 31022,
+        "bspline": 268,
+        "commands": 5005
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179655000000,
+        "sim_time": 179.71,
+        "monotonic_wall": 515186.714762435,
+        "ages": {
+          "clock_wall_s": 1.5220139175653458e-06,
+          "pose_wall_s": 0.04693688900442794,
+          "command_wall_s": 0.036628663016017526,
+          "pose_sim_s": 0.055,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1122,
+        "offset": 80489406,
+        "length": 75390,
+        "sha256": "c29645a6f58a7ad6bc8917e43aacf69aa34997e2f439a3019d767a4a5bb53e95"
+      }
+    },
+    {
+      "clock_ns": 179960000000,
+      "wall": 515187.080519875,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 179919999999,
+      "counts": {
+        "odom": 5342,
+        "cloud": 5342,
+        "imu": 31060,
+        "bspline": 268,
+        "commands": 5011
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 179884999999,
+        "sim_time": 179.915,
+        "monotonic_wall": 515187.014690766,
+        "ages": {
+          "clock_wall_s": 1.3620010577142239e-06,
+          "pose_wall_s": 0.016588393016718328,
+          "command_wall_s": 0.03662109700962901,
+          "pose_sim_s": 0.030000001,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1123,
+        "offset": 80564796,
+        "length": 75400,
+        "sha256": "615b47b893b8274c0bbd7d6cd338988263bad420ef2e6bcb40de695a46067963"
+      }
+    },
+    {
+      "clock_ns": 180145000000,
+      "wall": 515187.330143015,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180115000000,
+      "counts": {
+        "odom": 5348,
+        "cloud": 5348,
+        "imu": 31095,
+        "bspline": 268,
+        "commands": 5016
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180085000000,
+        "sim_time": 180.135,
+        "monotonic_wall": 515187.31473891,
+        "ages": {
+          "clock_wall_s": 1.0490184649825096e-06,
+          "pose_wall_s": 0.042469537002034485,
+          "command_wall_s": 0.03486274997703731,
+          "pose_sim_s": 0.05,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1124,
+        "offset": 80640196,
+        "length": 75403,
+        "sha256": "f909288800627e0199b3fc8a82990949323db08b70201619d8f79360b9e335d0"
+      }
+    },
+    {
+      "clock_ns": 180350000000,
+      "wall": 515187.623158307,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180280000000,
+      "counts": {
+        "odom": 5354,
+        "cloud": 5354,
+        "imu": 31130,
+        "bspline": 268,
+        "commands": 5021
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180314999999,
+        "sim_time": 180.35,
+        "monotonic_wall": 515187.614730771,
+        "ages": {
+          "clock_wall_s": 1.2500095181167126e-06,
+          "pose_wall_s": 0.01610031398013234,
+          "command_wall_s": 0.03655846498440951,
+          "pose_sim_s": 0.035000001,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1125,
+        "offset": 80715599,
+        "length": 75379,
+        "sha256": "7e74e2574bfa039199e915818ad5d2f223a12b588e530aea65839f1d39dc9a26"
+      }
+    },
+    {
+      "clock_ns": 180355000000,
+      "wall": 515187.63142999,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180314999999,
+      "counts": {
+        "odom": 5354,
+        "cloud": 5354,
+        "imu": 31131,
+        "bspline": 268,
+        "commands": 5022
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180314999999,
+        "sim_time": 180.35,
+        "monotonic_wall": 515187.614730771,
+        "ages": {
+          "clock_wall_s": 1.2500095181167126e-06,
+          "pose_wall_s": 0.01610031398013234,
+          "command_wall_s": 0.03655846498440951,
+          "pose_sim_s": 0.035000001,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1126,
+        "offset": 80790978,
+        "length": 75411,
+        "sha256": "5289da44a1e4af7a9f3404142346038b2bb03d278f7788b2ecf4afa17879ebbb"
+      }
+    },
+    {
+      "clock_ns": 180565000000,
+      "wall": 515187.931006875,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180544999999,
+      "counts": {
+        "odom": 5361,
+        "cloud": 5361,
+        "imu": 31168,
+        "bspline": 268,
+        "commands": 5028
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180509999999,
+        "sim_time": 180.555,
+        "monotonic_wall": 515187.914754631,
+        "ages": {
+          "clock_wall_s": 1.3289973139762878e-06,
+          "pose_wall_s": 0.02831883600447327,
+          "command_wall_s": 0.03694794396869838,
+          "pose_sim_s": 0.045000001,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1127,
+        "offset": 80866389,
+        "length": 75421,
+        "sha256": "bada64117443ba93eae2d4ff4751ca60b327da0914ae2cb725a0b8feef03eb0a"
+      }
+    },
+    {
+      "clock_ns": 180735000000,
+      "wall": 515188.181102662,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180710000000,
+      "counts": {
+        "odom": 5366,
+        "cloud": 5366,
+        "imu": 31198,
+        "bspline": 268,
+        "commands": 5033
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180680000000,
+        "sim_time": 180.725,
+        "monotonic_wall": 515188.154681365,
+        "ages": {
+          "clock_wall_s": 1.0450021363794804e-06,
+          "pose_wall_s": 0.031237616029102355,
+          "command_wall_s": 0.02684718102682382,
+          "pose_sim_s": 0.045,
+          "command_sim_s": 0.02
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1128,
+        "offset": 80941810,
+        "length": 75403,
+        "sha256": "1c0d202e9a2c56a664213d7da6ca9fcb74cdcb01d466217fe060cc1fee66186e"
+      }
+    },
+    {
+      "clock_ns": 180950000000,
+      "wall": 515188.481558277,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 180909999999,
+      "counts": {
+        "odom": 5372,
+        "cloud": 5372,
+        "imu": 31234,
+        "bspline": 268,
+        "commands": 5039
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 180909999999,
+        "sim_time": 180.935,
+        "monotonic_wall": 515188.454699881,
+        "ages": {
+          "clock_wall_s": 8.970382623374462e-07,
+          "pose_wall_s": 0.0098046800121665,
+          "command_wall_s": 0.0223470909986645,
+          "pose_sim_s": 0.025000001,
+          "command_sim_s": 0.005
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1129,
+        "offset": 81017213,
+        "length": 75413,
+        "sha256": "fa2b31f96fb3cfcb36fdae372c348d7644c7b0bb3b54b47a1ec3d013aaa27f70"
+      }
+    },
+    {
+      "clock_ns": 181050000000,
+      "wall": 515188.624891615,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181004999999,
+      "counts": {
+        "odom": 5375,
+        "cloud": 5375,
+        "imu": 31253,
+        "bspline": 268,
+        "commands": 5041
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181004999999,
+        "sim_time": 181.025,
+        "monotonic_wall": 515188.574670859,
+        "ages": {
+          "clock_wall_s": 8.42963345348835e-07,
+          "pose_wall_s": 0.002901588974054903,
+          "command_wall_s": 0.04596088797552511,
+          "pose_sim_s": 0.020000001,
+          "command_sim_s": 0.035
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1130,
+        "offset": 81092626,
+        "length": 75432,
+        "sha256": "558d3762e97add7a4925bdc776c137354ad00bf806832ba4886ab1bf2b50d213"
+      }
+    },
+    {
+      "clock_ns": 181165000000,
+      "wall": 515188.780602401,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181139999999,
+      "counts": {
+        "odom": 5379,
+        "cloud": 5379,
+        "imu": 31272,
+        "bspline": 268,
+        "commands": 5045
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181104999999,
+        "sim_time": 181.15,
+        "monotonic_wall": 515188.754752319,
+        "ages": {
+          "clock_wall_s": 1.2569944374263287e-06,
+          "pose_wall_s": 0.039687845041044056,
+          "command_wall_s": 0.027027259988244623,
+          "pose_sim_s": 0.045000001,
+          "command_sim_s": 0.02
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1131,
+        "offset": 81168058,
+        "length": 75407,
+        "sha256": "0db3862448b29a66584372001e004ce4ad493f2f4716df37e682fb1b556a9a85"
+      }
+    },
+    {
+      "clock_ns": 181375000000,
+      "wall": 515189.081103898,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181340000000,
+      "counts": {
+        "odom": 5385,
+        "cloud": 5385,
+        "imu": 31310,
+        "bspline": 268,
+        "commands": 5051
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181340000000,
+        "sim_time": 181.365,
+        "monotonic_wall": 515189.054644994,
+        "ages": {
+          "clock_wall_s": 7.509952411055565e-07,
+          "pose_wall_s": 0.0004732589586637914,
+          "command_wall_s": 0.026554480951745063,
+          "pose_sim_s": 0.025,
+          "command_sim_s": 0.02
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1132,
+        "offset": 81243465,
+        "length": 75416,
+        "sha256": "f9bd5d7bbc275b8f11de13431afdc9b4d250059d52ef5166ea48c259054b0bdd"
+      }
+    },
+    {
+      "clock_ns": 181570000000,
+      "wall": 515189.330363808,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181534999999,
+      "counts": {
+        "odom": 5391,
+        "cloud": 5391,
+        "imu": 31344,
+        "bspline": 268,
+        "commands": 5056
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181500000000,
+        "sim_time": 181.55,
+        "monotonic_wall": 515189.294844163,
+        "ages": {
+          "clock_wall_s": 1.2739910744130611e-06,
+          "pose_wall_s": 0.02696480299346149,
+          "command_wall_s": 0.017045732005499303,
+          "pose_sim_s": 0.05,
+          "command_sim_s": 0.02
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1133,
+        "offset": 81318881,
+        "length": 75432,
+        "sha256": "79f579a2d97669e90729aba1fe300a16c15cea6e54f27401844a1604afa99002"
+      }
+    },
+    {
+      "clock_ns": 181785000000,
+      "wall": 515189.630932662,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181764999999,
+      "counts": {
+        "odom": 5398,
+        "cloud": 5398,
+        "imu": 31386,
+        "bspline": 268,
+        "commands": 5062
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181735000000,
+        "sim_time": 181.765,
+        "monotonic_wall": 515189.594737729,
+        "ages": {
+          "clock_wall_s": 1.57597241923213e-06,
+          "pose_wall_s": 0.008935793011914939,
+          "command_wall_s": 0.016743292973842472,
+          "pose_sim_s": 0.03,
+          "command_sim_s": 0.015
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1134,
+        "offset": 81394313,
+        "length": 75411,
+        "sha256": "40e06b3c4e8391d06d7219dea734cf124dcb59d47000d4d2f2ba2eebeaebf141"
+      }
+    },
+    {
+      "clock_ns": 181850000000,
+      "wall": 515189.724258135,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181800000000,
+      "counts": {
+        "odom": 5399,
+        "cloud": 5399,
+        "imu": 31396,
+        "bspline": 268,
+        "commands": 5063
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181800000000,
+        "sim_time": 181.85,
+        "monotonic_wall": 515189.714697525,
+        "ages": {
+          "clock_wall_s": 1.419044565409422e-06,
+          "pose_wall_s": 0.04339971602894366,
+          "command_wall_s": 0.03544555004918948,
+          "pose_sim_s": 0.05,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1135,
+        "offset": 81469724,
+        "length": 75430,
+        "sha256": "0a2622a66315c43cfeea0a8a9f22baf67eedf7b12a236e4430bda07ceb4687db"
+      }
+    },
+    {
+      "clock_ns": 181960000000,
+      "wall": 515189.881350501,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 181930000000,
+      "counts": {
+        "odom": 5403,
+        "cloud": 5403,
+        "imu": 31415,
+        "bspline": 268,
+        "commands": 5067
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 181900000000,
+        "sim_time": 181.93,
+        "monotonic_wall": 515189.834749613,
+        "ages": {
+          "clock_wall_s": 0.007267730019520968,
+          "pose_wall_s": 0.016843957011587918,
+          "command_wall_s": 0.0070959459990262985,
+          "pose_sim_s": 0.03,
+          "command_sim_s": 0.0
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1136,
+        "offset": 81545154,
+        "length": 75378,
+        "sha256": "6e6d96b9024835c864f8cbc1d0e04dbd4a0415769b23b47ca563e7a589b15d20"
+      }
+    },
+    {
+      "clock_ns": 182180000000,
+      "wall": 515190.181472065,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182129999999,
+      "counts": {
+        "odom": 5409,
+        "cloud": 5409,
+        "imu": 31455,
+        "bspline": 268,
+        "commands": 5073
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182094999999,
+        "sim_time": 182.15,
+        "monotonic_wall": 515190.134726374,
+        "ages": {
+          "clock_wall_s": 1.0799849405884743e-06,
+          "pose_wall_s": 0.042858413013163954,
+          "command_wall_s": 0.006796826026402414,
+          "pose_sim_s": 0.055000001,
+          "command_sim_s": 0.005
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1137,
+        "offset": 81620532,
+        "length": 75396,
+        "sha256": "a66dcfba8773155e0755f1e13b97cb887e662c44229bdb23dd50308fd6934725"
+      }
+    },
+    {
+      "clock_ns": 182400000000,
+      "wall": 515190.481304539,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182360000000,
+      "counts": {
+        "odom": 5416,
+        "cloud": 5416,
+        "imu": 31495,
+        "bspline": 268,
+        "commands": 5079
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182330000000,
+        "sim_time": 182.37,
+        "monotonic_wall": 515190.434685766,
+        "ages": {
+          "clock_wall_s": 0.0065373710240237415,
+          "pose_wall_s": 0.02172756497748196,
+          "command_wall_s": 0.00638135802000761,
+          "pose_sim_s": 0.04,
+          "command_sim_s": 0.0
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1138,
+        "offset": 81695928,
+        "length": 75387,
+        "sha256": "ffd983b1a0aca3aab7ae874404dab884ae09bb513f6d3f6b59abd3d070433c55"
+      }
+    },
+    {
+      "clock_ns": 182615000000,
+      "wall": 515190.780530258,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182560000000,
+      "counts": {
+        "odom": 5422,
+        "cloud": 5422,
+        "imu": 31536,
+        "bspline": 268,
+        "commands": 5085
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182560000000,
+        "sim_time": 182.59,
+        "monotonic_wall": 515190.73473985,
+        "ages": {
+          "clock_wall_s": 1.6450067050755024e-06,
+          "pose_wall_s": 0.016517076001036912,
+          "command_wall_s": 0.0067651839926838875,
+          "pose_sim_s": 0.03,
+          "command_sim_s": 0.005
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1139,
+        "offset": 81771315,
+        "length": 75412,
+        "sha256": "dd3209402f0c34f44fab67f6e832e9449edac74cc54654bd174bb84aeb8fb4b8"
+      }
+    },
+    {
+      "clock_ns": 182650000000,
+      "wall": 515190.823804098,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182560000000,
+      "counts": {
+        "odom": 5424,
+        "cloud": 5424,
+        "imu": 31541,
+        "bspline": 268,
+        "commands": 5085
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182590000000,
+        "sim_time": 182.63,
+        "monotonic_wall": 515190.79475385,
+        "ages": {
+          "clock_wall_s": 1.4709657989442348e-06,
+          "pose_wall_s": 0.01728296495275572,
+          "command_wall_s": 0.01685508794616908,
+          "pose_sim_s": 0.04,
+          "command_sim_s": 0.01
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1140,
+        "offset": 81846727,
+        "length": 75409,
+        "sha256": "ee45e0bc1e693045c686d47b25dc8e8b41772d78d89bb8a963498517dd96e97b"
+      }
+    },
+    {
+      "clock_ns": 182790000000,
+      "wall": 515191.03044408,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182754999999,
+      "counts": {
+        "odom": 5428,
+        "cloud": 5428,
+        "imu": 31567,
+        "bspline": 268,
+        "commands": 5090
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182724999999,
+        "sim_time": 182.76,
+        "monotonic_wall": 515190.974641297,
+        "ages": {
+          "clock_wall_s": 1.1540250852704048e-06,
+          "pose_wall_s": 0.025367831985931844,
+          "command_wall_s": 0.046020317007787526,
+          "pose_sim_s": 0.035000001,
+          "command_sim_s": 0.03
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1141,
+        "offset": 81922136,
+        "length": 75393,
+        "sha256": "2a1e86ff3da2a4e6979ea6965ea280ea42ea55534edcddaf6776ffeda7ccc124"
+      }
+    },
+    {
+      "clock_ns": 183010000000,
+      "wall": 515191.330463723,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 182955000000,
+      "counts": {
+        "odom": 5434,
+        "cloud": 5434,
+        "imu": 31606,
+        "bspline": 268,
+        "commands": 5096
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 182955000000,
+        "sim_time": 182.975,
+        "monotonic_wall": 515191.274929202,
+        "ages": {
+          "clock_wall_s": 1.0379590094089508e-06,
+          "pose_wall_s": 0.00696335599059239,
+          "command_wall_s": 0.046555864973925054,
+          "pose_sim_s": 0.02,
+          "command_sim_s": 0.03
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1142,
+        "offset": 81997529,
+        "length": 75432,
+        "sha256": "e8c7166cbdfdc7415b020311c97aaccc1d2ec7e2a95ca3b18ed1039351c916d6"
+      }
+    },
+    {
+      "clock_ns": 183235000000,
+      "wall": 515191.631483763,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 183185000000,
+      "counts": {
+        "odom": 5441,
+        "cloud": 5441,
+        "imu": 31649,
+        "bspline": 268,
+        "commands": 5102
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 183155000000,
+        "sim_time": 183.2,
+        "monotonic_wall": 515191.574724143,
+        "ages": {
+          "clock_wall_s": 1.4640390872955322e-06,
+          "pose_wall_s": 0.037387310003396124,
+          "command_wall_s": 0.046265486045740545,
+          "pose_sim_s": 0.045,
+          "command_sim_s": 0.03
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1143,
+        "offset": 82072961,
+        "length": 75389,
+        "sha256": "d51abcf66bd4d1e563ad8ff93e10847f22700ad3064be01b47e45adf086966d3"
+      }
+    },
+    {
+      "clock_ns": 183460000000,
+      "wall": 515191.924496647,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 183384999999,
+      "counts": {
+        "odom": 5448,
+        "cloud": 5448,
+        "imu": 31689,
+        "bspline": 268,
+        "commands": 5107
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 183384999999,
+        "sim_time": 183.43,
+        "monotonic_wall": 515191.874645628,
+        "ages": {
+          "clock_wall_s": 1.374981366097927e-06,
+          "pose_wall_s": 0.035019317001570016,
+          "command_wall_s": 0.046188150998204947,
+          "pose_sim_s": 0.045000001,
+          "command_sim_s": 0.04
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1144,
+        "offset": 82148350,
+        "length": 75387,
+        "sha256": "95f5690afcd16cf312f4c305e15e65de8fc42c5f51d6c0eb3910c4fe959383a4"
+      }
+    },
+    {
+      "clock_ns": 183460000000,
+      "wall": 515191.932284291,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 183414999999,
+      "counts": {
+        "odom": 5448,
+        "cloud": 5448,
+        "imu": 31689,
+        "bspline": 268,
+        "commands": 5108
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 183384999999,
+        "sim_time": 183.43,
+        "monotonic_wall": 515191.874645628,
+        "ages": {
+          "clock_wall_s": 1.374981366097927e-06,
+          "pose_wall_s": 0.035019317001570016,
+          "command_wall_s": 0.046188150998204947,
+          "pose_sim_s": 0.045000001,
+          "command_sim_s": 0.04
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1145,
+        "offset": 82223737,
+        "length": 75393,
+        "sha256": "f45ded9a5823ed6aefd97abbb31f819445f105d10d1fbe5155b8aeec11eaaf57"
+      }
+    },
+    {
+      "clock_ns": 183670000000,
+      "wall": 515192.231066859,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 183615000000,
+      "counts": {
+        "odom": 5454,
+        "cloud": 5454,
+        "imu": 31728,
+        "bspline": 268,
+        "commands": 5114
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 183615000000,
+        "sim_time": 183.64,
+        "monotonic_wall": 515192.17461581,
+        "ages": {
+          "clock_wall_s": 1.0550138540565968e-06,
+          "pose_wall_s": 0.0033625150099396706,
+          "command_wall_s": 0.046807497972622514,
+          "pose_sim_s": 0.025,
+          "command_sim_s": 0.03
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1146,
+        "offset": 82299130,
+        "length": 75407,
+        "sha256": "075454272b47102c963011a3b49cd29623c80776a9f76d3655b9223ba1a9af76"
+      }
+    },
+    {
+      "clock_ns": 183860000000,
+      "wall": 515192.481669362,
+      "state": "succeeded",
+      "mode": "active_hold",
+      "cascade_pose_stamp_ns": 183814999999,
+      "counts": {
+        "odom": 5460,
+        "cloud": 5460,
+        "imu": 31763,
+        "bspline": 268,
+        "commands": 5119
+      },
+      "bridge": {
+        "state": "ready",
+        "reason": "Fresh SLAM/SCAN inputs",
+        "slam_stamp_ns": 183780000000,
+        "sim_time": 183.815,
+        "monotonic_wall": 515192.41464977,
+        "ages": {
+          "clock_wall_s": 1.267006155103445e-06,
+          "pose_wall_s": 0.01770890998886898,
+          "command_wall_s": 0.03630752500612289,
+          "pose_sim_s": 0.035,
+          "command_sim_s": 0.025
+        }
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+        "line": 1147,
+        "offset": 82374537,
+        "length": 75414,
+        "sha256": "8ad58b7d2afa77f6036c24dc40388291be9f9618dd54921e371ebfed75362f7f"
+      }
+    }
+  ],
+  "compact_neighbor_statuses": [
+    {
+      "clock_s": 178.625,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1114,
+        "offset": 79887307,
+        "length": 75438,
+        "sha256": "95680fd35f571092a267b24f69fb53b0c821898f0f7b0adaa53886de7f0c735a"
+      }
+    },
+    {
+      "clock_s": 178.84,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1115,
+        "offset": 79962745,
+        "length": 75417,
+        "sha256": "ddd121b973cb9aa9d3a43a2572929279f8ccbd52be280113127d8c4260a22e3c"
+      }
+    },
+    {
+      "clock_s": 178.98,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1116,
+        "offset": 80038162,
+        "length": 75430,
+        "sha256": "9f1aead093b8e8d7d36a12e9237314be238c984c703807242720a624a9e616ab"
+      }
+    },
+    {
+      "clock_s": 179.015,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1117,
+        "offset": 80113592,
+        "length": 75466,
+        "sha256": "0e4d778bdb5d0b1dbcd84f4af9074448443a39912d092d5fa910d7b94abd5dac"
+      }
+    },
+    {
+      "clock_s": 179.23,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1118,
+        "offset": 80189058,
+        "length": 75483,
+        "sha256": "58c3e79f1604b4b00d418e96b40b2d7edc7ddafb76cc8a21135952697d045bcc"
+      }
+    },
+    {
+      "clock_s": 179.445,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1119,
+        "offset": 80264541,
+        "length": 75420,
+        "sha256": "748769e7d318e0ee3934c4c6c36ee01848658ae4a9d9a4ab0cd98da26445b831"
+      }
+    },
+    {
+      "clock_s": 179.57,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1120,
+        "offset": 80339961,
+        "length": 74044,
+        "sha256": "4d956e3e5be56d90adf5026e32de7f498b606a0df6601710164f406f90ff5e28"
+      }
+    },
+    {
+      "clock_s": 179.64,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1121,
+        "offset": 80414005,
+        "length": 75401,
+        "sha256": "1897f522f281ade1b6df3f332d7210556a4206963e383a1ba22520b47298296d"
+      }
+    },
+    {
+      "clock_s": 179.75,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1122,
+        "offset": 80489406,
+        "length": 75390,
+        "sha256": "c29645a6f58a7ad6bc8917e43aacf69aa34997e2f439a3019d767a4a5bb53e95"
+      }
+    },
+    {
+      "clock_s": 179.96,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1123,
+        "offset": 80564796,
+        "length": 75400,
+        "sha256": "615b47b893b8274c0bbd7d6cd338988263bad420ef2e6bcb40de695a46067963"
+      }
+    },
+    {
+      "clock_s": 180.145,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1124,
+        "offset": 80640196,
+        "length": 75403,
+        "sha256": "f909288800627e0199b3fc8a82990949323db08b70201619d8f79360b9e335d0"
+      }
+    },
+    {
+      "clock_s": 180.35,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1125,
+        "offset": 80715599,
+        "length": 75379,
+        "sha256": "7e74e2574bfa039199e915818ad5d2f223a12b588e530aea65839f1d39dc9a26"
+      }
+    },
+    {
+      "clock_s": 180.355,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1126,
+        "offset": 80790978,
+        "length": 75411,
+        "sha256": "5289da44a1e4af7a9f3404142346038b2bb03d278f7788b2ecf4afa17879ebbb"
+      }
+    },
+    {
+      "clock_s": 180.565,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1127,
+        "offset": 80866389,
+        "length": 75421,
+        "sha256": "bada64117443ba93eae2d4ff4751ca60b327da0914ae2cb725a0b8feef03eb0a"
+      }
+    },
+    {
+      "clock_s": 180.735,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1128,
+        "offset": 80941810,
+        "length": 75403,
+        "sha256": "1c0d202e9a2c56a664213d7da6ca9fcb74cdcb01d466217fe060cc1fee66186e"
+      }
+    },
+    {
+      "clock_s": 180.95,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1129,
+        "offset": 81017213,
+        "length": 75413,
+        "sha256": "fa2b31f96fb3cfcb36fdae372c348d7644c7b0bb3b54b47a1ec3d013aaa27f70"
+      }
+    },
+    {
+      "clock_s": 181.05,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1130,
+        "offset": 81092626,
+        "length": 75432,
+        "sha256": "558d3762e97add7a4925bdc776c137354ad00bf806832ba4886ab1bf2b50d213"
+      }
+    },
+    {
+      "clock_s": 181.165,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1131,
+        "offset": 81168058,
+        "length": 75407,
+        "sha256": "0db3862448b29a66584372001e004ce4ad493f2f4716df37e682fb1b556a9a85"
+      }
+    },
+    {
+      "clock_s": 181.375,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1132,
+        "offset": 81243465,
+        "length": 75416,
+        "sha256": "f9bd5d7bbc275b8f11de13431afdc9b4d250059d52ef5166ea48c259054b0bdd"
+      }
+    },
+    {
+      "clock_s": 181.57,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1133,
+        "offset": 81318881,
+        "length": 75432,
+        "sha256": "79f579a2d97669e90729aba1fe300a16c15cea6e54f27401844a1604afa99002"
+      }
+    },
+    {
+      "clock_s": 181.785,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1134,
+        "offset": 81394313,
+        "length": 75411,
+        "sha256": "40e06b3c4e8391d06d7219dea734cf124dcb59d47000d4d2f2ba2eebeaebf141"
+      }
+    },
+    {
+      "clock_s": 181.85,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1135,
+        "offset": 81469724,
+        "length": 75430,
+        "sha256": "0a2622a66315c43cfeea0a8a9f22baf67eedf7b12a236e4430bda07ceb4687db"
+      }
+    },
+    {
+      "clock_s": 181.96,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1136,
+        "offset": 81545154,
+        "length": 75378,
+        "sha256": "6e6d96b9024835c864f8cbc1d0e04dbd4a0415769b23b47ca563e7a589b15d20"
+      }
+    },
+    {
+      "clock_s": 182.18,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1137,
+        "offset": 81620532,
+        "length": 75396,
+        "sha256": "a66dcfba8773155e0755f1e13b97cb887e662c44229bdb23dd50308fd6934725"
+      }
+    },
+    {
+      "clock_s": 182.4,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1138,
+        "offset": 81695928,
+        "length": 75387,
+        "sha256": "ffd983b1a0aca3aab7ae874404dab884ae09bb513f6d3f6b59abd3d070433c55"
+      }
+    },
+    {
+      "clock_s": 182.615,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1139,
+        "offset": 81771315,
+        "length": 75412,
+        "sha256": "dd3209402f0c34f44fab67f6e832e9449edac74cc54654bd174bb84aeb8fb4b8"
+      }
+    },
+    {
+      "clock_s": 182.65,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1140,
+        "offset": 81846727,
+        "length": 75409,
+        "sha256": "ee45e0bc1e693045c686d47b25dc8e8b41772d78d89bb8a963498517dd96e97b"
+      }
+    },
+    {
+      "clock_s": 182.79,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1141,
+        "offset": 81922136,
+        "length": 75393,
+        "sha256": "2a1e86ff3da2a4e6979ea6965ea280ea42ea55534edcddaf6776ffeda7ccc124"
+      }
+    },
+    {
+      "clock_s": 183.01,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1142,
+        "offset": 81997529,
+        "length": 75432,
+        "sha256": "e8c7166cbdfdc7415b020311c97aaccc1d2ec7e2a95ca3b18ed1039351c916d6"
+      }
+    },
+    {
+      "clock_s": 183.235,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1143,
+        "offset": 82072961,
+        "length": 75389,
+        "sha256": "d51abcf66bd4d1e563ad8ff93e10847f22700ad3064be01b47e45adf086966d3"
+      }
+    },
+    {
+      "clock_s": 183.46,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1144,
+        "offset": 82148350,
+        "length": 75387,
+        "sha256": "95f5690afcd16cf312f4c305e15e65de8fc42c5f51d6c0eb3910c4fe959383a4"
+      }
+    },
+    {
+      "clock_s": 183.46,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1145,
+        "offset": 82223737,
+        "length": 75393,
+        "sha256": "f45ded9a5823ed6aefd97abbb31f819445f105d10d1fbe5155b8aeec11eaaf57"
+      }
+    },
+    {
+      "clock_s": 183.67,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1146,
+        "offset": 82299130,
+        "length": 75407,
+        "sha256": "075454272b47102c963011a3b49cd29623c80776a9f76d3655b9223ba1a9af76"
+      }
+    },
+    {
+      "clock_s": 183.86,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1147,
+        "offset": 82374537,
+        "length": 75414,
+        "sha256": "8ad58b7d2afa77f6036c24dc40388291be9f9618dd54921e371ebfed75362f7f"
+      }
+    },
+    {
+      "clock_s": 184.075,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1148,
+        "offset": 82449951,
+        "length": 75391,
+        "sha256": "7f602ce645990c4adba588dbeb3b8607c1b646b8039a972e4bd49d07f6a0f67c"
+      }
+    },
+    {
+      "clock_s": 184.25,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1149,
+        "offset": 82525342,
+        "length": 75397,
+        "sha256": "88c082d48e4819a30e9ff58fa2be1dc1af7ee020da2bd564eb563fedc3bac85f"
+      }
+    },
+    {
+      "clock_s": 184.25,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1150,
+        "offset": 82600739,
+        "length": 75394,
+        "sha256": "167444bf8d3c33f3de94f70f1d48fd9b4d2811bec9ca976449afabc649139d84"
+      }
+    },
+    {
+      "clock_s": 184.48,
+      "state": "succeeded",
+      "goal": 9,
+      "request_id": "20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7:exploration_prefix9:1",
+      "message": "实际SLAM固定终点主动捕获/位置朝向保持",
+      "replans": 268,
+      "reference_requests": 25,
+      "phase": "pre_turn",
+      "trajectory_id": 268,
+      "source": {
+        "line": 1151,
+        "offset": 82676133,
+        "length": 75409,
+        "sha256": "5a96986d1f55de274fbda60bcb8538270fab015488741aea13fdd8720f6ab5da"
+      }
+    }
+  ],
+  "all_status_rows_succeeded_active_hold": true,
+  "original_parking_checks": {
+    "origin_exact_actual_slam": true,
+    "fixed_first5s_pose_coverage": true,
+    "fixed_first5s_native_coverage": true,
+    "fixed_first5s_status_coverage": false,
+    "fixed_first5s_control_coverage": true,
+    "only_active_hold": true,
+    "succeeded_unprotected": true,
+    "recorded_native_safe": true,
+    "actual_pose_callback_fresh": true,
+    "all_original_parking_thresholds": true
+  },
+  "original_parking_metrics": {
+    "slam_xy_drift_max_m": 0.004750221481022046,
+    "slam_yaw_drift_max_rad": 0.0019482137400326349,
+    "native_planar_speed_max_mps": 0.007338040159391014,
+    "native_wz_max_radps": 0.007193557380071097,
+    "native_yaw_dot_max_radps": 0.007096399104549608
+  },
+  "source_binding": {
+    "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_152930_closed_loop_cascade_clock_hold_curvature_off_AB_r1_97a7/navigation_status.jsonl",
+    "sha256": "b5e63034054b073d2c6e40e5db32206178c0369c8ac5a2d9393e5c5d45bdffd2",
+    "bytes": 83653428,
+    "stable_during_read": true
+  },
+  "read_scope": {
+    "raw_status_rows_read_by_seek": 31,
+    "raw_status_bytes_read": 2336359,
+    "raw_native_PID_or_SLAM_reads": 0,
+    "full_raw_scan": false
+  },
+  "navigation_ground_truth_used": false,
+  "full46_pass": false,
+  "whole_200hz_physical_acceptance": false
+}

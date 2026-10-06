@@ -1,0 +1,34 @@
+--- V20/spatial_reference.py
++++ V21/spatial_reference.py
+@@ -122,8 +122,15 @@
+     If no speed satisfies the discrete reference budget, return an explicit
+     infeasible stop request. Downstream slew and braking guards still apply.
+     """
+-    rate_budget = max(0.,float(yaw_rate_limit)-abs(feedback_yaw)-config['yaw_rate_reserve_radps'])
+-    accel_budget = config['yaw_command_slew_radps2']-config['yaw_acceleration_reserve_radps2']
++    # Controller limits/filter arithmetic can supply NumPy scalar values.
++    # Normalize at the numerical boundary: feasibility is also consumed by
++    # the caller's `is False` safety branch, not just by JSON diagnostics.
++    speed, curvature, curvature_rate, yaw_rate_limit, feedback_yaw, dt = map(
++        float, (speed, curvature, curvature_rate, yaw_rate_limit, feedback_yaw, dt))
++    previous_speed = None if previous_speed is None else float(previous_speed)
++    previous_yaw_reference = None if previous_yaw_reference is None else float(previous_yaw_reference)
++    rate_budget = max(0.,yaw_rate_limit-abs(feedback_yaw)-float(config['yaw_rate_reserve_radps']))
++    accel_budget = float(config['yaw_command_slew_radps2'])-float(config['yaw_acceleration_reserve_radps2'])
+     k, dk = abs(float(curvature)), abs(float(curvature_rate))
+     cap = min(float(speed), rate_budget/k if k>1e-12 else float(speed),
+         math.sqrt(accel_budget/dk) if dk>1e-12 else float(speed))
+@@ -156,9 +163,9 @@
+                 if demand(middle)<=accel_budget:low=middle
+                 else:high=middle
+             cap=low
+-    return cap,dict(enabled=True,requested_speed_mps=float(speed),limited_speed_mps=cap,
+-        yaw_rate_budget_radps=rate_budget,yaw_acceleration_budget_radps2=accel_budget,
+-        reference_acceleration_checked=acceleration_checked,temporal_yaw_slew_checked=temporal_checked,
++    return float(cap),dict(enabled=True,requested_speed_mps=float(speed),limited_speed_mps=float(cap),
++        yaw_rate_budget_radps=float(rate_budget),yaw_acceleration_budget_radps2=float(accel_budget),
++        reference_acceleration_checked=bool(acceleration_checked),temporal_yaw_slew_checked=bool(temporal_checked),
+         previous_curvature_yaw_reference_radps=previous_yaw_reference,
+-        reference_budget_feasible=feasible,
++        reference_budget_feasible=bool(feasible),
+         physical_response_verified=False)

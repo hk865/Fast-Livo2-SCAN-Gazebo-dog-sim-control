@@ -1,0 +1,185 @@
+{
+  "schema": "curvature_v21_numpy_bool_reproduction/v1",
+  "created_at": "2026-10-06T08:06:13.176327+00:00",
+  "status": "FROZEN_V20_DEFECT_REPRODUCED_AND_CANDIDATE_REPAIRED",
+  "actual_run_replay": false,
+  "physical_navigation_verified": false,
+  "scope": "Deterministic production Controller and actual EvidenceWriter.append with mocked fresh source/clock fixtures. No ROS/Gazebo or raw-run scan.",
+  "old_sources": {
+    "controller.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/controller.py",
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+      "bytes": 36560
+    },
+    "cascade_core.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/cascade_core.py",
+      "sha256": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+      "bytes": 36652
+    },
+    "spatial_reference.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/spatial_reference.py",
+      "sha256": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469",
+      "bytes": 8691
+    }
+  },
+  "candidate_sources": {
+    "controller.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/controller.py",
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+      "bytes": 36560
+    },
+    "cascade_core.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/cascade_core.py",
+      "sha256": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+      "bytes": 36652
+    },
+    "spatial_reference.py": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/spatial_reference.py",
+      "sha256": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7",
+      "bytes": 9320
+    }
+  },
+  "production_numerical_profile": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/profiles/pipeline_staged_original46.json",
+    "sha256": "0a70f3c6842cb56ead6f5fc9c2106d92fa08219a61297c889291fe190c4d7c25",
+    "bytes": 83387
+  },
+  "test_source": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v21_curvature/curvature_scalar_tests.py",
+    "sha256": "da5499348f80c3f7a88fa7f8dde3d2f20075bff5521cfadbf1afcdfe4f56a4e1",
+    "bytes": 9328
+  },
+  "actual_writer_source": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/runtime_io.py",
+    "sha256": "0ce262de267fabb2d3816b280e377299619a1a5053fac8ebaf1fa7b16ebd68e0",
+    "bytes": 6023
+  },
+  "direct_inputs": {
+    "speed": 0.3,
+    "curvature": -1.0,
+    "curvature_rate": 0.0,
+    "yaw_rate_limit": 0.6,
+    "feedback_yaw": 0.0,
+    "previous_speed": 0.3,
+    "dt": 0.033,
+    "previous_yaw_reference": 0.3,
+    "scalar_type": "numpy.float64"
+  },
+  "direct_old": {
+    "speed": 0.0,
+    "feasible_truth": false,
+    "feasible_type": "bool_",
+    "false_identity_matches": false,
+    "field_types": {
+      "enabled": "bool",
+      "requested_speed_mps": "float",
+      "limited_speed_mps": "float",
+      "yaw_rate_budget_radps": "float64",
+      "yaw_acceleration_budget_radps2": "float",
+      "reference_acceleration_checked": "bool_",
+      "temporal_yaw_slew_checked": "bool",
+      "previous_curvature_yaw_reference_radps": "float64",
+      "reference_budget_feasible": "bool_",
+      "physical_response_verified": "bool"
+    },
+    "serializable": false,
+    "exception": "TypeError: Object of type bool_ is not JSON serializable"
+  },
+  "direct_candidate": {
+    "speed": 0.0,
+    "feasible_truth": false,
+    "feasible_type": "bool",
+    "false_identity_matches": true,
+    "field_types": {
+      "enabled": "bool",
+      "requested_speed_mps": "float",
+      "limited_speed_mps": "float",
+      "yaw_rate_budget_radps": "float",
+      "yaw_acceleration_budget_radps2": "float",
+      "reference_acceleration_checked": "bool",
+      "temporal_yaw_slew_checked": "bool",
+      "previous_curvature_yaw_reference_radps": "float",
+      "reference_budget_feasible": "bool",
+      "physical_response_verified": "bool"
+    },
+    "serializable": true,
+    "exception": null
+  },
+  "production_old": {
+    "mode": "drive",
+    "command": [
+      0.06568439040939614,
+      -0.06434802141913104,
+      -0.6
+    ],
+    "integral_delta": [
+      -0.0007898434599510062,
+      -0.001844358563649874,
+      0.0
+    ],
+    "integral_dt_s": 0.03,
+    "budget": {
+      "speed": 0.0,
+      "feasible_truth": false,
+      "feasible_type": "bool_",
+      "false_identity_matches": false,
+      "field_types": {
+        "enabled": "bool",
+        "requested_speed_mps": "float",
+        "limited_speed_mps": "float",
+        "yaw_rate_budget_radps": "float",
+        "yaw_acceleration_budget_radps2": "float",
+        "reference_acceleration_checked": "bool",
+        "temporal_yaw_slew_checked": "bool",
+        "previous_curvature_yaw_reference_radps": "float64",
+        "reference_budget_feasible": "bool_",
+        "physical_response_verified": "bool"
+      },
+      "serializable": false,
+      "exception": "TypeError: Object of type bool_ is not JSON serializable"
+    },
+    "complete_PID_row_serialization": {
+      "serializable": false,
+      "exception": "TypeError: Object of type bool_ is not JSON serializable"
+    }
+  },
+  "production_candidate": {
+    "mode": "reference_constraint_hold",
+    "command": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "integral_delta": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "integral_dt_s": 0.0,
+    "budget": {
+      "speed": 0.0,
+      "feasible_truth": false,
+      "feasible_type": "bool",
+      "false_identity_matches": true,
+      "field_types": {
+        "enabled": "bool",
+        "requested_speed_mps": "float",
+        "limited_speed_mps": "float",
+        "yaw_rate_budget_radps": "float",
+        "yaw_acceleration_budget_radps2": "float",
+        "reference_acceleration_checked": "bool",
+        "temporal_yaw_slew_checked": "bool",
+        "previous_curvature_yaw_reference_radps": "float",
+        "reference_budget_feasible": "bool",
+        "physical_response_verified": "bool"
+      },
+      "serializable": true,
+      "exception": null
+    },
+    "complete_PID_row_serialization": {
+      "serializable": true,
+      "exception": null
+    }
+  },
+  "interpretation": "The old numpy false has the correct boolean truth but fails the identity predicate, missing the intended reference_constraint_hold. JSON failure is an additional consequence; this is not only a logging defect."
+}

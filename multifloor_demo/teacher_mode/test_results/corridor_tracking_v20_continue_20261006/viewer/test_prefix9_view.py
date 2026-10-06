@@ -23,12 +23,19 @@ def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Prefix9PanelTests(unittest.TestCase):
     def setUp(self):
-        self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)
+        self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)/'teacher';self.root.mkdir()
         self.root_patch=patch.object(viewer,'ROOT',self.root);self.root_patch.start()
         viewer.PREFIX9_VIEW_CACHE.clear();viewer.SOURCE_DIGEST_CACHE.clear()
         self.run=self.root/'runs/synthetic_prefix';self.run.mkdir(parents=True)
         for name in viewer.PREFIX9_RUN_SOURCES|{'worker_result.json'}:write(self.run/name,{})
         write(self.run/'navigation_profile.json',{'original46_prefix_regions':9,'controller_selector':'corridor_tracking_v20'})
+        self.helpers = [self.root / name for name in (
+            'navigation/corridor_tracking_v20/route.py',
+            'navigation/corridor_tracking_v20/prefix_contract.py',
+            'navigation/corridor_tracking_v20/mission46_profile.py')]
+        self.helpers += [self.root.parent / name for name in ('navigation/goal_regions.py', 'mission/route_regions.py')]
+        for helper in self.helpers:
+            helper.parent.mkdir(parents=True, exist_ok=True); helper.write_text('# synthetic geometry helper\n')
         self.report_path=self.root/'test_results/prefix_report.json'
         self.index_path=self.root/viewer.PREFIX9_REPORT_INDEX
         receipts=[{'goal_id':f'exploration:{i}','passed':True,'checks':{'raw_dwell':True}}for i in range(9)]
@@ -40,7 +47,7 @@ class Prefix9PanelTests(unittest.TestCase):
             'first5s_parking':{'passed':True,'checks':{'fixed_first':True},'clock_interval_ns':[10,5_000_000_010],
                 'metrics':{'slam_xy_drift_max_m':.0065478451805498624,'slam_yaw_drift_max_rad':.00366,
                     'native_planar_speed_max_mps':.0197,'native_wz_max_radps':.00312,'native_yaw_dot_max_radps':.00302}},
-            'source_bindings':[{'file':str(p),'sha256':digest(p)}for p in sorted(self.run.iterdir())]}
+            'source_bindings':[{'file':str(p),'sha256':digest(p)}for p in sorted(self.run.iterdir()) + self.helpers]}
         self.save()
     def tearDown(self):
         self.root_patch.stop();self.temp.cleanup()

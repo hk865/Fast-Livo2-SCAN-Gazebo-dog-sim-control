@@ -1,0 +1,57 @@
+{
+  "schema": "curvature_v21_serialization_control_review/v1",
+  "created_at": "2026-10-06T08:06:13.176327+00:00",
+  "reviewed": true,
+  "status": "PASS_FINITE_REPAIR_ONLY",
+  "actual_navigation_verified": false,
+  "original_geometry_timeout_dwell_or_safety_changed": false,
+  "reviewed_source_sha256": {
+    "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "spatial_reference.py": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7"
+  },
+  "serialization_and_intended_false_predicate_repair": true,
+  "numeric_formula_or_gains_changed": false,
+  "SLAM_CPP_changed": false,
+  "cross_frame_pipeline_changed": false,
+  "finite_receipt": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/v21_scalar_fix/FINITE_REPAIR_RECEIPT.json",
+    "sha256": "a4c1f7a2a4ccd79c5c423474b80652b0e6c033087d7d95b62f8050c25cd25116",
+    "bytes": 9511
+  },
+  "failure_reproduction": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/v21_scalar_fix/V20_NUMPY_BOOL_FAILURE_REPRODUCTION.json",
+    "sha256": "4413e80534de76c6fd8ea79b94afcd84339bdf4f958f08f116c6b7fca783d2fb",
+    "bytes": 6980
+  },
+  "patch_scope": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/v21_scalar_fix/NUMERICAL_PATCH_SCOPE.json",
+    "sha256": "ed3b90d1c14ad3ff32398fe7ae1c47c26d2f32b9eccaa3299211f3dd9827a2a2",
+    "bytes": 2985
+  },
+  "review_scope": [
+    "speed_budget native scalar input/output boundary and unchanged equations",
+    "Existing cascade reference_budget_feasible is False predicate receives genuine Python False",
+    "Existing reference_constraint_hold zeros commands and freezes integration",
+    "Actual select_pid_velocity zero-command branch bypasses prior command slew",
+    "Actual EvidenceWriter.append serialization with real production math rows"
+  ],
+  "findings": [
+    {
+      "severity": "blocking_in_frozen_V20",
+      "fixed_in_candidate": true,
+      "description": "NumPy bool_ can both crash json.dumps and bypass the intended identity-based infeasible hold. Prior finite admission did not exercise this production NumPy boundary."
+    },
+    {
+      "severity": "scope_limit",
+      "description": "No change to spatial reference construction, gains, limits, source freshness, route geometry, dwell/timeouts, SCAN C++, SLAM or cross-frame path policy. Corridor remains shadow-only."
+    }
+  ],
+  "admission": "Permits new candidate finite preflight only. A separately source-bound new gate and explicit profile are required before root-owned actual rerun. All original actual acceptance checks remain applicable.",
+  "remaining_unverified": [
+    "Actual ON run survival and acceptance",
+    "Physical angular response and parking",
+    "Full 46-region completion",
+    "Native 200 Hz physics ledger"
+  ]
+}

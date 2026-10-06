@@ -1,5 +1,12 @@
 # FAST-LIVO2 / SCAN / Gazebo Go2 Frozen Teacher
 
+## 2026-10-06 曲率开启独立检查点
+
+独立分支 `codex/v22-curvature-prefix9` 已实现曲率前馈、转向预算限速及NumPy布尔安全修复。原工作区97ed实际完成原9/9区域与首固定5秒停车，原8项门全通过，XY最大漂移4.45 mm。跨帧解耦本轮不做；原完整46区第十区越界失败和全部先前失败保留，未认证全任务、新律完整Sim2Sim或真机。
+
+[报告、实际曲线及命令](multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/README.md)、[分支回滚与clone限制](docs/CURVATURE_BRANCH_CHECKPOINT.md)。V20分支与main不变；本分支是源码/证据检查点，原机gate不授权clone执行。
+
+
 本仓库保存本地仿真适配的源码、场景资产、冻结配置和精简实验报告。仅仿真；不包含实体机器人部署，也不重新训练 Teacher。
 
 - [总实验报告](docs/EXPERIMENT_REPORT_20261006.md)：通过、失败及尚未验证范围。

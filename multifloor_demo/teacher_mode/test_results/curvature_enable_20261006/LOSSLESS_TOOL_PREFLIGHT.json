@@ -1,0 +1,37 @@
+{
+  "schema": "teacher_off97a7_lossless_tool_finite_preflight/v1",
+  "status": "PASS_FINITE_TOOL_ONLY",
+  "actual_cloud_archive_executed": false,
+  "actual_cloud_deleted": false,
+  "actual_cloud_body_read": false,
+  "actual_OFF_closed_run_readonly_check": "PASS",
+  "run_metadata_sha256": {
+    "run_result.json": "2b2175182d8b7f88f36c89e3fac254ae8aeb81da9b47552799e41fb11822fbfc",
+    "worker_result.json": "f4f4ddb6e34c0345cba3f86f522d8db89df0493867d5805a1d25f7360722eeb2",
+    "runtime_manifest.json": "f2d1e4478a6174f91282e12e674da3f00018577e8e0a5e5975014a944bd02ea6",
+    "pipeline_normal_stop.json": "e91ff37f5f77934f1d41ca7f944daf0dde086c8dd5b3e9e8e80b053627a47eee"
+  },
+  "tests": {
+    "total": 8,
+    "passed": 8,
+    "temporary_fixtures_only": true,
+    "final_wall_seconds": 0.061
+  },
+  "earlier_finite_failure": {
+    "test": "test_rename_identity_change_blocks_prune",
+    "scope": "temporary_fixture_only",
+    "failure": "One earlier unmodified temporary file was pruned before later replaced file was rejected.",
+    "fix": "Precheck all remaining source identities before decompress/pruning; all tests rerun passed."
+  },
+  "gross_original_bytes_observed_by_metadata": 11594784128,
+  "expected_original_files": 11054,
+  "actual_compression_ratio": "UNMEASURED",
+  "destination": "/var/tmp/go2_teacher_curvature_20261006_archives",
+  "archive_action_requires_off_independent_audit_completed": true,
+  "prune_separate_after_full_archive_verification": true,
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/lossless_off_clouds.py": "1007726b13b4ddbc34c49fd26e2560142e7d2da831b82fc8a872a75e91ab6dec",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/lossless_off_clouds_tests.py": "6709563b7ac01b0f1cd66592f918d67ab28b8746770ed835f168a1223e1edc64",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/LOSSLESS_OFF_CLOUDS.md": "e0773d0ea4a5d0561e1c98bb97f67b4109b79d9786fcc8d3ba2dea8faf4b688d"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "schema": "teacher_curvature_enable_control_review/v1",
+  "created_utc": "2026-10-06T07:31:38.608691+00:00",
+  "reviewed": true,
+  "status": "passed_for_bounded_simulation_experiment",
+  "finite_software_tests_passed": true,
+  "blocking_findings": [],
+  "scope": "Read-only review of frozen V20 curvature branches plus new finite tests. No ROS/Gazebo/native controller replay, source/profile edits or raw-run scan. Cross-frame decoupling deferred as requested.",
+  "candidate_settings": {
+    "spatial_reference": {
+      "enabled": true,
+      "arc_length_m": 0.2,
+      "curvature_feedforward_enabled": true,
+      "curvature_speed_limit_enabled": true
+    }
+  },
+  "frozen_control_source_pins": {
+    "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "spatial_reference.py": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469"
+  },
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/spatial_reference.py": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/pid_core.py": "91b93f058b527bdb25acdb76ce005b4c14b5f4a7bdc8acafbd9a76d46db69440",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/spatial_reference_tests.py": "488258e31ef2d66d829e5ecdfe7c61afeef1c44d8b8ced077af2a0cc5f207180",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/controller_reference_tests.py": "5b945e523e6afa09709d469bda6334399a5f4d2441c721dea3d4d0b0bff325dd",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/pure_tests.py": "855d340482aab3d83b10405e036453cd800fae603236b5b942a05c87e1174582",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pipeline_v19/cascade_core.py": "ba139551805511fbf04b2fbc52fcc8feb9ea9bd60c0fa18251e7d7a37c93e9c9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/curvature_enable_tests.py": "4525e71026bf12d1acd06c927d23ca80caea2edcb6a0f6cdb96ef6283c5d5ddb"
+  },
+  "mathematics": {
+    "reference": "kappa=d(spatial heading)/ds, kappa_rate=d2(spatial heading)/ds2; finite horizontal arc/chord heading, original 3D projection and raw path retained.",
+    "curvature_term": "Logged yaw_PD.curvature_FF = v*kappa. yaw_D = 0.15*(v*kappa-filtered_yawrate), so total Euler yaw reference = 1.15*v*kappa + 1.3*heading_error - 0.15*filtered_yawrate.",
+    "rate_budget": "Converted body-z yaw boundary to Euler-yaw space; subtract abs(yaw feedback) and 0.12 rad/s reserve, constrain abs(1.15*kappa)*v to remaining headroom.",
+    "acceleration_budget": "0.8 - 0.2 = 0.6 rad/s^2 reference budget; abs(1.15*kappa_rate)*v^2 + abs(1.15*kappa)*abs(v-v_previous)/dt <= budget.",
+    "path_jump": "Additional discrete abs(1.15*kappa*v - previous_curvature_yaw_reference) <= 0.6*dt; previous curvature reference and speed persist across set_path. Infeasible reference requests exact-zero constraint hold.",
+    "gate": "Curvature branches only operate in drive. External align uses the locked heading, zero XY command and frozen XY integrals. Constraint hold freezes all velocity integrals, emits exact zero and marks replan pending in production wrapper.",
+    "downstream": "Unchanged bounded PI output and production command slew [.6,.6,.8]; protection and constraint hold deliberately bypass normal slew to zero.",
+    "tail": "At fixed-goal short tail <=0.15 m, heading is fixed-goal yaw and curvature becomes unavailable/zero; this existing tail/capture behavior is retained."
+  },
+  "tests": {
+    "total": 46,
+    "suites": {
+      "spatial_reference_tests": {
+        "test_names": [
+          "spatial_reference_tests.SpatialReferenceChecks.test_circle_curvature_and_s_curvature_sign_are_spatial",
+          "spatial_reference_tests.SpatialReferenceChecks.test_cross_control_uses_its_own_normal_raw_cross_remains",
+          "spatial_reference_tests.SpatialReferenceChecks.test_curve_feature_flags_are_separate_and_corner_hold_freezes_pi",
+          "spatial_reference_tests.SpatialReferenceChecks.test_disabled_reference_preserves_original_segment_direction",
+          "spatial_reference_tests.SpatialReferenceChecks.test_fixed_goal_tail_heading_is_identical_inside_and_outside",
+          "spatial_reference_tests.SpatialReferenceChecks.test_handoff_and_preview_do_not_jump_to_same_xy_lower_floor",
+          "spatial_reference_tests.SpatialReferenceChecks.test_handoff_maps_real_pose_and_preserves_command_pi_and_filter",
+          "spatial_reference_tests.SpatialReferenceChecks.test_invalid_configuration_and_handoff_are_rejected",
+          "spatial_reference_tests.SpatialReferenceChecks.test_invalid_external_turn_reference_remains_fatal_before_duplicate_reuse",
+          "spatial_reference_tests.SpatialReferenceChecks.test_microsegment_changes_heading_without_replacing_path",
+          "spatial_reference_tests.SpatialReferenceChecks.test_original_hold_capture_and_straight_commands_are_preserved",
+          "spatial_reference_tests.SpatialReferenceChecks.test_ramp_microsegment_vertical_reference_matches_declared_gradient",
+          "spatial_reference_tests.SpatialReferenceChecks.test_replan_during_external_turn_keeps_lock_then_drive_uses_spatial_reference",
+          "spatial_reference_tests.SpatialReferenceChecks.test_reversal_chord_cancellation_is_explicit",
+          "spatial_reference_tests.SpatialReferenceChecks.test_speed_budget_rate_acceleration_and_infeasible_transition",
+          "spatial_reference_tests.SpatialReferenceChecks.test_true_corner_is_not_silently_rounded_into_diagonal_path"
+        ],
+        "status": "passed",
+        "tests_run": 16
+      },
+      "controller_reference_tests": {
+        "test_names": [
+          "controller_reference_tests.WrapperReferenceChecks.test_heading_uses_same_finite_arc_as_inner_controller",
+          "controller_reference_tests.WrapperReferenceChecks.test_invalid_reference_stops_same_tick_and_records_failure",
+          "controller_reference_tests.WrapperReferenceChecks.test_new_path_receives_actual_pose_at_atomic_handoff",
+          "controller_reference_tests.WrapperReferenceChecks.test_original_guard_target_is_not_replaced_with_unchecked_chord",
+          "controller_reference_tests.WrapperReferenceChecks.test_repeated_previews_do_not_mutate_progress_integrals_or_filters",
+          "controller_reference_tests.WrapperReferenceChecks.test_tail_heading_agrees_with_fixed_goal_capture"
+        ],
+        "status": "passed",
+        "tests_run": 6
+      },
+      "pure_tests": {
+        "test_names": [
+          "pure_tests.PureChecks.test_3d_projection_separates_overlapping_floors",
+          "pure_tests.PureChecks.test_ack_residual_antiwindup_not_guessed_slew",
+          "pure_tests.PureChecks.test_capture_hold_fixed_target_first_window_and_integral",
+          "pure_tests.PureChecks.test_cross_sign_and_grade_are_geometric",
+          "pure_tests.PureChecks.test_euler_yawrate_and_com_lever",
+          "pure_tests.PureChecks.test_fixed_goal_is_copied_and_wrong_floor_cannot_capture",
+          "pure_tests.PureChecks.test_full_loop_cannot_complete_at_initial_endpoint",
+          "pure_tests.PureChecks.test_future_gyro_or_ack_rejected_then_recoverable",
+          "pure_tests.PureChecks.test_limits_and_turn_do_not_integrate_unactuated_xy",
+          "pure_tests.PureChecks.test_math_update_is_header_event_not_heartbeat_rate",
+          "pure_tests.PureChecks.test_nan_and_backwards_pose_latch_failure",
+          "pure_tests.PureChecks.test_repeated_header_cannot_refresh_receipt",
+          "pure_tests.PureChecks.test_scan_replan_preserves_integral_and_filter",
+          "pure_tests.PureChecks.test_static_checked_path_does_not_expire_with_source_ttl",
+          "pure_tests.PureChecks.test_true_receipt_gap_checked_before_new_measurement",
+          "pure_tests.PureChecks.test_two_fresh_recovery_and_hold_does_not_integrate",
+          "pure_tests.PureChecks.test_verified_gains_are_preserved"
+        ],
+        "status": "passed",
+        "tests_run": 17
+      },
+      "curvature_enable_tests": {
+        "test_names": [
+          "curvature_enable_tests.CurvatureEnableChecks.test_both_flags_duplicate_header_does_not_reintegrate_and_nan_stops",
+          "curvature_enable_tests.CurvatureEnableChecks.test_coarse_true_corner_both_flags_stops_without_smoothing_through",
+          "curvature_enable_tests.CurvatureEnableChecks.test_external_locked_turn_excludes_curvature_and_freezes_xy_only",
+          "curvature_enable_tests.CurvatureEnableChecks.test_joint_flags_effective_feedforward_and_budget_match",
+          "curvature_enable_tests.CurvatureEnableChecks.test_production_wrapper_constraint_hold_exact_zero_and_pending_replan",
+          "curvature_enable_tests.CurvatureEnableChecks.test_sign_reversal_handoff_is_infeasible_zero_and_freezes_integral",
+          "curvature_enable_tests.CurvatureEnableChecks.test_speed_budget_direct_inequalities_grid"
+        ],
+        "status": "passed",
+        "tests_run": 7
+      }
+    },
+    "commands": [
+      {
+        "cwd": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20",
+        "command": "python3 -B -m unittest spatial_reference_tests controller_reference_tests pure_tests -v",
+        "exit_code": 0,
+        "tests_run": 39
+      },
+      {
+        "command": "python3 -B /home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_enable_20261006/curvature_enable_tests.py",
+        "exit_code": 0,
+        "tests_run": 7
+      }
+    ],
+    "additional_budget_grid_cases": 135,
+    "production_wrapper_test": "Actual select_pid_velocity source AST executed with pure Controller; only ROS clock/recording state are fixtures.",
+    "evidence_capture": "Both test commands executed successfully in this review. Suite names/counts enumerated afterward without rerunning the tests."
+  },
+  "admission": {
+    "bounded_simulation_enablement_review_passed": true,
+    "original_safety_gates_must_remain": true,
+    "run_admission_gate_and_source_binding_still_required": true,
+    "actual_run_completed": false,
+    "navigation_verified": false,
+    "full46_verified": false,
+    "physical_response_verified": false,
+    "full_200Hz_physics_verified": false,
+    "corridor_control_authority": false
+  },
+  "limitations": [
+    "The budget limits curvature reference, not measured Teacher yaw acceleration or the complete feedback/PI derivative. Fixed reserves are not newly measured plant guarantees.",
+    "The zero-curvature/feedback-only case is not made feasible by reducing forward speed; existing command limits/slew/heading guards still bound it. Do not interpret reference_budget_feasible as a proof that all feedback fits an unsaturated physical plant.",
+    "Off-path lateral correction and actual projection speed can differ from requested tangential speed; feedforward is a reference approximation.",
+    "Sharp-corner fallback or sign-changing path handoff may intentionally stop/replan. Turning this feature on does not promise fewer stops or mission completion.",
+    "No 0.45 m route-fence candidate pre-admission is added. It remains a measured-SLAM protective stop; prior path257 route-fence issue is not fixed by these switches.",
+    "No old-plan retention, cross-frame producer/consumer decoupling, active corridor control or collision-free/foot-support certification is introduced."
+  ],
+  "actual_test_observations_required": [
+    "Prove both profile flags and actual loaded source hashes; log active budget/FF rows, not configuration alone.",
+    "Measure drive time, constraint-hold duration/count, new-path/heading resets and original region progress/deadline outcomes.",
+    "Check logged v*kappa and D contribution, yaw/reference demand, limits/slew, command-versus-actual velocity/yaw and saturation with native values used offline only.",
+    "Keep original 0.45 m route fence, dwell/timeout/freshness/native safety and first5s parking checks; preserve failure/unverified outcomes."
+  ]
+}

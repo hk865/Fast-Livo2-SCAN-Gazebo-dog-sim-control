@@ -1,0 +1,26 @@
+{
+  "schema": "curvature_v22_archive_contract/v1",
+  "simulation_only": true,
+  "parent_candidate": "corridor_tracking_v21_curvature",
+  "archive_only_revision": true,
+  "numeric_formula_or_gains_changed": false,
+  "SLAM_CPP_changed": false,
+  "cross_frame_pipeline_changed": false,
+  "source_timeout_s": 0.3,
+  "Teacher_CPU_threads": 1,
+  "sole_actuator": "teacher_sim::TeacherActuator",
+  "navigation_ground_truth_allowed": false,
+  "historical_navigation_pass_inherited": false,
+  "original46_geometry_timeout_dwell_unchanged": true,
+  "parking_parameters_changed": false,
+  "allowed_profile": "curvature_original46_prefix9_on.json",
+  "SCAN_workspace_selector": "protected_baseline",
+  "geometry_helper_files": [
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v22_curvature_archive/route.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v22_curvature_archive/prefix_contract.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v22_curvature_archive/mission46_profile.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/goal_regions.py",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/route_regions.py"
+  ],
+  "prefix_acceptance": "original first9 actual-SLAM arrival receipts plus first5s active feedback hold; duration truncation is not success"
+}
