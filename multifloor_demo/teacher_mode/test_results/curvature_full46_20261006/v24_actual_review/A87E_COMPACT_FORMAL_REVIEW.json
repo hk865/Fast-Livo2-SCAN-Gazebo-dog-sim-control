@@ -1,0 +1,41 @@
+{
+  "schema": "independent_compact_actual46_review/v1",
+  "reviewed": true,
+  "status": "FAILED_REPORT_SOUND",
+  "actual_full46_pass": false,
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_175947_closed_loop_cascade_clock_hold_curvature_on_V24_full46_r2_isolated_a87e",
+  "report": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/a87e_FULL46_ACTUAL_EVALUATION.json",
+    "sha256": "9a54197d68fc7c8bd8c09d5bbee97aa6d08b78b9db34f60e97a070d931d0f848"
+  },
+  "source_bindings_verified": {
+    "navigation_scope.json": "8e23d6f58697b4fc9240c90b79e4eb9d59fc2bdd920d6bcdf91190783431a539",
+    "source_manifest.json": "85cc337baf9552d0435e93736188a43064c3e23e9fd8f6f85158ef9421d6ee4d",
+    "navigation_source_snapshots.json": "b51260b39c32855b20597b226275403df260a1ca92cc1fbfb36cb2640843b3e2",
+    "navigation_profile.json": "4320393c265e66a25dbc448b88605fb7515426cb88765fea17da014bc1b7468c",
+    "runtime_manifest.json": "00ec173dd127a70514a8a782e3e063a316207341c4620fde70d3a52229e738bc",
+    "worker_result.json": "06ba6286d3fd1ae980fd30a7f98f203f2fd02e0ac356b761cb772534ab9df08c",
+    "mission46_status.json": "59ae47a78d65f84eb80fe954866a2bc27703f45b894dd3c54d5e24f1f258687b",
+    "navigation_anchor.json": "838565013a0a190f087ebf23a310918634cc8cf84e1aac9978b43845bbfd7191"
+  },
+  "checks_count": {
+    "passed": 10,
+    "failed": 4,
+    "unverified": 8
+  },
+  "original_checks": 22,
+  "arrival_scope": {
+    "completed_exploration_regions": 12,
+    "required_exploration_regions": 18,
+    "total_required": 46,
+    "reported_actual_source_dwell_errors": [],
+    "reported_original_deadlines_all_12_passed": true
+  },
+  "source_binding_hashes_all_verified": true,
+  "review_scope": "One compact formal report plus its eight small source JSONs; no native/PID/SLAM/cloud raw reread, no controller replay; existing evaluator results independently checked for identity, aggregation and scope.",
+  "limitations": [
+    "A valid runtime cleanup/source/native/pipeline report does not promote failed original mission completion.",
+    "Arrival claims here cross-check the formal report; original dwell samples were not replayed again.",
+    "Both full200Hz and publication/PI/SCAN replay remain unverified."
+  ]
+}

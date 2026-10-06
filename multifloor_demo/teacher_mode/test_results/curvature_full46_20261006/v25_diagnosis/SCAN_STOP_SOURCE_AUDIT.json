@@ -1,0 +1,332 @@
+{
+  "schema": "v25_SCAN_stop_source_audit/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de",
+  "monotonic_wall_ns": 526747828889911,
+  "read_only": true,
+  "actual_run_raw_streams_reread": false,
+  "production_or_configuration_modified": false,
+  "new_simulation_or_build_started": false,
+  "formal_full46_status": "failed",
+  "formal_full46_passed": false,
+  "functional46_limited_pass": false,
+  "original_actual_arrivals": 11,
+  "required_total_regions": 46,
+  "original_deadlines_unchanged": true,
+  "runtime": {
+    "runtime_status": "completed_requires_independent_navigation_evaluation",
+    "error": null,
+    "all_owned_and_children_clean": true,
+    "pipeline_normal_completed": true
+  },
+  "original_check_statuses": {
+    "original46_profile_and_archived_sources": "passed",
+    "whole_mission_terminal": "failed",
+    "runtime_and_owned_cleanup": "passed",
+    "frozen_Teacher_CPU_sole_actuator": "passed",
+    "actual_loaded_SLAM_binary": "passed",
+    "actual_SLAM_navigation_source": "passed",
+    "three_original_phase_requests": "failed",
+    "exploration_original_regions_and_actual_dwell": "failed",
+    "return_origin_original_regions_and_actual_dwell": "unverified",
+    "navigation_f1_f3_original_regions_and_actual_dwell": "unverified",
+    "actual_original_origin_standing_initialization": "passed",
+    "three_causal_privileged_terrain_switches": "unverified",
+    "actual_current_run_saved_RGB": "unverified",
+    "original_dynamic_stop_clear_recovery": "unverified",
+    "final_first5s_SLAM_and_physical_hold": "unverified",
+    "native_physical_and_actuator_safety": "passed",
+    "pipeline_complete_ordered_context_valid_drain": "passed",
+    "actual_heading_reference_consistency": "passed",
+    "full_200Hz_native_actuator_trace_replay": "unverified",
+    "full_publication_PI_and_all_SCAN_geometry_replay": "unverified",
+    "actual_baseline_SCAN_and_no_corridor_authority": "passed",
+    "original_phase_receipt_and_first_hold_order": "failed"
+  },
+  "terrain_actual": {
+    "schema": "teacher_actor_terrain_switch/v1",
+    "current_provider": "initial",
+    "include_models": [
+      "floor_1",
+      "ramp_12",
+      "floor_2"
+    ],
+    "manifest_sha256": "c9d88197a5b0bd4459bf623855d6de7f6f0efa77ae14650bfcdca1581c89da68",
+    "switched": false,
+    "failure": null,
+    "event_sequence": 1,
+    "arrival_stamp_ns": null,
+    "pending_arrival_stamp_ns": null,
+    "navigation_ground_truth_used": false,
+    "completed_transitions": []
+  },
+  "terrain_fix_actual_switch_validated": false,
+  "actual_loaded_SCAN": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node",
+    "sha256": "5a5e3745314d7252bc69dbdf41118305f988c2252e8148e2956b11114b687332",
+    "verified": true
+  },
+  "current_CPP_static_audit_scope": "CMakeCache points to current baseline src. Baseline runtime contract binds exe/config/setup; this audit does not add a rebuild or machine-code arithmetic equivalence proof.",
+  "frozen_candidate_source_snapshots": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/stack.launch.py": {
+      "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/sources/navigation/corridor_tracking_v25_terrain_event/stack.launch.py",
+      "sha256": "31b053b4e5ff26283191893b367b962c6d44d47fb2d5319f476c850c98bd67a6",
+      "actual_live_archive_byte_equal": true
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/shared_controller.py": {
+      "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/sources/navigation/corridor_tracking_v25_terrain_event/shared_controller.py",
+      "sha256": "c0ca3dccd85d0be81844eed64db1e3493f87f8cbffd7ed474397bfae6c92ee75",
+      "actual_live_archive_byte_equal": true
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/controller.py": {
+      "snapshot": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/sources/navigation/corridor_tracking_v25_terrain_event/controller.py",
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+      "actual_live_archive_byte_equal": true
+    }
+  },
+  "configured_SCAN_launch_overrides": {
+    "use_sim_time": true,
+    "fsm.navi_mode": 3,
+    "fsm.planning_horizon": 2.5,
+    "fsm.thresh_replan": 0.35,
+    "fsm.max_replan_fail_count": 50,
+    "fsm.measured_max_speed": 0.2,
+    "fsm.measured_velocity_filter_tau": 0.4,
+    "grid_map.frame_id": "camera_init",
+    "grid_map.sliding_map_frame_id": "teacher_scan_sliding_map",
+    "grid_map.sensor_type": "lidar",
+    "grid_map.cloud_is_world": true,
+    "grid_map.need_extrinsic": false,
+    "grid_map.resolution": 0.08,
+    "grid_map.body_height": 0.4,
+    "grid_map.obstacles_inflation_z_down": 0.12,
+    "grid_map.obstacles_inflation_z_up": 0.12,
+    "grid_map.double_cylinder_radius": 0.25,
+    "grid_map.double_cylinder_offset": 0.18,
+    "grid_map.sliding_map_size_x": 10.0,
+    "grid_map.sliding_map_size_y": 10.0,
+    "grid_map.sliding_map_size_z": 5.0,
+    "grid_map.local_update_range_x": 5.0,
+    "grid_map.local_update_range_y": 5.0,
+    "grid_map.local_update_range_z": 2.5,
+    "manager.max_vel": 0.2,
+    "manager.max_acc": 0.15,
+    "manager.planning_horizon": 2.5,
+    "optimization.max_vel": 0.2,
+    "optimization.max_acc": 0.15
+  },
+  "parameters_are_configured_not_fresh_runtime_dump": true,
+  "source_and_installed_planner_yaml_byte_equal": true,
+  "inflation_grid_rounding": {
+    "resolution_m": 0.08,
+    "requested_vertical_m": 0.12,
+    "ceil_vertical_voxels": 2,
+    "voxel_center_offset_m": 0.16,
+    "voxel_extent_and_phase_not_ignored": true
+  },
+  "last_archived_forward_paths": [
+    {
+      "trajectory_id": 234,
+      "accepted_stamp_ns": 212884999999,
+      "reference_stamp": [
+        199,
+        480000000
+      ],
+      "body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "adjusted_body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "goal_changed": false
+    },
+    {
+      "trajectory_id": 235,
+      "accepted_stamp_ns": 212949999999,
+      "reference_stamp": [
+        212,
+        975000000
+      ],
+      "body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "adjusted_body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "goal_changed": false
+    },
+    {
+      "trajectory_id": 236,
+      "accepted_stamp_ns": 217669999999,
+      "reference_stamp": [
+        212,
+        975000000
+      ],
+      "body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "adjusted_body_goal": [
+        16.07728312529755,
+        6.839062656090681,
+        1.2034672279979741
+      ],
+      "goal_changed": false
+    }
+  ],
+  "last3_are_not_emergency_stop_geometry": true,
+  "matched_log_compact_counts": {
+    "Replan failed 50 times": 34,
+    "Obstacle discovered; emergency stop in 0.000s": 594,
+    "A-star failed; aborting optimization": 25
+  },
+  "offending_collision_voxel_or_surface_replay_available": false,
+  "constant_stop_mechanism_source": "plan_manage/src/planner_manager.cpp:317-325 + scan_replan_fsm.cpp:729-738,787-827,883-915",
+  "same_window_SLAM_height_discrepancy_observed_by_B": true,
+  "height_error_directly_caused_collision": "UNVERIFIED",
+  "potential_interface_or_parameter_mismatches_unresolved": [
+    "fixed linear/interpolated z and zero z gradient cannot adapt support-height bias",
+    "all measured surfaces incl floor contribute occupancy; stale height-layer occupancy remains a hypothesis",
+    "ceil(.12/.08) expands two voxel layers, differing from continuous .12m expectation",
+    "cloud/ray-origin callback association uses latest pose rather than exact header pair",
+    "actual occupancy/map bounds on failing query not recorded"
+  ],
+  "ruled_out_as_claims": [
+    ".4m goal convention does not itself shift body goal because sender subtracts and SCAN adds same .4",
+    "last three archived paths preserve original region12 body_goal",
+    "V25 Actor terrain event was not triggered and did not latch failure",
+    "no true navigation arrival inferred from internal target adjustment or stop trajectory duration"
+  ],
+  "next_minimal_candidate": "Bounded planning/stop decision evidence with explicit FSM reason, map version, body/local/original/adjusted goals, queried front/rear voxel IDs/status/source stamps. Keep original safety and deadlines before any parameter or interface repair.",
+  "writer_stopped": true,
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/plan_manage/src/scan_replan_fsm.cpp": {
+      "bytes": 36536,
+      "sha256": "1836771fdac3b3b16bd57d42681152b513f809f57bb239b9dad8d65b71758cf1"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/plan_manage/src/planner_manager.cpp": {
+      "bytes": 21856,
+      "sha256": "94bdd33159bf9fe38cc1450ca3a8ef1d294f181e67010632cc12cb3253f66c41"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/plan_env/src/grid_map.cpp": {
+      "bytes": 40516,
+      "sha256": "83264ae48e53fd849756b66b2b24df9966632cf8cf9fa5b47505bfd0fad036fa"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/plan_env/include/plan_env/grid_map.h": {
+      "bytes": 16052,
+      "sha256": "0d7d6f27917d9fe5985d73df63185a28eb52e886df661f4d5f23af13d322b577"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/path_searching/src/dyn_a_star.cpp": {
+      "bytes": 10810,
+      "sha256": "ba2bc44485c7506de56857f3e7a93cf94d5616f43573d4f53eb1fbd001aa758f"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/bspline_opt/src/bspline_optimizer.cpp": {
+      "bytes": 43788,
+      "sha256": "9744424bd58841213230e95b252706360b1d4db10eaf30e7f6bf34a857a87568"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/src/plan_manage/config/planner.yaml": {
+      "bytes": 2009,
+      "sha256": "f6a3e8ee0edd6663b2d4d3ee822bfc48cae41af2d36fe625641fe8f3fc3acf8a"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/install/scan_planner/share/scan_planner/config/planner.yaml": {
+      "bytes": 2009,
+      "sha256": "f6a3e8ee0edd6663b2d4d3ee822bfc48cae41af2d36fe625641fe8f3fc3acf8a"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/build/scan_planner/CMakeCache.txt": {
+      "bytes": 100911,
+      "sha256": "c10ce07890b072ea56989c76beaa04a2b5b635286238544b73f979a4b2c21aab"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/build/plan_env/CMakeCache.txt": {
+      "bytes": 105811,
+      "sha256": "df9fe1103380b1ab16fee134ad3028f373ed568c23d4f95fc21e84914012022d"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/ros2_ws/build/path_searching/CMakeCache.txt": {
+      "bytes": 98685,
+      "sha256": "798a589e8d405c83617f1c591a2bcc3db3da312fd266e9ab945dbd7881c7ba85"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/stack.launch.py": {
+      "bytes": 6037,
+      "sha256": "31b053b4e5ff26283191893b367b962c6d44d47fb2d5319f476c850c98bd67a6"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/shared_controller.py": {
+      "bytes": 43972,
+      "sha256": "c0ca3dccd85d0be81844eed64db1e3493f87f8cbffd7ed474397bfae6c92ee75"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/controller.py": {
+      "bytes": 36560,
+      "sha256": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/control_core.py": {
+      "bytes": 15661,
+      "sha256": "c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/odom_adapter.py": {
+      "bytes": 6566,
+      "sha256": "23f901e6702be4d2bc8201d16870512f75cb1d2573590b3e4a8bbe1056962b1b"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/e8de_FULL46_ACTUAL_EVALUATION.json": {
+      "bytes": 20277,
+      "sha256": "425438a744b66e5b7daad47f8068fcb39fda49f6cfe97d15e0b0cb80df1ec274"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/runtime_manifest.json": {
+      "bytes": 116654,
+      "sha256": "be9bba7e29ad2a50136d10ffc067ee9342e75fe0241170b080b9f95146fd11f5"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/worker_result.json": {
+      "bytes": 192885,
+      "sha256": "f66278f3140fbf6d3ea33438ba72ce9df5a96c39cde8d36d5a69a7a3c0b8f471"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/run_result.json": {
+      "bytes": 405,
+      "sha256": "243f36150778a473d698bba289e77ff518f54b63d7613c0af05b5c28df9a9a65"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/terrain_provider_result.json": {
+      "bytes": 1927,
+      "sha256": "520736d1e52f9778cd333584cd05267d44077daf3f8021027d71c65aaeef7249"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/navigation_profile.json": {
+      "bytes": 83625,
+      "sha256": "c71e2847aa7ff86613010dc64674932040935aea4b082f05dd1288402672ee9a"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/scan_loaded_binary.json": {
+      "bytes": 1165,
+      "sha256": "49ac2357c2da9a9116556cce37affd448983b2d404179a80b73c3c49ae41f1aa"
+    },
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/navigation_source_snapshots.json": {
+      "bytes": 136909,
+      "sha256": "7e61d6b6cff3fd38ad8d5f1e9976dcfa6bc304e966ddd4b4e41b9b494892e10c"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_LAST3_SCAN_GEOMETRY.json": {
+      "bytes": 69726,
+      "sha256": "c49b74ae8feb15ba9ac1ea6971d6a3edc74097dc17f85fbfe83766770b04fa6e"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_ALL_TRAJECTORY_METADATA.json": {
+      "bytes": 1111203,
+      "sha256": "5e7724b67fdbf3bcfda224af8da7a867c1a87ff4265c15151bf2501afe6224be"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/e8de_SCAN_diagnostic_lines.json.gz": {
+      "bytes": 53151,
+      "sha256": "db820aaebf46cb835f9bcc18ba29df2fe26f0762dfc1b749b7ff5adcb62ca35c"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_FRAME_AND_STOP_DIAGNOSIS.json": {
+      "bytes": 198334,
+      "sha256": "0d8595ac334e581225d1b89f796aad889a909ed29b00f9724df11e8b129e75a8"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/SCAN_LOG_CLOCK_JOIN.json": {
+      "bytes": 11656,
+      "sha256": "f548e76aff777ae8dd222439c175f0f0f3a32d33a1b0edfdc83c8399280fa56f"
+    },
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/SCAN_STOP_SOURCE_AUDIT.md": {
+      "bytes": 8845,
+      "sha256": "ef5f600d01f1a82fbc0ab62655591fb22e629c49f895d9ffda61d961300479a3"
+    }
+  }
+}

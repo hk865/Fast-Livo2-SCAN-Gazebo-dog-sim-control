@@ -1,0 +1,57 @@
+{
+  "schema": "teacher_curvature_v25_scoped_status/v1",
+  "finalized": true,
+  "simulation_only": true,
+  "version": "V25",
+  "model_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "navigation_ground_truth_used": false,
+  "actor_privileged_dimensions": 232,
+  "full46_status": "FAILED",
+  "full46_arrivals": 11,
+  "full46_total": 46,
+  "formal_checks": {
+    "passed": 10,
+    "failed": 4,
+    "unverified": 8
+  },
+  "report_sha256": "425438a744b66e5b7daad47f8068fcb39fda49f6cfe97d15e0b0cb80df1ec274",
+  "terrain_event_fix_actual_switches_verified": false,
+  "terrain_event_fix_finite_tests_passed": true,
+  "levels_by_scope": {
+    "interface": {
+      "status": "passed",
+      "description": "Frozen CPU Teacher/source/mapping interface and sole native executor witnessed"
+    },
+    "basic_motion": {
+      "status": "passed",
+      "description": "Designated historical flat/5cm/10cm step functional cases retained; not all terrain success"
+    },
+    "full_sim2sim": {
+      "status": "unverified",
+      "description": "No matched Isaac fullscene closed-loop; full200Hz/PI geometry replay unverified"
+    },
+    "finite_navigation": {
+      "status": "passed",
+      "description": "V22 original9/9 plus first5s scope retained; V25 first11 actualSLAM original arrival/dwell/deadline checked"
+    },
+    "full46_navigation": {
+      "status": "failed",
+      "description": "V25 actual original46 attempted:11 arrived, region12 timeout; original gates unchanged"
+    },
+    "real_robot": {
+      "status": "unverified",
+      "description": "Simulation only"
+    }
+  },
+  "curvature_feedforward_enabled": true,
+  "curvature_speed_limit_enabled": true,
+  "cross_frame_estimator_decoupling_implemented": false,
+  "region10_independent": {
+    "passed": true,
+    "activation_sim_s": 137.705,
+    "arrival_sim_s": 186.685,
+    "dwell_sim_s": 0.430000001,
+    "original_3d_and_deadline_unchanged": true
+  },
+  "root_cause_scope": "Confirmed SCAN continuous failure emergency stop and simultaneous estimated-height divergence; offending occupancy cause unverified"
+}

@@ -1,0 +1,86 @@
+{
+  "schema": "full46_v25_transparent_adapter_finite/v1",
+  "status": "PASS_FINITE_READER_ONLY",
+  "passed": true,
+  "actual_navigation_verified": false,
+  "run_raw_read": false,
+  "original_check_count": 22,
+  "original_thresholds_unchanged": true,
+  "old_checks_removed": [],
+  "tests": 13,
+  "execution": {
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "adapter_tests",
+      "-v"
+    ],
+    "exit_code": 0,
+    "log": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/ADAPTER_TESTS.log",
+    "log_sha256": "6a4b0fa9afc2a57d1c776ed8c76025af05df3d0cc60f88d05344767a287a2b8d"
+  },
+  "check_adapter": {
+    "exit_code": 0,
+    "output": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/CHECK_ADAPTER.json",
+    "sha256": "d35ea60cb1582eafce7ceafd4387c772ed4eed60d35507f7c2f776b9cb4903a4"
+  },
+  "AST_comparison": {
+    "baseline": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/evaluate_full46_v24.py",
+    "baseline_sha256": "91198ade1b51972caab0677100e054ad022b7c70bb2288ecd4d31665ad679658",
+    "normalized_full_module_AST_equal": true,
+    "only_allowed_deltas": [
+      "V25 candidate root, selector/version and descriptive labels",
+      "Additional exact SHA guard for frozen V24 adapter; existing V23/V20/base guards retained",
+      "Exact provenance pin set expanded from shared_controller/replan_policy to include terrain_provider/mission46_terrain/worker",
+      "Diagnostic source-closure result key and provenance docstring"
+    ],
+    "no_numeric_expression_or_acceptance_branch_change": true
+  },
+  "scope": {
+    "full_original46_functional_scope": "Same 18+14+14 original regions, actual dwell/deadlines, standing initialization, terrain, RGB, dynamic ACK/guard recovery, fixed first5s hold, recorded50Hz native safety, source/binary/pipeline checks.",
+    "full_replay_unverified": [
+      "full_200Hz_native_actuator_trace_replay",
+      "full_publication_PI_and_all_SCAN_geometry_replay"
+    ],
+    "formal_full_pass_not_claimed": true
+  },
+  "finite_cases": [
+    "Exact candidate import without runtime files",
+    "Actual974b prepare five repaired/control runtime source pins canonical/ref/manifest identity",
+    "Foreign same-basename parent source cannot fill candidate source",
+    "Missing/digest/ref/both manifest keys rejected",
+    "Noncanonical/missing/symlink/modified snapshot and changed live source rejected",
+    "Selector/version mismatch rejected",
+    "Recorded tangent/normal/heading/path/locked-tail joins checked; malformed/nonfinite/foreign references rejected",
+    "Missing turn coverage stays UNVERIFIED",
+    "Synthetic22 aggregation retains both replayUNVERIFIED and knownfailureFAILED"
+  ],
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/evaluate_full46_v25.py": "df20281a4c81aafee5bc88b8efe185cfd7f769086bcb16143f7749d007ac6182",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/adapter_tests.py": "c66e29f0e98fe35e3a5e1b0e3b7dfb10f4d0a6dc97bdd8dbd45fa08b08bd28e2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/ADAPTER_TESTS.log": "6a4b0fa9afc2a57d1c776ed8c76025af05df3d0cc60f88d05344767a287a2b8d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/CHECK_ADAPTER.json": "d35ea60cb1582eafce7ceafd4387c772ed4eed60d35507f7c2f776b9cb4903a4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v24_evaluation/evaluate_full46_v24.py": "91198ade1b51972caab0677100e054ad022b7c70bb2288ecd4d31665ad679658",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/evaluate_full46_v23.py": "437e0e2c265492645e98573fc01b011c0c8f4013522875462708a79fee13ebc6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/evaluate_full46_v20.py": "a4e529b882e31f2fa1d80bfdeff2c86e9243d1a09ae6ad5e97dba7998ccac133",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/evaluate_mission46.py": "9a16295984d60862727c92ab6df0a81e0254a8f04b7d77709cd4cc9c958498d2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/spatial_reference.py": "ba19a2f40b31d391810073361ed5c5821345ce0c5aef49ad34b8e542539a8cb7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/shared_controller.py": "c0ca3dccd85d0be81844eed64db1e3493f87f8cbffd7ed474397bfae6c92ee75",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/replan_policy.py": "db1c66c970b5277c1e50478108a8faef1fac99332290717621bb0ef810f2ae0f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/terrain_provider.py": "29713ba9b991fbbe7ef074dbf0b7bfaeefb5fec2fc66cc4cc88405ff7e89271b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/mission46_terrain.py": "3d8840715730e72dffa88b487395f707c45a6b9bfafccedbcf9d438e067142b5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/worker.py": "6dc07ffbac8ac26d5dfda9e1898b22a8129b82ad108d385b36f8854fff1e4ff5",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/mission46_profile.py": "5423f23ad5ee88475d20db22f2eb37a8dc8072b276a0b3bbcc4da6a039e70ca0",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/mission46.py": "ad70fdf29d2af465df48e6b12be39b42031e4c2cc8234a4e58d3a082a85b9e90",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event/mission46_runtime_evidence.py": "99daa86f451c3962b82cbfff9ada0f1e7a8f69e02c46313ca5f5c3164cbe9552"
+  },
+  "notes": [
+    "This is version/source adaptation, not an actual run audit. Root evaluates a closed run once.",
+    "No frozen V24/V25 source, old evaluator, old report, or active run modified.",
+    "An initial unittest invocation from repository root failed module lookup before tests; its output is preserved as ATTEMPT1_WRONG_CWD.log. Correct working-directory13 tests and check-adapter completed."
+  ]
+}

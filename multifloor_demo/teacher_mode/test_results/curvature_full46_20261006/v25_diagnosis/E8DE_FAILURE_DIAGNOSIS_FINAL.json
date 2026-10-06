@@ -1,0 +1,360 @@
+{
+  "schema": "e8de_final_failure_diagnosis/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de",
+  "formal_status": "FAILED",
+  "formal_passed": false,
+  "functional46_limited_pass": false,
+  "original_arrivals": 11,
+  "total_required": 46,
+  "formal_original_checks": {
+    "original46_profile_and_archived_sources": "passed",
+    "whole_mission_terminal": "failed",
+    "runtime_and_owned_cleanup": "passed",
+    "frozen_Teacher_CPU_sole_actuator": "passed",
+    "actual_loaded_SLAM_binary": "passed",
+    "actual_SLAM_navigation_source": "passed",
+    "three_original_phase_requests": "failed",
+    "exploration_original_regions_and_actual_dwell": "failed",
+    "return_origin_original_regions_and_actual_dwell": "unverified",
+    "navigation_f1_f3_original_regions_and_actual_dwell": "unverified",
+    "actual_original_origin_standing_initialization": "passed",
+    "three_causal_privileged_terrain_switches": "unverified",
+    "actual_current_run_saved_RGB": "unverified",
+    "original_dynamic_stop_clear_recovery": "unverified",
+    "final_first5s_SLAM_and_physical_hold": "unverified",
+    "native_physical_and_actuator_safety": "passed",
+    "pipeline_complete_ordered_context_valid_drain": "passed",
+    "actual_heading_reference_consistency": "passed",
+    "full_200Hz_native_actuator_trace_replay": "unverified",
+    "full_publication_PI_and_all_SCAN_geometry_replay": "unverified",
+    "actual_baseline_SCAN_and_no_corridor_authority": "passed",
+    "original_phase_receipt_and_first_hold_order": "failed"
+  },
+  "core_findings": [
+    {
+      "level": "direct_recorded_evidence",
+      "finding": "Around217–221s actual SLAM height drops about0.2m relative to native base_link mapped through a fixed initial SE3; physical base did not descend by that amount."
+    },
+    {
+      "level": "direct_recorded_evidence_and_source_mechanism",
+      "finding": "SCAN logs34 cycles of50 planning failures then emergency stop, and594 current-trajectory occupancy emergency messages. Controller records34 degenerate-spline rejections;457 subsequent running statuses have exactlyzero command, no accepted path, and outer obstacle_hold false."
+    },
+    {
+      "level": "direct_recorded_evidence",
+      "finding": "Last actual PID220.10s remains drive with nonzero command, no failure latch, path236 remaining2.022567m. The persistent stop is subsequent loss of an acceptable progress-bearing SCAN path, not persistent curvature reference_constraint_hold."
+    },
+    {
+      "level": "not_established",
+      "finding": "Offending costmap voxel/surface and exact collision query inputs were not archived here. Height drift directly causing Astar/collision failure is plausible but unproven. No proof of physical collision or safety guard bypass."
+    },
+    {
+      "level": "scope_limit",
+      "finding": "Terrain provider remains initial/failureNone/no completed transition; V25 logging repair was not physically exercised. Full46, later phases, finalparking and two fullreplays retain original FAIL/UNVERIFIED."
+    }
+  ],
+  "frame_comparison": {
+    "fixed_initial_pair_count": 26,
+    "initial_interval_ns": [
+      5745000000,
+      6570000000
+    ],
+    "initial_position_residual_RMS_xyz_m": [
+      0.00088536679027141,
+      0.0005584661062871309,
+      0.0003299713355802617
+    ],
+    "timejoin": {
+      "samples": 1366,
+      "no_extrapolation": true,
+      "native_max_bracket_gap_ns": 20000000,
+      "native_max_nearest_gap_ns": 10000000,
+      "native_max_distance_to_bracket_ns": 19999999,
+      "SLAM_position_sources": "Original PID feedback stamp+position and original status region_arrival_evidence stamp+raw_position, never status publication time substituted for SLAM pose time"
+    },
+    "native_position_semantics": "base_link.WorldPose origin, no COM position offset subtraction",
+    "selected_periods": [
+      {
+        "interval_s": [
+          217,
+          218
+        ],
+        "rows": 27,
+        "SLAM_z_m": {
+          "median": 1.2228822342369738,
+          "min": 1.2124802945863908,
+          "max": 1.230793115805083
+        },
+        "native_world_base_z_m": {
+          "median": 1.500857611795111,
+          "min": 1.4945545880033189,
+          "max": 1.5070407639100105
+        },
+        "native_fixed_camera_z_m": {
+          "median": 1.2018918997650938,
+          "min": 1.1954916772609345,
+          "max": 1.2081080737337662
+        },
+        "SLAM_minus_fixed_native_z_m": {
+          "median": 0.019507639321247883,
+          "min": 0.015203093121520128,
+          "max": 0.025917799851516765
+        }
+      },
+      {
+        "interval_s": [
+          219,
+          220
+        ],
+        "rows": 27,
+        "SLAM_z_m": {
+          "median": 1.102386419650717,
+          "min": 1.0700794056141674,
+          "max": 1.1438105555783054
+        },
+        "native_world_base_z_m": {
+          "median": 1.499243191831511,
+          "min": 1.4933628548654947,
+          "max": 1.5066794913452022
+        },
+        "native_fixed_camera_z_m": {
+          "median": 1.2006750869632683,
+          "min": 1.194766061249036,
+          "max": 1.2082233796386068
+        },
+        "SLAM_minus_fixed_native_z_m": {
+          "median": -0.09347987408364133,
+          "min": -0.13814397402443945,
+          "max": -0.05584525428109366
+        }
+      },
+      {
+        "interval_s": [
+          225,
+          230
+        ],
+        "rows": 33,
+        "SLAM_z_m": {
+          "median": 1.0072238571377405,
+          "min": 1.0034874558988693,
+          "max": 1.017010805643772
+        },
+        "native_world_base_z_m": {
+          "median": 1.502314241355704,
+          "min": 1.5020919253906846,
+          "max": 1.5026868108633737
+        },
+        "native_fixed_camera_z_m": {
+          "median": 1.2039152496535312,
+          "min": 1.2036922848882166,
+          "max": 1.2042885383647606
+        },
+        "SLAM_minus_fixed_native_z_m": {
+          "median": -0.19686769387887382,
+          "min": -0.20023037420961431,
+          "max": -0.18727773272098847
+        }
+      },
+      {
+        "interval_s": [
+          285,
+          289.45
+        ],
+        "rows": 29,
+        "SLAM_z_m": {
+          "median": 1.004763363800369,
+          "min": 1.0041091316844286,
+          "max": 1.005532730605953
+        },
+        "native_world_base_z_m": {
+          "median": 1.501769529771308,
+          "min": 1.501768876085971,
+          "max": 1.5017700478656246
+        },
+        "native_fixed_camera_z_m": {
+          "median": 1.2033683033389155,
+          "min": 1.2033676479592421,
+          "max": 1.2033688209106097
+        },
+        "SLAM_minus_fixed_native_z_m": {
+          "median": -0.19860466853819037,
+          "min": -0.1992592552836676,
+          "max": -0.19783515918149752
+        }
+      }
+    ]
+  },
+  "stop_summary": {
+    "count": 457,
+    "first_status_sim_s": 220.31,
+    "last_status_sim_s": 289.39,
+    "max_absolute_command": 0.0,
+    "obstacle_hold_any": false,
+    "last_degenerate_count": 34,
+    "accepted_trajectory_id_values": [
+      "None"
+    ]
+  },
+  "last_pre_timeout_actual_SLAM": {
+    "stamp_ns": 289444999999,
+    "position_camera_init": [
+      15.944946624377428,
+      4.409218919725925,
+      1.0042676663852703
+    ],
+    "original_region12_center": [
+      16.07728312529755,
+      6.839062656090681,
+      1.2034672279979741
+    ],
+    "error_xyz_m": [
+      -0.1323365009201236,
+      -2.429843736364756,
+      -0.1991995616127038
+    ],
+    "horizontal_distance_m": 2.4334447872567027,
+    "native_world_base_link_position_same_time": [
+      15.912123062511375,
+      4.610066780471853,
+      1.5017690167059454
+    ],
+    "native_position_in_fixed_initial_camera_frame": [
+      15.95279284142967,
+      4.437138731435315,
+      1.2033677893210675
+    ],
+    "timejoin": {
+      "left_native_stamp_ns": 289425000000,
+      "right_native_stamp_ns": 289445000000,
+      "max_distance_to_bracket_ns": 19999999,
+      "nearest_distance_ns": 1,
+      "left_native_source_line": 14472,
+      "right_native_source_line": 14473,
+      "linear_position_and_SLerp_attitude": true
+    },
+    "no_dwell_claim": true
+  },
+  "SCAN_log_evidence": {
+    "counts": {
+      "Replan failed 50 times": 34,
+      "Obstacle discovered; emergency stop in 0.000s": 594,
+      "A-star failed; aborting optimization": 25
+    },
+    "first_occurrences": {
+      "A-star failed; aborting optimization": {
+        "source_line": 19753,
+        "source_offset": 3162089,
+        "source_bytes": 105,
+        "source_line_sha256": "550f8f987b868a000b734957e3ddb3faef7c4b89ba34dcf4da599879722928d0",
+        "text": "[scan_planner_node-7] [ERROR] [1791282832.469286775] [bspline_opt]: A-star failed; aborting optimization"
+      },
+      "Replan failed 50 times": {
+        "source_line": 20574,
+        "source_offset": 3215700,
+        "source_bytes": 138,
+        "source_line_sha256": "76e9b76c71ded86ac731bb3cbb836a582321684934b3e55129bdabc0f2ce50ad",
+        "text": "[scan_planner_node-7] [WARN] [1791282832.919263063] [scan_planner_node]: Replan failed 50 times; emergency stop and wait for a new target"
+      },
+      "Obstacle discovered; emergency stop in 0.000s": {
+        "source_line": 20600,
+        "source_offset": 3217452,
+        "source_bytes": 119,
+        "source_line_sha256": "5c27dd353bdb630cd3765bafeea2ee150616c84c08cb4d5f1681541c85270ebf",
+        "text": "[scan_planner_node-7] [WARN] [1791282832.949178689] [scan_planner_node]: Obstacle discovered; emergency stop in 0.000s"
+      }
+    },
+    "clock_mapping": "Original wallclock retained. Supplemental SCAN_LOG_CLOCK_JOIN gives approximate ~219.790s Astar and~220.099s fail50 using independently recorded epoch/monotonic anchors; not an exact simulation event stamp or causal proof."
+  },
+  "geometry_evidence": {
+    "last_three_successfully_archived_paths": [
+      {
+        "path": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/navigation_trajectories/000232_trajectory_234.npz",
+        "sha256": "91ed90c23903b34aae917c4efc14cd828113ff2ff873320e0264526fa63433d9",
+        "samples_count": 165,
+        "sample_start": [
+          15.865637193947926,
+          3.033667620610161,
+          1.2244178808150195
+        ],
+        "sample_end": [
+          15.897620179943223,
+          5.458890071084868,
+          1.3215405661713322
+        ],
+        "sample_z_range_m": [
+          1.2244178808150195,
+          1.3225843131100474
+        ],
+        "horizontal_arc_m": 2.426718820811307,
+        "horizontal_extent_m": 2.425433331526496,
+        "coefficients_all_constant": false
+      },
+      {
+        "path": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/navigation_trajectories/000233_trajectory_235.npz",
+        "sha256": "a5f1cc721ca35fc323b38da6b3e58335a7fcfb6381be8ffbe311966adf5302a4",
+        "samples_count": 171,
+        "sample_start": [
+          15.859457765932673,
+          3.046285692297637,
+          1.2308145462546303
+        ],
+        "sample_end": [
+          16.00071133837727,
+          5.505794067187895,
+          1.2125289862563804
+        ],
+        "sample_z_range_m": [
+          1.2125289862563804,
+          1.2308145462546303
+        ],
+        "horizontal_arc_m": 2.46356124703318,
+        "horizontal_extent_m": 2.4635612470331805,
+        "coefficients_all_constant": false
+      },
+      {
+        "path": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_182824_closed_loop_cascade_clock_hold_terrain_event_V25_full46_r1_isolated_e8de/navigation_trajectories/000234_trajectory_236.npz",
+        "sha256": "3ac516cb9639de3f15a799c3bfd33f65ab8948b19695e1d5ca7f8851b813390f",
+        "samples_count": 165,
+        "sample_start": [
+          15.914615023008276,
+          3.9437022320245982,
+          1.2218184906760166
+        ],
+        "sample_end": [
+          16.069322711482847,
+          6.410096200866931,
+          1.2020672377484538
+        ],
+        "sample_z_range_m": [
+          1.2020672377484538,
+          1.2218184906760166
+        ],
+        "horizontal_arc_m": 2.4714455763509013,
+        "horizontal_extent_m": 2.4712413233868884,
+        "coefficients_all_constant": false
+      }
+    ],
+    "all_last3_body_goals_equal_adjusted": true,
+    "rejected_stop_spline_full_coefficients_available": false,
+    "reason_missing": "Production progress rejection returns before successful trajectory archive; last3 moving NPZ files cannot substitute."
+  },
+  "next_minimal_evidence": "Before changing planner/height parameters, capture the first failed plan/occupancy query voxel and local grid/world-frame metadata plus estimator gravity/bias/map residuals around the height change; preserve original route/dwell/timeout/safety gates. No new test or source change performed here.",
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_STREAM_RECEIPT.json": "6568d88dde2d75ea1e93d2a5309d88e06186c7b954e091762e3cd13b00017c79",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_FRAME_AND_STOP_DIAGNOSIS.json": "0d8595ac334e581225d1b89f796aad889a909ed29b00f9724df11e8b129e75a8",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_LAST3_SCAN_GEOMETRY.json": "c49b74ae8feb15ba9ac1ea6971d6a3edc74097dc17f85fbfe83766770b04fa6e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_ALL_TRAJECTORY_METADATA.json": "5e7724b67fdbf3bcfda224af8da7a867c1a87ff4265c15151bf2501afe6224be",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_PID_PATH_RECEIPTS.json": "c56d06726812bf05f799d61b41e250c428e0377c9c1e15ed0b15cd6f31d74878",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/SCAN_STOP_SOURCE_AUDIT.json": "39ab365eb4b413cb7b44193f1a1896bbd0248e0cfeac5e3cab2ade41df2ba89f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/SCAN_STOP_SOURCE_AUDIT.md": "ef5f600d01f1a82fbc0ab62655591fb22e629c49f895d9ffda61d961300479a3",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/SCAN_LOG_CLOCK_JOIN.json": "f548e76aff777ae8dd222439c175f0f0f3a32d33a1b0edfdc83c8399280fa56f",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/PLOT_PROVENANCE.json": "9dfc61bb1d73978cd00d407bb7ff24c26866055c11defa5d55ae94b7f07a7bff",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_HEIGHT_FIXED_FRAME.png": "b91d00766c4bb56927360952d0879a85ab8f7709df7d8b0a971560e31d55a9b6",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_HEIGHT_FIXED_FRAME.svg": "ee9e26436a64ddbabbdaa596e564cc4c34a133b6ca6d240af063f6aae43792d9",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_REGION12_COMMAND_STOP.png": "fede1677ad66fb571f3e0d72c80112218fe4d483bb5e2f02dff8cf198bcccd6c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_REGION12_COMMAND_STOP.svg": "8a1ff36df5a39071b3e26e3953f7ac387dda1b1e835b5cebd7badf76df2ebb20",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_evaluation/e8de_FULL46_ACTUAL_EVALUATION.json": "425438a744b66e5b7daad47f8068fcb39fda49f6cfe97d15e0b0cb80df1ec274"
+  },
+  "diagnostic_only": true,
+  "original_run_or_acceptance_modified": false,
+  "raw_scan_scope": "One complete streaming pass each of PID101013907B, status167387044B, navigation_stack6751561B, native50Hztelemetry2941335011B; each SHA computed in same pass.234 small trajectorymetadata JSON, last3 NPZ and initialframe smallfiles read. Prior first-line schema previews are disclosed. No200Hzraw/cloud read. Subsequent analysis/plots only compact."
+}

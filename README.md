@@ -1,5 +1,14 @@
 # FAST-LIVO2 / SCAN / Gazebo Go2 Frozen Teacher
 
+
+## 2026-10-06 V25实际完整任务检查点
+
+`codex/v25-terrain-event-full46` 保存地形事件字段合并修复（63项有限测试通过）与e8de实际完整46区尝试。实际11/46、第12区超时；原22门10通过/4失败/8未验证，原期限与保护不变。SCAN经过第10区，实际48.98秒到达并驻留0.43秒；页面三维区域的XY投影已修正。
+
+同时间固定初始SE3对照显示，转向后SLAM z约下降0.2m而实体base_link高度稳定。SCAN连续规划失败触发紧停；缺少碰撞体素证据，不能声称高度直接导致该故障。本轮未触发地形切换，所以事件修复的实际切换效果仍未验证。
+
+[完整报告/命令/哈希](multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/V25_REPORT.md)、[诊断与曲线](multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/v25_diagnosis/E8DE_FAILURE_DIAGNOSIS_FINAL.md)、[逐范围结论](multifloor_demo/teacher_mode/test_results/curvature_full46_20261006/V25_FINAL_STATUS.json)。代码与精简证据已导出，不含权重/build/完整raw；本机gate不授权clone执行，新机器须重建与重新验证。V24/V23/V22检查点和main保持。曲率前馈/限速开启，跨帧解耦暂缓；导航无仿真真值，Actor仍232维特权输入，完整Sim2Sim与真机未验证。
+
 ## 2026-10-06 V24恢复重规划修复及完整任务续测
 
 独立分支`codex/v24-recovery-replan-full46`已修复保护性零命令误触发换路。27bd原SLAM1–11区三维到达核验通过，第10区驻留0.425秒、51.59秒到达，之后信号中断；a87e隔离进程组重跑实际到达12区，正常退出，在第13区因地形切换记录TypeError触发停车后超时。原完整22门为FAILED（10通过/4失败/8未验证）。原期限、保护、权重不变；V25记录合并修复另立版本，尚不继承PASS。
