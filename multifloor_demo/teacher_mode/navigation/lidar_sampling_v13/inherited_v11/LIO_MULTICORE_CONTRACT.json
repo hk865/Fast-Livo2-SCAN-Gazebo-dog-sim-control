@@ -1,0 +1,27 @@
+{
+  "schema": "fastlivo_lio_existing_loop_two_threads/v1",
+  "simulation_only": true,
+  "baseline_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/slam_ws",
+  "candidate_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/slam_ws",
+  "core_library_sha256": "f8431ddff43e23fe00c99112c19f00ef4530e9447f4ed213c08494141717b6ef",
+  "mapping_executable_sha256": "51126a6ded0c04e9158e8301f3ca3aa76db9aeab92e9160e02f1049141f3518d",
+  "change": "V11 retains V10 source-specific existing LIO2 loop; separately gates diagnostic-only copies using profile window; all estimator/matching math retained",
+  "lio_residual_loop_threads": 2,
+  "VIO_MP_EN": false,
+  "teacher_cpu_threads": 1,
+  "inherited_process_environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1"
+  },
+  "omp_scope_note": "Existing omp_set_num_threads(2) changes main-thread OpenMP default after each LIO residual loop; no other project pragma is enabled. Eigen/third-party potential OpenMP is a boundary to observe in actual run; VIO explicit float reduction remains disabled.",
+  "algorithm_numeric_scope": "No expression, gate, plane selection order, gains, rate, PD, limit or freshness changes from V9 at same profile; selected matches merged serially in input order",
+  "source_CMake_sha256": "c55d27c31faab458ad98ffb66eed770e1cb71dffcc43632cc5101d2caff5827d",
+  "compile_commands_sha256": "c19840906bf0e74eaf29852bf2fc6b8c974830edb0acb39013d0ff858294ef37",
+  "numeric_preflight_scope": "Limited synthetic LIO729 and VIO9patch forward/inverse,18 processes; same state/cov/G/H each scene across V10/V11 off/inside/outside, inside non-wall diagnostics identical; no full actual replay",
+  "actual_full_trajectory_replay_equivalence": "UNVERIFIED",
+  "actual_Gazebo_performance_and_navigation": "UNVERIFIED",
+  "thread_observation": "Test-only GOMP preload confirmed two distinct threads/team=2 per three LIO residual loops; serial library made no GOMP calls; probe did not change output",
+  "acceptance_contract": "Inherited prospective clock hold criteria remains frozen; actual run must independently verify new binary and all source paths"
+}

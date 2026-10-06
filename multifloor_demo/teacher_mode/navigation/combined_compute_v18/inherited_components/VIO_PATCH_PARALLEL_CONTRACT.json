@@ -1,0 +1,42 @@
+{
+  "schema": "deterministic_vio_patch_parallel_contract/v1",
+  "candidate_root": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/parallel_vio_v16",
+  "implementation": "parallel per-patch updateState/updateStateInverse with ordered serial reduction",
+  "prospective_threads": 4,
+  "serial_below_patch_count": 64,
+  "threshold_finalized": true,
+  "LIO_inherited_unchanged_threads": 4,
+  "global_MP_EN_VIO_reduction_enabled": false,
+  "patch_slots": "disjoint per-i H/z/error/count; all pixel math and per-patch order unchanged",
+  "reduction": "original_index_order_float_error_and_int_count",
+  "state_exposure_prior_accept_rollback_math_changed": false,
+  "reference_cache_and_pyramid_order_changed": false,
+  "shared_inverse_temporaries_now_private": [
+    "pc",
+    "JdR",
+    "Jdt"
+  ],
+  "teacher_cpu_threads": 1,
+  "actual_runtime_verified": false,
+  "synthetic_fixture_scope": "updateState/updateStateInverse/computeJacobianAndUpdateEKF; not processFrame replay",
+  "inherited_publication_component_preflight_sha256": "e1bd86e253b2e5786f0ac30bd1ca03d2b1b0d51f8e0ce813bbe2adab4dbc24f2",
+  "inherited_component_scope": "Exact unchanged controller/helper bytes only; not candidate core/build/physics acceptance",
+  "selected_vio_patch_threads": 1,
+  "status": "PASS_LIMITED_SELECTED_T1_BUILD_NUMERIC_BENCHMARK",
+  "parallel_four_thread_candidate_status": "FAILED_PROSPECTIVE_LARGE_PERFORMANCE",
+  "parallel_four_thread_failed_cases": [
+    {
+      "case": "inverse_n512_level1_searchmixed_exposure",
+      "median_improvement_fraction": 0.3500733685502375,
+      "batch_median_p95_ratio": 0.9420535204404091,
+      "within_batch_p95_median_ratio": 1.113113521392136
+    },
+    {
+      "case": "inverse_n1024_level1_searchmixed_exposure",
+      "median_improvement_fraction": 0.08095760170889144,
+      "batch_median_p95_ratio": 0.9572927136312269,
+      "within_batch_p95_median_ratio": 1.0072106206700853
+    }
+  ],
+  "selection_reason": "t1 passes every large prospective performance gate and has stable small/large tails; t4 fails inverse512/1024; t4 benefit cannot be attributed across scenes"
+}

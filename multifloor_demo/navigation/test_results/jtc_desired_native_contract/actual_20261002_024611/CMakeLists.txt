@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.16)
+project(jtc_desired_native_contract LANGUAGES CXX)
+find_package(joint_trajectory_controller REQUIRED)
+add_executable(jtc_desired_native_contract fixture.cpp)
+target_compile_features(jtc_desired_native_contract PRIVATE cxx_std_17)
+target_link_libraries(jtc_desired_native_contract PRIVATE joint_trajectory_controller::joint_trajectory_controller ${CMAKE_DL_LIBS})

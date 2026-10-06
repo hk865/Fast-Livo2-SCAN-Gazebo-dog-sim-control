@@ -1,0 +1,17 @@
+# 守卫采集器只读审查
+
+截至2026-10-04 UTC01:58:36（北京时间09:58:36）的实际源码快照，21项离线检查通过。新源码尚待root冻结/实际试验，不能据本报告宣称动态恢复或导航passed。本轮只读运行源，在本新目录保存快照/测试/报告；未启动ROS、Kit、仿真或发送进程信号。
+
+实际实现使用`FunctionType`私有globals clone，而非`sys.setprofile`。`guard_audit.py:10–30`保留原生guard的同一code object、defaults、closure/kwdefaults，仅将私有命名空间里的`obstacle_ahead`改为采集wrapper；wrapper调用原函数一次，记录其target.copy和返回值，再原样返回。原模块globals未被修改，没有增加几何计算、fsync或I/O。系统既有profile在原生异常后仍保持相同；离线测试自己的sentinel也恢复到原profile。
+
+500组同输入原生/采集对照，结果和输入数组全部一致，每组原生及采集各两次原障碍检查，总计2000次。`review.json.geometry_cases.two_calls_each_baseline_and_observer`中累计值2004还包含随后fake schema验证的4次，范围纠正保存在`count_scope_clarification.json`；原receipt/code没有重写。额外平衡顺序的500组计时结果同样零差异，采集相对原生的配对中位开销约2.034µs，p95约8.413µs。synthetic160点/缓存/调度下的测量不是实时或最坏开销保证，不含ROS、点云解码、哈希、JSON序列化及异步队列工作。
+
+Teacher controller只在独立动态scope替换私有base模块中的guard binding；flat使用原生binding。`record_native_guard:217–248`调用采集guard后原样返回，不读取mover或Gazebo机身真值。输入来自现有accepted SLAM body odom与registered cloud，原自体过滤逻辑保留。源码校验失败/日志异常可能增加fail-closed拒绝边界；共享controller `tick:507–513`捕获异常、锁定failed并在同callback发布零速度，所以不能将“所有异常情况下的行为”泛称完全无变化。
+
+记录保留实际integer SLAM/cloud/clock stamps、过滤时所用真实SLAM pose/rotation、两个原生corridor结果及union、route/SCAN trajectory refs、调用前后原hold/clear状态。fake context用大于2⁵³的integer stamp验证JSON往返精确保留。`filtered_xyz_float64_sha256`准确指实际自体过滤后的immutable guard XYZ；它不是原PointCloud2序列化bytes hash。本hook每次只记录hash而不保存完整点云，实际clear几何重放仍须找到匹配stamp的原始被动cloud，并使用记录的过滤pose复现完全相同的hash。仅hash/文字声明不能证明真实空间clear。
+
+异步EvidenceWriter沿用有界队列，没有新增fsync。scope准备来源列表包含guard_audit/schema/controller/shared control_core，SCAN轨迹NPZ由邻接JSON存SHA，writer最终记录expected_records/drained/error。实际运行后仍需审计JSONL行数/序号/完整性和匹配原点云、真实clear连续1秒、新SCAN及实际停车恢复；采集器按单个rclpy executor路径设计，calls列表不是并发/reentrant接口。
+
+turn20新profile与原flat/dynamic12严格分scope。三项差异只有experiment名、max_yaw_rate从0.12至0.2及variant声明；.17到达半径/.6 dwell/90秒deadline/300ms TTL/停车阈值均保留。worker/契约仍与冻结b3164695/57fe7a07匹配，采集代码不操作actor/关节/物理。
+
+关键快照SHA256：guard_audit `3088f7b207d7335e88108dbdaab826df5661b6172264d8dcd43aae293aea0c64`；Teacher controller `04830b209d2488dd4c0ee3119e0441db8fdf19e84407d39d73fe53cf88c0bb24`；shared control_core `c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f`；guard schema `d429b6fefe64ae0eb6d500530eedcb3419c47e78b2a722ffc96e429886819629`；turn20 profile `178c0910a283c79a8e71ba93d30ea84aaac1a602bb78a0c604d213d9fc823cb3`。完整read source/hash在`review.json`，主receipt SHA256 `fface59ebef2bf321161e13c3671c206df999f846b363f3e6a512b9acd8d260e`。

@@ -1,0 +1,1103 @@
+{
+  "schema": "fastlivo_lio_diagnostics/v1",
+  "binary": {
+    "magic": "FLIVODIAG0001LE\\0",
+    "record_header": "7 uint64 little-endian: kind,sequence,stamp_ns,stage,iteration,level,n_values",
+    "payload": "float64 little-endian",
+    "matrix_order": "row-major",
+    "negative_iteration_level": "two-complement int64 in uint64 header"
+  },
+  "state25_order": [
+    "R_world_imu row-major9",
+    "position_world3",
+    "inverse_exposure1",
+    "velocity_world3",
+    "gyro_bias3",
+    "acc_bias3",
+    "gravity_world3"
+  ],
+  "tangent19_order": [
+    "right_rotation3",
+    "world_position3",
+    "inverse_exposure1",
+    "world_velocity3",
+    "gyro_bias3",
+    "acc_bias3",
+    "world_gravity3"
+  ],
+  "sampling": {
+    "aggregate": "100 every actual LIO iteration",
+    "constraint_and_query": "101/102 only first and terminal actual iteration in logger detail window; if same iteration, emitted once",
+    "map": "103 all actual init_plane and freeze events in detail window, batched per BuildVoxelMap/UpdateVoxelMap",
+    "detail_begin_s": 115,
+    "detail_end_s": 165,
+    "authoritative_detail_environment": [
+      "FASTLIVO_DIAGNOSTIC_BEGIN",
+      "FASTLIVO_DIAGNOSTIC_END"
+    ]
+  },
+  "kinds": {
+    "100": {
+      "payload_width": 1393,
+      "fields": [
+        {
+          "name": "schema_version",
+          "offset": 0,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "downsampled_count",
+          "offset": 1,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "effective_count",
+          "offset": 2,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "rematch_before",
+          "offset": 3,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "rematch_after",
+          "offset": 4,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "converged",
+          "offset": 5,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "stop",
+          "offset": 6,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_max_iterations",
+          "offset": 7,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "sum_absolute_residual",
+          "offset": 8,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "iteration_begin_omp_monotonic_s",
+          "offset": 9,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "residual_done_omp_monotonic_s",
+          "offset": 10,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "solution_done_omp_monotonic_s",
+          "offset": 11,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "pre_emit_omp_monotonic_s",
+          "offset": 12,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "detail_window",
+          "offset": 13,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "details_emitted",
+          "offset": 14,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "query_count",
+          "offset": 15,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_exists_count",
+          "offset": 16,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_matched_count",
+          "offset": 17,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "neighbor_attempted_count",
+          "offset": 18,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_neighbor_exists_count",
+          "offset": 19,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "counterfactual_neighbor_exists_count",
+          "offset": 20,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "neighbor_key_mismatch_count",
+          "offset": 21,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "final_matched_count",
+          "offset": 22,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "unmatched_count",
+          "offset": 23,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_primary_count",
+          "offset": 24,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_neighbor_count",
+          "offset": 25,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "visited_octree_nodes",
+          "offset": 26,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "visited_plane_nodes",
+          "offset": 27,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "visited_nonplane_nodes",
+          "offset": 28,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "radius_rejections",
+          "offset": 29,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "sigma_rejections",
+          "offset": 30,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "gate_passes",
+          "offset": 31,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "probability_wins",
+          "offset": 32,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_range_count",
+          "offset": 33,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_candidate_sigma_count",
+          "offset": 34,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_solver_weight_count",
+          "offset": 35,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonpositive_solver_weight_count",
+          "offset": 36,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_measurement_count",
+          "offset": 37,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_sigma_num",
+          "offset": 38,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_voxel_size_m",
+          "offset": 39,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_max_plane_points",
+          "offset": 40,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "state_propagat",
+          "offset": 41,
+          "shape": [
+            25
+          ],
+          "count": 25
+        },
+        {
+          "name": "state_iter_before",
+          "offset": 66,
+          "shape": [
+            25
+          ],
+          "count": 25
+        },
+        {
+          "name": "state_iter_after",
+          "offset": 91,
+          "shape": [
+            25
+          ],
+          "count": 25
+        },
+        {
+          "name": "P_before",
+          "offset": 116,
+          "shape": [
+            19,
+            19
+          ],
+          "count": 361
+        },
+        {
+          "name": "P_after",
+          "offset": 477,
+          "shape": [
+            19,
+            19
+          ],
+          "count": 361
+        },
+        {
+          "name": "M6",
+          "offset": 838,
+          "shape": [
+            6,
+            6
+          ],
+          "count": 36
+        },
+        {
+          "name": "HTz6",
+          "offset": 874,
+          "shape": [
+            6
+          ],
+          "count": 6
+        },
+        {
+          "name": "vec19",
+          "offset": 880,
+          "shape": [
+            19
+          ],
+          "count": 19
+        },
+        {
+          "name": "solution19",
+          "offset": 899,
+          "shape": [
+            19
+          ],
+          "count": 19
+        },
+        {
+          "name": "K1",
+          "offset": 918,
+          "shape": [
+            19,
+            19
+          ],
+          "count": 361
+        },
+        {
+          "name": "G19x6",
+          "offset": 1279,
+          "shape": [
+            19,
+            6
+          ],
+          "count": 114
+        }
+      ]
+    },
+    "101": {
+      "prefix": [
+        "schema_version",
+        "row_count",
+        "row_width"
+      ],
+      "row_width": 107,
+      "row_fields": [
+        {
+          "name": "source_index",
+          "offset": 0,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "origin",
+          "offset": 1,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_id",
+          "offset": 2,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_layer",
+          "offset": 3,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_birth_sequence",
+          "offset": 4,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_sequence",
+          "offset": 5,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_count",
+          "offset": 6,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_frozen",
+          "offset": 7,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_birth_stamp_s",
+          "offset": 8,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_stamp_s",
+          "offset": 9,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_sigma",
+          "offset": 10,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_probability",
+          "offset": 11,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_radius_m",
+          "offset": 12,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_min_eigenvalue",
+          "offset": 13,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_mid_eigenvalue",
+          "offset": 14,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_max_eigenvalue",
+          "offset": 15,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_point_count",
+          "offset": 16,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_voxel_center_m",
+          "offset": 17,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "selected_voxel_quarter_length_m",
+          "offset": 20,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "point_lidar",
+          "offset": 21,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "point_world_iter",
+          "offset": 24,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "normal",
+          "offset": 27,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "plane_center",
+          "offset": 30,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "plane_d",
+          "offset": 33,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "signed_point_plane_distance",
+          "offset": 34,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "H6",
+          "offset": 35,
+          "shape": [
+            6
+          ],
+          "count": 6
+        },
+        {
+          "name": "R_inv",
+          "offset": 41,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "meas",
+          "offset": 42,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "solver_sigma_plane",
+          "offset": 43,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_covariance",
+          "offset": 44,
+          "shape": [
+            6,
+            6
+          ],
+          "count": 36
+        },
+        {
+          "name": "body_covariance",
+          "offset": 80,
+          "shape": [
+            3,
+            3
+          ],
+          "count": 9
+        },
+        {
+          "name": "solver_body_world_covariance",
+          "offset": 89,
+          "shape": [
+            3,
+            3
+          ],
+          "count": 9
+        },
+        {
+          "name": "query_covariance",
+          "offset": 98,
+          "shape": [
+            3,
+            3
+          ],
+          "count": 9
+        }
+      ]
+    },
+    "102": {
+      "prefix": [
+        "schema_version",
+        "row_count",
+        "row_width"
+      ],
+      "row_width": 60,
+      "row_fields": [
+        {
+          "name": "source_index",
+          "offset": 0,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_exists",
+          "offset": 1,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "final_matched",
+          "offset": 2,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_matched",
+          "offset": 3,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "neighbor_attempted",
+          "offset": 4,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "actual_neighbor_exists",
+          "offset": 5,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "counterfactual_neighbor_exists",
+          "offset": 6,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "neighbor_key_mismatch",
+          "offset": 7,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_origin",
+          "offset": 8,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_id",
+          "offset": 9,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_voxel_key",
+          "offset": 10,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "actual_neighbor_voxel_key",
+          "offset": 13,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "counterfactual_neighbor_voxel_key",
+          "offset": 16,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "point_world_iter",
+          "offset": 19,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "point_lidar",
+          "offset": 22,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "actual_adjusted_loc_xyz",
+          "offset": 25,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "query_covariance",
+          "offset": 28,
+          "shape": [
+            3,
+            3
+          ],
+          "count": 9
+        },
+        {
+          "name": "visited_octree_nodes",
+          "offset": 37,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "visited_plane_nodes",
+          "offset": 38,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "visited_nonplane_nodes",
+          "offset": 39,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "radius_rejections",
+          "offset": 40,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "sigma_rejections",
+          "offset": 41,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "gate_passes",
+          "offset": 42,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "probability_wins",
+          "offset": 43,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_range_count",
+          "offset": 44,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "nonfinite_candidate_sigma_count",
+          "offset": 45,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_probability",
+          "offset": 46,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_candidate_sigma",
+          "offset": 47,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_radius",
+          "offset": 48,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_layer",
+          "offset": 49,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_birth_sequence",
+          "offset": 50,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_update_sequence",
+          "offset": 51,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_update_count",
+          "offset": 52,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "selected_plane_frozen",
+          "offset": 53,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_sigma_min",
+          "offset": 54,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_sigma_max",
+          "offset": 55,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_abs_distance_min",
+          "offset": 56,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_abs_distance_max",
+          "offset": 57,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "candidate_probability_max",
+          "offset": 58,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "primary_root_is_plane",
+          "offset": 59,
+          "shape": [],
+          "count": 1
+        }
+      ]
+    },
+    "103": {
+      "prefix": [
+        "schema_version",
+        "operation",
+        "row_count",
+        "row_width"
+      ],
+      "operation": {
+        "1": "BuildVoxelMap",
+        "2": "UpdateVoxelMap"
+      },
+      "event_code": {
+        "0": "actual init_plane completed, including nonplane result",
+        "1": "actual update_enable changed to false"
+      },
+      "row_width": 80,
+      "row_fields": [
+        {
+          "name": "event_code",
+          "offset": 0,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "tree_layer",
+          "offset": 1,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "voxel_center_m",
+          "offset": 2,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "voxel_quarter_length_m",
+          "offset": 5,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_id",
+          "offset": 6,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "is_plane",
+          "offset": 7,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "is_init",
+          "offset": 8,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_point_count",
+          "offset": 9,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_birth_sequence",
+          "offset": 10,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_sequence",
+          "offset": 11,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_count",
+          "offset": 12,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_birth_stamp_s",
+          "offset": 13,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_update_stamp_s",
+          "offset": 14,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_age_s",
+          "offset": 15,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "update_enabled",
+          "offset": 16,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "tree_initialized",
+          "offset": 17,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "center",
+          "offset": 18,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "normal",
+          "offset": 21,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "x_normal",
+          "offset": 24,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "y_normal",
+          "offset": 27,
+          "shape": [
+            3
+          ],
+          "count": 3
+        },
+        {
+          "name": "d",
+          "offset": 30,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "radius",
+          "offset": 31,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "min_eigenvalue",
+          "offset": 32,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "mid_eigenvalue",
+          "offset": 33,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "max_eigenvalue",
+          "offset": 34,
+          "shape": [],
+          "count": 1
+        },
+        {
+          "name": "plane_covariance",
+          "offset": 35,
+          "shape": [
+            6,
+            6
+          ],
+          "count": 36
+        },
+        {
+          "name": "point_covariance",
+          "offset": 71,
+          "shape": [
+            3,
+            3
+          ],
+          "count": 9
+        }
+      ]
+    }
+  },
+  "semantics": {
+    "origin": {
+      "0": "none",
+      "1": "primary voxel or its actual recursive leaf",
+      "2": "actual fallback neighbor or its actual recursive leaf"
+    },
+    "counterfactual_neighbor": "compute same comparison thresholds using pv.point_w (meters), preserving original primary key; only a read-only existence lookup, never matched or used by estimator",
+    "invalid_or_absent": "NaN for absent neighbor coordinates and unmatched selection scalars; candidate min/max remain +/-inf if no candidate evaluated; x/y normal NaN when is_plane=false",
+    "plane_identity": "plane_id plus selected tree center/layer; IDs not stable across runs",
+    "plane_age": "born on first actual init_plane attempt; update counter increments on every init_plane attempt, including rejected nonplane result",
+    "covariance_after": "same as before on nonterminal iterations, original final covariance update retained",
+    "total_rejections": "candidate/node counts, not mutually exclusive per-point rejection reasons; use final_matched/primary_matched to disambiguate successful alternative"
+  },
+  "equivalence_audit": {
+    "original_source": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/slam/ros2_ws/src/fast_livo2_core/src/voxel_map.cpp",
+    "original_sha256": "2643549f8641ecaa5e3cd5f5c46ef66410c12398b6bddc3921bd49defc530597",
+    "original_nonblank_lines": 913,
+    "all_original_lines_preserved_in_order_after_only_diagnostic_argument_normalization": true,
+    "new_cpp_sha256": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+    "diagnostics_change_estimator_math_or_gates": false,
+    "algorithm_neighbor_unit_bug_retained": true,
+    "runtime_equivalence_not_yet_tested": true,
+    "uninitialized_PointToPlane_members_read_by_logger": false
+  }
+}

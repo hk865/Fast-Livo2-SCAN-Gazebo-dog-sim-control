@@ -1,0 +1,104 @@
+{
+  "schema": "prospective_v9_clock_hold_independent_audit/v1",
+  "created_UTC": "2026-10-05T11:53:07.873012+00:00",
+  "simulation_only": true,
+  "navigation_ground_truth_used": false,
+  "frozen_control_clock_contract": {
+    "schema": "teacher_control_clock_exact_zero_hold/v1",
+    "same_clock_policy": "exact_zero_before_math_and_native_geometry",
+    "freshness_sim_and_wall_s": 0.3,
+    "continuous_stale_fail_wall_s": 8.0,
+    "backward_clock_policy": "latch_failure",
+    "resume_policy": "actual_clock_advance_and_fresh_original_sources_and_native_geometry",
+    "short_hold_integral_and_dwell": "frozen",
+    "long_hold_integral_and_dwell": "protect_reset",
+    "source_receipt_refresh_permitted": false
+  },
+  "unchanged_common_numerical_criteria": {
+    "source_ttl_sim_s": 0.3,
+    "source_ttl_wall_s": 0.3,
+    "producer_clock_future_tolerance_s": 0.05,
+    "gyro_to_pose_max_gap_s": 0.02,
+    "region_control_radius_m": 0.17,
+    "region_dwell_s": 0.6,
+    "region_max_source_gap_s": 0.2,
+    "goal_deadline_s": 90.0,
+    "native_step_s": 0.005,
+    "actor_step_s": 0.02,
+    "bootstrap_s": 0.1,
+    "flat_route_max_distance_m": 0.2,
+    "flat_route_rms_m": 0.08,
+    "drive_heading_max_rad": 0.2,
+    "speed_mean_abs_error_floor_mps": 0.05,
+    "speed_mean_abs_error_fraction": 0.25,
+    "maximum_roll_pitch_rad": 0.65,
+    "minimum_clearance_m": 0.18,
+    "maximum_tau_Nm": 23.50001,
+    "maximum_qd_radps": 30.001,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "parking_window_s": 5.0,
+    "parking_xy_drift_m": 0.05,
+    "parking_yaw_drift_rad": 0.1,
+    "parking_origin_speed_peak_mps": 0.08,
+    "parking_euler_yawdot_peak_radps": 0.1,
+    "parking_body_wz_peak_radps": 0.1,
+    "worker_slew_acceleration": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "dynamic_clear_s": 1.0,
+    "dynamic_guard_max_gap_s": 0.3
+  },
+  "unchanged_common_evaluator_sha256": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e",
+  "scope": [
+    "Immutable archived original sources only; no runtime output or source modification",
+    "Original common receipt is preserved separately, never edited",
+    "Only the explicit PI recurrence bookkeeping check may be replaced in the parallel hold-aware receipt; every other old status and criterion is byte-for-byte copied",
+    "Additional exact-zero/hold/source/guard/publication-slew checks must independently pass; no missing record is assumed safe",
+    "210 s partial routes cannot satisfy32-region/complete-ramp/final-parking gates",
+    "Short same-clock zero publishes freezePI/filter/source math stamps and all dwell fields; >=300 ms wallstall or stale input calls the unchanged protection/reset pathway",
+    "Resuming nonzero requires original clock advance, original fresh SLAM/IMU/cloud and an actual recorded native geometry check"
+  ],
+  "hold_gates": {
+    "exact_zero_tolerance": 0.0,
+    "numeric_replay_max_abs_error": 1e-08,
+    "record_count_must_equal_writer_expected": true,
+    "source_receipt_refresh_allowed": false,
+    "short_hold_all_frozen_snapshots_bit_identical": true,
+    "long_or_stale_hold_protect_reset_must_match_frozen_core": true,
+    "backward_clock_must_latch_failed": true,
+    "hold_clock_sim_and_wall_must_be_original_and_monotonic": true,
+    "source_TTL_sim_and_wall_s": 0.3,
+    "stall_limit_wall_s": 0.3,
+    "continuous_stale_failure_wall_s": 8.0,
+    "next_nonzero_native_guard_mandatory": true,
+    "guard_inputs_must_keep_original_common_freshness_geometry_gates": true,
+    "slew_limits_mps2_radps2": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "slew_time_uses_control_compute_minus_previous_actual_publication_ros_clock": true,
+    "slew_previous_command_includes_exact_zero_hold_publications": true,
+    "hold_PI_math_guard_calls_must_be_absent": true
+  },
+  "permitted_replaced_common_checks": [
+    "actual_executor_ack_and_cascade_PI_COM_PD_replay"
+  ],
+  "additional_checks": [
+    "actual_clock_hold_event_integrity_and_short_freeze",
+    "actual_clock_hold_stall_stale_reset_and_failure",
+    "actual_clock_hold_nonzero_resume_requires_native_geometry",
+    "actual_publication_slew_with_hold_chronology",
+    "actual_executor_ack_and_PI_replay_with_explicit_hold_resets"
+  ],
+  "pre_test_source_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py": "074b468581de568264f558e38f82ce25e809094843c6f86e2816130babf8099e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/clock_hold.py": "3503750c26381557f2aa379949910296f814c132e6741ae00189e9bca0e0c8f7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/controller.py": "a2500ef645fca32e8f20ed74c35ba403f3844a190caa6a2afea9154ea2883bed",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/cascade_core.py": "dccb1c8fc8ceeae1dc1aaabda8c39ada9a3fdb171e823a1ae09cc272e9461cc7",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/clock_hold_preflight.json": "354108d8d9b6541e7f17f8d9054b555741466a45d5548806177e8f1a66aaec79",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/profiles/l64_r20_c20_210.json": "2a3e2b8e5c8b705b44dd087232efddd6335b5e61007595f98fd08f04e8ed9282"
+  }
+}

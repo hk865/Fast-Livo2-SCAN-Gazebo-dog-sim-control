@@ -1,0 +1,78 @@
+{
+  "schema": "fastlivo_diagnostic_copy_detail_window_acceleration/v1",
+  "status": "BUILT_LIMITED_NUMERIC_CHECK_PASSED",
+  "simulation_only": true,
+  "baseline_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/slam_ws",
+  "candidate_workspace": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v12/slam_ws",
+  "detail_window_sim_s": [
+    115,
+    118
+  ],
+  "kind100_outside_detail": "not collected; not a zero constraint count",
+  "query_sidecars_outside_detail": "not allocated or populated; no estimator consumer",
+  "VIO_full_diagnostics_outside_detail": "retrieval counts, frame covariance, iteration kind201 not collected; no estimator consumer",
+  "raw_kind4": "same logger detail predicate at offset-corrected source header time; original raw header unchanged",
+  "retained_all_time_sources": "rawIMU1, lidar2, RGB3, Process2before10/after11, final VIO12/LIO13, IMU propagation20, original exceptional VIO skips; plane diagnostic lifetime counters and frame timestamp history retained",
+  "C++_difference_only_diagnostics": {
+    "src/fast_livo2_core/src/voxel_map.cpp": {
+      "before_sha256": "ed3595246aec39995b0cf67fc27066330422d0cc1b7f47b823d3abfe66533750",
+      "candidate_sha256": "d333313f1ea964761ceec780ad005ae708c1fa5151361e50a3ec476319a63108",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1,
+        1
+      ]
+    },
+    "src/fast_livo2_core/src/vio.cpp": {
+      "before_sha256": "44a14f27f4a322c1c7d2f18e62ffad21c3df9c7ae120a75c47963663d7917e78",
+      "candidate_sha256": "862776c0bb6569c27a9cbd8ae426a7c70dc1b2b22c13f242409fd8a10928c314",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        3,
+        2
+      ]
+    },
+    "src/fast_livo2_core/src/LIVMapper.cpp": {
+      "before_sha256": "caadf1b4ac6c5d28032b185ed3f0735da424aed47cd0da35a0dc2c8d79c7b18b",
+      "candidate_sha256": "3a4f992a0c3651c5693ef4c3da3cd64b223bf29247ebdc77fac6b8b2fb4d57a3",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1
+      ]
+    },
+    "src/fast_livo2_core/include/fast_livo2_core/core/diagnostics.h": {
+      "before_sha256": "5db7451b2cbbddcbc24b312860b94ac38b1d02d95758a85720292d5c59d704ab",
+      "candidate_sha256": "a5e56d67dff5eede8a68b891e63ffd71a0fcd0f699715a67a3ec51fa9a65adb9",
+      "only_exact_diagnostic_replacements": true,
+      "restoring_diagnostic_conditions_recovers_all_original_bytes": true,
+      "replacement_counts": [
+        1
+      ]
+    }
+  },
+  "state_estimation_or_matching_math_modified": false,
+  "source_timestamps_modified": false,
+  "points_reduced_for_estimator": false,
+  "lio_explicit_threads": 2,
+  "VIO_explicit_threads": "serial",
+  "teacher_cpu_threads": 1,
+  "candidate_core_library_sha256": "f8431ddff43e23fe00c99112c19f00ef4530e9447f4ed213c08494141717b6ef",
+  "build_and_numeric_fixtures": "PASS_LIMITED_SYNTHETIC_LIO_AND_VIO",
+  "actual_performance_and_navigation": "NOT_RUN",
+  "prospective_required_checks": [
+    "Build only when no actual baseline resource conflict",
+    "Inside window V10 vs V11 state25/cov361 and non-wall LIO diagnostic payloads byte identical",
+    "Outside window enabled logger vs disabled logger and V10 state/cov byte identical; no kind100/101/102",
+    "Profile 3s must produce actual environment115/118 and writer window115/118",
+    "Original timestamps/sensor/controller/gains/sourceTTL/nativeactuator ownership unaffected",
+    "Actual30Hz performance must still meet original300ms source validity; no credit for dropped/delayed missing data"
+  ],
+  "limited_numeric_comparison_sha256": "eee3c0509346eb8677f9bf46eafd02cb92e05c300ddb26bbf9755405300d7f3a",
+  "core_library_sha256": "8303ec94d33a976bc8ac0940e9d3d213120ce4a035ea22385e07f301c019efed",
+  "mapping_executable_sha256": "c7f2391cb49dffecf3518c7e826ec2e4d7fa0856ef65a35bb6cb254fb794e77b",
+  "lio_residual_loop_threads": 4,
+  "version_note": "V12 retains all V11 bounded detailed copies, newly lockfree4 plus explicitly selected kind300 timing; oldV11 contract saved inherited_v11"
+}

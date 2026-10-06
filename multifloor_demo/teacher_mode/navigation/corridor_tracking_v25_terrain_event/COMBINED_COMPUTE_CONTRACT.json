@@ -1,0 +1,35 @@
+{
+  "schema": "combined_compute_V18/v1",
+  "candidate_root": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/combined_compute_v18",
+  "components": {
+    "lio_jacobian": {
+      "source": "V15",
+      "threads": 4,
+      "residual_threads": 4,
+      "serial_below_accepted_rows": 256,
+      "same_row_math_and_original_Eigen_order": true,
+      "full_19_dimensional_prior_unchanged": true
+    },
+    "vio_patches": {
+      "source": "V16_selected_T1",
+      "compiled_threads": 1,
+      "serial_below_patch_count": 64,
+      "original_index_order_float_reduction": true
+    }
+  },
+  "required_fresh_checks": [
+    "729_full_StateEstimation_state_cov_and_all_nonwall_diagnostics",
+    "41_VIO_boundary_cases_state_cov_G_H_errors_reference_cache_nonwall"
+  ],
+  "navigation_only_env": {
+    "FASTLIVO_LIO_JACOBIAN_THREADS": "4",
+    "FASTLIVO_VIO_PATCH_THREADS": "1"
+  },
+  "controller_and_32_region_route": "original_V12_same_bytes",
+  "source_freshness_s": 0.3,
+  "teacher_device": "cpu",
+  "teacher_threads": 1,
+  "actual_motion_verified": false,
+  "inherited_component_PASS_does_not_authorize_combined_runtime": true,
+  "historical_LIO_HTH_replay": "NOT_BITEXACT_UNVERIFIED_CAUSE"
+}

@@ -1,0 +1,19 @@
+# 下一轮接续：主动停车已实测，曲线SLAM迁移仍待完成
+
+先读[主动停车实测报告](ACTIVE_PARKING_REPORT_20261005.md)、current_status.json、此前CURVATURE_ENVELOPE_REPORT与SLAM_CONTROLLER_TRANSFER_REPORT。不要重复已完成36转弯、14曲线、35留出运动和6真实SLAM迁移。本次8个实际物理run全部已结束，源与分析writers均完成；3个只读viewer以用户systemd服务保留。08点单次任务go2-teacher-08已确认PAUSED，不能因旧heartbeat再创建或开启它；不要改另一任务go2-017。
+
+当前接受的数学控制律为curvature_tracking_v4/core.py及v4r2/core.py，同SHA `9eca389f54277986656c0ccda3da42f01d9cbc25ed15d99b57cc9a1e51087384`。v4r2仅runner修归档分支，未改控制。计划在test_results/heartbeat_resume_20261005_0800/active_hold_plan_v4r2.json；相机先导4788与新确认518e/5627/6767共4/4通过，首窗XY4.45mm、yaw0.00241rad，靠近14.12s。固定初态重复不代表扰动鲁棒或全局最优。
+
+V2启动无物理失败、V3弱捕获180s失败、原V4三次缺capture.py归档未验证、原v1 tightS25零命令停车偏航失败全部原样保留。不能补旧归档或将新允许非零命令合同回填旧全零停车收据。各新run旧common overall仍FAILED，其中旧停车门UNVERIFIED；独立主动停车收据另列PASS。
+
+迁移前读test_results/heartbeat_resume_20261005_0800/SLAM_CURVE_TRANSFER_DESIGN.md与slam_curve_transfer_interfaces.json。旧slam_transfer_v5 adapter只替换折线路点；曲线读取StaticPath与固定终点，直接替换core会留下错误坐标。它的protect/turn_phase/stop_since和原全零停车验收也不支持capture/active_hold。审计已完成，尚未实施新SLAM桥。
+
+下一实际工作应在新目录完成一次实际SLAM body pose到camera_init的固定锚变换，同时转换完整解析path与事前固定终点并冻结SHA；不得按Gazebo真值、后续实测漂移或拟合轨迹建立导航目标。统一因果时钟、实际fresh10Hz与Teacher50Hz/native200Hz，先保留冻结名义控制参数，以真实IMU校验机身角速度、Euler转换与COM杠杆。重复旧头只保持命令，不积分、不累计驻留；双龄300ms、唯一执行器和停车保护不得放宽。
+
+先用新独立验收冻结路径/朝向/终点保持门、首次固定5秒窗与旧失败边界，再实际小场景安全路线、R0.6圆和tightS逐轮测试；不能把合成检查或模型加载当迁移通过。新主动停车的10/50Hz实际测试与随机扰动目前均未验证；若研究频率，要另登记单因素对照并保留失败。靠近慢14.12s需要分离位置增益/命令包络影响后调优，不能未经测试声称更快反馈即可解决。紧圆前馈入/出弧平滑仍是另一项未实施A/B。
+
+新曲线运动与有限真实SLAM均通过后才连接实际SCAN路线、区域到达、动态障碍停车恢复及旧地图注册，再推进多层坡道；不能用真值导航称融合成功。新Actor仍232维特权＋15已知，真实IMU/q/qd30维未与这些路线联测；局部点云替代187高度仍未完成。新匹配Isaac闭环Sim2Sim、真实SLAM多层与真机均未验证；无需重训Teacher。
+
+只读展示为8769新主动停车与8768历史SLAM/SCAN、8770实际SLAM固定路线，camera_mode独立保持。用户服务名go2-teacher-viewer-truth-8769 / slam-8770 / archive-8768，可用systemctl --user status检查；这些viewer没有控制权。本次初始GPU仅6%，V3仍失败；每轮重新记录资源与实际时序，不预设GPU唯一原因。
+
+复现命令见主README及新报告；实际runner只管理本轮进程组，禁止按名称批量杀Gazebo/Isaac/训练。冻结模型仍model_1000.pt，SHA `bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34`。后续任何新源码/报告/运行均追加新包清单，精确保留旧清单与历史acceptance。

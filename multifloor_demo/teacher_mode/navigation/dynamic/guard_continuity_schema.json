@@ -1,0 +1,24 @@
+{
+  "schema": "teacher_actual_guard_continuity/v1",
+  "scope": "Prospective finite_flat_dynamic_stop_resume_dwell_v1 only; original profiles retain their original behavior and receipts",
+  "profile_fields": {
+    "arrival_stop_policy": "after_measured_dwell",
+    "clear_guard_gap_max_sim_s": 0.3
+  },
+  "arrival": "Original raw SLAM ArrivalWindow control-region0.17m, dwell0.6sim s, integer source stamps, original0.2s maximum arrival-pose gap and90sim s deadline unchanged. Zero for arrival begins only when that original window returns arrived=true. Native obstacle/path-end/tilt/stale zero stops remain immediate.",
+  "continuity": "While obstacle_hold is active, reset original clear_since before shared control if current ROS clock minus previous actual guard clock exceeds0.3s. Exact current raw SLAM and registered-cloud header ages must be within original0.3s source TTL. A cached tick reaching1s cannot release; wait for the next already scheduled native guard, without any additional geometry calculation. Actual guard clock duplicate/backward fails closed.",
+  "native_guard_trace_additions": {
+    "previous_actual_guard_clock_ns": "Exact previous invocation ROS clock integer, never a status sample or scheduled fictitious check",
+    "clear_guard_gap_max_sim_s": "Frozen prospective threshold0.3",
+    "clear_guard_continuity_resets": "Cumulative real clear-timer reset evidence rows",
+    "clear_release_requires_this_callback_actual_guard": "True for this profile; actual release must be present in the same actual guard row"
+  },
+  "reset_history": {
+    "filename": "navigation_guard_continuity_history.jsonl",
+    "fields": ["schema", "compute_ros_clock_ns", "compute_monotonic_wall", "previous_actual_guard_clock_ns", "actual_guard_gap_ns", "pose_stamp_ns", "cloud_stamp_ns", "clear_start_before_s", "clear_start_after_s", "reason", "extra_geometry_computed"],
+    "reason": "actual_guard_gap or actual_source_stale",
+    "geometry": "extra_geometry_computed always false; this record is a clock/source safety reset, never an obstacle evaluation",
+    "writer_count": "Shutdown navigation_guard_writer_receipt.json clear_guard_continuity_resets must equal reset-history line count; expected_records still counts original actual native guard invocations only"
+  },
+  "acceptance": "Original continuous actual guard span >=1sim s with gap<=0.3s, same real parking/withdrawal/new SCAN/resume/2regions/final stop/clean children requirements. No old result is re-evaluated or upgraded by this schema."
+}

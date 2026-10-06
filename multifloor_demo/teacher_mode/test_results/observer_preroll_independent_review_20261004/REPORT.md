@@ -1,0 +1,11 @@
+# Independent passive observer pre-roll review
+
+36 offline checks passed against the actual ring class and sensor/archive/flush/tick method bodies. Final V45 freeze SHA256 `ce673b5972613543f10f34074d4ad7cb9354008e90d42784e469e1c8211f8093` matches all34 runtime hashes and the audited snapshots. Only the observer script and its source-list preparer changed relative to V44; the new helper and schema are added. Controller965d342..., profile, actor, native PD/physics and original TTL/arrival/parking criteria retain their V44 hashes.
+
+The ring retains actual decoded registered-cloud samples for1 source second, at most32 frames/16MiB. Original integer header stamps (also above2^53), receive-wall times, raw-payload hashes, dtype/shape and XYZ C-order bytes are preserved. Source-time expiration is counted; frame/byte overflow, backward stamps and same-stamp different payload fail explicitly. Source arrays are copied before the cache marks them read-only. A20ms passive observer tick can flush the ring upon entry without waiting for another cloud; the callback entry path and compressed NPZ keep exact original values and references. Flush clocks are separate metadata and never replace acquisition clocks.
+
+The original active entering/blocking/leaving and clear+5s archive conditions remain. Trigger/Program/fresh/Tail/verify_scope AST and mover tick after the observer-only branch match V44. No new navigation publication, robot state command, truth navigation input or geometry computation is introduced. The shared single EvidenceWriter drained32 synthetic jobs in original order with no error.
+
+Known limitation retained: if the existing EvidenceWriter has already set queue.error, the cleanup's first fixture_end append can raise before close/manifest generation. Thus a queue failure may yield a missing manifest and nonzero owned process instead of a schema2 failed manifest. Such runs remain strict failed/unverified; absence is never considered success. The frozen runtime was not modified by this independent audit.
+
+This is an offline source/retention review, not actual evidence-coverage or navigation acceptance. Original V44 run1536 missing pre-entry XYZ remains unchanged and cannot be retroactively filled. Candidate5 requires a new actual run and complete matching input coverage.
