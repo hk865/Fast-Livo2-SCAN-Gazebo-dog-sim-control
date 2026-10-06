@@ -1,0 +1,34 @@
+{
+  "schema": "terrain_event_v25_patch_scope/v1",
+  "candidate": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v25_terrain_event",
+  "parent_frozen": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v24_recovery_replan",
+  "production_feature_delta": "terrain_provider.SwitchingTerrainProvider._record only",
+  "incoming_false_accepted": true,
+  "incoming_non_false_refused_before_event_counter": true,
+  "sequence_time_navigation_false_authoritative": true,
+  "metadata_preserved": true,
+  "terrain_ray_or_layer_selection_math_changed": false,
+  "controller_gains_or_fence_geometry_deadline_changed": false,
+  "worker_protective_velocity_zero_and_learned_feedback_changed": false,
+  "obstacle_record_changed": false,
+  "obstacle_real_call_payloads_reserved_field_disjoint_proven_by_AST": true,
+  "actual_navigation_verified": false,
+  "CPP_build_or_runtime_launched": false,
+  "changed_existing_python_files": [
+    "pid_scope.py",
+    "full46_launch_contract.py",
+    "full46_launch_tests.py",
+    "terrain_provider.py",
+    "corridor_preflight.py",
+    "run.py"
+  ],
+  "profile_changes": {
+    "controller_selector": "v25_terrain_event_full46",
+    "profile_version": "corridor_tracking_v25_terrain_event",
+    "prospective_change": "declaration only",
+    "mission46_required_source_files": "candidate paths only"
+  },
+  "finite_scope": "Actual constructor + actual MissionTerrainProvider.check_switch with frozen SDF rays and synthetic original46 source receipts. Exact worker request prefix through terrain override/evidence lifted; command-source read is a declared fresh-command fixture, not full IPC/actuator rollout.",
+  "old_failure_reproduced": "Old V24 _record on safe actual187-ray production check_switch changes provider, raises duplicate-key TypeError, latches and exact worker prefix zeros.",
+  "new_result": "Three original causal switches lower->upper->lower->upper leave no failure and preserve nonzero fresh test command; corrupt count/finite/heights and unsafe source stay protective zero."
+}

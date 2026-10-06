@@ -1,0 +1,18 @@
+--- frozen_V24/terrain_provider.py
++++ candidate_V25/terrain_provider.py
+@@ -173,9 +173,13 @@
+                     navigation_ground_truth_used=False)
+ 
+     def _record(self, value):
++        if ('navigation_ground_truth_used' in value and
++                value['navigation_ground_truth_used'] is not False):
++            raise ValueError('Terrain event cannot authorize ground-truth navigation')
+         self.event_sequence += 1
+-        row = dict(sequence=self.event_sequence, recorded_monotonic_wall=time.monotonic(),
+-                   navigation_ground_truth_used=False, **value)
++        row = dict(value)
++        row.update(sequence=self.event_sequence, recorded_monotonic_wall=time.monotonic(),
++                   navigation_ground_truth_used=False)
+         self.log.write(canonical(row) + '\n')
+         return row
+ 
