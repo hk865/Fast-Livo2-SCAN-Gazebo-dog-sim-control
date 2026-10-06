@@ -1,7 +1,7 @@
 {
   "schema": "teacher_current_storage/v1",
-  "updated_UTC": "2026-10-05T19:05:25.470073+00:00",
-  "raw_status": "DELETED_BY_EXPLICIT_USER_REQUEST",
+  "updated_UTC": "2026-10-06T06:25:14.589703+00:00",
+  "raw_status": "HISTORICAL_RAW_PARTIALLY_PURGED_NEW_V20_RUNS_RETAINED",
   "deleted_files": 300941,
   "deleted_logical_bytes": 377442220572,
   "full_historical_raw_replay_available": false,
@@ -16,13 +16,35 @@
   "new_runtime_requires_new_build_preflight_and_actual_experiment": true,
   "protected": "Frozen model, RL project and training, passed camera_mode, source snapshots, summaries and finite numeric fixtures",
   "cleanup_summary": "maintenance/CLEANUP_SUMMARY.json",
-  "raw_status_scope": "Historical experiments covered by maintenance/PURGE_JOURNAL.jsonl.gz only; new V19 runs are not deleted.",
+  "raw_status_scope": "Original historical purge plus 2026-10-06 afternoon exact plans; latest 401b/dc50 run raw retained locally.",
   "new_v19": {
-    "raw_status": "RETAINED_LOCALLY_NOT_IN_GIT",
+    "raw_status": "SELECTED_LARGE_RAW_PURGED_COMPACT_COMPARISON_RETAINED",
     "report": "test_results/pipeline_v19_20261006/README.md",
     "original46_final_status": "FAILED",
     "original46_reached": 8,
     "original46_total": 46,
-    "historical_manifests_unchanged": true
+    "historical_manifests_unchanged": true,
+    "remaining_9779": "PID/SLAM/status, segment activation, 1931 spline files+metadata, source snapshots and reports"
+  },
+  "afternoon_cleanup": {
+    "raw_deleted_files": 69845,
+    "raw_deleted_logical_bytes": 73561572507,
+    "pip_cache_separate_bytes": 9464946102,
+    "total_this_round_bytes": 83026518609,
+    "receipt": "test_results/corridor_tracking_v20_continue_20261006/cleanup/CLEANUP_TOTAL.json",
+    "exact_deletion_manifests": [
+      "test_results/corridor_tracking_v20_continue_20261006/cleanup/FINAL_DELETE_CANDIDATES.jsonl",
+      "test_results/corridor_tracking_v20_continue_20261006/cleanup/PHASE2_DELETE_CANDIDATES.jsonl"
+    ],
+    "prior_current_status_sha256": "1ac45288e225d9c410a0ffafddc2be6c33234729488c220a23a63fe69f22b0de"
+  },
+  "new_v20": {
+    "prefix9_run_suffix": "401b",
+    "prefix9_limited_pass": true,
+    "full46_run_suffix": "dc50",
+    "full46_runtime_status": "FAILED_AT_ORIGINAL_REGION_10",
+    "full46_arrivals_observed": 9,
+    "raw_status": "BOTH_RETAINED_LOCALLY_NOT_IN_GIT",
+    "older_39ea": "selected large raw deleted; all 400 corridor snapshots and receipt streams retained"
   }
 }

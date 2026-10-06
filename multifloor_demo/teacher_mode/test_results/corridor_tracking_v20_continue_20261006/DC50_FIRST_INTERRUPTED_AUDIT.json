@@ -1,0 +1,13 @@
+{
+  "schema": "dc50_evaluation_interrupted_attempt/v1",
+  "stage": "actual_heading_reference_consistency",
+  "error": "ValueError: Ambiguous/foreign source cascade_core.py",
+  "effect": "Old basename-only snapshot lookup sees V19 and V20 archive sources; report generation aborted. No runtime conclusion inferred.",
+  "data_passes_before_error": [
+    "navigation_slam_poses.jsonl",
+    "navigation_status.jsonl",
+    "telemetry.jsonl"
+  ],
+  "preservation_error": "First wrapper did not persist compact before exception; one retry required.",
+  "remedy": "Independent wrapper selects exact V20 archive source path with required frozen SHA and normal archived source closure remains checked."
+}

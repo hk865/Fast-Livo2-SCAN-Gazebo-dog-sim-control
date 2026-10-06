@@ -1,0 +1,148 @@
+{
+  "schema": "prefix9_same_pass_region9_comparison/v1",
+  "candidate": {
+    "region9_exposed": true,
+    "comparable": true,
+    "original_region_arrived": true,
+    "drive_to_pre_turn_count": 1,
+    "reset_with_new_path_count": 0,
+    "observed_elapsed_until_arrival_or_failure_s": 47.959999999,
+    "source": "Only the same raw PID/pose/status read used by the independent evaluator; no interpolation.",
+    "observed_interval_s": [
+      125.985,
+      173.944999999
+    ],
+    "observed_slam_samples": 1401,
+    "actual_pose_interval_s": [
+      125.995,
+      173.944999999
+    ],
+    "observed_duration_s": 47.959999999000004,
+    "path_length_slam_3d_m": 6.687757795241921,
+    "excluded_pose_gap_count": 0,
+    "net_displacement_3d_m": 6.021402782930115,
+    "net_displacement_xy_m": 5.991032683184429,
+    "first_position_xyz_m": [
+      4.874819285491307,
+      1.9585807370043797,
+      0.2696374343812246
+    ],
+    "last_position_xyz_m": [
+      10.865349418318264,
+      1.8809834517666968,
+      0.8736398046534839
+    ],
+    "goal_center_xyz_m": [
+      11.024513336094422,
+      1.8900952382958984,
+      0.9020102095417398
+    ],
+    "initial_goal_distance_3d_m": 6.182501314704342,
+    "final_goal_distance_3d_m": 0.16192917355786474,
+    "goal_distance_reduction_3d_m": 6.020572141146477,
+    "net_progress_along_original_region7_to8_m": 6.021387312580414,
+    "direction_definition": "Original transformed region centers 7 to 8; not reset-local path progress."
+  },
+  "baseline": {
+    "region9_exposed": true,
+    "comparable": true,
+    "original_region_arrived": false,
+    "drive_to_pre_turn_count": 104,
+    "reset_with_new_path_count": 104,
+    "observed_elapsed_until_arrival_or_failure_s": 90.165,
+    "source": "Only the same raw PID/pose/status read used by the independent evaluator; no interpolation.",
+    "observed_interval_s": [
+      133.45,
+      223.615
+    ],
+    "observed_slam_samples": 2733,
+    "actual_pose_interval_s": [
+      133.455,
+      223.61
+    ],
+    "observed_duration_s": 90.16500000000002,
+    "path_length_slam_3d_m": 4.239159444330528,
+    "excluded_pose_gap_count": 0,
+    "net_displacement_3d_m": 2.5347563487395126,
+    "net_displacement_xy_m": 2.5213378748921405,
+    "first_position_xyz_m": [
+      7.856927509885077,
+      1.9007234933390653,
+      0.5798382595098979
+    ],
+    "last_position_xyz_m": [
+      10.37586657711446,
+      1.7907659790383879,
+      0.8403091179751987
+    ],
+    "goal_center_xyz_m": [
+      11.02329808071612,
+      1.8951347788353872,
+      0.9037710402579561
+    ],
+    "initial_goal_distance_3d_m": 3.182902177572833,
+    "final_goal_distance_3d_m": 0.658853408435288,
+    "goal_distance_reduction_3d_m": 2.524048769137545,
+    "net_progress_along_original_region7_to8_m": 2.533379118593934,
+    "direction_definition": "Original transformed region centers 7 to 8; not reset-local path progress."
+  },
+  "valid_region9_exposure_in_both": true,
+  "terminal_policy_difference": "V20 prefix9 makes original exploration:8 the final parking goal; r3 original46 continues to exploration:9. Region geometry/dwell match; terminal braking/parking do not form an identical-control A/B test.",
+  "full46_pass": false,
+  "whole_200hz_physical_acceptance": false,
+  "wrapper": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/audit_prefix9_with_series.py",
+    "sha256": "274d494a9e5624a8c3c5063de550727fd59e6515ddad0102514d0f70ae1bfbee"
+  },
+  "plot_series": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_COMPACT_SERIES.json.gz",
+    "sha256": "18553e168f128d40b8e281835aebb0d6e03b02162239bef1a211d89f1787ee17",
+    "wrapper": {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/audit_prefix9_with_series.py",
+      "sha256": "274d494a9e5624a8c3c5063de550727fd59e6515ddad0102514d0f70ae1bfbee"
+    },
+    "one_log_read_per_file": true
+  },
+  "source_bindings": [
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_slam_poses.jsonl",
+      "sha256": "faa9a36df1fe3a7dbf1f2b645903a84edf72225f0acb941cc15bd390065771ca",
+      "bytes": 5479547,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_status.jsonl",
+      "sha256": "b8252bbd2727e80487157eea0d44157d275c418039f799c8970778ac08a86464",
+      "bytes": 84350376,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_pid_history.jsonl",
+      "sha256": "b57e2de37833046340af8012334a42b40989c78bdf346a40ed6ec7e5f0e55255",
+      "bytes": 79455669,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_slam_poses.jsonl",
+      "sha256": "d005ada8c2c652b158114505328df87a960d08dceb97d616161af7389db9f39a",
+      "bytes": 6957667,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_status.jsonl",
+      "sha256": "c912557e15fd166819b2a49d85bc554f7fd665424dadc4916c4179852edecf69",
+      "bytes": 111749418,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_pid_history.jsonl",
+      "sha256": "cf9d7957b387000c831046d24ea07e9b7432e51d49eba0f59c34a46c484e08c8",
+      "bytes": 67993139,
+      "stable_during_read": true
+    }
+  ],
+  "full_prefix_report": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_PREFIX9_ACTUAL_EVALUATION.json",
+    "sha256": "dc4894e4d19ca1eeaa61c0e2cec48d6b8880cef72b47d3a3df961db2e534cf13"
+  }
+}

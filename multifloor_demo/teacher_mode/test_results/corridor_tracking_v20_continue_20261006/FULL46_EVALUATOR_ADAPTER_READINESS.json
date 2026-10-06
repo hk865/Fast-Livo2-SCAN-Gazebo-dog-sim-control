@@ -1,0 +1,68 @@
+{
+  "schema": "V20_full46_evaluator_adapter_readiness/v1",
+  "status": "SOURCE_REVIEW_AND_SMALL_READER_TESTS_ONLY",
+  "adapter_required": true,
+  "original_evaluators_modified": false,
+  "run_evaluated": false,
+  "simulation_started": false,
+  "source_binding_changes": [
+    "Load V20 mission46_profile/mission46/runtime_evidence, then preserve original source-closure checks; verify additional actual shared helper hashes.",
+    "Use V20 recorded spatial tangent, normal, cross error and spatial heading, preserving locked-turn and fixed-goal-tail checks; raw nearest segment is not the effective V20 heading."
+  ],
+  "original_checks_retained": [
+    "Original 18+14+14 request geometry and actual raw-SLAM continuous dwell windows",
+    "Whole mission terminal, runtime owned cleanup, CPU frozen Teacher/sole actuator, loaded SLAM",
+    "Original origin standing initialization",
+    "Three exact-order terrain layer switches from immutable ray/provider evidence",
+    "Current-run RGB saved PCD hash/point count/colors/source/fresh sensor metadata",
+    "Dynamic trigger/service ACK enter-block-leave-clear geometry/duration, raw guard replay, measured stop, aligned clear/recovery",
+    "Final fixed5s actual SLAM/native/controller active hold",
+    "50Hz recorded native physical/actuator safety",
+    "Pipeline ordered commit trace and context-valid complete drain",
+    "200Hz native actuator replay remains unverified",
+    "Full publication/PI/SCAN geometry replay remains unverified"
+  ],
+  "added_checks": [
+    "Original per-goal timeout from activation and arrival source-clock receipt fields",
+    "Actual baseline SCAN loaded-binary/manifest witness and no corridor authority/exporter",
+    "Original completed-stage and route/save/final-hold action order; RGB/dynamic/parking request joins; no shifting first final hold",
+    "RGB frame/completeness/per-sensor counts retained from original runtime validator"
+  ],
+  "profile_scope": {
+    "scan_workspace_selector": "protected_baseline",
+    "corridor_mode": "shadow",
+    "retain_valid_plan": false,
+    "exporter_enabled": false,
+    "corridor_geometry_certification": "UNAVAILABLE_NO_EXPORTER_BY_PROFILE",
+    "comparison": "Prefix9 exporter candidate and full46 baseline SCAN are different stacks; not an identical-stack A/B."
+  },
+  "semantic_limits": [
+    "Overall formal reader status remains unverified without both full replay checks; functional46_limited_pass is explicitly scoped and does not remove checks.",
+    "Dynamic evidence proves actual SetEntityPose execution ACK and measured guard/recovery; no independent entity-pose observer.",
+    "RGB point/color counts and source binding do not establish global map accuracy.",
+    "Privileged terrain rays and native states remain declared Actor/offline safety evidence, not navigation truth.",
+    "The adapter has not evaluated a completed V20 full46 run."
+  ],
+  "validation": {
+    "adapter_import_and_pins_passed": true,
+    "small_reader_tests": 5,
+    "full_runtime_reads": 0
+  },
+  "keep_for_completed_run": [
+    "navigation_source_snapshots.json and every bound run-local archive",
+    "Original mission requests/actions/status and all immutable proof documents",
+    "navigation_slam_poses.jsonl/navigation_status.jsonl/navigation_pid_history.jsonl",
+    "telemetry.jsonl plus exact native proof source files",
+    "guard cloud_array_file payloads used by dynamic replay",
+    "Saved current-run RGB PCD",
+    "fastlivo_debug/pipeline_v19_events.csv and summary, pipeline_normal_stop.json",
+    "Loaded SLAM/SCAN witness and runtime/profile/model/asset manifests"
+  ],
+  "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 -B multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/evaluate_full46_v20.py --run <FULL_RUN_DIR> --output <NEW_OUTPUT_OUTSIDE_RUN>.json",
+  "file_sha256": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/evaluate_full46_v20.py": "a4e529b882e31f2fa1d80bfdeff2c86e9243d1a09ae6ad5e97dba7998ccac133",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/full46_adapter_tests.py": "8f57bf0fa3fa56014329ee257623af8e964fd907cf3ac5ff5547a92fd55d4482",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/evaluate_mission46.py": "9a16295984d60862727c92ab6df0a81e0254a8f04b7d77709cd4cc9c958498d2",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/evaluate_mission46_reader_v1.py": "0650fff361a54c4b3fad1f491df76a2e36f8d73d3c581d9b6477bef3a91473d7"
+  }
+}

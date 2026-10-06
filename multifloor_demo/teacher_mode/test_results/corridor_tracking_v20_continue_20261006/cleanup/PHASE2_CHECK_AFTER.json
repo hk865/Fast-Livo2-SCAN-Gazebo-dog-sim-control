@@ -1,0 +1,128 @@
+{
+  "schema": "teacher_phase2_purge_independent_lightweight_after_check/v1",
+  "checked_at": "2026-10-06T06:17:48.672006+00:00",
+  "status": "PASSED",
+  "deletion_performed_by_checker": false,
+  "checks": {
+    "plan_hash_matches_purge_receipt": true,
+    "count_and_logical_bytes_match_purge_receipt": true,
+    "all_targets_absent": true,
+    "entire_listed_preserved_file_set_exists": true,
+    "retained_file_sizes_unchanged": true,
+    "protected_subtree_roots_exist": true,
+    "new401b_and_dc50_marker_evidence_present": true
+  },
+  "targets_checked": 36402,
+  "logical_bytes_deleted": 40101105705,
+  "preserved_file_records_checked": 4740,
+  "retained_counts": {
+    "20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779": 3981,
+    "20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea": 759
+  },
+  "remaining_targets": [],
+  "missing_preserved_files": [],
+  "size_changed_preserved_files": [],
+  "missing_protected_subtree_roots": [],
+  "new_runs_stat_only": [
+    {
+      "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b",
+      "stat_only": true,
+      "all_markers_present": true,
+      "files": [
+        {
+          "relative_path": "navigation_pid_history.jsonl",
+          "exists": true,
+          "bytes": 79455669
+        },
+        {
+          "relative_path": "navigation_status.jsonl",
+          "exists": true,
+          "bytes": 84350376
+        },
+        {
+          "relative_path": "navigation_slam_poses.jsonl",
+          "exists": true,
+          "bytes": 5479547
+        },
+        {
+          "relative_path": "telemetry.jsonl",
+          "exists": true,
+          "bytes": 1897421269
+        },
+        {
+          "relative_path": "actuator.jsonl",
+          "exists": true,
+          "bytes": 192238961
+        },
+        {
+          "relative_path": "source_manifest.json",
+          "exists": true,
+          "bytes": 95953
+        },
+        {
+          "relative_path": "sources",
+          "exists": true,
+          "bytes": null
+        },
+        {
+          "relative_path": "navigation_cloud_arrays",
+          "exists": true,
+          "bytes": null
+        }
+      ]
+    },
+    {
+      "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50",
+      "stat_only": true,
+      "all_markers_present": true,
+      "files": [
+        {
+          "relative_path": "navigation_pid_history.jsonl",
+          "exists": true,
+          "bytes": 84270984
+        },
+        {
+          "relative_path": "navigation_status.jsonl",
+          "exists": true,
+          "bytes": 109004776
+        },
+        {
+          "relative_path": "navigation_slam_poses.jsonl",
+          "exists": true,
+          "bytes": 5827407
+        },
+        {
+          "relative_path": "telemetry.jsonl",
+          "exists": true,
+          "bytes": 1926244271
+        },
+        {
+          "relative_path": "actuator.jsonl",
+          "exists": true,
+          "bytes": 198877500
+        },
+        {
+          "relative_path": "source_manifest.json",
+          "exists": true,
+          "bytes": 96811
+        },
+        {
+          "relative_path": "sources",
+          "exists": true,
+          "bytes": null
+        },
+        {
+          "relative_path": "navigation_cloud_arrays",
+          "exists": true,
+          "bytes": null
+        }
+      ]
+    }
+  ],
+  "receipt_sha256": "1477642917a014ba39e788af2190b80bbaa8b549517e98f1bc98358e1d9abc0b",
+  "plan_sha256": "51cf37895852b4fa09411663e785c5372021a5b0642ab81fb04378700e8acceb",
+  "preserved_plan_sha256": "24515ee4c5b73c3e243070a7df87645c19f100a16d603d017a743fdebb994be5",
+  "gate_verification": "Root PHASE2_POST_PURGE_GATE_VERIFIED.json confirms exact frozen V20 full46 source/profile gate; no runtime/navigation acceptance. This checker does not repeat large-library/model hashing.",
+  "content_scope": "Only lists/receipts and filesystem metadata read; no dc50/401b big raw content read, no RL/camera traversal.",
+  "future_cleanup": "No further deletion authorized by this document; all newer runs retained."
+}

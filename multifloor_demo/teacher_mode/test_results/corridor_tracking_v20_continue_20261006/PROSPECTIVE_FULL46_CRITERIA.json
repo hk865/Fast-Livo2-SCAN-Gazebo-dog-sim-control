@@ -1,0 +1,30 @@
+{
+  "schema": "teacher_v20_full46_entry_criteria/v1",
+  "created": "2026-10-06T14:03:00.286577+08:00",
+  "prefix9_receipt": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_PREFIX9_ACTUAL_EVALUATION.json",
+  "prefix9_receipt_sha256": "dc4894e4d19ca1eeaa61c0e2cec48d6b8880cef72b47d3a3df961db2e534cf13",
+  "profile": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/profiles/pipeline_staged_original46.json",
+  "profile_sha256": "0a70f3c6842cb56ead6f5fc9c2106d92fa08219a61297c889291fe190c4d7c25",
+  "execution_unverified_until_new_run": true,
+  "source": "actual SLAM/IMU/registered cloud and SCAN; truth offline only",
+  "scope_difference": "Prefix used read-only exporter SCAN; full46 exact frozen reviewed profile uses protected baseline SCAN. Same V20 finite-arc controller; no active corridor or old-plan retention. Shadow requests receive no exporter; no corridor proof is inferred.",
+  "requires": [
+    "18 original exploration regions",
+    "14 original return regions",
+    "current-run RGB map save",
+    "14 original navigation regions",
+    "original dynamic obstacle stop, clear and recovery",
+    "original floor/ramp and 3 causal actor layer transitions",
+    "first fixed 5s final active parking",
+    "fresh source and single frozen CPU Teacher actuator",
+    "normal owned runtime exit"
+  ],
+  "strict_unverified": [
+    "Every 200Hz physics step replay",
+    "Full publication PI and all SCAN geometry replay",
+    "New-controller Isaac Sim2Sim comparison",
+    "Real robot"
+  ],
+  "no_inherited_full46_pass": true,
+  "result": "NOT_RUN"
+}

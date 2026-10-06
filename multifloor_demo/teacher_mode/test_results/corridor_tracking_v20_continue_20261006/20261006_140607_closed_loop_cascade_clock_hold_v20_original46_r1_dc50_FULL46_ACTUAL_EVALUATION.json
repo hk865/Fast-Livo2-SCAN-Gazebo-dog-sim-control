@@ -1,0 +1,423 @@
+{
+  "schema": "independent_original46_SLAM_SCAN_mission/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50",
+  "run_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50",
+  "status": "failed",
+  "passed": false,
+  "checks": {
+    "original46_profile_and_archived_sources": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "archived_source_count": 273,
+        "run_local_reference_hashes_verified": true,
+        "current_pure_modules_match_archives": true,
+        "version_adapter": "V20 module selection; original closure gates retained",
+        "additional_current_modules_match_archives": [
+          "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/mission46.py",
+          "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
+          "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/navigation/control_core.py",
+          "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/guard_audit.py"
+        ]
+      }
+    },
+    "whole_mission_terminal": {
+      "status": "failed",
+      "passed": false,
+      "stage": "failed",
+      "message": "Actual execution bridge failed: Measured SLAM body pose left finite route fence; restart after review",
+      "completed_phase_regions": 0
+    },
+    "runtime_and_owned_cleanup": {
+      "status": "passed",
+      "passed": true,
+      "error": null,
+      "owned_clean": true,
+      "worker_samples": 9735
+    },
+    "frozen_Teacher_CPU_sole_actuator": {
+      "status": "passed",
+      "passed": true,
+      "model_SHA": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+      "Actor_privileged_dimensions": 232
+    },
+    "actual_loaded_SLAM_binary": {
+      "status": "passed",
+      "passed": true,
+      "actual_core_SHA": "f06e68d0dcbcab9f840077c372d0cda2e128f9935c4fe968987784e2124e00d8",
+      "actual_executable_SHA": "eedadd1a3e91eb9856b99bb55208bf51fea81de546579ab0d55ff3c91daf7a87"
+    },
+    "actual_SLAM_navigation_source": {
+      "status": "passed",
+      "passed": true,
+      "SLAM_pose_count": 5789,
+      "navigation_ground_truth_used": false
+    },
+    "three_original_phase_requests": {
+      "status": "failed",
+      "passed": false,
+      "errors": [],
+      "phase_request_files": [
+        "exploration_1.json"
+      ],
+      "phase_geometry_preserved": true,
+      "phase_region_checks": {
+        "exploration": {
+          "status": "failed",
+          "passed": false,
+          "completed_regions": 9,
+          "required_regions": 18,
+          "actual_source_dwell_errors": [],
+          "max_source_gap_ns": 35000001,
+          "request_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1",
+          "final_state": "stopped",
+          "independent_original_deadlines": [
+            {
+              "goal_id": "exploration:0",
+              "passed": true,
+              "activation_ns": 9610000000,
+              "arrival_ns": 19475000000,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:1",
+              "passed": true,
+              "activation_ns": 19530000000,
+              "arrival_ns": 30495000000,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:2",
+              "passed": true,
+              "activation_ns": 30570000000,
+              "arrival_ns": 41945000000,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:3",
+              "passed": true,
+              "activation_ns": 41995000000,
+              "arrival_ns": 52570000000,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:4",
+              "passed": true,
+              "activation_ns": 52650000000,
+              "arrival_ns": 68314999999,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:5",
+              "passed": true,
+              "activation_ns": 68350000000,
+              "arrival_ns": 84484999999,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:6",
+              "passed": true,
+              "activation_ns": 84550000000,
+              "arrival_ns": 101739999999,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:7",
+              "passed": true,
+              "activation_ns": 101795000000,
+              "arrival_ns": 124250000000,
+              "original_timeout_s": 90.0
+            },
+            {
+              "goal_id": "exploration:8",
+              "passed": true,
+              "activation_ns": 124330000000,
+              "arrival_ns": 140914999999,
+              "original_timeout_s": 90.0
+            }
+          ]
+        },
+        "return_origin": {
+          "status": "unverified",
+          "passed": null,
+          "reason": "Phase not executed",
+          "expected_regions": 14
+        },
+        "navigation_f1_f3": {
+          "status": "unverified",
+          "passed": null,
+          "reason": "Phase not executed",
+          "expected_regions": 14
+        }
+      },
+      "partial_arrival_counts": {
+        "exploration": 9
+      }
+    },
+    "exploration_original_regions_and_actual_dwell": {
+      "status": "failed",
+      "passed": false,
+      "completed_regions": 9,
+      "required_regions": 18,
+      "actual_source_dwell_errors": [],
+      "max_source_gap_ns": 35000001,
+      "request_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1",
+      "final_state": "stopped",
+      "independent_original_deadlines": [
+        {
+          "goal_id": "exploration:0",
+          "passed": true,
+          "activation_ns": 9610000000,
+          "arrival_ns": 19475000000,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:1",
+          "passed": true,
+          "activation_ns": 19530000000,
+          "arrival_ns": 30495000000,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:2",
+          "passed": true,
+          "activation_ns": 30570000000,
+          "arrival_ns": 41945000000,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:3",
+          "passed": true,
+          "activation_ns": 41995000000,
+          "arrival_ns": 52570000000,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:4",
+          "passed": true,
+          "activation_ns": 52650000000,
+          "arrival_ns": 68314999999,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:5",
+          "passed": true,
+          "activation_ns": 68350000000,
+          "arrival_ns": 84484999999,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:6",
+          "passed": true,
+          "activation_ns": 84550000000,
+          "arrival_ns": 101739999999,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:7",
+          "passed": true,
+          "activation_ns": 101795000000,
+          "arrival_ns": 124250000000,
+          "original_timeout_s": 90.0
+        },
+        {
+          "goal_id": "exploration:8",
+          "passed": true,
+          "activation_ns": 124330000000,
+          "arrival_ns": 140914999999,
+          "original_timeout_s": 90.0
+        }
+      ]
+    },
+    "return_origin_original_regions_and_actual_dwell": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Phase not executed",
+      "expected_regions": 14
+    },
+    "navigation_f1_f3_original_regions_and_actual_dwell": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Phase not executed",
+      "expected_regions": 14
+    },
+    "actual_original_origin_standing_initialization": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "actual_imu_samples": 641,
+        "actual_SLAM_samples": 96,
+        "native_safety_records": 160,
+        "hidden_bias_state_inspected": false
+      }
+    },
+    "three_causal_privileged_terrain_switches": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/mission46_terrain_evidence_1.json'"
+    },
+    "actual_current_run_saved_RGB": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/mission46_rgb_save_receipt.json'"
+    },
+    "original_dynamic_stop_clear_recovery": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/mission46_dynamic_receipt.json'"
+    },
+    "final_first5s_SLAM_and_physical_hold": {
+      "status": "unverified",
+      "passed": null,
+      "error": "[Errno 2] No such file or directory: '/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/mission46_final_parking_receipt.json'"
+    },
+    "native_physical_and_actuator_safety": {
+      "status": "passed",
+      "passed": true,
+      "samples": 9735,
+      "errors": [],
+      "max_abs_qd_radps": 11.797212371935784,
+      "max_abs_torque_Nm": 15.602785380695385,
+      "max_abs_roll_rad": 0.04354191413940046,
+      "max_abs_pitch_rad": 0.10441182414279697,
+      "min_clearance_m": 0.2432086238565696
+    },
+    "pipeline_complete_ordered_context_valid_drain": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "actual_trace_commits": 123226,
+        "summary": {
+          "schema": "staged_input_pipeline_v19/v1",
+          "mode": "staged",
+          "image_copy_opt": 0,
+          "count_limit": 512,
+          "byte_limit": 67108864,
+          "trace_schema": "pipeline_v19_events/v1",
+          "trace_columns": 23,
+          "normal_completed": true,
+          "context_valid_at_drain": true,
+          "accepted": 123226,
+          "delivered": 123226,
+          "committed": 123226,
+          "pending": 0,
+          "inflight": 0,
+          "ready": 0,
+          "bytes": 0,
+          "peak_pending": 19,
+          "peak_bytes": 20650547,
+          "canceled": 0,
+          "rejected_capacity": 0,
+          "closed_rejections": 0,
+          "failure": "",
+          "uncommitted_packets": [],
+          "rejected_packet": null
+        },
+        "receiver_TIDs": [
+          3018217
+        ],
+        "owner_TIDs": [
+          3018077
+        ],
+        "decoder_TIDs": {
+          "0": [
+            0
+          ],
+          "3": [
+            3018216
+          ],
+          "1": [
+            0
+          ],
+          "2": [
+            3018215
+          ]
+        },
+        "cleanup_exemption": false
+      }
+    },
+    "actual_heading_reference_consistency": {
+      "status": "passed",
+      "passed": true,
+      "V20_control_source_pins": {
+        "cascade_core.py": "3c1a3cb00993fe213b622b0df2bdaf511cb3fcbbd2728f0fc998a87c155f4e82",
+        "controller.py": "2af343e23e60a3c9a2e9757ea1e60c8bdbb342b792f91bc5c5dcb315fb2a6a5d",
+        "spatial_reference.py": "b358b03997759c0f7066f51c731370437998ee1fb953cd8c7bd1722b29739469"
+      },
+      "actual_align_turn_updates": 1355,
+      "other_reference_updates": 2787,
+      "mode_counts": {
+        "turn": 1355,
+        "drive": 2787
+      },
+      "maximum_effective_reference_error_rad": 0.0,
+      "errors": [],
+      "runtime_Controller_called": false,
+      "full_PI_math_not_asserted": true,
+      "full_spatial_chord_geometry_recomputed": false,
+      "scope": "Recorded V20 spatial tangent/normal/cross/path/heading joins and locked-heading/tail behavior; not a complete trajectory replay"
+    },
+    "full_200Hz_native_actuator_trace_replay": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Only original50Hz policy/native snapshots checked here; strict200Hz actuator trace has not been replayed"
+    },
+    "full_publication_PI_and_all_SCAN_geometry_replay": {
+      "status": "unverified",
+      "passed": null,
+      "reason": "Full source/ACK/PI/publication/geometry replay not completed by this mission reader; original numerical gates retained"
+    },
+    "actual_baseline_SCAN_and_no_corridor_authority": {
+      "status": "passed",
+      "passed": true,
+      "result": {
+        "scan_workspace_selector": "protected_baseline",
+        "actual_executable_SHA": "5a5e3745314d7252bc69dbdf41118305f988c2252e8148e2956b11114b687332",
+        "loaded_binary_receipt_SHA": "00c12eef0b6d1d30ed30ba01165dafa1e6bd6be2f9e0621e17927d875aa27f52",
+        "corridor_mode": "shadow",
+        "exporter_enabled": false,
+        "corridor_certificate_count": 0,
+        "corridor_control_authority": false,
+        "corridor_geometric_certification": "UNAVAILABLE_NO_EXPORTER_BY_PROFILE",
+        "prefix9_comparison_limitation": "Earlier prefix9 runs used bounded_snapshot_exporter_v20; this full46 uses protected_baseline SCAN. Not an identical-stack A/B comparison."
+      }
+    },
+    "original_phase_receipt_and_first_hold_order": {
+      "status": "failed",
+      "passed": false,
+      "error": "ValueError: Original completed-stage order differs"
+    }
+  },
+  "simulation_only": true,
+  "navigation_ground_truth_used": false,
+  "actor_privileged_dimensions": 232,
+  "real_robot_verified": false,
+  "evaluator_sha256": "9a16295984d60862727c92ab6df0a81e0254a8f04b7d77709cd4cc9c958498d2",
+  "source_bindings": {
+    "navigation_scope.json": "302304dce92865532021df86c1739d36dcd7cc5971fcee0d6bd61e50f748af05",
+    "source_manifest.json": "86254a6a975d9b683b30996628d2c66dee58c4d761fd6019af8f902d338b10f6",
+    "navigation_source_snapshots.json": "b749a6faca0ce534960669744178c90a8ab368af95a2786380a28d040c9113a9",
+    "navigation_profile.json": "e2837837dd6526839873df58998685557871879c88aac93eca5c92fe577cda0b",
+    "runtime_manifest.json": "1bd8b6b884286c881df27d044cb3417aa3f28821852fb949d8eea501ca7e30bc",
+    "worker_result.json": "321a22b725ae76da83cdd8ec97c0533a68604c52ad25d4ffa5d2bff40c1e0c5d",
+    "mission46_status.json": "7b62b9f6c93a09280586eabed73ed0ba0b959c3b607a325c13bda223014c96c3",
+    "navigation_anchor.json": "ec36ca265c0950365076fb76283ec94a7571b63774b0f8b94aaa30cb73ec1433"
+  },
+  "limitations": [
+    "Full200Hz, all PI/publication/SCAN geometry replay remain unverified. V20 recorded effective spatial-reference joins replace the V19 closest-segment heading assumption.",
+    "Dynamic entity evidence uses actual SetEntityPose execution ACKs, not an independent pose/info observer.",
+    "Native position is used only for Actor privilege and offline physical safety, never navigation."
+  ],
+  "formal_control_math_and_all_path_guard_replay_complete": false,
+  "functional46_limited_pass": false,
+  "functional46_limited_scope": "Original 18+14+14 regions, measured dwell/deadlines, initialization, terrain, RGB, dynamic ACK/guard recovery, first5s hold, 50Hz recorded native safety, source/binary and pipeline closure. Excludes complete 200Hz/PI/SCAN geometry replay.",
+  "version_adapter": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/evaluate_full46_v20.py",
+    "sha256": "a4e529b882e31f2fa1d80bfdeff2c86e9243d1a09ae6ad5e97dba7998ccac133",
+    "frozen_base_evaluator": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/evaluate_mission46.py",
+    "frozen_base_evaluator_sha256": "9a16295984d60862727c92ab6df0a81e0254a8f04b7d77709cd4cc9c958498d2",
+    "source_modules": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20",
+    "old_checks_removed": [],
+    "runtime_Controller_called": false
+  }
+}

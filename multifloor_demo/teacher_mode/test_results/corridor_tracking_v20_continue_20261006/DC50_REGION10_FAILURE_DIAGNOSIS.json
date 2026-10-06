@@ -1,0 +1,1205 @@
+{
+  "schema": "dc50_region10_offline_failure_diagnosis/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50",
+  "run_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50",
+  "status": "failed",
+  "passed": false,
+  "formal_report": {
+    "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50_FULL46_ACTUAL_EVALUATION.json",
+    "sha256": "e3e9887da09b66afde02b4af8b055ee0eb04ddb7340fa7a21209efb79373c920"
+  },
+  "compact_sha256": "b710838dc900cb7d5f99b39d3ef2638e41c89281d7cf2c0cb7bf977a1f17afbd",
+  "analysis_script_sha256": "42f7303063088977902c11e24b4efe689621892acb9080b423b197384d9890dc",
+  "scope": "Original46 failed with nine original exploration arrivals; region10 unfinished; no final parking or full46 PASS.",
+  "first_fence_failure": {
+    "slam_stamp_s": 187.574999999,
+    "native_physics_stamp_s": 187.565,
+    "pair_gap_s": -0.00999999900000148,
+    "slam_camera_init_xyz": [
+      12.51039689153753,
+      2.328446222035302,
+      1.0458709993200015
+    ],
+    "slam_scene_prior_world_xy": [
+      12.482605649741204,
+      2.450117127673205
+    ],
+    "native_body_origin_world_xyz": [
+      12.495153361568802,
+      2.4717252196781563,
+      1.3467680539611353
+    ],
+    "recorded_route_fence": {
+      "inside": false,
+      "segment": 26,
+      "fraction": 0.5059904489831083,
+      "nearest_camera_init_xyz": [
+        12.504936355070948,
+        1.8783618476215107,
+        1.051640966225298
+      ],
+      "horizontal_error_m": 0.4501174974936621,
+      "height_error_m": 0.005769966905296409,
+      "horizontal_radius_m": 0.45,
+      "maximum_height_error_m": 0.3,
+      "navigation_ground_truth_used": false
+    },
+    "slam_signed_lateral_m": 0.450117127673205,
+    "native_signed_lateral_m": 0.4717252196781563,
+    "native_rpy_rad": [
+      -0.0031533872717246013,
+      0.02193568183605243,
+      0.3308292361266157
+    ],
+    "slam_world_yaw_rad": 0.33134499029203307,
+    "native_minus_slam_yaw_rad": -0.0005157541654173814,
+    "native_body_COM_velocity_mps": [
+      0.05116461016483825,
+      0.06324346688463087,
+      -0.042102685987069344
+    ],
+    "native_body_origin_velocity_mps": [
+      0.050612892808387294,
+      0.05882318445720386,
+      -0.038458838432608215
+    ],
+    "native_world_origin_velocity_mps": [
+      0.027987259018479642,
+      0.0716795924567054,
+      -0.03974498156469756
+    ],
+    "native_body_angular_velocity_radps": [
+      0.035240045162027424,
+      0.0647822600100174,
+      0.08392185060401541
+    ],
+    "command_body": [
+      0.003884412406250124,
+      0.0,
+      0.0
+    ],
+    "native_fault": null,
+    "native_contacts": {
+      "body": 0.0,
+      "FR": 1.0,
+      "FL": 1.0,
+      "RR": 1.0,
+      "RL": 1.0
+    },
+    "slam_source": {
+      "line": 5574,
+      "offset": 5609263,
+      "length": 1000,
+      "sha256": "b70eb9cc8d1ea914e6d75f7184d6fc65d7d4284061f49200477e9895a7c2442a"
+    },
+    "native_source": {
+      "line": 9379,
+      "offset": 1856714092,
+      "length": 194715,
+      "sha256": "a29da2063d313d12d3e1c2b53c2a83231a547c0f6c2d1600997a461c66606bca"
+    },
+    "first_observed_failed_command_envelope": {
+      "state": "failed",
+      "healthy": false,
+      "stop_requested": true,
+      "reason": "Measured SLAM body pose left finite route fence; restart after review",
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "registered_route_fence": {
+        "inside": false,
+        "segment": 26,
+        "fraction": 0.5059904489831083,
+        "nearest_camera_init_xyz": [
+          12.504936355070948,
+          1.8783618476215107,
+          1.051640966225298
+        ],
+        "horizontal_error_m": 0.4501174974936621,
+        "height_error_m": 0.005769966905296409,
+        "horizontal_radius_m": 0.45,
+        "maximum_height_error_m": 0.3,
+        "navigation_ground_truth_used": false
+      },
+      "controller_source": null,
+      "controller_source_error": null,
+      "sequence": 14028,
+      "sim_time": 187.62,
+      "slam_stamp_ns": 187574999999
+    },
+    "native_command_receipt_source": {
+      "line": 9382,
+      "offset": 1857298282,
+      "length": 194740,
+      "sha256": "e8f588d288efa3dc5c518e5c89b976311c803f785f6ed668d27c5a59ad84a938"
+    }
+  },
+  "post_stop_peak_SLAM_fence": {
+    "slam_stamp_s": 192.49,
+    "native_physics_stamp_s": 192.485,
+    "pair_gap_s": -0.0049999999999954525,
+    "slam_camera_init_xyz": [
+      12.521326119759582,
+      2.3696608264527805,
+      1.0008934103423794
+    ],
+    "slam_scene_prior_world_xy": [
+      12.493087074277419,
+      2.4914478836124636
+    ],
+    "native_body_origin_world_xyz": [
+      12.505293282090003,
+      2.515456455821062,
+      1.3037113816271495
+    ],
+    "recorded_route_fence": {
+      "inside": false,
+      "segment": 9,
+      "fraction": 0.4959843581582951,
+      "nearest_camera_init_xyz": [
+        12.510860427794192,
+        1.8782975702432556,
+        1.0522334083677187
+      ],
+      "horizontal_error_m": 0.49147469951274364,
+      "height_error_m": 0.051339998025339284,
+      "horizontal_radius_m": 0.45,
+      "maximum_height_error_m": 0.3,
+      "navigation_ground_truth_used": false
+    },
+    "slam_signed_lateral_m": 0.4914478836124636,
+    "native_signed_lateral_m": 0.5154564558210621,
+    "native_rpy_rad": [
+      -0.010140941405664728,
+      0.058049645850537436,
+      0.40515583278767353
+    ],
+    "slam_world_yaw_rad": 0.40327182925864896,
+    "native_minus_slam_yaw_rad": 0.0018840035290245694,
+    "native_body_COM_velocity_mps": [
+      -0.03354411684463158,
+      0.007306910678254743,
+      -0.0581245637530779
+    ],
+    "native_body_origin_velocity_mps": [
+      -0.03295029173937153,
+      0.015721864921152528,
+      -0.06092507295537055
+    ],
+    "native_world_origin_velocity_mps": [
+      -0.03944164065939801,
+      -0.00048220454072880285,
+      -0.059066807411622554
+    ],
+    "native_body_angular_velocity_radps": [
+      -0.06922699926520402,
+      -0.048362833555620904,
+      -0.1599993891061334
+    ],
+    "command_body": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "native_fault": null,
+    "native_contacts": {
+      "body": 0.0,
+      "FR": 1.0,
+      "FL": 1.0,
+      "RR": 0.0,
+      "RL": 1.0
+    },
+    "slam_source": {
+      "line": 5723,
+      "offset": 5759349,
+      "length": 1004,
+      "sha256": "729ccda5dd672a5df85ca71a7d0753b86004a8d61e4aa39729b69dd1134ec184"
+    },
+    "native_source": {
+      "line": 9625,
+      "offset": 1904625359,
+      "length": 194747,
+      "sha256": "7fff25c263a02522f2a0db4dcfdb8ba0631d6a43280449ddf8d26b225ffc3da4"
+    }
+  },
+  "final_SLAM_snapshot": {
+    "slam_stamp_s": 194.669999999,
+    "native_physics_stamp_s": 194.665,
+    "pair_gap_s": -0.004999999000006028,
+    "slam_camera_init_xyz": [
+      12.506819125318845,
+      2.3413289687141705,
+      1.0231969717712788
+    ],
+    "slam_scene_prior_world_xy": [
+      12.478888321943169,
+      2.4629602988995574
+    ],
+    "native_body_origin_world_xyz": [
+      12.488810218389718,
+      2.4863361418284406,
+      1.3200502117786657
+    ],
+    "recorded_route_fence": {
+      "inside": false,
+      "segment": 9,
+      "fraction": 0.492034392418572,
+      "nearest_camera_init_xyz": [
+        12.499011228039013,
+        1.8784261364392267,
+        1.0510484186458018
+      ],
+      "horizontal_error_m": 0.46296867646537077,
+      "height_error_m": 0.02785144687452301,
+      "horizontal_radius_m": 0.45,
+      "maximum_height_error_m": 0.3,
+      "navigation_ground_truth_used": false
+    },
+    "slam_signed_lateral_m": 0.46296029889955737,
+    "native_signed_lateral_m": 0.48633614182844065,
+    "native_rpy_rad": [
+      0.0059366136391960644,
+      0.03152157334597513,
+      0.2673822083796054
+    ],
+    "slam_world_yaw_rad": 0.26661293312646756,
+    "native_minus_slam_yaw_rad": 0.0007692752531378577,
+    "native_body_COM_velocity_mps": [
+      -0.0018966408752760604,
+      0.000952432401688853,
+      0.0010945351583270652
+    ],
+    "native_body_origin_velocity_mps": [
+      -0.001903399376251637,
+      0.0010879487270671405,
+      0.001197328882201191
+    ],
+    "native_world_origin_velocity_mps": [
+      -0.0020838227470926936,
+      0.0005497963150996104,
+      0.001263156696929259
+    ],
+    "native_body_angular_velocity_radps": [
+      0.0005409152893282171,
+      0.001842858158499952,
+      -0.002393935933520777
+    ],
+    "command_body": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "native_fault": null,
+    "native_contacts": {
+      "body": 0.0,
+      "FR": 1.0,
+      "FL": 1.0,
+      "RR": 1.0,
+      "RL": 1.0
+    },
+    "slam_source": {
+      "line": 5789,
+      "offset": 5826366,
+      "length": 1041,
+      "sha256": "393277cb19155fc4175bded6901f70f71636af8aa64fcc7c19b36c8343b6f9f7"
+    },
+    "native_source": {
+      "line": 9734,
+      "offset": 1925854689,
+      "length": 194790,
+      "sha256": "f777f8b296d20178adbf9253a2316ff46189a6a258f9a240dd5f6bd6a569a324"
+    }
+  },
+  "coordinate_contract": {
+    "rotation_camera_init_from_world": [
+      [
+        0.9999411417687784,
+        0.010849562117982391,
+        0.0
+      ],
+      [
+        -0.010849562117982391,
+        0.9999411417687784,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "yaw_camera_init_from_world": -0.010849774985005922,
+    "SLAM_anchor_origin": [
+      0.0019432479128840062,
+      0.013904109313663352,
+      0.003438100920230331
+    ],
+    "world_route_segment_XY": [
+      [
+        11.000000000000002,
+        2.0
+      ],
+      [
+        14.000000000000002,
+        2.0
+      ]
+    ],
+    "native_position_semantics": "Native base.WorldPose link origin, NOT COM; no COM position subtraction.",
+    "native_velocity_semantics": "body_lin_vel is COM; v_origin_body = v_COM_body - omega_body cross measured base COM offset.",
+    "COM_offset_body_m": [
+      0.05523092034548942,
+      -0.001869001919385796,
+      0.006095299184261034
+    ],
+    "native_state_time_semantics": "PreUpdate state at world_sim_time minus 0.005 s, paired to SLAM original header; nearest sample <=10ms.",
+    "translation_semantics": "Recorded SLAM origin plus fixed scene spawn XY prior. No truth-fitted or per-trajectory alignment. Native physical lateral is directly measured against original scene XY segment.",
+    "vertical_limitation": "Scene route Z is support-relative; native body-origin altitude is not treated as the same Z datum. No direct 3D truth/SLAM position residual asserted.",
+    "native_source_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/sources/simulation/teacher_actuator.cpp",
+    "native_source_sha256": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+    "pure_fence_file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/sources/navigation/corridor_tracking_v20/route_fence.py",
+    "pure_fence_sha256": "0cee6450f504cd9242651fbdcd55d76425da278f2764c0933f65e95e2a5ef49e"
+  },
+  "region10": {
+    "activation_pose_s": 140.944999999,
+    "first_fence_pose_s": 187.574999999,
+    "elapsed_until_fence_s": 46.629999999999995,
+    "arrival": false,
+    "path_changes": 205,
+    "phase_events": [
+      {
+        "t": 140.979999999,
+        "old_phase": null,
+        "new_phase": "pre_turn",
+        "trajectory_id": 52,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.02191632773385884,
+        "source": {
+          "line": 3806,
+          "offset": 60356391,
+          "length": 10814,
+          "sha256": "6e9599cd8efdb53110f51b36a27e52dd7943ef39a078bbd757e34ec91da90667"
+        }
+      },
+      {
+        "t": 142.134999999,
+        "old_phase": "pre_turn",
+        "new_phase": "drive",
+        "trajectory_id": 52,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.05699042273481409,
+        "source": {
+          "line": 3839,
+          "offset": 60710883,
+          "length": 10723,
+          "sha256": "224a0f17160e490efe6b79d34ac993cc9b1acfc2a9d767aaac99865b35a08117"
+        }
+      },
+      {
+        "t": 146.159999999,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 63,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.2205184541631828,
+        "source": {
+          "line": 3956,
+          "offset": 62620864,
+          "length": 16884,
+          "sha256": "15ceaadc0b8744144bf144bacff5e1f477bf4bb3a44fedc2b201287a074c398d"
+        }
+      },
+      {
+        "t": 147.479999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 69,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.9807680211857531,
+        "source": {
+          "line": 3995,
+          "offset": 63313337,
+          "length": 17768,
+          "sha256": "939256083751946ef28b8d27f824dcbfa4c41b2421e8e2e515e7de7fb2e2e5f9"
+        }
+      },
+      {
+        "t": 150.485,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 69,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.09951629766446579,
+        "source": {
+          "line": 4083,
+          "offset": 64873753,
+          "length": 17723,
+          "sha256": "236764b46e9301a09173161c6e931f5c758fde100504149ca70dc501047cf92f"
+        }
+      },
+      {
+        "t": 151.539999999,
+        "old_phase": "settle",
+        "new_phase": "drive",
+        "trajectory_id": 69,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.13021461658652844,
+        "source": {
+          "line": 4114,
+          "offset": 65422228,
+          "length": 17693,
+          "sha256": "3ca05b368769f7803b059c570e0c66bbb91d1ea8c8b7983097ece872a7bf3949"
+        }
+      },
+      {
+        "t": 151.569999999,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 70,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.814530101749811,
+        "source": {
+          "line": 4115,
+          "offset": 65439921,
+          "length": 17746,
+          "sha256": "6c87dd2a7a8801bdc231349a3d14bb284ff5baf58ac7bccf5aecb289ddaf6eb1"
+        }
+      },
+      {
+        "t": 154.08,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 96,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.10254988621506958,
+        "source": {
+          "line": 4188,
+          "offset": 66736001,
+          "length": 17753,
+          "sha256": "dcfa977031b95ed0ab30b8dc0fc1c97be425cc58ab7b395df0f4b0c82a5b926b"
+        }
+      },
+      {
+        "t": 154.539999999,
+        "old_phase": "settle",
+        "new_phase": "drive",
+        "trajectory_id": 96,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.09139928231823807,
+        "source": {
+          "line": 4202,
+          "offset": 66985003,
+          "length": 17802,
+          "sha256": "e6970ef1cc6648955dba7cd5c720a844e9143babd5c7a393bd32bba2029d70fe"
+        }
+      },
+      {
+        "t": 155.235,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 99,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.35887310728666966,
+        "source": {
+          "line": 4223,
+          "offset": 67364010,
+          "length": 17755,
+          "sha256": "eb4153f44721545995ed499bbd8f6ea126d9a6604c84860ec6241f04d5f965bf"
+        }
+      },
+      {
+        "t": 156.324999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 113,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.7974607637796735,
+        "source": {
+          "line": 4254,
+          "offset": 67907777,
+          "length": 17558,
+          "sha256": "3a6c9c1915f1340da68cc066f49f4559bdcb204a3c81b127b582a6ba66e51dba"
+        }
+      },
+      {
+        "t": 158.865,
+        "old_phase": "align",
+        "new_phase": "pre_turn",
+        "trajectory_id": 118,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.21613029686098695,
+        "source": {
+          "line": 4329,
+          "offset": 69227386,
+          "length": 17638,
+          "sha256": "ae30599213c930eeebbdf820a34942ac315ba7a11e370e0aaaf12a5cb4d3ffad"
+        }
+      },
+      {
+        "t": 159.324999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 118,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.21648919894180588,
+        "source": {
+          "line": 4342,
+          "offset": 69456491,
+          "length": 17632,
+          "sha256": "495af043bd933344626dadfd2ac30a1c5e39edc530005aaf447d15989d533435"
+        }
+      },
+      {
+        "t": 160.58,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 118,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.09880127021218188,
+        "source": {
+          "line": 4379,
+          "offset": 70108930,
+          "length": 17568,
+          "sha256": "5d6a5d541d3bf90d3da4457810969d2af66d4c181ace66e8d43533db9d4094c9"
+        }
+      },
+      {
+        "t": 162.625,
+        "old_phase": "settle",
+        "new_phase": "drive",
+        "trajectory_id": 118,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.19530091784247838,
+        "source": {
+          "line": 4438,
+          "offset": 71143532,
+          "length": 17523,
+          "sha256": "b5fcb3c27bc3f718e3be7803c428cb57251f708fec926a460b4d6262df4aa15d"
+        }
+      },
+      {
+        "t": 162.625,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 119,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.7621375145342589,
+        "source": {
+          "line": 4439,
+          "offset": 71161055,
+          "length": 17564,
+          "sha256": "ac94948fc590606297f4d18cc0306e783746d1c993f0e5552c74a6a461a96478"
+        }
+      },
+      {
+        "t": 165.235,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 125,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.0983225218842473,
+        "source": {
+          "line": 4516,
+          "offset": 72514194,
+          "length": 17768,
+          "sha256": "85d121d7053be6be3ecd70be868b96178ba5201f30d25d438bc530cbfdfad13c"
+        }
+      },
+      {
+        "t": 165.5,
+        "old_phase": "settle",
+        "new_phase": "pre_turn",
+        "trajectory_id": 133,
+        "same_record_new_path": true,
+        "heading_error_rad": -0.4506885021398269,
+        "source": {
+          "line": 4524,
+          "offset": 72655555,
+          "length": 17689,
+          "sha256": "eea80cb7e1518f07a47c5d096ecf145291a193a178692d8c7edbc5b039b4d35e"
+        }
+      },
+      {
+        "t": 165.729999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 140,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.31407839043088903,
+        "source": {
+          "line": 4532,
+          "offset": 72796876,
+          "length": 17523,
+          "sha256": "fb7570ab0ee2ad01b3f70226fe90a1363d3562ebe91fe77cc46c88b4322352e4"
+        }
+      },
+      {
+        "t": 167.014999999,
+        "old_phase": "align",
+        "new_phase": "pre_turn",
+        "trajectory_id": 144,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.5610102774674293,
+        "source": {
+          "line": 4570,
+          "offset": 73465892,
+          "length": 17685,
+          "sha256": "95c9736f4c75c25b3430ac221abfe4abac6cac9bb6d3b811cf4ae89abb8ce250"
+        }
+      },
+      {
+        "t": 167.509999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 144,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.5415973114026805,
+        "source": {
+          "line": 4585,
+          "offset": 73730847,
+          "length": 17686,
+          "sha256": "f43aab168a59c6cbe81e4db9646cf7d5e2f961d8b3ee607752879fd075396e82"
+        }
+      },
+      {
+        "t": 169.689999999,
+        "old_phase": "align",
+        "new_phase": "pre_turn",
+        "trajectory_id": 163,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.7710597830434708,
+        "source": {
+          "line": 4651,
+          "offset": 74905403,
+          "length": 17805,
+          "sha256": "1fa418fea45ae0a53c526348325425bbfe7743e8660e8828c6f7e6fe669bd3fd"
+        }
+      },
+      {
+        "t": 170.414999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 163,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.7837273413706587,
+        "source": {
+          "line": 4672,
+          "offset": 75278842,
+          "length": 17854,
+          "sha256": "b1993e74de30a95615cd80d14c11f7718da2a7e75599b0590ff09d5d2f1950b2"
+        }
+      },
+      {
+        "t": 173.09,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 171,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.09093575654680408,
+        "source": {
+          "line": 4751,
+          "offset": 76685216,
+          "length": 17781,
+          "sha256": "38beee1d4b9118142b65b39692ffb1937928945c7d80ee7b41e93ee358e90d90"
+        }
+      },
+      {
+        "t": 173.585,
+        "old_phase": "settle",
+        "new_phase": "drive",
+        "trajectory_id": 171,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.08668066150070458,
+        "source": {
+          "line": 4767,
+          "offset": 76969485,
+          "length": 17750,
+          "sha256": "a7e620892c117ca6e47d8eaaa32130ecf429245eb734c3472cc77e20964f4825"
+        }
+      },
+      {
+        "t": 173.68,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 174,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.3991988884008324,
+        "source": {
+          "line": 4770,
+          "offset": 77022783,
+          "length": 17678,
+          "sha256": "dc1eee7416d85db364ed15f05eb367cce6039d74f65f5f9f576433209d2951d6"
+        }
+      },
+      {
+        "t": 175.43,
+        "old_phase": "align",
+        "new_phase": "pre_turn",
+        "trajectory_id": 198,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.5460067148373073,
+        "source": {
+          "line": 4821,
+          "offset": 77929158,
+          "length": 17685,
+          "sha256": "e9702e3d01050a1a44380c3ecac9c825b525c3da7ba22b169268052ca50057b7"
+        }
+      },
+      {
+        "t": 176.319999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 198,
+        "same_record_new_path": false,
+        "heading_error_rad": 0.5435058188918154,
+        "source": {
+          "line": 4847,
+          "offset": 78389128,
+          "length": 17689,
+          "sha256": "d4c1cbd91eee0beeb4044f4723703359335399fa058f036ff8e0c7f3a9dd6958"
+        }
+      },
+      {
+        "t": 178.3,
+        "old_phase": "align",
+        "new_phase": "pre_turn",
+        "trajectory_id": 208,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.23760420025306525,
+        "source": {
+          "line": 4905,
+          "offset": 79422240,
+          "length": 17699,
+          "sha256": "4fd49bfd91f3a925d729318ba75835a8157f6d3131e420d8494aa1f60b34a899"
+        }
+      },
+      {
+        "t": 178.764999999,
+        "old_phase": "pre_turn",
+        "new_phase": "align",
+        "trajectory_id": 214,
+        "same_record_new_path": true,
+        "heading_error_rad": -0.6531787986131223,
+        "source": {
+          "line": 4919,
+          "offset": 79670015,
+          "length": 17730,
+          "sha256": "8c04d1d75f6d5d661c89605b69712c017472eb03e985b2d1d99b2daf81364371"
+        }
+      },
+      {
+        "t": 181.13999999900003,
+        "old_phase": "align",
+        "new_phase": "settle",
+        "trajectory_id": 251,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.059459861912915545,
+        "source": {
+          "line": 4989,
+          "offset": 80919860,
+          "length": 17946,
+          "sha256": "c3a5892270af47fa89dc31b90dc542062c4a11effb17339a8c1242a63667a354"
+        }
+      },
+      {
+        "t": 181.634999999,
+        "old_phase": "settle",
+        "new_phase": "drive",
+        "trajectory_id": 251,
+        "same_record_new_path": false,
+        "heading_error_rad": -0.057529596643104364,
+        "source": {
+          "line": 5003,
+          "offset": 81170667,
+          "length": 17891,
+          "sha256": "b6e9acedce60a7f2aa0052b4d33aaaff3f575a659931096e9681b547b3a51f5d"
+        }
+      },
+      {
+        "t": 187.28,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 258,
+        "same_record_new_path": true,
+        "heading_error_rad": -0.587177835983918,
+        "source": {
+          "line": 5169,
+          "offset": 84122587,
+          "length": 16644,
+          "sha256": "d3e6296052c7647e5193471415938c7597c744b6f149952b679a8bc5707ef0e3"
+        }
+      }
+    ],
+    "drive_exits": [
+      {
+        "t": 146.159999999,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 63,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.2205184541631828,
+        "source": {
+          "line": 3956,
+          "offset": 62620864,
+          "length": 16884,
+          "sha256": "15ceaadc0b8744144bf144bacff5e1f477bf4bb3a44fedc2b201287a074c398d"
+        }
+      },
+      {
+        "t": 151.569999999,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 70,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.814530101749811,
+        "source": {
+          "line": 4115,
+          "offset": 65439921,
+          "length": 17746,
+          "sha256": "6c87dd2a7a8801bdc231349a3d14bb284ff5baf58ac7bccf5aecb289ddaf6eb1"
+        }
+      },
+      {
+        "t": 155.235,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 99,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.35887310728666966,
+        "source": {
+          "line": 4223,
+          "offset": 67364010,
+          "length": 17755,
+          "sha256": "eb4153f44721545995ed499bbd8f6ea126d9a6604c84860ec6241f04d5f965bf"
+        }
+      },
+      {
+        "t": 162.625,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 119,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.7621375145342589,
+        "source": {
+          "line": 4439,
+          "offset": 71161055,
+          "length": 17564,
+          "sha256": "ac94948fc590606297f4d18cc0306e783746d1c993f0e5552c74a6a461a96478"
+        }
+      },
+      {
+        "t": 173.68,
+        "old_phase": "drive",
+        "new_phase": "align",
+        "trajectory_id": 174,
+        "same_record_new_path": true,
+        "heading_error_rad": 0.3991988884008324,
+        "source": {
+          "line": 4770,
+          "offset": 77022783,
+          "length": 17678,
+          "sha256": "dc1eee7416d85db364ed15f05eb367cce6039d74f65f5f9f576433209d2951d6"
+        }
+      },
+      {
+        "t": 187.28,
+        "old_phase": "drive",
+        "new_phase": "pre_turn",
+        "trajectory_id": 258,
+        "same_record_new_path": true,
+        "heading_error_rad": -0.587177835983918,
+        "source": {
+          "line": 5169,
+          "offset": 84122587,
+          "length": 16644,
+          "sha256": "d3e6296052c7647e5193471415938c7597c744b6f149952b679a8bc5707ef0e3"
+        }
+      }
+    ],
+    "drive_exit_count": 6,
+    "drive_exits_same_record_new_path": 6,
+    "new_path_changes_heading_error_over_point2": 138,
+    "note": "Counts are recorded PID observations; same-record association establishes sequence correlation, not a sole causal mechanism. Direct drive->align transitions retained, not hidden by counting only pre_turn."
+  },
+  "late_drive_181point6_to_stop": {
+    "samples": 154,
+    "SLAM_minus_native_COM_xy_mps": {
+      "mean": [
+        -0.0006744565007413804,
+        -0.0008281102534286064
+      ],
+      "rms": [
+        0.012416093470707556,
+        0.014749046901679564
+      ],
+      "min": [
+        -0.03483796925046201,
+        -0.03957178913869754
+      ],
+      "max": [
+        0.04426700854719803,
+        0.03994600958131359
+      ]
+    },
+    "native_minus_reference_COM_xy_mps": {
+      "mean": [
+        -0.018922554026234967,
+        0.010413975465392909
+      ],
+      "rms": [
+        0.06591742823767133,
+        0.054656481542490906
+      ],
+      "min": [
+        -0.20371022043144313,
+        -0.09862188670472921
+      ],
+      "max": [
+        0.10460208456096004,
+        0.10689148219712208
+      ]
+    },
+    "reference_world_velocity_mps": {
+      "mean": [
+        0.1878661832075103,
+        0.06524820177712647,
+        0.01995745476599391
+      ],
+      "rms": [
+        0.18811348030950353,
+        0.07039893553931142,
+        0.02115102358764386
+      ],
+      "min": [
+        0.16369585185774188,
+        0.007062107625438459,
+        -0.00802185120894661
+      ],
+      "max": [
+        0.20107769820070276,
+        0.11504863575078833,
+        0.037531148754037486
+      ]
+    },
+    "control_path_cross_m": {
+      "mean": 0.014119223428128653,
+      "rms": 0.01942337228767773,
+      "min": -0.013400070618722382,
+      "max": 0.03755091031922413
+    },
+    "heading_error_rad": {
+      "mean": 0.03371972405427342,
+      "rms": 0.11132418423034114,
+      "min": -0.1306210745622017,
+      "max": 0.193000187716058
+    }
+  },
+  "selected_actual_SCAN_path_samples": [
+    {
+      "trajectory_id": 256,
+      "path_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1:9:256:256",
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_trajectories/000256_trajectory_256.npz",
+      "file_sha256": "749c3df44b93de49a8c8548ae6bbce5f4461f220bd6be5d326b5499d5a216d38",
+      "samples_sha256": "e77a532ccf30579ed2fc126ce0462a7f588ed2a1500ba51a18d3efe2b2b21ab2",
+      "samples": 350,
+      "maximum_original_fence_horizontal_error_m": 0.42936476232264537,
+      "outside_original_route_fence_count": 0,
+      "first_outside_sample_index": null,
+      "original_endpoint_camera_init_xyz": [
+        14.013971655835599,
+        1.8681487384698618,
+        1.2023435959883877
+      ],
+      "original_start_camera_init_xyz": [
+        11.608794985327881,
+        1.9141516577804607,
+        0.9665696506868482
+      ],
+      "SCAN_collision_replay": false,
+      "route_fence_sample_test_only": true
+    },
+    {
+      "trajectory_id": 257,
+      "path_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1:9:257:257",
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_trajectories/000257_trajectory_257.npz",
+      "file_sha256": "e3cd04ed168ff413ff07d076abdbf37314c8dc180c178536d6a76e819f6b9c1e",
+      "samples_sha256": "15c4e61b4e369a828884dc511fa5fe3ee6baa1ef716061898fe680f00357c4e0",
+      "samples": 121,
+      "maximum_original_fence_horizontal_error_m": 0.48139501267239587,
+      "outside_original_route_fence_count": 29,
+      "first_outside_sample_index": 12,
+      "original_endpoint_camera_init_xyz": [
+        14.02144924080838,
+        1.8628024667811387,
+        1.2032586993470462
+      ],
+      "original_start_camera_init_xyz": [
+        12.352711137700222,
+        2.2695758512733475,
+        1.030202544709017
+      ],
+      "SCAN_collision_replay": false,
+      "route_fence_sample_test_only": true
+    },
+    {
+      "trajectory_id": 258,
+      "path_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1:9:258:258",
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_trajectories/000258_trajectory_258.npz",
+      "file_sha256": "4a0193764b286fc962d9cd2b42efeee017a2d06a3e448b0cd27652262b4725fa",
+      "samples_sha256": "372625b46401ee3eb69d502f93e64295d9dc409df4b477688c7ee669c0bd0b7a",
+      "samples": 221,
+      "maximum_original_fence_horizontal_error_m": 0.420165583561415,
+      "outside_original_route_fence_count": 0,
+      "first_outside_sample_index": null,
+      "original_endpoint_camera_init_xyz": [
+        14.008994931054643,
+        1.8657806772965406,
+        1.2022543299774318
+      ],
+      "original_start_camera_init_xyz": [
+        12.468321128632088,
+        2.2989377891592127,
+        1.0159144042093846
+      ],
+      "SCAN_collision_replay": false,
+      "route_fence_sample_test_only": true
+    },
+    {
+      "trajectory_id": 259,
+      "path_id": "20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50:exploration:1:9:259:259",
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_trajectories/000259_trajectory_259.npz",
+      "file_sha256": "c7f206bccbe01a2194f223d7e909a6fd44f40856a9a26c2bbf2f1a1bb6214aad",
+      "samples_sha256": "b95510925c7517a636269c9dc12e935b6f9eaf95b4b2a66a5dea2fa7689f0e61",
+      "samples": 221,
+      "maximum_original_fence_horizontal_error_m": 0.4215744787263636,
+      "outside_original_route_fence_count": 0,
+      "first_outside_sample_index": null,
+      "original_endpoint_camera_init_xyz": [
+        14.008678292016516,
+        1.8599142655513017,
+        1.2029306401032231
+      ],
+      "original_start_camera_init_xyz": [
+        12.474850137874968,
+        2.300278880051821,
+        1.020817188228686
+      ],
+      "SCAN_collision_replay": false,
+      "route_fence_sample_test_only": true
+    }
+  ],
+  "established": [
+    "The execution bridge latched the unchanged original SLAM route fence and requested zero velocity; full46 is failed, not a resource-aborted successful mission.",
+    "Native body-origin lateral displacement also exceeds the original 0.45 m centerline radius at the first SLAM fence breach; this is not supported as a purely SLAM-only false alarm.",
+    "Accepted paths, heading phase transitions and local tracking reference are observed; source-consistent heading does not imply the path stays within the original route tube."
+  ],
+  "unverified": [
+    "No counterfactual controller replay or causal isolation; cannot attribute failure solely to replanning, velocity PI, Teacher tracking, estimator, or curvature limits.",
+    "50 Hz native snapshots are not the complete 200 Hz actuator/physics trace.",
+    "No SCAN collision guard re-evaluation, continuous-between-sample path safety proof, or foot support/corridor-control certification."
+  ],
+  "navigation_ground_truth_used": false,
+  "truth_use": "Offline diagnosis only",
+  "controller_replay_performed": false,
+  "source_bindings": {
+    "navigation_slam_poses.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_slam_poses.jsonl",
+      "sha256": "8f84f19107a0a1ff40e6e9043b89781d59e3810a9308227b62a18790b0bfe442",
+      "bytes": 5827407,
+      "rows": 5789,
+      "full_data_passes": 1
+    },
+    "navigation_status.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_status.jsonl",
+      "sha256": "8619e87dcf5facc3b8cddb1f55ed47d591b10147a380d8fdb53335d1d1352068",
+      "bytes": 109004776,
+      "rows": 1403,
+      "full_data_passes": 1
+    },
+    "telemetry.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/telemetry.jsonl",
+      "sha256": "de280204c5167a41d1b22b76c31f16c591c40b29d6622bef09d6dda63df86053",
+      "bytes": 1926244271,
+      "rows": 9735,
+      "full_data_passes": 1
+    },
+    "navigation_pid_history.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_pid_history.jsonl",
+      "sha256": "72063d9fa65cd9eb6f5db60aff27c0de1a750daea28b91a23b8df4a3ece2cc42",
+      "bytes": 84270984,
+      "rows": 5177,
+      "full_data_passes": 1
+    },
+    "navigation_anchor.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_anchor.json",
+      "sha256": "ec36ca265c0950365076fb76283ec94a7571b63774b0f8b94aaa30cb73ec1433",
+      "bytes": 51495
+    },
+    "navigation_scene_axis_registration.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_scene_axis_registration.json",
+      "sha256": "4854fad31156d7b2e28609544eb561fc86db698f873c4538dc0c623a8fa5502d",
+      "bytes": 46973
+    },
+    "mission46_status.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/mission46_status.json",
+      "sha256": "7b62b9f6c93a09280586eabed73ed0ba0b959c3b607a325c13bda223014c96c3",
+      "bytes": 99251
+    },
+    "runtime_manifest.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/runtime_manifest.json",
+      "sha256": "1bd8b6b884286c881df27d044cb3417aa3f28821852fb949d8eea501ca7e30bc",
+      "bytes": 116214
+    },
+    "navigation_profile.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_profile.json",
+      "sha256": "e2837837dd6526839873df58998685557871879c88aac93eca5c92fe577cda0b",
+      "bytes": 83338
+    },
+    "source_manifest.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/source_manifest.json",
+      "sha256": "86254a6a975d9b683b30996628d2c66dee58c4d761fd6019af8f902d338b10f6",
+      "bytes": 96811
+    },
+    "navigation_source_snapshots.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_source_snapshots.json",
+      "sha256": "b749a6faca0ce534960669744178c90a8ab368af95a2786380a28d040c9113a9",
+      "bytes": 128206
+    },
+    "navigation_status.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_status.json",
+      "sha256": "a6bae183f8810cee7adf4bc74922a04337efce29999e2cbda3d51b18be30909a",
+      "bytes": 83106
+    },
+    "sensor_contract.json": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/sensor_contract.json",
+      "sha256": "a829e85688b3e73224fb0449a1c152360ae181d1e62919323209841e8553d2b4",
+      "bytes": 3015
+    },
+    "actuator_contract_first_line": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/actuator.jsonl",
+      "offset": 0,
+      "length": 1074,
+      "sha256": "fce219eb16d907677ed9dd11499116b13aae2df9a45e6e07317bb3870c0da105"
+    },
+    "navigation_segment_activation.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_segment_activation.jsonl",
+      "sha256": "33f2ac9410f8dedd01b6e09f971bf97c343b0764f7ba27800f3d758f8374cac6",
+      "bytes": 7414,
+      "rows": 10,
+      "full_data_passes": 1
+    },
+    "navigation_cascade_paths.jsonl": {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_140607_closed_loop_cascade_clock_hold_v20_original46_r1_dc50/navigation_cascade_paths.jsonl",
+      "sha256": "343ea37d57d5f174aa7f1b8fe778dae4654fc4ede24ae54158e89a52ec2551f0",
+      "bytes": 5459131,
+      "rows": 257,
+      "full_data_passes": 1
+    }
+  }
+}

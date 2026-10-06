@@ -1,0 +1,93 @@
+{
+  "schema": "v20_single_status_observation/v1",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b",
+  "observed_utc": "2026-10-06T05:49:35.457086+00:00",
+  "source": {
+    "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_status.json",
+    "bytes": 73108,
+    "sha256": "777339d1528d722db57196f4d603bd9d8302f3682498d4b05726e75456d7650e"
+  },
+  "progress": {
+    "request_id": "20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b:exploration_prefix9:1",
+    "state": "running",
+    "waypoint_index": 5,
+    "total": 9,
+    "message": "实际 SLAM 反馈跟随 SCAN 路线，剩余 0.36 m",
+    "goal_activated_ros_clock_ns": 78385000000,
+    "accepted_trajectory_id": 29,
+    "replans": 29
+  },
+  "observed_region_receipts_count": 5,
+  "observed_region_goal_ids": [
+    "exploration:0",
+    "exploration:1",
+    "exploration:2",
+    "exploration:3",
+    "exploration:4"
+  ],
+  "observed_latest_receipt": {
+    "goal_id": "exploration:4",
+    "waypoint_index": 4,
+    "stamp_ns": 78310000000,
+    "start_stamp_ns": 77885000000,
+    "dwell_ns": 425000000
+  },
+  "heading_gate": {
+    "phase": "drive",
+    "measured_stop": false,
+    "stop_valid_pose_samples": 0,
+    "stop_first_stamp_s": null,
+    "stop_last_stamp_s": null
+  },
+  "recorded_protection": {
+    "obstacle_hold": false,
+    "tilt_hold": false,
+    "tilt_source": null,
+    "alignment_hold": false,
+    "pose_age": 0.035,
+    "cloud_age": 0.032,
+    "raw_imu_age": 0.025,
+    "command": [
+      0.1289999999999935,
+      0.0038096720999694312,
+      0.01350377309194037
+    ],
+    "feedback_source": "/demo/slam/body_odom"
+  },
+  "execution_bridge": {
+    "state": "ready",
+    "reason": "Fresh SLAM/SCAN inputs",
+    "message": null
+  },
+  "cascade": {
+    "mode": "drive",
+    "reason": null,
+    "compute_clock_ns": 98710000000,
+    "progress_m": 0.14691401369743187,
+    "path_id": "20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b:exploration_prefix9:1:5:29:29",
+    "parking_capture_clock_ns": null,
+    "parking_hold_declared_clock_ns": null,
+    "parking_hold_declared_pose_stamp_ns": null,
+    "parking_window_interrupted": false,
+    "protection_active": false,
+    "failure_latched": null
+  },
+  "reference": {
+    "heading_rad": 0.05933747768797508,
+    "cross_ref_m": 0.0012389059033403233,
+    "curvature_per_m": 0.0003443677341102846,
+    "fallback": null,
+    "fallback_reason": null
+  },
+  "only_one_small_atomic_file_read": true,
+  "run_or_production_modified": false,
+  "prefix9_acceptance": "unverified",
+  "raw_dwell_recomputed": false,
+  "first5s_parking_verified": false,
+  "whole_200hz_physics_verified": false,
+  "limits": [
+    "One instantaneous status is not route/parking acceptance.",
+    "Receipt count is controller-observed progress until independently checked against raw SLAM.",
+    "No reset frequency or sustained physical behavior is inferred from this snapshot."
+  ]
+}

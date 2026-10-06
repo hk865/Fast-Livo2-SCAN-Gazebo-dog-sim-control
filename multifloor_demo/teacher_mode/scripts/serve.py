@@ -983,6 +983,152 @@ def pipeline_view(directory):
             'display_note': '所选运行的输入流水线与排空记录；正常退出不认证运动或导航。'}
 
 
+PREFIX9_REPORT_SCHEMA = 'independent_original46_prefix9_actual_run/v1'
+PREFIX9_REPORT_INDEX = 'test_results/corridor_tracking_v20_continue_20261006/viewer/PREFIX9_REPORT_INDEX.json'
+PREFIX9_REQUIRED_CHECKS = frozenset(('immutable_source_archive', 'original_geometry_and_slam',
+    'all_original_nine_dwells', 'first_fixed5s_parking', 'sampled_native_safety',
+    'execution_contract', 'actual_pose_provenance', 'source_read_errors_absent'))
+PREFIX9_RUN_SOURCES = frozenset(('runtime_manifest.json', 'navigation_profile.json',
+    'navigation_anchor.json', 'navigation_request.json', 'source_manifest.json',
+    'policy_manifest.json', 'asset_manifest.json', 'navigation_slam_contract.json',
+    'navigation_slam_poses.jsonl', 'navigation_status.jsonl', 'navigation_pid_history.jsonl',
+    'telemetry.jsonl', 'actuator.jsonl'))
+PREFIX9_VIEW_CACHE = {}
+PREFIX9_VIEW_LOCK = threading.Lock()
+
+
+def _prefix9_identity(path):
+    st = Path(path).stat()
+    return (st.st_dev, st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns)
+
+
+def prefix9_view(directory):
+    """Display only a pinned independent prefix receipt, never a full-mission PASS.
+
+    The first read checks all recorded source digests. Subsequent UI refreshes
+    stat the same immutable dependencies; edits/replacements invalidate the
+    result. This avoids cycling >256 source files through the shared hash cache
+    and rereading multi-GB logs on every browser poll.
+    """
+    directory = Path(directory).resolve()
+    profile = read_json(directory / 'navigation_profile.json')
+    if (not isinstance(profile, dict) or profile.get('original46_prefix_regions') != 9
+            or profile.get('controller_selector') != 'corridor_tracking_v20'):
+        return {}
+    view = dict(schema='teacher_prefix9_limited_dashboard/v1', status='unverified',
+        valid_for_selected_run=False, limited_prefix9_pass=False, full46_pass=False,
+        whole_200hz_physical_acceptance=False, corridor_control_verified=False,
+        original_regions_expected=9, original_regions_verified=None, first5s_parking_verified=False,
+        display_note='仅原始前 9 区域与首次固定 5 秒停车的独立有限验收；不代表 full46、全部 200 Hz 物理步骤或走廊控制通过。')
+    index_path = ROOT / PREFIX9_REPORT_INDEX
+    index = read_json(index_path)
+    catalog = index.get('reports') if isinstance(index, dict) else None
+    entry = catalog.get(directory.name) if isinstance(catalog, dict) else None
+    if not isinstance(entry, dict):
+        return {**view, 'validation_errors': ['No pinned independent prefix9 report for the selected run']}
+    errors = []; dependencies = {}
+    def require(condition, message):
+        if not condition: raise ValueError(message)
+    def track(path):
+        path = Path(path).resolve(); dependencies[str(path)] = _prefix9_identity(path)
+        return path
+    try:
+        require(index.get('schema') == 'teacher_prefix9_report_index/v1', 'Unsupported prefix9 report index')
+        require(Path(entry.get('run_directory', '')).resolve() == directory, 'Report index belongs to another run')
+        report_path = Path(entry.get('report_file', '')).resolve()
+        require(report_path.is_relative_to((ROOT / 'test_results').resolve()), 'Prefix9 report must be an independent test-results artifact')
+        require(report_path.suffix == '.json', 'Prefix9 report must be JSON')
+        # Identity-only cache validation does not skip any recorded dependency.
+        key = str(directory)
+        with PREFIX9_VIEW_LOCK:
+            cached = PREFIX9_VIEW_CACHE.get(key)
+            if cached and cached['entry'] == entry:
+                try:
+                    if all(_prefix9_identity(p) == ident for p, ident in cached['dependencies'].items()):
+                        return dict(cached['view'])
+                except OSError:
+                    pass
+        track(index_path); track(report_path)
+        expected = entry.get('report_sha256')
+        require(isinstance(expected, str) and re.fullmatch(r'[0-9a-f]{64}', expected), 'Missing exact report SHA256')
+        require(source_file_sha256(report_path) == expected, 'Independent prefix9 report bytes changed')
+        raw = read_json(report_path)
+        require(raw.get('schema') == PREFIX9_REPORT_SCHEMA, 'Unsupported prefix9 independent report schema')
+        require(raw.get('run_id') == directory.name and Path(raw.get('run', '')).resolve() == directory,
+                'Independent prefix9 report belongs to another selected run')
+        checks = raw.get('checks')
+        require(isinstance(checks, dict) and set(checks) == PREFIX9_REQUIRED_CHECKS
+                and all(type(v) is bool for v in checks.values()), 'Prefix9 independent checks are incomplete')
+        require(all(raw.get(k) is False for k in ('full46_pass', 'whole_200hz_physical_acceptance', 'corridor_control_verified')),
+                'Prefix receipt attempts to upgrade the verified scope')
+        claimed = raw.get('prefix9_limited_pass')
+        require(type(claimed) is bool and claimed == all(checks.values()), 'Prefix9 PASS is inconsistent with its checks')
+        require(not claimed or raw.get('result_status') == 'limited_pass', 'Unsupported prefix9 PASS status')
+        regions = raw.get('original_regions') or {}; parking = raw.get('first5s_parking') or {}
+        if claimed:
+            receipts = regions.get('receipts') or []
+            require(regions.get('passed') is True and regions.get('actual_receipt_count') == 9
+                    and regions.get('raw_validated_count') == 9 and len(receipts) == 9
+                    and [r.get('goal_id') for r in receipts] == [f'exploration:{i}' for i in range(9)]
+                    and all(r.get('passed') is True and r.get('checks')
+                        and all(v is True for v in r['checks'].values()) for r in receipts),
+                    'Nine original raw-SLAM dwell receipts are not independently passed')
+            interval = parking.get('clock_interval_ns')
+            require(parking.get('passed') is True and parking.get('checks')
+                    and all(v is True for v in parking['checks'].values())
+                    and isinstance(interval, list) and len(interval) == 2
+                    and all(type(v) is int for v in interval) and interval[1]-interval[0] == 5_000_000_000,
+                    'First declared fixed five-second parking window is not independently passed')
+            metrics = parking.get('metrics') or {}
+            for name, limit in dict(slam_xy_drift_max_m=.05, slam_yaw_drift_max_rad=.1,
+                    native_planar_speed_max_mps=.08, native_wz_max_radps=.1, native_yaw_dot_max_radps=.1).items():
+                value = metrics.get(name)
+                require(type(value) in (int, float) and math.isfinite(value) and 0 <= value <= limit,
+                        'Original parking metric missing or exceeds unchanged limit: ' + name)
+        bindings = raw.get('source_bindings')
+        require(isinstance(bindings, list) and bool(bindings), 'Prefix9 report has no original source bindings')
+        baseline_name = (raw.get('r3_comparison') or {}).get('baseline_run')
+        baseline = Path(baseline_name).resolve() if isinstance(baseline_name, str) else None
+        if baseline is not None:
+            require(recording_path(baseline, ROOT / 'runs') == baseline, 'Comparison run is outside allowed recordings')
+        helpers = {str((ROOT / name).resolve()) for name in (
+            'navigation/corridor_tracking_v20/route.py', 'navigation/corridor_tracking_v20/prefix_contract.py',
+            'navigation/corridor_tracking_v20/mission46_profile.py')}
+        helpers |= {str((ROOT.parent / name).resolve()) for name in ('navigation/goal_regions.py', 'mission/route_regions.py')}
+        seen = set()
+        for binding in bindings:
+            require(isinstance(binding, dict) and isinstance(binding.get('file'), str), 'Malformed original source binding')
+            source = Path(binding['file'])
+            require(source.is_absolute(), 'Source path must be absolute')
+            source = source.resolve(); digest = binding.get('sha256')
+            require(str(source) not in seen, 'Duplicate original source binding')
+            seen.add(str(source))
+            in_run = source.is_relative_to(directory) or (baseline is not None and source.is_relative_to(baseline))
+            require(in_run or str(source) in helpers, 'Foreign source is not part of this run or its declared comparison')
+            require(not in_run or recording_read_allowed(source), 'Source escapes allowed recording roots')
+            require(isinstance(digest, str) and re.fullmatch(r'[0-9a-f]{64}', digest), 'Malformed original source SHA256')
+            track(source)
+            require(source_file_sha256(source) == digest, 'Bound source bytes changed: ' + str(source))
+        required = {str((directory / name).resolve()) for name in PREFIX9_RUN_SOURCES}
+        if claimed: required.add(str((directory / 'worker_result.json').resolve()))
+        require(required.issubset(seen), 'Mandatory selected-run raw sources are missing from report bindings')
+        for source, identity in dependencies.items():
+            require(_prefix9_identity(source) == identity, 'Evidence changed during prefix9 display verification')
+        view.update(status='passed_limited' if claimed else 'not_passed', valid_for_selected_run=True,
+            limited_prefix9_pass=claimed, original_regions_verified=regions.get('raw_validated_count'),
+            first5s_parking_verified=parking.get('passed') is True,
+            parking_metrics=parking.get('metrics') or {}, first5s_clock_interval_ns=parking.get('clock_interval_ns'),
+            report_file=str(report_path), report_sha256=expected, verified_source_count=len(seen),
+            checks=checks, validation_errors=[])
+        with PREFIX9_VIEW_LOCK:
+            PREFIX9_VIEW_CACHE[key] = dict(entry=entry, dependencies=dependencies, view=dict(view))
+            while len(PREFIX9_VIEW_CACHE) > 8: PREFIX9_VIEW_CACHE.pop(next(iter(PREFIX9_VIEW_CACHE)))
+        return view
+    except (OSError, ValueError, TypeError, RuntimeError, AttributeError, KeyError) as error:
+        errors.append(str(error))
+    return {**view, 'validation_errors': errors}
+
+
 def corridor_shadow_view(directory):
     """Read one complete bounded display record; never authorize its use."""
     profile = read_json(directory / 'navigation_scope.json').get('profile') or {}
@@ -1194,9 +1340,38 @@ MISSION46_PAGE_SCRIPT = r'''
 '''
 
 
+PREFIX9_PAGE_SCRIPT = r'''
+<script>
+(() => {
+ const previousShow=show;
+ const make=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+ show=data=>{
+  previousShow(data);
+  const r=data.prefix9_result||{};let p=$('prefix9Panel');
+  if(!Object.keys(r).length){if(p)p.hidden=true;return;}
+  if(!p){p=make('section',undefined,'panel tests');p.id='prefix9Panel';$('legacyPanel').before(p);}
+  p.hidden=false;p.replaceChildren();p.append(make('h2','本轮 prefix9 · 独立有限验收'));
+  const passed=r.valid_for_selected_run===true&&r.limited_prefix9_pass===true;
+  p.append(make('p',passed?'原始 9 区域 + 首次固定 5 秒停车：有限通过':r.valid_for_selected_run?'有限验收未通过':'独立有限验收尚未核对',passed?'badge pass':'badge'));
+  p.append(make('p',`原始区域 dwell：${r.original_regions_verified??'—'} / 9 · 首次固定 5 秒停车：${r.first5s_parking_verified?'已独立通过':'未验证'}`));
+  const metrics=r.parking_metrics||{},xy=metrics.slam_xy_drift_max_m;
+  if(typeof xy==='number'&&Number.isFinite(xy))p.append(make('p',`SLAM XY 最大漂移 ${xy.toFixed(5)} m · 原限值 0.05000 m；yaw 最大漂移 ${fmt(metrics.slam_yaw_drift_max_rad,5)} rad。`));
+  p.append(make('p',r.display_note,'caption'));
+  if(r.report_sha256)p.append(make('p',`所选 run 来源已核对 ${r.verified_source_count} 项 · 独立报告 SHA256 ${r.report_sha256}`,'caption'));
+  if((r.validation_errors||[]).length)p.append(make('p',r.validation_errors.join('; '),'caption'));
+  const detail=make('details');detail.append(make('summary','有限验收来源与范围'),make('pre',JSON.stringify(r,null,2)));p.append(detail);
+  let raw={};try{raw=JSON.parse($('raw').textContent);}catch(e){}
+  $('raw').textContent=JSON.stringify({...raw,prefix9_result:r},null,2);
+  // This panel never modifies full46, clock-hold ledger, or global PASS badges.
+ };
+})();
+</script>
+'''
+
+
 def dashboard_page():
     page = (ROOT / 'web/index.html').read_text(encoding='utf-8')
-    return page.replace('</body>', CLOSED_LOOP_PAGE_SCRIPT + MISSION46_PAGE_SCRIPT + '\n</body>').encode('utf-8')
+    return page.replace('</body>', CLOSED_LOOP_PAGE_SCRIPT + MISSION46_PAGE_SCRIPT + PREFIX9_PAGE_SCRIPT + '\n</body>').encode('utf-8')
 
 
 def safe_json(value):
@@ -1436,6 +1611,7 @@ class Dashboard:
                 'closed_loop_result': closed_loop_receipt_view(directory),
                 'pipeline_v19': pipeline,
                 'corridor_v20': corridor_shadow_view(directory),
+                'prefix9_result': prefix9_view(directory),
                 'mission46': mission46_view(directory),
                 'pid_navigation': pid_display,
                 'pid_navigation_original': pid_original,

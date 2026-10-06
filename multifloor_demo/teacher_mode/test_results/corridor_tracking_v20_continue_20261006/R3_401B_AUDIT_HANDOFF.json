@@ -1,0 +1,95 @@
+{
+  "schema": "v20_continue_completed_prefix_audit_handoff/v1",
+  "prefix9_limited_pass": true,
+  "candidate_run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b",
+  "baseline_run": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+  "preferred_region9_numbers": "Use the reviewed comparison, not the frozen evaluator first-status activation diagnostic. Core prefix acceptance checks are unchanged.",
+  "candidate_region9": {
+    "observed_duration_s": 23.62499999900001,
+    "drive_to_pre_turn_count": 0,
+    "reset_with_new_path_count": 0,
+    "path_length_slam_3d_m": 3.366309065478184,
+    "net_progress_along_original_region7_to8_m": 3.011482721093917,
+    "original_region_arrived": true
+  },
+  "baseline_region9": {
+    "observed_duration_s": 90.16500000000002,
+    "drive_to_pre_turn_count": 104,
+    "reset_with_new_path_count": 104,
+    "path_length_slam_3d_m": 4.239159444330528,
+    "net_progress_along_original_region7_to8_m": 2.533379118593934,
+    "original_region_arrived": false
+  },
+  "parking": {
+    "passed": true,
+    "clock_interval_ns": [
+      181315000000,
+      186315000000
+    ],
+    "counts": {
+      "poses": 151,
+      "native": 250,
+      "statuses": 33,
+      "control": 142
+    },
+    "metrics": {
+      "slam_xy_drift_max_m": 0.0065478451805498624,
+      "slam_yaw_drift_max_rad": 0.0036589885677149477,
+      "native_planar_speed_max_mps": 0.01966642693528264,
+      "native_wz_max_radps": 0.003120022605753225,
+      "native_yaw_dot_max_radps": 0.003014535452064966
+    }
+  },
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_PREFIX9_ACTUAL_EVALUATION.json": "dc4894e4d19ca1eeaa61c0e2cec48d6b8880cef72b47d3a3df961db2e534cf13",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_REGION9_COMPARISON_REVIEWED.json": "524c79f9b04df2ae00c52897b7d13fe7b16e9f1a9038e003f93a17586158b54e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_COMPACT_SERIES.json.gz": "18553e168f128d40b8e281835aebb0d6e03b02162239bef1a211d89f1787ee17",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/audit_prefix9_with_series.py": "274d494a9e5624a8c3c5063de550727fd59e6515ddad0102514d0f70ae1bfbee",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/review_prefix9_series.py": "f66feb5e5fbdb28183cf479c4941a29c91a7e4e9e133029da094b07593405c34",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/R3_401B_AUDIT_RESOURCE_USAGE.txt": "fb58016368cb124b60734f8569ae7d5795852668d016275e9a1533636e1ee103"
+  },
+  "series_gzip_bytes": 2666404,
+  "full_log_passes_per_file": 1,
+  "review_used_compact_only_plus_two_small_activation_journals": true,
+  "observed_audit_wall_s": 16.87,
+  "observed_audit_max_resident_kib": 952876,
+  "retention_dependencies": {
+    "candidate_for_reaudit": [
+      "navigation_slam_poses.jsonl",
+      "navigation_status.jsonl",
+      "navigation_pid_history.jsonl",
+      "telemetry.jsonl",
+      "actuator.jsonl",
+      "navigation_segment_activation.jsonl",
+      "runtime_manifest.json",
+      "navigation_profile.json",
+      "navigation_anchor.json",
+      "navigation_request.json",
+      "source_manifest.json",
+      "sources/",
+      "policy_manifest.json",
+      "asset_manifest.json",
+      "navigation_slam_contract.json",
+      "worker_result.json"
+    ],
+    "v19_r3_comparison": [
+      "navigation_slam_poses.jsonl",
+      "navigation_status.jsonl",
+      "navigation_pid_history.jsonl",
+      "navigation_segment_activation.jsonl",
+      "runtime_manifest.json",
+      "navigation_profile.json"
+    ],
+    "plots_only": [
+      "COMPACT_SERIES.json.gz",
+      "REGION9_COMPARISON_REVIEWED.json"
+    ],
+    "meaning": "Plots need only the compact series and reviewed interval metadata. Exact raw re-audit requires original listed records/source snapshots; retaining hashes alone does not permit verification or replay. Preserve other provenance receipts if preserving their separate audits."
+  },
+  "proposed_other_cleanup_runs_9eaf_4fc5_83e9_are_not_sources_of_this_report": true,
+  "full46_pass": false,
+  "whole_200hz_physical_acceptance": false,
+  "all_cloud_IMU_ACK_control_equations_replayed": false,
+  "corridor_control_verified": false,
+  "runtime_or_production_changed": false
+}

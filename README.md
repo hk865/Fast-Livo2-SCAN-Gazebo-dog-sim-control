@@ -4,14 +4,16 @@
 
 - [总实验报告](docs/EXPERIMENT_REPORT_20261006.md)：通过、失败及尚未验证范围。
 - [精简证据与曲线](evidence/INDEX.md)、[证据清单](evidence/EVIDENCE_MANIFEST.json)。
-- [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除351.5 GiB原始数据，见[清理总计](maintenance/CLEANUP_SUMMARY.json)及[首批删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
+- [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。较早清理351.5 GiB原始数据；10月6日下午另清理旧raw 68.51 GiB及过期pip缓存8.81 GiB，合计77.32 GiB，见[本轮清理](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/cleanup/README.md)。最新401b/dc50原始运行保留本机。历史[清理总计](maintenance/CLEANUP_SUMMARY.json)、[删除回执](maintenance/PURGE_RECEIPT.json)和[核验](maintenance/PURGE_VERIFICATION.json)保留原字节。
 - [原 Teacher 开发说明](multifloor_demo/teacher_mode/README.md)。旧路径与旧 PASS 均为历史记录；新机器必须重新构建和预检。
 
-## 2026-10-06 V20候选分支
+## 2026-10-06 V20候选分支与续测
 
-本分支保存有限弧长朝向参考、只读走廊观测及[轨迹选择修改方案](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/TRAJECTORY_SELECTION_PLAN.md)。实际前九区测试到达7区后因显存保护中止，九区任务和停车未完成；走廊400次观测0次认证，没有启用旧路径保留或主动走廊控制。详见[本轮报告](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/README.md)。
+有限弧长朝向参考续测 `401b` 已实际完成原始 **9/9区域和首次固定5秒停车**，独立有限验收通过，停车SLAM最大XY漂移6.55 mm。第九区23.625秒到达，到达前没有 drive→pre_turn 复位（旧V19为104次并超时）。随后 `dc50` 实际尝试原完整46区，到达9区后在第十区途中越过原0.45 m路线边界而停车，**完整46区失败**。两次SCAN导出配置和任务终点不同，不作严格单变量A/B。
 
-这是可回滚的源码/证据检查点，main基线为`5237b886`。不包含大体积raw、模型或生成二进制；V20原机gate不授权clone运行，见[导出和回退说明](docs/V20_BRANCH_CHECKPOINT.md)。原46区、新闭环Sim2Sim和真机均不能据此记通过。
+[本轮续测与清理报告](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/README.md)、[先前修改方案](multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/TRAJECTORY_SELECTION_PLAN.md)。走廊仍是只读shadow，本轮447次返回0认证；旧路径保留、主动走廊控制未启用。下一步保留旧路径需要监视实际执行路径，不能依赖SCAN对其最新候选的碰撞检查。
+
+这是可回滚的源码与证据检查点，main基线为 `5237b886`。不含模型、build或完整raw；V20原机gate不授权clone运行，见[导出和回退说明](docs/V20_BRANCH_CHECKPOINT.md)。前九区通过不代表46区、新闭环Sim2Sim或真机通过。先前39ea因显存保护只完成7区的失败仍保留，不回填。
 
 ## 2026-10-06 V19实测
 
@@ -19,7 +21,7 @@
 
 原46任务启动失败1次，运动尝试2次，最终 **8/46失败**。修复内外朝向参考冲突后，SCAN微小起始段的切线仍104次跳变触发转向门，第9区90 s超时；139,102条输入全部正常提交，0取消。较长任务源时间30.303 Hz、墙钟22.338 Hz，整套系统尚未持续满实时。
 
-[本轮最终报告](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/README.md)、[失败因果与曲线](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)。本轮新raw留在原工作区，Git只保存精简证据。V19在新目录提供源码和构建入口，便携运行仍阻断，不能用原机gate绕过重新验证。
+[本轮最终报告](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/README.md)、[失败因果与曲线](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)。V19大raw已在下午按清单部分清理，9779的PID/SLAM/status及样条对照仍留本机；Git只保存精简证据。V19在新目录提供源码和构建入口，便携运行仍阻断，不能用原机gate绕过重新验证。
 
 ## 已有实验结果
 

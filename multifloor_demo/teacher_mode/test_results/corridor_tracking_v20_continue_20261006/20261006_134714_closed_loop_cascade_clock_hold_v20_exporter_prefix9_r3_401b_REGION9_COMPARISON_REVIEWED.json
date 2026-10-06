@@ -1,0 +1,908 @@
+{
+  "schema": "prefix9_independent_reviewed_region9_comparison/v1",
+  "candidate": {
+    "region9_exposed": true,
+    "comparable": true,
+    "original_region_arrived": true,
+    "drive_to_pre_turn_count": 0,
+    "reset_with_new_path_count": 0,
+    "observed_elapsed_until_arrival_or_failure_s": 23.62499999900001,
+    "source": "Only the same raw PID/pose/status read used by the independent evaluator; no interpolation.",
+    "observed_interval_s": [
+      150.32,
+      173.944999999
+    ],
+    "observed_slam_samples": 691,
+    "actual_pose_interval_s": [
+      150.349999999,
+      173.944999999
+    ],
+    "observed_duration_s": 23.62499999900001,
+    "path_length_slam_3d_m": 3.366309065478184,
+    "excluded_pose_gap_count": 0,
+    "net_displacement_3d_m": 3.0115049282877937,
+    "net_displacement_xy_m": 2.99598726569612,
+    "first_position_xyz_m": [
+      7.869445638168049,
+      1.9033494146336871,
+      0.5683166367013045
+    ],
+    "last_position_xyz_m": [
+      10.865349418318264,
+      1.8809834517666968,
+      0.8736398046534839
+    ],
+    "activation_source": {
+      "data": {
+        "segment_start": [
+          7.863463932377456,
+          1.9039867166848037,
+          0.5699959731669763
+        ],
+        "source_pose_stamp_ns": 150284999999,
+        "control_stamp_ns": 150320000000,
+        "feedback": {
+          "stamp_ns": 150284999999,
+          "received_wall_ns": 509010709236619,
+          "frame_id": "camera_init",
+          "position_world_xyz": [
+            7.863463932377456,
+            1.9039867166848037,
+            0.5699959731669763
+          ],
+          "quaternion_wxyz": [
+            0.9996029405125603,
+            0.0054851074232020345,
+            0.0093289046484109,
+            0.02601627285487864
+          ],
+          "origin_velocity_body": [
+            0.12408822460320644,
+            -0.015836038853664323,
+            -0.02309326689698837
+          ],
+          "callback_ros_clock_ns": 150310000000
+        },
+        "request_id": "20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b:exploration_prefix9:1",
+        "waypoint_index": 8,
+        "navigation_ground_truth_used": false
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_segment_activation.jsonl",
+        "line": 9,
+        "offset": 6054,
+        "length": 749,
+        "sha256": "0ed90274fa0ec73199d3f6ce1888ab0e21638935c9e361e61bcbfb875073b207"
+      }
+    },
+    "activation_clock_scope": "Original segment activation event, not an index-transition status retaining the previous goal clock.",
+    "reset_scope": "Only original segment activation through measured arrival, or failure when no arrival exists.",
+    "reset_events": [],
+    "phase_durations_before_arrival_or_failure_s": {
+      "pre_turn": 0.9699999999999989,
+      "drive": 22.605000000000018
+    },
+    "all_goal_index8_rows_drive_to_pre_turn_count": 1,
+    "all_goal_index8_rows_scope": "Includes post-arrival final capture/parking in prefix9; not directly comparable to nonterminal V19 region8.",
+    "goal_center_xyz_m": [
+      11.024513336094422,
+      1.8900952382958984,
+      0.9020102095417398
+    ],
+    "initial_goal_distance_3d_m": 3.1726927446955577,
+    "final_goal_distance_3d_m": 0.16192917355786474,
+    "goal_distance_reduction_3d_m": 3.010763571137693,
+    "net_progress_along_original_region7_to8_m": 3.011482721093917,
+    "direction_definition": "Original transformed region centers 7 to 8; not reset-local path progress."
+  },
+  "baseline": {
+    "region9_exposed": true,
+    "comparable": true,
+    "original_region_arrived": false,
+    "drive_to_pre_turn_count": 104,
+    "reset_with_new_path_count": 104,
+    "observed_elapsed_until_arrival_or_failure_s": 90.16500000000002,
+    "source": "Only the same raw PID/pose/status read used by the independent evaluator; no interpolation.",
+    "observed_interval_s": [
+      133.45,
+      223.615
+    ],
+    "observed_slam_samples": 2733,
+    "actual_pose_interval_s": [
+      133.455,
+      223.61
+    ],
+    "observed_duration_s": 90.16500000000002,
+    "path_length_slam_3d_m": 4.239159444330528,
+    "excluded_pose_gap_count": 0,
+    "net_displacement_3d_m": 2.5347563487395126,
+    "net_displacement_xy_m": 2.5213378748921405,
+    "first_position_xyz_m": [
+      7.856927509885077,
+      1.9007234933390653,
+      0.5798382595098979
+    ],
+    "last_position_xyz_m": [
+      10.37586657711446,
+      1.7907659790383879,
+      0.8403091179751987
+    ],
+    "activation_source": {
+      "data": {
+        "segment_start": [
+          7.850856357202629,
+          1.8987689217195618,
+          0.5762308979332947
+        ],
+        "source_pose_stamp_ns": 133419999999,
+        "control_stamp_ns": 133450000000,
+        "feedback": {
+          "stamp_ns": 133419999999,
+          "received_wall_ns": 469234005895590,
+          "frame_id": "camera_init",
+          "position_world_xyz": [
+            7.850856357202629,
+            1.8987689217195618,
+            0.5762308979332947
+          ],
+          "quaternion_wxyz": [
+            0.9988441443495367,
+            -0.008676248015409142,
+            9.073759019265512e-05,
+            0.04727673619981391
+          ],
+          "origin_velocity_body": [
+            0.18481054903288774,
+            0.03866834065517348,
+            0.11612116822814202
+          ],
+          "callback_ros_clock_ns": 133445000000
+        },
+        "request_id": "20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779:exploration:1",
+        "waypoint_index": 8,
+        "navigation_ground_truth_used": false
+      },
+      "source": {
+        "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_segment_activation.jsonl",
+        "line": 9,
+        "offset": 6007,
+        "length": 743,
+        "sha256": "ed9581d44d12a701486e98fa0867969b9c115f6c352c8d155f31b8d6b6aa7234"
+      }
+    },
+    "activation_clock_scope": "Original segment activation event, not an index-transition status retaining the previous goal clock.",
+    "reset_scope": "Only original segment activation through measured arrival, or failure when no arrival exists.",
+    "reset_events": [
+      {
+        "clock_s": 142.53,
+        "previous_source_line": 3522,
+        "source_line": 3523,
+        "new_path": true
+      },
+      {
+        "clock_s": 149.655,
+        "previous_source_line": 3718,
+        "source_line": 3719,
+        "new_path": true
+      },
+      {
+        "clock_s": 161.53,
+        "previous_source_line": 4044,
+        "source_line": 4045,
+        "new_path": true
+      },
+      {
+        "clock_s": 162.665,
+        "previous_source_line": 4075,
+        "source_line": 4076,
+        "new_path": true
+      },
+      {
+        "clock_s": 163.34,
+        "previous_source_line": 4094,
+        "source_line": 4095,
+        "new_path": true
+      },
+      {
+        "clock_s": 163.825,
+        "previous_source_line": 4107,
+        "source_line": 4108,
+        "new_path": true
+      },
+      {
+        "clock_s": 164.27,
+        "previous_source_line": 4119,
+        "source_line": 4120,
+        "new_path": true
+      },
+      {
+        "clock_s": 164.75,
+        "previous_source_line": 4132,
+        "source_line": 4133,
+        "new_path": true
+      },
+      {
+        "clock_s": 165.275,
+        "previous_source_line": 4146,
+        "source_line": 4147,
+        "new_path": true
+      },
+      {
+        "clock_s": 165.71,
+        "previous_source_line": 4158,
+        "source_line": 4159,
+        "new_path": true
+      },
+      {
+        "clock_s": 166.11,
+        "previous_source_line": 4169,
+        "source_line": 4170,
+        "new_path": true
+      },
+      {
+        "clock_s": 166.55,
+        "previous_source_line": 4181,
+        "source_line": 4182,
+        "new_path": true
+      },
+      {
+        "clock_s": 167.02,
+        "previous_source_line": 4194,
+        "source_line": 4195,
+        "new_path": true
+      },
+      {
+        "clock_s": 167.55,
+        "previous_source_line": 4208,
+        "source_line": 4209,
+        "new_path": true
+      },
+      {
+        "clock_s": 168.02,
+        "previous_source_line": 4221,
+        "source_line": 4222,
+        "new_path": true
+      },
+      {
+        "clock_s": 168.435,
+        "previous_source_line": 4233,
+        "source_line": 4234,
+        "new_path": true
+      },
+      {
+        "clock_s": 168.905,
+        "previous_source_line": 4246,
+        "source_line": 4247,
+        "new_path": true
+      },
+      {
+        "clock_s": 169.405,
+        "previous_source_line": 4259,
+        "source_line": 4260,
+        "new_path": true
+      },
+      {
+        "clock_s": 170.035,
+        "previous_source_line": 4276,
+        "source_line": 4277,
+        "new_path": true
+      },
+      {
+        "clock_s": 170.515,
+        "previous_source_line": 4289,
+        "source_line": 4290,
+        "new_path": true
+      },
+      {
+        "clock_s": 170.98,
+        "previous_source_line": 4302,
+        "source_line": 4303,
+        "new_path": true
+      },
+      {
+        "clock_s": 171.465,
+        "previous_source_line": 4316,
+        "source_line": 4317,
+        "new_path": true
+      },
+      {
+        "clock_s": 171.94,
+        "previous_source_line": 4329,
+        "source_line": 4330,
+        "new_path": true
+      },
+      {
+        "clock_s": 172.52,
+        "previous_source_line": 4345,
+        "source_line": 4346,
+        "new_path": true
+      },
+      {
+        "clock_s": 173.17,
+        "previous_source_line": 4363,
+        "source_line": 4364,
+        "new_path": true
+      },
+      {
+        "clock_s": 173.71,
+        "previous_source_line": 4378,
+        "source_line": 4379,
+        "new_path": true
+      },
+      {
+        "clock_s": 174.2,
+        "previous_source_line": 4392,
+        "source_line": 4393,
+        "new_path": true
+      },
+      {
+        "clock_s": 174.725,
+        "previous_source_line": 4406,
+        "source_line": 4407,
+        "new_path": true
+      },
+      {
+        "clock_s": 175.21,
+        "previous_source_line": 4419,
+        "source_line": 4420,
+        "new_path": true
+      },
+      {
+        "clock_s": 175.73,
+        "previous_source_line": 4433,
+        "source_line": 4434,
+        "new_path": true
+      },
+      {
+        "clock_s": 176.31,
+        "previous_source_line": 4449,
+        "source_line": 4450,
+        "new_path": true
+      },
+      {
+        "clock_s": 176.95,
+        "previous_source_line": 4467,
+        "source_line": 4468,
+        "new_path": true
+      },
+      {
+        "clock_s": 177.42,
+        "previous_source_line": 4480,
+        "source_line": 4481,
+        "new_path": true
+      },
+      {
+        "clock_s": 177.87,
+        "previous_source_line": 4492,
+        "source_line": 4493,
+        "new_path": true
+      },
+      {
+        "clock_s": 178.375,
+        "previous_source_line": 4506,
+        "source_line": 4507,
+        "new_path": true
+      },
+      {
+        "clock_s": 178.82,
+        "previous_source_line": 4518,
+        "source_line": 4519,
+        "new_path": true
+      },
+      {
+        "clock_s": 179.34,
+        "previous_source_line": 4533,
+        "source_line": 4534,
+        "new_path": true
+      },
+      {
+        "clock_s": 179.795,
+        "previous_source_line": 4545,
+        "source_line": 4546,
+        "new_path": true
+      },
+      {
+        "clock_s": 180.23,
+        "previous_source_line": 4557,
+        "source_line": 4558,
+        "new_path": true
+      },
+      {
+        "clock_s": 180.71,
+        "previous_source_line": 4570,
+        "source_line": 4571,
+        "new_path": true
+      },
+      {
+        "clock_s": 181.19,
+        "previous_source_line": 4583,
+        "source_line": 4584,
+        "new_path": true
+      },
+      {
+        "clock_s": 181.77,
+        "previous_source_line": 4599,
+        "source_line": 4600,
+        "new_path": true
+      },
+      {
+        "clock_s": 182.16,
+        "previous_source_line": 4611,
+        "source_line": 4612,
+        "new_path": true
+      },
+      {
+        "clock_s": 182.69,
+        "previous_source_line": 4625,
+        "source_line": 4626,
+        "new_path": true
+      },
+      {
+        "clock_s": 183.31,
+        "previous_source_line": 4642,
+        "source_line": 4643,
+        "new_path": true
+      },
+      {
+        "clock_s": 183.81,
+        "previous_source_line": 4656,
+        "source_line": 4657,
+        "new_path": true
+      },
+      {
+        "clock_s": 184.285,
+        "previous_source_line": 4669,
+        "source_line": 4670,
+        "new_path": true
+      },
+      {
+        "clock_s": 184.76,
+        "previous_source_line": 4682,
+        "source_line": 4683,
+        "new_path": true
+      },
+      {
+        "clock_s": 185.245,
+        "previous_source_line": 4695,
+        "source_line": 4696,
+        "new_path": true
+      },
+      {
+        "clock_s": 185.695,
+        "previous_source_line": 4707,
+        "source_line": 4708,
+        "new_path": true
+      },
+      {
+        "clock_s": 186.23,
+        "previous_source_line": 4722,
+        "source_line": 4723,
+        "new_path": true
+      },
+      {
+        "clock_s": 186.91,
+        "previous_source_line": 4741,
+        "source_line": 4742,
+        "new_path": true
+      },
+      {
+        "clock_s": 187.4,
+        "previous_source_line": 4754,
+        "source_line": 4755,
+        "new_path": true
+      },
+      {
+        "clock_s": 187.875,
+        "previous_source_line": 4767,
+        "source_line": 4768,
+        "new_path": true
+      },
+      {
+        "clock_s": 188.345,
+        "previous_source_line": 4780,
+        "source_line": 4781,
+        "new_path": true
+      },
+      {
+        "clock_s": 188.81,
+        "previous_source_line": 4793,
+        "source_line": 4794,
+        "new_path": true
+      },
+      {
+        "clock_s": 189.325,
+        "previous_source_line": 4807,
+        "source_line": 4808,
+        "new_path": true
+      },
+      {
+        "clock_s": 189.8,
+        "previous_source_line": 4820,
+        "source_line": 4821,
+        "new_path": true
+      },
+      {
+        "clock_s": 190.23,
+        "previous_source_line": 4832,
+        "source_line": 4833,
+        "new_path": true
+      },
+      {
+        "clock_s": 190.72,
+        "previous_source_line": 4845,
+        "source_line": 4846,
+        "new_path": true
+      },
+      {
+        "clock_s": 191.335,
+        "previous_source_line": 4862,
+        "source_line": 4863,
+        "new_path": true
+      },
+      {
+        "clock_s": 191.88,
+        "previous_source_line": 4877,
+        "source_line": 4878,
+        "new_path": true
+      },
+      {
+        "clock_s": 192.37,
+        "previous_source_line": 4890,
+        "source_line": 4891,
+        "new_path": true
+      },
+      {
+        "clock_s": 192.89,
+        "previous_source_line": 4904,
+        "source_line": 4905,
+        "new_path": true
+      },
+      {
+        "clock_s": 193.37,
+        "previous_source_line": 4917,
+        "source_line": 4918,
+        "new_path": true
+      },
+      {
+        "clock_s": 193.85,
+        "previous_source_line": 4930,
+        "source_line": 4931,
+        "new_path": true
+      },
+      {
+        "clock_s": 194.335,
+        "previous_source_line": 4943,
+        "source_line": 4944,
+        "new_path": true
+      },
+      {
+        "clock_s": 194.85,
+        "previous_source_line": 4957,
+        "source_line": 4958,
+        "new_path": true
+      },
+      {
+        "clock_s": 195.335,
+        "previous_source_line": 4970,
+        "source_line": 4971,
+        "new_path": true
+      },
+      {
+        "clock_s": 195.81,
+        "previous_source_line": 4983,
+        "source_line": 4984,
+        "new_path": true
+      },
+      {
+        "clock_s": 196.235,
+        "previous_source_line": 4995,
+        "source_line": 4996,
+        "new_path": true
+      },
+      {
+        "clock_s": 196.815,
+        "previous_source_line": 5010,
+        "source_line": 5011,
+        "new_path": true
+      },
+      {
+        "clock_s": 197.305,
+        "previous_source_line": 5023,
+        "source_line": 5024,
+        "new_path": true
+      },
+      {
+        "clock_s": 197.765,
+        "previous_source_line": 5035,
+        "source_line": 5036,
+        "new_path": true
+      },
+      {
+        "clock_s": 198.21,
+        "previous_source_line": 5047,
+        "source_line": 5048,
+        "new_path": true
+      },
+      {
+        "clock_s": 198.645,
+        "previous_source_line": 5059,
+        "source_line": 5060,
+        "new_path": true
+      },
+      {
+        "clock_s": 199.095,
+        "previous_source_line": 5071,
+        "source_line": 5072,
+        "new_path": true
+      },
+      {
+        "clock_s": 199.605,
+        "previous_source_line": 5085,
+        "source_line": 5086,
+        "new_path": true
+      },
+      {
+        "clock_s": 200.22,
+        "previous_source_line": 5101,
+        "source_line": 5102,
+        "new_path": true
+      },
+      {
+        "clock_s": 200.685,
+        "previous_source_line": 5114,
+        "source_line": 5115,
+        "new_path": true
+      },
+      {
+        "clock_s": 201.17,
+        "previous_source_line": 5127,
+        "source_line": 5128,
+        "new_path": true
+      },
+      {
+        "clock_s": 201.605,
+        "previous_source_line": 5139,
+        "source_line": 5140,
+        "new_path": true
+      },
+      {
+        "clock_s": 202.165,
+        "previous_source_line": 5154,
+        "source_line": 5155,
+        "new_path": true
+      },
+      {
+        "clock_s": 202.86,
+        "previous_source_line": 5173,
+        "source_line": 5174,
+        "new_path": true
+      },
+      {
+        "clock_s": 203.51,
+        "previous_source_line": 5191,
+        "source_line": 5192,
+        "new_path": true
+      },
+      {
+        "clock_s": 204.02,
+        "previous_source_line": 5205,
+        "source_line": 5206,
+        "new_path": true
+      },
+      {
+        "clock_s": 204.57,
+        "previous_source_line": 5220,
+        "source_line": 5221,
+        "new_path": true
+      },
+      {
+        "clock_s": 205.035,
+        "previous_source_line": 5232,
+        "source_line": 5233,
+        "new_path": true
+      },
+      {
+        "clock_s": 205.495,
+        "previous_source_line": 5245,
+        "source_line": 5246,
+        "new_path": true
+      },
+      {
+        "clock_s": 206.01,
+        "previous_source_line": 5259,
+        "source_line": 5260,
+        "new_path": true
+      },
+      {
+        "clock_s": 206.53,
+        "previous_source_line": 5273,
+        "source_line": 5274,
+        "new_path": true
+      },
+      {
+        "clock_s": 206.99,
+        "previous_source_line": 5285,
+        "source_line": 5286,
+        "new_path": true
+      },
+      {
+        "clock_s": 207.46,
+        "previous_source_line": 5298,
+        "source_line": 5299,
+        "new_path": true
+      },
+      {
+        "clock_s": 207.865,
+        "previous_source_line": 5309,
+        "source_line": 5310,
+        "new_path": true
+      },
+      {
+        "clock_s": 208.35,
+        "previous_source_line": 5322,
+        "source_line": 5323,
+        "new_path": true
+      },
+      {
+        "clock_s": 208.92,
+        "previous_source_line": 5338,
+        "source_line": 5339,
+        "new_path": true
+      },
+      {
+        "clock_s": 209.47,
+        "previous_source_line": 5353,
+        "source_line": 5354,
+        "new_path": true
+      },
+      {
+        "clock_s": 210.105,
+        "previous_source_line": 5370,
+        "source_line": 5371,
+        "new_path": true
+      },
+      {
+        "clock_s": 210.555,
+        "previous_source_line": 5382,
+        "source_line": 5383,
+        "new_path": true
+      },
+      {
+        "clock_s": 211.01,
+        "previous_source_line": 5394,
+        "source_line": 5395,
+        "new_path": true
+      },
+      {
+        "clock_s": 211.7,
+        "previous_source_line": 5413,
+        "source_line": 5414,
+        "new_path": true
+      },
+      {
+        "clock_s": 212.705,
+        "previous_source_line": 5440,
+        "source_line": 5441,
+        "new_path": true
+      },
+      {
+        "clock_s": 213.185,
+        "previous_source_line": 5453,
+        "source_line": 5454,
+        "new_path": true
+      },
+      {
+        "clock_s": 213.67,
+        "previous_source_line": 5466,
+        "source_line": 5467,
+        "new_path": true
+      }
+    ],
+    "phase_durations_before_arrival_or_failure_s": {
+      "pre_turn": 44.49999999999997,
+      "align": 13.109999999999957,
+      "settle": 5.355000000000018,
+      "drive": 26.980000000000047
+    },
+    "all_goal_index8_rows_drive_to_pre_turn_count": 104,
+    "all_goal_index8_rows_scope": "Includes post-arrival final capture/parking in prefix9; not directly comparable to nonterminal V19 region8.",
+    "goal_center_xyz_m": [
+      11.02329808071612,
+      1.8951347788353872,
+      0.9037710402579561
+    ],
+    "initial_goal_distance_3d_m": 3.182902177572833,
+    "final_goal_distance_3d_m": 0.658853408435288,
+    "goal_distance_reduction_3d_m": 2.524048769137545,
+    "net_progress_along_original_region7_to8_m": 2.533379118593934,
+    "direction_definition": "Original transformed region centers 7 to 8; not reset-local path progress."
+  },
+  "valid_region9_exposure_in_both": true,
+  "prefix9_limited_pass": true,
+  "terminal_policy_difference": "V20 prefix9 makes original exploration:8 the final parking goal; r3 original46 continues to exploration:9. Region geometry/dwell match; terminal braking/parking do not form an identical-control A/B test.",
+  "diagnostic_correction": {
+    "original_frozen_evaluator_not_modified": true,
+    "prefix_acceptance_checks_unchanged": true,
+    "candidate_transition_status_had_previous_goal_activation_s": 125.985,
+    "candidate_exact_segment_activation_s": 150.32,
+    "candidate_measured_arrival_s": 173.944999999,
+    "candidate_only_all_idx8_reset_clock_s": [
+      174.005
+    ],
+    "reason": "Index-transition status retains previous activation field; post-arrival final parking also retains waypoint index 8. Activation receipt and raw measured arrival define the comparable pre-arrival interval."
+  },
+  "first5s_parking": {
+    "passed": true,
+    "clock_interval_ns": [
+      181315000000,
+      186315000000
+    ],
+    "counts": {
+      "poses": 151,
+      "native": 250,
+      "statuses": 33,
+      "control": 142
+    },
+    "metrics": {
+      "slam_xy_drift_max_m": 0.0065478451805498624,
+      "slam_yaw_drift_max_rad": 0.0036589885677149477,
+      "native_planar_speed_max_mps": 0.01966642693528264,
+      "native_wz_max_radps": 0.003120022605753225,
+      "native_yaw_dot_max_radps": 0.003014535452064966
+    }
+  },
+  "sampled_native_safety": {
+    "passed": true,
+    "checks": {
+      "actual_native_samples": true,
+      "no_recorded_fault_or_safety_violation": true,
+      "native_time_increases": true
+    },
+    "samples": 9424,
+    "bad_sample_count": 0,
+    "bad_sources": [],
+    "worker_completion_status": "recorded",
+    "worker_fault": null,
+    "worker_result_present": true,
+    "body_contact_samples": 0,
+    "actor_fault_samples": 0,
+    "observed_native_gap_max_ns": 20000000,
+    "all_200hz_physics_verified": false
+  },
+  "source_bindings": [
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_PREFIX9_ACTUAL_EVALUATION.json",
+      "sha256": "dc4894e4d19ca1eeaa61c0e2cec48d6b8880cef72b47d3a3df961db2e534cf13"
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b_COMPACT_SERIES.json.gz",
+      "sha256": "18553e168f128d40b8e281835aebb0d6e03b02162239bef1a211d89f1787ee17"
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/review_prefix9_series.py",
+      "sha256": "f66feb5e5fbdb28183cf479c4941a29c91a7e4e9e133029da094b07593405c34"
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_134714_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r3_401b/navigation_segment_activation.jsonl",
+      "sha256": "2d1ac404858355d4d8f3ecc731cecb7319448e793fa378772bbbf898444d7680",
+      "bytes": 6803,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_segment_activation.jsonl",
+      "sha256": "39dc16c86fb8373be472c0faa1d05b268d0384fbb7e73784eb16ff0aed82fb31",
+      "bytes": 6750,
+      "stable_during_read": true
+    },
+    {
+      "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/audit_prefix9_with_series.py",
+      "sha256": "274d494a9e5624a8c3c5063de550727fd59e6515ddad0102514d0f70ae1bfbee"
+    }
+  ],
+  "large_log_rescans": 0,
+  "computation": "Recomputed diagnostics from the same-pass compact series and two ~7KB segment activation journals; no PID/pose/native full reread.",
+  "full46_pass": false,
+  "whole_200hz_physical_acceptance": false,
+  "corridor_control_verified": false,
+  "original_executed_wrapper_preserved_with_exact_hash": true
+}

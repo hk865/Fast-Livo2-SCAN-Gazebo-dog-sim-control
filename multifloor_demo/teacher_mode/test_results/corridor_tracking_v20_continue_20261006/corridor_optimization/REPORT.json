@@ -1,0 +1,82 @@
+{
+  "schema": "corridor_equivalent_optimization_summary/v1",
+  "source_sha256": "386e62167f66fe593d3aee538ae162a58abdb01cbc08da32e9433058de795aee",
+  "scope": "offline candidate only; production frozen source unchanged",
+  "single_cpu": [
+    19
+  ],
+  "nice": 15,
+  "baseline_evaluations": 3,
+  "candidate_evaluations": 3,
+  "repetitions": 1,
+  "rows": [
+    {
+      "sequence": 99,
+      "baseline_thread_cpu_ms": 459.557011,
+      "baseline_wall_ms": 459.558036,
+      "candidate_thread_cpu_ms": 309.412828,
+      "candidate_wall_ms": 309.415562,
+      "measured_wall_reduction_fraction": 0.326710583296165,
+      "exact_archived_result_match": true,
+      "baseline_hull_profile_ms": 261.884989,
+      "candidate_hull_profile_ms": 130.136434
+    },
+    {
+      "sequence": 187,
+      "baseline_thread_cpu_ms": 420.780269,
+      "baseline_wall_ms": 420.786839,
+      "candidate_thread_cpu_ms": 288.070152,
+      "candidate_wall_ms": 288.079673,
+      "measured_wall_reduction_fraction": 0.31537860431989406,
+      "exact_archived_result_match": true,
+      "baseline_hull_profile_ms": 234.593073,
+      "candidate_hull_profile_ms": 116.67631
+    },
+    {
+      "sequence": 316,
+      "baseline_thread_cpu_ms": 474.761462,
+      "baseline_wall_ms": 474.767446,
+      "candidate_thread_cpu_ms": 318.962583,
+      "candidate_wall_ms": 318.974102,
+      "measured_wall_reduction_fraction": 0.3281466438202252,
+      "exact_archived_result_match": true,
+      "baseline_hull_profile_ms": 277.09615800000006,
+      "candidate_hull_profile_ms": 139.721392
+    }
+  ],
+  "equivalence": [
+    "Same binary64 XY values, sorted unique point order, monotonic chain, and collinearity predicate; Python float avoids repeated NumPy scalar operations.",
+    "Original canonical SHA computation reused only for the same owned immutable map object inside one certification call; no cache across calls.",
+    "All three complete output dictionaries including diagnostic support SHA exactly match the archived outputs.",
+    "166 small deterministic hull sets, including degenerate/collinear/near-collinear/duplicates/signed zero, match reference output and JSON exactly."
+  ],
+  "next_low_risk_proposals": [
+    "Hoist path segment delta and denominator out of the per-support-cell _expected_body_z call, preserving operation/reduction order; not implemented or tested here.",
+    "Precompute unchanged corners/probes and bucket floor indices once per support derivation; not implemented or tested here."
+  ],
+  "not_equivalent_shortcuts": [
+    "Skipping support derivation when occupancy already rejects changes diagnostic completeness and needs a distinct contract/review.",
+    "Do not reduce hull coverage, hit count, source/cell freshness, body sweep, unknown rejection, or stopping-distance bounds."
+  ],
+  "limitations": [
+    "cProfile instrumentation overhead is included and can exaggerate improvement from removing Python function calls.",
+    "Single pass, three deterministically chosen old-run jobs; not a statistical throughput or new-run timing claim.",
+    "No new source-clock freshness evidence; 288-319 ms profile durations do not establish delivery within 300 ms.",
+    "No ROS, simulation, truth input, build, production edit, or active control authority."
+  ],
+  "navigation_acceptance": "UNVERIFIED",
+  "control_authority": false,
+  "file_sha256": {
+    "candidate_000316.pstats": "77ffe04cdaa953b7ed200855179016e5b5270daacd62baf19438fbe878b649b6",
+    "candidate.json": "4b72cebd7a3a573e697614b6c0b9624c2ba6ba8bc3177ad8632c2cd72690fac0",
+    "baseline_000187.pstats": "66167c0c0269a8d58d45996ddc202178929667968d74942a30d053dda78d6296",
+    "baseline_000316.pstats": "5e9eb5c61fd1732fb66ad301b6e398987ef85b1fb457761ca4c181b1f7e4a530",
+    "candidate_tests.py": "0c0547e966de8e3ff380c54e5c64be7bf75e26c49b8362dd1404972cf4733d45",
+    "candidate.py": "cdc820ac9a5b639cffa1522465ceac83c44a1e6d531ae9ff9325e9968b6b2fa8",
+    "benchmark.py": "3276ede66d4a67153de4b163fc53e2434feb9032b5429120e2682b564ed9449d",
+    "candidate_000099.pstats": "8488a731390c01a28f0daf66cf9b25ede45f9210ad6efcb7112fc6a14b3b478f",
+    "baseline.json": "5b83c8549df9baa6a6d4e37538364c1519ad76135da42feb88f36e6a2dbac373",
+    "baseline_000099.pstats": "a42f03974e3802082e3a560c7c5ae642057d344eff89930f37f69e865d36d63c",
+    "candidate_000187.pstats": "d949949fd2cf40d3dfe008e3faf0076f7adcdd41dec156b0ec182567e9a1e3a5"
+  }
+}

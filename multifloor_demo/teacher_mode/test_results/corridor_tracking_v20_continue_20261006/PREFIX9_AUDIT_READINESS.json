@@ -1,0 +1,93 @@
+{
+  "schema": "v20_prefix9_continue_readonly_readiness/v1",
+  "created_utc": "2026-10-06T05:41:08.381954+00:00",
+  "gate_verified": true,
+  "gate_status": "PASS_LIMITED_NEW_EXPERIMENT",
+  "profile": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/profiles/exporter_shadow_original46_prefix9.json",
+  "profile_exact_sha256": "7be376c0fcec46ce5dc0628e1b60a82de107c9f11fb0a51269c96049c87c4c00",
+  "gate_actual_navigation_verified": false,
+  "existing_evaluator_finite_receipt_all_source_pins_match": true,
+  "finite_test_count": 13,
+  "finite_tests_rerun": false,
+  "production_or_old_report_modified": false,
+  "runtime_started_by_this_audit": false,
+  "source_bindings": {
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/profiles/exporter_shadow_original46_prefix9.json": "7be376c0fcec46ce5dc0628e1b60a82de107c9f11fb0a51269c96049c87c4c00",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/CORRIDOR_V20_PREFLIGHT.json": "24c0cdc9f6d26cab020fb9df3590b7190338c987f64386368568bc919891517e",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/corridor_tracking_v20/CORRIDOR_V20_CONTRACT.json": "67f04ad6432396ec5614f386236337e50e9a29c06989ce6558ebca79bcf7aa44",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/PROSPECTIVE_CRITERIA.json": "e5dc8906a41648362dfca1b28739148aed66cdf3e93e687d91efdb31ed97a728",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/evaluate_prefix9.py": "812946d475141e2bd2c71fb925cadb75b6b1086027167fb53d8a318b25c3481b",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/test_evaluate_prefix9.py": "cc65a51c890e2d6c8dea7a088265fb057f6c51e8883bd8d39ae422805ad863e4",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/PREFIX9_EVALUATOR_FINITE_RECEIPT.json": "feb66c805fc9ce3a251718e8672eef41334ec12916a26d3908ebd94325b86232"
+  },
+  "gate_read_work": {
+    "sha_calls": 401,
+    "bytes_hashed_including_duplicates": 99083630,
+    "unique_files": 224,
+    "elapsed_wall_s": 0.07239917002152652,
+    "multiple_reads_reason": "Workspace subcontracts verify their bindings, then the top-level frozen gate rechecks them. No runtime log scans."
+  },
+  "evaluation_command": [
+    "python3",
+    "-B",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_20261006/evaluation/evaluate_prefix9.py",
+    "--run",
+    "<NEW_RUN_ABSOLUTE_PATH>",
+    "--baseline",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779",
+    "--output",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/NEW_RUN_PREFIX9_ACTUAL_EVALUATION.json"
+  ],
+  "evaluation_read_work": {
+    "large_log_passes_per_file": 1,
+    "candidate_logs": [
+      "navigation_slam_poses.jsonl",
+      "navigation_status.jsonl",
+      "navigation_pid_history.jsonl",
+      "telemetry.jsonl",
+      "actuator.jsonl"
+    ],
+    "baseline_logs": [
+      "navigation_slam_poses.jsonl",
+      "navigation_status.jsonl",
+      "navigation_pid_history.jsonl"
+    ],
+    "line_and_whole_file_sha_computed_in_same_read": true,
+    "candidate_archive_source_files_each_hashed_once": true,
+    "no_recursive_whole_run_scan": true,
+    "no_bag_pointcloud_video_trajectory_or_snapshot_replay": true,
+    "r1_plus_r3_comparison_log_bytes": 2209813798,
+    "stat_only_reference_sizes": {
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/navigation_slam_poses.jsonl": 4890432,
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/navigation_status.jsonl": 73011705,
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/navigation_pid_history.jsonl": 70259653,
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/telemetry.jsonl": 1701942045,
+      "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/actuator.jsonl": 173009739,
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_slam_poses.jsonl": 6957667,
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_status.jsonl": 111749418,
+      "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779/navigation_pid_history.jsonl": 67993139
+    },
+    "additional_r1_source_archive_bytes": 65320974,
+    "estimate_note": "New-run size depends on duration. CPU JSON decoding and hashing are offline only. No timed full-log benchmark was run in this readiness check."
+  },
+  "criteria": {
+    "original_regions": 9,
+    "original_dwell_s": 0.4,
+    "original_max_observation_gap_s": 0.2,
+    "original_goal_timeout_s": 90,
+    "source_timeout_s": 0.3,
+    "first_parking_window_s": 5,
+    "region_count_or_process_stop_is_success": false,
+    "full46_verified": false,
+    "whole_200hz_physics_verified": false,
+    "corridor_control_authority": false,
+    "curvature_feedforward": false,
+    "curvature_speed_limit": false
+  },
+  "evaluation_limits": [
+    "The prefix evaluator checks exact raw-SLAM pose stamps and positions and nonzero pose freshness; it does not replay every cloud/IMU/ACK protection or the full control equations.",
+    "50 Hz native snapshots do not certify all 200 Hz physics steps.",
+    "The inherited V9 clock-hold document contains an older .6 s / .17 m route; original46 prefix uses unchanged original region-specific geometry and .4 s dwell.",
+    "If first5s passes, inspect its actual serialized origin, times, immutable declaration and no-interruption fields before presenting a limited prefix PASS."
+  ]
+}

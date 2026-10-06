@@ -1,16 +1,22 @@
 # Go2 Frozen Teacher：Gazebo 适配与 Sim2Sim 验证
 
-> **存储更新（2026-10-06）：** 已按用户要求删除351.5 GiB原始实验记录。本文其余部分为历史开发记录，完整raw和录像不再可回放；参见 [清理说明](docs/RAW_DATA_CLEANUP_20261006.md) 与 `CURRENT_STORAGE_STATUS.json`。源码、精简报告、曲线和失败摘要已存远程仓库。
+> **存储更新（2026-10-06 下午）：** 在较早351.5 GiB清理之外，本轮按要求清理旧raw 68.51 GiB、过期pip缓存8.81 GiB，共77.32 GiB。最新401b/dc50两次运行原始数据保留；旧raw不能再完整回放。精确边界见[本轮清理](test_results/corridor_tracking_v20_continue_20261006/cleanup/README.md)、[历史清理说明](docs/RAW_DATA_CLEANUP_20261006.md)和 `CURRENT_STORAGE_STATUS.json`。
 
 这是独立仿真控制模式。冻结Teacher通过唯一关节力矩执行器实际控制Gazebo Go2；CPU单线程、策略50Hz、关节PD200Hz。没有重新训练、操作实体机器人、停止另一任务训练/评估或修改已通过的camera_mode。模型与逐轮执行源码、失败、配置、物理日志和相机均归档。
 
-## 最新：V19流水线完成，原46区域尝试失败8/46
+## 最新：V20前九区与停车通过，完整46区在第十区越界停车
+
+冻结V20有限弧长朝向参考实际重跑：`401b` 独立核对原始9/9区域及首次固定5秒停车通过，停车SLAM最大XY漂移6.55 mm。第9区激活至到达23.625秒，到达前无 drive→pre_turn 复位；旧V19对应区90秒超时、104次复位。两次任务终点与SCAN导出模式有差别，不作为严格单变量因果对照。
+
+随后实际尝试原完整46区的 `dc50` 运行到第10区途中，因测得SLAM位置超过原0.45 m路线边界而停车，完成9区；Teacher fault为空。未放宽边界，未把运行正常退出记为导航通过。完整结果与本轮清理见[续测报告](test_results/corridor_tracking_v20_continue_20261006/README.md)。当前走廊仍仅shadow，没有启用旧路径保留；全46区、新控制器完整Sim2Sim和真机仍未通过/未验证。
+
+## 历史V19：流水线完成，原46区域尝试失败8/46
 
 接收、LiDAR解码、RGB解码与唯一估计owner分线程，有界队列和正常退出排空已实测。IMU/LIO/VIO共享状态仍按序，不能把周期下界写成三者最大耗时。同包1.5x单次对照的最大位姿滞后由2.535 s降到50 ms；1x ABBA未见明显时效改善。该结果表示有限容量余量，不证明普遍加速倍数。
 
 原46任务启动失败1次、运动重跑2次，均保留；最终8/46失败。外门/内环参考冲突修复后，SCAN微小起始段切线仍104次跳变触发转向门，第9区90 s超时。139,102项全部正常提交、无取消；不能以流水线通过抵消导航失败。较长任务源时间30.303 Hz、墙钟22.338 Hz、pose窗口RTF0.737，整套系统尚未持续满实时。
 
-[最终报告、曲线及命令](test_results/pipeline_v19_20261006/README.md)、[故障因果分析](test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)、[实际画面/路线/失败结果](http://127.0.0.1:8768/?run=20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779)。本轮新raw仍保留本机，未包含在上述历史351.5 GiB清理中；Git只导出源码及精简证据。完整200 Hz/PI重放、未到达路线、动态障碍、新律Isaac和真机仍未验证。
+[最终报告、曲线及命令](test_results/pipeline_v19_20261006/README.md)、[故障因果分析](test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)、[实际画面/路线/失败结果](http://127.0.0.1:8768/?run=20261006_024447_closed_loop_cascade_clock_hold_v19_original46_r3_heading_9779)。该V19段原始记录已在下午清理中部分删除，保留PID/SLAM/status及样条等对照数据；Git只导出源码及精简证据。完整200 Hz/PI重放、未到达路线、动态障碍、新律Isaac和真机仍未验证。
 
 ## 历史V18：队列与算法并行已经实现并实际测试
 

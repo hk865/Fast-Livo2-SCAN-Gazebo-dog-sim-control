@@ -1,0 +1,1697 @@
+{
+  "schema": "corridor_bounded_profile/v1",
+  "variant": "candidate",
+  "source": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+  "source_sha256": "386e62167f66fe593d3aee538ae162a58abdb01cbc08da32e9433058de795aee",
+  "candidate_sha256": "cdc820ac9a5b639cffa1522465ceac83c44a1e6d531ae9ff9325e9968b6b2fa8",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea",
+  "affinity": [
+    19
+  ],
+  "nice": 15,
+  "max_baseline_evaluations": 3,
+  "evaluations_per_selected_input": 1,
+  "timing_note": "Both variants measured once with cProfile enabled; profiler overhead is included. Not a runtime latency benchmark.",
+  "navigation_acceptance": "UNVERIFIED",
+  "control_authority": false,
+  "samples": [
+    {
+      "sequence": 99,
+      "selection": "median recorded wall among stale-free rejections",
+      "snapshot_file": "corridor_snapshots/000099.json.gz",
+      "snapshot_raw_sha256": "2913749b4365ef03662b372fec95fb271b6dad132c3e7c39e848a21516fc1f24",
+      "input_sha256": "22ba85e089fedc8e47451a48a3b44ccf8dfe32e12d6cb3285eb7120a5b2462d7",
+      "surface_points": 7564,
+      "wall_ms": 309.415562,
+      "thread_cpu_ms": 309.412828,
+      "status": "unavailable",
+      "reason": "prefix_not_fully_verified",
+      "exact_archived_result_match": true,
+      "result_sha256": "7eb32583ebb5c6a7e081d783ae77c4942e0101a41d795be3b8d20746785b6c5d",
+      "changed_fields": [],
+      "by_cumulative": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 63,
+          "function": "certify_once",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 8.453800000000001e-05,
+          "cumulative_profile_s": 0.309360984
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 262,
+          "function": "certify_corridor",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.000356522,
+          "cumulative_profile_s": 0.309273016
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.056072051000000005,
+          "cumulative_profile_s": 0.297241668
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 634,
+          "calls": 634,
+          "self_profile_s": 0.082495733,
+          "cumulative_profile_s": 0.130136434
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.012506235000000001,
+          "cumulative_profile_s": 0.036851809
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2561,
+          "calls": 2561,
+          "self_profile_s": 0.007974131,
+          "cumulative_profile_s": 0.019118228
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 635,
+          "calls": 2807,
+          "self_profile_s": 0.0027885370000000002,
+          "cumulative_profile_s": 0.017586918
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2653,
+          "calls": 2653,
+          "self_profile_s": 0.001104079,
+          "cumulative_profile_s": 0.017180265
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8408,
+          "calls": 8408,
+          "self_profile_s": 0.016807284000000002,
+          "cumulative_profile_s": 0.016807284000000002
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2172,
+          "calls": 2172,
+          "self_profile_s": 0.0016794770000000002,
+          "cumulative_profile_s": 0.016076186000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 344453,
+          "calls": 344453,
+          "self_profile_s": 0.015052469,
+          "cumulative_profile_s": 0.015052469
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 184103,
+          "calls": 184103,
+          "self_profile_s": 0.012852319000000001,
+          "cumulative_profile_s": 0.012852319000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 480,
+          "calls": 480,
+          "self_profile_s": 0.008797041,
+          "cumulative_profile_s": 0.012465974000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 37125,
+          "calls": 37125,
+          "self_profile_s": 0.01187784,
+          "cumulative_profile_s": 0.01187784
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 162378,
+          "calls": 162378,
+          "self_profile_s": 0.010535832,
+          "cumulative_profile_s": 0.010535832
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 55,
+          "function": "sha_once",
+          "primitive_calls": 7,
+          "calls": 7,
+          "self_profile_s": 8.439e-06,
+          "cumulative_profile_s": 0.009493477
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 31,
+          "function": "_sha",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 4.9873e-05,
+          "cumulative_profile_s": 0.009483541
+        },
+        {
+          "file": "/usr/lib/python3.12/json/__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.9164e-05,
+          "cumulative_profile_s": 0.008968791
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.6184e-05,
+          "cumulative_profile_s": 0.008944329
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008923899,
+          "cumulative_profile_s": 0.008923899
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 634,
+          "calls": 634,
+          "self_profile_s": 0.008573131000000001,
+          "cumulative_profile_s": 0.008573131000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 3113,
+          "calls": 3113,
+          "self_profile_s": 0.0024215960000000003,
+          "cumulative_profile_s": 0.007479388000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 483,
+          "calls": 483,
+          "self_profile_s": 0.0051900670000000005,
+          "cumulative_profile_s": 0.006740135
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'mean' of 'numpy.ndarray' objects>",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.000376533,
+          "cumulative_profile_s": 0.005143934
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2177,
+          "function": "sum",
+          "primitive_calls": 1584,
+          "calls": 1584,
+          "self_profile_s": 0.001034352,
+          "cumulative_profile_s": 0.004790483
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.0018239640000000002,
+          "cumulative_profile_s": 0.004767401
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 9826,
+          "calls": 9826,
+          "self_profile_s": 0.0035783480000000003,
+          "cumulative_profile_s": 0.0035783480000000003
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 795,
+          "calls": 795,
+          "self_profile_s": 0.002751453,
+          "cumulative_profile_s": 0.0031514190000000004
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2593,
+          "function": "ptp",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.0006471080000000001,
+          "cumulative_profile_s": 0.0031213290000000004
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2100,
+          "function": "clip",
+          "primitive_calls": 870,
+          "calls": 870,
+          "self_profile_s": 0.000569769,
+          "cumulative_profile_s": 0.002976498
+        }
+      ],
+      "by_self": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 634,
+          "calls": 634,
+          "self_profile_s": 0.082495733,
+          "cumulative_profile_s": 0.130136434
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.056072051000000005,
+          "cumulative_profile_s": 0.297241668
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8408,
+          "calls": 8408,
+          "self_profile_s": 0.016807284000000002,
+          "cumulative_profile_s": 0.016807284000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 344453,
+          "calls": 344453,
+          "self_profile_s": 0.015052469,
+          "cumulative_profile_s": 0.015052469
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 184103,
+          "calls": 184103,
+          "self_profile_s": 0.012852319000000001,
+          "cumulative_profile_s": 0.012852319000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.012506235000000001,
+          "cumulative_profile_s": 0.036851809
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 37125,
+          "calls": 37125,
+          "self_profile_s": 0.01187784,
+          "cumulative_profile_s": 0.01187784
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 162378,
+          "calls": 162378,
+          "self_profile_s": 0.010535832,
+          "cumulative_profile_s": 0.010535832
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008923899,
+          "cumulative_profile_s": 0.008923899
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 480,
+          "calls": 480,
+          "self_profile_s": 0.008797041,
+          "cumulative_profile_s": 0.012465974000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 634,
+          "calls": 634,
+          "self_profile_s": 0.008573131000000001,
+          "cumulative_profile_s": 0.008573131000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2561,
+          "calls": 2561,
+          "self_profile_s": 0.007974131,
+          "cumulative_profile_s": 0.019118228
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 483,
+          "calls": 483,
+          "self_profile_s": 0.0051900670000000005,
+          "cumulative_profile_s": 0.006740135
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 9826,
+          "calls": 9826,
+          "self_profile_s": 0.0035783480000000003,
+          "cumulative_profile_s": 0.0035783480000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 635,
+          "calls": 2807,
+          "self_profile_s": 0.0027885370000000002,
+          "cumulative_profile_s": 0.017586918
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 795,
+          "calls": 795,
+          "self_profile_s": 0.002751453,
+          "cumulative_profile_s": 0.0031514190000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 3878,
+          "calls": 3878,
+          "self_profile_s": 0.002625586,
+          "cumulative_profile_s": 0.002625586
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 3113,
+          "calls": 3113,
+          "self_profile_s": 0.0024215960000000003,
+          "cumulative_profile_s": 0.007479388000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'tolist' of 'numpy.ndarray' objects>",
+          "primitive_calls": 660,
+          "calls": 660,
+          "self_profile_s": 0.002243155,
+          "cumulative_profile_s": 0.002243155
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.asarray>",
+          "primitive_calls": 4166,
+          "calls": 4166,
+          "self_profile_s": 0.0018587780000000002,
+          "cumulative_profile_s": 0.0018587780000000002
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.0018239640000000002,
+          "cumulative_profile_s": 0.004767401
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'setdefault' of 'dict' objects>",
+          "primitive_calls": 7564,
+          "calls": 7564,
+          "self_profile_s": 0.0017510310000000001,
+          "cumulative_profile_s": 0.0017510310000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 9075,
+          "calls": 9075,
+          "self_profile_s": 0.00170618,
+          "cumulative_profile_s": 0.00170618
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2172,
+          "calls": 2172,
+          "self_profile_s": 0.0016794770000000002,
+          "cumulative_profile_s": 0.016076186000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'extend' of 'list' objects>",
+          "primitive_calls": 7128,
+          "calls": 7128,
+          "self_profile_s": 0.001497499,
+          "cumulative_profile_s": 0.001497499
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 90,
+          "function": "_clip",
+          "primitive_calls": 870,
+          "calls": 870,
+          "self_profile_s": 0.001432268,
+          "cumulative_profile_s": 0.001432268
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 67,
+          "function": "_count_reduce_items",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.001224351,
+          "cumulative_profile_s": 0.0013265220000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 7506,
+          "calls": 7506,
+          "self_profile_s": 0.001191145,
+          "cumulative_profile_s": 0.001191145
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2653,
+          "calls": 2653,
+          "self_profile_s": 0.001104079,
+          "cumulative_profile_s": 0.017180265
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2177,
+          "function": "sum",
+          "primitive_calls": 1584,
+          "calls": 1584,
+          "self_profile_s": 0.001034352,
+          "cumulative_profile_s": 0.004790483
+        }
+      ]
+    },
+    {
+      "sequence": 187,
+      "selection": "median recorded wall among support rejections",
+      "snapshot_file": "corridor_snapshots/000187.json.gz",
+      "snapshot_raw_sha256": "9100f633207660a67960e9350e6f6fac2b9bc31e63974ac81c8fe05aa7f80cf7",
+      "input_sha256": "4dcb3e7d5aaca78c009038e631cdad8764b95bf55b4ae0f266eb3eef4efbd6b2",
+      "surface_points": 6969,
+      "wall_ms": 288.079673,
+      "thread_cpu_ms": 288.070152,
+      "status": "unavailable",
+      "reason": "prefix_not_fully_verified",
+      "exact_archived_result_match": true,
+      "result_sha256": "f64cdcf7d40572c98fbf9975484ed758a79cfe433149d493bd5ffa6198a18615",
+      "changed_fields": [],
+      "by_cumulative": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 63,
+          "function": "certify_once",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 7.7694e-05,
+          "cumulative_profile_s": 0.288023691
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 262,
+          "function": "certify_corridor",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.000354457,
+          "cumulative_profile_s": 0.28794309900000004
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.053036975,
+          "cumulative_profile_s": 0.27656545400000004
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 624,
+          "calls": 624,
+          "self_profile_s": 0.074550554,
+          "cumulative_profile_s": 0.11667631
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.012571152,
+          "cumulative_profile_s": 0.036974176000000004
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2518,
+          "calls": 2518,
+          "self_profile_s": 0.007781592,
+          "cumulative_profile_s": 0.017975656
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 625,
+          "calls": 2729,
+          "self_profile_s": 0.0026663840000000004,
+          "cumulative_profile_s": 0.016592227
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2562,
+          "calls": 2562,
+          "self_profile_s": 0.0010786600000000002,
+          "cumulative_profile_s": 0.016194814000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8337,
+          "calls": 8337,
+          "self_profile_s": 0.015787523,
+          "cumulative_profile_s": 0.015787523
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2104,
+          "calls": 2104,
+          "self_profile_s": 0.001579448,
+          "cumulative_profile_s": 0.015116154000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 305791,
+          "calls": 305791,
+          "self_profile_s": 0.013441855,
+          "cumulative_profile_s": 0.013441855
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 458,
+          "calls": 458,
+          "self_profile_s": 0.008278474000000001,
+          "cumulative_profile_s": 0.011728488
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 163901,
+          "calls": 163901,
+          "self_profile_s": 0.011398072,
+          "cumulative_profile_s": 0.011398072
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 34477,
+          "calls": 34477,
+          "self_profile_s": 0.011131862000000001,
+          "cumulative_profile_s": 0.011131862000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 143372,
+          "calls": 143372,
+          "self_profile_s": 0.009329726,
+          "cumulative_profile_s": 0.009329726
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 55,
+          "function": "sha_once",
+          "primitive_calls": 7,
+          "calls": 7,
+          "self_profile_s": 8.228e-06,
+          "cumulative_profile_s": 0.008547118000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 31,
+          "function": "_sha",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 5.2338000000000006e-05,
+          "cumulative_profile_s": 0.00853743
+        },
+        {
+          "file": "/usr/lib/python3.12/json/__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.5937e-05,
+          "cumulative_profile_s": 0.008043661
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.3447e-05,
+          "cumulative_profile_s": 0.008024593
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008006627,
+          "cumulative_profile_s": 0.008006627
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 624,
+          "calls": 624,
+          "self_profile_s": 0.0075319950000000005,
+          "cumulative_profile_s": 0.0075319950000000005
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 3057,
+          "calls": 3057,
+          "self_profile_s": 0.0023979540000000003,
+          "cumulative_profile_s": 0.007368736000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 461,
+          "calls": 461,
+          "self_profile_s": 0.004961565,
+          "cumulative_profile_s": 0.006435551
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'mean' of 'numpy.ndarray' objects>",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.000377411,
+          "cumulative_profile_s": 0.005110713
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2177,
+          "function": "sum",
+          "primitive_calls": 1584,
+          "calls": 1584,
+          "self_profile_s": 0.0010341550000000001,
+          "cumulative_profile_s": 0.004854617
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.001813874,
+          "cumulative_profile_s": 0.004733302
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 9169,
+          "calls": 9169,
+          "self_profile_s": 0.003351741,
+          "cumulative_profile_s": 0.003351741
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2593,
+          "function": "ptp",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.000657123,
+          "cumulative_profile_s": 0.0031231210000000004
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 795,
+          "calls": 795,
+          "self_profile_s": 0.002717615,
+          "cumulative_profile_s": 0.0031166090000000002
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2100,
+          "function": "clip",
+          "primitive_calls": 883,
+          "calls": 883,
+          "self_profile_s": 0.000567309,
+          "cumulative_profile_s": 0.002975656
+        }
+      ],
+      "by_self": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 624,
+          "calls": 624,
+          "self_profile_s": 0.074550554,
+          "cumulative_profile_s": 0.11667631
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.053036975,
+          "cumulative_profile_s": 0.27656545400000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8337,
+          "calls": 8337,
+          "self_profile_s": 0.015787523,
+          "cumulative_profile_s": 0.015787523
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 305791,
+          "calls": 305791,
+          "self_profile_s": 0.013441855,
+          "cumulative_profile_s": 0.013441855
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.012571152,
+          "cumulative_profile_s": 0.036974176000000004
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 163901,
+          "calls": 163901,
+          "self_profile_s": 0.011398072,
+          "cumulative_profile_s": 0.011398072
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 34477,
+          "calls": 34477,
+          "self_profile_s": 0.011131862000000001,
+          "cumulative_profile_s": 0.011131862000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 143372,
+          "calls": 143372,
+          "self_profile_s": 0.009329726,
+          "cumulative_profile_s": 0.009329726
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 458,
+          "calls": 458,
+          "self_profile_s": 0.008278474000000001,
+          "cumulative_profile_s": 0.011728488
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008006627,
+          "cumulative_profile_s": 0.008006627
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2518,
+          "calls": 2518,
+          "self_profile_s": 0.007781592,
+          "cumulative_profile_s": 0.017975656
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 624,
+          "calls": 624,
+          "self_profile_s": 0.0075319950000000005,
+          "cumulative_profile_s": 0.0075319950000000005
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 461,
+          "calls": 461,
+          "self_profile_s": 0.004961565,
+          "cumulative_profile_s": 0.006435551
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 9169,
+          "calls": 9169,
+          "self_profile_s": 0.003351741,
+          "cumulative_profile_s": 0.003351741
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 795,
+          "calls": 795,
+          "self_profile_s": 0.002717615,
+          "cumulative_profile_s": 0.0031166090000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 625,
+          "calls": 2729,
+          "self_profile_s": 0.0026663840000000004,
+          "cumulative_profile_s": 0.016592227
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 3760,
+          "calls": 3760,
+          "self_profile_s": 0.002526328,
+          "cumulative_profile_s": 0.002526328
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 3057,
+          "calls": 3057,
+          "self_profile_s": 0.0023979540000000003,
+          "cumulative_profile_s": 0.007368736000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'tolist' of 'numpy.ndarray' objects>",
+          "primitive_calls": 655,
+          "calls": 655,
+          "self_profile_s": 0.001907894,
+          "cumulative_profile_s": 0.001907894
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.001813874,
+          "cumulative_profile_s": 0.004733302
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.asarray>",
+          "primitive_calls": 4069,
+          "calls": 4069,
+          "self_profile_s": 0.0017859380000000002,
+          "cumulative_profile_s": 0.0017859380000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 8986,
+          "calls": 8986,
+          "self_profile_s": 0.00169,
+          "cumulative_profile_s": 0.00169
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'setdefault' of 'dict' objects>",
+          "primitive_calls": 6969,
+          "calls": 6969,
+          "self_profile_s": 0.0016644750000000001,
+          "cumulative_profile_s": 0.0016644750000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2104,
+          "calls": 2104,
+          "self_profile_s": 0.001579448,
+          "cumulative_profile_s": 0.015116154000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'extend' of 'list' objects>",
+          "primitive_calls": 7128,
+          "calls": 7128,
+          "self_profile_s": 0.001515188,
+          "cumulative_profile_s": 0.001515188
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 90,
+          "function": "_clip",
+          "primitive_calls": 883,
+          "calls": 883,
+          "self_profile_s": 0.001425236,
+          "cumulative_profile_s": 0.001425236
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 67,
+          "function": "_count_reduce_items",
+          "primitive_calls": 792,
+          "calls": 792,
+          "self_profile_s": 0.0012053930000000001,
+          "cumulative_profile_s": 0.001308179
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 7353,
+          "calls": 7353,
+          "self_profile_s": 0.001170571,
+          "cumulative_profile_s": 0.001170571
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2562,
+          "calls": 2562,
+          "self_profile_s": 0.0010786600000000002,
+          "cumulative_profile_s": 0.016194814000000002
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2177,
+          "function": "sum",
+          "primitive_calls": 1584,
+          "calls": 1584,
+          "self_profile_s": 0.0010341550000000001,
+          "cumulative_profile_s": 0.004854617
+        }
+      ]
+    },
+    {
+      "sequence": 316,
+      "selection": "median recorded wall among occupied rejections",
+      "snapshot_file": "corridor_snapshots/000326.json.gz",
+      "snapshot_raw_sha256": "07fa4236f26543bb1bb43265d42d48cf7ab43e78466b3faaa1912c40660f203e",
+      "input_sha256": "8d57f7cbaca397b4d2447e11355d474c22a05712d52460a5bf2ab013dd722991",
+      "surface_points": 8199,
+      "wall_ms": 318.974102,
+      "thread_cpu_ms": 318.962583,
+      "status": "blocked",
+      "reason": "prefix_not_fully_verified",
+      "exact_archived_result_match": true,
+      "result_sha256": "1ad74144e188058ec601c9f2b3429f43ca4566763cf7cc53090be5dd76efd6b6",
+      "changed_fields": [],
+      "by_cumulative": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 63,
+          "function": "certify_once",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.00013137,
+          "cumulative_profile_s": 0.31892306000000004
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 262,
+          "function": "certify_corridor",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.000385773,
+          "cumulative_profile_s": 0.318788354
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.057570027,
+          "cumulative_profile_s": 0.30666995
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 611,
+          "calls": 611,
+          "self_profile_s": 0.08885591100000001,
+          "cumulative_profile_s": 0.139721392
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.012175447,
+          "cumulative_profile_s": 0.035901718
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2444,
+          "calls": 2444,
+          "self_profile_s": 0.007963566,
+          "cumulative_profile_s": 0.019164275
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 612,
+          "calls": 2713,
+          "self_profile_s": 0.0027469010000000004,
+          "cumulative_profile_s": 0.017059774
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2558,
+          "calls": 2558,
+          "self_profile_s": 0.001152348,
+          "cumulative_profile_s": 0.016646119
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8013,
+          "calls": 8013,
+          "self_profile_s": 0.016583249,
+          "cumulative_profile_s": 0.016583249
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 361799,
+          "calls": 361799,
+          "self_profile_s": 0.015932996,
+          "cumulative_profile_s": 0.015932996
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2101,
+          "calls": 2101,
+          "self_profile_s": 0.001671151,
+          "cumulative_profile_s": 0.015493771000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 193187,
+          "calls": 193187,
+          "self_profile_s": 0.013780068000000001,
+          "cumulative_profile_s": 0.013780068000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 457,
+          "calls": 457,
+          "self_profile_s": 0.008629363000000001,
+          "cumulative_profile_s": 0.012163554
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 35283,
+          "calls": 35283,
+          "self_profile_s": 0.011353829000000001,
+          "cumulative_profile_s": 0.011353829000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 171483,
+          "calls": 171483,
+          "self_profile_s": 0.011015674000000001,
+          "cumulative_profile_s": 0.011015674000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 55,
+          "function": "sha_once",
+          "primitive_calls": 7,
+          "calls": 7,
+          "self_profile_s": 7.669e-06,
+          "cumulative_profile_s": 0.009476956
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 31,
+          "function": "_sha",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 6.1628e-05,
+          "cumulative_profile_s": 0.009467565
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 611,
+          "calls": 611,
+          "self_profile_s": 0.009432187,
+          "cumulative_profile_s": 0.009432187
+        },
+        {
+          "file": "/usr/lib/python3.12/json/__init__.py",
+          "line": 183,
+          "function": "dumps",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.5925e-05,
+          "cumulative_profile_s": 0.008954584
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 183,
+          "function": "encode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 1.4262000000000002e-05,
+          "cumulative_profile_s": 0.008934681
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008916119,
+          "cumulative_profile_s": 0.008916119
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 2950,
+          "calls": 2950,
+          "self_profile_s": 0.002397268,
+          "cumulative_profile_s": 0.007280132000000001
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 460,
+          "calls": 460,
+          "self_profile_s": 0.0051364900000000005,
+          "cumulative_profile_s": 0.006645596
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'mean' of 'numpy.ndarray' objects>",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.000375225,
+          "cumulative_profile_s": 0.004986629
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2177,
+          "function": "sum",
+          "primitive_calls": 1512,
+          "calls": 1512,
+          "self_profile_s": 0.0010037750000000002,
+          "cumulative_profile_s": 0.0046817890000000004
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.0017582250000000002,
+          "cumulative_profile_s": 0.004611404
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 10360,
+          "calls": 10360,
+          "self_profile_s": 0.003770069,
+          "cumulative_profile_s": 0.003770069
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 759,
+          "calls": 759,
+          "self_profile_s": 0.002667397,
+          "cumulative_profile_s": 0.0030635460000000003
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2593,
+          "function": "ptp",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.0006412280000000001,
+          "cumulative_profile_s": 0.0030198340000000003
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 2100,
+          "function": "clip",
+          "primitive_calls": 847,
+          "calls": 847,
+          "self_profile_s": 0.0005710530000000001,
+          "cumulative_profile_s": 0.002905322
+        }
+      ],
+      "by_self": [
+        {
+          "file": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/test_results/corridor_tracking_v20_continue_20261006/corridor_optimization/candidate.py",
+          "line": 16,
+          "function": "hull_binary64",
+          "primitive_calls": 611,
+          "calls": 611,
+          "self_profile_s": 0.08885591100000001,
+          "cumulative_profile_s": 0.139721392
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 162,
+          "function": "derive_measured_support",
+          "primitive_calls": 1,
+          "calls": 1,
+          "self_profile_s": 0.057570027,
+          "cumulative_profile_s": 0.30666995
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+          "primitive_calls": 8013,
+          "calls": 8013,
+          "self_profile_s": 0.016583249,
+          "cumulative_profile_s": 0.016583249
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.len>",
+          "primitive_calls": 361799,
+          "calls": 361799,
+          "self_profile_s": 0.015932996,
+          "cumulative_profile_s": 0.015932996
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'append' of 'list' objects>",
+          "primitive_calls": 193187,
+          "calls": 193187,
+          "self_profile_s": 0.013780068000000001,
+          "cumulative_profile_s": 0.013780068000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 150,
+          "function": "_expected_body_z",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.012175447,
+          "cumulative_profile_s": 0.035901718
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 146,
+          "function": "<genexpr>",
+          "primitive_calls": 35283,
+          "calls": 35283,
+          "self_profile_s": 0.011353829000000001,
+          "cumulative_profile_s": 0.011353829000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'pop' of 'list' objects>",
+          "primitive_calls": 171483,
+          "calls": 171483,
+          "self_profile_s": 0.011015674000000001,
+          "cumulative_profile_s": 0.011015674000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.sorted>",
+          "primitive_calls": 611,
+          "calls": 611,
+          "self_profile_s": 0.009432187,
+          "cumulative_profile_s": 0.009432187
+        },
+        {
+          "file": "/usr/lib/python3.12/json/encoder.py",
+          "line": 205,
+          "function": "iterencode",
+          "primitive_calls": 5,
+          "calls": 5,
+          "self_profile_s": 0.008916119,
+          "cumulative_profile_s": 0.008916119
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2191,
+          "function": "lstsq",
+          "primitive_calls": 457,
+          "calls": 457,
+          "self_profile_s": 0.008629363000000001,
+          "cumulative_profile_s": 0.012163554
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/linalg/linalg.py",
+          "line": 2383,
+          "function": "norm",
+          "primitive_calls": 2444,
+          "calls": 2444,
+          "self_profile_s": 0.007963566,
+          "cumulative_profile_s": 0.019164275
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/index_tricks.py",
+          "line": 326,
+          "function": "__getitem__",
+          "primitive_calls": 460,
+          "calls": 460,
+          "self_profile_s": 0.0051364900000000005,
+          "cumulative_profile_s": 0.006645596
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'astype' of 'numpy.ndarray' objects>",
+          "primitive_calls": 10360,
+          "calls": 10360,
+          "self_profile_s": 0.003770069,
+          "cumulative_profile_s": 0.003770069
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.all>",
+          "primitive_calls": 612,
+          "calls": 2713,
+          "self_profile_s": 0.0027469010000000004,
+          "cumulative_profile_s": 0.017059774
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/lib/function_base.py",
+          "line": 1324,
+          "function": "diff",
+          "primitive_calls": 759,
+          "calls": 759,
+          "self_profile_s": 0.002667397,
+          "cumulative_profile_s": 0.0030635460000000003
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.array>",
+          "primitive_calls": 3706,
+          "calls": 3706,
+          "self_profile_s": 0.002531134,
+          "cumulative_profile_s": 0.002531134
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/fromnumeric.py",
+          "line": 71,
+          "function": "_wrapreduction",
+          "primitive_calls": 2950,
+          "calls": 2950,
+          "self_profile_s": 0.002397268,
+          "cumulative_profile_s": 0.007280132000000001
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'tolist' of 'numpy.ndarray' objects>",
+          "primitive_calls": 642,
+          "calls": 642,
+          "self_profile_s": 0.002255664,
+          "cumulative_profile_s": 0.002255664
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method numpy.asarray>",
+          "primitive_calls": 3980,
+          "calls": 3980,
+          "self_profile_s": 0.001961042,
+          "cumulative_profile_s": 0.001961042
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'setdefault' of 'dict' objects>",
+          "primitive_calls": 8199,
+          "calls": 8199,
+          "self_profile_s": 0.001899618,
+          "cumulative_profile_s": 0.001899618
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 101,
+          "function": "_mean",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.0017582250000000002,
+          "cumulative_profile_s": 0.004611404
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 8655,
+          "calls": 8655,
+          "self_profile_s": 0.001693281,
+          "cumulative_profile_s": 0.001693281
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 145,
+          "function": "_contains",
+          "primitive_calls": 2101,
+          "calls": 2101,
+          "self_profile_s": 0.001671151,
+          "cumulative_profile_s": 0.015493771000000002
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'extend' of 'list' objects>",
+          "primitive_calls": 6804,
+          "calls": 6804,
+          "self_profile_s": 0.0015853730000000002,
+          "cumulative_profile_s": 0.0015853730000000002
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 90,
+          "function": "_clip",
+          "primitive_calls": 847,
+          "calls": 847,
+          "self_profile_s": 0.001385362,
+          "cumulative_profile_s": 0.001385362
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/_methods.py",
+          "line": 67,
+          "function": "_count_reduce_items",
+          "primitive_calls": 756,
+          "calls": 756,
+          "self_profile_s": 0.001208436,
+          "cumulative_profile_s": 0.001305811
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method builtins.isinstance>",
+          "primitive_calls": 7166,
+          "calls": 7166,
+          "self_profile_s": 0.0011541210000000001,
+          "cumulative_profile_s": 0.0011541210000000001
+        },
+        {
+          "file": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261006_130405_closed_loop_cascade_clock_hold_v20_exporter_prefix9_r1_39ea/sources/navigation/corridor_tracking_v20/corridor.py",
+          "line": 222,
+          "function": "<genexpr>",
+          "primitive_calls": 2558,
+          "calls": 2558,
+          "self_profile_s": 0.001152348,
+          "cumulative_profile_s": 0.016646119
+        },
+        {
+          "file": "/usr/lib/python3/dist-packages/numpy/core/numeric.py",
+          "line": 136,
+          "function": "ones",
+          "primitive_calls": 457,
+          "calls": 457,
+          "self_profile_s": 0.0010243910000000001,
+          "cumulative_profile_s": 0.0012713450000000001
+        }
+      ]
+    }
+  ],
+  "profile_timer_note": "cProfile default timer; reported profile seconds are not isolated CPU time. thread_cpu_ms is the separately measured current-thread CPU clock."
+}
