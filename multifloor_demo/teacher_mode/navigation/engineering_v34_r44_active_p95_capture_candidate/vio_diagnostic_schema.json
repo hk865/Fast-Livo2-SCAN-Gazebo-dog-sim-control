@@ -1,0 +1,273 @@
+{
+  "schema": "fastlivo_vio_diagnostic/v1",
+  "scope": "diagnostic copies of actual V7 VIO, no estimator math/state/threshold/feature-selection changes",
+  "record_header": "diagnostics.h 7 uint64 fields; data doubles row-major; negative iteration/level represented as uint64 two-complement; true stage/source stamp supplied by caller",
+  "state_encoding": {
+    "n_values": 25,
+    "fields": [
+      "rot_end_row_major_3x3",
+      "pos_end_xyz",
+      "inv_expo_time",
+      "vel_end_xyz",
+      "bias_g_xyz",
+      "bias_a_xyz",
+      "gravity_xyz"
+    ]
+  },
+  "cov_and_solution_order": "rotation[0:3],position[3:6],inverse_exposure[6],velocity[7:10],gyro_bias[10:13],acc_bias[13:16],gravity[16:19]",
+  "skip_codes": {
+    "0": "executed",
+    "1": "empty_image_processFrame_skipped",
+    "2": "empty_visual_feature_map_retrieval_skipped",
+    "3": "zero_actual_total_points_update_or_reference_skipped",
+    "4": "zero_n_meas_actual_original_division_recorded",
+    "5": "non_finite_actual_candidate_error_original_branch_retained",
+    "6": "input_pg_size_le_10_generation_skipped"
+  },
+  "kinds": {
+    "200": {
+      "description": "phase-coded actual frame/retrieval/cov/map-management summaries",
+      "phases": {
+        "0": {
+          "length": 2,
+          "fields": [
+            "phase",
+            "skip_code"
+          ]
+        },
+        "1": {
+          "length": 24,
+          "fields": [
+            "phase=1",
+            "skip_code",
+            "actual_frame_id",
+            "input_pg_count",
+            "feature_voxel_count",
+            "feature_point_count",
+            "retained_query_voxel_count",
+            "candidate_visits_main_plus_raycast",
+            "reject_null_candidate",
+            "reject_empty_observations",
+            "reject_behind_camera",
+            "candidate_fov_passes",
+            "selected_grid_count",
+            "reject_depth_discontinuity",
+            "reject_uninitialized_normal",
+            "reference_selection_passes",
+            "reject_patch_sse",
+            "accepted_tracks",
+            "ncc_evaluations_or_NaN_disabled",
+            "ncc_enabled",
+            "reject_ncc_or_NaN_disabled",
+            "normal_enabled",
+            "raycast_enabled",
+            "actual_total_points"
+          ],
+          "derived_rejects": {
+            "outside_fov": "candidate_visits - reject_null - reject_empty_observations - reject_behind_camera - candidate_fov_passes",
+            "reference_selection_failed": "selected_grid_count - reject_depth_discontinuity - reject_uninitialized_normal - reference_selection_passes"
+          },
+          "notes": "Candidate visits include raycast revisits. feature point counts sum valid voxel entries. NCC disabled logs NaN evaluation/rejection counts, not zero. total_points and accepted_tracks duplicated deliberately for stable reader fields."
+        },
+        "3": {
+          "length": 1139,
+          "segments": [
+            [
+              "metadata",
+              6,
+              [
+                "phase",
+                "skip_code",
+                "actual_frame_id",
+                "total_points",
+                "img_point_cov",
+                "inverse_composition_enabled"
+              ]
+            ],
+            [
+              "P19_before_frame_cov_update",
+              361
+            ],
+            [
+              "state_before_frame_cov_update",
+              25
+            ],
+            [
+              "P19_after_actual_frame_cov_update",
+              361
+            ],
+            [
+              "state_after_actual_frame_cov_update",
+              25
+            ],
+            [
+              "actual_G19",
+              361
+            ]
+          ],
+          "notes": "Original VIO covariance is updated once after all levels/iterations. On zero-track skip P/state unchanged, G=NaN (not applied). No per-iteration covariance update is fabricated."
+        },
+        "5": {
+          "length": 5,
+          "fields": [
+            "phase",
+            "skip_code",
+            "actual_frame_id",
+            "actual_added_points",
+            "feature_voxel_count_after_generation"
+          ]
+        },
+        "6": {
+          "length": 5,
+          "fields": [
+            "phase",
+            "skip_code",
+            "actual_frame_id",
+            "actual_added_reference_observations",
+            "actual_total_points"
+          ]
+        }
+      }
+    },
+    "201": {
+      "description": "every actual VIO update iteration in both forward and inverse composition branches, plus explicit zero-track skipped event",
+      "skipped_length": 3,
+      "skipped_fields": [
+        "inverse_composition_enabled",
+        "H_columns",
+        "skip_code"
+      ],
+      "metadata_fields": [
+        "inverse_composition_enabled",
+        "H_columns",
+        "skip_code",
+        "total_points",
+        "n_meas",
+        "img_point_cov",
+        "previous_accepted_mean_squared_error",
+        "candidate_mean_squared_error",
+        "post_update_error_NaN_not_computed",
+        "accepted_state_update",
+        "EKF_end",
+        "H_rows"
+      ],
+      "segments_after_metadata": [
+        [
+          "state_propagat",
+          25
+        ],
+        [
+          "state_current_before",
+          25
+        ],
+        [
+          "P19_before",
+          361
+        ],
+        [
+          "actual_HtH_over_img_point_cov",
+          "H_columns**2"
+        ],
+        [
+          "actual_HTz_over_img_point_cov",
+          "H_columns"
+        ],
+        [
+          "actual_solution19_or_NaN_on_rollback",
+          19
+        ],
+        [
+          "state_current_after_or_rollback",
+          25
+        ],
+        [
+          "P19_after_iteration",
+          361
+        ]
+      ],
+      "length_formula": "12+25+25+361+H_columns**2+H_columns+19+25+361 = 870 at H_columns=6; 884 at H_columns=7",
+      "notes": [
+        "post_update_error is NaN because original algorithm does not reevaluate residual immediately after applying solution; next iteration candidate error is the real reevaluation.",
+        "On rollback actual current residual H/z are still recorded; diagnostic-only HtH/HTz recomputation copies them and does not enter solver. No applied solver solution exists; logged solution is NaN.",
+        "P19_after_iteration normally equals before because covariance is only updated at end of frame (kind200 phase3).",
+        "accepted_state_update records original error<=last_error branch, not a new diagnostic acceptance rule.",
+        "All original branches, including nonfinite/zero-count behavior, retained unchanged."
+      ]
+    },
+    "202": {
+      "description": "actual accepted retrieval tracks in fixed detail window",
+      "length": 36,
+      "fields": [
+        "diagnostic_point_id",
+        "actual_current_frame_id",
+        "actual_reference_frame_id",
+        "reference_source_stamp_s_or_NaN",
+        "reference_age_s_or_NaN",
+        "observation_count",
+        "search_level",
+        "reference_level",
+        "actual_patch_SSE",
+        "actual_NCC_or_NaN_disabled",
+        "ncc_enabled",
+        "normal_initialized",
+        "point_world_xyz[3]",
+        "actual_current_pixel_xy[2]",
+        "reference_pixel_xy[2]",
+        "actual_normal_xyz[3]_only_if_initialized_else_NaN",
+        "reference_T_f_w_rotation_row_major[9]",
+        "reference_T_f_w_translation[3]",
+        "reference_inverse_exposure",
+        "current_inverse_exposure"
+      ],
+      "notes": "IDs are diagnostic-only per-manager IDs assigned to persistent VisualPoint pointer; actual reference IDs were initialized during feature creation. Frame-source stamps stored for every processed nonempty image. No uninitialized Feature grad/score or VisualPoint fields are read. Raw patch arrays/hash omitted; actual scalar retrieval SSE/NCC and H/z retained separately."
+    },
+    "203": {
+      "description": "actual pixel H_sub/z arrays for first and terminating/max iterations at every level in fixed detail window",
+      "metadata_fields": [
+        "inverse_composition_enabled",
+        "H_rows",
+        "H_columns",
+        "n_meas",
+        "img_point_cov"
+      ],
+      "segments_after_metadata": [
+        [
+          "H_sub_row_major",
+          "H_rows*H_columns"
+        ],
+        [
+          "z",
+          "H_rows"
+        ]
+      ],
+      "notes": "Logger copies completed arrays after original update/rollback branch; they are not fed back. Allows independent reconstruction of kind201 HtH/R and HTz/R."
+    }
+  },
+  "static_equivalence": {
+    "method": "strip all complete FASTLIVO_DIAG_BEGIN/END blocks; source and header exactly match previously frozen original byte for byte",
+    "vio_source_exact_original": true,
+    "vio_header_exact_original": true,
+    "original_vio_sha256": "",
+    "instrumented_vio_sha256": "",
+    "original_vio_header_sha256": "",
+    "instrumented_vio_header_sha256": ""
+  },
+  "limitations": [
+    "Compile/runtime verification performed by root after merging; this schema alone is not runtime success.",
+    "Diagnostic CPU and finite writer queue can affect timing; drops or stale protective stops invalidate complete diagnostic claims.",
+    "Raw patch images are not saved by this VIO instrumentation.",
+    "Reference deletes are not separately counted; added reference observations are actual update_num; actual accepted observation_count/age provided per detail track."
+  ],
+  "V11_collection_scope": {
+    "profile_window_sim_s": [
+      115,
+      118
+    ],
+    "outside_detail_is_absence_not_zero": true,
+    "solver_kind100_and_query_sidecars": "detail-only",
+    "VIO_retrieval_frame_cov_and_iteration_kind201": "detail-only; exceptional skip kind200 remains original",
+    "caller_kind1_2_3_10_11_12_13_14_20": "original gating retained;14 already detail-only",
+    "kind4": "detail_at(offset-corrected source header) using profile-defined window; raw record original header unchanged",
+    "record_layout_math_state_covariance_unchanged": true
+  }
+}

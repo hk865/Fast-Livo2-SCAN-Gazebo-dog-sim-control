@@ -1,0 +1,60 @@
+- gz_topic_name: /clock
+  ros_topic_name: /clock
+  gz_type_name: gz.msgs.Clock
+  ros_type_name: rosgraph_msgs/msg/Clock
+  direction: GZ_TO_ROS
+- gz_topic_name: /velodyne_points/points
+  ros_topic_name: /livox/lidar
+  gz_type_name: gz.msgs.PointCloudPacked
+  ros_type_name: sensor_msgs/msg/PointCloud2
+  direction: GZ_TO_ROS
+- gz_topic_name: /imu/data
+  ros_topic_name: /livox/imu
+  gz_type_name: gz.msgs.IMU
+  ros_type_name: sensor_msgs/msg/Imu
+  direction: GZ_TO_ROS
+- gz_topic_name: /demo/camera
+  ros_topic_name: /camera/image_color
+  gz_type_name: gz.msgs.Image
+  ros_type_name: sensor_msgs/msg/Image
+  direction: GZ_TO_ROS
+- gz_topic_name: /demo/camera_info
+  ros_topic_name: /camera/camera_info
+  gz_type_name: gz.msgs.CameraInfo
+  ros_type_name: sensor_msgs/msg/CameraInfo
+  direction: GZ_TO_ROS
+- gz_topic_name: /demo/ground_truth
+  ros_topic_name: /demo/ground_truth
+  gz_type_name: gz.msgs.Odometry
+  ros_type_name: nav_msgs/msg/Odometry
+  direction: GZ_TO_ROS
+
+- gz_topic_name: /world/multifloor_demo/model/go2/link/base_link/sensor/demo_body_contacts/contact
+  ros_topic_name: /demo/body_contacts
+  gz_type_name: gz.msgs.Contacts
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  direction: GZ_TO_ROS
+
+- gz_topic_name: /world/multifloor_demo/model/go2/link/lf_lower_leg_link/sensor/demo_lf_foot_contacts/contact
+  ros_topic_name: /demo/contacts/lf_foot
+  gz_type_name: gz.msgs.Contacts
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  direction: GZ_TO_ROS
+
+- gz_topic_name: /world/multifloor_demo/model/go2/link/rf_lower_leg_link/sensor/demo_rf_foot_contacts/contact
+  ros_topic_name: /demo/contacts/rf_foot
+  gz_type_name: gz.msgs.Contacts
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  direction: GZ_TO_ROS
+
+- gz_topic_name: /world/multifloor_demo/model/go2/link/lh_lower_leg_link/sensor/demo_lh_foot_contacts/contact
+  ros_topic_name: /demo/contacts/lh_foot
+  gz_type_name: gz.msgs.Contacts
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  direction: GZ_TO_ROS
+
+- gz_topic_name: /world/multifloor_demo/model/go2/link/rh_lower_leg_link/sensor/demo_rh_foot_contacts/contact
+  ros_topic_name: /demo/contacts/rh_foot
+  gz_type_name: gz.msgs.Contacts
+  ros_type_name: ros_gz_interfaces/msg/Contacts
+  direction: GZ_TO_ROS

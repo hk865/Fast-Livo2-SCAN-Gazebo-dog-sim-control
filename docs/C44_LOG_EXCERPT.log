@@ -1,0 +1,30 @@
+# C44 excerpt: A is verbatim; B is selected fields, not verbatim.
+# A: 13 original SCAN lines; ROS log clock.
+[INFO] [1791637217.480610797] [scan_planner_node]: Reference path accepted
+[INFO] [1791637217.517372163] [scan_planner_node]: Measured replan state: frozen=1 pos=[-0.127673,0.030208,0.007417] measured_vel=[-0.099765,-0.004472,-0.021709] used_vel=[0.000000,0.000000,0.000000] acc=[0,0,0] body_goal=[0.003473,2.019125,0.020297]
+[INFO] [1791637228.769168654] [scan_planner_node]: Measured replan state: frozen=0 pos=[-0.103034,0.494730,0.000530] measured_vel=[0.027483,0.083990,0.003015] used_vel=[0.007878,0.137150,-0.005277] acc=[0,0,0] body_goal=[0.003473,2.019125,0.020297]
+[INFO] [1791637232.419677549] [scan_planner_node]: Measured replan state: frozen=0 pos=[-0.069810,0.938521,0.003826] measured_vel=[-0.019259,0.180888,0.092423] used_vel=[0.020751,0.168665,0.004399] acc=[0,0,0] body_goal=[0.003473,2.019125,0.020297]
+[INFO] [1791637235.779185806] [scan_planner_node]: Measured replan state: frozen=0 pos=[-0.019550,1.385863,0.001560] measured_vel=[0.011400,0.114201,-0.003117] used_vel=[0.027634,0.155599,-0.004090] acc=[0,0,0] body_goal=[0.003473,2.019125,0.020297]
+[INFO] [1791637235.830128417] [scan_planner_node]: Reference path accepted
+[INFO] [1791637235.869358676] [scan_planner_node]: Measured replan state: frozen=0 pos=[-0.019382,1.389281,-0.000372] measured_vel=[0.004797,0.097668,-0.055197] used_vel=[0.000000,0.000000,0.000000] acc=[0,0,0] body_goal=[0.003473,2.019125,0.020297]
+[INFO] [1791637238.930456915] [scan_planner_node]: Reference path accepted
+[INFO] [1791637238.969254272] [scan_planner_node]: Measured replan state: frozen=0 pos=[-0.006906,1.781333,0.003399] measured_vel=[-0.039312,0.197302,-0.018733] used_vel=[0.008783,0.185756,-0.000016] acc=[0,0,0] body_goal=[2.003473,2.019125,0.020297]
+[INFO] [1791637242.129179658] [scan_planner_node]: Measured replan state: frozen=0 pos=[0.045588,2.196237,0.006911] measured_vel=[-0.037137,0.113504,0.005571] used_vel=[0.021502,0.071705,0.005763] acc=[0,0,0] body_goal=[2.003473,2.019125,0.020297]
+[INFO] [1791637242.137562136] [scan_planner_node]: Reference path accepted
+[INFO] [1791637242.169736608] [scan_planner_node]: Measured replan state: frozen=1 pos=[0.045588,2.196237,0.006911] measured_vel=[-0.037137,0.113504,0.005571] used_vel=[0.000000,0.000000,0.000000] acc=[0,0,0] body_goal=[2.003473,2.019125,0.020297]
+[INFO] [1791637366.110777895] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+# B: 14 field projections; source/simulation clocks are nanoseconds.
+{"goal_id":"exploration:0","stamp_ns":20660000000,"reason":"passed","protected":false,"region_inside":true,"control_region_inside":true,"navigation_ground_truth_used":false}
+{"goal_id":"exploration:1","stamp_ns":31750000000,"reason":"passed","protected":false,"region_inside":true,"control_region_inside":true,"navigation_ground_truth_used":false}
+{"goal_id":"exploration:2","stamp_ns":43860000000,"reason":"passed","protected":false,"region_inside":true,"control_region_inside":true,"navigation_ground_truth_used":false}
+{"goal_id":"exploration:3","stamp_ns":54980000000,"reason":"passed","protected":false,"region_inside":true,"control_region_inside":true,"navigation_ground_truth_used":false}
+{"goal_id":"exploration:4","stamp_ns":72340000000,"reason":"passed","protected":false,"region_inside":true,"control_region_inside":true,"navigation_ground_truth_used":false}
+{"source_ns":76265000000,"original_ray_abs_p95_m":0.463324076258242,"original_ray_abs_p95_limit_m":0.35,"original_reason":"no_quality_candidate","original_top_rejections":["ray_p95"]}
+{"source_ns":78280000000,"original_ray_abs_p95_m":0.4253871685796007,"original_ray_abs_p95_limit_m":0.35,"original_reason":"no_quality_candidate","original_top_rejections":["ray_p95"]}
+{"state":"failed","ros_clock_ns":162470000000,"message":"定位等待期间原区域超过仿真时间限制，停车","actual_published_command":[0.0,0.0,0.0],"pose_age_s":0.011,"cloud_age_s":0.009,"correction_generation":1,"latest_source_ns":162430000000,"accepted_match_source_ns":111740000000,"correction_stale":true,"control_allowed":false}
+{"physics_hz":200,"physics_steps":32692,"last_physics_s":163.465,"step_gaps":0,"native_faults":0}
+{"normal_completed":true,"accepted":91418,"delivered":91418,"committed":91418,"pending":0,"inflight":0,"ready":0,"canceled":0,"rejected_capacity":0,"closed_rejections":0}
+{"waited_wall_s":0.2435232729985728,"sent_signals":[],"natural_worker_exit":true,"worker_returncode":0}
+{"verified":true,"samples":8173,"worker_fault":"EOFError: Gazebo actuator disconnected"}
+{"inference_device":"cpu","high_level_source_is_actual_SLAM":true,"navigation_truth_used":false,"actor_observations_remain_privileged":true,"privileged_actor_observation_dimensions":232}
+{"original46_passed":5,"hard_passed":0,"remaining":41,"navigation_validation":"unverified","Sim2Sim":"unverified","real_robot":"unverified"}

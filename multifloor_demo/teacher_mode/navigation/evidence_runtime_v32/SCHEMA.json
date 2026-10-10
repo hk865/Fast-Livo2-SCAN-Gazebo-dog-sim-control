@@ -1,0 +1,96 @@
+{
+  "schema": "evidence_runtime_v32_contract/v1",
+  "purpose": "Recording only; preserve original command validation, Actor, response, done, safety gates and acknowledgement ordering.",
+  "native_telemetry": {
+    "file": "telemetry.jsonl",
+    "write": "Original synchronous 50Hz line write; no queue or drop introduced",
+    "outer_fields": "All outer fields retain their original values",
+    "mission46_required_fields": [
+      "world_sim_time",
+      "state_physics_world_time",
+      "body_lin_vel",
+      "body_ang_vel",
+      "rpy",
+      "qd",
+      "applied_torque",
+      "q_target",
+      "fault",
+      "actor_inferred_this_frame",
+      "body_clearance",
+      "contacts",
+      "command",
+      "command_expired"
+    ],
+    "changed_nested_field": "closed_loop_read_evidence removes repeated raw_utf8 and full decoded envelopes; preserves read/source integer stamps, actual commands, TTL/ages, raw SHA, controller_source and acceptance SHA. The complete original wire text is external."
+  },
+  "original_commands": {
+    "file": "bounded_worker_evidence/original_commands.bin",
+    "trigger": "Consecutive command sequence or original raw_bytes_sha256 change",
+    "body": "Exact original UTF8 command bytes, no decoded duplicate",
+    "maximum_file_bytes": 805306368,
+    "queue_record_limit": 64,
+    "queue_byte_limit": 16777216,
+    "loss": "Nonblocking optional writer; overflow or I/O failure marks capture incomplete. Does not modify physical commands."
+  },
+  "height_sources": {
+    "file": "bounded_worker_evidence/height_sources.bin",
+    "detail_elapsed_sim_windows_s": [
+      [
+        3,
+        4.5
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        208.5,
+        215
+      ]
+    ],
+    "outside_detail": "Retain scalar source/count/clip summaries; omit the four 187-point raw/hit_z/valid/model arrays",
+    "maximum_file_bytes": 67108864,
+    "navigation_use": false
+  },
+  "raw_sensors": {
+    "file": "diagnostic_raw_evidence/sensor_messages.bin",
+    "body": "Exact original ROS2 CDR serialized sensor message, including original header, fields, data, padding and endian flag",
+    "topics": [
+      "/demo/teacher/raw_lidar",
+      "/livox/lidar",
+      "/livox/imu"
+    ],
+    "adapted_stage": "ROS sensor adapter output before FAST-LIVO preprocessing; not claimed to be the kind4 preprocessed cloud",
+    "source_header_time_windows_s": [
+      [
+        3,
+        4.5
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        208.5,
+        215
+      ]
+    ],
+    "maximum_file_bytes_default": 1073741824,
+    "window_outside_cloud_recording": false,
+    "truth": "Existing native telemetry joined offline; no truth topic subscription or navigation publication",
+    "loss": "Written/attempted and eligible-message counters, stamp gaps, publisher graph, writer errors and truncation must be checked. Zero local writer loss does not prove zero upstream DDS loss."
+  },
+  "binary_format": {
+    "magic_16_ascii": "GO2BOUNDED001LE followed by NUL",
+    "record": "Little-endian uint64 metadata_bytes, uint64 body_bytes; UTF8 JSON metadata; exact body bytes",
+    "integrity": "Each metadata stores body byte count and SHA256. Original command bodies also verify the actual read raw SHA. read_records rejects corrupt/truncated records."
+  },
+  "runtime_assertions": {
+    "teacher_checkpoint_and_inference_unchanged": true,
+    "navigation_and_truth_contract_unchanged": true,
+    "navigation_timeout_s": 0.3,
+    "native_ipc_timeout_s": 0.2,
+    "acknowledgement_sync_write_unchanged": true,
+    "ground_classification": "Offline analysis separates level floor top, ramp top, step/stair top and other surfaces; steps, ramps, sides and bottoms are excluded from floor-ground-only counts."
+  }
+}

@@ -1,0 +1,77 @@
+# Main Gazebo ↔ ROS2 bridge for core robot topics
+# Uses YAML config format (more stable than inline arguments)
+# Note: /joint_states is published by joint_state_broadcaster (ros2_control), not bridged
+
+# Gazebo → ROS2 (sensor data)
+- gz_topic_name: "/clock"
+  ros_topic_name: "/clock"
+  gz_type_name: "gz.msgs.Clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/imu/data"
+  ros_topic_name: "/imu/data"
+  gz_type_name: "gz.msgs.IMU"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/velodyne_points/points"
+  ros_topic_name: "/velodyne_points/points"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/unitree_lidar/points"
+  ros_topic_name: "/unitree_lidar/points"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/gps/fix"
+  ros_topic_name: "/gps/fix"
+  gz_type_name: "gz.msgs.NavSat"
+  ros_type_name: "sensor_msgs/msg/NavSatFix"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/rgb_image"
+  ros_topic_name: "/rgb_image"
+  gz_type_name: "gz.msgs.Image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/d455/image"
+  ros_topic_name: "/d455/image"
+  gz_type_name: "gz.msgs.Image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/d455/depth_image"
+  ros_topic_name: "/d455/depth_image"
+  gz_type_name: "gz.msgs.Image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/d455/points"
+  ros_topic_name: "/d455/points"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  direction: GZ_TO_ROS
+
+- gz_topic_name: "/d455/camera_info"
+  ros_topic_name: "/d455/camera_info"
+  gz_type_name: "gz.msgs.CameraInfo"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  direction: GZ_TO_ROS
+
+# ROS2 → Gazebo (control)
+- ros_topic_name: "/cmd_vel"
+  gz_topic_name: "/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/joint_group_effort_controller/joint_trajectory"
+  gz_topic_name: "/joint_group_effort_controller/joint_trajectory"
+  ros_type_name: "trajectory_msgs/msg/JointTrajectory"
+  gz_type_name: "gz.msgs.JointTrajectory"
+  direction: ROS_TO_GZ

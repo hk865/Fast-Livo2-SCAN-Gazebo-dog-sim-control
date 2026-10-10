@@ -1,0 +1,38 @@
+# Gazebo Harmonic → ROS2 perception sensor bridge
+# Bridges Gazebo sensor topics to ROS2 topics for downstream consumers (e.g. SLAM)
+# Uses existing Go2 URDF sensors: Velodyne VLP-16 (LiDAR) + D455 (Camera) + IMU
+
+# LiDAR: Velodyne VLP-16 → SLAM /livox/lidar
+- gz_topic_name: "/velodyne_points/points"
+  ros_topic_name: "/livox/lidar"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  direction: GZ_TO_ROS
+
+# IMU: → SLAM /livox/imu
+- gz_topic_name: "/imu/data"
+  ros_topic_name: "/livox/imu"
+  gz_type_name: "gz.msgs.IMU"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  direction: GZ_TO_ROS
+
+# Camera: D455 RGB → SLAM /camera/image_color
+- gz_topic_name: "/d455/image"
+  ros_topic_name: "/camera/image_color"
+  gz_type_name: "gz.msgs.Image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  direction: GZ_TO_ROS
+
+# CameraInfo: D455 → ROS2
+- gz_topic_name: "/d455/camera_info"
+  ros_topic_name: "/camera/image_color_frame_info"
+  gz_type_name: "gz.msgs.CameraInfo"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  direction: GZ_TO_ROS
+
+# Ground truth odometry (Gazebo OdometryPublisher → /odom)
+- gz_topic_name: "/odom"
+  ros_topic_name: "/ground_truth/odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  direction: GZ_TO_ROS

@@ -1,0 +1,92 @@
+{
+  "schema": "go2_P95_quality_source_capture_contract/v2",
+  "run_id": "__PREPARED_RUN_NAME__",
+  "caps": {
+    "groups": 3,
+    "group_bytes": 5242880,
+    "raw_bytes": 1048576,
+    "adapted_bytes": 1048576,
+    "registered_bytes": 1572864,
+    "identity_bytes": 1048576,
+    "auxiliary_bytes": 524288,
+    "shared_bytes": 1048576,
+    "total_bytes": 16777216,
+    "event_window_ns": 15000000000,
+    "maximum_query_points": 30720
+  },
+  "unchanged_gates": {
+    "native_response_ns": 200000000,
+    "source_and_SCAN_freshness_ns": 300000000,
+    "correction_age_ns": 3000000000,
+    "allray_abs_p95_m": 0.35,
+    "foreground_fraction": 0.05,
+    "surface_p95_m": 0.12,
+    "stage_geometry_RMS_m": 0.006,
+    "stage_geometry_maximum_m": 0.03,
+    "stage_nearest_index_bijection": true,
+    "require_complete_imu": false
+  },
+  "topics": {
+    "imu_source": "/livox/imu",
+    "imu_relay": "/demo/teacher/slam/imu",
+    "clock": "/clock"
+  },
+  "diagnostic_only": true,
+  "fixture": false,
+  "source_bindings": [],
+  "authorization": {
+    "parent_thread": "",
+    "user_message": "",
+    "assistant_message": "",
+    "delegation": "Public source study snapshot; historical authorization omitted.",
+    "runtime_started_by_reviewer": false,
+    "runtime_launch_authorized": false,
+    "authority_file": "",
+    "authority_sha256": ""
+  },
+  "runtime_budget": {
+    "native_seconds": 1500,
+    "wall_seconds": 9090,
+    "new_output_cap_bytes": 10000000000,
+    "shared_hard_cap_bytes": 80000000000,
+    "original_profile_duration_seconds": 1500
+  },
+  "limitations": [
+    "Original matcher/controller gates and 0.35m P95 rejection threshold unchanged.",
+    "Only the original checked worker job owns source pins; no shadow matcher or cache replacement.",
+    "PRE and POST are original checked jobs, not automatically accepted control; terminal-before-POST remains incomplete.",
+    "Registered full payload is /demo/slam/raw_registered_full; canonical bundle is metadata, not a second full registered cloud.",
+    "Absent point-ID/stage commit remains UNVERIFIED.",
+    "Complete received ROS message reserialization, not original wire CDR; whole group rejected if over cap.",
+    "No GTpose/IMU world quaternion/frontend z prior; no fabricated point timing.",
+    "Only actual source bracketing auxiliary messages retained; full LIO IMU consumption is not claimed; require_complete_imu=false.",
+    "R6 formal eight-group contract remains separate and unchanged.",
+    "No online shadow scoring; fixed16MiB logical and allocated capture cap.",
+    "Only the first two consecutive distinct original checked jobs with sole ray_p95 rejection in the same exact active request and parent generation arm capture.",
+    "Active requests are exploring/exploration, returning/return_origin, navigating/navigation_f1_f3; wrong run, idle or terminal request cannot arm.",
+    "PRE is the last checked job before the rejection streak; FAIL is the second rejection; POST is the next checked same-scope job; no frame is automatically control-accepted.",
+    "Duplicate P95 stamps do not count; non-P95 results, out-of-order source, association rejection, scope or generation changes break the streak; complete or expired capture never requests route stop.",
+    "Exactly one newly authorized C44 original-route diagnostic round; original C43 failed once-run and all prior seals/latches are preserved; no route or capture PASS is granted by approval."
+  ],
+  "actual_mission_phases": {
+    "exploring": "exploration",
+    "returning": "return_origin",
+    "navigating": "navigation_f1_f3"
+  },
+  "diagnostic_trigger": {
+    "original_predicate": "top_candidate_only_ray_p95_failed",
+    "first_sustained_failure": true,
+    "active_mission_phases": {
+      "exploring": "exploration",
+      "returning": "return_origin",
+      "navigating": "navigation_f1_f3"
+    },
+    "request_suffix": "positive_canonical_decimal_route_counter",
+    "consecutive_distinct_checked_jobs": 2,
+    "same_scope_and_parent_generation": true,
+    "complete_previous_jobs": 1,
+    "pre_relation": "last_checked_job_before_first_rejection",
+    "fail_relation": "second_consecutive_distinct_rejection",
+    "post_original_checked_job": true
+  }
+}
