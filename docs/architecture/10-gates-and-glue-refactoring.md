@@ -188,7 +188,7 @@ stop 请求                通知别的进程停
 | 12 | 定位 | 未初始化 | `initialized=false` | `known_scene_runtime.py` |
 | 13 | 定位 | SCAN 栅格重建期 | 定位事务触发重建,`ready=False` | `scan_epoch_supervisor.py:110,112,118` |
 | 14 | 定位 | 等待帧内超时 | 等待期间照跑死线与 8 s 检查,**直接 failed 不可恢复** | `known_scene_inputs.py:99-112` |
-| 15 | 定位 | 独立零命令点 | 不走 #9 全等门的另一处 | `known_scene_inputs.py:59` |
+| 15 | 定位 | **修正事务开始 → 立即停车并作废旧路径** | `transition` 由假变真(`on_localization_status`),**不咨询 #9 全等门** | `known_scene_inputs.py:59`(零命令)、`:60-65`(同时作废 samples/cascade/路径/参考) |
 | 16 | 时钟 | 重复时钟 | 同 tick ROS clock 与上次相同 | `clock_hold.py:46-64` → `:163` |
 | 17 | 时钟 | 时钟倒退 | 检测到倒退 → 直接 failed | `clock_hold.py:133-135` |
 | 18 | 时钟 | 时钟停滞 | ≥300 ms 无推进(`TTL_NS`) | `clock_hold.py:15-16,59-62` |
@@ -284,40 +284,88 @@ stop_requested = not healthy or not any(command)
 
 ---
 
-### 3.3 三个系统性陷阱
+### 3.3 三个跨文件耦合点(含本文两处错误结论的订正)
 
 **出发点**:Q2 的延伸 —— 用户的目标是"把门禁改成只上报",所以必须找出**跨门的结构性问题**(改单门无效的那些)。
 
-**方法**:不新增检索,而是**检查 §3.2 的门之间是否有共享状态或并行路径**。三个陷阱都是这样被发现的。
+**方法**:不新增检索,而是**检查 §3.2 的门之间是否有共享状态或并行路径**。
 
-#### 陷阱 1:`bridge.py:292` 自锁回环
+> ⚠️ **本节初版的三个结论里有两个是错的。** 订正记录如下 —— 保留它,因为它就是 §6.7 的由来:
+>
+> | 初版结论 | 复核结果 | 依据 |
+> |---|---|---|
+> | 陷阱 1:`bridge.py:292` 构成自锁回环,零命令被持久化为 stop 状态 | **不成立** | `stop_requested` 从未参与 `reasons`/`healthy` 构造,不存在反馈路径 |
+> | 陷阱 2:`execution_frozen` 是第二套停车,不同步改会冻死规划侧 | **不成立** | 规划侧用它做"参考点跟随",不是冻结规划 |
+> | 陷阱 3:300 ms fail-closed 分散 4 处且字面量不一致 | **成立** | grep 实测 |
+>
+> 两处错误的原因相同:**把"看到两个东西语义相关"当成了"推断了因果关系"**。这正是 §0 要求"每个结论附推导、附复核命令"的原因。
 
-**发现路径**:读 `bridge.py:286-292` 时注意到 `stop_requested` 的定义里含 `not any(command)` —— 而 `command` 自己就是被门控的结果。
+#### 耦合点 1(订正后):`bridge.py:292` 把两种语义混进一个字段
+
+**初版写法(错误)**:称其为"自锁回环":
 
 ```python
 stop_requested = not healthy or not any(command)
 ```
 
-**推导**:任何一次零命令(含"保护零")→ `stop_requested=True` → `worker.py:165` / `policy_candidate/worker.py:138` 把后续命令整体置零 → 下帧又 `not any(command)`。
+**初版推导**:零命令 → `stop_requested=True` → `worker.py:165` 置零 → 下帧又 `not any(command)` → 永久停。
 
-**结论**:零命令被**持久化**成 stop 状态。这不是单帧保护。
+**复核为什么错**:
 
-**这一步含推断**,推断链是:定义(`bridge.py:292`)→ 消费者(`worker.py:165`)→ 反馈。三段都有行号,可复核(§5.H4)。
+1. `healthy = not reasons`(`bridge.py:286`),而 `reasons` 的全部来源(`:226`、`:236`、`:243-244`、`:246`、`:249`、`:251`、`:269-270`、`:272`、`:274`、`:276`、`:278`、`:280`、`:282`、`:285`)**没有一条依赖 `stop_requested`,也没有一条依赖"命令是否为零"**。
+2. `stop_requested` 只被三处消费:`:465` 发布 Bool、`:502` 写日志、`worker.py:165` 与 `policy_candidate/worker.py:138` 的**逐帧**判断。
+3. 没有任何一处把它**存为状态**。下一帧由 `reasons` 重新计算。**不存在自锁。**
 
-#### 陷阱 2:`execution_frozen` 是并行的第二套停车路径
+**订正后的真实结论(性质不同,影响也不同)**:
 
-**发现路径**:`grep execution_frozen` 时发现它有**独立的**判据和**独立的**消费链,不复用 `bridge`。
+`stop_requested` 把两种不同的事情压进了同一个字段:
+
+| 语义 | 条件 | 是否真的是"被请求停车" |
+|---|---|---|
+| 门控不健康 | `not healthy` | 是 |
+| 命令恰好为零 | `not any(command)` | **否** —— 正常停车、保护 hold、到点驻留都会这样 |
+
+**后果是归因错误,不是控制错误**:
+
+- `/demo/teacher/navigation_bridge/stop`(`:465`)与命令信封里的 `stop_requested` 会把**正常停车标成"被请求停车"**
+- `worker.py:165` / `policy_candidate/worker.py:138` 会走 `'SLAM/SCAN requested controlled stop'` 分支 —— **日志上的原因与实际不符**
+
+**仍然建议拆成两个字段**,但理由是**归因正确性**,不是"防自锁"。这改变了 §4 表格第 1 行的性质:不是"修控制 bug",而是"修可观测性"。
+
+#### 耦合点 2(订正后):`execution_frozen` 是"参考点跟随"耦合,改造时必须一起考虑
+
+**初版写法(错误)**:称它是"与零命令并行的第二套停车路径",会"把规划侧冻死"。
+
+**实际链路**(行号已核实):
 
 ```
-controller.py:874  state!='running' or obstacle_hold or norm<.015
-  → /demo/navigation/execution_frozen (shared_controller.py:126)
-  → scan_epoch_supervisor.py:15 重映射
-  → scan_replan_fsm.cpp:434-435  measured_start_.stop()
+controller.py:874     execution_frozen = state!='running' or obstacle_hold or |v[:2]|<.015
+                      ↓ /demo/navigation/execution_frozen (shared_controller.py:126)
+scan_epoch_supervisor.py:12-15  重映射 planning/go2_execution_frozen → /demo/navigation/execution_frozen
+                      ↓
+scan_replan_fsm.cpp:84-85       订阅 planning/go2_execution_frozen
+scan_replan_fsm.cpp:434-435     go2_execution_frozen_ = msg->data; if (frozen) measured_start_.stop()
+scan_replan_fsm.cpp:444-449     冻结期间每 tick 执行 info->start_time_ += dt
+scan_replan_fsm.cpp:221,414,776,782   用于重规划起点的速度估计
 ```
 
-**结论**:只取消控制器 hold 而不同步改 `controller.py:874`,规划侧仍被冻死 → `samples` 不更新 → 又是零。
+**订正后的真实结论**:`execution_frozen` 在规划侧的作用有两条——
 
-#### 陷阱 3:300 ms fail-closed 分散在 4 个文件,而且字面量**不一致**
+1. **把重规划起点的实测速度归零**(`measured_start_.stop()`,`:435`)
+2. **冻结期间让轨迹的 `start_time_` 跟着墙钟走**(`:444-449`),净效果是**参考点停在原处,不随墙钟向前跑**
+
+也就是:**它实现的是"机器人不动时,参考点也别动"** —— 这是一个**正确的耦合**,不是陷阱。
+
+**但改造时它确实是必须一起考虑的耦合点**:一旦让控制器"只上报、不停车",会出现两种失配——
+
+| 失配 | 后果 |
+|---|---|
+| 机器人真在动,但 `:874` 仍报 frozen | 参考点停在原处 → 控制器持续追一个落后的参考 |
+| 机器人被 hold,但 `:874` 报 not frozen | 参考点随墙钟跑远 → 恢复瞬间位置误差很大 |
+
+所以正确做法不是"同步改 `:874`",而是**保证 `:874` 的语义与"机器人是否真的在动"始终一致**。
+
+#### 耦合点 3(成立):300 ms fail-closed 分散在 4 个文件,而且字面量**不一致**
 
 **发现路径**:这是本文初版**出错**的地方,值得作为方法学案例说明。
 
@@ -347,7 +395,7 @@ controller.py:874  state!='running' or obstacle_hold or norm<.015
 | 语义 | 字面量处数 | 文件数 | 关键位置 | 备注 |
 |---|---:|---:|---|---|
 | 3 s 修正 TTL | **7** | **5** | `known_scene_matcher.py:419`(**唯一生效**)、`event_aware_source_capture.py:19`、`known_scene_route_registration.py:139`、`known_scene_stale_recovery.py:16,38,48`、`known_scene_adapter.py:120` | `adapter:120` 的 `maximum_source_age_ns` **是另一个语义**(源槽龄,不是匹配龄) |
-| 300 ms 命令/源时效 | ≥10 | 4 | 见 §3.3 陷阱 3 | 字面量不统一(`300_000_000` / `.3`),grep 无法统一检索 |
+| 300 ms 命令/源时效 | ≥10 | 4 | 见 §3.3 耦合点 3 | 字面量不统一(`300_000_000` / `.3`),grep 无法统一检索 |
 | 0.35 m 射线残差门 | **3** 处声明 | 3 | `known_scene_matcher.py:53`、`event_aware_source_capture.py:19`、`EVENT_CAPTURE_CONTRACT_TEMPLATE.json:21` | 其余 39 处 `0.35` 命中是**区域半径**,语义无关 |
 | 雷达外参 | 3 | 3 | `known_scene_adapter.py:121`、`known_scene_matcher.py:303`、`scenario.json:308` | 代码 2 份 + 场景 1 份;`worker` 调 `match` 时**不转发 mount** |
 | 90 s 区域死线 | ≥3 | 3 | `route_regions.py:56`(**唯一生效**)、`profiles/engineering_nav46.json:7`、`:3693`(**无读取者**) | 两处声明是死的 |
@@ -388,11 +436,11 @@ controller.py:874  state!='running' or obstacle_hold or norm<.015
 
 | # | 建议 | 依据 | 风险 |
 |---|---|---|---|
-| 1 | 拆 `bridge.py:292`:`stop_requested` 与 `not any(command)` 分两个字段 | §3.3 陷阱 1 | 低 |
+| 1 | 拆 `bridge.py:292`:`stop_requested` 与 `not any(command)` 分两个字段 | §3.3 耦合点 1 | 低(**改进归因,不改控制**) |
 | 2 | **把 §3.2 的门禁如实搬进声明式门禁表,行为不变** | §3.2 全节 | 低 |
 | 3 | 加 `Mode.ENFORCE \| REPORT` 开关,默认 ENFORCE | §3.2(46 个调用点) | 低 |
-| 4 | 同步处理 `controller.py:874` | §3.3 陷阱 2 | 中 |
-| 5 | 300 ms 四处收敛到 `contracts/limits.py` | §3.3 陷阱 3 | 中 |
+| 4 | 让 `controller.py:874` 的语义与"机器人是否真的在动"保持一致 | §3.3 耦合点 2 | 中 |
+| 5 | 300 ms 四处收敛到 `contracts/limits.py` | §3.3 耦合点 3 | 中 |
 | 6 | 常量唯一真源(6 组副本) | §3.4 | 低 |
 | 7 | 显式端口替代话题劫持 | 见 [00 号文档 §6.1](00-overview-dataflow.md) | 中 |
 | 8 | 显式适配器替代 monkey-patch | 见 `known_scene_inputs.py:18-23`、`teacher_wrapper.py:88-92`、`ENG/worker.py:41-43` | 高 |
@@ -457,18 +505,22 @@ Get-ChildItem $ENG -Recurse -Filter *.py |
 ### H4 —— 验证 §3.3 的三个陷阱
 
 ```powershell
-# 陷阱 1:自锁回环
-Select-String "$ENG\bridge.py" -Pattern 'stop_requested\s*='
+# 耦合点 1:stop_requested 的两个语义
+# 期望:stop_requested 只出现在 bridge.py:292(定义)、:465、:502,以及两个 worker 的消费点
+#       关键是要确认它【不参与 reasons 构造】—— 即它不出现在 :224-285 之间
+Select-String "$ENG\bridge.py" -Pattern 'stop_requested'
+Select-String "$ENG\bridge.py" -Pattern 'reasons\.append'      # 期望 15,且无一含 stop_requested
 Select-String "$ENG\worker.py" -Pattern 'stop_requested'
 Select-String "$ENG\policy_candidate\worker.py" -Pattern 'stop_requested'
 
-# 陷阱 2:execution_frozen 的独立链路
+# 耦合点 2:execution_frozen 在规划侧的真实作用(必须读到消费端才算核实)
 Select-String "$ENG\controller.py" -Pattern 'execution_frozen'
 Select-String "$ENG\shared_controller.py" -Pattern 'execution_frozen'
 Select-String "$ENG\scan_epoch_supervisor.py" -Pattern 'execution_frozen'
-Select-String 'multifloor_demo\navigation\ros2_ws\src\plan_manage\src\scan_replan_fsm.cpp' -Pattern 'execution_frozen|measured_start_.stop'
+Select-String 'multifloor_demo\navigation\ros2_ws\src\plan_manage\src\scan_replan_fsm.cpp' -Pattern 'execution_frozen|measured_start_'
+# 关键两行: :435 measured_start_.stop()  与  :448-449 info->start_time_ += dt(参考点跟随)
 
-# 陷阱 3:300 ms 字面量不统一(关键:注意 policy_candidate 命中 0)
+# 耦合点 3:300 ms 字面量不统一(关键:注意 policy_candidate 命中 0)
 foreach($f in 'bridge.py','worker.py','policy_candidate\worker.py','cascade_core.py'){
   "{0,-28} {1}" -f $f,(Select-String "$ENG\$f" -Pattern '300_000_000').Count }
 Select-String "$ENG\policy_candidate\worker.py" -Pattern 'wall_age|sim_age'
@@ -547,7 +599,29 @@ foreach($k in 'region_progress_deadline_s','whole_session_budget_bytes','mission
 
 ### 6.6 未覆盖:跨文件的运行时耦合
 
-§3.3 的陷阱 1、2 是**读代码推断**出来的,没有运行时验证。可能存在其它同类耦合没被发现。**判定"改单门无效"的唯一可靠方法是实际跑一次** —— 这也是 §4 建议先做"行为不变的门禁表搬迁"的原因。
+§3.3 的耦合点全部是**读代码推断**出来的,没有运行时验证。可能存在其它同类耦合没被发现。**判定"改单门无效"的唯一可靠方法是实际跑一次** —— 这也是 §4 建议先做"行为不变的门禁表搬迁"的原因。
+
+### 6.7 本文自身出过的错(方法学记录)
+
+这一节记录本文的**实际错误**,因为它是"为什么 §0 要求附推导与复核命令"的最好证据。
+
+**本文件被推送后,按"补推导"的要求复核,发现 §3.3 的三个结论里有 2 个是错的:**
+
+| 错误结论 | 错在哪 | 性质 |
+|---|---|---|
+| 陷阱 1:`bridge.py:292` 自锁回环 | 从未检查 `stop_requested` 是否参与 `reasons` 构造。实测:不参与,无反馈路径 | **虚构了因果关系** |
+| 陷阱 2:`execution_frozen` 冻死规划侧 | 从未读 `scan_replan_fsm.cpp` 的消费端,只看到"有独立链路"就断言是"第二套停车" | **在没读消费端的情况下断言后果** |
+
+**共同错误模式**:**观察到"语义相关"就断言"存在因果",把推断当成了事实。**
+
+**另外,通过实测还订正了初版 3 个数字错误**:`publish_command()` 调用点 44→**46**;bridge reason 19→**15 个出口 / 19 个条件**(初版重复计数 `self.failed=` 赋值);3 s TTL "5 份"→**7 处字面量 / 5 文件**(初版把"文件数"当成了"份数")。
+
+**这对读者的实际意义**:
+
+1. §3.1、§3.2、§3.4、§3.5 的数字都经过 grep 实测,可以信,但**请按 §5 自己跑一遍**。
+2. §3.3 现在只剩**耦合点 3 是实测成立的**;耦合点 1、2 是订正后的定性描述,**仍属读代码推断**,置信度低于前三节。
+3. §4 的"风险"列是**结构估计**,不是实测。
+4. 凡本文出现"会""必然""导致"这类**因果断言**,请先确认它后面跟了 `文件:行号` 与可复核的推导 —— **没有的,就是本文没验证的。**
 
 ---
 
@@ -562,4 +636,6 @@ foreach($k in 'region_progress_deadline_s','whole_session_budget_bytes','mission
 - "应该抽象门禁" —— 这是**方案选择**,不是唯一解。也可以选择继续加 `if`,代价是 §4 表格里的可读性与归因成本
 - "选门禁表作为第一刀" —— 依据是"风险最低 + 收益最大"的权衡,如果优先级不同,结论会变
 
-**如果只能改一件事**,我仍然选门禁表:它同时解决可读性、`report` 模式、事故归因(依据见 §4 表格第 2 行),并且§4 的第 1、3、4、5 步都依赖它。
+**如果只能改一件事**,我仍然选门禁表:它同时解决可读性、`report` 模式、事故归因(依据见 §4 表格第 2 行),并且 §4 的第 1、3、4、5 步都依赖它。
+
+> **但这个"仍然"的置信度已经下降**:§3.3 的两处错误说明,**未经运行时验证的结构性断言不可靠**。如果 §4 第 2 步(行为不变的门禁表搬迁)能先跑起来,它会顺带把本文其余的结构性推断一起证伪或证实 —— 那比继续读代码更有价值。
