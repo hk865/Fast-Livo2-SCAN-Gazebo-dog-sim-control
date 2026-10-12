@@ -1,0 +1,46 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+sult = coro.send(None)
+[python3-8]              ^^^^^^^^^^^^^^^
+[python3-8]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 584, in handler
+[python3-8]     call_coroutine = take_from_wait_list(entity)
+[python3-8]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-8]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/executors.py", line 470, in _take_subscription
+[python3-8]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[python3-8]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-8] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[INFO] [parameter_bridge-15]: process has finished cleanly [pid 3262986]
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 3262984]
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 3262965]
+[INFO] [python3-2]: process has finished cleanly [pid 3262964]
+[INFO] [python3-1]: process has finished cleanly [pid 3262962]
+[INFO] [python3-11]: process has finished cleanly [pid 3262982]
+[INFO] [python3-9]: process has finished cleanly [pid 3262980]
+[INFO] [python3-5]: process has finished cleanly [pid 3262971]
+[INFO] [python3-14]: process has finished cleanly [pid 3262985]
+[INFO] [python3-10]: process has finished cleanly [pid 3262981]
+[INFO] [python3-12]: process has finished cleanly [pid 3262983]
+[ERROR] [python3-8]: process has died [pid 3262979, exit code 1, cmd 'python3 /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/known_scene_runtime.py --run /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/GT_REFERENCE_R31C_NULL_STATUS_STARTUP_20261009T065612Z_386968 --ros-args -p use_sim_time:=true'].
+[INFO] [python3-16]: process has finished cleanly [pid 3262987]
+[INFO] [python3-7]: process has finished cleanly [pid 3262973]
+[INFO] [python3-6]: process has finished cleanly [pid 3262972]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/GT_REFERENCE_R31C_NULL_STATUS_STARTUP_20261009T065612Z_386968/world.sdf:L2089]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/GT_REFERENCE_R31C_NULL_STATUS_STARTUP_20261009T065612Z_386968/world.sdf:L2119]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/GT_REFERENCE_R31C_NULL_STATUS_STARTUP_20261009T065612Z_386968/world.sdf:L2124]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+libEGL warning: pci id for fd 65: 10de:2c05, driver (null)
+
+pci id for fd 66: 10de:2c05, driver (null)
+pci id for fd 67: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 65: 10de:2c05, driver (null)
+
+pci id for fd 66: 10de:2c05, driver (null)
+pci id for fd 67: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 65: 10de:2c05, driver (null)
+
+[1;31m[Err] [teacher_actuator.cpp:334] [0m[1;31mTeacher actuator damping latch: [0m[1;31msocket_timeout_disconnect_or_partial_frame[0m[1;31m at [0m[1;31m39.87[0m[1;31m[0m
