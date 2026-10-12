@@ -627,7 +627,11 @@ class PIDNavigation(TeacherNavigation):
         return super().control(now)
     def request_admission_replan_if_due(self,now):
         pending=(self.reference_replan_pending or self.path_admission_replan_pending or self.path_admission_hold)
-        if pending and self.state=='running' and now-self.last_reference>3.:
+        # A previous goal's pending replan must wait for inherited control to
+        # activate the next segment from a fresh, unprotected actual SLAM pose.
+        if (pending and self.state=='running' and now-self.last_reference>3.
+            and (not getattr(self,'global_reference_settings',{'enabled':False})['enabled']
+                or self.segment_start is not None)):
             self.evidence.append(self.run/'reference_replan_events.jsonl',dict(
                 reason='path_admission_rejection' if self.path_admission_replan_pending or self.path_admission_hold else 'reference_constraint_hold',
                 admission_reason=None if self.path_admission_last_decision is None else self.path_admission_last_decision['reason'],
