@@ -15,6 +15,7 @@ from collections import deque
 from dataclasses import replace
 from pathlib import Path as FilePath
 import numpy as np
+from known_scene_hold_guard import arm_teacher_recovery, start_teacher_recovery, complete_teacher_recovery
 from scipy.interpolate import BSpline
 
 import rclpy
@@ -704,7 +705,8 @@ class Navigation(Node):
                 self.samples = None
                 self.request_plan()
             return
-        if self.obstacle_resume_pending:
+        teacher_recovery=start_teacher_recovery(self,current_yaw,desired_yaw)
+        if self.obstacle_resume_pending and not teacher_recovery:
             if self.heading_gate.resume_after_stop(current_yaw,desired_yaw,self.obstacle_stopped_duration):
                 self.aligned_obstacle_resumes += 1
             self.obstacle_resume_pending = False
@@ -760,6 +762,7 @@ class Navigation(Node):
         elif self.obstacle_hold:
             self.obstacle_clear_since = self.obstacle_clear_since or ros_now
             if ros_now-self.obstacle_clear_since >= 1.0:
+                arm_teacher_recovery(self)
                 self.obstacle_hold = False
                 self.obstacle_resumes += 1
                 self.obstacle_stopped_duration = ros_now-(ros_now if self.obstacle_hold_started_ros is None else self.obstacle_hold_started_ros)
@@ -813,6 +816,7 @@ class Navigation(Node):
             return
         self.message = f'实际 SLAM 反馈跟随 SCAN 路线，剩余 {distance:.2f} m'
         self.publish_command(velocity, yaw_rate)
+        complete_teacher_recovery(self)
 
     def publish_status(self):
         now = time.monotonic()

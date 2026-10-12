@@ -364,7 +364,8 @@ def verify_dynamic(run, request_id, status_rows, pose_rows, guard_records, obsta
                 d.get('cloud_frame_id')!='camera_init'):
             raise ValueError('Actual obstacle guard source is stale or in another frame')
     for r in replay_rows:
-        d=r['data'];array=inside(run,d['cloud_array_file']);cloud=np.load(array,allow_pickle=False)
+        from known_scene_hold_guard import replay_payload
+        d=r['data'];array=inside(run,replay_payload(run,d));cloud=np.load(array,allow_pickle=False)
         if raw_sha(np.asarray(cloud,dtype='<f8').tobytes())!=d['filtered_xyz_float64_sha256']:
             raise ValueError('Actual guard cloud payload hash differs')
         native=NativeGuardAudit(steering_obstacle_ahead)

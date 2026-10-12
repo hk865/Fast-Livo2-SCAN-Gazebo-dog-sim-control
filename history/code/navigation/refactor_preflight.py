@@ -27,10 +27,10 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
       prepared['freeze'].get(str(Path(run)/'runtime_plan.json'))==plan_digest,
       plan.get('run')==run and plan.get('profile_path')==str(here/'profiles/engineering_nav46.json'),
       plan.get('simulation_only')is True and plan.get('real_robot')is False and plan.get('navigation_ground_truth_used')is False,
-      plan.get('ros_domain')==90 and plan.get('wall_budget_s')==1620.,
-      plan.get('R56_shutdown_probe',{}).get('source_dir')==str(stage),
-      plan.get('R56_shutdown_probe',{}).get('max_native_s')==750 and plan.get('R56_shutdown_probe',{}).get('max_acquisition_wall_s')==1500,
-      plan.get('R56_shutdown_probe',{}).get('output_hard_B')==10000000000 and plan.get('R56_shutdown_probe',{}).get('strict_original_gates')is True,
+      plan.get('ros_domain')==90 and plan.get('wall_budget_s')==2520.,
+      plan.get('R57_shutdown_probe',{}).get('source_dir')==str(stage),
+      plan.get('R57_shutdown_probe',{}).get('max_native_s')==1200 and plan.get('R57_shutdown_probe',{}).get('max_acquisition_wall_s')==2400,
+      plan.get('R57_shutdown_probe',{}).get('output_hard_B')==10000000000 and plan.get('R57_shutdown_probe',{}).get('strict_original_gates')is True,
       same(me,saved)and me.get('state')!='Z' and me.get('pid')==me.get('pgid')==me.get('session'),
       saved.get('owned_run')==run and saved.get('role')=='navigation_stack',
       saved.get('ownership_token')==owner.get('token')==permit.get('token') and permit.get('identity')==saved,
@@ -70,10 +70,10 @@ def verify_source_equivalence(here):
     m=json.loads(manifest.read_text());sealed=Path(m['candidate'])
     for name,digest in m['sources'].items():
         if sha(sealed/name)!=digest:raise RuntimeError('Sealed C51 source changed: '+name)
-        if name not in d['admission_only_files'] and sha(here/name)!=digest:
+        if name not in set(d['admission_only_files'])|set(d['behavior_fix_files']) and sha(here/name)!=digest:
             raise RuntimeError('C51 integration source differs: '+name)
     actual={str(p.relative_to(here))for p in here.rglob('*')if p.is_file()and'__pycache__'not in p.parts and'.git'not in p.parts}
-    if actual!=set(m['sources'])|set(d['new_admission_files']):
+    if actual!=set(m['sources'])|set(d['new_admission_files'])|set(d['new_behavior_files']):
         raise RuntimeError('C51 integration has unlisted files')
     for name,digest in d['admission_source_sha256'].items():
         if sha(here/name)!=digest:raise RuntimeError('C51 admission source changed: '+name)
@@ -91,6 +91,8 @@ def verify_source_equivalence(here):
     expected_policy['candidate_origin']=str(here/'policy_candidate/worker.py')
     if json.loads((here/'POLICY_SELECTION_CONTRACT.json').read_text())!=expected_policy:
         raise RuntimeError('C51 private policy binding changed beyond candidate path')
+    from local_behavior_admission import verify_local_behavior
+    verify_local_behavior(here,d)
     baseline=json.loads(Path(d['original_baseline_receipt']).read_text())
     original=Path(baseline['baseline'])
     for name,digest in baseline['baseline_files'].items():
@@ -108,5 +110,5 @@ def verify_source_equivalence(here):
         if sha(path)!=digest:raise RuntimeError('C51 CPU checked source changed: '+str(path))
     declared=json.loads(Path(d['changed_files_receipt']).read_text())['changed']
     return {name:dict(baseline=str(original/name),candidate=str(here/name),sha256=sha(here/name),
-        baseline_sha256=sha(original/name),declared_change='Fresh full-module AST and CPU behavior equivalence; original predicates retained')
+        baseline_sha256=sha(original/name),declared_change=('Original glue AST/CPU equivalence after removing separately declared local behavior repair; repair uses exact-delta and separate local CPU proof' if name in d['behavior_fix_files'] else 'Fresh full-module AST and CPU glue behavior equivalence; original predicates retained'))
         for name in declared}

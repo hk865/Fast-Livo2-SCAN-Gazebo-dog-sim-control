@@ -1,5 +1,6 @@
 """Atomic pose/cloud/metadata ingestion and controlled map-frame handoff."""
 from integration_limits import KNOWN_BUNDLE_FRESHNESS_S
+from known_scene_hold_guard import observe_zero_hold, _frame
 import json,time
 from collections import OrderedDict
 from std_msgs.msg import String
@@ -115,9 +116,11 @@ class KnownSceneInputMixin:
                 if self.state=='failed':
                     self.reset_region_arrival('failed');self.publish_command();return
             self.publish_command();self.reset_region_arrival('known_scene_fresh_transaction_hold')
+            observe_zero_hold(self,now,self.get_clock().now().nanoseconds)
             if self.state!='failed':
                 self.message='等待同一定位版本的新鲜位姿、点云或停车修正事务'
             return
+        self._last_authorized_hold_frame=_frame(self)
         return super()._control_candidate(now)
 
     def request_plan(self):

@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 from teacher_wrapper import TeacherNavigation
 from pid_core import slew
+from known_scene_hold_guard import retain_native_context, remember_native_guard, arm_teacher_recovery
 from cascade_core import Controller
 from control_core import follow_trajectory, trajectory_has_progress
 from scipy.interpolate import BSpline
@@ -669,6 +670,8 @@ class PIDNavigation(TeacherNavigation):
         return cmd[:2],float(cmd[2])
     def evaluate_motion_guard(self,*args):
         result=self.record_native_guard(*args)
+        retain_native_context(self,args)
+        remember_native_guard(self)
         if self.pending_guard_row is not None:
             self.pending_guard_row.update(cloud_array_file=self.guard_cloud_receipt['cloud_array_file'],
                 cloud_raw_payload_file=self.guard_cloud_receipt['cloud_raw_payload_file'],
@@ -785,7 +788,8 @@ class PIDNavigation(TeacherNavigation):
                     if ros_now-self.obstacle_clear_since>=1.:
                         self.obstacle_hold=False;self.obstacle_resumes+=1
                         self.obstacle_stopped_duration=ros_now-(ros_now if self.obstacle_hold_started_ros is None else self.obstacle_hold_started_ros)
-                        self.obstacle_resume_pending=False;self.heading_gate.reset()
+                        arm_teacher_recovery(self)
+                        self.obstacle_resume_pending=True;self.heading_gate.reset()
                         self.samples=None;self.execution_path_exhaustion=None
                         # Retain the admission hold. Only a newly associated,
                         # execution-admitted curve can authorize future motion.
