@@ -9,7 +9,7 @@ from PIL import Image as PIL
 def main():
     p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--topic',default='/demo/camera');p.add_argument('--archive-stride',type=int,default=5);a=p.parse_args()
     if a.archive_stride<1:p.error('--archive-stride must be positive')
-    rclpy.init();node=rclpy.create_node('teacher_real_rgb_archive');count=0
+    rclpy.init();node=rclpy.create_node('teacher_real_rgb_archive');count=0;vehicle_count=0
     info_counts={}
     def camera_info(msg,kind,topic):
         directory=a.run/'camera_info';directory.mkdir(exist_ok=True)
@@ -23,17 +23,23 @@ def main():
         temp=directory/(kind+'.tmp');temp.write_text(json.dumps(record,indent=2)+'\n');temp.replace(directory/(kind+'.json'))
     for kind,topic in [('vehicle','/demo/camera_info'),('overview','/demo/teacher/overview_info')]:
         node.create_subscription(CameraInfo,topic,lambda msg,kind=kind,topic=topic:camera_info(msg,kind,topic),qos_profile_sensor_data)
-    def callback(msg):
-        nonlocal count
+    def callback(msg,vehicle=False):
+        nonlocal count,vehicle_count
+        current_count=vehicle_count if vehicle else count
         if msg.encoding not in ('rgb8','bgr8','rgba8'):return
         fmt='RGBA'if msg.encoding=='rgba8'else 'RGB';raw='BGR'if msg.encoding=='bgr8'else fmt
         im=PIL.frombytes(fmt,(msg.width,msg.height),bytes(msg.data),'raw',raw,msg.step).convert('RGB')
-        tmp=a.run/'frame.tmp';im.save(tmp,format='JPEG',quality=86);tmp.replace(a.run/'frame.jpg')
-        if count%a.archive_stride==0:
-            (a.run/'frames').mkdir(exist_ok=True);im.save(a.run/'frames'/f'{msg.header.stamp.sec}_{msg.header.stamp.nanosec:09d}.jpg',quality=86)
-        (a.run/'frame_source.json').write_text(json.dumps({'source':f'Actual Gazebo {a.topic} via ROS bridge','topic':a.topic,'frame':msg.header.frame_id,'stamp_sec':msg.header.stamp.sec,'stamp_nsec':msg.header.stamp.nanosec,'count':count,'width':msg.width,'height':msg.height,'archive_stride':a.archive_stride}))
-        count+=1
+        directory=a.run/'vehicle_rgb'if vehicle else a.run
+        directory.mkdir(exist_ok=True)
+        tmp=directory/'frame.tmp';im.save(tmp,format='JPEG',quality=86);tmp.replace(directory/'frame.jpg')
+        if current_count%a.archive_stride==0:
+            (directory/'frames').mkdir(exist_ok=True);im.save(directory/'frames'/f'{msg.header.stamp.sec}_{msg.header.stamp.nanosec:09d}.jpg',quality=86)
+        topic='/demo/camera'if vehicle else a.topic
+        (directory/'frame_source.json').write_text(json.dumps({'source':f'Actual Gazebo {topic} via ROS bridge','topic':topic,'frame':msg.header.frame_id,'stamp_sec':msg.header.stamp.sec,'stamp_nsec':msg.header.stamp.nanosec,'count':current_count,'width':msg.width,'height':msg.height,'archive_stride':a.archive_stride}))
+        if vehicle:vehicle_count+=1
+        else:count+=1
     node.create_subscription(Image,a.topic,callback,qos_profile_sensor_data)
+    if a.topic!='/demo/camera':node.create_subscription(Image,'/demo/camera',lambda msg:callback(msg,vehicle=True),qos_profile_sensor_data)
     try:rclpy.spin(node)
     except KeyboardInterrupt:pass
     finally:node.destroy_node();rclpy.try_shutdown()

@@ -42,6 +42,38 @@ def requested(test,t):
 
 def duration(test):return 600. if test=='navigation' else 30. if test.endswith('_continue') else 26. if test=='switch' else 25. if test.startswith('step') else 15. if test=='stand' else 18.
 
+def load_schedule(path):
+    if path is None:return None
+    data=json.loads(path.read_text())
+    end=float(data['duration_s']);steps=data['commands']
+    if not math.isfinite(end) or not 5<=end<=600 or not isinstance(steps,list) or not steps:
+        raise ValueError('Schedule requires 5..600 seconds and explicit commands')
+    previous=-1.
+    for step in steps:
+        start=float(step['start_s']);command=np.asarray(step['command'],dtype=float)
+        if not math.isfinite(start) or not previous<start<end or command.shape!=(3,) or not np.isfinite(command).all():
+            raise ValueError('Invalid or unordered schedule command')
+        if (abs(command)>np.asarray([.3,.2,.3])+1e-8).any():raise ValueError('Schedule exceeds bounded command limits')
+        previous=start
+    if float(steps[0]['start_s'])!=0 or any(steps[0]['command']) or any(steps[-1]['command']):
+        raise ValueError('Schedule must begin and end with zero velocity command')
+    completion=data.get('completion_stop')
+    if completion:
+        if completion.get('axis')!='x' or completion.get('comparison')not in ('le','ge'):
+            raise ValueError('Physical test completion supports an explicit x threshold only')
+        values=[float(completion[k])for k in ('threshold','minimum_active_s','settle_s')]
+        if not all(math.isfinite(v)for v in values) or values[1]<3 or not 5<=values[2]<=15:
+            raise ValueError('Invalid physical completion bounds')
+    return data
+
+def scheduled_request(schedule,t):
+    step=schedule['commands'][0]
+    for candidate in schedule['commands']:
+        if float(candidate['start_s'])>t:break
+        step=candidate
+    command=np.asarray(step['command'],dtype=float)
+    return command,'initializing'if t<.1 else 'tracking'if any(command)else 'stop_transition'
+
 def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
     """Read only SLAM/SCAN-gated command envelopes; stale input parks via policy."""
     try:
@@ -85,7 +117,9 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--test',choices=list(COMMANDS),required=True)
     p.add_argument('--socket',required=True);p.add_argument('--noisy',action='store_true');p.add_argument('--seed',type=int,default=42)
     p.add_argument('--command-file',type=Path);p.add_argument('--acceptance',type=Path,default=ROOT/'runs/acceptance.json')
-    args=p.parse_args();actor=load_actor();args.run.mkdir(parents=True,exist_ok=True)
+    p.add_argument('--schedule',type=Path)
+    args=p.parse_args();schedule=load_schedule(args.schedule);actor=load_actor();args.run.mkdir(parents=True,exist_ok=True)
+    if schedule and args.test=='navigation':raise ValueError('A scripted schedule cannot replace SLAM navigation')
     acceptance=None
     if args.test=='navigation':
         if args.command_file is None:raise ValueError('Navigation requires a reviewed command file')
@@ -94,7 +128,7 @@ def main():
         acceptance=check_acceptance(args.acceptance)
     terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf');rng=np.random.default_rng(args.seed)
     last_action=np.zeros(12);cmd=np.zeros(3);fault=None;first_t=None;settled_frames=0
-    last_command_t=0.;last_request=np.zeros(3);navigation_sequence={}
+    last_command_t=0.;last_request=np.zeros(3);navigation_sequence={};completion_time=None
     metadata={'checkpoint':str(CHECKPOINT),'checkpoint_sha256':SHA,'inference_device':'cpu','torch_threads':1,
               'observation_noise':'teacher_noisy matched uniform' if args.noisy else 'clean teacher_full evaluation',
               'observation_source':'Gazebo privileged COM twist, quaternion, joint physics, applied DCMotor torque, static SDF terrain raycast',
@@ -106,6 +140,11 @@ def main():
     if args.test.endswith('_continue'):
         metadata['functional_step_protocol']='tests/step_functional_protocol.json'
         metadata['functional_step_scope']='Step ascent and continued forward walking; world base height gain is diagnostic only'
+    if schedule:
+        metadata.update(test_duration_s=float(schedule['duration_s']),command_start_seconds=next((float(v['start_s'])for v in schedule['commands']if any(v['command'])),None),
+                        command_end_s=float(schedule['commands'][-1]['start_s']),schedule=str(args.schedule),schedule_sha256=hashlib.sha256(args.schedule.read_bytes()).hexdigest(),
+                        protocol_scope=schedule.get('scope','independent bounded simulation protocol'),legacy_motion_evaluation_applicable=False)
+        metadata['physical_test_completion_source']='privileged base x only for test termination; no position servo or navigation localization'if schedule.get('completion_stop')else None
     if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance)
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
@@ -117,7 +156,11 @@ def main():
             while True:
                 s=np.frombuffer(recv_exact(conn,64*8),dtype='<f8').copy()
                 if first_t is None:first_t=s[0]
-                t=float(s[0]-first_t);request,phase=requested(args.test,t)
+                t=float(s[0]-first_t);request,phase=scheduled_request(schedule,t)if schedule else requested(args.test,t)
+                if schedule and schedule.get('completion_stop'):
+                    criterion=schedule['completion_stop'];crossed=float(s[1])<=float(criterion['threshold'])if criterion['comparison']=='le'else float(s[1])>=float(criterion['threshold'])
+                    if completion_time is None and t>=float(criterion['minimum_active_s'])and crossed:completion_time=t
+                    if completion_time is not None:request=np.zeros(3);phase='stop_transition'
                 # Model a command producer that dies at t=7s. Its last command
                 # really expires after .30s, then follows the same stop path.
                 if args.test=='navigation':
@@ -156,7 +199,7 @@ def main():
                     if settled_frames>=15:phase='teacher_zero_command_stand'
                 else:settled_frames=0
                 if args.test=='invalid_output' and t>=7:target[0]=float('nan');phase='fault_injection'
-                done=t>=duration(args.test) or (fault is not None and t>=2)
+                done=t>=metadata['test_duration_s'] or (completion_time is not None and t>=completion_time+float(schedule['completion_stop']['settle_s'])) or (fault is not None and t>=2)
                 response=np.zeros(16,dtype='<f8');response[:12]=target;response[12]=1 if fault else 0;response[13]=1 if done else 0
                 row={'sim_time':t,'world_sim_time':float(s[0]),'command':cmd.tolist(),'requested':request.tolist(),
                      'state_physics_world_time':float(s[0]-.005),
@@ -171,6 +214,7 @@ def main():
                      'height_scan_overhead_points':int(extra.get('height_scan_overhead_count',0)),
                      'command_expired':command_expired,'command_age_sim_s':t-last_command_t,
                      'command_source':metadata.get('command_source','scripted simulation test'),'command_reason':command_reason,
+                     'physical_test_completion_time_s':completion_time,
                      'observation_source':metadata['observation_source']}
                 rows.append(row);stream.write(json.dumps(row,allow_nan=False)+'\n')
                 if len(rows)%10==0 or done:atomic_json(args.run/'state.json',row)
@@ -186,5 +230,6 @@ def main():
         except FileNotFoundError:pass
         np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
         atomic_json(args.run/'worker_result.json',{'completed':bool(rows),'fault':fault,'samples':len(rows),
+            'physical_test_completion_time_s':completion_time,
             'last_sim_time':rows[-1]['sim_time']if rows else None,'cpu_forward_ms':{'p50':float(np.median(latencies)),'p95':float(np.percentile(latencies,95)),'max':float(max(latencies))}if latencies else {}})
 if __name__=='__main__':main()

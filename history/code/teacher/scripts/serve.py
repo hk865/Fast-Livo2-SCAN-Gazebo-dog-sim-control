@@ -257,6 +257,8 @@ class Dashboard:
                 'frame': {'available': frame is not None,
                           'age_s': max(0., time.time() - frame.stat().st_mtime) if frame else None,
                           'filename': frame.name if frame else None},
+                'camera_info': {kind: read_json(directory / 'camera_info' / (kind + '.json')) for kind in ('overview','vehicle')},
+                'vehicle_frame': {'available': (directory / 'vehicle_rgb/frame.jpg').is_file()},
                 'diagnostic_source': 'Gazebo simulation truth for motion diagnostics; not a navigation input',
                 'read_only': True}
 
@@ -333,7 +335,11 @@ def handler_for(dashboard):
                 self.json(read_json(dashboard.runs / 'acceptance.json'))
             elif parsed.path == '/api/frame':
                 directory = dashboard.resolve(run)
-                frame = dashboard.frame(directory) if directory else None
+                camera = parse_qs(parsed.query).get('camera', ['overview'])[0]
+                if camera not in ('overview','vehicle'):
+                    self.json({'error': 'Unknown camera'}, 400)
+                    return
+                frame = dashboard.frame(directory / 'vehicle_rgb' if camera == 'vehicle' else directory) if directory else None
                 if frame is None or dashboard.inside(frame) is None:
                     self.json({'error': 'No recorded Gazebo frame'}, 404)
                     return

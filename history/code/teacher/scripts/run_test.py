@@ -32,7 +32,10 @@ def main():
     p.add_argument('--overview-fov',type=float,default=None)
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
+    p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
     args=p.parse_args();suite=[]
+    schedule=json.loads(args.schedule.read_text())if args.schedule else None
+    if schedule and 'navigation'in args.tests:p.error('Scripted schedules cannot drive navigation tests')
     if args.shadow and not args.sensors:p.error('--shadow requires --sensors; no unavailable input is fabricated')
     # Sensor modes default to the actual verified graphics path. Bare physics
     # keeps its prior environment and does not allocate a graphics context.
@@ -45,7 +48,8 @@ def main():
             latest=ROOT/'runs/latest';tmp=ROOT/'runs/latest.tmp'
             if tmp.exists()or tmp.is_symlink():tmp.unlink()
             tmp.symlink_to(run.name);tmp.replace(latest)
-            terrain=test if test in ['ramp_up','ramp_down','step05','step10','step05_continue','step10_continue']else 'flat'
+            terrain=schedule.get('terrain','flat')if schedule else test if test in ['ramp_up','ramp_down','step05','step10','step05_continue','step10_continue']else 'flat'
+            if schedule:shutil.copy2(args.schedule,run/'independent_protocol.json')
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
             if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
@@ -53,11 +57,12 @@ def main():
             if args.sensors:prepare+=['--sensors']
             if args.camera_only:prepare+=['--camera-only']
             subprocess.run(prepare,check=True,stdout=(run/'prepare.log').open('w'))
-            if args.spawn:
-                tree=E.parse(run/'world.sdf');x,y,z,yaw=args.spawn
+            spawn=args.spawn or (schedule.get('spawn')if schedule else None)
+            if spawn:
+                tree=E.parse(run/'world.sdf');x,y,z,yaw=spawn
                 tree.getroot().find("world/model[@name='go2']/pose").text=f'{x} {y} {z} 0 0 {yaw}'
                 E.indent(tree);tree.write(run/'world.sdf',encoding='unicode')
-                asset=json.loads((run/'asset_manifest.json').read_text());asset['spawn']=args.spawn
+                asset=json.loads((run/'asset_manifest.json').read_text());asset['spawn']=spawn
                 asset['spawn_override']=True;asset['scenario_label']=args.label
                 asset['world_sha256']=sha(run/'world.sdf');(run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
             baseline=resource();(run/'resources_before.json').write_text(json.dumps(baseline,indent=2))
@@ -84,6 +89,7 @@ def main():
             (run/'rendering_manifest.json').write_text(json.dumps(render_manifest,indent=2)+'\n')
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
+            if schedule:worker_cmd+=['--schedule',str(run/'independent_protocol.json')]
             worker=gazebo=capture=bridge=shadow=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
             actual_sensors_ready=False;gpu_samples=[];gpu_guard_mb=None
             if args.renderer=='hardware':
@@ -117,7 +123,7 @@ def main():
                 # explicitly selects the NVIDIA device and crashed Mesa here;
                 # those failed runs are retained rather than hidden.
                 gazebo=subprocess.Popen(cmd,env=env,stdout=(run/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-                deadline=time.monotonic()+180
+                deadline=time.monotonic()+max(180,float(schedule['duration_s'])*3+60 if schedule else 180)
                 sensor_deadline=time.monotonic()+30;gpu_last=-float('inf')
                 resource_stream=(run/'process_resources.jsonl').open('w',buffering=1);resource_last=-float('inf')
                 while worker.poll()is None:
