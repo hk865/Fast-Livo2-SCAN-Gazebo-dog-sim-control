@@ -856,14 +856,22 @@ void LIVMapper::run(rclcpp::Node::SharedPtr &node)
 {
   int status_interval = 0;
   start_ingress();
+  std::unique_ptr<rclcpp::executors::SingleThreadedExecutor> serial_executor;
   try {
+  if (pipeline_mode == "serial") {
+    serial_executor=std::make_unique<rclcpp::executors::SingleThreadedExecutor>();
+    serial_executor->add_node(this->node);
+  }
   while (rclcpp::ok()) 
   {
 // BOUNDARY_TIMING_BEGIN spin_some_open
   { fastlivo_timing::Scope timing_spin_some(8);
 // BOUNDARY_TIMING_END spin_some_open
     if(fast_livo2_core::mapping_stop_requested())break;
-    if(pipeline_mode=="serial")rclcpp::spin_some(this->node);
+    // One owner and original callbacks, with a cooperative1ms ready-work
+    // budget. Re-collect queued sensor work without dropping old IMU samples.
+    // A running callback is not preempted by the executor time budget.
+    if(pipeline_mode=="serial")serial_executor->spin_all(std::chrono::milliseconds(1));
     else commit_ingress();
 // BOUNDARY_TIMING_BEGIN spin_some_close
   }
