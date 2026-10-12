@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Own only this test's children; keep training and camera service untouched."""
 import argparse, datetime, hashlib, json, os, signal, subprocess, sys, time, uuid, shutil
+import xml.etree.ElementTree as E
 from pathlib import Path
 from evaluate import evaluate
 ROOT=Path(__file__).resolve().parents[1]
@@ -24,11 +25,12 @@ def resource():
             'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True)}
 def main():
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
+    p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
     args=p.parse_args();suite=[]
     for repeat in range(args.repeat):
         for test in args.tests:
             stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
-            run=ROOT/'runs'/f'{stamp}_{test}_r{repeat+1}_{uuid.uuid4().hex[:4]}';run.mkdir(parents=True)
+            run=ROOT/'runs'/f'{stamp}_{test}{"_"+args.label if args.label else ""}_r{repeat+1}_{uuid.uuid4().hex[:4]}';run.mkdir(parents=True)
             latest=ROOT/'runs/latest';tmp=ROOT/'runs/latest.tmp'
             if tmp.exists()or tmp.is_symlink():tmp.unlink()
             tmp.symlink_to(run.name);tmp.replace(latest)
@@ -37,6 +39,13 @@ def main():
             if args.sensors:prepare+=['--sensors']
             if args.camera_only:prepare+=['--camera-only']
             subprocess.run(prepare,check=True,stdout=(run/'prepare.log').open('w'))
+            if args.spawn:
+                tree=E.parse(run/'world.sdf');x,y,z,yaw=args.spawn
+                tree.getroot().find("world/model[@name='go2']/pose").text=f'{x} {y} {z} 0 0 {yaw}'
+                E.indent(tree);tree.write(run/'world.sdf',encoding='unicode')
+                asset=json.loads((run/'asset_manifest.json').read_text());asset['spawn']=args.spawn
+                asset['spawn_override']=True;asset['scenario_label']=args.label
+                asset['world_sha256']=sha(run/'world.sdf');(run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
             baseline=resource();(run/'resources_before.json').write_text(json.dumps(baseline,indent=2))
             sourcefiles=[f for f in ROOT.rglob('*')if f.is_file()and not any(d in f.parts for d in ['runs','build','__pycache__','test_results'])]
             sources={str(f.relative_to(ROOT)):sha(f)for f in sourcefiles}
