@@ -134,7 +134,7 @@ protocol = {'checkpoint':str(args.checkpoint), 'checkpoint_sha256':sha,
             'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'task':'RL-Unitree-Go2-Flat-FullObservation-AER-GaitGeometry-v22',
             'policy_device':'cpu', 'physics_device':'cpu', 'num_envs':1,
-            'diagnostic_conditions':'nominal dynamics, reset default at rest, no pushes/no observation noise, flat mesh, single seed42',
+            'diagnostic_conditions':'nominal dynamics, scheduled spawn/default joints at rest, no pushes/no observation noise, '+('exact SDF static collision mesh' if terrain_manifest else 'flat mesh')+', single seed42',
             'criterion':{'fall':'termination before timeout or roll/pitch >0.8rad or base clearance<0.16m', 'velocity_rmse_xy_max_mps':.15, 'velocity_rmse_yaw_max_radps':.2, 'stand_drift_max_m':.15},
             'physics_dt':config.sim.dt, 'decimation':config.decimation,
             'schedule':schedule, 'schedule_sha256':hashlib.sha256(args.schedule.read_bytes()).hexdigest() if args.schedule else None,
@@ -226,6 +226,7 @@ try:
                     trace[-1]['body_names']=list(robot.body_names)
                     trace[-1]['body_positions_world']=robot.data.body_link_pos_w.torch[0].numpy().tolist()
                     trace[-1]['contact_body_names']=list(contact.body_names)
+                    trace[-1]['base_contact_force_world']=base.scene.sensors['base_contact_forces'].data.net_forces_w.torch[0].numpy().tolist()
                 _,_,terminated,truncated,_=env.step(action)
                 if terminated.item() or max(abs(roll),abs(pitch))>.8 or (clearance is not None and clearance<.16):
                     failed=True; break
