@@ -75,7 +75,9 @@ def run(profile,camera=False):
     sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json','profiles.py','pure_tests.py','active_hold_receipt.py','test_active_hold_receipt.py','README_RECEIPT.md','README.md')if (HERE/name).exists()]
     sources += [(HERE/'reference_v1_core.py',Path('references/v1_core.py')),(HERE/'reference_curve_receipt.py',Path('references/v1_curve_receipt.py'))]
     sources += [(ROOT/'simulation'/name,Path('native')/Path(name).name)for name in ('teacher_actuator.cpp','build/libteacher_actuator.so','prepare.py')]
-    if camera:sources += [(ROOT/'scripts/capture.py',Path('observer/capture.py'))]
+    # This optional observer is frozen for every candidate. Archive its exact
+    # bytes even when it is not executed; runtime separately records execution.
+    sources += [(ROOT/'scripts/capture.py',Path('observer/capture.py'))]
     for source,relative in sources:
         dest=directory/'sources'/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,dest);refs[str(relative)]=sha(dest)
     (directory/'source_manifest.json').write_text(json.dumps(refs,indent=2)+'\n')
@@ -133,6 +135,8 @@ def run(profile,camera=False):
             'frozen_model_sha256':'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34',
             'source_manifest_sha256':sha(directory/'source_manifest.json'),'truth_profile_sha256':sha(directory/'truth_profile.json'),
             'uses_truth_for_control':True,'counts_as_SLAM_navigation':False,'training_processes_signaled':False,'real_robot':False,
+            'observer_capture_executed':bool(camera),
+            'observer_archive_scope':'Frozen optional source; archive does not claim camera execution or RGB coverage',
             'parking_semantics':'prospective_fixed_goal_bounded_capture_then_active_pose_hold_v4; original v1 zero-command parking receipt not upgraded'},indent=2)+'\n')
         signal.signal(signal.SIGINT,interrupt);signal.signal(signal.SIGTERM,interrupt)
     if (directory/'sources/truth/evaluate.py').exists():
