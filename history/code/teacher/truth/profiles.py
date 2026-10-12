@@ -55,7 +55,7 @@ def from_v1(source_path,expected_sha256,trial_role='pilot',repetition=1):
     profile=json.loads(json.dumps(old,allow_nan=False))
     profile.update(schema='truth_teacher_static_curve_active_hold_profile/v2',
         scenario=old['scenario']+'_active_hold_weak_p1',design='curvature_cascade_pi_active_hold',
-        controller_revision='v2 weak fixed endpoint active parking; frozen v1 drive preserved',
+        controller_revision='v3 numerical target binding; weak_p1 active parking; frozen v1 drive preserved',
         campaign_phase='active_parking_pilot' if trial_role=='pilot' else 'active_parking_confirmation',
         trial_role=trial_role,repetition=repetition,
         active_parking=parking_contract(path),

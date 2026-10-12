@@ -185,6 +185,16 @@ class ActiveParking(unittest.TestCase):
             if c.row['controller_updated']:blocked=blocked or any(c.row['velocity_PI']['blocked_axis'])
         self.assertTrue(blocked);np.testing.assert_array_equal(c.hold_integral,0.)
 
+    def test_cross_numpy_roundoff_keeps_exact_prospective_target(self):
+        p=profile();p['active_parking']['target']['position_world_xyz'][0]+=2e-15
+        p['active_parking']['target_sha256']=parameter_hash(p['active_parking']['target'])
+        c=Controller(p)
+        self.assertEqual(c._target,p['active_parking']['target'])
+        self.assertEqual(c._target_sha,p['active_parking']['target_sha256'])
+        p=profile();p['active_parking']['target']['position_world_xyz'][0]+=2e-12
+        p['active_parking']['target_sha256']=parameter_hash(p['active_parking']['target'])
+        with self.assertRaises(ValueError):Controller(p)
+
     def test_invalid_profile_target_or_envelope_rejected(self):
         p=profile();p['active_parking']['target']['position_world_xyz'][0]=99.
         with self.assertRaises(ValueError):Controller(p)

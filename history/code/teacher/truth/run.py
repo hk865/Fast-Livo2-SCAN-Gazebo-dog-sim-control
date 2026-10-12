@@ -127,13 +127,13 @@ def run(profile,camera=False):
         for role in ('capture','bridge','gazebo','worker'):stop(children.get(role))
         Path(env['TEACHER_SOCKET']).unlink(missing_ok=True)
         (directory/'resources_after.json').write_text(json.dumps(resource(),indent=2))
-        (directory/'runtime_manifest.json').write_text(json.dumps({'scope':'Isolated60x60plane curvePID active pose hold v2 characterization; different parking semantics; no SLAM5 or SLAM navigation claim',
+        (directory/'runtime_manifest.json').write_text(json.dumps({'scope':'Isolated60x60plane curvePID active pose hold v3 numerical binding characterization; different parking semantics; no SLAM5 or SLAM navigation claim',
             'run':str(directory),'error':error,'owned_processes':[{'role':k,'pid':v.pid,'returncode':v.returncode}for k,v in children.items()],
             'exclusive_writer':'teacher_sim::TeacherActuator','native_plugin_sha256':sha(directory/'sources/native/libteacher_actuator.so'),
             'frozen_model_sha256':'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34',
             'source_manifest_sha256':sha(directory/'source_manifest.json'),'truth_profile_sha256':sha(directory/'truth_profile.json'),
             'uses_truth_for_control':True,'counts_as_SLAM_navigation':False,'training_processes_signaled':False,'real_robot':False,
-            'parking_semantics':'prospective_fixed_goal_active_pose_velocity_hold_v2; original v1 zero-command parking receipt not upgraded'},indent=2)+'\n')
+            'parking_semantics':'prospective_fixed_goal_active_pose_velocity_hold_v3_numerical_binding; original v1 zero-command parking receipt not upgraded'},indent=2)+'\n')
         signal.signal(signal.SIGINT,interrupt);signal.signal(signal.SIGTERM,interrupt)
     if (directory/'sources/truth/evaluate.py').exists():
         subprocess.run([sys.executable,str(directory/'sources/truth/evaluate.py'),'--run',str(directory)],check=True,

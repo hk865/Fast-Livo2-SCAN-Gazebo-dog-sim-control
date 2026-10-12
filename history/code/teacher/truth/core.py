@@ -383,11 +383,20 @@ class Controller(FrozenV1Controller):
         self.parking=json.loads(json.dumps(self.p['active_parking'],allow_nan=False))
         if self.parking['schema']!='fixed_endpoint_active_parking/v1':
             raise ValueError('Explicit active parking contract required')
-        self._target=parking_target_record(self.path)
+        # Preserve the exact prospective target and its byte-level canonical
+        # SHA. NumPy versions may differ in quadrature by a few femtometres;
+        # recomputation is only a bounded numerical consistency check.
+        expected_target=parking_target_record(self.path)
+        self._target=json.loads(json.dumps(self.parking['target'],allow_nan=False))
         self._target_sha=parameter_hash(self._target)
+        endpoint=np.asarray(self._target['position_world_xyz'],float)
         if (self.parking['target_sha256']!=self._target_sha or
-            self.parking['target']!=self._target or
-            self.parking['target_kind']!='prospective_fixed_path_endpoint'):
+            self.parking['target_kind']!='prospective_fixed_path_endpoint' or
+            endpoint.shape!=(3,) or not np.isfinite(endpoint).all() or
+            self._target['path_parameters_sha256']!=expected_target['path_parameters_sha256'] or
+            np.max(abs(endpoint-np.asarray(expected_target['position_world_xyz'])))>1e-12 or
+            not math.isfinite(float(self._target['heading0_rad'])) or
+            abs(wrap(self._target['heading0_rad']-expected_target['heading0_rad']))>1e-12):
             raise ValueError('Parking target must be the immutable prospective path endpoint')
         self.hold_limits=np.asarray(self.parking['command_limits_body'],float)
         if (self.hold_limits.shape!=(3,) or not np.isfinite(self.hold_limits).all() or

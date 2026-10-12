@@ -29,11 +29,11 @@ def main():
         return cmd, 'initializing'if t<.1 else 'tracking'if np.linalg.norm(cmd)>1e-9 else'stop_transition'
     def write(path,obj):
         if path.name=='policy_manifest.json':
-            obj.update(test='truth_pid_calibration',command_source='Simulation truth curve PID and prospective active pose hold v2',
+            obj.update(test='truth_pid_calibration',command_source='Simulation truth curve PID and prospective active pose hold v3 numerical binding',
                 navigation_truth_used=True,counts_as_SLAM_navigation=False,
                 test_duration_s=p['duration_s'],command_end_s=None,command_start_seconds=3.,
                 feedback_source='native physics state, correctly time shifted world_time-.005',
-                parking_semantics='fixed prospective goal active pose velocity hold v2; not original zero-velocity-only parking',
+                parking_semantics='fixed prospective goal active pose velocity hold v3 numerical binding; not original zero-velocity-only parking',
                 truth_profile=p,legacy_motion_evaluation_applicable=False)
             capture['metadata']=obj
         if path.name=='worker_result.json':obj.update(truth_controller_completed_t_s=controller.completed_t,
