@@ -199,7 +199,7 @@ def prepare(run,args):
     # Bind event capture before the one-time source archive/scope freeze.
     capture=json.loads((HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json').read_text())
     capture['run_id']=run.name
-    capture['authorization']['delegation']='R43 continued original-route10GB single round with durable owner; source-bound observer capture is evidence only; no shadow scoring'
+    capture['authorization']['delegation']='R44 original-route10GB proposed single round with durable owner; source-bound observer capture is evidence only; no shadow scoring'
     capture['authorization']['runtime_started_by_reviewer']=False
     for item in capture['source_bindings']:
         if sha(item['path'])!=item['sha256']:raise RuntimeError('Frozen event source binding changed: '+item['role'])
@@ -665,7 +665,7 @@ def execute(run,plan):
         # Native physics is stopped before waiting for the unmodified Actor's
         # normal EOF/final archive; hard gates and original escalation remain.
         from worker_archive_shutdown import await_archive_close,inspect_worker_archive
-        from owned_guardian import validated_members
+        from owned_guardian import validated_members,ident as worker_archive_identity
         def archive_abort_reason():
             normal_diagnostic=bool(startup_stop and startup_stop.get('reason')in(
                 'actual_original_mission_failed','actual_original_navigation_failed'))
@@ -682,7 +682,7 @@ def execute(run,plan):
             if time.monotonic()>=wall_deadline:return 'original frozen wall deadline'
             return None
         worker_archive_close=await_archive_close(children.get('worker'),identities.get('worker'),
-            cleanup.get('gazebo',{}),identity,validated_members,abort_reason=archive_abort_reason)
+            cleanup.get('gazebo',{}),worker_archive_identity,validated_members,abort_reason=archive_abort_reason)
         cleanup['worker']=stop_owned(children.get('worker'),identities.get('worker'))
         worker_archive_integrity=inspect_worker_archive(run)if'worker'in children else None
         if worker_archive_integrity is not None and not worker_archive_integrity['verified']:
@@ -750,10 +750,10 @@ def main():
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
     launch_authority=json.loads((HERE/'R33_SHORT_STARTUP_CONTRACT.json').read_text())
     if not args.prepare_only and launch_authority.get('runtime_launch_authorized')is not True:
-        raise RuntimeError('R43 preparation only: budget/runtime approval pending; no run may start')
+        raise RuntimeError('R44 preparation only: budget/runtime approval pending; no run may start')
     if not args.prepare_only:
         launch_latch=Path(launch_authority['source_stage'])/'ONE_SIMULATION_LATCH.json'
-        if launch_latch.exists():raise RuntimeError('R43 authorized single simulation attempt already consumed')
+        if launch_latch.exists():raise RuntimeError('R44 authorized single simulation attempt already consumed')
         # A source-review PASS and the exact current user authority are both
         # required before creating any run, registration, alias or execution request.
         from corridor_preflight import verify_preflight
@@ -785,7 +785,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r43_lifecycle_recovery_candidate';tmp=ROOT/'runs'/('latest_engineering_v34_r43_lifecycle_recovery_candidate.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r44_active_p95_capture_candidate';tmp=ROOT/'runs'/('latest_engineering_v34_r44_active_p95_capture_candidate.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,
