@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/run.py --profile l64_r30_c10_210 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/run.py --profile l64_r30_c10_210 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -37,7 +37,7 @@ SYSTEM_PYTHON=Path('/usr/bin/python3')
 DEFAULT_CPU_PYTHON=Path('/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/bin/python3')
 ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
 SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
-SLAM_WORKSPACE=HERE.parent/'closed_loop_multifloor_v7/slam_ws'
+SLAM_WORKSPACE=HERE/'slam_ws'
 SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
 SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
@@ -174,6 +174,7 @@ def prepare(run,args):
           'source_manifest_sha256':sha(run/'source_manifest.json'),'scope_sha256':receipt['sha256'],
           'world_sha256':sha(run/'world.sdf'),'cloud_transport_manifest_sha256':sha(run/'cloud_transport_manifest.json'),
           'runtime_started':False,'renderer':'hardware/Ogre2','compatibility_motion_gate_applies':False,
+          'slam_multicore_contract':json.loads((HERE/'LIO_MULTICORE_CONTRACT.json').read_text()),
           'slam_binary_contract':binary_contract,'navigation_stack_diagnostic_environment':diagnostic_environment,
           'diagnostic_prefix_only':bool(p.get('diagnostic_scope')),
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],

@@ -8,7 +8,7 @@ import hashlib,json,math
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent;NAV=HERE.parent;ROOT=NAV.parent;DEMO=ROOT.parent
-SLAM_WS=NAV/'closed_loop_multifloor_v7/slam_ws'
+SLAM_WS=HERE/'slam_ws'
 SCHEMA='teacher_closed_loop_navigation_scope/v1'
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 CACHE={}
@@ -29,7 +29,7 @@ def runtime_files():
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
     preflight=[HERE/'diagnostic_preflight.json']if(HERE/'diagnostic_preflight.json').is_file()else[]
     preflight+=[HERE/'clock_hold_preflight.json']if(HERE/'clock_hold_preflight.json').is_file()else[]
-    preflight+=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json']
+    preflight+=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'LIO_MULTICORE_CONTRACT.json',HERE/'multicore_preflight.json']
     return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
         HERE/'diagnostic_baseline.json',
         SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[

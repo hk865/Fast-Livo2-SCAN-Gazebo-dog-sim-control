@@ -24,6 +24,15 @@ if(OpenMP_CXX_FOUND)
   add_compile_options(${OpenMP_CXX_FLAGS})
 endif()
 
+# Enable the existing independent per-point LIO residual loop only.
+# Keep VIO and every other translation unit serial; no arithmetic changes.
+if(NOT OpenMP_CXX_FOUND)
+  message(FATAL_ERROR "LIO two-thread candidate requires OpenMP")
+endif()
+set_source_files_properties(src/voxel_map.cpp PROPERTIES
+  COMPILE_DEFINITIONS "MP_EN;MP_PROC_NUM=2"
+)
+
 # Dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)

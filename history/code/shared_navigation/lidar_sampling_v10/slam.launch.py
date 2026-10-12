@@ -26,7 +26,7 @@ def generate_launch_description():
             if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=expected:
                 raise RuntimeError('Actual SLAM source/configuration hash changed: '+name)
         for package in ('fast_livo2_core','fast_livo2_ros'):
-            expected=(here.parent/'closed_loop_multifloor_v7/slam_ws/install'/package).resolve()
+            expected=(here/'slam_ws/install'/package).resolve()
             if Path(get_package_prefix(package)).resolve()!=expected:
                 raise RuntimeError('Source the V7 diagnostic SLAM overlay; package mismatch '+package)
         ros=['--ros-args','-p','use_sim_time:=true']
