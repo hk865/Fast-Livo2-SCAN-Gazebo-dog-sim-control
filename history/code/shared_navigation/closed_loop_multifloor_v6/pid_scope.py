@@ -86,6 +86,11 @@ def prepare(run,profile):
         if estimation!={'gravity_est_en':True,'ba_bg_est_en':True}:
             raise ValueError('Explicit prospective actual-SLAM estimation configuration required')
         params['imu'].update(estimation)
+    if profile.get('slam_visual_measurement_covariance') is not None:
+        image_cov=profile['slam_visual_measurement_covariance']
+        if isinstance(image_cov,bool) or image_cov!=1000:
+            raise ValueError('Prospective visual covariance must be the frozen 1000 trial')
+        params['vio']['img_point_cov']=image_cov
 
     write(run/'navigation_fastlivo.yaml',cfg);write(run/'navigation_camera.yaml',yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text()))
     write(run/'navigation_profile.json',profile);write(run/'navigation_scenario.json',{'mode':'teacher','sensors':s})

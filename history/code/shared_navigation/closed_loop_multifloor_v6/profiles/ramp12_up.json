@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_closed_loop_cascade_flat_short_v1",
+  "experiment": "teacher_closed_loop_cascade_ramp12_up_v1",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
-  "distance_m": 1.0,
-  "max_speed_mps": 0.3,
+  "distance_m": 13.6,
+  "max_speed_mps": 0.2,
   "max_yaw_rate_radps": 0.3,
   "arrival_radius_m": 0.22,
   "arrival_height_half_span_m": 0.1,
   "arrival_control_radius_m": 0.17,
   "dwell_sim_s": 0.6,
-  "goal_timeout_sim_s": 90.0,
+  "goal_timeout_sim_s": 140.0,
   "pose_cloud_timeout_s": 0.3,
   "sensor_warmup_sim_s": 2.0,
   "interface_version": "navigation_v4_latest_clock_measured_transition",
@@ -56,9 +56,9 @@
   "recovery_min_pose_span_sim_s": 0.1,
   "fence": {
     "along_min_m": -0.45,
-    "along_max_m": 1.45,
+    "along_max_m": 14.049999999999999,
     "lateral_abs_m": 0.45,
-    "height_abs_m": 0.2
+    "height_abs_m": 1.4
   },
   "navigation_ground_truth_used": false,
   "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
@@ -90,42 +90,42 @@
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
     "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
   },
-  "selector": "flat_short",
-  "route_height_delta_m": 0.0,
-  "return_to_origin": true,
+  "selector": "ramp12_up",
+  "route_height_delta_m": 1.2,
+  "return_to_origin": false,
   "expected_asset": {
-    "terrain": "flat",
+    "terrain": "ramp_up",
     "spawn": [
-      6,
-      -0.7,
+      1.2,
+      2,
       0.4,
       0
     ]
   },
   "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
   "spawn": [
-    6,
-    -0.7,
+    1.2,
+    2,
     0.4,
     0
   ],
-  "duration_s": 180,
+  "duration_s": 230,
   "overview_pose": [
     8,
+    -1,
     2.5,
-    2.2,
     0,
-    0.5,
-    -1.5707963267948966
+    0.45,
+    1.5707963267948966
   ],
-  "terrain_target_manifest": "tests/terrain_targets/all_static.json",
+  "terrain_target_manifest": "tests/terrain_targets/lower12.json",
   "controller_kind": "teacher",
-  "protocol_case_id": "flat_short_1m_roundtrip",
+  "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_cascade",
+  "controller_selector": "closed_loop_multifloor_v6",
   "cascade_runtime_revision": "v1_header_event_actual_SLAM_SCAN_causal_executor_ack",
   "cascade": {
-    "desired_speed": 0.3,
+    "desired_speed": 0.2,
     "command_limits": [
       0.6,
       0.2,
@@ -163,7 +163,7 @@
     "actual_navigation_verified": false
   },
   "pid_parent_profile": {
-    "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/flat_short.json",
+    "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
     "unchanged_fields": [
       "warmup_history",
       "teacher_transition",

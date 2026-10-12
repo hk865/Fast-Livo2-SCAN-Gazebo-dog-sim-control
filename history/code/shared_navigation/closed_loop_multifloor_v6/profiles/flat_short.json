@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_registered_turn06_v2",
+  "experiment": "teacher_closed_loop_cascade_flat_short_v1",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
-  "distance_m": 13.6,
-  "max_speed_mps": 0.2,
-  "max_yaw_rate_radps": 0.6,
+  "distance_m": 1.0,
+  "max_speed_mps": 0.3,
+  "max_yaw_rate_radps": 0.3,
   "arrival_radius_m": 0.22,
   "arrival_height_half_span_m": 0.1,
   "arrival_control_radius_m": 0.17,
@@ -56,9 +56,9 @@
   "recovery_min_pose_span_sim_s": 0.1,
   "fence": {
     "along_min_m": -0.45,
-    "along_max_m": 14.049999999999999,
+    "along_max_m": 1.45,
     "lateral_abs_m": 0.45,
-    "height_abs_m": 1.4
+    "height_abs_m": 0.2
   },
   "navigation_ground_truth_used": false,
   "policy_observations": "Teacher CPU actor: 232 privileged simulator-state/height-scan dimensions plus 15 known velocity-command/previous-action dimensions; navigation feedback uses actual sensor SLAM/IMU and actual SCAN paths only",
@@ -90,46 +90,46 @@
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
     "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
   },
-  "selector": "multifloor12_23_registered_turn06",
-  "route_height_delta_m": 2.4,
-  "return_to_origin": false,
+  "selector": "flat_short",
+  "route_height_delta_m": 0.0,
+  "return_to_origin": true,
   "expected_asset": {
-    "terrain": "ramp_up",
+    "terrain": "flat",
     "spawn": [
-      1.2,
-      2,
+      6,
+      -0.7,
       0.4,
       0
     ]
   },
   "review_basis": "explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation",
   "spawn": [
-    1.2,
-    2,
+    6,
+    -0.7,
     0.4,
     0
   ],
-  "duration_s": 450,
+  "duration_s": 180,
   "overview_pose": [
     8,
-    -1,
     2.5,
+    2.2,
     0,
-    0.45,
-    1.5707963267948966
+    0.5,
+    -1.5707963267948966
   ],
-  "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+  "terrain_target_manifest": "tests/terrain_targets/all_static.json",
   "controller_kind": "teacher",
-  "protocol_case_id": "ramp12_up_full",
+  "protocol_case_id": "flat_short_1m_roundtrip",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_multifloor_v3",
-  "cascade_runtime_revision": "v3_single_nearest_SCAN_projection_heading",
+  "controller_selector": "closed_loop_multifloor_v6",
+  "cascade_runtime_revision": "v1_header_event_actual_SLAM_SCAN_causal_executor_ack",
   "cascade": {
-    "desired_speed": 0.2,
+    "desired_speed": 0.3,
     "command_limits": [
       0.6,
       0.2,
-      0.6
+      0.3
     ],
     "external_heading_gate": true,
     "base_com_offset": [
@@ -163,7 +163,7 @@
     "actual_navigation_verified": false
   },
   "pid_parent_profile": {
-    "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/ramp12_up.json",
+    "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/profiles/flat_short.json",
     "unchanged_fields": [
       "warmup_history",
       "teacher_transition",
@@ -179,120 +179,5 @@
       "dwell_sim_s"
     ],
     "note": "Legacy scope and controller math are not execution inputs; PID numeric values remain for compatibility only."
-  },
-  "registered_route_fence": {
-    "horizontal_radius_m": 0.45,
-    "height_error_m": 0.3,
-    "scope": "tube around frozen actual-SLAM registered scene-prior polyline; no Gazebo feedback"
-  },
-  "scene_initial_support_z": 0.0,
-  "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "Same directed nearest SCAN projection yaw supplies parent stop/align gate and cascade drive/turn; original lookahead retained for checked-target obstacle guard. Core gains/PI/TTL/native safety unchanged.",
-  "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
-  "route_world_points": [
-    {
-      "goal_id": "lower_entry",
-      "xyz": [
-        2.0,
-        2.0,
-        0.0
-      ]
-    },
-    {
-      "goal_id": "lower_top",
-      "xyz": [
-        14.0,
-        2.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "lower_exit",
-      "xyz": [
-        14.8,
-        2.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "connector_x",
-      "xyz": [
-        16.0,
-        2.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "connector_mid",
-      "xyz": [
-        16.0,
-        4.5,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "connector_y",
-      "xyz": [
-        16.0,
-        7.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_entry",
-      "xyz": [
-        14.8,
-        7.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_low_seam",
-      "xyz": [
-        14.0,
-        7.0,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_top",
-      "xyz": [
-        2.0,
-        7.0,
-        2.4
-      ]
-    },
-    {
-      "goal_id": "floor3_stop",
-      "xyz": [
-        1.2,
-        7.0,
-        2.4
-      ]
-    }
-  ],
-  "ramp_segments": [
-    {
-      "model": "ramp_12",
-      "direction": "up",
-      "destination_goal_index": 2
-    },
-    {
-      "model": "ramp_23",
-      "direction": "up",
-      "destination_goal_index": 9
-    }
-  ],
-  "terrain_layer_switch": {
-    "initial_manifest": "tests/terrain_targets/lower12.json",
-    "alternate_manifest": "tests/terrain_targets/upper23.json",
-    "completed_goal_id": "connector_mid",
-    "alternate_include_models": [
-      "floor_2",
-      "ramp_23",
-      "floor_3"
-    ],
-    "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
-    "ray_equality_tolerance_m": 1e-09
   }
 }

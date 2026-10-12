@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_real_SLAM_SCAN_ramp12_segmented_turn06_v4",
+  "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_registered_turn06_v2",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
   "distance_m": 13.6,
   "max_speed_mps": 0.2,
@@ -90,8 +90,8 @@
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
     "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
   },
-  "selector": "ramp12_segmented_turn06",
-  "route_height_delta_m": 1.2,
+  "selector": "multifloor12_23_registered_turn06",
+  "route_height_delta_m": 2.4,
   "return_to_origin": false,
   "expected_asset": {
     "terrain": "ramp_up",
@@ -109,7 +109,7 @@
     0.4,
     0
   ],
-  "duration_s": 300,
+  "duration_s": 450,
   "overview_pose": [
     8,
     -1,
@@ -122,8 +122,8 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_multifloor_v5",
-  "cascade_runtime_revision": "v5_same_controller_actual_SLAM_online_gravity_acc_gyro_bias",
+  "controller_selector": "closed_loop_multifloor_v6",
+  "cascade_runtime_revision": "v3_single_nearest_SCAN_projection_heading",
   "cascade": {
     "desired_speed": 0.2,
     "command_limits": [
@@ -187,119 +187,87 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "Same frozen controller/known-map regions/source freshness/physical safety and original acceptance thresholds. Independently generated FAST-LIVO config enables its original online gravity and accelerometer/gyro bias estimation, camera_mode original config untouched. No truth pose or height injection.",
+  "prospective_change": "Same directed nearest SCAN projection yaw supplies parent stop/align gate and cascade drive/turn; original lookahead retained for checked-target obstacle guard. Core gains/PI/TTL/native safety unchanged.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
-      "goal_id": "lower_x02",
+      "goal_id": "lower_entry",
       "xyz": [
-        2,
-        2,
+        2.0,
+        2.0,
         0.0
       ]
     },
     {
-      "goal_id": "lower_x03",
+      "goal_id": "lower_top",
       "xyz": [
-        3,
-        2,
-        0.1
-      ]
-    },
-    {
-      "goal_id": "lower_x04",
-      "xyz": [
-        4,
-        2,
-        0.2
-      ]
-    },
-    {
-      "goal_id": "lower_x05",
-      "xyz": [
-        5,
-        2,
-        0.30000000000000004
-      ]
-    },
-    {
-      "goal_id": "lower_x06",
-      "xyz": [
-        6,
-        2,
-        0.4
-      ]
-    },
-    {
-      "goal_id": "lower_x07",
-      "xyz": [
-        7,
-        2,
-        0.5
-      ]
-    },
-    {
-      "goal_id": "lower_x08",
-      "xyz": [
-        8,
-        2,
-        0.6000000000000001
-      ]
-    },
-    {
-      "goal_id": "lower_x09",
-      "xyz": [
-        9,
-        2,
-        0.7000000000000001
-      ]
-    },
-    {
-      "goal_id": "lower_x10",
-      "xyz": [
-        10,
-        2,
-        0.8
-      ]
-    },
-    {
-      "goal_id": "lower_x11",
-      "xyz": [
-        11,
-        2,
-        0.9
-      ]
-    },
-    {
-      "goal_id": "lower_x12",
-      "xyz": [
-        12,
-        2,
-        1.0
-      ]
-    },
-    {
-      "goal_id": "lower_x13",
-      "xyz": [
-        13,
-        2,
-        1.1
-      ]
-    },
-    {
-      "goal_id": "lower_x14",
-      "xyz": [
-        14,
-        2,
-        1.2000000000000002
+        14.0,
+        2.0,
+        1.2
       ]
     },
     {
       "goal_id": "lower_exit",
       "xyz": [
         14.8,
-        2,
+        2.0,
         1.2
+      ]
+    },
+    {
+      "goal_id": "connector_x",
+      "xyz": [
+        16.0,
+        2.0,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "connector_mid",
+      "xyz": [
+        16.0,
+        4.5,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "connector_y",
+      "xyz": [
+        16.0,
+        7.0,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_entry",
+      "xyz": [
+        14.8,
+        7.0,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_low_seam",
+      "xyz": [
+        14.0,
+        7.0,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_top",
+      "xyz": [
+        2.0,
+        7.0,
+        2.4
+      ]
+    },
+    {
+      "goal_id": "floor3_stop",
+      "xyz": [
+        1.2,
+        7.0,
+        2.4
       ]
     }
   ],
@@ -307,11 +275,24 @@
     {
       "model": "ramp_12",
       "direction": "up",
-      "destination_goal_index": 13
+      "destination_goal_index": 2
+    },
+    {
+      "model": "ramp_23",
+      "direction": "up",
+      "destination_goal_index": 9
     }
   ],
-  "slam_imu_online_estimation": {
-    "gravity_est_en": true,
-    "ba_bg_est_en": true
+  "terrain_layer_switch": {
+    "initial_manifest": "tests/terrain_targets/lower12.json",
+    "alternate_manifest": "tests/terrain_targets/upper23.json",
+    "completed_goal_id": "connector_mid",
+    "alternate_include_models": [
+      "floor_2",
+      "ramp_23",
+      "floor_3"
+    ],
+    "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+    "ray_equality_tolerance_m": 1e-09
   }
 }

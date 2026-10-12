@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_real_SLAM_SCAN_multifloor12_23_segmented_turn06_v4",
+  "experiment": "teacher_real_SLAM_SCAN_ramp12_segmented_turn06_visual_cov1000_v6",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
   "distance_m": 13.6,
   "max_speed_mps": 0.2,
@@ -90,8 +90,8 @@
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
     "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
   },
-  "selector": "multifloor12_23_segmented_turn06",
-  "route_height_delta_m": 2.4,
+  "selector": "ramp12_segmented_turn06",
+  "route_height_delta_m": 1.2,
   "return_to_origin": false,
   "expected_asset": {
     "terrain": "ramp_up",
@@ -109,7 +109,7 @@
     0.4,
     0
   ],
-  "duration_s": 600,
+  "duration_s": 300,
   "overview_pose": [
     8,
     -1,
@@ -122,8 +122,8 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_multifloor_v5",
-  "cascade_runtime_revision": "v5_same_controller_actual_SLAM_online_gravity_acc_gyro_bias",
+  "controller_selector": "closed_loop_multifloor_v6",
+  "cascade_runtime_revision": "v6_same_controller_online_gravity_bias_visual_cov1000",
   "cascade": {
     "desired_speed": 0.2,
     "command_limits": [
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "Same frozen controller/known-map regions/source freshness/physical safety and original acceptance thresholds. Independently generated FAST-LIVO config enables its original online gravity and accelerometer/gyro bias estimation, camera_mode original config untouched. No truth pose or height injection.",
+  "prospective_change": "Compared with V5: only actual FAST-LIVO image measurement covariance changes from 100000000 to 1000, restoring a bounded photometric constraint. Controller, physical model, initialization gate, source freshness, scene prior, known route and original 3D arrival/safety criteria unchanged. No truth navigation. Does not add a loop closure backend or claim color ICP.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
@@ -301,150 +301,6 @@
         2,
         1.2
       ]
-    },
-    {
-      "goal_id": "connector_x",
-      "xyz": [
-        16,
-        2,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "connector_mid",
-      "xyz": [
-        16,
-        4.5,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "connector_y",
-      "xyz": [
-        16,
-        7,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_entry",
-      "xyz": [
-        14.8,
-        7,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_x14",
-      "xyz": [
-        14,
-        7,
-        1.2
-      ]
-    },
-    {
-      "goal_id": "upper_x13",
-      "xyz": [
-        13,
-        7,
-        1.3
-      ]
-    },
-    {
-      "goal_id": "upper_x12",
-      "xyz": [
-        12,
-        7,
-        1.4
-      ]
-    },
-    {
-      "goal_id": "upper_x11",
-      "xyz": [
-        11,
-        7,
-        1.5
-      ]
-    },
-    {
-      "goal_id": "upper_x10",
-      "xyz": [
-        10,
-        7,
-        1.6
-      ]
-    },
-    {
-      "goal_id": "upper_x09",
-      "xyz": [
-        9,
-        7,
-        1.7
-      ]
-    },
-    {
-      "goal_id": "upper_x08",
-      "xyz": [
-        8,
-        7,
-        1.8
-      ]
-    },
-    {
-      "goal_id": "upper_x07",
-      "xyz": [
-        7,
-        7,
-        1.9
-      ]
-    },
-    {
-      "goal_id": "upper_x06",
-      "xyz": [
-        6,
-        7,
-        2.0
-      ]
-    },
-    {
-      "goal_id": "upper_x05",
-      "xyz": [
-        5,
-        7,
-        2.1
-      ]
-    },
-    {
-      "goal_id": "upper_x04",
-      "xyz": [
-        4,
-        7,
-        2.2
-      ]
-    },
-    {
-      "goal_id": "upper_x03",
-      "xyz": [
-        3,
-        7,
-        2.3
-      ]
-    },
-    {
-      "goal_id": "upper_x02",
-      "xyz": [
-        2,
-        7,
-        2.4000000000000004
-      ]
-    },
-    {
-      "goal_id": "floor3_stop",
-      "xyz": [
-        1.2,
-        7,
-        2.4
-      ]
     }
   ],
   "ramp_segments": [
@@ -452,27 +308,11 @@
       "model": "ramp_12",
       "direction": "up",
       "destination_goal_index": 13
-    },
-    {
-      "model": "ramp_23",
-      "direction": "up",
-      "destination_goal_index": 31
     }
   ],
-  "terrain_layer_switch": {
-    "initial_manifest": "tests/terrain_targets/lower12.json",
-    "alternate_manifest": "tests/terrain_targets/upper23.json",
-    "completed_goal_id": "connector_mid",
-    "alternate_include_models": [
-      "floor_2",
-      "ramp_23",
-      "floor_3"
-    ],
-    "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
-    "ray_equality_tolerance_m": 1e-09
-  },
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
     "ba_bg_est_en": true
-  }
+  },
+  "slam_visual_measurement_covariance": 1000
 }
