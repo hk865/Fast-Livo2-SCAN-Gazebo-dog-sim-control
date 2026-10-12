@@ -1,0 +1,98 @@
+{
+  "schema": "truth_teacher_velocity_pid_benchmark_protocol/v2",
+  "status": "prospective_frozen_before_actual",
+  "scope": "Simulation benchmark using simulator feedback in the outer velocity controller; never sensor-SLAM navigation or real-robot acceptance",
+  "time": {
+    "physical_pose_source": "telemetry.state_physics_world_time; native.physics_step.t-dt (dt=.005)",
+    "expected_pose_offset_from_world_sim_time_s": -0.005,
+    "pose_offset_tolerance_s": 1e-08,
+    "bootstrap_excluded_s": 0.1,
+    "maximum_telemetry_gap_s": 0.041,
+    "maximum_causal_control_age_s": 0.301,
+    "minimum_stable_speed_duration_s": 0.5,
+    "speed_startup_excluded_s": 1.0,
+    "duration_semantics": "profile.duration_s is maximum budget; completed worker truth_controller_completed_t_s plus declared profile.post_completion_s determines earlier normal termination",
+    "frequency_selector": "Only controller_updated=true rows count as feedback updates; original hold/init/parking rows remain for causal coverage",
+    "native_physics_step_s": 0.005,
+    "native_iteration_coverage": "Every original physics_step iteration must be contiguous; same cached state is paired with telemetry"
+  },
+  "route": {
+    "maximum_xy_distance_m": 0.2,
+    "drive_xy_distance_rms_m": 0.08,
+    "maximum_drive_heading_error_rad": 0.2,
+    "goal_xy_tolerance_m": 0.15,
+    "every_waypoint_must_be_visited_in_order": true,
+    "heading_reference": "causal controller reference_yaw; requested route/heading and feedback time are retained for independent review",
+    "no_world_z_gain_ratio_gate": true
+  },
+  "speed": {
+    "metric": "mean absolute actual COM velocity projected on the causal nonzero reference velocity minus its norm",
+    "error_limit_mps": "max(0.05, 0.25 * mean_reference_speed)",
+    "full_speed_reference_fraction_min": 0.8,
+    "maximum_absolute_error_floor_mps": 0.05,
+    "maximum_relative_error_fraction": 0.25,
+    "active_reference_min_mps": 0.03,
+    "translation_modes": [
+      "drive"
+    ],
+    "excluded_modes": [
+      "initializing",
+      "pre_turn",
+      "turn",
+      "settle",
+      "goal_dwell",
+      "parking",
+      "feedback_timeout"
+    ]
+  },
+  "parking": {
+    "fixed_window_s": 5.0,
+    "trigger": "First eligible actual mode=parking zero row after worker/controller completion dwell; requested and actor command and reference XY velocity must all be zero",
+    "maximum_xy_drift_m": 0.05,
+    "maximum_yaw_drift_rad": 0.1,
+    "must_continuously_keep_requested_and_actor_command_zero": true,
+    "physical_pose_source": "Every original 200Hz native cached state, not chosen quiet window"
+  },
+  "safety": {
+    "maximum_abs_roll_pitch_rad": 0.65,
+    "minimum_body_clearance_m": 0.18,
+    "maximum_abs_applied_torque_Nm": 23.50001,
+    "maximum_abs_joint_velocity_radps": 30.001,
+    "body_contact_count": 0,
+    "fault_count": 0,
+    "semantics": "All original 200Hz native physics_step qd/tau/contact/attitude; native clearance recomputed from unchanged world.sdf all-static downward ray. Tau is applied force command fed to physics, not measured motor torque."
+  },
+  "terrain": {
+    "ramp_full_length_m": 12.0,
+    "strict_foot_support_requires_actual_contact_xyz_normal_and_collision_geometry": true,
+    "foot_support_continuity_s": 0.1,
+    "ramp_each_foot_entry_surface_exit_and_each_1m_bin_required": true,
+    "step_functional": "each actual foot supports the true tread; base proceeds at least 1 m after edge+0.5 m, then final parking; world Z rise alone is diagnostic",
+    "missing_foot_geometry_status": "unverified; no strict full ramp or step pass"
+  },
+  "score": {
+    "eligible_only_if_all_required_checks_passed": true,
+    "expression": "100 / (1 + RMS_route/0.08 + mean_absolute_speed_error/speed_limit + max_drive_heading/0.2 + parking_XY_drift/0.05 + parking_yaw_drift/0.1)",
+    "unsafe_or_incomplete_or_unverified_score": null,
+    "open_loop_diagnostic_excluded_from_ranking": true
+  },
+  "model_training_changed": false,
+  "navigation_ground_truth_used": true,
+  "SLAM_navigation_verified": false,
+  "real_robot_verified": false,
+  "revision": "Schema/time/native-evidence adaptation; all v1 numerical motion and safety thresholds unchanged; old actual archive remains v1",
+  "termination": {
+    "required_profile_post_completion_s": true,
+    "missing_declared_termination_is_interface_pilot_only": true,
+    "worker_completion_timestamp_matches_actual_control_rows": true,
+    "actual_last_elapsed_matches_minimum_of_budget_and_completion_plus_declared_post": true,
+    "owned_processes_zero_exit_required": true,
+    "old_actual_data_or_summary_never_backfilled": true,
+    "required_zero_exit_roles": [
+      "worker",
+      "gazebo"
+    ],
+    "optional_camera_cleanup_signal_return_is_not_actor_fault": true,
+    "required_success_reason": "truth_controller_completed"
+  }
+}
