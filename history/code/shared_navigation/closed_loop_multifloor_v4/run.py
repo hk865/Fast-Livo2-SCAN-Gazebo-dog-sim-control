@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v3/run.py --profile ramp12_registered_turn06 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v4/run.py --profile ramp12_segmented_turn06 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v3/run.py --profile ramp12_registered_turn06 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v4/run.py --profile ramp12_segmented_turn06 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
