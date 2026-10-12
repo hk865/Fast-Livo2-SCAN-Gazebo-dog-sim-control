@@ -101,7 +101,8 @@ class Controller:
             reference_xy=a[:2]+tan*np.clip(along+.8,0,L)
             err=np.r_[reference_xy-s[1:3],eyaw]
             final=self.segment==len(self.route)-2
-            if final and distance<=.12 and np.linalg.norm(origin_body[:2])<.08 and abs(yawdot)<.1 and abs(eyaw)<.2:
+            goal_radius=.14 if self.dwell is not None else .12
+            if final and distance<=goal_radius and np.linalg.norm(origin_body[:2])<.08 and abs(yawdot)<.1 and abs(eyaw)<.2:
                 self.dwell=t if self.dwell is None else self.dwell
                 mode='goal_dwell';self.command[:]=0.
                 if t-self.dwell>=.6:self.completed_t=t;mode='parking'
@@ -114,12 +115,13 @@ class Controller:
                     speed=float(self.p['desired_speed'])
             velocity_world=np.r_[speed*tan, speed*(b[2]-a[2])/L]
             g=self.g
+            active_dt=0. if mode in ('parking','goal_dwell','pre_turn','settle')else dt
             effective_limits=self.limits.copy()
             if self.p['design']=='legacy_position':effective_limits[0]=min(effective_limits[0],float(self.p['desired_speed']))
             outer_I=np.array([0.,0.,0.]);outer_P=np.zeros(3);outer_D=np.zeros(3)
             if self.p['design']=='legacy_position':
                 kp=np.array([.6,.6,1.1]);ki=np.array([.08,.08,.04]);kd=np.array([.12,.12,.15])
-                candidate=np.clip(self.integral+dt*err,[-.4,-.4,-.3],[.4,.4,.3])
+                candidate=np.clip(self.integral+active_dt*err,[-.4,-.4,-.3],[.4,.4,.3])
                 outer_P=kp*err;outer_I=ki*candidate;outer_D=-kd*self.filtered
                 world=outer_P+outer_I+outer_D
                 target_body=np.r_[(R.T@np.r_[world[:2],0.])[:2],world[2]]
@@ -135,8 +137,8 @@ class Controller:
                 outer_I=ki*candidate;world=outer_P+outer_I+outer_D
                 raw=np.r_[(R.T@np.r_[world[:2],0.])[:2],world[2]]
             else:
-                self.integral[1]=np.clip(self.integral[1]-dt*cross,-.3,.3)
-                self.integral[2]=np.clip(self.integral[2]+dt*eyaw,-.3,.3)
+                self.integral[1]=np.clip(self.integral[1]-active_dt*cross,-.3,.3)
+                self.integral[2]=np.clip(self.integral[2]+active_dt*eyaw,-.3,.3)
                 lateral=-g['cross_kp']*cross-g['cross_kd']*float(self.filtered[:2]@normal)+g['cross_ki']*self.integral[1]
                 velocity_world[:2]+=np.clip(lateral,-.20,.20)*normal
                 wref=g['yaw_kp']*eyaw-g['yaw_kd']*self.filtered[2]+g['yaw_ki']*self.integral[2]
@@ -155,7 +157,7 @@ class Controller:
                     ev=target_body-self.inner_filtered
                     kp=np.array([g['velocity_kp_x'],g['velocity_kp_y'],g['rate_kp']])
                     ki=np.array([g['velocity_ki_x'],g['velocity_ki_y'],g['rate_ki']])
-                    candidate=np.clip(self.velocity_integral+dt*ev,-.5,.5)
+                    candidate=np.clip(self.velocity_integral+active_dt*ev,-.5,.5)
                     raw=target_body+kp*ev+ki*candidate
                     clipped=np.clip(raw,-self.limits,self.limits)
                     candidate=np.where(ev*(raw-clipped)>0,self.velocity_integral,candidate)
@@ -181,6 +183,7 @@ class Controller:
                 'measured_origin_velocity_world':origin_world.tolist(),'measured_COM_velocity_body':com_body.tolist(),
                 'measured_yaw_rate':yawdot,'saturated':(abs(raw-clipped)>1e-9).tolist(),
                 'completed_t_s':self.completed_t,'route_reference_changes':0,
+                'goal_entry_radius_m':.12,'goal_hold_radius_m':.14,'active_integral_dt_s':active_dt,
                 'feedback_source':'Gazebo native physics truth; intentionally controls this calibration only',
                 'counts_as_SLAM_navigation':False}
         sim_age=stamp-self.last_feedback if self.last_feedback is not None else 0.

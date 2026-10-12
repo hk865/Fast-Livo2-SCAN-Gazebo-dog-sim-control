@@ -85,9 +85,16 @@ def run(profile,camera=False):
         children['gazebo']=subprocess.Popen(['gz','sim','-s','-r',str(directory/'world.sdf')],env=env,stdout=(directory/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
         deadline=time.monotonic()+profile['duration_s']*3+60
         while children['worker'].poll()is None:
-            if children['gazebo'].poll()is not None:raise RuntimeError('Gazebo exited before controller')
+            if children['gazebo'].poll()is not None:
+                if children['gazebo'].returncode!=0:raise RuntimeError('Gazebo exited abnormally before controller')
+                # Native done response can stop Gazebo before worker flushes its
+                # arrays/receipt. Wait for the owned worker, never SIGINT it here.
+                try:children['worker'].wait(timeout=10)
+                except subprocess.TimeoutExpired:raise RuntimeError('Gazebo exited without completed worker receipt')
+                break
             if time.monotonic()>deadline:raise TimeoutError('Truth experiment wall deadline')
             time.sleep(.5)
+        if children['worker'].returncode!=0:raise RuntimeError('Teacher worker exited abnormally')
         time.sleep(.1)
         try:children['gazebo'].wait(timeout=8)
         except subprocess.TimeoutExpired:error='Gazebo natural termination timeout'
