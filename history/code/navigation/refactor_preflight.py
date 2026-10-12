@@ -6,11 +6,11 @@ import hashlib,json,sys,os,time
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def contract(here):
     here=Path(here).resolve();d=json.loads((here/'C51_REFACTOR_CONTRACT.json').read_text())
-    if (d.get('schema')!='R65_explicit_strict_identity_handoff_admission/v1' or d['candidate_root']!=str(here)
+    if (d.get('schema')!='R66_explicit_strict_identity_handoff_admission/v1' or d['candidate_root']!=str(here)
         or d.get('historical_runtime_PASS_inherited')is not False
         or d.get('autonomous_navigation_verified')is not False
         or d.get('REPORT_mode')is not False or d.get('maximum_simulation_attempts')!=1):
-        raise RuntimeError('R65 diagnostic identity/scope differs')
+        raise RuntimeError('R66 diagnostic identity/scope differs')
     return d
 
 def process_identity(pid):
@@ -24,15 +24,15 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
     checks=[
       str(entry)==d['allowed_launch_entry']['path'],
       argv==[str(entry),'launch',str(here/'stack.launch.py'),'run_dir:='+run],
-      env.get('DEMO_RUN_DIR')==run and env.get('ROS_DOMAIN_ID')=='114' and env.get('GZ_PARTITION')=='teacher_closed_loop_'+Path(run).name,
+      env.get('DEMO_RUN_DIR')==run and env.get('ROS_DOMAIN_ID')=='115' and env.get('GZ_PARTITION')=='teacher_closed_loop_'+Path(run).name,
       latch.get('run')==run and latch.get('maximum_attempts')==1 and latch.get('navigation_ground_truth_used')is False,
       prepared['freeze'].get(str(Path(run)/'runtime_plan.json'))==plan_digest,
       plan.get('run')==run and plan.get('profile_path')==str(here/'profiles/engineering_nav46.json'),
       plan.get('simulation_only')is True and plan.get('real_robot')is False and plan.get('navigation_ground_truth_used')is False and plan.get('autonomous_navigation_verified')is False,
-      plan.get('ros_domain')==114 and plan.get('wall_budget_s')==4590.,
-      plan.get('R65_strict_identity_handoff',{}).get('source_dir')==str(stage),
-      plan.get('R65_strict_identity_handoff',{}).get('max_native_s')==1500 and plan.get('R65_strict_identity_handoff',{}).get('max_acquisition_wall_s')==4350,
-      plan.get('R65_strict_identity_handoff',{}).get('output_hard_B')==10000000000 and plan.get('R65_strict_identity_handoff',{}).get('strict_original_gates')is True,
+      plan.get('ros_domain')==115 and plan.get('wall_budget_s')==4590.,
+      plan.get('R66_strict_identity_handoff',{}).get('source_dir')==str(stage),
+      plan.get('R66_strict_identity_handoff',{}).get('max_native_s')==1500 and plan.get('R66_strict_identity_handoff',{}).get('max_acquisition_wall_s')==4350,
+      plan.get('R66_strict_identity_handoff',{}).get('output_hard_B')==10000000000 and plan.get('R66_strict_identity_handoff',{}).get('strict_original_gates')is True,
       same(me,saved)and me.get('state')!='Z' and me.get('pid')==me.get('pgid')==me.get('session'),
       saved.get('owned_run')==run and saved.get('role')=='navigation_stack',
       saved.get('ownership_token')==owner.get('token')==permit.get('token') and permit.get('identity')==saved,
@@ -40,7 +40,7 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
       'navigation_stack'in owner.get('allowed_roles',[])and now<owner['wall_deadline'],
       parent_command[1:]==['-B',str(stage/'run.py'),'--execute'],
       heartbeat.get('state')=='RUNNING' and 0<=now-heartbeat['monotonic_wall']<3.,
-      plan.get('R65_strict_identity_handoff',{}).get('deadline_utc')=='2026-10-12T00:00:00Z',
+      plan.get('R66_strict_identity_handoff',{}).get('deadline_utc')=='2026-10-12T00:00:00Z',
       1791763200-time.time()>4590 and plan.get('wall_budget_s',float('inf'))<=1791763200-time.time()-240,
     ]
     if not all(checks):raise RuntimeError('C51 bounded launch identity/context differs: '+str([i for i,x in enumerate(checks)if not x]))
@@ -69,40 +69,40 @@ def require_bounded_entry(here):
 def verify_source_equivalence(here):
     here=Path(here).resolve();d=contract(here)
     manifest_path=Path(d['candidate_manifest'])
-    if sha(manifest_path)!=d['candidate_manifest_sha256']:raise RuntimeError('R65 manifest changed')
+    if sha(manifest_path)!=d['candidate_manifest_sha256']:raise RuntimeError('R66 manifest changed')
     manifest=json.loads(manifest_path.read_text());baseline=Path(manifest['baseline']).resolve()
     before=json.loads(Path(d['baseline_manifest']).read_text())
-    if sha(d['baseline_manifest'])!=d['baseline_manifest_sha256']:raise RuntimeError('R65 baseline receipt changed')
+    if sha(d['baseline_manifest'])!=d['baseline_manifest_sha256']:raise RuntimeError('R66 baseline receipt changed')
     for name,digest in before['baseline_files'].items():
         if sha(baseline/name)!=digest:raise RuntimeError('Protected R57 source changed: '+name)
     prior=json.loads((baseline/'R33_STARTUP_PREFLIGHT.json').read_text())
     for name,digest in prior['verified_inputs_sha256'].items():
         if sha(name)!=digest:raise RuntimeError('Protected R57 external source changed: '+name)
-    if (baseline!=here.with_name('engineering_v44_r64_reference_retention_entry_candidate')
+    if (baseline!=here.with_name('engineering_v45_r65_guard_payload_layout_candidate')
             or before.get('baseline')!=str(baseline) or before.get('candidate')!=str(here)):
-        raise RuntimeError('R65 baseline identity differs')
+        raise RuntimeError('R66 baseline identity differs')
     excluded=set(manifest['excluded_gate_files'])
     if excluded!={'C51_REFACTOR_CONTRACT.json','R33_STARTUP_PREFLIGHT.json','R33_STARTUP_SOURCE_REVIEW.json'}:
-        raise RuntimeError('R65 excluded gate set differs')
-    if set(manifest['sources'])&excluded:raise RuntimeError('R65 gate/source sets overlap')
+        raise RuntimeError('R66 excluded gate set differs')
+    if set(manifest['sources'])&excluded:raise RuntimeError('R66 gate/source sets overlap')
     changed_set={name for name,digest in manifest['sources'].items()
                  if digest!=before['baseline_files'].get(name)}
-    if changed_set!=set(manifest['declared_changed_files']):raise RuntimeError('R65 declared delta differs')
+    if changed_set!=set(manifest['declared_changed_files']):raise RuntimeError('R66 declared delta differs')
     actual={str(p.relative_to(here))for p in here.rglob('*')if p.is_file()and'__pycache__'not in p.parts and'.git'not in p.parts}
-    if actual!=set(manifest['sources'])|excluded:raise RuntimeError('R65 unlisted files')
+    if actual!=set(manifest['sources'])|excluded:raise RuntimeError('R66 unlisted files')
     rows={}
     for name,digest in manifest['sources'].items():
-        if sha(here/name)!=digest:raise RuntimeError('R65 candidate source changed: '+name)
+        if sha(here/name)!=digest:raise RuntimeError('R66 candidate source changed: '+name)
         changed=digest!=before['baseline_files'].get(name)
-        if changed and name not in set(manifest['declared_changed_files']):raise RuntimeError('R65 undeclared runtime edit: '+name)
+        if changed and name not in set(manifest['declared_changed_files']):raise RuntimeError('R66 undeclared runtime edit: '+name)
         rows[name]=dict(baseline=str(baseline/name),candidate=str(here/name),sha256=digest,
             baseline_sha256=before['baseline_files'].get(name),declared_change='Declared prospective source identity/path handoff repair' if changed else 'Exact R57 bytes retained')
     for name,digest in d['stage_input_sha256'].items():
-        if sha(name)!=digest:raise RuntimeError('R65 stage input changed: '+name)
-    if sha(d['fresh_CPU_receipt'])!=d['fresh_CPU_receipt_sha256']:raise RuntimeError('R65 CPU receipt changed')
+        if sha(name)!=digest:raise RuntimeError('R66 stage input changed: '+name)
+    if sha(d['fresh_CPU_receipt'])!=d['fresh_CPU_receipt_sha256']:raise RuntimeError('R66 CPU receipt changed')
     cpu=json.loads(Path(d['fresh_CPU_receipt']).read_text())
-    if cpu.get('tests_pass')is not True or cpu.get('actual_candidate')!=str(here):raise RuntimeError('R65 CPU checks incomplete')
+    if cpu.get('tests_pass')is not True or cpu.get('actual_candidate')!=str(here):raise RuntimeError('R66 CPU checks incomplete')
     for name,digest in cpu['source_sha256'].items():
-        if sha(name)!=digest:raise RuntimeError('R65 CPU source changed: '+name)
+        if sha(name)!=digest:raise RuntimeError('R66 CPU source changed: '+name)
     return rows
 

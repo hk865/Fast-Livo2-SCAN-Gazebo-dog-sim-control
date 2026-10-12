@@ -33,6 +33,8 @@ from continuous_route import (configuration as continuous_configuration, RoutePr
     CausalHandoffProjectionController)
 
 
+from path_commit import staged_cascade_binding
+
 class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
         super().__init__(run);self.pid=ResetBookkeeping()  # no legacy controller mathematics
@@ -470,21 +472,20 @@ class PIDNavigation(TeacherNavigation):
             active_reference_stamp=self.active_reference_stamp,planning_start_state=copy.deepcopy(self.planning_start_state),
             execution_path_exhaustion=copy.deepcopy(getattr(self,'execution_path_exhaustion',None)))
             if recovery is not None and recovery['allowed'] else None)
+        # A lower accepted archive is not yet the execution receipt commit.
+        # Keep its unique replan/archive counter on a rejected final binding.
+        binding_execution=dict(samples=self.samples,active_trajectory_id=self.active_trajectory_id,
+            active_reference_stamp=self.active_reference_stamp,planning_start_state=copy.deepcopy(self.planning_start_state),
+            execution_path_exhaustion=copy.deepcopy(getattr(self,'execution_path_exhaustion',None)),
+            trajectory_archive_reference=getattr(self,'trajectory_archive_reference',None))
+        binding_generation=self.known_scene_inputs['generation']
         before=self.replans;wall=time.monotonic_ns();super().accept_spline(msg,metadata)
         if self.replans>before and self.samples is not None:
-            capture_clear=(self.clear_committed_exhausted_capture() if recovery is not None and recovery['allowed'] else None)
-            self.path_admission_active=dict(payload=copy.deepcopy(value),metadata=copy.deepcopy(metadata),
-                identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
-                active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding,
-                correction_generation=self.known_scene_inputs["generation"],
-                ordered_coverage_index=None if self.continuous_route is None else self.continuous_route.next_index)
-            self.path_admission_hold=False;self.path_admission_replan_pending=False;self.reference_replan_pending=False
-            self.reference_consistency_hold=False;self.reference_consistency_check=None
             indices=[0]
             for i in range(1,len(self.samples)):
                 if np.linalg.norm(self.samples[i,:2]-self.samples[indices[-1],:2])>=1e-5:indices.append(i)
             points=self.samples[indices]
-            self.path_receipt=dict(points_xyz=points.tolist(),
+            receipt=dict(points_xyz=points.tolist(),
                 source_sample_indices=indices,source_samples_count=len(self.samples),
                 source_samples_float64_sha256=hashlib.sha256(np.asarray(self.samples,dtype='<f8').tobytes()).hexdigest(),
                 path_id=str(self.request_id)+':'+str(self.waypoint_index)+':'+str(self.replans)+':'+str(self.active_trajectory_id),
@@ -492,13 +493,44 @@ class PIDNavigation(TeacherNavigation):
                 received_wall_ns=wall,frame_id='camera_init',array_file=self.trajectory_archive_reference,
                 request_id=self.request_id,waypoint_index=self.waypoint_index,
                 trajectory_id=self.active_trajectory_id,metadata=copy.deepcopy(metadata))
-            self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
+            receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
+            try:
+                staged=staged_cascade_binding(self,receipt)
+                if staged is not None:
+                    if time.monotonic()-started>.100:
+                        raise ValueError('admission_callback_budget_exhausted')
+                    if not self._known_generation_ready() or self.known_scene_inputs['generation']!=binding_generation:
+                        raise ValueError('admitted_path_source_generation_changed')
+            except (ValueError,TypeError,KeyError,AttributeError,OverflowError,FloatingPointError) as error:
+                for key,old in binding_execution.items():setattr(self,key,old)
+                self.path_admission_hold=True;self.path_admission_replan_pending=True;self.publish_command()
+                self.last_spline_rejected='V33 admitted path binding rejected: '+str(error)
+                self.message=self.last_spline_rejected+'; wait for a fully bound path'
+                self.archive_admission(value,metadata,dict(admitted=False,reason='admitted_path_binding_rejected',
+                    proof=proof,handoff=handoff,anchor_binding=binding,binding_error=str(error),
+                    lower_gate_samples_accepted=True,lower_gate_execution_identity_restored=True,
+                    unique_lower_archive_counter_retained=True,exact_zero_requested=True),started)
+                return
+            capture_clear=(self.clear_committed_exhausted_capture() if recovery is not None and recovery['allowed'] else None)
+            active=dict(payload=copy.deepcopy(value),metadata=copy.deepcopy(metadata),
+                identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
+                active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding,
+                correction_generation=self.known_scene_inputs['generation'],
+                ordered_coverage_index=None if self.continuous_route is None else self.continuous_route.next_index)
+            # All preparation succeeded; no await or callback boundary occurs
+            # between the original cascade binding and its matching receipt.
+            if staged is not None:
+                self.cascade=staged[0];self.cascade_path_id=receipt['path_id']
+            self.path_receipt=receipt;self.path_admission_active=active
+            self.path_admission_hold=False;self.path_admission_replan_pending=False;self.reference_replan_pending=False
+            self.reference_consistency_hold=False;self.reference_consistency_check=None
             if handoff is not None and handoff.get('stopped_rebind',{}).get('allowed'):
-                # The original Teacher owns all turn/settle commands after this real commit.
                 self.heading_gate.reset()
+            if staged is not None:self.evidence.append(self.run/'navigation_cascade_paths.jsonl',staged[1])
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
             self.archive_admission(value,metadata,dict(admitted=True,reason='exhausted_capture_rebound_after_all_execution_gates' if capture_clear is not None else 'continuous_fence_and_existing_execution_gates_passed',
-                proof=proof,handoff=handoff,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear),started)
+                proof=proof,handoff=handoff,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear,
+                synchronous_original_path_binding=staged is not None),started)
         else:
             # Existing execution guards still own final admission. Their
             # refusal never becomes an admitted path in this separate ledger.
