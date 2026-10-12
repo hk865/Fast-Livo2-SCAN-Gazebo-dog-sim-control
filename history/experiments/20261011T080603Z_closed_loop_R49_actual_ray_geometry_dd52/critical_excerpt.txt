@@ -1,0 +1,50 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+14]
+[INFO] [parameter_bridge-13]: sending signal 'SIGINT' to process[parameter_bridge-13]
+[INFO] [python3-12]: sending signal 'SIGINT' to process[python3-12]
+[INFO] [python3-11]: sending signal 'SIGINT' to process[python3-11]
+[INFO] [python3-10]: sending signal 'SIGINT' to process[python3-10]
+[INFO] [python3-9]: sending signal 'SIGINT' to process[python3-9]
+[INFO] [python3-8]: sending signal 'SIGINT' to process[python3-8]
+[INFO] [python3-7]: sending signal 'SIGINT' to process[python3-7]
+[INFO] [python3-6]: sending signal 'SIGINT' to process[python3-6]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [parameter_blackboard-3]: sending signal 'SIGINT' to process[parameter_blackboard-3]
+[INFO] [python3-2]: sending signal 'SIGINT' to process[python3-2]
+[INFO] [python3-1]: sending signal 'SIGINT' to process[python3-1]
+[parameter_bridge-13] [INFO] [1791706055.320745720] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] [INFO] [1791706055.324656177] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_blackboard-3] [INFO] [1791706055.326141180] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] des manager
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 1305462]
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 1305447]
+[INFO] [python3-1]: process has finished cleanly [pid 1305445]
+[INFO] [python3-9]: process has finished cleanly [pid 1305458]
+[INFO] [python3-11]: process has finished cleanly [pid 1305460]
+[INFO] [python3-6]: process has finished cleanly [pid 1305450]
+[INFO] [python3-14]: process has finished cleanly [pid 1305463]
+[INFO] [python3-12]: process has finished cleanly [pid 1305461]
+[INFO] [python3-8]: process has finished cleanly [pid 1305455]
+[INFO] [python3-2]: process has finished cleanly [pid 1305446]
+[INFO] [python3-5]: process has finished cleanly [pid 1305449]
+[INFO] [python3-10]: process has finished cleanly [pid 1305459]
+[INFO] [python3-7]: process has finished cleanly [pid 1305451]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+ 0x79d8a3a9cb83, in 
+#11   Object "/lib/x86_64-linux-gnu/libstdc++.so.6", at 0x79d89fcecdb3, in 
+#10   Object "/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/libgz-sim-sensors-system.so", at 0x79d888178cff, in gz::sim::v8::systems::SensorsPrivate::RenderThread()
+#9    Object "/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/libgz-sim-sensors-system.so", at 0x79d88817827b, in gz::sim::v8::systems::SensorsPrivate::RunOnce()
+#8    Object "/opt/ros/jazzy/opt/gz_sensors_vendor/lib/libgz-sensors8.so.8", at 0x79d8a383b03e, in gz::sensors::v8::Manager::RunOnce(std::chrono::duration<long, std::ratio<1l, 1000000000l> > const&, bool)
+#7    Object "/opt/ros/jazzy/opt/gz_sensors_vendor/lib/libgz-sensors8.so.8", at 0x79d8a383af5b, in gz::sensors::v8::Sensor::Update(std::chrono::duration<long, std::ratio<1l, 1000000000l> > const&, bool)
+#6    Object "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R49_SAMPLED_RAY_RECTIFICATION_STAGE/libgo2_ray_observer.so", at 0x79d8a4208886, in gz::sensors::v8::GpuLidarSensor::Update(std::chrono::duration<long, std::ratio<1l, 1000000000l> > const&)
+#5    Object "/opt/ros/jazzy/opt/gz_sensors_vendor/lib/libgz-sensors8-gpu_lidar.so.8", at 0x79d8a4ba28ba, in gz::sensors::v8::GpuLidarSensor::Update(std::chrono::duration<long, std::ratio<1l, 1000000000l> > const&)
+#4    Object "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R49_SAMPLED_RAY_RECTIFICATION_STAGE/libgo2_ray_observer.so", at 0x79d8a420daec, in gz::transport::v13::Node::Publisher::Publish(google::protobuf::Message const&)
+#3    Object "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R49_SAMPLED_RAY_RECTIFICATION_STAGE/libgo2_ray_observer.so", at 0x79d8a4208021, in diag::geometry_fail(char const*)
+#2    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x79d8a3a288fe, in abort
+#1    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x79d8a3a4527d, in gsignal
+#0    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x79d8a3a9ec0c, in pthread_kill
+Aborted (Signal sent by tkill() 1305777 1000)
