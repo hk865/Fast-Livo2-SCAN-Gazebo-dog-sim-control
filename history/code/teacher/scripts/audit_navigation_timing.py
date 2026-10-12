@@ -8,6 +8,12 @@ from pathlib import Path
 
 import numpy as np
 
+TRANSPORT_HISTORY_ONLY = {
+    'transport_write_started_monotonic_wall', 'transport_written_monotonic_wall',
+    'transport_queue_delay_wall_s', 'transport_write_duration_wall_s',
+    'transport_superseded_envelopes',
+}
+
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -58,11 +64,27 @@ def evaluate(run, write=True):
     commands = rows(run/'navigation_command_history.jsonl')
     status = rows(run/'navigation_status.jsonl')
     command_index = {row['sequence']: row for row in commands if isinstance(row.get('sequence'), int)}
-    command_hash = {seq: hashlib.sha256(json.dumps(row, sort_keys=True, allow_nan=False).encode()).hexdigest()
+    command_hash = {seq: hashlib.sha256(json.dumps({key:value for key,value in row.items() if key not in TRANSPORT_HISTORY_ONLY}, sort_keys=True, allow_nan=False).encode()).hexdigest()
                     for seq, row in command_index.items()}
     lineage_errors = []
     ttl_errors = []
     command_slew_errors = []
+    transport_errors = []
+    transport_records = []
+    for row in commands:
+        present = TRANSPORT_HISTORY_ONLY.intersection(row)
+        if not present:
+            continue
+        if present != TRANSPORT_HISTORY_ONLY or not all(finite(row[key]) for key in present):
+            transport_errors.append({'sequence':row['sequence'],'reason':'Incomplete/nonfinite explicit post-write transport metadata'})
+            continue
+        begin,end=row['transport_write_started_monotonic_wall'],row['transport_written_monotonic_wall']
+        queue_delay,duration=row['transport_queue_delay_wall_s'],row['transport_write_duration_wall_s']
+        if (begin < row['monotonic_wall']-1e-8 or end < begin or abs(queue_delay-(begin-row['monotonic_wall']))>1e-8
+                or abs(duration-(end-begin))>1e-8):
+            transport_errors.append({'sequence':row['sequence'],'reason':'Transport timing differs from original envelope timestamps'})
+        transport_records.append({'sequence':row['sequence'],'queue_delay_s':queue_delay,'write_duration_s':duration,
+                                  'superseded_envelopes':row['transport_superseded_envelopes']})
     read_counts = collections.Counter()
     accepted_age = []
     matched_envelope_frames = 0
@@ -103,6 +125,8 @@ def evaluate(run, write=True):
             if (abs(age_sim-envelope['sim_age_s']) > 1e-8 or not finite(age_wall)
                     or age_wall < minimum_age_wall-1e-8):
                 lineage_errors.append({'frame': index, 'sequence': seq, 'reason': 'Worker age does not match causal envelope clock'})
+            if finite(original.get('transport_write_started_monotonic_wall')) and age_wall+original['monotonic_wall']<original['transport_write_started_monotonic_wall']-1e-8:
+                lineage_errors.append({'frame':index,'sequence':seq,'reason':'Worker completed envelope read before its actual write began'})
             if outcome == 'accepted':
                 accepted_age.append((age_wall, age_sim))
                 allowed = original['healthy'] is True and -.05 <= age_wall < .3 and -.05 <= age_sim < .3
@@ -142,7 +166,11 @@ def evaluate(run, write=True):
                                                    'limit_s': .3, 'moving_to_stale_physical_stop': 'unverified' if not moving_stale else 'requires native stop interval audit',
                                                    'limit': 'Zero standing/rejected input holding alone does not verify stopping from motion'},
                   'actual_teacher_command_slew': {'status': 'passed' if policy and not command_slew_errors else 'failed',
-                                                   'maximum_per_policy_step_delta': slew.tolist(), 'errors': command_slew_errors}},
+                                                   'maximum_per_policy_step_delta': slew.tolist(), 'errors': command_slew_errors},
+                  'recorded_transport_timing': {'status':'failed'if transport_errors else'passed'if transport_records else'unverified',
+                                                'errors':transport_errors,'written_envelopes_recorded':len(transport_records),
+                                                'canonical_hash_excluded_fields':sorted(TRANSPORT_HISTORY_ONLY),
+                                                'meaning':'Only explicitly documented post-write history fields are excluded from file-envelope hash; embedded base transport state remains included'}},
               'metrics': {'real_time_factor_observed': rtf,
                           'sensor_ready_snapshot_spans': spans(health, lambda row: row.get('ready') is True),
                           'bridge_healthy_snapshot_spans': spans(commands, lambda row: row.get('healthy') is True),
@@ -153,6 +181,10 @@ def evaluate(run, write=True):
                           'accepted_maximum_wall_age_s': float(ages[:,0].max()) if len(ages) else None,
                           'accepted_maximum_sim_age_s': float(ages[:,1].max()) if len(ages) else None,
                           'moving_to_stale_events': moving_stale,
+                          'transport_written_records':transport_records,
+                          'transport_maximum_queue_delay_s':max((row['queue_delay_s']for row in transport_records),default=None),
+                          'transport_maximum_write_duration_s':max((row['write_duration_s']for row in transport_records),default=None),
+                          'transport_timestamp_scope':'Write-return timestamp follows atomic replacement, so an actual concurrent reader may finish before writer return. Write-start is a safe causal lower bound; original source age is never refreshed on transport.',
                           'alignment_phase_snapshot_counts': dict(collections.Counter(row.get('alignment_phase') for row in status)),
                           'maximum_controller_tilt_stop_counter': max((row.get('tilt_stops',0) for row in status), default=0),
                           'maximum_raw_imu_tilt_rad': max((row.get('raw_imu_max_tilt_rad') or 0 for row in status), default=None),

@@ -279,6 +279,13 @@ class Dashboard:
             and correction.get('all_checks_identical') is True and correction.get('all_metrics_identical') is True
             and original_functional.get('checks') == reproduced.get('checks')
             and original_functional.get('metrics') == reproduced.get('metrics'))
+        ramp_original = read_json(directory / 'summary_full_ramp.json')
+        stop_addendum = read_json(directory / 'full_ramp_stop_status_addendum.json')
+        ramp_display = ramp_original
+        if ramp_original and stop_addendum and stop_addendum.get('original_summary_sha256') == hashlib.sha256((directory / 'summary_full_ramp.json').read_bytes()).hexdigest():
+            ramp_display = {**ramp_original, 'checks': {**ramp_original.get('checks', {}),
+                'teacher_stop_on_destination_landing': stop_addendum['teacher_stop_on_destination_landing']},
+                'display_note': 'Parking status uses separately archived clarification; original full-ramp receipt retained'}
         return {'available': True, 'run_id': directory.name, 'selected': run,
                 'state': read_json(state_path), 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
@@ -287,7 +294,9 @@ class Dashboard:
                 'step_provenance': correction,
                 'step_functional_source': 'summary_functional.reproduced.json' if corrected else 'summary_functional.json',
                 'step_safety': read_json(directory / 'supplemental_native_safety.json'),
-                'full_ramp': read_json(directory / 'summary_full_ramp.json'),
+                'full_ramp': ramp_display,
+                'full_ramp_original': ramp_original,
+                'full_ramp_stop_addendum': stop_addendum,
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
                 'navigation': self.navigation_view(directory),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),

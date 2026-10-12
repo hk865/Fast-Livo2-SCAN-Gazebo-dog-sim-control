@@ -202,7 +202,8 @@ def main():
         if args.noisy:raise ValueError('Sensor replacement A/B uses clean evaluation only')
         metadata.update(observation_source='Gazebo privileged COM velocity, applied torque and static terrain; actual ROS IMU gyro/gravity and named physical joints q/qd after t=3s',
                         actual_sensor_replacement={'activation_s':3.,'dimensions':30,'script_sha256':broker_sha,'maximum_sim_age_s':.025,'maximum_wall_age_s':.3,
-                                                   'causal_reference':'world_sim_time-.005','on_failure':'native damping; no privileged fallback','remaining_privileged_dimensions':217})
+                                                   'causal_reference':'world_sim_time-.005','on_failure':'native damping; no privileged fallback',
+                                                   'remaining_dimensions_not_replaced':217,'remaining_privileged_dimensions':190,'controller_known_dimensions':27})
     if terrain_manifest:
         metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),'sha256':hashlib.sha256(args.terrain_target_manifest.read_bytes()).hexdigest(),
             'definition':terrain_manifest,'selected_collision_names':[shape.name for shape in terrain.shapes],

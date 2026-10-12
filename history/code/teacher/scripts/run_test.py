@@ -28,6 +28,12 @@ def resource():
     return {'processes':subprocess.check_output(['ps','-eo','pid,ppid,%cpu,%mem,rss,args'],text=True),
             'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True)}
 def main():
+    termination_signal=None
+    def request_cleanup(signum,frame):
+        nonlocal termination_signal
+        termination_signal=signum
+        raise InterruptedError(f'Runner received signal {signum}; cleaning up only owned children')
+    for signum in (signal.SIGTERM,signal.SIGINT):signal.signal(signum,request_cleanup)
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
     p.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'))
@@ -193,6 +199,9 @@ def main():
                 except subprocess.TimeoutExpired:gazebo_grace_expired=True
             except Exception as e:error=f'{type(e).__name__}: {e}'
             finally:
+                # Complete cleanup and write a failed receipt even if the caller
+                # sends repeated termination signals. Never signal shared jobs.
+                for signum in (signal.SIGTERM,signal.SIGINT):signal.signal(signum,signal.SIG_IGN)
                 if resource_stream and not resource_stream.closed:resource_stream.close()
                 if shadow and shadow.poll()is None:
                     time.sleep(.5) # drain actual ROS messages before final causal comparison
@@ -228,5 +237,7 @@ def main():
                              'legacy_scope':'Compatibility record only; historical command timing and height-gain protocol do not apply to the independent functional retest'}
                 else:console={'run':str(run),'test':test,'result':summary['tests'][0]}
                 print(json.dumps(console,ensure_ascii=False),flush=True)
+            for signum in (signal.SIGTERM,signal.SIGINT):signal.signal(signum,request_cleanup)
+            if termination_signal is not None:raise SystemExit(128+termination_signal)
     (ROOT/'runs/suite_latest.json').write_text(json.dumps(suite,indent=2,ensure_ascii=False)+'\n')
 if __name__=='__main__':main()

@@ -63,7 +63,7 @@ def describe(run):
     summary=read(run/'summary_navigation_independent.json')
     timing=read(run/'navigation_timing_audit.json')
     runtime=read(run/'runtime_manifest.json')
-    gpu=[row['gpu'] for row in runtime.get('resource_samples',[]) if isinstance(row,dict) and 'gpu' in row]
+    gpu=[row['gpu'] for row in runtime.get('gpu_resource_samples',[]) if isinstance(row,dict) and 'gpu' in row]
     return {'run':str(run),'levels':summary['levels'],
             'gpu_before':read(run/'resources_before.json').get('gpu'),
             'gpu_samples':gpu,'policy_cpu_forward_ms':read(run/'worker_result.json').get('cpu_forward_ms'),

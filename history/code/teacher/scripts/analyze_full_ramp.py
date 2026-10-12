@@ -27,7 +27,7 @@ def clean(v):
     if isinstance(v,(tuple,list)):return [clean(x) for x in v]
     if isinstance(v,float) and not math.isfinite(v):return None
     return v
-def check(value,**evidence):return {'passed':bool(value),**evidence}
+def check(value,**evidence):return {'status':'unverified'if value is None else'passed'if bool(value)else'failed','passed':None if value is None else bool(value),**evidence}
 def array(rows,key,width=None):
     a=np.asarray([r.get(key) for r in rows],dtype=float)
     shape=(len(rows),) if width is None else (len(rows),width)
@@ -83,7 +83,7 @@ def support_masks(steps,centers,feet,surfaces,criteria):
     return masks,{'missing_or_malformed_contact_geometry_rows':missing,'raw_points_examined':raw_points,'qualified_actual_top_points':qualified,'wrench_scope':'Raw wrenches are retained in actuator.jsonl; quantitative vertical bearing load is not inferred.'}
 
 
-def evaluate(run):
+def evaluate(run, write_outputs=True):
     run=Path(run).resolve();checks={};metrics={};errors=[];sources={};schedule={};protocol={};legacy={}
     try:
         schedule=read(run/'independent_protocol.json');profile=schedule['profile_id']
@@ -153,21 +153,24 @@ def evaluate(run):
         stoppos=pos[stop];stopyaw=np.unwrap(angles[:,2])[stop];drift=float(np.linalg.norm(stoppos[:,:2]-stoppos[0,:2],axis=1).max()) if len(stoppos) else None;yawdrift=float(abs(stopyaw-stopyaw[0]).max()) if len(stopyaw) else None
         stoplin=np.sqrt(np.mean(nv[stop,:2]**2,axis=0)) if stop.any() else np.full(2,np.inf);stopyawrate=float(np.sqrt(np.mean(array(steps,'body_ang_vel',3)[stop,2]**2))) if stop.any() else np.inf
         metrics['stop']={'window_s':[stop_start,stop_end],'translation_drift_m':drift,'yaw_drift_rad':yawdrift,'linear_rms_mps':stoplin,'yaw_rate_rms_radps':stopyawrate,'native_samples':int(stop.sum()),'strategy':'continuous learned Teacher with zero VELOCITY command; action remains inferred'}
-        checks['teacher_stop_on_destination_landing']=check(drift is not None and drift<=stopcriteria['translation_drift_m'] and yawdrift<=stopcriteria['yaw_drift_rad'] and max(stoplin)<=stopcriteria['linear_rms_mps'] and stopyawrate<=stopcriteria['yaw_rate_rms_radps'],**metrics['stop'])
+        stop_verified=completion is not None and drift is not None and stop.sum()>=ti['stop_evaluation_s']/protocol['physics_dt_s']-2 and pstop.sum()>=ti['stop_evaluation_s']*protocol['policy_hz']-2
+        stop_value=drift<=stopcriteria['translation_drift_m'] and yawdrift<=stopcriteria['yaw_drift_rad'] and max(stoplin)<=stopcriteria['linear_rms_mps'] and stopyawrate<=stopcriteria['yaw_rate_rms_radps'] and np.max(abs(actual_cmd[pstop]))<1e-6 and np.max(abs(requested[pstop]))<1e-6 if stop_verified else None
+        checks['teacher_stop_on_destination_landing']=check(stop_value,**metrics['stop'],destination_completion_time_s=completion,reason='Actual destination landing and full continuousTeacher stop window'if stop_verified else'Destination not reached or complete stop window absent; parking not tested')
         metrics['height_change_diagnostic']={'body_world_z_gain_m':float(np.median(stoppos[:,2])-startpos[2]) if len(stoppos) else None,'support_surface_z_change_m':float(np.median(ground[stop])-np.median(ground[initial])) if stop.any() else None,'body_world_z_used_as_pass_gate':False,'height_scan_overhead_points_total':sum(r.get('height_scan_overhead_points',0) for r in rows),'frames_with_overhead_height_scan':sum(r.get('height_scan_overhead_points',0)>0 for r in rows)}
         manifest=read(run/'source_manifest.json');mismatches=[rel for rel,digest in manifest.items() if not(run/'sources'/rel).is_file() or sha(run/'sources'/rel)!=digest]
         checks['archived_source_integrity']=check(not mismatches,archived_files=len(manifest),mismatches=mismatches)
         sourcefiles=['world.sdf','actuator.jsonl','telemetry.jsonl','runtime_manifest.json','policy_manifest.json','worker_result.json','independent_protocol.json','sources/tests/ramp_full_protocol.json','sources/scripts/evaluate_step_functional.py','sources/policy/observation.py']
         sources={p:sha(run/p) for p in sourcefiles}
-        np.savez_compressed(run/'full_ramp_native_analysis.npz',sim_time=nt,base_position=pos,world_COM_velocity=world_v,support_clearance=clearance,**{f'{leg}_collision_center':centers[leg] for leg in centers},**{f'{name}_{leg}_top_support':masks[name][leg] for name in surfaces for leg in centers})
+        if write_outputs:np.savez_compressed(run/'full_ramp_native_analysis.npz',sim_time=nt,base_position=pos,world_COM_velocity=world_v,support_clearance=clearance,**{f'{leg}_collision_center':centers[leg] for leg in centers},**{f'{name}_{leg}_top_support':masks[name][leg] for name in surfaces for leg in centers})
     except Exception as e:errors.append(f'{type(e).__name__}: {e}')
-    status='passed' if checks and all(v['passed'] for v in checks.values()) and not errors else 'failed'
+    status='failed'if errors or any(v['passed']is False for v in checks.values())else'passed'if checks and all(v['passed']is True for v in checks.values())else'unverified'
     receipt=clean({'schema_version':1,'profile_id':schedule.get('profile_id'),'scope':'Complete original physical ramp locomotion and landing transition audit, not SLAM navigation or stairs','status':status,'levels':{'full_ramp_locomotion':status,'navigation':'unverified','real_robot':'unverified'},'checks':checks,'metrics':metrics,'errors':errors,'protocol':protocol,'schedule':schedule,'source_hashes':sources,'analyzer_sha256':sha(__file__),'legacy_evaluation_diagnostic_only':legacy.get('levels'),'privileged_truth_use':'actor observation and physical-test end latch/evaluation only; no position servo or navigation claim'})
-    (run/'summary_full_ramp.json').write_text(json.dumps(receipt,indent=2,allow_nan=False)+'\n');return receipt
+    if write_outputs:(run/'summary_full_ramp.json').write_text(json.dumps(receipt,indent=2,allow_nan=False)+'\n')
+    return receipt
 
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('runs',nargs='+',type=Path);args=p.parse_args()
     for run in args.runs:
-        result=evaluate(run);print(json.dumps({'run':str(run),'status':result['status'],'failed_checks':[k for k,v in result['checks'].items() if not v['passed']],'errors':result['errors'],'metrics':result['metrics']},allow_nan=False),flush=True)
+        result=evaluate(run);print(json.dumps({'run':str(run),'status':result['status'],'failed_checks':[k for k,v in result['checks'].items() if v['passed']is False],'unverified_checks':[k for k,v in result['checks'].items()if v['passed']is None],'errors':result['errors'],'metrics':result['metrics']},allow_nan=False),flush=True)
 if __name__=='__main__':main()
