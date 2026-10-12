@@ -4,14 +4,16 @@ from __future__ import annotations
 import argparse
 import collections
 from contextlib import contextmanager
+import gc
 import hashlib
 import json
 from pathlib import Path
 import sys
+import threading
 import time
 
 CONTRACT = {
-    "schema": "teacher_original_request_substages/v1",
+    "schema": "teacher_original_request_substages/v2",
     "maximum_file_bytes": 512 * 1024,
     "maximum_recent_bytes": 256 * 1024,
     "maximum_recent_records": 128,
@@ -27,6 +29,10 @@ CONTRACT = {
     "original_timing_rows_modified": False,
     "memory_scope": "retained encoded scalar rows; excludes Python objects and original worker RSS",
     "performance_non_regression_verified": False,
+    "json_call_ordinal_and_input_length_recorded": True,
+    "GC_observer_same_thread_active_frame_only": True,
+    "GC_schedule_threshold_or_enabled_modified": False,
+    "maximum_GC_generation_groups": 3,
 }
 
 
@@ -41,11 +47,47 @@ class RequestWindow:
         self.recent_bytes = self.critical_bytes = 0
         self.attempted = self.evicted = self.oversize = self.diagnostic_errors = 0
         self.timers_created = 0
+        self.owner_thread_id = threading.get_ident()
+        self.pending_gc = {}
+        self.ignored_foreign_gc = 0
 
     def begin(self, sequence):
         self.active = False
         self.frame = {"schema": CONTRACT["schema"], "frame_sequence": sequence,
-                      "native_clock_ns": None, "operations": {}, "request_calls": 0}
+                      "native_clock_ns": None, "operations": {}, "request_calls": 0,
+                      "json_load_calls": 0, "GC_generations": {}}
+
+    def observe_gc(self, phase, info):
+        """Record actual default-GC callbacks; never request or defer collection."""
+        try:
+            if threading.get_ident() != self.owner_thread_id:
+                self.ignored_foreign_gc += 1
+                return
+            generation = info['generation']
+            if type(generation) is not int or generation not in (0, 1, 2):
+                return
+            if phase == 'start':
+                if self.frame is not None:
+                    self.pending_gc[generation] = (self.frame['frame_sequence'],
+                        self.clock(), self.cpu_clock(), self.active)
+            elif phase == 'stop' and generation in self.pending_gc:
+                sequence, wall, cpu, active = self.pending_gc.pop(generation)
+                if self.frame is None or self.frame['frame_sequence'] != sequence:
+                    return
+                wall, cpu = self.clock() - wall, self.cpu_clock() - cpu
+                row = self.frame['GC_generations'].setdefault(str(generation),
+                    dict(calls=0, total_wall_ns=0, total_thread_cpu_ns=0,
+                         maximum_wall_ns=0, request_active_calls=0,
+                         collected=0, uncollectable=0))
+                row['calls'] += 1
+                row['total_wall_ns'] += wall
+                row['total_thread_cpu_ns'] += cpu
+                row['maximum_wall_ns'] = max(row['maximum_wall_ns'], wall)
+                row['request_active_calls'] += int(active)
+                row['collected'] += info['collected']
+                row['uncollectable'] += info['uncollectable']
+        except Exception:
+            self.diagnostic_errors += 1
 
     def received(self, clock_ns):
         if self.frame is not None:
@@ -144,6 +186,10 @@ class RequestWindow:
                       original_scalar_rows_sha256=hashlib.sha256(b"".join(rows)).hexdigest(),
                       bounded_window_final=True, full_run_capture_complete=False,
                       native_parking_verified=False)
+        header['GC_observer'] = dict(owner_thread_id=self.owner_thread_id,
+            actual_thresholds=list(gc.get_threshold()), actual_enabled=gc.isenabled(),
+            schedule_modified_by_observer=False, foreign_threads_ignored=True)
+        footer['ignored_foreign_thread_GC_callbacks'] = self.ignored_foreign_gc
         encode = lambda x: (json.dumps(x, separators=(",", ":"), allow_nan=False) + "\n").encode()
         payload = encode(header) + b"".join(rows) + encode(footer)
         if len(payload) > CONTRACT["maximum_file_bytes"]:
@@ -170,6 +216,21 @@ def observed_path(original, capture):
             return capture.call("worker.Path.read_text/" + label, self.name,
                                 super().read_text, *args, **kwargs)
     return ObservedPath
+
+
+@contextmanager
+def observe_default_gc(capture):
+    callback = capture.observe_gc
+    gc.callbacks.append(callback)
+    try:
+        yield
+    finally:
+        # Remove only this exact addition, retaining pre-existing and newly
+        # registered callbacks and their order.
+        for index in range(len(gc.callbacks) - 1, -1, -1):
+            if gc.callbacks[index] is callback:
+                del gc.callbacks[index]
+                break
 
 
 @contextmanager
@@ -238,7 +299,20 @@ def instrument(worker, timing_module, provider_class, recording_class, capture):
             return getattr(original_json, name)
 
         def loads(self, *args, **kwargs):
-            return capture.call("worker.json.loads", "loads", original_json.loads, *args, **kwargs)
+            if not capture.active or capture.frame is None:
+                return original_json.loads(*args, **kwargs)
+            try:
+                capture.frame['json_load_calls'] += 1
+                ordinal = capture.frame['json_load_calls']
+                value = args[0] if args else kwargs.get('s')
+                size = len(value) if type(value) in (str, bytes, bytearray) else None
+                label = 'ordinal=%s;input_length=%s' % (ordinal, size)
+            except Exception:
+                capture.diagnostic_errors += 1
+                return capture.call("worker.json.loads", "loads", original_json.loads, *args, **kwargs)
+            return capture.call("worker.json.loads", "loads",
+                capture.call, "worker.json.loads/" + str(ordinal), label,
+                original_json.loads, *args, **kwargs)
 
     original_canonical = worker.canonical
     try:
@@ -272,7 +346,7 @@ def main():
     from evidence_runtime_v32.worker_logging import RecordingContext
     capture = RequestWindow()
     try:
-        with instrument(worker, ipc_evidence, MissionTerrainProvider, RecordingContext, capture):
+        with observe_default_gc(capture), instrument(worker, ipc_evidence, MissionTerrainProvider, RecordingContext, capture):
             return ipc_fault_window.main()
     finally:
         try:

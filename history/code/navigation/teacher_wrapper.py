@@ -24,6 +24,7 @@ sys.path.insert(0,str(DEMO/'navigation'))
 spec=importlib.util.spec_from_file_location('teacher_measured_scan_base',HERE/'shared_controller.py')
 base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
 from pid_scope import verify_scope
+from status_acceptance_receipt import StatusAcceptanceReceipt
 from control_core import rotation_xyzw,body_tilt
 from runtime_io import EvidenceWriter,latest_sensor_qos
 from compact_archives import make_evidence_writer
@@ -59,6 +60,7 @@ class RecordedPublisher:
             data['motion_limits']['pure_turn_rate_rad_s']=self.node.heading_gate.max_turn_rate
             data['arrival_stop_policy']='after_measured_dwell'
             data['arrival_stop_policy_source']='Actual raw SLAM original control-region ArrivalWindow; no tracking-pose arrival'
+        data=self.node.status_acceptance_receipt.project(data)
         self.publisher.publish(String(data=json.dumps(data,ensure_ascii=False,allow_nan=False)))
         self.node.evidence.append(self.run/'navigation_status.jsonl',{**data,'monotonic_wall':time.monotonic(),
             'ros_sim_time':self.node.get_clock().now().nanoseconds/1e9})
@@ -68,6 +70,9 @@ class RecordedPublisher:
 class TeacherNavigation(base.Navigation):
     def __init__(self,run):
         self.run=run;receipt=verify_scope(run/'navigation_scope.json');self.profile=receipt['profile']
+        self.status_acceptance_receipt=StatusAcceptanceReceipt(run,receipt,enabled=(
+            self.profile.get('mission46_required') is True
+            and self.profile.get('continuous_route_contract',{}).get('enabled') is True))
         super().__init__()
         self.evidence=make_evidence_writer(self.run,self.profile);self.gyro_body=None;self.gyro_stamp=None;self.gyro_wall=None
         self.heading_gate=TeacherHeadingGate(self.profile)

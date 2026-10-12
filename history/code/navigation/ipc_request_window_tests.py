@@ -1,4 +1,5 @@
 import hashlib
+import gc
 import json
 from pathlib import Path
 import tempfile
@@ -8,7 +9,7 @@ from unittest.mock import patch
 
 import ipc_evidence
 import ipc_fault_window
-from ipc_request_window import CONTRACT, RequestWindow, instrument, observed_path
+from ipc_request_window import CONTRACT, RequestWindow, instrument, observed_path, observe_default_gc
 
 
 class RequestWindowTests(unittest.TestCase):
@@ -225,10 +226,118 @@ class RequestWindowTests(unittest.TestCase):
                 "worker": fake_worker, "mission46_terrain": fake_provider,
                 "evidence_runtime_v32.worker_logging": fake_recording}), \
                 patch.object(ipc_fault_window, "main", fail), \
-                patch("sys.argv", ["test", "--run", td]), patch("sys.stderr", FailingStderr()):
+                patch("sys.argv", ["test", "--run", td]), patch("sys.stderr", FailingStderr()), \
+                patch.object(module.Path, "read_bytes", return_value=b"finite fake source receipt"), \
+                patch.object(RequestWindow, "save", side_effect=OSError("actual optional save failure")) as saved:
             with self.assertRaises(RuntimeError) as raised:
                 module.main()
+            saved.assert_called_once()
         self.assertIs(raised.exception, error)
+
+
+class DefaultGCObserverTests(unittest.TestCase):
+    fixture = RequestWindowTests.fixture
+
+    def test_actual_callback_values_wall_CPU_generation_and_request_phase(self):
+        wall, cpu = iter((100, 200)), iter((10, 50))
+        c = RequestWindow(clock=lambda: next(wall), cpu_clock=lambda: next(cpu))
+        c.begin(1)
+        c.active = True
+        c.observe_gc('start', {'generation': 2})
+        c.observe_gc('stop', {'generation': 2, 'collected': 7, 'uncollectable': 0})
+        row = c.frame['GC_generations']['2']
+        self.assertEqual((row['total_wall_ns'], row['total_thread_cpu_ns']), (100, 40))
+        self.assertEqual((row['calls'], row['request_active_calls'], row['collected']), (1, 1, 7))
+        self.assertEqual(c.pending_gc, {})
+
+    def test_foreign_thread_and_outside_frame_callbacks_are_not_misattributed(self):
+        c = RequestWindow()
+        c.observe_gc('start', {'generation': 0})
+        self.assertEqual(c.pending_gc, {})
+        c.begin(1)
+        with patch('ipc_request_window.threading.get_ident', return_value=c.owner_thread_id + 1):
+            c.observe_gc('start', {'generation': 2})
+            c.observe_gc('stop', {'generation': 2, 'collected': 0, 'uncollectable': 0})
+        self.assertEqual(c.frame['GC_generations'], {})
+        self.assertEqual(c.pending_gc, {})
+        self.assertEqual(c.ignored_foreign_gc, 2)
+
+    def test_restoration_preserves_existing_and_new_callbacks_and_original_fault(self):
+        original = tuple(gc.callbacks)
+        thresholds, enabled = gc.get_threshold(), gc.isenabled()
+        additional = lambda phase, info: None
+        error = RuntimeError('original worker termination')
+        try:
+            with self.assertRaises(RuntimeError) as raised:
+                with observe_default_gc(RequestWindow()):
+                    self.assertEqual(tuple(gc.callbacks[:-1]), original)
+                    gc.callbacks.append(additional)
+                    raise error
+            self.assertIs(raised.exception, error)
+            self.assertEqual(tuple(gc.callbacks), (*original, additional))
+            self.assertEqual((gc.get_threshold(), gc.isenabled()), (thresholds, enabled))
+        finally:
+            gc.callbacks.remove(additional)
+        self.assertEqual(tuple(gc.callbacks), original)
+
+    def test_JSON_ordinals_forward_each_original_object_error_and_argument_once(self):
+        w, P, R, _ = self.fixture()
+        calls, token, error = [], object(), ValueError('original decoder failure')
+        def loads(*args, **kwargs):
+            calls.append((args, kwargs))
+            if args[0] == 'fail':
+                raise error
+            return token
+        w.json = types.SimpleNamespace(loads=loads, dumps=json.dumps)
+        c = RequestWindow()
+        c.begin(1)
+        with instrument(w, ipc_evidence, P, R, c), c.request_scope():
+            self.assertIs(w.json.loads('{}'), token)
+            self.assertIs(w.json.loads(b'[]'), token)
+            with self.assertRaises(ValueError) as raised:
+                w.json.loads('fail')
+        self.assertIs(raised.exception, error)
+        self.assertEqual(calls, [(('{}',), {}), ((b'[]',), {}), (('fail',), {})])
+        self.assertEqual(c.frame['json_load_calls'], 3)
+        self.assertEqual(c.frame['operations']['worker.json.loads']['calls'], 3)
+        self.assertEqual(c.frame['operations']['worker.json.loads/3']['errors'], 1)
+        self.assertIn('input_length=2', c.frame['operations']['worker.json.loads/1']['maximum_target'])
+
+    def test_optional_GC_clock_errors_preserve_original_JSON_error(self):
+        w, P, R, _ = self.fixture()
+        c = RequestWindow()
+        c.begin(1)
+        def fail_clock():
+            raise RuntimeError('optional clock error')
+        c.clock = fail_clock
+        c.observe_gc('start', {'generation': 2})
+        self.assertGreater(c.diagnostic_errors, 0)
+        c.active = True
+        with instrument(w, ipc_evidence, P, R, c), self.assertRaises(json.JSONDecodeError):
+            w.json.loads('invalid unchanged JSON')
+
+    def test_all_generation_metrics_stay_in_retained_and_file_caps_with_terminal(self):
+        c = RequestWindow(clock=lambda: 1, cpu_clock=lambda: 1)
+        for sequence in range(1, 1001):
+            c.begin(sequence)
+            for generation in (0, 1, 2, 3):
+                c.observe_gc('start', {'generation': generation})
+                c.observe_gc('stop', {'generation': generation, 'collected': 0, 'uncollectable': 0})
+            self.assertEqual(len(c.frame['GC_generations']), 3)
+            c.finish('response_sent', True)
+            self.assertLessEqual(c.recent_bytes, CONTRACT['maximum_recent_bytes'])
+        c.begin(1001)
+        c.finish('original worker fault', False)
+        with tempfile.TemporaryDirectory() as td:
+            f = c.save(td, {})
+            raw = f.read_bytes()
+            lines = raw.splitlines(keepends=True)
+            records = [json.loads(line) for line in lines]
+            self.assertLessEqual(len(raw), CONTRACT['maximum_file_bytes'])
+            self.assertEqual(records[0]['GC_observer']['actual_thresholds'], list(gc.get_threshold()))
+            self.assertFalse(records[0]['GC_observer']['schedule_modified_by_observer'])
+            self.assertTrue(any(row.get('frame_sequence') == 1001 for row in records))
+            self.assertEqual(records[-1]['original_scalar_rows_sha256'], hashlib.sha256(b''.join(lines[1:-1])).hexdigest())
 
 
 if __name__ == "__main__":
