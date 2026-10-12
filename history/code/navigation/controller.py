@@ -10,6 +10,7 @@ from cascade_core import Controller
 from control_core import follow_trajectory, trajectory_has_progress
 from scipy.interpolate import BSpline
 from path_admission import FrozenFence, candidate, payload, replayable, certify_curve, remaining_certificate
+from known_scene_route_registration import KnownSceneFrozenFence
 from clock_hold import ControlClockHold
 from global_route_reference import (contract as global_reference_contract, SegmentGuides,
     StableProjectionController, direction_check, admission_direction_check)
@@ -50,7 +51,7 @@ class PIDNavigation(TeacherNavigation):
         if self.registered_cloud_archive_mode not in ('legacy_all','disabled'):
             raise ValueError('Unsupported registered_cloud_archive mode; bounded_event is not yet implemented')
         self.reference_replan_pending=False
-        self.path_admission_fence=FrozenFence(self.run,self.profile)
+        self.path_admission_fence=KnownSceneFrozenFence(self.run,self.profile)
         self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
         self.path_admission_sequence=0;self.path_admission_last_decision=None
         self.control_clock_hold=ControlClockHold()

@@ -3,7 +3,7 @@
 No truth subscriptions, commands, TF, map deletion, or frontend state resets.
 """
 import argparse,copy,hashlib,json,sys,time
-from collections import OrderedDict
+from collections import OrderedDict,deque
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -46,6 +46,22 @@ def proposal_body_effect(result,applied):
         origin_translation_diagnostic_m=float(np.linalg.norm(candidate[:3,3]-current[:3,3])),
         before_world_body_position=before[:3,3].tolist(),after_world_body_position=proposed[:3,3].tolist(),
         pose_association='exact_worker_captured_body_stamp',robot_truth_pose_used=False)
+
+def transaction_convergence(applied,target,captured_body,source_ns):
+    """Require convergence at the exact body captured when this target froze."""
+    if type(source_ns) is not int or source_ns<=0:
+        raise ValueError('Transaction release requires its frozen body source stamp')
+    current=checked_transform(applied);goal=checked_transform(target)
+    body=checked_transform(captured_body)
+    origin,angle=transform_distance(current,goal)
+    before=current@body;after=goal@body
+    residual=float(np.linalg.norm(after[:3,3]-before[:3,3]))
+    return dict(schema='known_scene_same_source_transaction_convergence/v1',
+        frozen_body_source_ns=source_ns,body_residual_m=residual,origin_residual_m=origin,
+        rotation_residual_rad=angle,body_limit_m=.005,original_origin_limit_m=.005,
+        original_rotation_limit_rad=.003,
+        converged=residual<.005 and origin<.005 and angle<.003,
+        robot_truth_pose_used=False,pose_association='frozen_transaction_worker_body')
 
 def corrected_odom(msg,c):
     out=copy.deepcopy(msg);t=c@odometry_transform(msg);q=Rotation.from_matrix(t[:3,:3]).as_quat()
@@ -97,10 +113,12 @@ def main():
             self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None
+            self.pending_body=None;self.pending_source_ns=None;self.startup_results=deque(maxlen=16)
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
             self.history=(run/'known_scene_matches.jsonl').open('x',buffering=1)
             self.bundle_history=(run/'known_scene_bundles.jsonl').open('x',buffering=1)
             self.decision_history=(run/'known_scene_correction_decisions.jsonl').open('x',buffering=1)
+            self.release_history=(run/'known_scene_transaction_releases.jsonl').open('x',buffering=1)
             self.pubs={k:self.create_publisher(Odometry,'/demo/slam/'+k+'_odom',10) for k in ('body','lidar')}
             self.cloud_pub=self.create_publisher(PointCloud2,'/cloud_registered_full',qos_profile_sensor_data)
             self.bundle_pub=self.create_publisher(String,'/demo/navigation/localization_bundle',10)
@@ -158,10 +176,18 @@ def main():
                 saved=self.correction.target.copy();self.correction.target=self.correction.applied.copy()
                 snapshot=self.correction.tick(ns);self.correction.target=saved
             else:snapshot=self.correction.tick(ns)
-            if self.transition and transform_distance(self.correction.applied,self.pending_target)[0]<.005 \
-                    and transform_distance(self.correction.applied,self.pending_target)[1]<.003:
-                self.correction.target=self.correction.applied.copy()
-                self.transition=False;self.transaction_count+=1
+            if self.transition and not snapshot['correction_stale']:
+                convergence=transaction_convergence(self.correction.applied,self.pending_target,
+                    self.pending_body,self.pending_source_ns)
+                if convergence['converged'] and self.idle_or_stopped(slot['body'][0]):
+                    self.correction.target=self.correction.applied.copy()
+                    self.transition=False;self.transaction_count+=1
+                    self.release_history.write(json.dumps(dict(convergence=convergence,
+                        released_source_ns=ns,generation=snapshot['generation'],
+                        C_world_odom=self.correction.applied.tolist(),
+                        target_C_world_odom=self.pending_target.tolist(),
+                        frozen_T_odom_body=self.pending_body.tolist(),
+                        measured_zero_stop_verified=True),allow_nan=False)+'\n')
             c=self.nav_world@np.asarray(snapshot['C_world_odom'])
             metadata=dict(schema='known_scene_navigation_bundle/v1',run_id=run.name,source_ns=ns,
                 generation=snapshot['generation'],C_world_odom=snapshot['C_world_odom'],
@@ -184,6 +210,7 @@ def main():
             result=self.worker.poll()
             if result is not None:
                 self.last_result=result;self.history.write(json.dumps(result,allow_nan=False)+'\n')
+                if not self.initialized:self.startup_results.append(copy.deepcopy(result))
                 if result.get('accepted') and result.get('evidence_verified'):
                     candidate=np.asarray(result['C_world_odom'])
                     parent_matches=result.get('parent_generation')==self.correction.generation
@@ -197,6 +224,15 @@ def main():
                         if body is not None and self.idle_or_stopped(body,initial=True):
                             self.correction.propose(result);self.correction.applied=candidate.copy()
                             self.correction.generation+=1;self.initialized=True;self.transaction_count+=1
+                            atomic(run/'known_scene_initialization_frame.json',dict(
+                                schema='known_scene_canonical_initialization_frame/v1',run_id=run.name,
+                                generation=self.correction.generation,source_ns=result['source_ns'],
+                                C_world_odom=candidate.tolist(),T_navigation_world=self.nav_world.tolist(),
+                                reference_sha256=sha(reference_path),world_sha256=sha(run/'world.sdf'),
+                                runtime_witness_sha256=sha(run/'known_scene_runtime_witness.json'),
+                                actual_startup_results=list(self.startup_results),
+                                IMU_world_orientation_used=False,robot_truth_pose_used=False,
+                                frontend_state_reset=False,initial_commit_navigation_idle_verified=True))
                     elif result is not None:
                         self.correction.last_match_ns=result['source_ns']
                         effect=proposal_body_effect(result,self.correction.applied)
@@ -208,7 +244,9 @@ def main():
                             navigation_state=nav_state,transition_already_active=self.transition,
                             transaction_started=start,original_stop_and_rate_limits_preserved=True),allow_nan=False)+'\n')
                         if start:
-                            self.correction.target=candidate.copy();self.pending_target=candidate.copy();self.stop_since_ns=None;self.transition=True
+                            self.correction.target=candidate.copy();self.pending_target=candidate.copy()
+                            self.pending_body=checked_transform(result['T_odom_body']);self.pending_source_ns=result['source_ns']
+                            self.stop_since_ns=None;self.transition=True
             if self.join is not None and clock-self.last_submit>=1_000_000_000:
                 self.worker.submit_join(self.join,clock,self.correction.applied.copy(),parent_generation=self.correction.generation);self.last_submit=clock
             status=dict(schema='known_scene_navigation_status/v1',run_id=run.name,initialized=self.initialized,
@@ -225,7 +263,7 @@ def main():
             else:atomic(run/'known_scene_diagnostic_capture_receipt.json',dict(schema='known_scene_diagnostic8MiB_receipt/v1',
                 status='NONFINAL_WORKER_NOT_DRAINED',final=False,worker_drained=False,
                 maximum_groups=2,maximum_bytes=8*1024*1024,navigation_verified=False))
-            self.history.close();self.bundle_history.close();self.decision_history.close()
+            self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
             atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
     node=Runtime()

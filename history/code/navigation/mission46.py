@@ -148,12 +148,16 @@ class TeacherMission46:
         self.initialization = copy.deepcopy(receipt)
 
     def set_heading_alignment(self, alignment):
+        expected_source='actual_known_scene_canonical_frame' if self.continuous_route else 'actual_slam_and_imu'
         if (not isinstance(alignment, dict) or alignment.get('ground_truth_used') is not False
-                or alignment.get('source') != 'actual_slam_and_imu'
+                or alignment.get('source') != expected_source
                 or not SHA.fullmatch(str(alignment.get('source_evidence_sha256', '')))
                 or not isinstance(alignment.get('yaw_camera_init_from_world'), (int, float))
                 or not math.isfinite(alignment['yaw_camera_init_from_world'])):
-            raise ValueError('Heading must be frozen from actual SLAM/IMU registration')
+            raise ValueError('Heading must be frozen from the declared actual registration')
+        if self.continuous_route and (alignment.get('IMU_world_orientation_used')is not False
+                or alignment['yaw_camera_init_from_world']!=0.):
+            raise ValueError('Known-scene axes require canonical given-map frame, without IMU world orientation')
         if self.original.heading_alignment is not None and alignment != self.original.heading_alignment:
             raise ValueError('Frozen heading alignment cannot be changed between phases')
         self.original.heading_alignment = copy.deepcopy(alignment)

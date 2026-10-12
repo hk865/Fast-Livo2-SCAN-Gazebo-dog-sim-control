@@ -28,7 +28,8 @@ def expected_profile(here,name=PROFILE_NAME):
     from mission46_profile import required_source_files
     result=json.loads(baseline_profile_path(here,name).read_text())
     result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
-        mission46_required_source_files=[str(p.resolve()) for p in required_source_files()])
+        mission46_required_source_files=[str(p.resolve()) for p in required_source_files()],
+        route_prior_source='Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation')
     result['engineering_contract'].update(schema='go2_engineering_v34_launch/v1',
         backend_control_adoption=True,backend_control_scope='navigation frame only; frontend state never reset',
         original_46_region_definitions_and_arrival_gates_unchanged=False,
@@ -48,6 +49,10 @@ def expected_profile(here,name=PROFILE_NAME):
         maximum_source_age_s=.3,maximum_match_age_s=3.,matcher_interval_s=1.,
         translation_rate_mps=.04,rotation_rate_radps=.02,
         startup_correction_commit_requires_navigation_idle=True,
+        route_axis_registration=dict(version='known_scene_canonical_axes_v34r17',
+            source='actual_known_scene_canonical_frame',yaw_navigation_from_world_rad=0.,
+            frozen_initial_commit_and_two_actual_source_matches_required=True,
+            IMU_world_orientation_used=False,raw_IMU_use='rates/acceleration for stationary initialization only'),
         quality_diagnostic_capture=dict(version='known_scene_complete_CDR_diagnostic_v34r16',maximum_groups=2,
             maximum_logical_and_allocated_bytes=8*1024*1024,maximum_whole_raw_adapted_CDR_bytes=1024*1024,
             maximum_whole_registered_CDR_bytes=1536*1024,final_receipt_requires_worker_drained=True,
@@ -57,6 +62,9 @@ def expected_profile(here,name=PROFILE_NAME):
         correction_trigger=dict(version='known_scene_body_effect_v34r15',translation_m=.04,rotation_rad=.025,
             translation_reference='same_source_corrected_body_position',
             exact_worker_captured_body_required=True,origin_translation_is_diagnostic_only=True),
+        correction_release=dict(version='known_scene_frozen_body_convergence_v34r17',
+            frozen_same_source_body_residual_m=.005,original_origin_residual_m=.005,
+            original_rotation_residual_rad=.003,fresh_measured_zero_stop_required=True),
         bounded_foreground_surface_policy=dict(version='known_scene_unmapped_foreground_v34r14',
             maximum_fraction=.05,negative_static_first_hit_threshold_m=.12,
             minimum_static_surface_distance_m=.1,
@@ -70,7 +78,7 @@ def normal_form(profile,here):
     result=copy.deepcopy(profile)
     for key in ('controller_selector','profile_version','prospective_change',
                 'mission46_required_source_files','engineering_contract','diagnostic_scope',
-                'global_route_reference_contract'):
+                'global_route_reference_contract','route_prior_source'):
         result[key]=copy.deepcopy(base[key])
     result.pop('continuous_route_contract',None);result.pop('known_scene_localization_contract',None)
     return result

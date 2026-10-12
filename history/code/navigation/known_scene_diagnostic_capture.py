@@ -41,7 +41,7 @@ class BoundedSourceFrames:
             capture_representation='complete_lossless_received_ROS_message_reserialization_not_wire_CDR',
             serialized_message_roundtrip_fields_verified=True,all_match_candidates_preserved_in_original_log=True,
             point_payload_sha256={k:hashlib.sha256(bytes(messages[k].data)).hexdigest() for k in ('raw','adapted','registered')},
-            raw_adapted_full_messages=True,registered_RGB_layout_preserved=True,source_arrays_truncated=False,
+            raw_adapted_full_messages=True,registered_source_layout_preserved=True,source_arrays_truncated=False,
             robot_truth_pose_used=False)
         encoded=(json.dumps(metadata,allow_nan=False,separators=(',',':'))+'\n').encode()
         if len(encoded)>128*1024:return self.reject(source,'metadata_128KiB_bound')

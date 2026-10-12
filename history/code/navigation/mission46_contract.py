@@ -39,8 +39,9 @@ def contract():
             'stamp_ns': 'original source header, not receive-time replacement',
             'received_wall_s': 'actual receive monotonic clock'},
         'heading_alignment': {
-            'source': 'actual_slam_and_imu', 'ground_truth_used': False,
-            'yaw_camera_init_from_world': 'one fixed measured scene-axis registration',
+            'source': 'actual_known_scene_canonical_frame', 'ground_truth_used': False,
+            'yaw_camera_init_from_world': 'zero, fixed provided-map axes of actual matched canonical navigation frame',
+            'IMU_world_orientation_used': False,
             'source_evidence_sha256': 'archived real registration evidence digest',
             'must_remain_identical': True},
         'common_receipt_fields': {
@@ -91,7 +92,7 @@ def contract():
             'saved_file_and_sha': 'must be checked against actual saved RGB PCD, not metadata claim'},
         'dynamic_obstacle': {
             'entity': 'moving_obstacle', 'world_service': 'root actual Teacher Gazebo world, not old demo service',
-            'original_scene_trigger': '[1,2,0] transformed by frozen actualSLAM/IMU registration',
+            'original_scene_trigger': '[1,2,0] translated by initial measured canonical SLAM origin in frozen provided-map axes',
             'stage': 'navigating', 'activation_navigation_waypoint_index': 1,
             'matching_request_state': 'running', 'planar_activation_radius_m': 1.4,
             'original_motion': 'y4→y2 at .25m/s; block20sim_s; y2→y0 at .25m/s',

@@ -26,6 +26,7 @@ from mission46_runtime_evidence import (FileTail, native_ns, checked_json, seal,
     verify_initialization, verify_rgb, verify_terrain, verify_dynamic, verify_parking,
     native_projection, status_projection)
 from request import SceneAxisRegistration, StartupDeadline
+from known_scene_route_registration import KnownSceneAxisRegistration,ROUTE_REFERENCE
 from runtime_io import EvidenceWriter, latest_sensor_qos
 from compact_archives import make_evidence_writer
 
@@ -79,7 +80,7 @@ def build_node(run, scope, profile):
             self.writer=make_evidence_writer(run,profile);self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='teacher-mission46-audit')
             self.jobs={};self.last_errors={};self.started_wall=time.monotonic()
             self.deadline=StartupDeadline(profile,self.started_wall)
-            self.registration=SceneAxisRegistration(run,scope,self.writer)
+            self.registration=KnownSceneAxisRegistration(run,scope,self.writer) if profile.get('known_scene_localization_contract',{}).get('enabled')is True else SceneAxisRegistration(run,scope,self.writer)
             self.pose=None;self.pose_row=None;self.origin_row=None;self.last_pose_stamp=None
             self.health={};self.health_wall=-math.inf;self.nav={};self.nav_wall=-math.inf
             self.bridge={};self.bridge_wall=-math.inf;self.map_status={};self.obstacle={};self.obstacle_wall=-math.inf
@@ -215,7 +216,7 @@ def build_node(run, scope, profile):
             if self.mission.original.heading_alignment is None:
                 reg_sha=atomic_exact(run/'navigation_scene_axis_registration.json',registration)
                 heading=copy.deepcopy(registration['heading_receipt'])
-                heading.update(source='actual_slam_and_imu',source_evidence_sha256=reg_sha,ground_truth_used=False)
+                heading.update(source=heading.get('source','actual_slam_and_imu'),source_evidence_sha256=reg_sha,ground_truth_used=False)
                 self.mission.set_heading_alignment(heading)
             if ns/1e9-self.init_try_sim<.5:return
             self.init_try_sim=ns/1e9
@@ -240,7 +241,7 @@ def build_node(run, scope, profile):
                 scene_axis_registration=reg,scene_axis_registration_file='navigation_scene_axis_registration.json',
                 scene_axis_registration_file_sha256=hashlib.sha256((run/'navigation_scene_axis_registration.json').read_bytes()).hexdigest(),
                 registered_route_camera_init_xyz=points,registered_route_points_sha256=canonical_sha(points),
-                registered_route_reference='original46 centers with single actualSLAM/IMU yaw and initial measured origin',
+                registered_route_reference=ROUTE_REFERENCE if isinstance(self.registration,KnownSceneAxisRegistration) else 'original46 centers with single actualSLAM/IMU yaw and initial measured origin',
                 original_region_count=46,initial_actual_slam_source=copy.deepcopy(source))
             atomic_exact(run/'navigation_anchor.json',self.anchor)
             if self.context.ok():self.anchor_pub.publish(String(data=json.dumps(self.anchor,allow_nan=False)))

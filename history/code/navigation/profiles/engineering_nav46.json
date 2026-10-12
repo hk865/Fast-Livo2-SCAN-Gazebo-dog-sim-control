@@ -188,7 +188,7 @@
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
   "prospective_change": "V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, 300ms fresh inputs,200ms IPC and original safety/collision gates retained.",
-  "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
+  "route_prior_source": "Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
     "ba_bg_est_en": true
@@ -724,7 +724,7 @@
     ],
     "waypoint_reference": "relative_world_axes",
     "simulation": {
-      "description": "Gazebo Go2 \u56db\u8db3\u7269\u7406 \u00b7 \u4e09\u5c42\u5e73\u53f0/10%\u7f13\u5761\uff08\u975e\u697c\u68af\uff09",
+      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
       "kind": "gazebo_physics",
       "terrain": "ramps"
     },
@@ -3708,6 +3708,14 @@
     "translation_rate_mps": 0.04,
     "rotation_rate_radps": 0.02,
     "startup_correction_commit_requires_navigation_idle": true,
+    "route_axis_registration": {
+      "version": "known_scene_canonical_axes_v34r17",
+      "source": "actual_known_scene_canonical_frame",
+      "yaw_navigation_from_world_rad": 0.0,
+      "frozen_initial_commit_and_two_actual_source_matches_required": true,
+      "IMU_world_orientation_used": false,
+      "raw_IMU_use": "rates/acceleration for stationary initialization only"
+    },
     "quality_diagnostic_capture": {
       "version": "known_scene_complete_CDR_diagnostic_v34r16",
       "maximum_groups": 2,
@@ -3728,6 +3736,13 @@
       "translation_reference": "same_source_corrected_body_position",
       "exact_worker_captured_body_required": true,
       "origin_translation_is_diagnostic_only": true
+    },
+    "correction_release": {
+      "version": "known_scene_frozen_body_convergence_v34r17",
+      "frozen_same_source_body_residual_m": 0.005,
+      "original_origin_residual_m": 0.005,
+      "original_rotation_residual_rad": 0.003,
+      "fresh_measured_zero_stop_required": true
     },
     "bounded_foreground_surface_policy": {
       "version": "known_scene_unmapped_foreground_v34r14",

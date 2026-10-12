@@ -7,7 +7,7 @@ import sys
 
 GATE_NAME='ENGINEERING_V34_PREFLIGHT.json'
 REVIEW_NAME='ENGINEERING_V34_SOURCE_REVIEW.json'
-CHANGED_ADAPTERS=frozenset(('controller.py', 'corridor_preflight.py', 'full46_launch_contract.py', 'mission46.py', 'mission46_obstacle_runtime.py', 'mission46_runtime.py', 'mission46_runtime_evidence.py', 'pid_scope.py', 'run.py', 'sensor_gate.py', 'shared_controller.py', 'slam.launch.py', 'stack.launch.py', 'teacher_wrapper.py'))
+CHANGED_ADAPTERS=frozenset(('controller.py', 'corridor_preflight.py', 'full46_launch_contract.py', 'mission46.py', 'mission46_contract.py', 'mission46_obstacle_runtime.py', 'mission46_runtime.py', 'mission46_runtime_evidence.py', 'pid_scope.py', 'run.py', 'sensor_gate.py', 'shared_controller.py', 'slam.launch.py', 'stack.launch.py', 'teacher_wrapper.py'))
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
