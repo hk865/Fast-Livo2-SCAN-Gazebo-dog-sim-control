@@ -271,17 +271,18 @@ class Controller:
     def _protect(self, reason, fatal=False):
         if fatal:
             self.failure_latched = reason
-        if not self.protected or reason != self.protection_reason:
-            self.velocity_integral[:] = 0.
-            self.hold_integral[:] = 0.
-            self.filtered = self.inner_filtered = None
-            self.last_math_stamp = self.last_math_wall = None
-            self.last_reference_speed = None
-            self.last_curvature_yaw_reference = 0.
-            self.turn_phase = self.turn_dwell = self.capture_dwell = None
-            self.recovery = []
-            if self.hold_stamp is not None:
-                self.parking_interrupted = True
+        # Any newly observed protection invalidates a partially seeded recovery.
+        # Repeated identical reasons must not preserve a pre-guard time anchor.
+        self.velocity_integral[:] = 0.
+        self.hold_integral[:] = 0.
+        self.filtered = self.inner_filtered = None
+        self.last_math_stamp = self.last_math_wall = None
+        self.last_reference_speed = None
+        self.last_curvature_yaw_reference = 0.
+        self.turn_phase = self.turn_dwell = self.capture_dwell = None
+        self.recovery = []
+        if self.hold_stamp is not None:
+            self.parking_interrupted = True
         self.protected = True
         self.protection_reason = reason
         self.command[:] = 0.
@@ -419,11 +420,32 @@ class Controller:
             self.recovery.append(stamp)
             self.recovery = self.recovery[-2:]
             if len(self.recovery) < 2:
+                # This is a qualified real source sample, not a math update.
+                # Seed measurements from its actual motion; zero refers only
+                # to the committed reference/output, never to measured motion.
+                yawdot = (math.sin(roll)*gyro[1]+math.cos(roll)*gyro[2])/math.cos(pitch)
+                origin_world = R@origin_body
+                com_body = origin_body+np.cross(gyro,self.com_offset)
+                self.filtered = np.r_[origin_world[:2],yawdot]
+                self.inner_filtered = np.r_[com_body[:2],gyro[2]]
+                self.last_math_stamp, self.last_math_wall = stamp, wall
+                self.last_reference_speed = self.last_curvature_yaw_reference = 0.
+                self.command[:] = 0.
+                self.row = dict(kind='recovery_source_seed',feedback_pose_stamp_ns=stamp,
+                    feedback_received_wall_ns=receipt,imu_stamp_ns=gyro_stamp,ack_stamp_ns=ack_stamp,
+                    history_kind='seed',math_step_executed=False,header_dt_s=0.,integral_dt_s=0.,
+                    reference_velocity_world=[0.,0.,0.],reference_COM_velocity_body=[0.,0.,0.],
+                    raw_command_body=[0.,0.,0.],measured_origin_velocity_world=origin_world.tolist(),
+                    measured_COM_velocity_body=com_body.tolist(),measured_body_omega=gyro.tolist())
                 return self._output('recovering',clock,wall,reason=self.protection_reason)
             self.protected = False
             self.protection_reason = None
-            self.last_math_stamp = self.last_math_wall = None
-        dt = 0. if self.last_math_stamp is None else (stamp-self.last_math_stamp)/1e9
+        # Recovery establishes this anchor using a previous actual source.
+        # A duplicate source cannot reach this branch or refresh the anchor.
+        if self.last_math_stamp is None or stamp <= self.last_math_stamp:
+            self._protect('missing_positive_source_math_interval')
+            return self._output('protect',clock,wall,reason=self.protection_reason)
+        dt = (stamp-self.last_math_stamp)/1e9
         self.last_math_stamp, self.last_math_wall = stamp, wall
         if dt > .20000001:
             self.capture_dwell = self.turn_dwell = None

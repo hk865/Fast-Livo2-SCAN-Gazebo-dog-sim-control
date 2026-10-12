@@ -132,37 +132,60 @@ def speed_budget(speed, curvature, curvature_rate, yaw_rate_limit, feedback_yaw,
     rate_budget = max(0.,yaw_rate_limit-abs(feedback_yaw)-float(config['yaw_rate_reserve_radps']))
     accel_budget = float(config['yaw_command_slew_radps2'])-float(config['yaw_acceleration_reserve_radps2'])
     k, dk = abs(float(curvature)), abs(float(curvature_rate))
-    cap = min(float(speed), rate_budget/k if k>1e-12 else float(speed),
-        math.sqrt(accel_budget/dk) if dk>1e-12 else float(speed))
+    # Solve only inside the finite requested interval. Compare products
+    # first; divide by nonzero curvature only when its boundary cuts it.
+    cap = max(0.,float(speed))
+    if k*cap > rate_budget:
+        cap = rate_budget/k
+    if dk*cap*cap > accel_budget:
+        cap = math.sqrt(accel_budget/dk)
     lower_bound=0.
     temporal_checked=previous_yaw_reference is not None
     temporal_feasible=True
     if temporal_checked:
         width=accel_budget*max(0.,dt)
-        if k>1e-12:
-            interval=sorted(((previous_yaw_reference-width)/curvature,
-                (previous_yaw_reference+width)/curvature))
-            lower_bound=max(0.,interval[0]);cap=min(cap,interval[1])
-            temporal_feasible=cap>=lower_bound and cap>=0.
-        else:
-            temporal_feasible=abs(previous_yaw_reference)<=width+1e-12
+        qlo,qhi=previous_yaw_reference-width,previous_yaw_reference+width
+        endpoint=curvature*cap
+        if max(0.,endpoint)<qlo or min(0.,endpoint)>qhi:
+            temporal_feasible=False
+        elif curvature>0.:
+            if qlo>0.:lower_bound=qlo/curvature
+            if endpoint>qhi:cap=qhi/curvature
+        elif curvature<0.:
+            if qhi<0.:lower_bound=qhi/curvature
+            if endpoint<qlo:cap=qlo/curvature
+        # Exact zero is the constant affine function, not an epsilon class.
+        temporal_feasible=temporal_feasible and cap>=lower_bound and cap>=0.
         if not temporal_feasible:cap=0.
     acceleration_checked = previous_speed is not None and dt>0.
     feasible = temporal_feasible
     if acceleration_checked and feasible:
-        a = k/dt
-        def demand(v):return dk*v*v+a*abs(v-previous_speed)
-        # Convex piecewise quadratic; its minimum on [0, cap] is known.
-        minimizer = min(cap,max(lower_bound,min(previous_speed,a/(2.*dk)))) if dk>1e-12 else min(cap,max(lower_bound,previous_speed))
-        if demand(minimizer)>accel_budget+1e-12:
+        # Multiply the original acceleration inequality by its real dt.
+        # This avoids k/dt and does not change any physical budget.
+        D=dk*dt;budget=accel_budget*dt
+        def demand(v):return D*v*v+k*abs(v-previous_speed)
+        minimizer=min(cap,max(lower_bound,min(previous_speed,k/(2.*D)))) if D>0. else min(cap,max(lower_bound,previous_speed))
+        if demand(minimizer)>budget+1e-12*dt:
             feasible=False;cap=0.
-        elif demand(cap)>accel_budget:
+        elif demand(cap)>budget:
             low,high=minimizer,cap
             for _ in range(50):
                 middle=(low+high)*.5
-                if demand(middle)<=accel_budget:low=middle
+                if demand(middle)<=budget:low=middle
                 else:high=middle
             cap=low
+    # Round boundary quotients inward if their floating products overshoot.
+    if feasible:
+        for _ in range(4):
+            valid=(k*cap<=rate_budget and dk*cap*cap<=accel_budget and
+                (not temporal_checked or abs(curvature*cap-previous_yaw_reference)<=accel_budget*max(0.,dt)) and
+                (not acceleration_checked or demand(cap)<=budget))
+            if valid:break
+            inward=math.nextafter(cap,lower_bound)
+            if inward==cap:break
+            cap=inward
+        if not valid:
+            feasible=False;cap=0.
     return float(cap),dict(enabled=True,requested_speed_mps=float(speed),limited_speed_mps=float(cap),
         yaw_rate_budget_radps=float(rate_budget),yaw_acceleration_budget_radps2=float(accel_budget),
         reference_acceleration_checked=bool(acceleration_checked),temporal_yaw_slew_checked=bool(temporal_checked),
