@@ -1,0 +1,54 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+it__
+[python3-9]     self.run=run;receipt=verify_scope(run/'navigation_scope.json');self.profile=receipt['profile']
+[python3-9]                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-9]   File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/pid_scope.py", line 92, in verify_scope
+[python3-9]     s=json.loads(Path(row['path']).read_text())
+[python3-9]                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[python3-9]   File "/usr/lib/python3.12/pathlib.py", line 1030, in read_text
+[python3-9]     return f.read()
+[python3-9]            ^^^^^^^^
+[python3-9]   File "<frozen codecs>", line 319, in decode
+[python3-9] KeyboardInterrupt
+[scan_planner_node-7] [INFO] [1791089644.392286705] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[fastlivo_mapping-4] [INFO] [1791089644.393278839] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_blackboard-3] [INFO] [1791089644.393580152] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[scan_planner_node-7] des manager
+[ERROR] [python3-9]: process has died [pid 2226745, exit code -2, cmd 'python3 /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/pid_mode/controller.py --run /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_125401_navigation_champ_pid_v2_safety_r1_b5cf --ros-args -p use_sim_time:=true'].
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 2226737]
+[INFO] [fastlivo_mapping-4]: process has finished cleanly [pid 2226738]
+[INFO] [scan_planner_node-7]: process has finished cleanly [pid 2226741]
+[INFO] [python3-1]: process has finished cleanly [pid 2226735]
+[INFO] [python3-10]: process has finished cleanly [pid 2226746]
+[INFO] [python3-2]: process has finished cleanly [pid 2226736]
+[INFO] [python3-8]: process has finished cleanly [pid 2226744]
+[INFO] [python3-11]: process has finished cleanly [pid 2226747]
+[INFO] [python3-5]: process has finished cleanly [pid 2226739]
+[INFO] [python3-6]: process has finished cleanly [pid 2226740]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+[WARN] [1791089642.377026645] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1791089642.377054016] [rcl]: 'localhost_only' is enabled, 'automatic_discovery_range' and 'static_peers' will be ignored.
+Traceback (most recent call last):
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py", line 181, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py", line 178, in main
+    try:node.finish()
+        ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py", line 164, in finish
+    self.publish(np.zeros(3))
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/pid_comparison/champ_mode/command_file_reader.py", line 104, in publish
+    msg=Twist();msg.linear.x=float(value[0]);msg.linear.y=float(value[1]);msg.angular.z=float(value[2]);self.pub.publish(msg)
+                                                                                                        ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/publisher.py", line 70, in publish
+    self.__publisher.publish(msg)
+rclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:423
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+004_125401_navigation_champ_pid_v2_safety_r1_b5cf/world.sdf:L1796]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="demo_rgb"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_125401_navigation_champ_pid_v2_safety_r1_b5cf/world.sdf:L2036]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_125401_navigation_champ_pid_v2_safety_r1_b5cf/world.sdf:L2090]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_125401_navigation_champ_pid_v2_safety_r1_b5cf/world.sdf:L2120]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261004_125401_navigation_champ_pid_v2_safety_r1_b5cf/world.sdf:L2125]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;31m[Err] [SystemLoader.cc:92] [0m[1;31mFailed to load system plugin [[0m[1;31mgz_ros2_control-system[0m[1;31m] : Could not find shared library.[0m[1;31m[0m

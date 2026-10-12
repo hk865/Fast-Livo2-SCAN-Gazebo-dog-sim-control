@@ -95,7 +95,7 @@ def source_audit(run,freeze):
             if not p.is_relative_to(run) or entry.get('sha256')!=h:refbad.append(name);continue
         if not p.is_file() or sha(p)!=h:refbad.append(name)
     externalbad=[]
-    for name,e in freeze.get('external_source_snapshots',{}).items():
+    for name,e in freeze.get('source_snapshots',freeze.get('external_source_snapshots',{})).items():
         p=Path(e['snapshot'])
         if not p.is_relative_to(run) or not p.is_file() or sha(p)!=e.get('sha256'):externalbad.append(name)
     return check(bool(manifest) and bool(refs) and not bad and not missing and not refbad,
@@ -212,7 +212,7 @@ def evaluate(run,write=True):
         for name in ['pid_navigation_protocol.json','pid_navigation_case.json','pid_navigation_freeze.json','navigation_scope.json','navigation_profile.json','navigation_anchor.json','navigation_request.json','runtime_manifest.json','source_manifest.json','world.sdf']:
             if not (run/name).is_file():raise FileNotFoundError('Missing actual campaign input '+name)
         p=read(run/'pid_navigation_protocol.json');case=read(run/'pid_navigation_case.json');freeze=read(run/'pid_navigation_freeze.json');scope=read(run/'navigation_scope.json');profile=read(run/'navigation_profile.json');anchor=read(run/'navigation_anchor.json');request=read(run/'navigation_request.json');runtime=read(run/'runtime_manifest.json')
-        controller=scope.get('controller',scope.get('locomotion_controller',scope.get('controller_kind')));controller='teacher_pid' if controller=='teacher' else controller;checks['prospective_case_and_scope']=check(p.get('schema')=='teacher_champ_pid_navigation_protocol/v1' and controller in p['controllers'] and scope.get('protocol_case_id')==case['case_id'] and scope.get('navigation_ground_truth_used') is False and not scope.get('acceptance_is_global',False),controller=controller,case_id=case.get('case_id'),experiment=scope.get('experiment'),truth_navigation=scope.get('navigation_ground_truth_used'))
+        controller=scope.get('controller',scope.get('locomotion_controller',scope.get('controller_kind')));controller='teacher_pid' if controller=='teacher' else 'champ' if controller=='champ_pid' else controller;checks['prospective_case_and_scope']=check(p.get('schema')=='teacher_champ_pid_navigation_protocol/v1' and controller in p['controllers'] and scope.get('protocol_case_id')==case['case_id'] and scope.get('navigation_ground_truth_used') is False and not scope.get('acceptance_is_global',False),controller=controller,case_id=case.get('case_id'),experiment=scope.get('experiment'),truth_navigation=scope.get('navigation_ground_truth_used'))
         checks['source_provenance']=source_audit(run,freeze)
         refproto=run/'sources/tests/pid_navigation/protocol.json';refcases=run/'sources/tests/pid_navigation/cases.json'
         limits_exact=(profile.get('goal_timeout_sim_s')==case['goal_deadline_s'] and profile.get('max_speed_mps')==case['nominal_body_forward_mps'] and profile.get('max_lateral_speed_mps')==case['maximum_body_lateral_mps'] and profile.get('max_yaw_rate_radps')==case['maximum_yaw_rate_radps'])
