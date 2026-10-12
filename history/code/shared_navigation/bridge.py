@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 import tempfile
 import time
+from runtime_io import BackgroundCheck,LatestCommandWriter,latest_sensor_qos
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -228,10 +229,9 @@ class CommandFile:
 def make_node(rclpy, writer, acceptance_path, acceptance):
     from rclpy.node import Node
     from rclpy.clock import Clock, ClockType
-    from rclpy.qos import qos_profile_sensor_data, QoSProfile, DurabilityPolicy
+    from rclpy.qos import QoSProfile, DurabilityPolicy
     from geometry_msgs.msg import Twist
     from nav_msgs.msg import Odometry
-    from rosgraph_msgs.msg import Clock as ClockMessage
     from std_msgs.msg import Bool, String
 
     class Bridge(Node):
@@ -241,27 +241,32 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             self.gate = CommandGate(acceptance.get('profile') if acceptance.get('experimental') else None)
             self.sequence = 0
             self.acceptance_checked_wall = None
+            self.last_status_wall=-math.inf;self.last_published_state=None
+            history=Path(acceptance['run_dir'])/'navigation_command_history.jsonl'if acceptance.get('experimental')else None
+            self.transport=LatestCommandWriter(writer,history)
             self.status_pub = self.create_publisher(String, STATUS_TOPIC, 10)
             self.stop_pub = self.create_publisher(Bool, STOP_TOPIC, 10)
             self.safety_pub = self.create_publisher(String, '/demo/control/safety', 10)
             if acceptance.get('experimental'):
-                self.create_subscription(String, '/demo/teacher/navigation/sensor_health', self.sensor_health, 10)
+                self.create_subscription(String, '/demo/teacher/navigation/sensor_health', self.sensor_health, 1)
                 latched=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
                 self.create_subscription(String, '/demo/teacher/navigation/anchor', self.anchor, latched)
-            self.pose_sub = self.create_subscription(Odometry, SLAM_TOPIC, self.pose, qos_profile_sensor_data)
+            self.pose_sub = self.create_subscription(Odometry, SLAM_TOPIC, self.pose, latest_sensor_qos())
             self.command_sub = self.create_subscription(Twist, COMMAND_TOPIC, self.command, 1)
-            self.clock_sub = self.create_subscription(ClockMessage, '/clock', self.clock, qos_profile_sensor_data)
             if self.pose_sub.topic_name != SLAM_TOPIC or self.command_sub.topic_name != COMMAND_TOPIC:
                 self.destroy_node()
                 raise RuntimeError('Remapping SLAM/SCAN input topics is forbidden; ground truth cannot be a navigation source')
             self.wall_clock = Clock(clock_type=ClockType.STEADY_TIME)
+            self.checker=BackgroundCheck(self.check_integrity)
             self.timer = self.create_timer(.02, self.tick, clock=self.wall_clock)
 
-        def clock(self, message):
-            stamp = message.clock.sec * 1_000_000_000 + message.clock.nanosec
-            self.gate.clock(stamp, time.monotonic())
+        def sync_clock(self):
+            # rclpy's single ROS TimeSource subscription retains the latest
+            # real /clock. Never stamp commands from a second lagging queue.
+            self.gate.clock(self.get_clock().now().nanoseconds,time.monotonic())
 
         def pose(self, message):
+            self.sync_clock()
             p, q = message.pose.pose.position, message.pose.pose.orientation
             stamp = message.header.stamp.sec * 1_000_000_000 + message.header.stamp.nanosec
             self.gate.pose(stamp, [p.x, p.y, p.z], [q.x, q.y, q.z, q.w],
@@ -270,11 +275,15 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 self.tick()
 
         def command(self, message):
+            self.sync_clock();was_moving=any(self.gate.requested)
             self.gate.command([message.linear.x, message.linear.y, message.angular.z],
                               [message.linear.z, message.angular.x, message.angular.y], time.monotonic())
-            self.tick()
+            # 50Hz wall heartbeat writes ordinary commands. Stop/fault edges
+            # enqueue an immediate zero without creating a callback feedback.
+            if self.gate.failed or was_moving and not any(self.gate.requested):self.tick()
 
         def sensor_health(self, message):
+            self.sync_clock()
             try:
                 data=json.loads(message.data)
                 now=time.monotonic()
@@ -317,6 +326,9 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                                'policy_inputs': 'Constructed by Teacher worker; audit active policy_manifest.json. Current prepared worker uses Gazebo privileged inputs.'},
                            'acceptance': acceptance, 'navigation_validation': 'unverified',
                            'health_scope': 'SLAM/SCAN input health only; this does not establish actuator health or physical stopping'})
+            status['clock_source']='single rclpy ROS TimeSource /clock, KEEP_LAST depth=1'
+            status['transport']={'type':'latest_pending_atomic_file','superseded':self.transport.superseded,
+                                 'written':self.transport.written,'max_queue_delay_wall_s':self.transport.max_delay_s}
             return status
 
         def publish(self, status):
@@ -325,46 +337,49 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 self.stop_pub.publish(Bool(data=status['stop_requested']))
                 self.safety_pub.publish(String(data=json.dumps({**status,'mode':'teacher','source':'scan_slam'},allow_nan=False)))
 
+        def check_integrity(self):
+            slam_ok,slam_nodes=self.publishers(SLAM_TOPIC,'demo_slam_odom_adapter')
+            command_ok,command_nodes=self.publishers(COMMAND_TOPIC,'demo_navigation')
+            scope_ok=True
+            if acceptance.get('experimental'):
+                health_ok,_=self.publishers('/demo/teacher/navigation/sensor_health','teacher_navigation_sensor_gate')
+                anchor_ok,_=self.publishers('/demo/teacher/navigation/anchor','teacher_navigation_request')
+                scope_ok=health_ok and anchor_ok
+            current=check_acceptance(acceptance_path)
+            if current['sha256']!=acceptance['sha256']:raise RuntimeError('Acceptance file changed during navigation; review and restart')
+            return {'graph':{'slam':slam_ok,'command':command_ok,
+                    'details':{'slam_publishers':slam_nodes,'command_publishers':command_nodes}},'scope_ok':scope_ok}
+
         def tick(self):
-            now = time.monotonic()
-            if self.gate.graph_wall is None or now - self.gate.graph_wall >= .1:
-                slam_ok, slam_nodes = self.publishers(SLAM_TOPIC, 'demo_slam_odom_adapter')
-                command_ok, command_nodes = self.publishers(COMMAND_TOPIC, 'demo_navigation')
-                self.gate.graph = {'slam': slam_ok, 'command': command_ok,
-                                   'details': {'slam_publishers': slam_nodes, 'command_publishers': command_nodes}}
-                self.gate.graph_wall = now
-                if acceptance.get('experimental'):
-                    health_ok,_=self.publishers('/demo/teacher/navigation/sensor_health','teacher_navigation_sensor_gate')
-                    anchor_ok,_=self.publishers('/demo/teacher/navigation/anchor','teacher_navigation_request')
-                    self.gate.scope_graph_ok=health_ok and anchor_ok
-            if self.acceptance_checked_wall is None or now - self.acceptance_checked_wall >= .1:
-                self.acceptance_checked_wall = now
-                try:
-                    current = check_acceptance(acceptance_path)
-                    if current['sha256'] != acceptance['sha256']:
-                        self.gate.failed = 'Acceptance file changed during navigation; review and restart'
-                except RuntimeError as error:
-                    self.gate.failed = str(error)
+            self.sync_clock();now=time.monotonic();checked=self.checker.result
+            if checked is not None:
+                if checked['error']:self.gate.failed='Integrity check failed: '+checked['error']
+                else:
+                    self.gate.graph=checked['data']['graph'];self.gate.scope_graph_ok=checked['data']['scope_ok']
+                    self.gate.graph_wall=checked['started_wall']
+            if self.transport.error:self.gate.failed=self.transport.error
             status = self.envelope(now)
             try:
-                writer.write(status)
-                if acceptance.get('experimental'):
-                    with(Path(acceptance['run_dir'])/'navigation_command_history.jsonl').open('a')as stream:
-                        stream.write(json.dumps(status,ensure_ascii=False,allow_nan=False)+'\n')
-            except OSError as error:
+                self.transport.submit(status)
+            except RuntimeError as error:
                 self.gate.failed = f'Command file write failed: {error}'
                 status = self.envelope(now)
                 self.publish(status)
                 raise RuntimeError(self.gate.failed) from error
-            self.publish(status)
+            # A normal health heartbeat is 20Hz. State/stop edges publish
+            # immediately; repeated already-zero updates do not flood DDS.
+            published=(status['state'],status['stop_requested'])
+            if now-self.last_status_wall>=.05 or published!=self.last_published_state:
+                self.publish(status);self.last_status_wall=now;self.last_published_state=published
 
         def shutdown_stop(self):
             self.gate.failed = 'Navigation command bridge stopped'
             status = self.envelope(time.monotonic())
             try:
-                writer.write(status)
+                self.transport.close(status)
             finally:
                 self.publish(status)
+                self.checker.close()
     return Bridge()
 
 

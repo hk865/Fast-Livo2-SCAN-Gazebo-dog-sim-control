@@ -6,6 +6,7 @@ import json
 import math
 from pathlib import Path
 import time
+from runtime_io import BackgroundCheck,EvidenceWriter,latest_sensor_qos
 
 TOPIC='/demo/teacher/navigation/sensor_health'
 
@@ -36,11 +37,28 @@ class ImageInfoPairs:
 
 
 class WarmupRecovery:
-    """One initial warmup; recovery needs genuinely new measured pose stamps."""
-    def __init__(self,warmup_s=2.,recovery_samples=2,recovery_span_s=.1):
+    """Cumulative real initialization history; current release remains strict.
+
+    An isolated cloud gap does not erase samples FAST-LIVO already initialized
+    from. It still immediately stops motion and resets fresh recovery samples.
+    """
+    def __init__(self,warmup_s=2.,recovery_samples=2,recovery_span_s=.1,requirements=None):
         self.warmup_ns=round(warmup_s*1e9);self.recovery_samples=recovery_samples
         self.recovery_span_ns=round(recovery_span_s*1e9);self.complete=False;self.good_since=None
         self.first_pose=None;self.last_pose=None;self.samples=0
+        self.requirements=requirements or {'body_odom':{'min_samples':10,'min_span_sim_s':warmup_s},
+                                          'cloud':{'min_samples':10,'min_span_sim_s':warmup_s}}
+        self.history={}
+    def record(self,name,stamp_ns):
+        if name not in self.requirements:return
+        previous=self.history.get(name)
+        if previous is None:self.history[name]={'first_stamp_ns':stamp_ns,'last_stamp_ns':stamp_ns,'samples':1}
+        elif stamp_ns>previous['last_stamp_ns']:
+            previous['last_stamp_ns']=stamp_ns;previous['samples']+=1
+        self.complete=all(name in self.history
+            and self.history[name]['samples']>=rule['min_samples']
+            and self.history[name]['last_stamp_ns']-self.history[name]['first_stamp_ns']>=round(rule['min_span_sim_s']*1e9)
+            for name,rule in self.requirements.items())
     def observe(self,healthy,clock_ns,pose_stamp_ns):
         if not healthy or clock_ns is None or pose_stamp_ns is None:
             self.good_since=None;self.first_pose=None;self.last_pose=None;self.samples=0
@@ -49,7 +67,6 @@ class WarmupRecovery:
         if self.last_pose is None or pose_stamp_ns>self.last_pose:
             self.samples+=1;self.last_pose=pose_stamp_ns
             if self.first_pose is None:self.first_pose=pose_stamp_ns
-        if not self.complete and clock_ns-self.good_since>=self.warmup_ns:self.complete=True
         return (self.complete and self.samples>=self.recovery_samples
                 and self.last_pose-self.first_pose>=self.recovery_span_ns)
 
@@ -62,10 +79,8 @@ def main():
     import rclpy
     from rclpy.node import Node
     from rclpy.clock import Clock,ClockType
-    from rclpy.qos import qos_profile_sensor_data
     from sensor_msgs.msg import Image,CameraInfo,Imu,PointCloud2
     from nav_msgs.msg import Odometry
-    from rosgraph_msgs.msg import Clock as ClockMessage
     from std_msgs.msg import String
     import numpy as np
     import yaml
@@ -83,19 +98,23 @@ def main():
             self.clock_ns=None;self.clock_wall=None;self.stamps={};self.walls={};self.counts={};self.errors={}
             self.pairs=ImageInfoPairs();self.failure=None;self.last_report=None
             self.warmup=WarmupRecovery(profile['sensor_warmup_sim_s'],profile['recovery_fresh_pose_samples'],
-                                      profile['recovery_min_pose_span_sim_s'])
+                                      profile['recovery_min_pose_span_sim_s'],profile['warmup_history'])
+            self.evidence=EvidenceWriter()
             self.pub=self.create_publisher(String,TOPIC,10)
             for name,typ,topic in [('imu',Imu,'/livox/imu'),('raw_lidar',PointCloud2,'/demo/teacher/raw_lidar'),
                 ('image',Image,'/demo/camera'),('camera_info',CameraInfo,'/demo/camera_info'),
                 ('body_odom',Odometry,'/demo/slam/body_odom'),('cloud',PointCloud2,'/cloud_registered_full')]:
-                self.create_subscription(typ,topic,lambda m,n=name:self.receive(n,m),qos_profile_sensor_data)
-            self.create_subscription(ClockMessage,'/clock',self.clock,qos_profile_sensor_data)
+                self.create_subscription(typ,topic,lambda m,n=name:self.receive(n,m),latest_sensor_qos())
+            self.graph_check=BackgroundCheck(self.graph)
             self.create_timer(.1,self.tick,clock=Clock(clock_type=ClockType.STEADY_TIME))
-        def clock(self,msg):
-            ns=msg.clock.sec*1_000_000_000+msg.clock.nanosec
+        def sync_clock(self):
+            # Use rclpy's sole ROS TimeSource /clock(depth=1). A second custom
+            # clock queue previously lagged 460ms behind the current ROS clock.
+            ns=self.get_clock().now().nanoseconds
             if self.clock_ns is not None and ns<self.clock_ns:self.failure='Simulation clock moved backward'
             if self.clock_ns is None or ns>self.clock_ns:self.clock_ns=ns;self.clock_wall=time.monotonic()
         def receive(self,name,msg):
+            self.sync_clock()
             stamp=msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec
             if stamp<=self.stamps.get(name,-1):return
             error=None
@@ -134,6 +153,7 @@ def main():
             if error:self.errors[name]=error;return
             self.errors.pop(name,None);self.stamps[name]=stamp;self.walls[name]=time.monotonic()
             self.counts[name]=self.counts.get(name,0)+1
+            self.warmup.record(name,stamp)
         def graph(self):
             expected={'/aft_mapped_to_init':'laserMapping','/demo/slam/body_odom':'demo_slam_odom_adapter',
                 '/cloud_registered_full':'laserMapping','/demo/slam/lidar_filtered':'demo_slam_self_echo_filter',
@@ -146,7 +166,9 @@ def main():
                     'passed':len(infos)==1 and infos[0].node_name==name and infos[0].node_namespace=='/'}
             return results
         def tick(self):
+            self.sync_clock()
             now=time.monotonic();reasons=[];ages={};ns=self.clock_ns
+            if self.evidence.error:self.failure=self.evidence.error
             if self.failure:reasons.append(self.failure)
             if self.clock_wall is None or now-self.clock_wall>=.3:reasons.append('Actual simulation clock stale')
             for name in ('imu','raw_lidar','image','camera_info','body_odom','cloud'):
@@ -162,22 +184,28 @@ def main():
                                          wall_limit=2. if actual_camera_rate<10 else.3)
             if pair is None:
                 reasons.append('Vehicle image and actual CameraInfo are not paired within 50ms')
-            graph=self.graph()
+            checked=self.graph_check.result
+            graph={}if checked is None or checked['data']is None else checked['data']
+            if checked is None or checked['error']or now-checked['started_wall']>=.3:
+                reasons.append('Actual SLAM publisher graph check missing/stale')
             for topic,value in graph.items():
                 if not value['passed']:reasons.append('Unexpected actual SLAM publisher chain: '+topic)
             warmed=self.warmup.observe(not reasons,ns,self.stamps.get('body_odom'))
-            if not warmed and not reasons:reasons.append('Waiting for fresh SLAM recovery samples'if self.warmup.complete else'Waiting for continuous initial actual sensor SLAM warmup')
+            if not warmed and not reasons:reasons.append('Waiting for fresh SLAM recovery samples'if self.warmup.complete else'Waiting for cumulative actual sensor SLAM initialization history')
             status={'schema':1,'mode':'teacher','state':'failed'if self.failure else'ready'if warmed else'hold',
                 'ready':warmed,'reason':'; '.join(reasons)if reasons else'Actual vehicle RGB/K, IMU, LiDAR and sensor SLAM healthy',
                 'monotonic_wall':now,'ros_sim_time_ns':ns,'good_since_sim_ns':self.warmup.good_since,'ages':ages,
                 'initial_warmup_complete':self.warmup.complete,'recovery_fresh_pose_samples':self.warmup.samples,
+                'initialization_history':self.warmup.history,'initialization_requirements':self.warmup.requirements,
+                'clock_source':'single rclpy ROS TimeSource /clock, KEEP_LAST depth=1',
+                'graph_check_started_wall':None if checked is None else checked['started_wall'],
+                'graph_check_duration_wall_s':None if checked is None else checked['completed_wall']-checked['started_wall'],
                 'recovery_first_pose_stamp_ns':self.warmup.first_pose,'recovery_last_pose_stamp_ns':self.warmup.last_pose,
                 'actual_image_camera_info_pair':pair,
                 'counts':self.counts,'publisher_graph':graph,'ground_truth_navigation_used':False,
                 'overview_used_for_vio':False,'camera_intrinsics_scale':'Original640x480 K; FAST-LIVO2 internally applies scale=0.5'}
-            atomic(run/'navigation_sensor_gate.json',status)
-            with(run/'navigation_sensor_gate_history.jsonl').open('a')as stream:
-                stream.write(json.dumps(status,allow_nan=False,ensure_ascii=False)+'\n')
+            self.evidence.atomic(run/'navigation_sensor_gate.json',status)
+            self.evidence.append(run/'navigation_sensor_gate_history.jsonl',status)
             self.pub.publish(String(data=json.dumps(status,allow_nan=False)));self.last_report=status
     node=Gate()
     try:rclpy.spin(node)
@@ -185,7 +213,8 @@ def main():
     finally:
         if node.last_report:
             status={**node.last_report,'ready':False,'state':'hold','reason':'Sensor SLAM gate stopped','monotonic_wall':time.monotonic()}
-            atomic(run/'navigation_sensor_gate.json',status)
+            node.evidence.atomic(run/'navigation_sensor_gate.json',status)
+        node.graph_check.close();node.evidence.close()
         node.destroy_node();rclpy.try_shutdown()
 
 
