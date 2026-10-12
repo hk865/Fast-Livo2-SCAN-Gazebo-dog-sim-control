@@ -228,7 +228,7 @@ def main():
                                 schema='known_scene_canonical_initialization_frame/v1',run_id=run.name,
                                 generation=self.correction.generation,source_ns=result['source_ns'],
                                 C_world_odom=candidate.tolist(),T_navigation_world=self.nav_world.tolist(),
-                                reference_sha256=sha(reference_path),world_sha256=sha(run/'world.sdf'),
+                                reference_sha256=sha(run/'known_scene_reference.json'),world_sha256=sha(run/'world.sdf'),
                                 runtime_witness_sha256=sha(run/'known_scene_runtime_witness.json'),
                                 actual_startup_results=list(self.startup_results),
                                 IMU_world_orientation_used=False,robot_truth_pose_used=False,
