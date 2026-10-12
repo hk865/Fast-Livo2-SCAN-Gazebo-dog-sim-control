@@ -166,7 +166,7 @@ def read_live_json(path):
     try:return json.loads(Path(path).read_text())
     except (OSError, ValueError):return None
 
-def actual_scan_association(run,rid):
+def actual_scan_association(run,rid,admitted_only=False):
     """Recheck the original controller's real archived association transaction."""
     directory=Path(run)/'path_admission_candidates'
     if not directory.is_dir():return None
@@ -182,6 +182,7 @@ def actual_scan_association(run,rid):
             or metadata.get('schema')!=1 or metadata.get('reference_stamp')!=list(nonce)
             or metadata.get('trajectory')!=payload
             or decision.get('association_payload_id')!=payload.get('traj_id')):continue
+        if admitted_only and decision.get('admitted') is not True:continue
         return dict(candidate_file=str(p),candidate_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
                     request_id=rid,reference_stamp=list(nonce),trajectory_id=payload.get('traj_id'),
                     complete_payload_matches_metadata=True,path_admitted=decision.get('admitted') is True,
@@ -190,31 +191,5 @@ def actual_scan_association(run,rid):
     return None
 
 def startup_stop_decision(run,clock_ns,wall_elapsed,run_allocated_bytes):
-    """Diagnostic stop conditions; never changes an original mission receipt."""
-    run=Path(run)
-    if run_allocated_bytes>=2000000000:return dict(stop=True,reason='new_output_cap',navigation_PASS=False)
-    result=read_live_json(run/'R33_INITIALIZATION_RESULT.json')
-    if isinstance(result,dict):
-        if result.get('original_verifier_passed') is False:
-            return dict(stop=True,reason='actual_initialization_first_rejection',job_result=result,
-                        navigation_PASS=False)
-        required=['mission46_initialization_receipt.json','mission46_initialization_evidence.json',
-                  'navigation_anchor.json','mission46_requests.jsonl','navigation_request.json','navigation_status.json']
-        if result.get('original_verifier_passed') is True and all((run/n).is_file() for n in required):
-            status=read_live_json(run/'navigation_status.json');actual=read_live_json(run/'navigation_request.json')
-            try:requests=[json.loads(line) for line in (run/'mission46_requests.jsonl').read_text().splitlines()]
-            except (OSError,ValueError):requests=[]
-            if isinstance(status,dict) and isinstance(actual,dict):
-                rid=status.get('request_id')
-                consumed=(bool(rid) and status.get('state')=='running' and bool(status.get('goals_definition_sha256'))
-                    and actual.get('request_id')==rid
-                    and any(r.get('request',{}).get('request_id')==rid for r in requests))
-                association=actual_scan_association(run,rid) if consumed else None
-                if association is not None:
-                    return dict(stop=True,reason='real_initialization_anchor_request_SCAN_response_associated',
-                        actual_request_id=rid,actual_controller_goals_definition_sha256=status['goals_definition_sha256'],
-                        SCAN_response_association=association,navigation_PASS=False,
-                        autonomous_arrival_or_parking_verified=False)
-    if clock_ns>=90000000000:return dict(stop=True,reason='native90s_diagnostic_cutoff',navigation_PASS=False)
-    if wall_elapsed>=360:return dict(stop=True,reason='wall360s_diagnostic_cutoff',navigation_PASS=False)
-    return dict(stop=False,navigation_PASS=False)
+    from first_goal_stop import first_goal_stop_decision
+    return first_goal_stop_decision(run,clock_ns,wall_elapsed,run_allocated_bytes)

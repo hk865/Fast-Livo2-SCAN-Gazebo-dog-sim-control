@@ -279,8 +279,8 @@ def prepare(run,args):
         plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
             'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
         plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
-    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=90,max_wall_seconds=360,new_output_cap_bytes=2000000000,original_profile_duration_preserved=duration,no_GT_carrier=True)
-    plan['wall_budget_s']=360.
+    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=60,max_wall_seconds=240,new_output_cap_bytes=2000000000,original_profile_duration_preserved=duration,no_GT_carrier=True)
+    plan['wall_budget_s']=240.
     from mission46_profile import required_source_files as actual_mission_sources
     actual_sources=actual_mission_sources()
     declared_sources=p['mission46_required_source_files']
@@ -604,8 +604,12 @@ def execute(run,plan):
                     elif rc is not None:raise RuntimeError('Bounded shadow sampler incomplete; inspect its receipt')
                 elif role not in ('worker','gazebo')and child.poll()is not None:raise RuntimeError(role+' exited while Actor remained active')
             if sample_complete:break
-            for record in native_tail.poll():native_last_ns=native_ns(record['data'])
-            decision=startup_stop_decision(run,native_last_ns,now-(wall_deadline-plan['wall_budget_s']),usage([run])['allocated_bytes'])
+            from first_goal_stop import observe_native_tail,first_goal_runtime_decision
+            observed_native=observe_native_tail(native_tail,native_last_ns)
+            native_last_ns=observed_native['native_ns']
+            current_run_storage=usage([run])
+            decision=first_goal_runtime_decision(run,observed_native,
+                now-(wall_deadline-plan['wall_budget_s']),max(current_run_storage['allocated_bytes'],current_run_storage['logical_bytes']))
             if decision['stop']:
                 startup_stop=decision;write_new(run/'R33_DIAGNOSTIC_STOP.json',dict(decision,actual_native_ns=native_last_ns,actual_monotonic_wall=now));break
             sensors_ready=(run/'frame_source.json').exists()
@@ -723,7 +727,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_startup_r33';tmp=ROOT/'runs'/('latest_engineering_v34_startup_r33.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r33_first_goal';tmp=ROOT/'runs'/('latest_engineering_v34_r33_first_goal.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,
