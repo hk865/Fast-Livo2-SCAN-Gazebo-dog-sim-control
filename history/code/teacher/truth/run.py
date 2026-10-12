@@ -72,7 +72,8 @@ def run(profile,camera=False):
     (directory/'truth_profile.json').write_text(json.dumps(profile,indent=2)+'\n')
     refs={}
     sources=[(ROOT/'policy'/name,Path('policy')/name)for name in ('worker.py','observation.py','contract.json')]
-    sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json','profiles.py','pure_tests.py','curve_receipt.py','test_curve_receipt.py','README_CURVE_RECEIPT.md')if (HERE/name).exists()]
+    sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json','profiles.py','pure_tests.py','active_hold_receipt.py','test_active_hold_receipt.py','README_RECEIPT.md','README.md')if (HERE/name).exists()]
+    sources += [(HERE/'reference_v1_core.py',Path('references/v1_core.py')),(HERE/'reference_curve_receipt.py',Path('references/v1_curve_receipt.py'))]
     sources += [(ROOT/'simulation'/name,Path('native')/Path(name).name)for name in ('teacher_actuator.cpp','build/libteacher_actuator.so','prepare.py')]
     if camera:sources += [(ROOT/'scripts/capture.py',Path('observer/capture.py'))]
     for source,relative in sources:
@@ -82,7 +83,7 @@ def run(profile,camera=False):
          'GZ_SIM_SYSTEM_PLUGIN_PATH':str(directory/'sources/native'),
          'TEACHER_SOCKET':'/tmp/teacher_truth_'+uuid.uuid4().hex[:12]+'.sock',
          'TEACHER_ACTUATOR_LOG':str(directory/'actuator.jsonl'),
-         'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1','ROS_DOMAIN_ID':'79','ROS_LOCALHOST_ONLY':'1'}
+         'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1','ROS_DOMAIN_ID':'86','ROS_LOCALHOST_ONLY':'1'}
     if camera:env.pop('LIBGL_ALWAYS_SOFTWARE',None);env.pop('GALLIUM_DRIVER',None)
     children={};error=None
     resource=lambda:{'wall':time.monotonic(),'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True),
@@ -126,12 +127,13 @@ def run(profile,camera=False):
         for role in ('capture','bridge','gazebo','worker'):stop(children.get(role))
         Path(env['TEACHER_SOCKET']).unlink(missing_ok=True)
         (directory/'resources_after.json').write_text(json.dumps(resource(),indent=2))
-        (directory/'runtime_manifest.json').write_text(json.dumps({'scope':'Isolated60x60plane curvePID characterization; no SLAM5 or SLAM navigation claim',
+        (directory/'runtime_manifest.json').write_text(json.dumps({'scope':'Isolated60x60plane curvePID active pose hold v2 characterization; different parking semantics; no SLAM5 or SLAM navigation claim',
             'run':str(directory),'error':error,'owned_processes':[{'role':k,'pid':v.pid,'returncode':v.returncode}for k,v in children.items()],
             'exclusive_writer':'teacher_sim::TeacherActuator','native_plugin_sha256':sha(directory/'sources/native/libteacher_actuator.so'),
             'frozen_model_sha256':'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34',
             'source_manifest_sha256':sha(directory/'source_manifest.json'),'truth_profile_sha256':sha(directory/'truth_profile.json'),
-            'uses_truth_for_control':True,'counts_as_SLAM_navigation':False,'training_processes_signaled':False,'real_robot':False},indent=2)+'\n')
+            'uses_truth_for_control':True,'counts_as_SLAM_navigation':False,'training_processes_signaled':False,'real_robot':False,
+            'parking_semantics':'prospective_fixed_goal_active_pose_velocity_hold_v2; original v1 zero-command parking receipt not upgraded'},indent=2)+'\n')
         signal.signal(signal.SIGINT,interrupt);signal.signal(signal.SIGTERM,interrupt)
     if (directory/'sources/truth/evaluate.py').exists():
         subprocess.run([sys.executable,str(directory/'sources/truth/evaluate.py'),'--run',str(directory)],check=True,

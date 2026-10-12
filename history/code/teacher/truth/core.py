@@ -350,3 +350,240 @@ class Controller:
                         previous_fresh_wall_receipt_gap_s=receipt_gap,
                         estimated_teacher_command_body=self.applied_command_estimate.tolist())
         return self.command.copy(),self.row['mode']
+
+# BEGIN ACTIVE PARKING V2: the entire preceding v1 source is byte-identical.
+from pathlib import Path
+
+V1_DRIVE_SOURCE_SHA256 = '82d07762f2d44c969abafb65a792881fddce83dc5ca22851b376468ec48e597d'
+V1_DRIVE_SOURCE_SIZE_BYTES = 21098
+FrozenV1Controller = Controller
+
+
+def parking_target_record(path):
+    return dict(position_world_xyz=path.final_xyz.tolist(), heading0_rad=path.heading0,
+                path_parameters_sha256=path.sha256)
+
+
+def _deadband(value, width):
+    value = np.asarray(value, float)
+    return np.sign(value)*np.maximum(abs(value)-width, 0.)
+
+
+class Controller(FrozenV1Controller):
+    """Unchanged analytic driving, followed by bounded active endpoint hold.
+
+    Capture and hold both use the prospective fixed endpoint, not a moving
+    measured-pose anchor. The first arrived pose is immutable diagnostic data.
+    This API only returns Teacher body velocity commands; never joint actions.
+    """
+    def __init__(self, profile):
+        super().__init__(profile)
+        if hashlib.sha256(Path(__file__).read_bytes()[:V1_DRIVE_SOURCE_SIZE_BYTES]).hexdigest()!=V1_DRIVE_SOURCE_SHA256:
+            raise ValueError('Frozen v1 drive prefix differs')
+        self.parking=json.loads(json.dumps(self.p['active_parking'],allow_nan=False))
+        if self.parking['schema']!='fixed_endpoint_active_parking/v1':
+            raise ValueError('Explicit active parking contract required')
+        self._target=parking_target_record(self.path)
+        self._target_sha=parameter_hash(self._target)
+        if (self.parking['target_sha256']!=self._target_sha or
+            self.parking['target']!=self._target or
+            self.parking['target_kind']!='prospective_fixed_path_endpoint'):
+            raise ValueError('Parking target must be the immutable prospective path endpoint')
+        self.hold_limits=np.asarray(self.parking['command_limits_body'],float)
+        if (self.hold_limits.shape!=(3,) or not np.isfinite(self.hold_limits).all() or
+            np.any(self.hold_limits<=0) or np.any(self.hold_limits>[.06,.04,.10])):
+            raise ValueError('Active parking command envelope exceeded')
+        positive=('position_kp','position_kd','yaw_kp','yaw_kd','reference_xy_norm_limit_mps',
+            'reference_yaw_limit_radps','capture_xy_entry_m','capture_xy_hold_m',
+            'capture_yaw_entry_rad','capture_yaw_hold_rad','capture_actual_xy_speed_mps',
+            'capture_actual_yawrate_radps','capture_fresh_dwell_s','target_loss_radius_m',
+            'target_loss_heading_rad')
+        if any(not math.isfinite(float(self.parking[k])) or float(self.parking[k])<=0 for k in positive):
+            raise ValueError('Nonpositive active parking parameter')
+        if (self.parking['reference_xy_norm_limit_mps']>.025 or self.parking['reference_yaw_limit_radps']>.07 or
+            self.parking['capture_xy_entry_m']>.025 or self.parking['capture_xy_hold_m']>.03 or
+            self.parking['capture_yaw_entry_rad']>.035 or self.parking['capture_yaw_hold_rad']>.045 or
+            self.parking['capture_actual_xy_speed_mps']>.03 or self.parking['capture_actual_yawrate_radps']>.06 or
+            self.parking['capture_fresh_dwell_s']<.6 or self.parking['target_loss_radius_m']>.3 or
+            self.parking['target_loss_heading_rad']>.6):
+            raise ValueError('Active parking/capture safety boundary loosened')
+        if (self.parking['position_kp']>1 or self.parking['position_kd']>.5 or
+            self.parking['yaw_kp']>1.3 or self.parking['yaw_kd']>.3 or
+            not 0<=self.parking['position_deadband_m']<=.005 or
+            not 0<=self.parking['yaw_deadband_rad']<=.008):
+            raise ValueError('Parking gain/deadband outside candidate boundary')
+        fixed_contract=dict(first_fixed_parking_window_s=5.,maximum_xy_drift_m=.05,
+            maximum_yaw_drift_rad=.1,maximum_native_xy_speed_mps=.08,
+            maximum_native_Euler_yawrate_radps=.1,feedback_TTL_sim_and_wall_s=.3,
+            command_slew_per_s=[.6,.6,.8],actual_command_must_be_zero=False,
+            continuous_Teacher_inference_required=True,action_zero_is_parking=False,
+            SLAM_verified=False,real_robot_verified=False)
+        if any(self.parking.get(k)!=v for k,v in fixed_contract.items()):
+            raise ValueError('Frozen parking numerical/source contract differs')
+        self.hold_integral=np.zeros(3)
+        self.capture_stamp=None;self.hold_stamp=None;self.capture_dwell_start=None
+        self.arrival_pose=None;self.capture_elapsed=None;self.capture_world=None
+        self.hold_elapsed=None;self.hold_world=None
+
+    def _metadata(self, entry_reset=False):
+        self.row.update(active_parking_enabled=True,
+            parking_reference_kind='prospective_fixed_path_endpoint',
+            parking_target_world_xyz=list(self._target['position_world_xyz']),
+            parking_target_yaw_rad=self._target['heading0_rad'],parking_target_sha256=self._target_sha,
+            parking_capture_elapsed_s=self.capture_elapsed,parking_capture_world_time_s=self.capture_world,
+            parking_capture_state_time_s=self.capture_stamp,
+            parking_hold_declared_elapsed_s=self.hold_elapsed,parking_hold_declared_world_time_s=self.hold_world,
+            parking_hold_declared_state_time_s=self.hold_stamp,
+            arrival_capture_position_world=None if self.arrival_pose is None else list(self.arrival_pose['position_world_xyz']),
+            arrival_capture_yaw_rad=None if self.arrival_pose is None else self.arrival_pose['yaw_rad'],
+            entry_integral_reset=bool(entry_reset),parking_command_limits_body=self.hold_limits.tolist(),
+            v1_drive_source_prefix_sha256=V1_DRIVE_SOURCE_SHA256,
+            v1_drive_source_prefix_size_bytes=V1_DRIVE_SOURCE_SIZE_BYTES,
+            parking_is_old_zero_command_protocol=False)
+
+    def _limit_hold(self, raw):
+        limited=np.clip(raw,-self.hold_limits,self.hold_limits)
+        norm=np.linalg.norm(limited[:2])
+        if norm>self.hold_limits[0]:limited[:2]*=self.hold_limits[0]/norm
+        return limited
+
+    def _hold_fresh(self, s, t, stamp, dt, entry_reset=False):
+        R=rotation(s[4:8]);yaw=math.atan2(R[1,0],R[0,0])
+        roll=math.atan2(R[2,1],R[2,2]);pitch=math.asin(np.clip(-R[2,0],-1,1))
+        if abs(math.cos(pitch))<.4 or abs(math.cos(roll))<.4:
+            raise ValueError('Unsafe active parking yaw kinematics')
+        yawdot=(math.sin(roll)*s[12]+math.cos(roll)*s[13])/math.cos(pitch)
+        origin_body=s[8:11]-np.cross(s[11:14],self.com_offset)
+        origin_world=R@origin_body
+        error_world=np.asarray(self._target['position_world_xyz'])[:2]-s[1:3]
+        error_yaw=wrap(self._target['heading0_rad']-yaw)
+        distance=float(np.linalg.norm(error_world))
+        if distance>self.parking['target_loss_radius_m'] or abs(error_yaw)>self.parking['target_loss_heading_rad']:
+            self.fault='parking_target_lost';self.hold_integral[:]=0.
+            self._zero_row(s,t,self.fault);self._metadata(entry_reset)
+            return
+        measurement=np.r_[origin_world[:2],yawdot]
+        actual=np.r_[s[8:10],s[13]]
+        # The first capture frame was already filtered by the unchanged drive
+        # controller. Never count that physical measurement twice.
+        if not entry_reset:
+            alpha=1. if self.filtered is None else dt/(.2+dt)
+            self.filtered=measurement.copy() if self.filtered is None else self.filtered+alpha*(measurement-self.filtered)
+            beta=1. if self.inner_filtered is None else dt/(.1+dt)
+            self.inner_filtered=actual.copy() if self.inner_filtered is None else self.inner_filtered+beta*(actual-self.inner_filtered)
+        xy_radius=self.parking['capture_xy_hold_m'] if self.capture_dwell_start is not None else self.parking['capture_xy_entry_m']
+        yaw_radius=self.parking['capture_yaw_hold_rad'] if self.capture_dwell_start is not None else self.parking['capture_yaw_entry_rad']
+        eligible=(distance<=xy_radius and abs(error_yaw)<=yaw_radius and
+                  np.linalg.norm(origin_body[:2])<self.parking['capture_actual_xy_speed_mps'] and
+                  abs(yawdot)<self.parking['capture_actual_yawrate_radps'])
+        if self.hold_stamp is None:
+            if eligible:
+                if self.capture_dwell_start is None:self.capture_dwell_start=stamp
+                if stamp-self.capture_dwell_start>=self.parking['capture_fresh_dwell_s']-1e-9:
+                    self.hold_stamp=stamp;self.hold_world=float(s[0]);self.hold_elapsed=t;self.completed_t=t
+                    self.waypoint_events.append(dict(kind='active_hold_declared',state_physics_time_s=stamp,
+                        world_time_s=float(s[0]),elapsed_s=t,target_sha256=self._target_sha))
+            else:self.capture_dwell_start=None
+        mode='active_hold' if self.hold_stamp is not None else 'capture'
+        position_P=self.parking['position_kp']*_deadband(error_world,self.parking['position_deadband_m'])
+        position_D=-self.parking['position_kd']*self.filtered[:2]
+        velocity_world=np.r_[position_P+position_D,0.]
+        xy_norm=np.linalg.norm(velocity_world[:2]);xy_limit=self.parking['reference_xy_norm_limit_mps']
+        if xy_norm>xy_limit:velocity_world[:2]*=xy_limit/xy_norm
+        yaw_P=self.parking['yaw_kp']*float(_deadband(error_yaw,self.parking['yaw_deadband_rad']))
+        yaw_D=-self.parking['yaw_kd']*self.filtered[2]
+        desired_yawdot=float(np.clip(yaw_P+yaw_D,-self.parking['reference_yaw_limit_radps'],self.parking['reference_yaw_limit_radps']))
+        body_wref=(desired_yawdot*math.cos(pitch)-math.sin(roll)*s[12])/math.cos(roll)
+        origin_ref_body=R.T@velocity_world
+        com_ref=origin_ref_body+np.cross(np.array([0.,0.,body_wref]),self.com_offset)
+        target=np.r_[com_ref[:2],body_wref];ev=target-self.inner_filtered
+        g=self.g;kp=np.array([g['velocity_kp_x'],g['velocity_kp_y'],g['rate_kp']])
+        ki=np.array([g['velocity_ki_x'],g['velocity_ki_y'],g['rate_ki']])
+        candidate=np.clip(self.hold_integral+dt*ev,-.5,.5)
+        raw=target+kp*ev+ki*candidate;limited=self._limit_hold(raw)
+        blocked_axis=ev*(raw-limited)>0
+        candidate=np.where(blocked_axis,self.hold_integral,candidate)
+        next_slew=self.applied_command_estimate+np.clip(limited-self.applied_command_estimate,-SLEW*.02,SLEW*.02)
+        blocked_slew=ev*(raw-next_slew)>1e-9
+        candidate=np.where(blocked_slew,self.hold_integral,candidate)
+        self.hold_integral=candidate
+        raw=target+kp*ev+ki*candidate;limited=self._limit_hold(raw)
+        self.command=limited
+        self.progress,projection=self.path.project(s[1:4],self.progress)
+        self.row=dict(kind='controller_update',controller_updated=True,
+            control_t_s=float(s[0]),feedback_time_s=stamp,elapsed_s=t,header_dt_s=dt,
+            active_integral_dt_s=dt,feedback_hz=self.hz,design='curvature_cascade_pi_active_hold',
+            mode=mode,segment=0,reference_xy=self._target['position_world_xyz'][:2],
+            reference_yaw=self._target['heading0_rad'],reference_velocity_world=velocity_world.tolist(),
+            error_cross=float(-error_world@self.path.geometry(self.progress)[2][:2]),
+            error_along=float(error_world@self.path.geometry(self.progress)[1][:2]),error_yaw=error_yaw,
+            arc_progress_m=self.progress,path_length_m=self.path.length,remaining_arc_m=self.path.length-self.progress,
+            endpoint_xy_distance_m=distance,path_curvature_1pm=0.,planned_tangential_speed_mps=0.,
+            yaw_feedforward_radps=0.,reference_geometric_yaw_rate_radps=desired_yawdot,
+            yaw_PD=dict(P=yaw_P,D=yaw_D),position_terms=dict(P=position_P.tolist(),D=position_D.tolist(),I=[0.,0.]),
+            v_reference_body=target.tolist(),command_body=limited.tolist(),raw_command_body=raw.tolist(),
+            velocity_PI=dict(error=ev.tolist(),P=(kp*ev).tolist(),I=(ki*candidate).tolist(),
+                filtered_actual_body=self.inner_filtered.tolist(),blocked_axis=blocked_axis.tolist(),blocked_slew=blocked_slew.tolist()),
+            measured_origin_velocity_world=origin_world.tolist(),measured_origin_velocity_body=origin_body.tolist(),
+            measured_COM_velocity_body=s[8:11].tolist(),measured_yaw_rate=yawdot,
+            COM_reference_angular_assumption='Desired body omega_xy=0 for COM lever arm; measured omega_y used in Euler conversion',
+            saturated=(abs(raw-limited)>1e-9).tolist(),completed_t_s=self.completed_t,
+            capture_fresh_dwell_start_state_time_s=self.capture_dwell_start,capture_measurement_eligible=bool(eligible),
+            parking_reference_yaw_rate_radps=desired_yawdot,parking_reference_velocity_world=velocity_world.tolist(),
+            parking_position_error_world=error_world.tolist(),parking_heading_error_rad=error_yaw,
+            goal_entry_radius_m=.12,goal_hold_radius_m=.14,progress_required_before_final_dwell_m=self.path.length-.15,
+            projection=projection,path_parameters_sha256=self.path.sha256,route_reference_changes=0,
+            feedback_measurement_fresh=True,feedback_source='Gazebo native truth; active endpoint parking calibration only',
+            counts_as_SLAM_navigation=False,fault=None)
+        self._metadata(entry_reset)
+
+    def update(self, s, t):
+        s=np.asarray(s,float);t=float(t)
+        if self.capture_stamp is None:
+            estimate_before=self.applied_command_estimate.copy()
+            command,mode=super().update(s,t)
+            if mode=='goal_dwell' and self.fault is None:
+                self.capture_stamp=float(s[0]-.005);self.capture_world=float(s[0]);self.capture_elapsed=t
+                R=rotation(s[4:8]);self.arrival_pose=dict(position_world_xyz=s[1:4].tolist(),
+                    yaw_rad=math.atan2(R[1,0],R[0,0]))
+                self.hold_integral[:]=0.;self.dwell=None;self.completed_t=None
+                # Parent performed its zero-command slew once; replace that
+                # estimate with exactly one Teacher slew toward active output.
+                self.applied_command_estimate=estimate_before
+                dt=float(self.row['header_dt_s'])
+                receipt_gap=float(self.row['previous_fresh_wall_receipt_gap_s'])
+                self._hold_fresh(s,t,self.capture_stamp,dt,entry_reset=True)
+                self.applied_command_estimate+=np.clip(self.command-self.applied_command_estimate,-SLEW*.02,SLEW*.02)
+                self.row.update(estimated_teacher_command_body=self.applied_command_estimate.tolist(),
+                    feedback_age_sim_s=0.,feedback_age_wall_s=0.,previous_fresh_wall_receipt_gap_s=receipt_gap)
+                return self.command.copy(),self.row['mode']
+            self._metadata(False)
+            return command,mode
+        if s.shape!=(64,) or not np.isfinite(s).all() or np.linalg.norm(s[4:8])<.9:
+            raise ValueError('Invalid native64 active parking state')
+        if self.last_world is not None and s[0]<=self.last_world:
+            raise ValueError('Nonincreasing active parking native clock')
+        self.last_world=float(s[0]);self.frame+=1
+        stamp=float(s[0]-.005);now=time.monotonic()
+        receipt_gap=0. if self.last_wall is None else now-self.last_wall
+        dt=0. if self.last_feedback is None else stamp-self.last_feedback
+        updated=self.frame%self.stride==0
+        if self.fault is None and (dt<0 or dt>.30000001 or receipt_gap>.3):
+            self.fault='feedback_timeout';self.hold_integral[:]=0.;self.integral[:]=0.;self.velocity_integral[:]=0.
+        if self.fault is not None:
+            self._zero_row(s,t,self.fault);self._metadata(False)
+        elif updated:
+            self.last_feedback=stamp;self.last_wall=now
+            self._hold_fresh(s,t,stamp,dt,False)
+        else:
+            self.row={**self.row,'kind':'controller_hold', 'controller_updated':False,
+                'control_t_s':float(s[0]),'elapsed_s':t,'command_body':self.command.tolist(),
+                'feedback_measurement_fresh':False}
+            self._metadata(False)
+        sim_age=stamp-self.last_feedback if self.last_feedback is not None else 0.
+        wall_age=now-self.last_wall if self.last_wall is not None else 0.
+        self.applied_command_estimate+=np.clip(self.command-self.applied_command_estimate,-SLEW*.02,SLEW*.02)
+        self.row.update(feedback_age_sim_s=sim_age,feedback_age_wall_s=wall_age,
+            previous_fresh_wall_receipt_gap_s=receipt_gap,
+            estimated_teacher_command_body=self.applied_command_estimate.tolist())
+        return self.command.copy(),self.row['mode']

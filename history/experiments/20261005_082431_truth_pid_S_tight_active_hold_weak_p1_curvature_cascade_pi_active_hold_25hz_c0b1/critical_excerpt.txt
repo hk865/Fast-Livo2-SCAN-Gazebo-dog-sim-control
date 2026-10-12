@@ -1,0 +1,11 @@
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+Traceback (most recent call last):
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_082431_truth_pid_S_tight_active_hold_weak_p1_curvature_cascade_pi_active_hold_25hz_c0b1/sources/truth/worker.py", line 50, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_082431_truth_pid_S_tight_active_hold_weak_p1_curvature_cascade_pi_active_hold_25hz_c0b1/sources/truth/worker.py", line 18, in main
+    controller=Controller(p);capture={'state':None,'metadata':None};old_recv=legacy.recv_exact;old_atomic=legacy.atomic_json
+               ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_082431_truth_pid_S_tight_active_hold_weak_p1_curvature_cascade_pi_active_hold_25hz_c0b1/sources/truth/core.py", line 391, in __init__
+    raise ValueError('Parking target must be the immutable prospective path endpoint')
+ValueError: Parking target must be the immutable prospective path endpoint

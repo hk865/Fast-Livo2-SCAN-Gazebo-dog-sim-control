@@ -1,4 +1,4 @@
-"""Meaningful CPU geometry/controller checks; no simulated plant or pass claim."""
+"""Offline controller safety/regression checks; no Teacher or simulator run."""
 import copy
 import hashlib
 import json
@@ -10,192 +10,198 @@ from unittest.mock import patch
 
 import numpy as np
 
-from core import Controller, StaticPath, rotation, wrap
-from profiles import (circle_profile,s_curve_profile,MODEL_SHA,REQUIRED_PLANT_CHECKS,
-                      REQUIRED_PLANT_INPUTS,APPROVED_PLANT_PROTOCOL_SHA,APPROVED_PLANT_ANALYZER_SHA)
+from core import (Controller,FrozenV1Controller,StaticPath,rotation,V1_DRIVE_SOURCE_SHA256,
+                  V1_DRIVE_SOURCE_SIZE_BYTES,parameter_hash,parking_target_record)
+from profiles import parking_contract,from_v1
+
+
+OFFSET=[.05523092034548942,-.001869001919385796,.006095299184261034]
+
+
+def profile(kind='s_curve',hz=25,heading=0.):
+    path=dict(kind=kind,origin_world_xyz=[0.,0.,.32],heading0_rad=heading,
+              entry_straight_m=2.,exit_straight_m=2.,direction_sign=1)
+    path.update(dict(radius_m=.6,turn_angle_rad=2*math.pi) if kind=='circle' else
+                dict(curve_length_m=6.,heading_amplitude_rad=1.))
+    geometry=StaticPath(path)
+    p=dict(schema='truth_teacher_static_curve_profile/v1',scenario='pure_test_only',terrain='flat',
+           path=path,path_parameters_sha256=parameter_hash(path),path_length_m=geometry.length,
+           maximum_abs_curvature_1pm=geometry.maximum_abs_curvature,desired_speed=.3,feedback_hz=hz,
+           duration_s=180.,post_completion_s=7.,command_limits=[.8,.35,.8],gains={},
+           base_com_offset=OFFSET.copy(),spawn=[0.,0.,.4,heading],frozen_source_hashes={})
+    p['active_parking']=parking_contract(geometry)
+    return p
 
 
 def quaternion(roll,pitch,yaw):
-    cr,sr=math.cos(roll/2),math.sin(roll/2)
-    cp,sp=math.cos(pitch/2),math.sin(pitch/2)
+    cr,sr=math.cos(roll/2),math.sin(roll/2);cp,sp=math.cos(pitch/2),math.sin(pitch/2)
     cy,sy=math.cos(yaw/2),math.sin(yaw/2)
-    return np.array([cr*cp*cy+sr*sp*sy,sr*cp*cy-cr*sp*sy,
-                     cr*sp*cy+sr*cp*sy,cr*cp*sy-sr*sp*cy])
+    return np.array([cr*cp*cy+sr*sp*sy,sr*cp*cy-cr*sp*sy,cr*sp*cy+sr*cp*sy,cr*cp*sy-sr*sp*cy])
 
 
-def state(world_t,position,yaw=0.,origin_world_velocity=(0.,0.,0.),
-          body_omega=(0.,0.,0.),roll=0.,pitch=0.):
-    p=circle_profile(2.)
-    q=quaternion(roll,pitch,yaw);R=rotation(q)
-    result=np.zeros(64);result[0]=world_t;result[1:4]=position;result[4:8]=q
-    result[8:11]=R.T@np.asarray(origin_world_velocity)+np.cross(body_omega,p['base_com_offset'])
-    result[11:14]=body_omega;result[50:55]=[0.,1.,1.,1.,1.]
-    return result
+def state(world_t,position,yaw=0.,world_velocity=(0.,0.,0.),omega=(0.,0.,0.),roll=0.,pitch=0.):
+    q=quaternion(roll,pitch,yaw);R=rotation(q);s=np.zeros(64)
+    s[0]=world_t;s[1:4]=position;s[4:8]=q
+    s[8:11]=R.T@np.asarray(world_velocity)+np.cross(omega,OFFSET);s[11:14]=omega
+    s[50:55]=[0.,1.,1.,1.,1.]
+    return s
 
 
-class Geometry(unittest.TestCase):
-    def test_circle_tangent_and_signed_curvature_both_directions(self):
-        for sign in [-1,1]:
-            p=StaticPath(circle_profile(2.,direction_sign=sign)['path'])
-            s=p.entry+math.pi*p.radius/2
-            point,tangent,normal,heading,kappa=p.geometry(s)
-            np.testing.assert_allclose(point,[4.,2.*sign,.32],atol=1e-12)
-            self.assertAlmostEqual(kappa,sign/2)
-            self.assertAlmostEqual(wrap(heading),sign*math.pi/2)
-            np.testing.assert_allclose(tangent,[0.,sign,0.],atol=1e-12)
-            np.testing.assert_allclose(p.position(p.entry+p.curve_length),[2.,0.,.32],atol=1e-12)
-            np.testing.assert_allclose(p.final_xyz,[4.,0.,.32],atol=1e-12)
-
-    def test_s_true_arclength_derivative_curvature_and_tangent_endpoints(self):
-        for sign in [-1,1]:
-            p=StaticPath(s_curve_profile(8.,.5,direction_sign=sign)['path'])
-            for u in np.linspace(.1,7.9,41):
-                s=p.entry+u;epsilon=1e-5
-                finite=(p.position(s+epsilon)-p.position(s-epsilon))/(2*epsilon)
-                _,tangent,normal,heading,kappa=p.geometry(s)
-                np.testing.assert_allclose(finite,tangent,atol=2e-9)
-                hleft=p.geometry(s-epsilon)[3];hright=p.geometry(s+epsilon)[3]
-                self.assertAlmostEqual((hright-hleft)/(2*epsilon),kappa,places=8)
-                self.assertAlmostEqual(float(tangent@normal),0.,places=12)
-            self.assertAlmostEqual(p.position(p.entry+p.curve_length)[1],0.,places=12)
-            self.assertAlmostEqual(p.geometry(p.entry)[4],0.)
-            self.assertAlmostEqual(p.geometry(p.entry+p.curve_length)[4],0.)
-            self.assertAlmostEqual(p.geometry(p.length)[3],0.)
-
-    def test_projection_lap_cannot_skip_at_circle_overlap(self):
-        p=StaticPath(circle_profile(1.)['path']);progress=0.
-        for s in np.linspace(0,p.length,401):
-            value,details=p.project(p.position(s),progress)
-            self.assertGreaterEqual(value,progress)
-            self.assertAlmostEqual(value,s,places=7)
-            self.assertLessEqual(value-progress,p.forward_window+1e-9)
-            progress=value
-        progress,details=p.project(p.position(p.entry),p.entry)
-        self.assertLess(progress,p.entry+.1)
-        self.assertLess(progress,p.length-.15)
-
-    def test_path_hash_and_immutable_input(self):
-        profile=circle_profile(2.);controller=Controller(profile)
-        original=controller.path.final_xyz.copy()
-        profile['path']['radius_m']=99.
-        np.testing.assert_array_equal(controller.path.final_xyz,original)
-        bad=circle_profile(2.);bad['path']['radius_m']=3.
-        with self.assertRaises(ValueError):Controller(bad)
-
-    def test_pending_radius_and_real_evidence_margin(self):
-        p=circle_profile(2.)
-        self.assertEqual(p['feasibility']['status'],'pending_actual_minimum_radius')
-        with tempfile.TemporaryDirectory(prefix='curve_source_pure_test_') as name:
-            # Synthetic receipt fixture tests hash rejection; never saved as a
-            # real experiment and never used for a tracking feasibility claim.
-            run=Path(name)
-            archived=run/'sources/curvature';archived.mkdir(parents=True)
-            original=Path(__file__).resolve().parent.parent/'curvature_tuning'
-            manifest={}
-            for n in ['protocol.json','evaluate_radius.py']:
-                dst=archived/n;dst.write_bytes((original/n).read_bytes())
-                manifest['curvature/'+n]={'path':str(dst),'sha256':hashlib.sha256(dst.read_bytes()).hexdigest()}
-            for n in REQUIRED_PLANT_INPUTS:
-                if n!='protocol.json':(run/n).write_text('{}')
-            (run/'source_manifest.json').write_text(json.dumps(manifest))
-            plan=run/'curvature_plan.json'
-            plan.write_text(json.dumps({'speed_mps':.3,'yaw_rate_radps':.2,'model_sha256':MODEL_SHA,
-                                        'protocol_sha256':APPROVED_PLANT_PROTOCOL_SHA}))
-            receipt=run/'summary_radius_independent.json'
-            receipt.write_text(json.dumps({'schema':'teacher_continuous_turn_plant_independent/v1',
-                'status':'passed','run':str(run),'checks':{n:{'status':'passed'} for n in REQUIRED_PLANT_CHECKS},
-                'analyzer_sha256':APPROVED_PLANT_ANALYZER_SHA,
-                'input_hashes':{n:hashlib.sha256((archived/n if n=='protocol.json' else run/n).read_bytes()).hexdigest()
-                                for n in REQUIRED_PLANT_INPUTS},
-                'metrics':{'actual_fitted_radius_m':1.}}))
-            evidence=dict(status='passed',desired_speed_mps=.3,direction_sign=1,
-                          minimum_of_passed_tested_actual_radii_m=1.,source_path=str(receipt),
-                          source_sha256=hashlib.sha256(receipt.read_bytes()).hexdigest())
-            with self.assertRaises(ValueError):circle_profile(1.4,minimum_radius_evidence=evidence)
-            p=circle_profile(1.5,minimum_radius_evidence=evidence)
-            self.assertFalse(p['feasibility']['circle_radius_is_tested_feasible'])
-            wrong=copy.deepcopy(evidence);wrong['source_sha256']='0'*64
-            with self.assertRaises(ValueError):circle_profile(1.5,minimum_radius_evidence=wrong)
-            incomplete=json.loads(receipt.read_text());incomplete['checks'].pop(REQUIRED_PLANT_CHECKS[0])
-            old_receipt=receipt.read_bytes();receipt.write_text(json.dumps(incomplete))
-            wrong=copy.deepcopy(evidence);wrong['source_sha256']=hashlib.sha256(receipt.read_bytes()).hexdigest()
-            with self.assertRaises(ValueError):circle_profile(1.5,minimum_radius_evidence=wrong)
-            receipt.write_bytes(old_receipt)
-            plan.write_text('{}')
-            with self.assertRaises(ValueError):circle_profile(1.5,minimum_radius_evidence=evidence)
+def at_endpoint(controller,offset=(0.,0.),yaw_offset=0.,world_t=3.01):
+    position=controller.path.final_xyz.copy();position[:2]+=offset
+    return state(world_t,position,controller.path.heading0+yaw_offset)
 
 
-class ControllerBehavior(unittest.TestCase):
-    def test_actual_update_cadence_and_held_PI(self):
-        for hz in [10,25,50]:
-            c=Controller(circle_profile(2.,hz=hz));times=[];oldI=None
-            for frame in range(251):
-                t=frame*.02
-                cmd,mode=c.update(state(t+.01,[0.,0.,.32]),t)
-                self.assertLessEqual(np.linalg.norm(cmd[:2]),.8+1e-12)
-                if c.row['controller_updated']:
-                    times.append(c.row['feedback_time_s'])
-                    oldI=c.row['velocity_PI']['I']
-                elif c.row.get('velocity_PI'):
-                    self.assertEqual(c.row['velocity_PI']['I'],oldI)
-            np.testing.assert_allclose(np.diff(times),1/hz,atol=1e-12)
+class ActiveParking(unittest.TestCase):
+    def test_frozen_v1_prefix_and_drive_replay_match(self):
+        data=Path(__file__).with_name('core.py').read_bytes()
+        self.assertEqual(hashlib.sha256(data[:V1_DRIVE_SOURCE_SIZE_BYTES]).hexdigest(),V1_DRIVE_SOURCE_SHA256)
+        for kind in ('circle','s_curve'):
+            for hz in (10,25,50):
+                p=profile(kind,hz);old=FrozenV1Controller(p);new=Controller(p)
+                old.progress=new.progress=2.
+                for frame in range(121):
+                    elapsed=3.+frame*.02;arc=2.+frame*.006
+                    point,tangent,_,heading,kappa=new.path.geometry(arc)
+                    native=state(elapsed+.01,point,heading,.3*tangent,(0.,0.,.3*kappa))
+                    with patch('core.time.monotonic',return_value=100.+frame*.02):
+                        a,ma=old.update(native,elapsed);b,mb=new.update(native,elapsed)
+                    np.testing.assert_array_equal(a,b);self.assertEqual(ma,mb)
+                    np.testing.assert_array_equal(old.velocity_integral,new.velocity_integral)
+                    self.assertEqual(old.progress,new.progress)
+                self.assertIsNone(new.capture_stamp)
 
-    def test_curvature_yaw_feedforward_and_exact_body_conversion(self):
-        p=circle_profile(2.)
-        c=Controller(p);c.progress=c.path.entry+1.
-        point,tangent,normal,heading,kappa=c.path.geometry(c.progress)
-        roll=.13;pitch=.18;omega_y=.07
-        desired_yawdot=.3*kappa
-        body_wz=(desired_yawdot*math.cos(pitch)-math.sin(roll)*omega_y)/math.cos(roll)
-        native=state(3.01,point,heading,.3*tangent,(0.,omega_y,body_wz),roll,pitch)
-        command,mode=c.update(native,3.)
+    def test_circle_endpoint_cannot_skip_full_lap(self):
+        c=Controller(profile('circle'))
+        for frame in range(101):
+            elapsed=3.+frame*.02
+            with patch('core.time.monotonic',return_value=100.+frame*.02):
+                _,mode=c.update(at_endpoint(c,world_t=elapsed+.01),elapsed)
+        self.assertIsNone(c.capture_stamp);self.assertIsNone(c.completed_t)
         self.assertEqual(mode,'drive')
-        self.assertAlmostEqual(c.row['yaw_feedforward_radps'],desired_yawdot,places=10)
-        self.assertAlmostEqual(c.row['measured_yaw_rate'],desired_yawdot,places=10)
-        self.assertAlmostEqual(c.row['v_reference_body'][2],body_wz,places=9)
-        self.assertAlmostEqual(c.row['yaw_PD']['D'],0.,places=9)
-        self.assertNotEqual(c.row['v_reference_body'][2],desired_yawdot)
-        np.testing.assert_allclose(c.row['measured_origin_velocity_world'],.3*tangent,atol=1e-12)
 
-    def test_endpoint_cannot_complete_without_full_path_progress(self):
-        c=Controller(circle_profile(2.))
-        endpoint=c.path.final_xyz
-        for i in range(101):
-            _,mode=c.update(state(3.01+.02*i,endpoint),3.+.02*i)
+    def test_capture_resets_separate_PI_not_fixed_target(self):
+        p=profile();c=Controller(p);c.progress=c.path.length-.08;c.velocity_integral[:]=[.2,.1,.05]
+        target=c.path.final_xyz.copy()
+        with patch('core.time.monotonic',return_value=100.):
+            cmd,mode=c.update(at_endpoint(c,(-.08,0.)),3.)
+        self.assertEqual(mode,'capture');self.assertTrue(c.row['entry_integral_reset'])
+        np.testing.assert_array_equal(c.hold_integral,[0.,0.,0.])
+        np.testing.assert_array_equal(c.velocity_integral,[.2,.1,.05])
+        np.testing.assert_array_equal(c.row['parking_target_world_xyz'],target)
+        self.assertNotEqual(c.row['arrival_capture_position_world'],target.tolist())
         self.assertIsNone(c.completed_t)
-        self.assertNotIn(mode,('goal_dwell','parking'))
+        p['active_parking']['target']['position_world_xyz'][0]=99.
+        c.row['parking_target_world_xyz'][0]=99.
+        with patch('core.time.monotonic',return_value=100.02):
+            c.update(at_endpoint(c,(-.08,0.),world_t=3.03),3.02)
+        np.testing.assert_array_equal(c.row['parking_target_world_xyz'],target)
 
-    def test_final_goal_zero_dwell_freezes_I_and_parks(self):
-        c=Controller(circle_profile(2.));c.progress=c.path.length-.07
-        c.velocity_integral[:]=[.11,-.02,.01]
-        before=c.velocity_integral.copy()
-        for i in range(101):
-            cmd,mode=c.update(state(3.01+.02*i,c.path.final_xyz),3.+.02*i)
-            np.testing.assert_array_equal(cmd,np.zeros(3))
-            np.testing.assert_array_equal(c.velocity_integral,before)
-        self.assertIsNotNone(c.completed_t);self.assertEqual(mode,'parking')
-        self.assertFalse(c.row['controller_updated'])
+    def test_rotated_position_COM_offset_and_Euler_yaw_conversion(self):
+        c=Controller(profile(heading=.8));c.progress=c.path.length-.08
+        position=c.path.final_xyz.copy();position[:2]-=.08*np.array([math.cos(.8),math.sin(.8)])
+        roll,pitch=.13,.18;omega_y=.07;yaw=.78;yawdot=.02
+        omega=(.03,omega_y,(yawdot*math.cos(pitch)-math.sin(roll)*omega_y)/math.cos(roll))
+        native=state(3.01,position,yaw,(0.,0.,0.),omega,roll,pitch)
+        with patch('core.time.monotonic',return_value=100.):c.update(native,3.)
+        self.assertEqual(c.row['mode'],'capture')
+        np.testing.assert_allclose(c.row['measured_origin_velocity_world'],0.,atol=1e-12)
+        self.assertAlmostEqual(c.row['measured_yaw_rate'],yawdot)
+        R=rotation(native[4:8]);target=np.asarray(c.row['v_reference_body'])
+        expected_w=(c.row['parking_reference_yaw_rate_radps']*math.cos(pitch)-math.sin(roll)*omega_y)/math.cos(roll)
+        self.assertAlmostEqual(target[2],expected_w)
+        expected_com=R.T@np.asarray(c.row['reference_velocity_world'])+np.cross([0.,0.,expected_w],OFFSET)
+        np.testing.assert_allclose(target[:2],expected_com[:2],atol=1e-12)
 
-    def test_timeout_latches_zero_and_clock_fault_rejects(self):
-        c=Controller(circle_profile(2.))
-        c.update(state(3.01,[0.,0.,.32]),3.)
-        cmd,mode=c.update(state(3.5,[0.,0.,.32]),3.49)
-        self.assertEqual(mode,'feedback_timeout');np.testing.assert_array_equal(cmd,0.)
-        cmd,mode=c.update(state(3.52,[0.,0.,.32]),3.51)
-        self.assertEqual(mode,'feedback_timeout');np.testing.assert_array_equal(cmd,0.)
-        with self.assertRaises(ValueError):c.update(state(3.52,[0.,0.,.32]),3.51)
+    def test_capture_fresh_dwell_hold_PI_and_fixed_declared_stamp(self):
+        c=Controller(profile());c.progress=c.path.length-.02
+        for frame in range(32):
+            elapsed=3.+frame*.02;before=c.hold_integral.copy()
+            with patch('core.time.monotonic',return_value=100.+frame*.02):
+                c.update(at_endpoint(c,world_t=elapsed+.01),elapsed)
+            if frame and not c.row['controller_updated']:np.testing.assert_array_equal(c.hold_integral,before)
+            if frame:self.assertFalse(c.row['entry_integral_reset'])
+        self.assertEqual(c.row['mode'],'active_hold');self.assertAlmostEqual(c.hold_stamp-c.capture_stamp,.6)
+        stamp=c.hold_stamp
+        with patch('core.time.monotonic',return_value=100.64):
+            command,mode=c.update(at_endpoint(c,yaw_offset=.08,world_t=3.65),3.64)
+        self.assertEqual(mode,'active_hold');self.assertNotEqual(command[2],0.)
+        self.assertEqual(c.hold_stamp,stamp)
+        # The abrupt synthetic heading error initially blocks I against the
+        # downstream slew. It may integrate only once that command catches up.
+        for frame in range(33,43):
+            elapsed=3.+frame*.02
+            with patch('core.time.monotonic',return_value=100.+frame*.02):
+                c.update(at_endpoint(c,yaw_offset=.08,world_t=elapsed+.01),elapsed)
+        self.assertEqual(c.hold_stamp,stamp);self.assertGreater(abs(c.hold_integral[2]),0.)
+
+    def test_updated25Hz_holds_do_not_integrate(self):
+        c=Controller(profile());c.progress=c.path.length-.08;times=[]
+        for frame in range(20):
+            elapsed=3.+frame*.02;before=c.hold_integral.copy()
+            with patch('core.time.monotonic',return_value=100.+frame*.02):
+                c.update(at_endpoint(c,(-.08,0.),world_t=elapsed+.01),elapsed)
+            if c.row['controller_updated']:times.append(c.row['feedback_time_s'])
+            else:np.testing.assert_array_equal(c.hold_integral,before)
+        np.testing.assert_allclose(np.diff(times),.04,atol=1e-12)
+
+    def test_late_fresh_wall_arrival_latches_before_fresh_reset(self):
+        c=Controller(profile());c.progress=c.path.length-.02
+        with patch('core.time.monotonic',side_effect=[100.,100.02,100.4]):
+            c.update(at_endpoint(c),3.);c.update(at_endpoint(c,world_t=3.03),3.02)
+            command,mode=c.update(at_endpoint(c,world_t=3.05),3.04)
+        self.assertEqual(mode,'feedback_timeout');np.testing.assert_array_equal(command,0.)
+        self.assertGreater(c.row['previous_fresh_wall_receipt_gap_s'],.3)
+        self.assertEqual(c.last_wall,100.)
+        with patch('core.time.monotonic',return_value=100.42):
+            command,mode=c.update(at_endpoint(c,world_t=3.07),3.06)
+        self.assertEqual(mode,'feedback_timeout');np.testing.assert_array_equal(command,0.)
+
+    def test_fault_after_declared_hold_still_has_TTL(self):
+        c=Controller(profile());c.progress=c.path.length-.02
+        for frame in range(31):
+            elapsed=3.+frame*.02
+            with patch('core.time.monotonic',return_value=100.+frame*.02):
+                c.update(at_endpoint(c,world_t=elapsed+.01),elapsed)
+        self.assertIsNotNone(c.completed_t)
+        with patch('core.time.monotonic',return_value=100.62):
+            command,mode=c.update(at_endpoint(c,world_t=4.0),3.99)
+        self.assertEqual(mode,'feedback_timeout');np.testing.assert_array_equal(command,0.)
+        with self.assertRaises(ValueError):c.update(at_endpoint(c,world_t=4.0),4.)
         with self.assertRaises(ValueError):c.update(np.full(64,np.nan),4.)
 
-    def test_late_fresh_wall_receipt_cannot_reset_timeout(self):
-        c=Controller(circle_profile(2.,hz=25))
-        with patch('core.time.monotonic',side_effect=[10.,10.02,10.4]):
-            c.update(state(3.01,[0.,0.,.32]),3.)
-            c.update(state(3.03,[0.,0.,.32]),3.02)
-            command,mode=c.update(state(3.05,[0.,0.,.32]),3.04)
-        self.assertEqual(mode,'feedback_timeout')
-        self.assertGreater(c.row['previous_fresh_wall_receipt_gap_s'],.3)
-        np.testing.assert_array_equal(command,0.)
+    def test_hold_command_limit_antiwindup_and_slew_pressure(self):
+        c=Controller(profile());c.progress=c.path.length-.02
+        with patch('core.time.monotonic',return_value=100.):c.update(at_endpoint(c),3.)
+        previous=c.applied_command_estimate.copy();blocked=False
+        for frame in range(1,41):
+            elapsed=3.+frame*.02
+            native=state(elapsed+.01,c.path.final_xyz,world_velocity=(-1.,1.,0.))
+            with patch('core.time.monotonic',return_value=100.+frame*.02):command,_=c.update(native,elapsed)
+            self.assertTrue(np.all(abs(command)<=c.hold_limits+1e-12))
+            self.assertLessEqual(np.linalg.norm(command[:2]),.06+1e-12)
+            self.assertTrue(np.all(abs(c.applied_command_estimate-previous)<=np.array([.6,.6,.8])*.02+1e-12))
+            previous=c.applied_command_estimate.copy()
+            if c.row['controller_updated']:blocked=blocked or any(c.row['velocity_PI']['blocked_axis'])
+        self.assertTrue(blocked);np.testing.assert_array_equal(c.hold_integral,0.)
+
+    def test_invalid_profile_target_or_envelope_rejected(self):
+        p=profile();p['active_parking']['target']['position_world_xyz'][0]=99.
+        with self.assertRaises(ValueError):Controller(p)
+        p=profile();p['active_parking']['command_limits_body'][0]=.061
+        with self.assertRaises(ValueError):Controller(p)
+        p=profile();p['path']['origin_world_xyz'][0]=1.
+        with self.assertRaises(ValueError):Controller(p)
+
+    def test_profile_hash_and_only_parking_derivation(self):
+        old=profile();old.pop('active_parking')
+        with tempfile.TemporaryDirectory(prefix='active_parking_offline_') as name:
+            source=Path(name)/'v1.json';source.write_text(json.dumps(old))
+            digest=hashlib.sha256(source.read_bytes()).hexdigest();new=from_v1(source,digest)
+            for key in ('path','desired_speed','feedback_hz','gains','base_com_offset','command_limits','spawn'):
+                self.assertEqual(old[key],new[key])
+            self.assertEqual(new['active_parking']['target_sha256'],parameter_hash(parking_target_record(StaticPath(old['path']))))
+            with self.assertRaises(ValueError):from_v1(source,'0'*64)
 
 
-if __name__=='__main__':
-    unittest.main(verbosity=2)
+if __name__=='__main__':unittest.main(verbosity=2)
