@@ -12,6 +12,7 @@ class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
         super().__init__(run);self.pid=HeaderPID(self.profile);self.pid_velocity=None
         self.execution_health=None;self.execution_health_wall=None
+        self.cloud_callback_records=0;self.pending_cloud_callback_row=None
         self.pid_pose_stamp=None;self.pid_row=None;self.pid_records=0;self.pid_guard_needs_evaluation=False;self.pid_prepared_output=None
         if self.profile['controller_kind']=='champ':
             from std_msgs.msg import String
@@ -31,6 +32,26 @@ class PIDNavigation(TeacherNavigation):
         if self.pose_stamp>before:
             v=msg.twist.twist.linear;self.pid_velocity=self.rotation@np.array([v.x,v.y,v.z])
             self.pid_pose_stamp=self.pose_stamp
+    def on_cloud(self,msg):
+        wall=time.monotonic();start_ns=self.get_clock().now().nanoseconds
+        self.cloud_callback_records+=1
+        self.pending_cloud_callback_row={'schema':'pid_actual_cloud_callback/v1','sequence':self.cloud_callback_records,
+            'producer_stamp_ns':int(self.stamp(msg)),'frame_id':msg.header.frame_id,
+            'received_monotonic_wall':wall,'received_ros_clock_ns':start_ns,
+            'source_topic':'/cloud_registered_full','input_width':int(msg.width),'input_height':int(msg.height),
+            'previous_accepted_stamp_ns':int(self.cloud_stamp),'reason':None,'navigation_ground_truth_used':False}
+        try:super().on_cloud(msg)
+        except Exception as error:
+            self.note_cloud_decision('callback_exception',error=type(error).__name__+': '+str(error));raise
+        finally:
+            row=self.pending_cloud_callback_row;end=time.monotonic()
+            row.update(finished_monotonic_wall=end,callback_duration_wall_s=end-wall,
+                duration_scope='entry through original callback processing, before asynchronous receipt enqueue',
+                finished_ros_clock_ns=self.get_clock().now().nanoseconds,
+                accepted=row['reason']=='accepted',accepted_stamp_ns=int(self.cloud_stamp),
+                accepted_cloud_received_monotonic_wall=self.cloud_updated if math.isfinite(self.cloud_updated)else None)
+            if row['reason']is None:row['reason']='callback_returned_without_branch_receipt'
+            self.evidence.append(self.run/'navigation_cloud_callbacks.jsonl',row);self.pending_cloud_callback_row=None
     def follow_checked_trajectory(self,*args,**kwargs):
         # The PID uses raw measured SLAM XY. Neither its arrival nor feedback
         # is the predictive tracking pose used by the historical CHAMP follower.
@@ -124,6 +145,7 @@ def main():
         finally:
             (run/'navigation_pid_writer_receipt.json').write_text(json.dumps({'schema':1,'expected_pid_records':node.pid_records,
                 'expected_guard_records':node.guard_sequence,'queue_error':node.evidence.error,
+                'expected_cloud_callback_records':node.cloud_callback_records,
                 'status':'failed'if node.evidence.error else'drained','navigation_verified':False})+'\n')
             node.destroy_node();rclpy.try_shutdown()
 

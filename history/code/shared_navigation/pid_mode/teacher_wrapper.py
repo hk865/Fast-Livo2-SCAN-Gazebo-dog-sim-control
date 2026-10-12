@@ -159,7 +159,12 @@ class TeacherNavigation(base.Navigation):
         self.evidence.append(self.run/'navigation_slam_poses.jsonl',row)
     def on_cloud(self,msg):
         stamp=self.stamp(msg);ns=self.get_clock().now().nanoseconds;received=time.monotonic()
-        if stamp<=self.cloud_stamp or not -.05e9<=ns-stamp<self.cloud_timeout*1e9:return
+        if stamp<=self.cloud_stamp:
+            self.note_cloud_decision('rejected_duplicate_or_backward_header',decision_ros_clock_ns=ns,
+                previous_accepted_stamp_ns=int(self.cloud_stamp));return
+        if not -.05e9<=ns-stamp<self.cloud_timeout*1e9:
+            self.note_cloud_decision('rejected_header_age',decision_ros_clock_ns=ns,
+                actual_header_age_ns=ns-stamp,timeout_s=self.cloud_timeout);return
         super().on_cloud(msg)
         if self.cloud_stamp==stamp and self.cloud_input_context is not None:
             c=self.cloud_input_context
@@ -173,6 +178,11 @@ class TeacherNavigation(base.Navigation):
             self.guard_cloud_receipt={**row,'filtering_body_pose':c['filtering_body_pose'].tolist(),
                 'filtering_body_rotation':c['filtering_body_rotation'].tolist()}
             self.evidence.append(self.run/'navigation_cloud_history.jsonl',row)
+    def note_cloud_decision(self,reason,**details):
+        # A read-only hook into the actual rejection/acceptance branch. It never
+        # retries a message, decodes another cloud, or changes a freshness gate.
+        row=getattr(self,'pending_cloud_callback_row',None)
+        if row is not None:row.update(reason=reason,decision_details=details)
     def accept_spline(self,msg,metadata):
         before=self.replans;super().accept_spline(msg,metadata)
         if self.replans==before or self.samples is None:return

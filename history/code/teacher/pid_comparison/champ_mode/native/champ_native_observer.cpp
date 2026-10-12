@@ -23,6 +23,7 @@
 #include <gz/sim/components/ContactSensorData.hh>
 #include <gz/sim/components/JointForceCmd.hh>
 #include <gz/sim/components/SystemPluginInfo.hh>
+#include "force_capture.hh"
 namespace champ_compare {
 static std::string Quote(const std::string &s) {
   std::string out = "\"";
@@ -50,13 +51,26 @@ static void MessageVector(std::ostream &out, const gz::msgs::Vector3d &v) {
   out << '[' << v.x() << ',' << v.y() << ',' << v.z() << ']';
 }
 
+static void ForceArray(std::ostream &out, const ForceCapture::Values &values) {
+  out << '[';
+  for (size_t i=0; i<values.size(); ++i) {
+    if (i) out << ',';
+    if (values[i]) out << *values[i]; else out << "null";
+  }
+  out << ']';
+}
+
 
 class NativeObserver final : public gz::sim::System,
-    public gz::sim::ISystemConfigure, public gz::sim::ISystemPostUpdate {
+    public gz::sim::ISystemConfigure, public gz::sim::ISystemConfigurePriority,
+    public gz::sim::ISystemPreUpdate, public gz::sim::ISystemPostUpdate {
  public:
+  gz::sim::System::PriorityType ConfigurePriority() override { return 1; }
   void Configure(const gz::sim::Entity &entity, const std::shared_ptr<const sdf::Element> &sdf,
       gz::sim::EntityComponentManager &ecm, gz::sim::EventManager &events) override {
     modelEntity=entity; eventManager=&events;
+    if (sdf->Get<int>("gz:system_priority",1).first != 1)
+      throw std::runtime_error("CHAMP force observer requires priority 1 after control priority 0");
     gz::sim::Model model(entity); base=gz::sim::Link(model.LinkByName(ecm,"base_link"));
     if (!base.Valid(ecm)) throw std::runtime_error("CHAMP observer base missing");
     base.EnableVelocityChecks(ecm);
@@ -93,10 +107,24 @@ class NativeObserver final : public gz::sim::System,
     }
     log<<"{\"kind\":\"actuator_contract\",\"writer\":\"gz_ros2_control only; observer has no actuation API\","
        <<"\"state_phase\":\"PostUpdate\",\"state_time_offset_s\":0,\"body_pose_resets\":0,\"observer_joint_position_reset_count\":0,"
-       <<"\"torque_source\":\"JointForceCmd component after physics; commanded force, not measured motor torque\","
+       <<"\"torque_source\":\"command_feed_to_physics\",\"force_capture_phase\":\"PreUpdate after CM write, before Physics Update\","
+       <<"\"force_observer_priority\":1,\"control_writer_priority\":0,\"force_missing_value\":null,\"force_is_measured_motor_torque\":false,"
        <<"\"qtarget_source\":\"separate ROS JointTrajectory original header/receive clock evidence\",\"joint_order\":[";
     for(size_t i=0;i<12;++i){if(i)log<<',';log<<Quote(names[i]);}
     log<<"],\"base_com_offset_body_m\":";Vector(log,comOffset);log<<"}\n";log.flush();
+  }
+  void PreUpdate(const gz::sim::UpdateInfo &info,gz::sim::EntityComponentManager &ecm) override {
+    if(info.paused)return;
+    // All reads: control priority 0 wrote the buffer; physics Update has not consumed it.
+    const auto &readOnlyEcm=static_cast<const gz::sim::EntityComponentManager &>(ecm);
+    ForceCapture::Values values{};
+    for(size_t i=0;i<12;++i) {
+      const auto force=readOnlyEcm.Component<gz::sim::components::JointForceCmd>(joints[i].Entity());
+      if(force&&force->Data().size()==1&&std::isfinite(force->Data()[0]))values[i]=force->Data()[0];
+    }
+    forceCapture.Store(info.iterations,
+      std::chrono::duration_cast<std::chrono::nanoseconds>(info.simTime).count(),
+      std::chrono::duration_cast<std::chrono::nanoseconds>(info.dt).count(),values);
   }
   void PostUpdate(const gz::sim::UpdateInfo &info,const gz::sim::EntityComponentManager &ecm) override {
     if(info.paused)return;
@@ -117,21 +145,55 @@ class NativeObserver final : public gz::sim::System,
     }
     auto pose=base.WorldPose(ecm);
     auto origin=base.WorldLinearVelocity(ecm), com=base.WorldLinearVelocity(ecm,comOffset), omega=base.WorldAngularVelocity(ecm);
-    std::array<double,12> q{},qd{},tau{};std::array<int,12> tauValid{};
+    const auto timeNs=std::chrono::duration_cast<std::chrono::nanoseconds>(info.simTime).count();
+    const auto dtNs=std::chrono::duration_cast<std::chrono::nanoseconds>(info.dt).count();
+    const bool forcePairValid=forceCapture.Matches(info.iterations,timeNs,dtNs);
+    const auto tau=forceCapture.ForStep(info.iterations,timeNs,dtNs);
+    ForceCapture::Values postForce{};
+    std::array<double,12> q{},qd{};std::array<int,12> tauValid{},postForceValid{};
+    for(size_t i=0;i<12;++i)tauValid[i]=tau[i].has_value()?1:0;
+    const bool forceCommandValid=forcePairValid&&std::all_of(tauValid.begin(),tauValid.end(),[](int v){return v==1;});
     bool valid=pose.has_value()&&origin.has_value()&&com.has_value()&&omega.has_value();
     for(size_t i=0;i<12;++i){auto p=joints[i].Position(ecm),v=joints[i].Velocity(ecm);
       if(!p||!v||p->size()!=1||v->size()!=1){valid=false;continue;}q[i]=(*p)[0];qd[i]=(*v)[0];
       const auto force=ecm.Component<gz::sim::components::JointForceCmd>(joints[i].Entity());
-      if(force&&force->Data().size()==1&&std::isfinite(force->Data()[0])){tau[i]=force->Data()[0];tauValid[i]=1;}
+      if(force&&force->Data().size()==1&&std::isfinite(force->Data()[0])){postForce[i]=force->Data()[0];postForceValid[i]=1;}
       valid=valid&&std::isfinite(q[i])&&std::isfinite(qd[i]);
     }
     if(!valid){log<<"{\"kind\":\"state_unavailable\",\"t\":"<<time<<"}\n";return;}
     if(!pose->Pos().IsFinite()||!pose->Rot().IsFinite()||!origin->IsFinite()||!com->IsFinite()||!omega->IsFinite())throw std::runtime_error("Nonfinite CHAMP native state");
+    // Only evidence and a latched flag: the separate command reader owns stopping.
+    if(time>=.1&&actuatorViolation.empty()) {
+      for(size_t i=0;i<12;++i) {
+        if(tau[i]&&std::abs(*tau[i])>23.5+1e-6){actuatorViolation="force_command_limit_exceeded";break;}
+        if(std::abs(qd[i])>30.+1e-6){actuatorViolation="joint_velocity_limit_exceeded";break;}
+      }
+      if(!actuatorViolation.empty())actuatorViolationTime=time;
+    }
     std::array<int,5> contactCounts{};
     for(size_t g=0;g<5;++g)for(auto c:contactEntities[g]){const auto data=ecm.Component<gz::sim::components::ContactSensorData>(c);if(data)contactCounts[g]+=data->Data().contact_size();else contactCounts[g]=-1;}
     log<<"{\"kind\":\"physics_step\",\"t\":"<<time<<",\"dt\":"<<std::chrono::duration<double>(info.dt).count()
        <<",\"state_time_offset_s\":0,\"state_phase\":\"PostUpdate\",\"iteration\":"<<iteration++<<",\"mode\":\"CHAMP\",\"fault\":0,\"q\":";
-    Array(log,q);log<<",\"qd\":";Array(log,qd);log<<",\"qtarget\":null,\"tau\":";Array(log,tau);log<<",\"tau_available\":";Array(log,tauValid);
+    Array(log,q);log<<",\"qd\":";Array(log,qd);log<<",\"qtarget\":null,\"tau\":";ForceArray(log,tau);log<<",\"tau_available\":";Array(log,tauValid);
+    log<<",\"physics_iteration\":"<<info.iterations
+       <<",\"torque_source\":\"command_feed_to_physics\",\"force_capture_phase\":\"PreUpdate after CM write, before Physics Update\""
+       <<",\"force_capture_pair_valid\":"<<(forcePairValid?"true":"false")
+       <<",\"force_command_valid\":"<<(forceCommandValid?"true":"false")
+       <<",\"force_capture_iteration\":";
+    if(forceCapture.seen)log<<forceCapture.iteration;else log<<"null";
+    log<<",\"force_capture_sim_time\":";
+    if(forceCapture.seen)log<<forceCapture.timeNs*1e-9;else log<<"null";
+    log<<",\"force_capture_dt\":";
+    if(forceCapture.seen)log<<forceCapture.dtNs*1e-9;else log<<"null";
+    log<<",\"force_capture_reason\":"<<Quote(forcePairValid?"matched":(forceCapture.frameValid?"same_step_mismatch":forceCapture.reason))
+       <<",\"force_application_interval_start_s\":"<<(timeNs-dtNs)*1e-9
+       <<",\"force_application_interval_end_s\":"<<time
+       <<",\"tau_postupdate_buffer\":";ForceArray(log,postForce);
+    log<<",\"tau_postupdate_available\":";Array(log,postForceValid);
+    log<<",\"actuator_limit_violation_latched\":";
+    if(actuatorViolation.empty())log<<"null";else log<<Quote(actuatorViolation);
+    log<<",\"actuator_limit_violation_first_time\":";
+    if(actuatorViolation.empty())log<<"null";else log<<actuatorViolationTime;
     log<<",\"contacts\":";Array(log,contactCounts);
     log<<",\"position\":";Vector(log,pose->Pos());log<<",\"quaternion_wxyz\":["<<pose->Rot().W()<<','<<pose->Rot().X()<<','<<pose->Rot().Y()<<','<<pose->Rot().Z()<<']';
     log<<",\"body_lin_vel_origin\":";Vector(log,pose->Rot().RotateVectorReverse(*origin));log<<",\"body_lin_vel_com\":";Vector(log,pose->Rot().RotateVectorReverse(*com));
@@ -189,7 +251,15 @@ class NativeObserver final : public gz::sim::System,
       state<<std::setprecision(17)<<"{\"schema\":1,\"state_phase\":\"PostUpdate\",\"state_time_offset_s\":0,\"world_sim_time\":"<<time<<",\"position\":";
       Vector(state,pose->Pos());state<<",\"quaternion_wxyz\":["<<pose->Rot().W()<<','<<pose->Rot().X()<<','<<pose->Rot().Y()<<','<<pose->Rot().Z()<<']';
       state<<",\"body_lin_vel_com\":";Vector(state,pose->Rot().RotateVectorReverse(*com));state<<",\"body_ang_vel\":";Vector(state,pose->Rot().RotateVectorReverse(*omega));
-      state<<",\"q\":";Array(state,q);state<<",\"qd\":";Array(state,qd);state<<",\"tau\":";Array(state,tau);state<<",\"tau_available\":";Array(state,tauValid);state<<",\"contacts\":";Array(state,contactCounts);state<<"}";
+      state<<",\"q\":";Array(state,q);state<<",\"qd\":";Array(state,qd);state<<",\"tau\":";ForceArray(state,tau);state<<",\"tau_available\":";Array(state,tauValid);
+      state<<",\"torque_source\":\"command_feed_to_physics\",\"force_capture_phase\":\"PreUpdate after CM write, before Physics Update\",\"physics_iteration\":"<<info.iterations
+           <<",\"force_capture_iteration\":"<<forceCapture.iteration<<",\"force_capture_sim_time\":"<<forceCapture.timeNs*1e-9<<",\"force_capture_dt\":"<<forceCapture.dtNs*1e-9
+           <<",\"force_capture_pair_valid\":"<<(forcePairValid?"true":"false")<<",\"force_command_valid\":"<<(forceCommandValid?"true":"false")
+           <<",\"actuator_limit_violation_latched\":";
+      if(actuatorViolation.empty())state<<"null";else state<<Quote(actuatorViolation);
+      state<<",\"actuator_limit_violation_first_time\":";
+      if(actuatorViolation.empty())state<<"null";else state<<actuatorViolationTime;
+      state<<",\"contacts\":";Array(state,contactCounts);state<<"}";
       state.flush();if(!state)throw std::runtime_error("Native snapshot writer failed");state.close();if(std::rename(temporary.c_str(),statePath.c_str())!=0)throw std::runtime_error("Native snapshot atomic replace failed");
     }
     const bool done=static_cast<bool>(std::ifstream(donePath));
@@ -208,7 +278,9 @@ class NativeObserver final : public gz::sim::System,
   gz::sim::Link base;gz::sim::Entity modelEntity=gz::sim::kNullEntity;
   gz::math::Vector3d comOffset;gz::sim::EventManager *eventManager=nullptr;
   std::ofstream log;std::string donePath,statePath;double endTime=120.;bool ownershipChecked=false;uint64_t iteration=0;
+  ForceCapture forceCapture;
+  std::string actuatorViolation;double actuatorViolationTime=0;
 };
 }
-GZ_ADD_PLUGIN(champ_compare::NativeObserver,gz::sim::System,champ_compare::NativeObserver::ISystemConfigure,champ_compare::NativeObserver::ISystemPostUpdate)
+GZ_ADD_PLUGIN(champ_compare::NativeObserver,gz::sim::System,champ_compare::NativeObserver::ISystemConfigure,champ_compare::NativeObserver::ISystemConfigurePriority,champ_compare::NativeObserver::ISystemPreUpdate,champ_compare::NativeObserver::ISystemPostUpdate)
 GZ_ADD_PLUGIN_ALIAS(champ_compare::NativeObserver,"champ_compare::NativeObserver")

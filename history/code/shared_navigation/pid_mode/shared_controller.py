@@ -256,6 +256,7 @@ class Navigation(Node):
     def on_cloud(self, msg):
         if msg.header.frame_id != 'camera_init':
             self.message = '拒绝非 camera_init 的点云'
+            self.note_cloud_decision('rejected_frame_id')
             return
         try:
             cloud = point_cloud2.read_points_numpy(msg, field_names=('x', 'y', 'z'), skip_nans=True)
@@ -263,18 +264,23 @@ class Navigation(Node):
             cloud = cloud[np.isfinite(cloud).all(axis=1)]
         except Exception as exc:
             self.message = f'点云解码失败: {exc}'
+            self.note_cloud_decision('rejected_decode',error=type(exc).__name__+': '+str(exc))
             return
         if not len(cloud):
+            self.note_cloud_decision('rejected_no_finite_points')
             return
         stamp = self.stamp(msg)
         if not self.pose_history:
+            self.note_cloud_decision('rejected_no_slam_pose_history')
             return
         pose_stamp, body_pose, body_rotation = min(self.pose_history, key=lambda sample: abs(sample[0]-stamp))
         if abs(pose_stamp-stamp) > 150_000_000:
             self.message = '点云无邻近时刻SLAM机身姿态，自体过滤暂停并停车'
+            self.note_cloud_decision('rejected_no_nearby_slam_pose',closest_pose_stamp_ns=int(pose_stamp),pose_cloud_gap_ns=abs(pose_stamp-stamp))
             return
         cloud, self.self_filtered_points = remove_go2_self_returns(cloud, body_pose, body_rotation)
         if not len(cloud):
+            self.note_cloud_decision('rejected_all_points_self_filtered',filtering_pose_stamp_ns=int(pose_stamp),self_filtered_points=int(self.self_filtered_points))
             return
         if stamp > self.cloud_stamp:
             self.cloud_stamp = stamp
@@ -296,6 +302,8 @@ class Navigation(Node):
         filtered = point_cloud2.create_cloud_xyz32(msg.header, cloud.astype(np.float32))
         self.scan_cloud_pub.publish(filtered)
         self.counts['cloud'] += 1
+        self.note_cloud_decision('accepted',filtering_pose_stamp_ns=int(pose_stamp),filtered_points=int(len(cloud)),
+            self_filtered_points=int(self.self_filtered_points),cloud_input_context_available=self.cloud_input_context is not None)
 
     def on_request(self, msg):
         try:

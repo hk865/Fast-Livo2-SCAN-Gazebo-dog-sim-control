@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_pid_ramp12_up_v1",
+  "experiment": "teacher_pid_ramp12_up_v3",
   "scope": "Prospective actual SLAM/SCAN PID velocity-command experiment; simulation only",
   "distance_m": 13.6,
   "max_speed_mps": 0.2,
@@ -83,8 +83,8 @@
     "derivative_filter_tau_s": 0.2,
     "header_gap_max_s": 0.3,
     "slew_acceleration": [
-      0.15,
-      0.15,
+      0.3,
+      0.3,
       0.25
     ],
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
@@ -120,5 +120,6 @@
   ],
   "terrain_target_manifest": "tests/terrain_targets/lower12.json",
   "controller_kind": "teacher",
-  "protocol_case_id": "ramp12_up_full"
+  "protocol_case_id": "ramp12_up_full",
+  "pid_runtime_revision": "v3_xy_slew_0p3_actual_cloud_callback_receipts"
 }

@@ -93,6 +93,34 @@ def read_json(path):
         return {}
 
 
+def pid_receipt_view(directory):
+    original = read_json(directory / 'summary_pid_navigation_independent.json')
+    correction = read_json(directory / 'display_correction.json')
+    selected = original
+    verified = False
+    if (correction.get('schema') == 'pid_analysis_display_correction/v1'
+            and correction.get('original_filename') == 'summary_pid_navigation_independent.json'
+            and correction.get('corrected_filename') in ('summary_pid_navigation_independent.corrected_v1.json',
+                'summary_pid_navigation_independent.corrected_v2.json')
+            and all(correction.get(k) is True for k in ('rawinputhashes_unchanged', 'analysis_only',
+                'protocol_thresholds_unchanged', 'old_receipt_kept'))):
+        corrected = read_json(directory / correction['corrected_filename'])
+        version = 'v2' if correction['corrected_filename'].endswith('.corrected_v2.json') else 'v1'
+        fix_path = ROOT / f'tests/pid_navigation/independent_receipt_fix_{version}.json'
+        try:
+            verified = bool(corrected and original and
+                hashlib.sha256((directory / correction['original_filename']).read_bytes()).hexdigest() == correction['original_summary_sha256'] and
+                hashlib.sha256((directory / correction['corrected_filename']).read_bytes()).hexdigest() == correction['corrected_summary_sha256'] and
+                hashlib.sha256(fix_path.read_bytes()).hexdigest() == correction['fix_receipt_sha256'] and
+                original.get('input_hashes') == corrected.get('input_hashes') and
+                original.get('protocol') == corrected.get('protocol'))
+        except (OSError, KeyError):
+            verified = False
+        if verified:
+            selected = corrected
+    return selected, original, {**correction, 'display_hashes_verified': verified} if correction else {}
+
+
 def safe_json(value):
     """Nonfinite diagnostic values stay missing instead of breaking the UI."""
     if isinstance(value, float) and not math.isfinite(value):
@@ -286,6 +314,7 @@ class Dashboard:
             ramp_display = {**ramp_original, 'checks': {**ramp_original.get('checks', {}),
                 'teacher_stop_on_destination_landing': stop_addendum['teacher_stop_on_destination_landing']},
                 'display_note': 'Parking status uses separately archived clarification; original full-ramp receipt retained'}
+        pid_display, pid_original, pid_correction = pid_receipt_view(directory)
         return {'available': True, 'run_id': directory.name, 'selected': run,
                 'state': read_json(state_path), 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
@@ -298,7 +327,9 @@ class Dashboard:
                 'full_ramp_original': ramp_original,
                 'full_ramp_stop_addendum': stop_addendum,
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
-                'pid_navigation': read_json(directory / 'summary_pid_navigation_independent.json'),
+                'pid_navigation': pid_display,
+                'pid_navigation_original': pid_original,
+                'pid_navigation_correction': pid_correction,
                 'pid_scope': read_json(directory / 'navigation_scope.json') if (directory / 'pid_profile_input.json').is_file() else {},
                 'targeted_ttl': read_json(directory / 'summary_ttl_dropout_independent.json'),
                 'dynamic_obstacle': read_json(directory / 'summary_dynamic_obstacle_independent.json'),

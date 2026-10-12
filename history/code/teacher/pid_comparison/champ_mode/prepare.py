@@ -112,6 +112,8 @@ def prepare(run,duration=120.):
     ET.SubElement(p,'parameters').text=str(stage/'ros_control.yaml')
     ET.SubElement(p,'robot_param_node').text='robot_state_publisher'
     o=ET.SubElement(model,'plugin',{'filename':str(stage/native.name),'name':'champ_compare::NativeObserver'})
+    o.set('xmlns:gz','https://gazebosim.org/sdf')
+    ET.SubElement(o,'gz:system_priority').text='1'
     ET.SubElement(o,'duration_s').text=str(duration+8)
     ET.SubElement(o,'done_file').text=str(stage/'monitor_done.json')
     ET.SubElement(o,'state_file').text=str(stage/'native_state.json')
@@ -127,6 +129,15 @@ def prepare(run,duration=120.):
     contract={'schema':'champ_execution_contract/v1','controller_kind':'champ','run':str(run),'physical_scene_identical_except_actuation_plugins':True,
         'exclusive_effort_writer':'gz_ros2_control::GazeboSimROS2ControlPlugin','observer':'champ_compare::NativeObserver','observer_writes_joint_force':False,
         'observer_state_phase':'PostUpdate','state_time_offset_s':0,'duration_s':duration,'execution_duration_s':duration+8,'terminal_parking_after_navigation_duration_s':8,'input_world_sha256':sha(stage/'input_teacher_world.sdf'),'world_sha256':sha(run/'world.sdf'),
+        'force_capture':{'torque_source':'command_feed_to_physics','phase':'PreUpdate after CM write, before Physics Update',
+            'observer_priority':1,'control_writer_priority':0,'priority_order':'lower values earlier; all PreUpdate before Physics Update',
+            'pair_key':'UpdateInfo.iterations and exact simTime/dt nanoseconds','missing_value':None,'is_measured_motor_torque':False,
+            'postupdate_buffer_is_diagnostic_only':True,'application_interval':'[PostUpdate time - dt, PostUpdate time]',
+            'priority_xml_element':'gz:system_priority','limits_verified_by_preparation':False},
+        'actuator_safety':{'effort_limit_nm':23.5,'velocity_limit_rad_s':30.,'numeric_tolerance':1e-6,'bootstrap_exclusion_s':.1,
+            'missing_force_startup_allowed_until_s':3.,'exceedance_behavior':'native200Hz latched evidence; reader50Hz zero velocity and failed shutdown; raw values never clamped',
+            'configuration_basis':'URDF/SDF limits and existing enforce_command_limits=true; hardware write itself is not an explicit clamp',
+            'Teacher_DC_speed_torque_curve_used':False,'actual_limits_passed':False},
         'physical_model_mass_kg':asset['model_mass_kg'],'physics_step_s':asset['physics_step_s'],'joint_names_training_order':asset['joint_names'],
         'initialization':'Original ros2_control URDF initial positions (0,.9,-1.8 per leg), native hold_joints Pg100 until trajectory controller; CHAMP adapter nominal calibration .5 sim seconds and >=50 actual raw samples; zero body cmd before3s',
         'body_pose_resets':0,'body_servo':False,'body_stabilizer':False,'auxiliary':['original bounded nominal joint-stop adapter'],
@@ -138,7 +149,7 @@ def prepare(run,duration=120.):
         'gz_ros2_control_plugin':{'path':str(gz_plugin),'sha256':sha(gz_plugin)},
         'loader':{'gait_messages_library_dir':str(messages_stage),'gait_messages_ament_prefix':str(messages_prefix),'original_sha256':loader_sources,'copied_sha256':loader_copies,
             'scope':'Only gait child LD and AMENT prefix; Gazebo CM override remains separate','resolution_receipt':str(stage/'loader_resolution.json'),'resolved_not_found':0},
-        'executor_source_sha256':{**{str(p):sha(p)for p in [HERE/'prepare.py',HERE/'baseline.launch.py',HERE/'command_file_reader.py',HERE/'native/champ_native_observer.cpp',HERE/'native/CMakeLists.txt',TEACHER/'policy/worker.py',TEACHER/'policy/observation.py']},**loader_sources},
+        'executor_source_sha256':{**{str(p):sha(p)for p in [HERE/'prepare.py',HERE/'baseline.launch.py',HERE/'command_file_reader.py',HERE/'native/champ_native_observer.cpp',HERE/'native/force_capture.hh',HERE/'native/CMakeLists.txt',TEACHER/'policy/worker.py',TEACHER/'policy/observation.py']},**loader_sources},
         'artifacts':{str(p):sha(p)for p in stage.rglob('*')if p.is_file()},'protected_before':protected,
         'teacher_actor_started':False,'actual_runtime_verified':False,'historical_camera_demo_used_as_motion_evidence':False}
     if any(sha(p)!=h for p,h in protected.items()):raise RuntimeError('Protected original file changed during preparation')

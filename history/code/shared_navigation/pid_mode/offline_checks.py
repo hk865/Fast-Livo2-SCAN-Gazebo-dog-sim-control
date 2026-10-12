@@ -52,7 +52,7 @@ def run_checks(run,output):
     cmd,d=update(8_000_000_000,key=('newroute',1,'drive'))
     check('new goal clears old integral',np.array_equal(pid.integral,zero))
     previous=np.array([.15,-.03,.07]);desired=np.array([.18,.09,.13]);actual=slew(previous,desired,.05,profile['pid']['slew_acceleration'])
-    check('independent slew preserves lateral command',actual[1]>previous[1]and np.all(abs(actual-previous)<=np.array([.15,.15,.25])*.05+1e-12))
+    check('independent slew preserves lateral command',actual[1]>previous[1]and np.all(abs(actual-previous)<=np.asarray(profile['pid']['slew_acceleration'])*.05+1e-12))
     check('zero translation stop overrides slew',np.array_equal(slew(previous,zero,.05,[.15,.15,.25])[:2],zero[:2]))
     anchor={'source':'/demo/slam/body_odom','ground_truth_navigation_used':False,'origin':[2,3,.3],'yaw':math.pi/2}
     route=build_request('test',anchor,profile,{})

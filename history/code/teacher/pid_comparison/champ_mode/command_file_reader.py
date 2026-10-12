@@ -35,6 +35,24 @@ def rpy(q):
     w,x,y,z=q
     return [math.atan2(2*(w*x+y*z),1-2*(x*x+y*y)),math.asin(float(np.clip(2*(w*y-z*x),-1,1))),math.atan2(2*(w*z+x*y),1-2*(y*y+z*z))]
 
+def actuator_safety_reason(state,t):
+    """Inspect untouched native evidence; never clamp or manufacture a force."""
+    violation=state.get('actuator_limit_violation_latched')
+    if violation:return str(violation)
+    qd=state.get('qd')
+    if not isinstance(qd,list)or len(qd)!=12 or not all(isinstance(v,(int,float))and math.isfinite(v)for v in qd):return 'joint_velocity_evidence_invalid'
+    if t>=.1 and any(abs(v)>30.+1e-6 for v in qd):return 'joint_velocity_limit_exceeded'
+    # Allow the declared startup while hardware initializes; later missing force fails closed.
+    if t<3:return None
+    if state.get('torque_source')!='command_feed_to_physics'or state.get('force_capture_phase')!='PreUpdate after CM write, before Physics Update':return 'force_capture_source_invalid'
+    if state.get('force_capture_pair_valid')is not True or state.get('force_command_valid')is not True:return 'force_capture_unavailable'
+    if state.get('physics_iteration')!=state.get('force_capture_iteration'):return 'force_capture_iteration_mismatch'
+    if abs(float(state['force_capture_sim_time'])-float(state['world_sim_time']))>1e-9 or abs(float(state['force_capture_dt'])-.005)>1e-9:return 'force_capture_time_mismatch'
+    tau=state.get('tau');available=state.get('tau_available')
+    if not isinstance(tau,list)or len(tau)!=12 or available!=[1]*12 or not all(isinstance(v,(int,float))and math.isfinite(v)for v in tau):return 'force_capture_values_invalid'
+    if any(abs(v)>23.5+1e-6 for v in tau):return 'force_command_limit_exceeded'
+    return None
+
 def finalize_receipts(run,stage,metadata,publish_zero,context_ok,rcle_error_type):
     """Persist closed-log evidence even when ROS SIGINT invalidates publishing.
 
@@ -163,6 +181,8 @@ def main():
             try:
                 state=json.loads((stage/'native_state.json').read_text())
                 if state.get('state_phase')!='PostUpdate'or not -.05<=t-float(state['world_sim_time'])<=.3:raise ValueError('native state stale/phase')
+                actuator_reason=actuator_safety_reason(state,t)
+                if actuator_reason:self.failure=self.failure or actuator_reason
                 self.latest_native=state;self.native_wall=now
                 position=state['position'];angles=rpy(state['quaternion_wxyz']);ground=float(safety.height(np.array([position[:2]]),ray_start_z=position[2])[0]);clearance=position[2]-ground
                 if t>1.5 and (max(abs(angles[0]),abs(angles[1]))>.8 or clearance<.15):self.failure=self.failure or 'fallen_or_low_clearance'
@@ -195,7 +215,8 @@ def main():
             metadata={'schema':1,'controller_kind':'champ','actor_device':None,'actor_started':False,'inference_threads':0,'cpu_only':True,'test_duration_s':args.duration+8,'navigation_duration_s':args.duration,
                 'completed':self.finished and self.failure is None,'fault':self.failure,'last_ros_sim_ns':self.clock_ns,'consumer_function_ast_sha256':function_sha,
                 'command_reader_sha256':sha(__file__),'accepted_scope':acceptance,'last_execution_health':self.last_health,'physical_state_phase':'PostUpdate','state_time_offset_s':0,
-                'torque_source':'native JointForceCmd component; not measured motor torque','startup_semantics':contract['initialization'],'final_parking_s':8,'truth_navigation_used':False,
+                'torque_source':'command_feed_to_physics','force_capture_phase':contract['force_capture']['phase'],'force_is_measured_motor_torque':False,
+                'actuator_safety':contract['actuator_safety'],'startup_semantics':contract['initialization'],'final_parking_s':8,'truth_navigation_used':False,
                 'no_second_force_writer':True,'body_stabilizer':False,'body_servo':False,'raw_recorders_closed':not close_errors,'recorder_close_errors':close_errors}
             finalize_receipts(run,stage,metadata,lambda:self.publish(np.zeros(3)),rclpy.ok,_ros.RCLError)
     node=Reader();exit_code=0
