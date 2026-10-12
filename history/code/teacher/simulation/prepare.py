@@ -18,8 +18,10 @@ def main():
     a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true')
     a.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'),help='Override only the collision-free overview camera world pose')
     a.add_argument('--overview-fov',type=float,default=None,help='Optional diagnostic camera horizontal field of view in radians; no image warp')
+    a.add_argument('--camera-rate',type=float,default=2.,help='Actual vehicle RGB rate; observer camera remains 2 Hz')
     a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre2');args=a.parse_args()
     if args.overview_fov is not None and not 0<args.overview_fov<math.pi:a.error('--overview-fov must be between 0 and pi radians')
+    if not math.isfinite(args.camera_rate)or not 1<=args.camera_rate<=20:a.error('--camera-rate must be within 1..20 Hz')
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
     model=copy.deepcopy(E.parse(source).getroot().find('model'))
@@ -49,7 +51,7 @@ def main():
                 if info is None:info=E.SubElement(sensor.find('camera'),'camera_info_topic')
                 info.text='/demo/camera_info'
                 # RGB is diagnostic; 2 Hz avoids competing with CPU inference.
-                sensor.find('update_rate').text='2'
+                sensor.find('update_rate').text=str(args.camera_rate)
         for contact in link.findall("sensor[@type='contact']"):
             contact.find('update_rate').text='200'
     # The original URDF contact friction was .2. Archive uses random .5..1.0;

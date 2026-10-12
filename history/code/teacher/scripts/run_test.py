@@ -8,10 +8,12 @@ from evaluate import evaluate
 ROOT=Path(__file__).resolve().parents[1]
 PYTHON=Path('/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/bin/python3')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
-def stop(proc):
+def stop(proc,process_group=True):
     if proc is None:return
     if proc.poll()is not None:return
-    try:os.killpg(proc.pid,signal.SIGINT)
+    try:
+        if process_group:os.killpg(proc.pid,signal.SIGINT)
+        else:os.kill(proc.pid,signal.SIGINT)
     except ProcessLookupError:return
     try:proc.wait(timeout=5)
     except subprocess.TimeoutExpired:
@@ -30,6 +32,7 @@ def main():
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
     p.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'))
     p.add_argument('--overview-fov',type=float,default=None)
+    p.add_argument('--camera-rate',type=float,default=None)
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
@@ -63,6 +66,7 @@ def main():
             if args.terrain_target_manifest:shutil.copy2(args.terrain_target_manifest,run/'terrain_target_manifest.json')
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
+            if args.camera_rate is not None or args.navigation_stack:prepare+=['--camera-rate',str(args.camera_rate if args.camera_rate is not None else 10.)]
             if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
             if args.overview_fov is not None:prepare+=['--overview-fov',str(args.overview_fov)]
             if args.sensors:prepare+=['--sensors']
@@ -185,7 +189,8 @@ def main():
                     stop(shadow)
                 if shadow and (not (run/'sensor_shadow/summary.json').exists()or shadow.returncode):
                     shadow_error=shadow_error or 'Read-only shadow observer did not finish successfully; see shadow.log'
-                for proc in [navstack,capture,bridge,gazebo,worker]:stop(proc)
+                stop(navstack,process_group=False) # launch forwards once; avoid double SIGINT in child cleanup
+                for proc in [capture,bridge,gazebo,worker]:stop(proc)
                 try:Path(env['TEACHER_SOCKET']).unlink()
                 except FileNotFoundError:pass
                 (run/'resources_after.json').write_text(json.dumps(resource(),indent=2))
