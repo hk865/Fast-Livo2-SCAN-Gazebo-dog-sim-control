@@ -231,10 +231,21 @@ class Dashboard:
             state_age = max(0., time.time() - state_path.stat().st_mtime)
         except OSError:
             state_age = None
+        original_functional = read_json(directory / 'summary_functional.json')
+        reproduced = read_json(directory / 'summary_functional.reproduced.json')
+        correction = read_json(directory / 'provenance_correction.json')
+        corrected = bool(reproduced and correction.get('status') == 'reproduced_identical'
+            and correction.get('all_checks_identical') is True and correction.get('all_metrics_identical') is True
+            and original_functional.get('checks') == reproduced.get('checks')
+            and original_functional.get('metrics') == reproduced.get('metrics'))
         return {'available': True, 'run_id': directory.name, 'selected': run,
                 'state': read_json(state_path), 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
-                'step_functional': read_json(directory / 'summary_functional.json'),
+                'step_functional': reproduced if corrected else original_functional,
+                'step_functional_original': original_functional,
+                'step_provenance': correction,
+                'step_functional_source': 'summary_functional.reproduced.json' if corrected else 'summary_functional.json',
+                'step_safety': read_json(directory / 'supplemental_native_safety.json'),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),
                            'gif': (directory / 'frame_replay.gif').is_file(),
