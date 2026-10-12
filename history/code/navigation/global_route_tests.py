@@ -3,11 +3,13 @@ import argparse
 import ast
 import copy
 import hashlib
+import importlib.util
 import json
 import math
 from pathlib import Path
 from types import SimpleNamespace as NS
 import unittest
+import sys
 import numpy as np
 from cascade_core import Controller
 from global_route_reference import (contract,SegmentGuides,StableProjectionController,
@@ -147,6 +149,126 @@ class GlobalReferenceChecks(unittest.TestCase):
         np.testing.assert_array_equal(c.velocity_integral,before['velocity_integral'])
         _,row=c.update(*sources(200_000_000,position=pose),mode_override='drive')
         self.assertAlmostEqual(reference['heading_rad'],row['reference_yaw_rad'],places=12)
+
+    def test_multipoint_request_converts_every_height_and_keeps_original_association(self):
+        goal=np.array([5.,0.,.82]);guides=SegmentGuides();published=[];associated=[];records=[]
+        def path():return NS(header=NS(frame_id=None,stamp=NS(sec=2,nanosec=0)),poses=[])
+        def pose():return NS(header=None,pose=NS(position=NS(),orientation=NS()))
+        make=method('shared_controller.py','make_path',dict(Path=path,PoseStamped=pose))
+        planning=method('controller.py','planner_reference_points')
+        request=method('shared_controller.py','request_plan',dict(time=NS(monotonic=lambda:3.)))
+        node=NS(global_reference_settings=SETTINGS,global_route_guides=guides,
+            segment_start=np.array([0.,0.,.32]),pose=np.array([0.,0.,.32]),pose_stamp=123,
+            request_id='multi',waypoint_index=0,waypoints=[goal],goals_definition_sha256='original',
+            run=Path('/unused'),evidence=NS(append=lambda p,r:records.append(r)),
+            get_clock=lambda:NS(now=lambda:NS(nanoseconds=2_000_000_000,to_msg=lambda:NS(sec=2,nanosec=0))),
+            reference_pub=NS(get_subscription_count=lambda:1,publish=lambda p:published.append(p)),
+            trajectory_association=NS(request=lambda stamp,g:associated.append((stamp,g.copy()))),
+            last_reference_stamp=0,reference_requests=0)
+        node.stamp=lambda msg:msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec
+        node.make_path=lambda points,**kw:make(node,points,**kw)
+        node.planner_reference_points=lambda g:planning(node,g)
+        request(node);request(node)  # Paused clock still needs unique request identities.
+        self.assertEqual(node.reference_requests,2)
+        self.assertEqual(associated[0][0],[2,0]);self.assertEqual(associated[1][0],[2,1])
+        self.assertEqual(node.stamp(published[0]),2_000_000_000)
+        points=np.array([[p.pose.position.x,p.pose.position.y,p.pose.position.z] for p in published[0].poses])
+        expected=np.array(records[0]['guide_points_xyz']);expected[:,2]-=.4
+        np.testing.assert_array_equal(points,expected)
+        for _,bound_goal in associated:np.testing.assert_array_equal(bound_goal,goal)
+        np.testing.assert_array_equal(goal,[5.,0.,.82])
+        self.assertTrue(all(r['guide_only_not_arrival'] for r in records))
+
+    def test_planner_without_subscription_does_not_advance_guide_or_request_identity(self):
+        node=NS(reference_pub=NS(get_subscription_count=lambda:0),last_reference_stamp=7,reference_requests=2)
+        method('shared_controller.py','request_plan')(node)
+        self.assertEqual(node.last_reference_stamp,7);self.assertEqual(node.reference_requests,2)
+
+    def test_planning_helpers_never_satisfy_original_region_dwell(self):
+        # Load the unchanged production geometry without importing a ROS node.
+        spec=importlib.util.spec_from_file_location('v33_test_goal_regions',HERE.parents[2]/'navigation'/'goal_regions.py')
+        geometry=importlib.util.module_from_spec(spec);sys.modules[spec.name]=geometry;spec.loader.exec_module(geometry)
+        goal=geometry.Goal('original',(5.,0.,.32),'disc_prism',radius=.12,height_half_span=.1)
+        node=NS(goals=[goal],waypoint_index=0,region_raw_pose=np.array([1.,0.,.32]),pose_stamp=0,
+            obstacle_hold=False,tilt_hold=False,bridge_safety={'state':'ready'},request_id='multi',
+            goals_definition_sha256='original',region_arrival=geometry.ArrivalWindow(goal),
+            segment_started_ros_ns=0,segment_start_pose_stamp_ns=0)
+        observe=method('shared_controller.py','measured_region_arrival',dict(
+            goal_contains=geometry.contains,goal_contains_control=geometry.contains_control))
+        helpers,_=SegmentGuides().remaining(('multi',0),[0.,0.,.32],goal.center,[0.,0.,.32],SETTINGS)
+        for helper in helpers[:-1]:
+            node.region_raw_pose=np.array(helper)
+            for _ in range(6):
+                node.pose_stamp+=100_000_000
+                self.assertEqual(observe(node),(False,False))
+        node.region_raw_pose=np.array(goal.center)
+        for _ in range(4):
+            node.pose_stamp+=100_000_000
+            self.assertEqual(observe(node),(True,False))
+        for _ in range(5):self.assertEqual(observe(node),(True,False))  # Duplicate source stamps add no dwell.
+        node.pose_stamp+=100_000_000
+        self.assertEqual(observe(node),(True,True));self.assertEqual(node.region_arrival_evidence['dwell_ns'],400_000_000)
+        node.obstacle_hold=True;node.pose_stamp+=100_000_000
+        self.assertEqual(observe(node),(False,False))
+        self.assertEqual(goal.timeout_sim_s,90.);self.assertEqual(goal.dwell_sim_s,.4)
+
+    def test_long_checked_ramp_keeps_monotonic_progress_and_identical_preview_heading(self):
+        x=np.linspace(0.,6.,121);path=np.column_stack([x,.1*np.sin(x/2.),.32+.1*x])
+        config=copy.deepcopy(CONFIG)
+        config['spatial_reference'].update(curvature_feedforward_enabled=True,curvature_speed_limit_enabled=True)
+        c=StableProjectionController(config,path[-1].tolist(),0.,'long_checked_ramp')
+        c.set_path(path.tolist(),'long_scan',0,0);original=c.path.copy();digest=c.path_sha
+        progress=0.;backward_measurements=0
+        for i,x in enumerate(np.arange(0.,5.7,.1),1):
+            if i%5==0:x-=.18;backward_measurements+=1
+            position=np.array([x,.1*math.sin(x/2.)+.01,.32+.1*x])
+            old_integral=c.velocity_integral.copy();reference=c.preview_reference(position)
+            self.assertEqual(c.progress,progress);np.testing.assert_array_equal(c.velocity_integral,old_integral)
+            self.assertTrue(direction_check(c,reference,.2,SETTINGS)['allowed'])
+            _,row=c.update(*sources(i*50_000_000,position=position),mode_override='drive')
+            self.assertGreaterEqual(c.progress,progress);progress=c.progress
+            if row['controller_updated']:
+                self.assertAlmostEqual(reference['heading_rad'],row['reference_yaw_rad'],places=12)
+                self.assertEqual(row['mode'],'drive')
+                self.assertTrue(row['curvature_speed_supervisor']['enabled'])
+            self.assertIsNone(c.capture_stamp)
+        self.assertGreater(backward_measurements,0);self.assertGreater(progress,5.5)
+        np.testing.assert_array_equal(c.path,original);self.assertEqual(c.path_sha,digest)
+
+    def test_same_xy_on_other_floor_uses_checked_3d_projection(self):
+        path=[[0,0,.32],[4,0,.32],[4,1,.82],[0,1,1.32],[0,0,1.32],[4,0,1.32]]
+        c=StableProjectionController(CONFIG,path[-1],0.,'upper_goal');c.set_path(path,'layered_scan',0,0)
+        reference=c.preview_reference([1.,0.,1.32])
+        self.assertAlmostEqual(reference['raw_projection']['point_xyz'][2],1.32)
+        self.assertGreater(reference['nearest_s_m'],10.)
+        self.assertEqual(c.progress,0.);self.assertTrue(c.new_path)
+
+    def test_r2_short_endpoint_can_capture_only_the_exact_fixed_original_goal(self):
+        # R2 recorded endpoint is 30.044mm short. This is a geometric probe,
+        # not a replay of motion beyond R2's budget cutoff or an arrival claim.
+        start=[.002140521201626509,.015981136414608084,.005298323072704509]
+        end=[-.007570610401839042,-.9578567872266464,.0033290913355266084]
+        goal=[-.007867831141414133,-.9878993668995609,.003288638586980197]
+        yaw=math.atan2(goal[1]-start[1],goal[0]-start[0]);q=[math.cos(yaw/2),0.,0.,math.sin(yaw/2)]
+        c=StableProjectionController(CONFIG,goal,yaw,'original_goal');c.set_path([start,end],'short_scan',0,0)
+        digest=c.goal_sha
+        self.assertTrue(c.preview_reference(end)['endpoint_is_fixed_goal'])
+        self.assertEqual(c.preview_reference(end)['heading_source'],'fixed_goal_tail')
+        c.update(*sources(100_000_000,position=end,quaternion=q),mode_override='drive')
+        _,row=c.update(*sources(200_000_000,position=end,quaternion=q),mode_override='drive')
+        self.assertEqual(row['mode'],'capture');np.testing.assert_array_equal(c.goal,goal)
+        self.assertEqual(c.goal_sha,digest);self.assertFalse(row['actual_SLAM_SCAN_verified'])
+
+    def test_new_path_preserves_feedback_filters_and_pi_without_transferring_progress(self):
+        c=core();c.update(*sources(100_000_000),mode_override='drive')
+        c.update(*sources(200_000_000,position=[1.,.01,.32]),mode_override='drive')
+        before=copy.deepcopy(c.__dict__)
+        c.set_path([[.9,0,.32],[2.,.02,.32],[4.,0,.32]],'replacement',200_000_000,10_200_000_000,
+            position=np.array([1.,.01,.32]))
+        for name in ('velocity_integral','filtered','inner_filtered','command'):
+            np.testing.assert_array_equal(getattr(c,name),before[name])
+        self.assertEqual(c.progress,0.);self.assertTrue(c.new_path);self.assertIsNone(c.capture_stamp)
+        self.assertEqual(c.goal_sha,before['goal_sha'])
 
     def test_production_follow_keeps_checked_target_while_incoherent_holds(self):
         c=core([[0,0,.32],[-.05,-.15,.32],[.25,-.15,.32],[4,0,.32]])

@@ -13,7 +13,7 @@ import time
 
 GIB = 1024**3
 SESSION = Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/STORAGE_SESSION.json')
-HARD_BYTES = 4 * GIB
+HARD_BYTES = 50_000_000_000  # User-approved decimal50GB,2026-10-07T12:03:15Z
 SOFT_BYTES = HARD_BYTES - 512 * 1024**2
 HOME_RESERVE = 100 * GIB
 ROOT_RESERVE = 80 * GIB
@@ -77,7 +77,7 @@ def register(run):
 def check(snapshot, previous=None):
     reasons=[]
     if snapshot['conservative_session_growth_bytes'] >= SOFT_BYTES:
-        reasons.append('whole_session_soft_stop_3p5GiB')
+        reasons.append('whole_session_soft_stop')
     for fs in snapshot['filesystems']:
         reserve = HOME_RESERVE if fs['path']=='/home' else ROOT_RESERVE
         if fs['available_bytes'] < reserve: reasons.append('filesystem_reserve_'+fs['path'])
@@ -105,6 +105,8 @@ def conservative_growth(known, initial, filesystem_consumption):
 
 def observe(run,profile,starting=False,count_files=True,previous=None):
     d=json.loads(SESSION.read_text())
+    if (d.get('hard_bytes'), d.get('soft_bytes'), d.get('cleanup_reserve_bytes')) != (HARD_BYTES, SOFT_BYTES, HARD_BYTES-SOFT_BYTES):
+        raise RuntimeError('Shared session budget/source authorization mismatch')
     policy=profile['raw_storage_budget']
     if policy != dict(max_run_bytes=HARD_BYTES,
             minimum_start_available_bytes=HOME_RESERVE,

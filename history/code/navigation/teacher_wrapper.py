@@ -25,6 +25,7 @@ base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
 from pid_scope import verify_scope
 from control_core import rotation_xyzw,body_tilt
 from runtime_io import EvidenceWriter,latest_sensor_qos
+from compact_archives import make_evidence_writer
 from transition_gate import TeacherHeadingGate
 from guard_audit import NativeGuardAudit,result_json
 from std_msgs.msg import String
@@ -64,7 +65,7 @@ class TeacherNavigation(base.Navigation):
     def __init__(self,run):
         self.run=run;receipt=verify_scope(run/'navigation_scope.json');self.profile=receipt['profile']
         super().__init__()
-        self.evidence=EvidenceWriter();self.gyro_body=None;self.gyro_stamp=None;self.gyro_wall=None
+        self.evidence=make_evidence_writer(self.run,self.profile);self.gyro_body=None;self.gyro_stamp=None;self.gyro_wall=None
         self.heading_gate=TeacherHeadingGate(self.profile)
         self.status_pub=RecordedPublisher(self.status_pub,run,self)
         self.bridge_updated=-math.inf

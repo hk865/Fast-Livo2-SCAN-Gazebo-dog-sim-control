@@ -278,6 +278,165 @@ class IndependentMatcher(Protocol):
     def match(self, query: MatchQuery, maps: Mapping[str, FrozenMap]) -> Sequence[MatchCandidate]: ...
 
 
+def probe_existing_sensor_sources(paths: Mapping[str, str | Path], hashes: Mapping[str, str], *,
+                                  source_ns: int, seed_z_offsets: Sequence[float],
+                                  prior_information: Any = None) -> dict:
+    """Read-only, bounded source feasibility/ICP probe, NOT IndependentMatcher.
+
+    Accepts the existing RGB binary PCD/save metadata and normalized registered
+    NPY/archive/exact body-odom records. No SDF, truth alignment, floor height,
+    covariance, or mount transform is used. The source pose is an initialization
+    only; prior information is refused. This diagnostic never emits candidates.
+    Seed offsets are explicit caller choices, not a complete floor search.
+    """
+    import io
+    import json
+    import time
+    from scipy.spatial import cKDTree
+
+    keys = {"pcd", "map_metadata", "query", "archive", "pose"}
+    if set(paths) != keys or set(hashes) != keys:
+        raise ContractError("five_explicit_source_paths_and_hashes_required")
+    if prior_information is not None:
+        raise ContractError("prior_information_not_permitted_in_geometry_probe")
+    _integer(source_ns, "probe source", positive=True)
+    if not 2 <= len(seed_z_offsets) <= 8:
+        raise ContractError("probe_requires_two_to_eight_explicit_seeds")
+    offsets = []
+    for value in seed_z_offsets:
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or abs(value) > 10.:
+            raise ContractError("bounded_finite_seed_offsets_required")
+        offsets.append(float(value))
+    if len(set(offsets)) != len(offsets):
+        raise ContractError("duplicate_probe_seeds")
+    blobs, bindings = {}, {}
+    for key in sorted(keys):
+        path = Path(paths[key]); expected = _sha(hashes[key], key)
+        with path.open("rb") as stream:
+            blob = stream.read(16 * 1024 * 1024 + 1)
+        if not 0 < len(blob) <= 16 * 1024 * 1024 or hashlib.sha256(blob).hexdigest() != expected:
+            raise ContractError("probe_source_size_or_hash_mismatch:" + key)
+        blobs[key] = blob
+        bindings[key] = {"path": str(path.resolve()), "bytes": len(blob), "sha256": expected}
+
+    def exact_record(key):
+        found = []
+        for line in blobs[key].splitlines():
+            if len(line) > 64 * 1024:
+                raise ContractError("oversized_source_metadata_record")
+            record = json.loads(line)
+            if record.get("stamp_ns") == source_ns:
+                found.append(record)
+        if len(found) != 1:
+            raise ContractError("one_exact_integer_source_record_required:" + key)
+        return found[0]
+
+    archive, odom = exact_record("archive"), exact_record("pose")
+    if (archive.get("schema") != "actual_registered_cloud_xyz_archive/v1"
+            or archive.get("navigation_ground_truth_used") is not False
+            or odom.get("navigation_ground_truth_used") is not False
+            or archive.get("frame_id") != "camera_init" or odom.get("frame_id") != "camera_init"
+            or odom.get("child_frame_id") != "demo_slam_body"
+            or odom.get("source_topic") != "/demo/slam/body_odom"
+            or type(archive.get("stamp_ns")) is not int or type(odom.get("stamp_ns")) is not int
+            or archive.get("filtering_body_stamp_ns") != source_ns
+            or Path(archive.get("array_file", "")).name != Path(paths["query"]).name):
+        raise ContractError("query_source_frame_reference_or_truth_mismatch")
+    transform = np.eye(4)
+    transform[:3, :3] = _array(archive.get("filtering_body_rotation"), (3, 3), "source rotation")
+    transform[:3, 3] = _array(archive.get("filtering_body_pose"), (3,), "source position")
+    transform = _se3(transform, "registered_from_body")
+    x, y, z, w = _array(odom.get("quaternion_xyzw"), (4,), "source quaternion")
+    if abs(x*x + y*y + z*z + w*w - 1.) > 1e-8:
+        raise ContractError("source_quaternion_not_unit")
+    rotation = np.array([[1-2*(y*y+z*z), 2*(x*y-z*w), 2*(x*z+y*w)],
+                         [2*(x*y+z*w), 1-2*(x*x+z*z), 2*(y*z-x*w)],
+                         [2*(x*z-y*w), 2*(y*z+x*w), 1-2*(x*x+y*y)]])
+    if (not np.allclose(rotation, transform[:3, :3], atol=1e-10, rtol=0.)
+            or not np.allclose(_array(odom.get("position"), (3,), "odom position"), transform[:3, 3], atol=1e-10, rtol=0.)):
+        raise ContractError("same_source_body_pose_disagrees_with_cloud_archive")
+    stream = io.BytesIO(blobs["query"])
+    version = np.lib.format.read_magic(stream)
+    if version not in ((1, 0), (2, 0)):
+        raise ContractError("unsupported_normalized_query_format")
+    reader = np.lib.format.read_array_header_1_0 if version == (1, 0) else np.lib.format.read_array_header_2_0
+    shape, fortran, dtype = reader(stream, max_header_size=1024)
+    if (dtype != np.dtype("<f8") or fortran or len(shape) != 2 or shape[1] != 3
+            or not 100 <= shape[0] <= 250000 or list(shape) != archive.get("shape")
+            or stream.tell() + shape[0] * 24 != len(blobs["query"])
+            or hashes["query"] != archive.get("array_sha256")):
+        raise ContractError("query_layout_or_archive_hash_mismatch")
+    xyz = np.frombuffer(blobs["query"], dtype="<f8", offset=stream.tell()).reshape(shape)
+    if (not np.isfinite(xyz).all() or hashlib.sha256(xyz.tobytes()).hexdigest()
+            != archive.get("filtered_xyz_float64_sha256")):
+        raise ContractError("normalized_query_xyz_hash_mismatch")
+    selected = xyz[::math.ceil(len(xyz)/4000)]
+    local = (selected - transform[:3, 3]) @ transform[:3, :3]
+
+    metadata = json.loads(blobs["map_metadata"]); saved = metadata.get("save", {})
+    if (metadata.get("frame_id") != "camera_init" or metadata.get("ground_truth_used") is not False
+            or metadata.get("reference_map_loaded") is not False or saved.get("complete") is not True
+            or saved.get("filename") != Path(paths["pcd"]).name
+            or metadata.get("format", {}).get("xyz") != "little-endian float32 at offsets 0,4,8"):
+        raise ContractError("unbound_saved_sensor_map_metadata")
+    blob = blobs["pcd"]; end = blob.find(b"DATA binary\n", 0, 16384)
+    if end < 0:
+        raise ContractError("unsupported_sensor_pcd_header")
+    offset = end + len(b"DATA binary\n"); header = blob[:offset].decode("ascii")
+    required = ("FIELDS x y z rgb\n", "SIZE 4 4 4 4\n", "TYPE F F F U\n", "COUNT 1 1 1 1\n", "HEIGHT 1\n")
+    count = _integer(saved.get("point_count"), "saved points", positive=True)
+    if (any(line not in header for line in required) or f"POINTS {count}\n" not in header
+            or f"WIDTH {count}\n" not in header or offset + count*16 != len(blob)):
+        raise ContractError("saved_pcd_layout_or_snapshot_count_mismatch")
+    packed = np.frombuffer(blob, dtype=[("x", "<f4"), ("y", "<f4"), ("z", "<f4"), ("rgb", "<u4")], offset=offset)
+    indices = np.arange(0, count, math.ceil(count/32000))
+    target = np.column_stack([packed[k][indices] for k in ("x", "y", "z")]).astype(np.float64)
+    if not np.isfinite(target).all():
+        raise ContractError("nonfinite_sampled_map_geometry")
+    tree = cKDTree(target); started = time.monotonic(); hypotheses = []
+    for dz in offsets:
+        current = np.array(transform, copy=True); current[2, 3] += dz; converged = False
+        for iteration in range(40):
+            moved = local @ current[:3, :3].T + current[:3, 3]
+            distances, matches = tree.query(moved, workers=1); valid = distances <= .5
+            if valid.sum() < 80 or time.monotonic() - started > 15.:
+                break
+            a, b = moved[valid], target[matches[valid]]; ac, bc = a.mean(0), b.mean(0)
+            u, _, vt = np.linalg.svd((a-ac).T @ (b-bc)); r = vt.T @ u.T
+            if np.linalg.det(r) < 0:
+                vt[-1] *= -1.; r = vt.T @ u.T
+            step = np.eye(4); step[:3, :3] = r; step[:3, 3] = bc-r@ac; current = step@current
+            if np.linalg.norm(step[:3, 3]) < 1e-5 and np.linalg.norm(r-np.eye(3)) < 1e-5:
+                converged = True; break
+        moved = local @ current[:3, :3].T + current[:3, 3]
+        distances, matches = tree.query(moved, workers=1); valid = distances <= .5
+        _, backward = cKDTree(moved).query(target[matches[valid]], workers=1)
+        hypotheses.append({"seed_z_offset_m": dz, "iterations": iteration+1, "converged": converged,
+            "geometry_capped_all_query_rms_m": float(np.sqrt(np.mean(np.minimum(distances, .5)**2))),
+            "inlier_rms_m": float(np.sqrt(np.mean(distances[valid]**2))) if valid.any() else None,
+            "all_query_p95_m": float(np.quantile(distances, .95)), "within_0p5m_fraction": float(valid.mean()),
+            "mutual_correspondence_fraction": float(np.mean(backward == np.flatnonzero(valid))) if valid.any() else 0.,
+            "unique_target_fraction": len(np.unique(matches[valid]))/int(valid.sum()) if valid.any() else 0.,
+            "map_from_body": current.tolist()})
+        if time.monotonic() - started > 15.:
+            break
+    return {"schema": "existing_sensor_source_cpu_feasibility_probe/v1", "source_bindings": bindings,
+        "query_source_ns": source_ns, "same_integer_source_pose_verified": True,
+        "sample_local_roundtrip_max_m": float(np.max(np.abs(local@transform[:3, :3].T+transform[:3, 3]-selected))),
+        "pcd_points": count, "pcd_saved_source_s": saved.get("last_observation_stamp"),
+        "online_revision_not_used": metadata.get("revision"), "online_point_count_not_used": metadata.get("point_count"),
+        "sampled_map_points": len(target), "sampled_query_points": len(local),
+        "sampling": "deterministic_stride_existing_points_no_centroids", "duration_wall_s": time.monotonic()-started,
+        "budget_exhausted": len(hypotheses) != len(offsets) or time.monotonic()-started > 15.,
+        "objective": "point_to_point_geometry_only_initialization_probe", "prior_information_added": False,
+        "seed_provenance": "same_source_frontend_pose_plus_explicit_offsets_not_truth", "hypotheses": hypotheses,
+        "search_complete": False, "independent_matcher_implemented": False, "shadow_candidate_produced": False,
+        "runtime_enabled": False, "control_allowed": False, "original_ros_payload_verified": False,
+        "blockers": ["five_reviewed_maps_and_four_overlaps_missing", "global_lookalike_floor_search_missing",
+            "geometry_independence_calibration_and_gravity_reviews_missing", "normal_information_and_association_review_missing",
+            "normalized_xyz_is_not_original_ros_payload", "runtime_adapter_and_revision_ack_unverified"]}
+
+
 @dataclass(frozen=True)
 class ShadowPolicy:
     """Conservative prototype gates, NOT calibrated production thresholds."""

@@ -17,7 +17,7 @@ CHANGE=('V33 simulation engineering: independent IPC stage timing, bounded optio
     'Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, '
     'arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. '
     'Continuous registered-cloud/raw-source archives deliberately omitted; their replay '
-    'acceptance is UNVERIFIED, never zero or historical PASS. Whole session4GiB budget.')
+    'acceptance is UNVERIFIED, never zero or historical PASS. Whole session50,000,000,000 decimalbyte budget, user-approved2026-10-07T12:03:15Z.')
 DECLARED_FIELDS=('controller_selector','profile_version','prospective_change',
     'mission46_required_source_files','duration_s','diagnostic_scope','raw_budget_bytes',
     'minimum_available_storage_bytes','raw_storage_budget',
@@ -69,6 +69,9 @@ def expected_profile(here,name=PROFILE_NAME):
         raw_source_capture=False,overview_archive_stride=30,omitted_cloud_replay_acceptance='UNVERIFIED',
         dense_solver_payload_collected=False,dense_solver_payload_acceptance='UNVERIFIED',
         state_stage_timing_kept=True,dense_window_outside_original1500s_cap=True,
+        compact_histories=dict(enabled=True,codec='v33_dictionary_jsonl/v1',
+            streams=['navigation_command_history.jsonl','navigation_status.jsonl','mission46_status_history.jsonl'],
+            original_JSON_values_preserved=True,live_inputs_unchanged=True),
         optional_IPC_payload_max_bytes=36*1024**2,live_SLAM_inputs_unchanged=True,
         current_run_RGB_map_save_required=True,whole_session_budget_bytes=HARD_BYTES)
     return result

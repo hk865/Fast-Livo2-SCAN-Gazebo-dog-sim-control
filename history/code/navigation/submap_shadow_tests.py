@@ -22,7 +22,8 @@ import unittest
 import numpy as np
 
 from submap_shadow import (ContractError, FrozenMap, MAP_ORDER, MAX_MAP_BYTES,
-                           MatchCandidate, MatchQuery, Overlap, ShadowPolicy, SubmapShadow)
+                           MatchCandidate, MatchQuery, Overlap, ShadowPolicy, SubmapShadow,
+                           probe_existing_sensor_sources)
 
 
 SHA = hashlib.sha256(b"synthetic calibration fixture; not real sensor evidence").hexdigest()
@@ -488,6 +489,8 @@ class ShadowTests(unittest.TestCase):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--existing-source-probe", action="store_true",
+                        help="Read only the five hash-bound historical small inputs; no ROS or truth")
     args = parser.parse_args()
     stream = io.StringIO()
     start = time.monotonic()
@@ -503,6 +506,45 @@ def main():
         file = Path(__file__).resolve().with_name(name)
         if file.exists():
             report["source_hashes"][name] = hashlib.sha256(file.read_bytes()).hexdigest()
+    if args.existing_source_probe:
+        root = Path(__file__).resolve().parents[2]
+        run = root / "runs/20261007_152015_closed_loop_cascade_clock_hold_V32_surface_baseline_r1_a21e"
+        maprun = root.parent / "camera_mode/runs/20261002_194830_d16898"
+        query = root / "test_results/map_surface_v32_20261007/navigation_failure/preserved_native_guards" / run.name
+        paths = {"pcd": maprun / "colored_map.pcd", "map_metadata": maprun / "map_metadata.json",
+                 "query": query / "005861_197080000000.npy", "archive": run / "navigation_cloud_xyz.jsonl",
+                 "pose": run / "mission46_actual_slam_poses.jsonl"}
+        hashes = {"pcd": "cb907d100020518b1b0727d0f5653cfb17a2d515e94971e5cc59d5ddd8a879c4",
+                  "map_metadata": "c5591f573c0ee617d6a442c53b4fbf26d36a539cee33b59cdc5eb523bdb2aabc",
+                  "query": "45bf7da7736abae8d8c1f7527ed669841b346964e3e82d1e593385280d9e8f83",
+                  "archive": "e83fc124ca7add7037e182707a74d9f3be236d0c42a67b85a2d7def950bf5b46",
+                  "pose": "c0bfd0bbf5661b0318ead1325d69758a4c1216b2588c39b954135a2d7855b7c4"}
+        actual = probe_existing_sensor_sources(paths, hashes, source_ns=197080000000,
+                                               seed_z_offsets=(-1., -.5, 0., .5, 1.))
+        assert not any(actual[k] for k in ("control_allowed", "runtime_enabled", "search_complete", "shadow_candidate_produced"))
+        assert actual["pcd_points"] == 235235 and actual["online_point_count_not_used"] == 252326
+        assert actual["sample_local_roundtrip_max_m"] < 1e-12
+        checks = []
+        for name, altered_hashes, stamp, prior in (
+                ("one_ns_pairing_rejected", hashes, 197080000001, None),
+                ("wrong_query_hash_rejected", dict(hashes, query="0"*64), 197080000000, None),
+                ("prior_information_rejected", hashes, 197080000000, np.eye(6)*1e12)):
+            try:
+                probe_existing_sensor_sources(paths, altered_hashes, source_ns=stamp,
+                                              seed_z_offsets=(-.5, .5), prior_information=prior)
+            except ContractError:
+                checks.append(name)
+            else:
+                raise AssertionError(name)
+        actual["source_contract_checks"] = checks
+        report["existing_source_probe"] = actual
+        report["synthetic_only"] = False
+        # The 46 unit cases remain synthetic; this separate probe adds no
+        # localization, wrong-floor, covariance, timing or control PASS.
+        report["synthetic_unit_cases"] = result.testsRun
+        report["synthetic_unit_duration_seconds"] = report["duration_seconds"]
+        report["duration_seconds"] = time.monotonic() - start
+        report["maximum_rss_kib"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     encoded = (json.dumps(report, ensure_ascii=False, indent=2) + "\n").encode()
     if len(encoded) > 1024 * 1024:
         raise RuntimeError("receipt exceeds 1 MiB budget")

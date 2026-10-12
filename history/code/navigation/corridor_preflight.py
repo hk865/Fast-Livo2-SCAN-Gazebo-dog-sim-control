@@ -9,7 +9,8 @@ GATE_NAME='ENGINEERING_V33_PREFLIGHT.json'
 REVIEW_NAME='ENGINEERING_V33_SOURCE_REVIEW.json'
 CHANGED_ADAPTERS=frozenset(('controller.py','shared_controller.py','teacher_wrapper.py','worker.py',
     'run.py','pid_scope.py','slam_workspace.py','slam.launch.py','storage_guard.py',
-    'mission46_profile.py','full46_launch_contract.py','corridor_preflight.py'))
+    'mission46_profile.py','full46_launch_contract.py','corridor_preflight.py',
+    'bridge.py','mission46_runtime.py'))
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -55,7 +56,7 @@ def unchanged_navigation_bindings(here):
         q=here/p.name
         if sha(q)!=sha(p):raise RuntimeError('Undeclared V33 edit: '+p.name)
         rows[p.name]=dict(baseline=str(p),candidate=str(q),sha256=sha(p))
-    if not {'cascade_core.py','path_admission.py','bridge.py','sensor_gate.py','spatial_reference.py'}.issubset(rows):
+    if not {'cascade_core.py','path_admission.py','sensor_gate.py','spatial_reference.py'}.issubset(rows):
         raise RuntimeError('Original safety/control sources missing')
     return rows
 

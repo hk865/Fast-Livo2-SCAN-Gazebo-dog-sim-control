@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V33 simulation engineering: independent IPC stage timing, bounded optional worker evidence; switchable current-segment SCAN guides and same-trajectory monotonic projection with original heading rejection; shadow submap interface has no control authority. Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. Continuous registered-cloud/raw-source archives deliberately omitted; their replay acceptance is UNVERIFIED, never zero or historical PASS. Whole session4GiB budget.",
+  "prospective_change": "V33 simulation engineering: independent IPC stage timing, bounded optional worker evidence; switchable current-segment SCAN guides and same-trajectory monotonic projection with original heading rejection; shadow submap interface has no control authority. Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. Continuous registered-cloud/raw-source archives deliberately omitted; their replay acceptance is UNVERIFIED, never zero or historical PASS. Whole session50,000,000,000 decimalbyte budget, user-approved2026-10-07T12:03:15Z.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -270,7 +270,7 @@
     "reserved_bytes": 67108864
   },
   "raw_storage_budget": {
-    "max_run_bytes": 4294967296,
+    "max_run_bytes": 50000000000,
     "minimum_start_available_bytes": 107374182400,
     "minimum_runtime_available_bytes": 107374182400
   },
@@ -285,7 +285,7 @@
     "navigation_f1_f3": 14
   },
   "max_simulation_duration_s": 1500.0,
-  "raw_budget_bytes": 4294967296,
+  "raw_budget_bytes": 50000000000,
   "minimum_available_storage_bytes": 107374182400,
   "raw_budget_is_limit_not_permission_to_drop_evidence": false,
   "original_scenario": {
@@ -3655,9 +3655,20 @@
     "dense_solver_payload_acceptance": "UNVERIFIED",
     "state_stage_timing_kept": true,
     "dense_window_outside_original1500s_cap": true,
+    "compact_histories": {
+      "enabled": true,
+      "codec": "v33_dictionary_jsonl/v1",
+      "streams": [
+        "navigation_command_history.jsonl",
+        "navigation_status.jsonl",
+        "mission46_status_history.jsonl"
+      ],
+      "original_JSON_values_preserved": true,
+      "live_inputs_unchanged": true
+    },
     "optional_IPC_payload_max_bytes": 37748736,
     "live_SLAM_inputs_unchanged": true,
     "current_run_RGB_map_save_required": true,
-    "whole_session_budget_bytes": 4294967296
+    "whole_session_budget_bytes": 50000000000
   }
 }

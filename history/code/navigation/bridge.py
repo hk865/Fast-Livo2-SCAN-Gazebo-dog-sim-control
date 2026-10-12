@@ -18,6 +18,7 @@ import time
 import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from runtime_io import BackgroundCheck,LatestCommandWriter,latest_sensor_qos
+from compact_archives import make_command_writer
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -349,7 +350,7 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             self.acceptance_checked_wall = None
             self.last_status_wall=-math.inf;self.last_published_state=None
             history=Path(acceptance['run_dir'])/'navigation_command_history.jsonl'if acceptance.get('experimental')else None
-            self.transport=LatestCommandWriter(writer,history)
+            self.transport=make_command_writer(writer,history,acceptance)
             self.status_pub = self.create_publisher(String, STATUS_TOPIC, 10)
             self.stop_pub = self.create_publisher(Bool, STOP_TOPIC, 10)
             self.safety_pub = self.create_publisher(String, '/demo/control/safety', 10)

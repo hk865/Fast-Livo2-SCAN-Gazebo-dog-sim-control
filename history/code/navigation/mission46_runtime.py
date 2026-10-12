@@ -27,6 +27,7 @@ from mission46_runtime_evidence import (FileTail, native_ns, checked_json, seal,
     native_projection, status_projection)
 from request import SceneAxisRegistration, StartupDeadline
 from runtime_io import EvidenceWriter, latest_sensor_qos
+from compact_archives import make_evidence_writer
 
 
 def atomic_exact(path, data):
@@ -74,7 +75,7 @@ def build_node(run, scope, profile):
                     raise ValueError('Mission46 runtime source is not frozen: '+str(path))
             self.mission=TeacherMission46(profile['original_scenario'])
             self.mission.bind_runtime_interfaces(load_interfaces(run,scope))
-            self.writer=EvidenceWriter();self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='teacher-mission46-audit')
+            self.writer=make_evidence_writer(run,profile);self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='teacher-mission46-audit')
             self.jobs={};self.last_errors={};self.started_wall=time.monotonic()
             self.deadline=StartupDeadline(profile,self.started_wall)
             self.registration=SceneAxisRegistration(run,scope,self.writer)
