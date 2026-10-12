@@ -12,7 +12,8 @@ DEFAULTS = dict(plane_tolerance_m=.025, min_plane_points=80, ransac_trials=180,
                 ramp_min_deg=3., ramp_max_deg=20., bin_m=.25, min_bin_points=6,
                 minimum_supported_width_m=1., side_drop_min_m=.06,
                 side_evidence_distance_m=.20, seam_tolerance_m=.25,
-                minimum_ramp_length_m=1., maximum_edge_spread_m=.12)
+                minimum_ramp_length_m=1., maximum_edge_spread_m=.12, support_cell_width_m=.10,
+                minimum_interior_coverage_fraction=.80, side_face_min_vertical_span_m=.06)
 
 
 def unit(value):
@@ -81,7 +82,7 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
         pts = xyz[p['indices']]; delta = pts-anchor
         horizontal_dist = np.linalg.norm(delta-(delta @ up)[:, None]*up, axis=1)
         gap = float((anchor-p['center']) @ up)
-        if .15 <= gap <= .65 and np.any(horizontal_dist < .35): current.append((gap, p))
+        if .15 <= gap <= .65 and np.any(horizontal_dist < .45): current.append((gap, p))
     current.sort(key=lambda x: x[0]); current_id = current[0][1]['plane_id'] if current else None
     base['current_support_platform_id'] = current_id
     if len(current) > 1 and abs(current[0][0]-current[1][0]) < .06:
@@ -115,10 +116,25 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
                 below = h < slope*u-cfg['side_drop_min_m']
                 left_mask = common & below & (v < left-.015) & (v >= left-cfg['side_evidence_distance_m'])
                 right_mask = common & below & (v > right+.015) & (v <= right+cfg['side_evidence_distance_m'])
+                # A lower layer alone can be visible through a sampling hole.
+                # Require measured near-vertical edge-face returns connecting
+                # the surface and lower side, rather than certifying a hull.
+                depth = slope*u-h
+                near_surface_side = common & (depth >= .01) & (depth <= .22)
+                left_face = depth[near_surface_side & (np.abs(v-left) <= .05)]
+                right_face = depth[near_surface_side & (np.abs(v-right) <= .05)]
+                face_spans = [float(np.ptp(a)) if len(a)>=3 else 0. for a in (left_face,right_face)]
+                cells = max(1, int(np.ceil(width/cfg['support_cell_width_m'])))
+                occupied_cells = len(np.unique(np.clip(((vs-left)/max(width,1e-9)*cells).astype(int),0,cells-1)))
+                interior = occupied_cells/cells
                 row.update(left_edge_m=float(left), right_edge_m=float(right), observed_width_m=width,
                            left_external_drop_points=int(left_mask.sum()), right_external_drop_points=int(right_mask.sum()),
+                           left_actual_side_face_vertical_span_m=face_spans[0],right_actual_side_face_vertical_span_m=face_spans[1],
+                           interior_observed_support_fraction=interior,
                            bilateral_observed=bool(width >= cfg['minimum_supported_width_m']
-                               and left_mask.sum() >= 2 and right_mask.sum() >= 2))
+                               and left_mask.sum() >= 2 and right_mask.sum() >= 2
+                               and min(face_spans)>=cfg['side_face_min_vertical_span_m']
+                               and interior>=cfg['minimum_interior_coverage_fraction']))
             candidate['bins'].append(row)
         good = [r for r in candidate['bins'] if r['bilateral_observed']]
         candidate['bilateral_bins'] = len(good); candidate['total_bins'] = len(candidate['bins'])

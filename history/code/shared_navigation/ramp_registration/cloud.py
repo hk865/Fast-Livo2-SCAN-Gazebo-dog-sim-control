@@ -40,7 +40,11 @@ def decode_cloud(metadata, raw):
     dtype = np.dtype({'names': names, 'formats': formats, 'offsets': offsets, 'itemsize': step})
     # Strides retain organized-cloud row padding rather than mistaking it for a point.
     view = np.ndarray((h, w), dtype=dtype, buffer=raw, strides=(row, step))
-    fields = view.copy(order='C').reshape(-1)
+    # NumPy structured copy may leave padding uninitialized; explicitly copy
+    # every original point byte, then view it with the original field layout.
+    point_bytes = np.ndarray((h, w, step), dtype=np.uint8, buffer=raw,
+                             strides=(row, step, 1)).copy(order='C').reshape(-1)
+    fields = point_bytes.view(dtype)
     xyz = np.column_stack([fields[n].astype(np.float64) for n in ('x', 'y', 'z')])
     valid = np.isfinite(xyz).all(axis=1)
     return fields, np.ascontiguousarray(xyz[valid]), np.flatnonzero(valid).astype(np.int64)
@@ -77,8 +81,14 @@ class GravityCalibration:
         if self.result is not None:
             return self.result
         stamp = imu['original_stamp_ns']
-        if (abs(stamp-imu_pose['original_stamp_ns']) > 150_000_000
+        if (imu.get('frame_id')!='imu_link' or imu_pose.get('frame_id')!='camera_init'
+                or imu_pose.get('child_frame_id')!='aft_mapped' or body_pose.get('frame_id')!='camera_init'
+                or body_pose.get('child_frame_id')!='demo_slam_body'
+                or abs(stamp-imu_pose['original_stamp_ns']) > 150_000_000
                 or abs(stamp-body_pose['original_stamp_ns']) > 150_000_000
+                or not 0<=imu['received_monotonic_wall']-imu_pose['received_monotonic_wall']<.3
+                or not 0<=imu['received_monotonic_wall']-body_pose['received_monotonic_wall']<.3
+                or max(body_pose.get('twist_covariance',[1e6]*36)[7*k]for k in range(3))>=1.
                 or np.linalg.norm(imu['angular_velocity']) > .1
                 or np.linalg.norm(body_pose['body_linear_velocity']) > .05):
             return None

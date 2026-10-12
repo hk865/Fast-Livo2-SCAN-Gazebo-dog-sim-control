@@ -100,7 +100,7 @@ def main():
             else:
                 p=msg.pose.pose.position;q=msg.pose.pose.orientation;v=msg.twist.twist.linear
                 row.update(child_frame_id=msg.child_frame_id,position=[p.x,p.y,p.z],quaternion=[q.x,q.y,q.z,q.w],
-                           body_linear_velocity=[v.x,v.y,v.z],pose_covariance=list(msg.pose.covariance));raw=None
+                           body_linear_velocity=[v.x,v.y,v.z],pose_covariance=list(msg.pose.covariance),twist_covariance=list(msg.twist.covariance));raw=None
             try:writer.append(row,raw)
             except Exception as exc:self.failure=f'{type(exc).__name__}: {exc}'
     node=None;failure=None;reason='duration_complete'

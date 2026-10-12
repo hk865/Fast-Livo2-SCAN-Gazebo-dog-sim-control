@@ -78,16 +78,29 @@ class CaptureWriter:
         row['background_queue_delay_wall_s']=row['processed_monotonic_wall']-row['received_monotonic_wall']
         if stream in self.histories:
             values=row['position']+row['quaternion']+row.get('body_linear_velocity',[])
-            if not np.isfinite(values).all(): raise ValueError('nonfinite actual SLAM pose')
-            self.histories[stream].append(row)
+            history=self.histories[stream];child='demo_slam_body' if stream=='body_odom' else 'aft_mapped'
+            accepted=(np.isfinite(values).all() and row['frame_id']=='camera_init' and row['child_frame_id']==child
+                and .98<=sum(v*v for v in row['quaternion'])<=1.02
+                and (not history or row['original_stamp_ns']>history[-1]['original_stamp_ns']))
+            row['pose_admitted']=bool(accepted)
+            if accepted:history.append(row)
+            else:row['pose_rejection_reason']='invalid_frame_values_quaternion_or_nonincreasing_stamp'
         elif stream=='imu':
             ip=self.nearest('imu_slam_odom',row['original_stamp_ns']); bp=self.nearest('body_odom',row['original_stamp_ns'])
-            if ip is not None and bp is not None:
+            clock=row.get('received_ros_clock_ns');ca=row.get('received_clock_wall_age_s')
+            fresh=(clock is not None and -50_000_000<=clock-row['original_stamp_ns']<300_000_000
+                and ca is not None and 0<=ca<.3)
+            if ip is not None and bp is not None and self.gravity.result is None and fresh:
                 if self.gravity.observe(row,ip,bp) is not None: atomic_json(self.output/'gravity.json',self.gravity.result)
         elif stream=='full_cloud':
-            fields,xyz,indices=decode_cloud(row,raw)
+            decode_error=None
+            try:fields,xyz,indices=decode_cloud(row,raw)
+            except ValueError as exc:
+                decode_error=str(exc);fields=np.empty(0,dtype=np.uint8);xyz=np.empty((0,3),dtype=np.float64);indices=np.empty(0,dtype=np.int64)
             body=self.nearest('body_odom',row['original_stamp_ns'])
             reasons=temporal_admission(row,body)
+            if decode_error is not None:reasons.append('invalid_PointCloud2_field_layout_or_empty_payload: '+decode_error)
+            if not len(xyz):reasons.append('no_finite_actual_XYZ')
             if self.last_cloud_stamp is not None and row['original_stamp_ns']<=self.last_cloud_stamp:
                 reasons.append('cloud_header_not_strictly_increasing')
             self.last_cloud_stamp=max(row['original_stamp_ns'],self.last_cloud_stamp or row['original_stamp_ns'])
@@ -101,7 +114,7 @@ class CaptureWriter:
             row.update(archive_file=filename,archive_sha256=sha(destination.read_bytes()),raw_payload_sha256=sha(raw),
                 raw_payload_bytes=len(raw),decoded_xyz_dtype=xyz.dtype.str,decoded_xyz_shape=list(xyz.shape),
                 decoded_xyz_sha256=sha(xyz.tobytes()),original_structured_dtype=fields.dtype.descr,
-                finite_points=len(xyz),nonfinite_points=len(fields)-len(xyz),
+                finite_points=len(xyz),nonfinite_points=len(fields)-len(xyz),decode_error=decode_error,
                 body_pose=body,geometry_admitted=not reasons,geometry_rejection_reasons=reasons,
                 gravity_receipt=self.gravity.result,source_topic='/cloud_registered_full',
                 color_cloud_used=False,ground_truth_used=False)
