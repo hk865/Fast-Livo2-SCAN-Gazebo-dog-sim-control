@@ -24,9 +24,10 @@ def resource():
     return {'processes':subprocess.check_output(['ps','-eo','pid,ppid,%cpu,%mem,rss,args'],text=True),
             'gpu':subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True)}
 def main():
-    p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
+    p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
     args=p.parse_args();suite=[]
+    if args.shadow and not args.sensors:p.error('--shadow requires --sensors; no unavailable input is fabricated')
     for repeat in range(args.repeat):
         for test in args.tests:
             stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
@@ -59,7 +60,7 @@ def main():
                  'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'}
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
-            worker=gazebo=capture=bridge=None;error=None;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
+            worker=gazebo=capture=bridge=shadow=None;error=shadow_error=None;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
             try:
                 worker=subprocess.Popen(worker_cmd,env={**env,'CUDA_VISIBLE_DEVICES':''},stdout=(run/'worker.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 deadline=time.monotonic()+20
@@ -67,33 +68,58 @@ def main():
                     if worker.poll()is not None:raise RuntimeError('Policy failed before IPC ready')
                     if time.monotonic()>deadline:raise TimeoutError('Policy initialization timeout')
                     time.sleep(.05)
+                if args.sensors or args.camera_only:
+                    bridge=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','--ros-args','-p','config_file:='+str(run/'sensor_bridge.yaml')],env=env,stdout=(run/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
+                    capture=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(run),'--topic','/demo/teacher/overview'],env=env,stdout=(run/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
+                if args.shadow:
+                    shadow=subprocess.Popen([sys.executable,str(ROOT/'scripts/sensor_shadow.py'),'--run',str(run),'--output',str(run/'sensor_shadow'),'--duration','185','--ros-domain','79'],
+                                            env=env,stdout=(run/'shadow.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
+                    deadline=time.monotonic()+20
+                    while not (run/'sensor_shadow/ready').exists():
+                        if shadow.poll()is not None:raise RuntimeError('Read-only shadow observer failed before ready')
+                        if time.monotonic()>deadline:raise TimeoutError('Read-only shadow observer initialization timeout')
+                        time.sleep(.05)
+                if bridge:
+                    # DDS discovery occurs before the first physics samples.
+                    time.sleep(.5)
+                    if bridge.poll()is not None:raise RuntimeError('Sensor bridge failed before simulation')
                 cmd=['gz','sim','-s','-r',str(run/'world.sdf')]
                 # Mesa llvmpipe uses the inherited X display. EGL headless
                 # explicitly selects the NVIDIA device and crashed Mesa here;
                 # those failed runs are retained rather than hidden.
                 gazebo=subprocess.Popen(cmd,env=env,stdout=(run/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-                if args.sensors or args.camera_only:
-                    bridge=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','/demo/camera@sensor_msgs/msg/Image[gz.msgs.Image'],env=env,stdout=(run/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-                    capture=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(run)],env=env,stdout=(run/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 deadline=time.monotonic()+180
+                resource_stream=(run/'process_resources.jsonl').open('w',buffering=1);resource_last=-float('inf')
                 while worker.poll()is None:
+                    if shadow and shadow.poll()is not None:shadow_error='Read-only shadow observer exited before policy completed'
+                    if time.monotonic()-resource_last>=2:
+                        owned=[proc.pid for proc in [worker,gazebo,bridge,capture,shadow]if proc and proc.poll()is None]
+                        ps=subprocess.run(['ps','-p',','.join(map(str,owned)),'-o','pid,ppid,%cpu,%mem,rss,args'],text=True,stdout=subprocess.PIPE)
+                        resource_stream.write(json.dumps({'monotonic_wall':time.monotonic(),'owned_processes':ps.stdout})+'\n');resource_last=time.monotonic()
                     if gazebo.poll()is not None:
                         try:worker.wait(timeout=2)
                         except subprocess.TimeoutExpired:raise RuntimeError('Gazebo exited before policy test finished')
                         break
                     if time.monotonic()>deadline:raise TimeoutError('Simulation test wall timeout')
                     time.sleep(.5)
+                resource_stream.close()
                 if worker.returncode:raise RuntimeError('Policy test process failed')
                 # Retain two more physics steps so terminate/damping is visible.
                 time.sleep(.1)
             except Exception as e:error=f'{type(e).__name__}: {e}'
             finally:
+                if shadow and shadow.poll()is None:
+                    time.sleep(.5) # drain actual ROS messages before final causal comparison
+                    stop(shadow)
+                if shadow and (not (run/'sensor_shadow/summary.json').exists()or shadow.returncode):
+                    shadow_error=shadow_error or 'Read-only shadow observer did not finish successfully; see shadow.log'
                 for proc in [capture,bridge,gazebo,worker]:stop(proc)
                 try:Path(env['TEACHER_SOCKET']).unlink()
                 except FileNotFoundError:pass
                 (run/'resources_after.json').write_text(json.dumps(resource(),indent=2))
-                manifest={'run':str(run),'test':test,'owned_processes':[{ 'pid':proc.pid,'returncode':proc.returncode}for proc in [worker,gazebo,bridge,capture]if proc],
+                manifest={'run':str(run),'test':test,'owned_processes':[{ 'role':role,'pid':proc.pid,'returncode':proc.returncode}for role,proc in [('worker',worker),('gazebo',gazebo),('bridge',bridge),('capture',capture),('shadow',shadow)]if proc],
                           'error':error,'ros_domain':79,'gazebo_partition':env['GZ_PARTITION'],
+                          'sensors':args.sensors,'camera_only':args.camera_only,'shadow_requested':args.shadow,'shadow_error':shadow_error,
                           'plugin_sha256':plugin_hash,
                           'training_process_untouched':True,'real_robot':False}
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))

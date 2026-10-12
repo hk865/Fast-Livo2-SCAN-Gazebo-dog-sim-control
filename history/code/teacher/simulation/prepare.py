@@ -7,6 +7,9 @@ import xml.etree.ElementTree as E
 ROOT = Path(__file__).resolve().parents[1]
 DEMO = ROOT.parent
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def rpy_quaternion(rpy):
+    r,p,y=rpy;cr,sr=math.cos(r/2),math.sin(r/2);cp,sp=math.cos(p/2),math.sin(p/2);cy,sy=math.cos(y/2),math.sin(y/2)
+    return [sr*cp*cy-cr*sp*sy,cr*sp*cy+sr*cp*sy,cr*cp*sy-sr*sp*cy,cr*cp*cy+sr*sp*sy]
 def xml(p, e):
     E.indent(e); p.write_text(E.tostring(e, encoding='unicode')+'\n')
 def main():
@@ -41,7 +44,8 @@ def main():
                 info=sensor.find('camera/camera_info_topic')
                 if info is None:info=E.SubElement(sensor.find('camera'),'camera_info_topic')
                 info.text='/demo/camera_info'
-                if args.camera_only:sensor.find('update_rate').text='2'
+                # RGB is diagnostic; 2 Hz avoids competing with CPU inference.
+                sensor.find('update_rate').text='2'
         for contact in link.findall("sensor[@type='contact']"):
             contact.find('update_rate').text='200'
     # The original URDF contact friction was .2. Archive uses random .5..1.0;
@@ -59,21 +63,76 @@ def main():
     p=E.SubElement(model,'plugin',{'filename':'libteacher_actuator.so','name':'teacher_sim::TeacherActuator'})
     # Plugin source uses these native defaults too; persisted for review.
     for key,val in [('kp','25'),('kd','.5'),('effort_limit','23.5'),('velocity_limit','30')]:E.SubElement(p,key).text=val
+    if args.sensors:
+        # This system only reads physics joint components; it never writes a target.
+        publisher=E.SubElement(model,'plugin',{'filename':'gz-sim-joint-state-publisher-system','name':'gz::sim::systems::JointStatePublisher'})
+        E.SubElement(publisher,'topic').text='/demo/teacher/physical_joint_states'
+        for name in mapping:E.SubElement(publisher,'joint_name').text=name
     world=E.parse(DEMO/'simulation/generated/three_floors.sdf').getroot()
     w=world.find('world');w.set('name','teacher_demo')
     w.find('physics/max_step_size').text='.005'
-    if args.camera_only:
+    if args.sensors or args.camera_only:
         # Ogre1 uses GLX llvmpipe. Ogre2 EGL device selection crashes Mesa
         # against this NVIDIA device when software rendering is requested.
         for engine in w.findall('plugin/render_engine'):engine.text='ogre'
     if not args.sensors and not args.camera_only:
         for wp in list(w.findall('plugin')):
             if any(n in wp.get('name','') for n in ['Sensors','Imu']):w.remove(wp)
+    if args.sensors or args.camera_only:
+        # A separate static, collision-free observer shows actual leg motion.
+        # It is never part of the robot or the policy observation geometry.
+        overview=E.fromstring('<model name="teacher_overview_camera"><static>true</static><pose>7 -3.5 2 0 .5 1.5708</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>2</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>1.4</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
+        w.append(overview)
     if args.terrain.startswith('step'):
         height=.05 if args.terrain=='step05' else .1
         step=E.fromstring(f'<model name="teacher_low_step"><static>true</static><pose>8 -.7 {height/2} 0 0 0</pose><link name="link"><collision name="collision"><geometry><box><size>2 1.4 {height}</size></box></geometry></collision><visual name="visual"><geometry><box><size>2 1.4 {height}</size></box></geometry><material><ambient>.8 .5 .2 1</ambient><diffuse>.8 .5 .2 1</diffuse></material></visual></link></model>')
         w.append(step)
     w.append(model);xml(args.output/'world.sdf',world)
+    sensor_contract={'schema_version':1,'renderer':'ogre'if args.sensors or args.camera_only else None,
+                     'scope':'read-only sensor diagnostics; privileged actor remains unchanged; no SLAM or navigation started',
+                     'joint_states':{'gz_topic':'/demo/teacher/physical_joint_states','ros_topic':'/demo/control/measured_joint_states',
+                         'publisher':'gz::sim::systems::JointStatePublisher','reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
+    if args.sensors or args.camera_only:
+        sensor_contract['overview']={'gz_topic':'/demo/teacher/overview','ros_topic':'/demo/teacher/overview','frame':'teacher_overview_frame',
+                                     'world_pose':[7,-3.5,2,0,.5,1.5708],'rate_hz':2,'width':640,'height':480,'horizontal_fov':1.4,'collision_geometry':False}
+    for link in model.findall('link'):
+        for sensor in link.findall('sensor'):
+            kind=sensor.get('type')
+            if kind not in ['imu','camera','gpu_lidar']:continue
+            values=[float(v)for v in sensor.findtext('pose','0 0 0 0 0 0').split()]
+            key='lidar'if kind=='gpu_lidar'else kind
+            entry={'type':kind,'link':link.get('name'),'sensor_name':sensor.get('name'),
+                   'body_xyz':values[:3],'body_rpy':values[3:],'rate_hz':float(sensor.findtext('update_rate','0')),
+                   'frame':sensor.findtext('gz_frame_id'),'gz_topic':'/'+sensor.findtext('topic','').lstrip('/')}
+            if kind=='imu':
+                custom=sensor.find('imu/orientation_reference_frame/custom_rpy')
+                localization=sensor.findtext('imu/orientation_reference_frame/localization')
+                world_rpy=[float(v)for v in custom.text.split()]if custom is not None else None
+                entry['ros_topic']='/livox/imu'
+                entry['orientation_reference']={'localization':localization,'custom_parent_frame':custom.get('parent_frame')if custom is not None else None,
+                    'world_rpy':world_rpy,'world_quaternion':rpy_quaternion(world_rpy)if world_rpy is not None else None,
+                    'body_imu_quaternion':rpy_quaternion(values[3:]),'description':'actual generated SDF IMU CUSTOM/world reference'}
+            elif kind=='gpu_lidar':
+                entry['gz_points_topic']=entry['gz_topic']+'/points';entry['ros_topic']='/demo/teacher/raw_lidar'
+                entry['cloud_registered_full']=False
+                entry['samples']={'horizontal':int(sensor.findtext('lidar/scan/horizontal/samples','0')),'vertical':int(sensor.findtext('lidar/scan/vertical/samples','0'))}
+            else:entry['ros_topic']='/demo/camera'
+            sensor_contract[key]=entry
+    (args.output/'sensor_contract.json').write_text(json.dumps(sensor_contract,indent=2)+'\n')
+    bridge=[]
+    def bridged(gz_topic,ros_topic,gz_type,ros_type):
+        bridge.append({'gz_topic_name':gz_topic,'ros_topic_name':ros_topic,'gz_type_name':gz_type,'ros_type_name':ros_type,
+                       'direction':'GZ_TO_ROS','qos_profile':'SENSOR_DATA','publisher_queue':5,'subscriber_queue':5,'lazy':False})
+    if args.sensors or args.camera_only:
+        bridged('/demo/camera','/demo/camera','gz.msgs.Image','sensor_msgs/msg/Image')
+        bridged('/demo/teacher/overview','/demo/teacher/overview','gz.msgs.Image','sensor_msgs/msg/Image')
+        bridged('/clock','/clock','gz.msgs.Clock','rosgraph_msgs/msg/Clock')
+    if args.sensors:
+        bridged('/imu/data','/livox/imu','gz.msgs.IMU','sensor_msgs/msg/Imu')
+        bridged('/demo/teacher/physical_joint_states','/demo/control/measured_joint_states','gz.msgs.Model','sensor_msgs/msg/JointState')
+        bridged('/velodyne_points/points','/demo/teacher/raw_lidar','gz.msgs.PointCloudPacked','sensor_msgs/msg/PointCloud2')
+    # JSON is valid YAML; bridge configuration is frozen inside this run.
+    (args.output/'sensor_bridge.yaml').write_text(json.dumps(bridge,indent=2)+'\n')
     # Read-only ROS frame/joint tree, stripped of every actuation element.
     urdf=E.parse(DEMO/'simulation/generated/go2_measured.urdf').getroot()
     for tag in ['ros2_control','gazebo','transmission']:
@@ -88,6 +147,8 @@ def main():
           'base_inertial_pose':model.find("link[@name='base_link']/inertial/pose").text,
           'source_hashes':{str(s):sha(s)for s in [source,DEMO/'simulation/generated/three_floors.sdf']},
           'world_sha256':sha(args.output/'world.sdf'),'true_stairs':False}
+    meta['sensor_contract_sha256']=sha(args.output/'sensor_contract.json')
+    meta['sensor_bridge_sha256']=sha(args.output/'sensor_bridge.yaml')
     (args.output/'asset_manifest.json').write_text(json.dumps(meta,indent=2)+'\n')
     print(json.dumps(meta))
 if __name__=='__main__':main()

@@ -19,7 +19,8 @@ import time
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 TOPICS = {'imu': '/livox/imu', 'slam': '/demo/slam/body_odom',
-          'joints': '/demo/control/measured_joint_states', 'cloud': '/cloud_registered_full'}
+          'joints': '/demo/control/measured_joint_states', 'cloud': '/cloud_registered_full',
+          'clock':'/clock','camera':'/demo/camera','raw_lidar':'/demo/teacher/raw_lidar','overview':'/demo/teacher/overview'}
 
 
 def load(path):
@@ -68,8 +69,9 @@ def rotation(q):
 
 def causal(history, stamp, max_age):
     """Do not select a future sensor sample to improve retrospective errors."""
-    eligible = [sample for sample in history if 0 <= stamp - sample['t'] <= max_age]
-    return max(eligible, key=lambda sample: sample['t']) if eligible else None
+    stamp_ns=round(stamp*1e9);max_age_ns=round(max_age*1e9)
+    eligible = [sample for sample in history if 0 <= stamp_ns-sample['stamp_ns'] <= max_age_ns]
+    return max(eligible, key=lambda sample: sample['stamp_ns']) if eligible else None
 
 
 def observed_scan(points, position, body_rotation, grid, radius=.075):
@@ -99,15 +101,19 @@ def make_node(rclpy, args, run, output, contract):
     from rclpy.node import Node
     from rclpy.clock import Clock, ClockType
     from rclpy.qos import qos_profile_sensor_data
-    from sensor_msgs.msg import Imu, JointState, PointCloud2
+    from sensor_msgs.msg import Imu, JointState, PointCloud2, Image
+    from rosgraph_msgs.msg import Clock as ClockMessage
     from nav_msgs.msg import Odometry
     from sensor_msgs_py import point_cloud2
 
     sys.path.insert(0, str(ROOT / 'policy'))
     from observation import SCAN_GRID_XY, TerrainHeightMap
     scenario = load(args.scenario)
-    config = scenario.get('sensors', {}).get('imu', {}).get('orientation_reference', {})
+    sensor_contract=load(run/'sensor_contract.json')
+    config = sensor_contract.get('imu',{}).get('orientation_reference') or scenario.get('sensors', {}).get('imu', {}).get('orientation_reference', {})
     try:
+        if sensor_contract and (config.get('localization')!='CUSTOM' or config.get('custom_parent_frame')!='world'):
+            raise ValueError('Only explicit CUSTOM/world IMU orientation is established')
         body_imu = rotation(config['body_imu_quaternion'])
         world_reference = rotation(config['world_quaternion'])
     except (KeyError, ValueError):
@@ -126,11 +132,12 @@ def make_node(rclpy, args, run, output, contract):
 
     class Shadow(Node):
         def __init__(self):
-            super().__init__('teacher_sensor_shadow_audit')
+            super().__init__('teacher_sensor_shadow_audit',enable_rosout=False,start_parameter_services=False)
             self.histories = {key: deque(maxlen=1200 if key != 'cloud' else 24) for key in TOPICS}
             self.counts, self.invalid = Counter(), Counter()
             self.periods = {key: {'sim': [], 'wall': []} for key in TOPICS}
-            self.errors, self.gaps = {}, {key: [] for key in TOPICS}
+            self.errors, self.raw_errors, self.gaps = {}, {}, {key: [] for key in TOPICS}
+            self.frames={key:Counter()for key in TOPICS}
             self.matched = Counter()
             self.references = self.reference_failures = 0
             self.last_reference = -math.inf
@@ -140,36 +147,76 @@ def make_node(rclpy, args, run, output, contract):
             self.pending = deque()
             self.partial = b''
             self.reference_file = run / 'telemetry.jsonl'
-            try:
-                self.reference_offset = self.reference_file.stat().st_size
-            except OSError:
-                self.reference_offset = 0
+            self.reference_offset=0
             self.records = (output / 'shadow.jsonl').open('w', buffering=1)
+            self.sensor_records = (output / 'sensor_samples.jsonl').open('w', buffering=1)
             self.subscribers = [self.create_subscription(Imu, TOPICS['imu'], self.imu, qos_profile_sensor_data),
                 self.create_subscription(Odometry, TOPICS['slam'], self.slam, qos_profile_sensor_data),
                 self.create_subscription(JointState, TOPICS['joints'], self.joints, qos_profile_sensor_data),
-                self.create_subscription(PointCloud2, TOPICS['cloud'], self.cloud, qos_profile_sensor_data)]
+                self.create_subscription(PointCloud2, TOPICS['cloud'], self.cloud, qos_profile_sensor_data),
+                self.create_subscription(ClockMessage,TOPICS['clock'],self.clock_message,qos_profile_sensor_data),
+                self.create_subscription(Image,TOPICS['camera'],self.camera,qos_profile_sensor_data),
+                self.create_subscription(PointCloud2,TOPICS['raw_lidar'],self.raw_lidar,qos_profile_sensor_data),
+                self.create_subscription(Image,TOPICS['overview'],self.overview,qos_profile_sensor_data)]
             if any(sub.topic_name != topic for sub, topic in zip(self.subscribers, TOPICS.values())):
                 raise RuntimeError('Shadow input remapping is forbidden; diagnostic truth is read only from recorded policy telemetry')
             self.timer = self.create_timer(.05, self.tick, clock=Clock(clock_type=ClockType.STEADY_TIME))
             self.tick()
+            (output/'ready').write_text(json.dumps({'pid':os.getpid(),'subscribed':TOPICS,
+                'application_publishers':self.application_publishers(),'readonly':True})+'\n')
+
+        def application_publishers(self):
+            return [p.topic_name for p in self.publishers if p.topic_name not in ['/rosout','/parameter_events']]
 
         def add(self, key, message, **values):
-            stamp = message.header.stamp.sec + message.header.stamp.nanosec * 1e-9
-            if not math.isfinite(stamp) or stamp < 0:
+            self.add_sample(key,message.header.stamp.sec*1000000000+message.header.stamp.nanosec,message.header.frame_id,**values)
+
+        def add_sample(self,key,stamp_ns,frame,**values):
+            stamp=stamp_ns*1e-9
+            if stamp_ns < 0:
                 self.invalid[key] += 1
                 return
             now = time.monotonic()
             if self.histories[key]:
                 previous = self.histories[key][-1]
-                if stamp <= previous['t']:
+                if stamp_ns <= previous['stamp_ns']:
                     self.invalid[key] += 1
                     return
                 self.periods[key]['sim'].append(stamp - previous['t'])
                 self.periods[key]['wall'].append(now - previous['received_monotonic_wall'])
             self.counts[key] += 1
-            self.histories[key].append({'t': stamp, 'received_monotonic_wall': now,
-                                        'frame': message.header.frame_id, **values})
+            self.frames[key][frame]+=1
+            sample={'t':stamp,'stamp_ns':stamp_ns,'received_monotonic_wall':now,'frame':frame,**values}
+            self.histories[key].append(sample)
+            # Actual sensor values remain reviewable independently of truth diagnostics.
+            archived={k:v for k,v in sample.items()if k!='points'}
+            self.sensor_records.write(json.dumps(clean({'source':key,'topic':TOPICS[key],**archived}),allow_nan=False)+'\n')
+
+        def clock_message(self,message):
+            self.add_sample('clock',message.clock.sec*1000000000+message.clock.nanosec,'world_simulation_clock')
+
+        def camera(self,message):
+            self.add('camera',message,width=message.width,height=message.height,encoding=message.encoding,
+                     data_bytes=len(message.data),data_sha256=hashlib.sha256(message.data).hexdigest())
+
+        def overview(self,message):
+            self.add('overview',message,width=message.width,height=message.height,encoding=message.encoding,
+                     data_bytes=len(message.data),data_sha256=hashlib.sha256(message.data).hexdigest())
+
+        def raw_lidar(self,message):
+            try:
+                points=point_cloud2.read_points_numpy(message,field_names=('x','y','z'),skip_nans=True).reshape(-1,3)
+                points=points[np.isfinite(points).all(axis=1)]
+            except (ValueError,TypeError,AssertionError):
+                self.invalid['raw_lidar']+=1
+                return
+            if not self.counts['raw_lidar']:
+                np.savez_compressed(output/'raw_lidar_first.npz',xyz=points,stamp_ns=message.header.stamp.sec*1000000000+message.header.stamp.nanosec,
+                                    frame=message.header.frame_id)
+            self.add('raw_lidar',message,point_count=len(points),width=message.width,height=message.height,
+                     xyz_min=points.min(axis=0)if len(points)else None,xyz_max=points.max(axis=0)if len(points)else None,
+                     data_bytes=len(message.data),data_sha256=hashlib.sha256(message.data).hexdigest(),
+                     scope='actual raw sensor-frame LiDAR; no SLAM registration or policy height substitution')
 
         def imu(self, message):
             gyro = np.asarray([message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z])
@@ -186,7 +233,9 @@ def make_node(rclpy, args, run, output, contract):
                 except ValueError:
                     pass
             self.add('imu', message, gyro_body=body_imu @ gyro, gravity_body=gravity,
-                     acceleration_imu=acceleration, orientation_source='Gazebo IMU CUSTOM reference; not a hardware attitude-estimator validation')
+                     gyro_imu=gyro,acceleration_imu=acceleration,quaternion_xyzw=[q.x,q.y,q.z,q.w],
+                     angular_velocity_covariance=list(message.angular_velocity_covariance),orientation_covariance=list(message.orientation_covariance),
+                     orientation_source='Gazebo IMU CUSTOM reference; not a hardware attitude-estimator validation')
 
         def slam(self, message):
             if message.header.frame_id != 'camera_init' or message.child_frame_id != 'demo_slam_body':
@@ -220,6 +269,8 @@ def make_node(rclpy, args, run, output, contract):
                 self.invalid['joints'] += 1
                 return
             self.add('joints', message, q=q, qd=qd,
+                     message_names=list(message.name),message_position=list(message.position),message_velocity=list(message.velocity),message_effort=list(message.effort),
+                     ordered_names=contract['gazebo_joint_names'],
                      effort_scope='Not used as measured torque; Gazebo state effort provenance is not established')
 
         def cloud(self, message):
@@ -235,8 +286,9 @@ def make_node(rclpy, args, run, output, contract):
             self.add('cloud', message, points=points, point_count=len(points))
 
         def queue(self, row):
-            t = row.get('sim_time') if isinstance(row, dict) else None
+            t = row.get('world_sim_time') if isinstance(row, dict) else None
             if not isinstance(t, (int, float)) or not math.isfinite(t) or t <= self.last_reference:
+                if isinstance(row,dict)and 'world_sim_time'not in row:self.reference_failures+=1
                 return
             self.last_reference = t
             self.pending.append((time.monotonic(), row))
@@ -262,8 +314,8 @@ def make_node(rclpy, args, run, output, contract):
                         self.reference_failures += 1
             except OSError:
                 pass
-            # state.json is a genuine last received policy row, never fabricated.
-            self.queue(load(run / 'state.json'))
+            # Only the complete ordered telemetry stream is used. A newer
+            # state.json must never skip intervening reference rows.
 
         def metric(self, name, candidate, reference, scale=1.):
             if candidate is None or reference is None:
@@ -273,19 +325,22 @@ def make_node(rclpy, args, run, output, contract):
                 return None
             error = (np.clip(actual, -100, 100) - np.clip(baseline, -100, 100)) * scale
             self.errors.setdefault(name, []).append(error.tolist())
-            return {'candidate': actual, 'reference': baseline, 'scaled_error': error}
+            self.raw_errors.setdefault(name,[]).append((actual-baseline).tolist())
+            return {'candidate': actual, 'reference': baseline, 'raw_error':actual-baseline,'scale':scale,'scaled_error': error}
 
         def compare(self, reference):
-            t = reference['sim_time']
+            t = reference['world_sim_time']
             audit_wall = time.monotonic()
-            samples = {key: causal([sample for sample in history
-                                   if audit_wall - sample['received_monotonic_wall'] <= args.max_age], t, args.max_age)
+            samples = {key: causal(history,t,args.max_age)
                        for key, history in self.histories.items()}
-            result = {'sim_time': t, 'wall_elapsed_s': time.monotonic() - self.started,
+            result = {'sim_time':reference['sim_time'],'world_sim_time':t,'reference_stamp_ns':round(t*1e9),'wall_elapsed_s': time.monotonic() - self.started,
                       'status': 'shadow_unverified', 'policy_changed': False,
+                      'timestamp_matching':'latest actual ROS header stamp <= recorded world_sim_time; integer nanosecond matching; no future sample',
                       'sources_missing': [key for key, sample in samples.items() if sample is None],
                       'sample_ages_sim_s': {key: None if sample is None else t - sample['t'] for key, sample in samples.items()},
                       'sample_wall_ages_at_audit_s': {key: None if sample is None else audit_wall - sample['received_monotonic_wall'] for key, sample in samples.items()},
+                      'sample_wall_fresh_at_audit':{key:sample is not None and audit_wall-sample['received_monotonic_wall']<=args.max_age for key,sample in samples.items()},
+                      'matched_samples':{key:None if sample is None else {k:v for k,v in sample.items()if k!='points'}for key,sample in samples.items()},
                       'terms': {}, 'reference_source': 'recorded Teacher Gazebo privileged policy telemetry; diagnostic only'}
             for key, sample in samples.items():
                 if sample is not None:
@@ -357,16 +412,27 @@ def make_node(rclpy, args, run, output, contract):
             for key in TOPICS:
                 gaps = self.gaps[key]
                 sources[key] = {'topic': TOPICS[key], 'received': self.counts[key], 'invalid': self.invalid[key],
+                    'frames':dict(self.frames[key]),
                     'causal_matched_rows': self.matched[key], 'status': 'shadow_data_available_unverified' if self.matched[key] else 'unverified_missing',
                     'received_period_s': {clock: {'p50': float(np.median(values)), 'p95': float(np.percentile(values, 95)), 'max': max(values)} if values else None
                                           for clock, values in self.periods[key].items()},
                     'pair_age_sim_s': {'p50': float(np.median(gaps)), 'p95': float(np.percentile(gaps, 95)), 'max': max(gaps)} if gaps else None}
             metrics = {name: {'samples': len(values), 'scaled_rmse': np.sqrt(np.mean(np.asarray(values)**2, axis=0)).tolist(),
-                              'scaled_error_abs_max': np.max(np.abs(values), axis=0).tolist()} for name, values in self.errors.items() if values}
+                              'scaled_error_abs_max': np.max(np.abs(values), axis=0).tolist(),
+                              'raw_rmse':np.sqrt(np.mean(np.asarray(self.raw_errors[name])**2,axis=0)).tolist(),
+                              'raw_error_abs_max':np.max(np.abs(self.raw_errors[name]),axis=0).tolist()} for name, values in self.errors.items() if values}
+            graph={}
+            for key,topic in TOPICS.items():
+                try:graph[key]=[{'node_name':p.node_name,'node_namespace':p.node_namespace,'type':p.topic_type}for p in self.get_publishers_info_by_topic(topic)]
+                except Exception as error:graph[key]={'unavailable':str(error)}
             summary = {'status': 'shadow_unverified', 'policy_changed': False, 'navigation_validation': 'unverified',
                 'real_robot': 'unverified', 'ros_domain': args.ros_domain, 'reference_run': str(run),
                 'duration_wall_s': time.monotonic() - self.started, 'reference_rows': self.references,
                 'reference_parse_failures': self.reference_failures, 'sources': sources, 'metrics': metrics,
+                'ros_publisher_graph_at_finish':graph,'readonly_node_application_publishers':self.application_publishers(),
+                'timestamp_matching':'causal world_sim_time to exact ROS header nanoseconds; delayed audit wall age logged separately, never replaces simulation stamp',
+                'imu_orientation_reference':config,'imu_contract_source':'generated run/sensor_contract.json'if sensor_contract else 'legacy scenario fallback',
+                'sensor_contract_sha256':digest(run/'sensor_contract.json'),
                 'actual_base_com_offset_m': None if com_offset is None else com_offset.tolist(),
                 'contract_sha256': digest(ROOT / 'policy/contract.json'), 'scenario_sha256': digest(args.scenario),
                 'world_sha256': digest(run / 'world.sdf'), 'script_sha256': digest(Path(__file__)),
@@ -376,6 +442,7 @@ def make_node(rclpy, args, run, output, contract):
                     'Local cloud uppermost observed points are not certified +20m uppermost ray intersections']}
             (output / 'summary.json').write_text(json.dumps(clean(summary), ensure_ascii=False, indent=2, allow_nan=False) + '\n')
             self.records.close()
+            self.sensor_records.close()
             print(json.dumps(clean(summary), ensure_ascii=False, indent=2, allow_nan=False), flush=True)
     return Shadow()
 
