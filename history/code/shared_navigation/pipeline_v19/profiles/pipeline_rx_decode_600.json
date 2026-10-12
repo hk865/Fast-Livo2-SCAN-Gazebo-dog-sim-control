@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V19 pipeline mode rx_decode; original V18 arithmetic/control/route guards retained; normal context-valid drain required; fresh bounded experiment only",
+  "prospective_change": "V19 bounded receive/decode pipeline with separately reviewed revision03 heading-reference agreement; finite tests do not certify original46",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
@@ -554,5 +554,20 @@
     "max_run_bytes": 128849018880,
     "minimum_start_available_bytes": 161061273600,
     "minimum_runtime_available_bytes": 32212254720
+  },
+  "controller_reference_revision": {
+    "revision": 3,
+    "change": "During align, cascade turn target equals the external Teacher heading gate lock; drive resumes current checked SCAN tangent",
+    "unchanged": [
+      "PID gains",
+      "region geometry and dwell",
+      "300ms TTL",
+      "measured stop conditions",
+      "command limits",
+      "frozen Teacher",
+      "SLAM C++ core"
+    ],
+    "cause_run": "20261006_022511_closed_loop_cascade_clock_hold_v19_original46_r2_4fc5",
+    "actual_runtime_verified": false
   }
 }

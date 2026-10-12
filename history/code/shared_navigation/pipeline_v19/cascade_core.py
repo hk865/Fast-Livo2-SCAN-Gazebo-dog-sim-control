@@ -275,12 +275,16 @@ class Controller:
         terms['translation_integral_frozen'] = bool(turn_only)
         return limited, raw, candidate, terms
 
-    def update(self, feedback, imu, ack, clock_ns, wall_ns, guard_reason=None, mode_override=None):
+    def update(self, feedback, imu, ack, clock_ns, wall_ns, guard_reason=None, mode_override=None,
+               external_turn_heading=None):
         """Return (requested velocity ndarray[3], independent diagnostic dict).
 
         mode_override: None/drive = geometric stop-turn-drive; turn = suppress
         translation; hold = protected zero; capture = bounded fixed-goal hold.
         Wrapper must reevaluate safety against the resulting actual direction.
+        external_turn_heading: optional locked external-gate reference, used
+        only for externally owned turn mode before parking. Drive continues
+        following the checked SCAN path; omitted input preserves prior math.
         """
         clock, wall = integer(clock_ns), integer(wall_ns)
         if mode_override not in (None, 'drive', 'turn', 'hold', 'capture'):
@@ -292,9 +296,17 @@ class Controller:
             reason = str(self.failure_latched or guard_reason or 'external_hold')
             self._protect(reason, fatal=reason=='clock_backwards')
             return self._output('protect',clock,wall,reason=self.protection_reason)
+        external_turn_heading_value = None
         try:
             if self.path is None:
                 raise ValueError('No checked SCAN path')
+            if (self.external_heading_gate and mode_override=='turn' and
+                self.capture_stamp is None and external_turn_heading is not None):
+                if (isinstance(external_turn_heading, bool) or
+                    not isinstance(external_turn_heading, (int, float, np.integer, np.floating)) or
+                    not math.isfinite(float(external_turn_heading))):
+                    raise ValueError('Invalid finite external turn heading')
+                external_turn_heading_value = float(external_turn_heading)
             stamp, receipt = self._fresh(feedback,clock,wall)
             gyro_stamp, _ = self._fresh(imu,clock,wall)
             ack_stamp, _ = self._fresh(ack,clock,wall)
@@ -387,6 +399,7 @@ class Controller:
             self.capture_dwell = None
             entry_reset = True
         position_terms = dict(P=[0.,0.],D=[0.,0.])
+        external_turn_reference = None
         if self.capture_stamp is not None:
             if goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance or abs(wrap(self.goal_yaw-yaw))>.6:
                 self._protect('parking_fixed_target_lost')
@@ -416,6 +429,13 @@ class Controller:
             position_terms = dict(P=P.tolist(),D=D.tolist())
         else:
             eligible = False
+            if external_turn_heading_value is not None:
+                external_turn_reference = dict(
+                    reference_yaw_source='external_heading_gate_locked_reference',
+                    external_turn_heading_rad=external_turn_heading_value,
+                    ungated_reference_yaw_rad=heading)
+                heading = external_turn_heading_value
+                error_yaw = wrap(heading-yaw)
             if self.external_heading_gate:
                 self.turn_phase = 'turn' if mode_override=='turn' else None
                 self.turn_dwell = None
@@ -483,4 +503,6 @@ class Controller:
             capture_entry_integral_reset=entry_reset,command_saturated=(abs(raw-requested)>1e-9).tolist(),
             COM_reference_angular_assumption='Reference body omega_x/y=0; causal measured omega_y in Euler yaw conversion',
             source_hz_is_math_update_hz=True,parking_active_command_need_not_be_zero=True)
+        if external_turn_reference is not None:
+            self.row.update(external_turn_reference)
         return self._output(mode,clock,wall,updated=True)

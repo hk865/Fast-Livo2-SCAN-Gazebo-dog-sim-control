@@ -224,7 +224,8 @@ class PIDNavigation(TeacherNavigation):
         heading_reference=copy.deepcopy(self.steering);gate_heading=self.heading_gate.heading
         ack=self.get_ack();guard=None
         if self.feedback is None or self.paired_imu is None or ack is None:guard='actual_causal_feedback_or_ack_missing'
-        cmd,diagnostic=self.cascade.update(self.feedback,self.paired_imu,ack,ns,wall,guard_reason=guard,mode_override=mode)
+        cmd,diagnostic=self.cascade.update(self.feedback,self.paired_imu,ack,ns,wall,guard_reason=guard,mode_override=mode,
+            external_turn_heading=gate_heading if mode=='turn' and self.heading_gate.phase=='align' else None)
         if diagnostic.get('failure_latched'):
             self.state='failed';self.message='串级真实输入保护锁定：'+str(diagnostic['failure_latched'])
         self.cascade_last_row=diagnostic;self.pid_guard_needs_evaluation=(bool(diagnostic.get('controller_updated'))

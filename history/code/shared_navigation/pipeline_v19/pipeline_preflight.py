@@ -7,7 +7,7 @@ if not __debug__:
     raise RuntimeError('V19 preflight forbids optimized Python')
 
 REQUIRED=frozenset(('independent_build','queue_lifecycle','production_packet_semantics',
-    'finite_math','fp_team_loader','base_control_math_unchanged',
+    'finite_math','fp_team_loader','control_reference_revision_reviewed',
     'lifecycle_reader_negative_tests','prospective_protocol'))
 
 
