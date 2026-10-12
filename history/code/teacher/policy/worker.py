@@ -74,6 +74,33 @@ def scheduled_request(schedule,t):
     command=np.asarray(step['command'],dtype=float)
     return command,'initializing'if t<.1 else 'tracking'if any(command)else 'stop_transition'
 
+def sensor_terms(run,state,obs,broker_sha):
+    data=json.loads((run/'sensor_feedback.json').read_text());now=time.monotonic();stamp_ns=round((float(state[0])-.005)*1e9)
+    if data.get('schema_version')!=1 or data.get('run')!=str(run.resolve()) or data.get('broker_alive')is not True:
+        raise ValueError('Sensor broker is absent, dead or belongs to a different run')
+    if data.get('script_sha256')!=broker_sha or data.get('application_publishers')!=[]:
+        raise ValueError('Sensor broker source or read-only contract differs')
+    if not 0<=now-float(data['broker_monotonic_wall'])<=.3:raise ValueError('Sensor broker wall timeout')
+    selected={}
+    for key in ('imu','joints'):
+        graph=data['publisher_graph'].get(key,[])
+        if len(graph)!=1 or graph[0].get('node_name')!='ros_gz_bridge':raise ValueError('Actual sensor publisher is not unique Gazebo bridge')
+        eligible=[v for v in data['histories'][key]if 0<=stamp_ns-int(v['stamp_ns'])<=25000000 and 0<=now-float(v['received_monotonic_wall'])<=.3]
+        if not eligible:raise ValueError('No causal fresh actual '+key+' sample')
+        selected[key]=max(eligible,key=lambda v:int(v['stamp_ns']))
+    imu,joints=selected['imu'],selected['joints'];gyro=np.asarray(imu['gyro_body']);gravity=np.asarray(imu['gravity_body']);q=np.asarray(joints['q']);qd=np.asarray(joints['qd'])
+    if gyro.shape!=(3,)or gravity.shape!=(3,)or q.shape!=(12,)or qd.shape!=(12,)or not all(np.isfinite(v).all()for v in (gyro,gravity,q,qd)):
+        raise ValueError('Actual sensor vector shape or finite check failed')
+    expected=[f'{leg}_{part}_joint'for leg in ('rf','lf','rh','lh')for part in ('hip','upper_leg','lower_leg')]
+    if joints['ordered_names']!=expected or abs(np.linalg.norm(gravity)-1)>.001:raise ValueError('Actual sensor mapping or gravity contract failed')
+    out=obs.copy();out[3:6]=np.clip(gyro,-100,100)*.2;out[6:9]=np.clip(gravity,-100,100);out[12:24]=np.clip(q-QDEFAULT,-100,100);out[24:36]=np.clip(qd,-100,100)*.05
+    evidence={'effective_physics_stamp_ns':stamp_ns,'broker_sequence':data['broker_sequence'],'broker_sha256':broker_sha,
+        'raw_terms':{'gyro_body':gyro.tolist(),'gravity_body':gravity.tolist(),'q':q.tolist(),'qd':qd.tolist()},
+        'sources':{key:{'stamp_ns':v['stamp_ns'],'age_sim_s':(stamp_ns-int(v['stamp_ns']))*1e-9,'age_wall_s':now-float(v['received_monotonic_wall']),
+                       'source_topic':v['source_topic'],'frame':v['frame']}for key,v in selected.items()},
+        'replaced_dimensions':[3,6,12,24],'dimension_count':30,'actor_input_changed':True,'truth_fallback':False}
+    return out,evidence
+
 def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
     """Read only SLAM/SCAN-gated command envelopes; stale input parks via policy."""
     if sequence_state is not None:sequence_state.update(read_monotonic_wall=time.monotonic(),read_status='rejected_or_missing')
@@ -123,6 +150,7 @@ def main():
     p.add_argument('--schedule',type=Path)
     p.add_argument('--terrain-target-manifest',type=Path)
     p.add_argument('--navigation-duration',type=float,default=120.)
+    p.add_argument('--sensor-feedback',action='store_true')
     args=p.parse_args();schedule=load_schedule(args.schedule);actor=load_actor();args.run.mkdir(parents=True,exist_ok=True)
     if schedule and args.test=='navigation':raise ValueError('A scripted schedule cannot replace SLAM navigation')
     acceptance=None
@@ -161,6 +189,12 @@ def main():
                         protocol_scope=schedule.get('scope','independent bounded simulation protocol'),legacy_motion_evaluation_applicable=False)
         metadata['physical_test_completion_source']='privileged base x only for test termination; no position servo or navigation localization'if schedule.get('completion_stop')else None
     if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance,test_duration_s=args.navigation_duration,legacy_motion_evaluation_applicable=False)
+    broker_sha=hashlib.sha256((args.run/'sources/scripts/sensor_feedback.py').read_bytes()).hexdigest()if args.sensor_feedback else None
+    if args.sensor_feedback:
+        if args.noisy:raise ValueError('Sensor replacement A/B uses clean evaluation only')
+        metadata.update(observation_source='Gazebo privileged COM velocity, applied torque and static terrain; actual ROS IMU gyro/gravity and named physical joints q/qd after t=3s',
+                        actual_sensor_replacement={'activation_s':3.,'dimensions':30,'script_sha256':broker_sha,'maximum_sim_age_s':.025,'maximum_wall_age_s':.3,
+                                                   'causal_reference':'world_sim_time-.005','on_failure':'native damping; no privileged fallback','remaining_privileged_dimensions':217})
     if terrain_manifest:
         metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),'sha256':hashlib.sha256(args.terrain_target_manifest.read_bytes()).hexdigest(),
             'definition':terrain_manifest,'selected_collision_names':[shape.name for shape in terrain.shapes],
@@ -199,8 +233,13 @@ def main():
                 cmd+=np.clip(request-cmd,-np.array([.6,.6,.8])*.02,np.array([.6,.6,.8])*.02)
                 angles=rpy(s[4:8]);contacts=s[50:55].tolist()
                 obs,extra=build_observation(s,cmd,last_action,terrain,noisy=args.noisy,rng=rng)
+                sensor_evidence=None
+                if args.sensor_feedback and t>=3:
+                    try:obs,sensor_evidence=sensor_terms(args.run,s,obs,broker_sha)
+                    except (OSError,ValueError,KeyError,TypeError)as error:
+                        fault=fault or 'actual_sensor_source_rejected: '+str(error);phase='fault_damping_sensor_source';obs=np.full(247,np.nan,dtype=np.float32)
                 if scan_stream:scan_stream.write(json.dumps({'sim_time':t,**extra},allow_nan=False)+'\n')
-                start=time.perf_counter_ns();action=actor(torch.from_numpy(np.asarray(obs,dtype=np.float32)).reshape(1,247)).numpy()[0]
+                start=time.perf_counter_ns();action=actor(torch.from_numpy(np.asarray(obs,dtype=np.float32)).reshape(1,247)).numpy()[0]if np.isfinite(obs).all()else last_action.copy()
                 latency=(time.perf_counter_ns()-start)/1e6;latencies.append(latency)
                 if not np.isfinite(action).all() or not np.isfinite(obs).all():fault=fault or 'nonfinite_policy'
                 if s[56]>0:fault=fault or f'actuator_fault_{int(s[56])}'
@@ -232,12 +271,13 @@ def main():
                      'q_target':target.tolist()if np.isfinite(target).all()else None,'action':action.tolist(),
                      'policy_target':(QDEFAULT+.25*action).tolist(),
                      'state':phase,'fault':fault,'inference_ms':latency,'body_clearance':float(s[3]-ground),
-                     'height_scan_min':float(np.min(obs[60:])),'height_scan_max':float(np.max(obs[60:])),
+                     'height_scan_min':float(np.min(obs[60:]))if np.isfinite(obs).all()else None,'height_scan_max':float(np.max(obs[60:]))if np.isfinite(obs).all()else None,
                      'height_scan_overhead_points':int(extra.get('height_scan_overhead_count',0)),
                      'command_expired':command_expired,'command_age_sim_s':t-last_command_t,
                      'command_source':metadata.get('command_source','scripted simulation test'),'command_reason':command_reason,
                      'physical_test_completion_time_s':completion_time,
                      'navigation_envelope':navigation_sequence.copy()if args.test=='navigation'else None,
+                     'sensor_feedback_used':sensor_evidence,'actor_inferred_this_frame':bool(np.isfinite(obs).all()),
                      'observation_source':metadata['observation_source']}
                 rows.append(row);stream.write(json.dumps(row,allow_nan=False)+'\n')
                 if len(rows)%10==0 or done:atomic_json(args.run/'state.json',row)

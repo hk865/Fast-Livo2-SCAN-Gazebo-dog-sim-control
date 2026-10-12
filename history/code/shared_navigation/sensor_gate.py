@@ -10,6 +10,50 @@ import time
 TOPIC='/demo/teacher/navigation/sensor_health'
 
 
+class ImageInfoPairs:
+    """Bounded original-stamp pairs; a newer unpaired Info does not erase one."""
+    def __init__(self,capacity=32):
+        self.capacity=capacity;self.images={};self.infos={}
+    def observe(self,name,stamp,frame,width,height,wall):
+        cache=self.images if name=='image'else self.infos
+        cache[stamp]=(frame,width,height,wall)
+        while len(cache)>self.capacity:cache.pop(min(cache))
+    def latest_fresh(self,clock_ns,wall_now,sim_limit=.3,wall_limit=.3):
+        if clock_ns is None:return None
+        for image_stamp,image in sorted(self.images.items(),reverse=True):
+            if not (-50_000_000<=clock_ns-image_stamp<round(sim_limit*1e9)
+                    and 0<=wall_now-image[3]<wall_limit):continue
+            candidates=[(abs(stamp-image_stamp),stamp,info)for stamp,info in self.infos.items()
+                if info[:3]==image[:3] and abs(stamp-image_stamp)<=50_000_000
+                and -50_000_000<=clock_ns-stamp<round(sim_limit*1e9)and 0<=wall_now-info[3]<wall_limit]
+            if candidates:
+                difference,info_stamp,info=min(candidates)
+                return {'image_stamp_ns':image_stamp,'camera_info_stamp_ns':info_stamp,
+                    'pair_stamp_difference_ns':difference,'frame_id':image[0],
+                    'width':image[1],'height':image[2],'image_wall_age_s':wall_now-image[3],
+                    'camera_info_wall_age_s':wall_now-info[3]}
+        return None
+
+
+class WarmupRecovery:
+    """One initial warmup; recovery needs genuinely new measured pose stamps."""
+    def __init__(self,warmup_s=2.,recovery_samples=2,recovery_span_s=.1):
+        self.warmup_ns=round(warmup_s*1e9);self.recovery_samples=recovery_samples
+        self.recovery_span_ns=round(recovery_span_s*1e9);self.complete=False;self.good_since=None
+        self.first_pose=None;self.last_pose=None;self.samples=0
+    def observe(self,healthy,clock_ns,pose_stamp_ns):
+        if not healthy or clock_ns is None or pose_stamp_ns is None:
+            self.good_since=None;self.first_pose=None;self.last_pose=None;self.samples=0
+            return False
+        if self.good_since is None:self.good_since=clock_ns
+        if self.last_pose is None or pose_stamp_ns>self.last_pose:
+            self.samples+=1;self.last_pose=pose_stamp_ns
+            if self.first_pose is None:self.first_pose=pose_stamp_ns
+        if not self.complete and clock_ns-self.good_since>=self.warmup_ns:self.complete=True
+        return (self.complete and self.samples>=self.recovery_samples
+                and self.last_pose-self.first_pose>=self.recovery_span_ns)
+
+
 def atomic(path,data):
     tmp=path.with_suffix('.tmp');tmp.write_text(json.dumps(data,allow_nan=False,ensure_ascii=False)+'\n');tmp.replace(path)
 
@@ -37,7 +81,9 @@ def main():
             super().__init__('teacher_navigation_sensor_gate')
             self.set_parameters([rclpy.parameter.Parameter('use_sim_time',value=True)])
             self.clock_ns=None;self.clock_wall=None;self.stamps={};self.walls={};self.counts={};self.errors={}
-            self.info=None;self.image=None;self.good_since=None;self.failure=None;self.last_report=None
+            self.pairs=ImageInfoPairs();self.failure=None;self.last_report=None
+            self.warmup=WarmupRecovery(profile['sensor_warmup_sim_s'],profile['recovery_fresh_pose_samples'],
+                                      profile['recovery_min_pose_span_sim_s'])
             self.pub=self.create_publisher(String,TOPIC,10)
             for name,typ,topic in [('imu',Imu,'/livox/imu'),('raw_lidar',PointCloud2,'/demo/teacher/raw_lidar'),
                 ('image',Image,'/demo/camera'),('camera_info',CameraInfo,'/demo/camera_info'),
@@ -69,7 +115,7 @@ def main():
             elif name=='image':
                 if msg.header.frame_id!='demo_camera_optical_frame' or msg.width!=640 or msg.height!=480 or not msg.data:
                     error='Vehicle image frame/dimensions invalid'
-                else:self.image=(stamp,msg.header.frame_id,msg.width,msg.height)
+                else:self.pairs.observe(name,stamp,msg.header.frame_id,msg.width,msg.height,time.monotonic())
             elif name=='camera_info':
                 expected=[calib['cam_fx'],0.,calib['cam_cx'],0.,calib['cam_fy'],calib['cam_cy'],0.,0.,1.]
                 if (msg.header.frame_id!='demo_camera_optical_frame' or msg.width!=640 or msg.height!=480
@@ -78,7 +124,7 @@ def main():
                     # this 2e-5 px tolerance does not change geometry bounds.
                     or not np.allclose(msg.k,expected,rtol=0,atol=2e-5)):
                     error='Actual vehicle CameraInfo does not match pinhole K/zero D'
-                else:self.info=(stamp,msg.header.frame_id,msg.width,msg.height)
+                else:self.pairs.observe(name,stamp,msg.header.frame_id,msg.width,msg.height,time.monotonic())
             elif name=='raw_lidar':
                 if msg.header.frame_id!='velodyne' or msg.width*msg.height<20:error='Raw actual LiDAR invalid'
             elif name=='imu':
@@ -112,18 +158,21 @@ def main():
                 if wall_age is None or sim_age is None or not 0<=wall_age<wall_limit or not -.05<=sim_age<sim_limit:
                     reasons.append(name+' missing/stale')
                 if name in self.errors:reasons.append(self.errors[name])
-            if self.info is None or self.image is None or self.info[1:]!=self.image[1:] or abs(self.info[0]-self.image[0])>50_000_000:
+            pair=self.pairs.latest_fresh(ns,now,sim_limit=.75 if actual_camera_rate<10 else.3,
+                                         wall_limit=2. if actual_camera_rate<10 else.3)
+            if pair is None:
                 reasons.append('Vehicle image and actual CameraInfo are not paired within 50ms')
             graph=self.graph()
             for topic,value in graph.items():
                 if not value['passed']:reasons.append('Unexpected actual SLAM publisher chain: '+topic)
-            if reasons:self.good_since=None
-            elif self.good_since is None:self.good_since=ns
-            warmed=not reasons and ns is not None and self.good_since is not None and (ns-self.good_since)/1e9>=profile['sensor_warmup_sim_s']
-            if not warmed and not reasons:reasons.append('Waiting for continuous actual sensor SLAM warmup')
+            warmed=self.warmup.observe(not reasons,ns,self.stamps.get('body_odom'))
+            if not warmed and not reasons:reasons.append('Waiting for fresh SLAM recovery samples'if self.warmup.complete else'Waiting for continuous initial actual sensor SLAM warmup')
             status={'schema':1,'mode':'teacher','state':'failed'if self.failure else'ready'if warmed else'hold',
                 'ready':warmed,'reason':'; '.join(reasons)if reasons else'Actual vehicle RGB/K, IMU, LiDAR and sensor SLAM healthy',
-                'monotonic_wall':now,'ros_sim_time_ns':ns,'good_since_sim_ns':self.good_since,'ages':ages,
+                'monotonic_wall':now,'ros_sim_time_ns':ns,'good_since_sim_ns':self.warmup.good_since,'ages':ages,
+                'initial_warmup_complete':self.warmup.complete,'recovery_fresh_pose_samples':self.warmup.samples,
+                'recovery_first_pose_stamp_ns':self.warmup.first_pose,'recovery_last_pose_stamp_ns':self.warmup.last_pose,
+                'actual_image_camera_info_pair':pair,
                 'counts':self.counts,'publisher_graph':graph,'ground_truth_navigation_used':False,
                 'overview_used_for_vio':False,'camera_intrinsics_scale':'Original640x480 K; FAST-LIVO2 internally applies scale=0.5'}
             atomic(run/'navigation_sensor_gate.json',status)

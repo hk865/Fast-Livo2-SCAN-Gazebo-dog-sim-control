@@ -183,6 +183,8 @@ def make_node(rclpy, contract):
             self.last_contract_check = -math.inf
             self.last_graph = {}
             self.alive = True
+            self.script_sha256 = digest(__file__)
+            self.previous_source_status = {}
             self.events = (contract.run / "sensor_feedback_events.jsonl").open("x", buffering=1)
             self.samples = (contract.run / "sensor_feedback_samples.jsonl").open("x", buffering=1)
             self.subscriptions_owned = [
@@ -225,7 +227,7 @@ def make_node(rclpy, contract):
 
         def tick(self):
             now = time.monotonic()
-            if now - self.last_contract_check >= 1:
+            if self.alive and now - self.last_contract_check >= 1:
                 contract.assert_unchanged()
                 self.last_graph = {key: [{"node_name": p.node_name, "node_namespace": p.node_namespace, "topic_type": p.topic_type}
                                         for p in self.get_publishers_info_by_topic(topic)] for key, topic in TOPICS.items()}
@@ -235,6 +237,9 @@ def make_node(rclpy, contract):
                 age = now - history[-1]["received_monotonic_wall"] if history else None
                 statuses[key] = {"status": "missing" if age is None else "stale_wall" if age > WALL_MAX_AGE_S else "actual_history_available",
                                  "wall_age_s": age, "received": self.received[key], "accepted": self.accepted[key], "invalid": self.invalid[key]}
+                if self.previous_source_status.get(key) != statuses[key]["status"]:
+                    self.event("source_status_changed", stream=key, **statuses[key])
+                    self.previous_source_status[key] = statuses[key]["status"]
             self.sequence += 1
             payload = {
                 "schema_version": 1, "run": str(contract.run), "broker_pid": os.getpid(), "broker_alive": self.alive,
@@ -243,7 +248,7 @@ def make_node(rclpy, contract):
                 "histories": {key: list(history) for key, history in self.histories.items()},
                 "invalid_reason_counts": dict(self.invalid_reasons), "contract": contract.description,
                 "publisher_graph": self.last_graph, "publisher_graph_monotonic_wall": self.last_contract_check,
-                "application_publishers": self.application_publishers(), "script_sha256": digest(__file__),
+                "application_publishers": self.application_publishers(), "script_sha256": self.script_sha256,
                 "replacement_scope": "Only actual IMU body gyro/gravity and named q/qd, 30 dimensions; no actor, torque, velocity, terrain scan or SLAM construction",
                 "worker_required_selection": {"causal_sensor_stamp": "<= native effective physical world time, world_sim_time-.005",
                                               "max_source_age_sim_s": .025, "max_source_age_wall_s": WALL_MAX_AGE_S,

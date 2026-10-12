@@ -55,7 +55,24 @@ class TeacherNavigation(base.Navigation):
         try:data=json.loads(msg.data)
         except (ValueError,TypeError):return
         if data.get('mode')!='teacher' or data.get('source')!='scan_slam':return
-        self.bridge_updated=time.monotonic();super().on_bridge_safety(msg)
+        self.bridge_updated=time.monotonic();self.bridge_safety=data
+        if self.state=='running'and self.apply_tilt_guard(self.bridge_updated,self.get_clock().now().nanoseconds/1e9):
+            self.reset_region_arrival('protected')
+            # Do not feed bridge hold -> repeated zero -> bridge status back
+            # into another zero. A moving command still stops immediately.
+            if any(self.command):self.publish_command()
+            if self.state=='failed':self.publish_status()
+    def on_imu(self,msg):
+        now=time.monotonic();ros_now=self.get_clock().now().nanoseconds/1e9;q=msg.orientation
+        accepted=self.raw_imu.update([q.x,q.y,q.z,q.w],self.stamp(msg)/1e9,now,ros_now,
+                                     msg.orientation_covariance[0]>=0)
+        if accepted:self.counts['imu']+=1
+        if self.state=='running'and self.apply_tilt_guard(now,ros_now):
+            self.reset_region_arrival('protected')
+            # Protection still stops a moving robot in this very callback.
+            # Already-zero held commands use the unchanged 20Hz timer heartbeat.
+            if any(self.command):self.publish_command()
+            if self.state=='failed':self.publish_status()
     def apply_tilt_guard(self,now,ros_now):
         protected=super().apply_tilt_guard(now,ros_now)
         if now-self.bridge_updated>.30 or self.bridge_safety.get('state')!='ready':
