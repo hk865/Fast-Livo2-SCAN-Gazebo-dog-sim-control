@@ -3,6 +3,7 @@
 import argparse,copy,hashlib,json,math,os,time
 from collections import deque
 from pathlib import Path
+from handoff_stop_policy import tail_stop_request
 from path_handoff import stopped_rebind as stopped_path_rebind, retention_reference_eligibility
 import numpy as np
 from teacher_wrapper import TeacherNavigation
@@ -454,6 +455,13 @@ class PIDNavigation(TeacherNavigation):
                 else dict(allowed=False,reason='fail_closed_rejection_requires_stop',samples_present=self.samples is not None,
                     conditions=self.path_execution_eligibility()['conditions']))
             if time.monotonic()-started>.100:retain=dict(retain,allowed=False,reason='retention_callback_budget_exhausted',samples_present=self.samples is not None)
+            stop_request=tail_stop_request(proof,handoff,
+                getattr(self.cascade,'spatial_config',{}),self.pose_stamp,self.cloud_stamp,
+                capture_active=getattr(self.cascade,'capture_stamp',None)is not None,
+                failure_active=getattr(self.cascade,'failure_latched',None)is not None)
+            if retain.get('allowed')is True and stop_request['required']:
+                retain=dict(allowed=False,reason='nonfixed_tail_requires_original_measured_stop',
+                    original_eligible_retention=retain,handoff_stop_request=stop_request)
             self.path_admission_hold=not retain['allowed']
             self.last_spline_rejected='V28 SCAN整条路径接纳拒绝：'+str(proof.get('reason'))
             self.path_admission_replan_pending=True

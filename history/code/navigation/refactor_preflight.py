@@ -6,7 +6,7 @@ import hashlib,json,sys,os,time
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def contract(here):
     here=Path(here).resolve();d=json.loads((here/'C51_REFACTOR_CONTRACT.json').read_text())
-    if (d.get('schema')!='R73_explicit_strict_identity_handoff_admission/v1' or d['candidate_root']!=str(here)
+    if (d.get('schema')!='R74_explicit_strict_identity_handoff_admission/v1' or d['candidate_root']!=str(here)
         or d.get('historical_runtime_PASS_inherited')is not False
         or d.get('autonomous_navigation_verified')is not False
         or d.get('REPORT_mode')is not False or d.get('maximum_simulation_attempts')!=1):
@@ -24,15 +24,15 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
     checks=[
       str(entry)==d['allowed_launch_entry']['path'],
       argv==[str(entry),'launch',str(here/'stack.launch.py'),'run_dir:='+run],
-      env.get('DEMO_RUN_DIR')==run and env.get('ROS_DOMAIN_ID')=='122' and env.get('GZ_PARTITION')=='teacher_closed_loop_'+Path(run).name,
+      env.get('DEMO_RUN_DIR')==run and env.get('ROS_DOMAIN_ID')=='123' and env.get('GZ_PARTITION')=='teacher_closed_loop_'+Path(run).name,
       latch.get('run')==run and latch.get('maximum_attempts')==1 and latch.get('navigation_ground_truth_used')is False,
       prepared['freeze'].get(str(Path(run)/'runtime_plan.json'))==plan_digest,
       plan.get('run')==run and plan.get('profile_path')==str(here/'profiles/engineering_nav46.json'),
       plan.get('simulation_only')is True and plan.get('real_robot')is False and plan.get('navigation_ground_truth_used')is False and plan.get('autonomous_navigation_verified')is False,
-      plan.get('ros_domain')==122 and plan.get('wall_budget_s')==4590.,
-      plan.get('R73_strict_identity_handoff',{}).get('source_dir')==str(stage),
-      plan.get('R73_strict_identity_handoff',{}).get('max_native_s')==1500 and plan.get('R73_strict_identity_handoff',{}).get('max_acquisition_wall_s')==4350,
-      plan.get('R73_strict_identity_handoff',{}).get('output_hard_B')==10000000000 and plan.get('R73_strict_identity_handoff',{}).get('strict_original_gates')is True,
+      plan.get('ros_domain')==123 and plan.get('wall_budget_s')==4590.,
+      plan.get('R74_strict_identity_handoff',{}).get('source_dir')==str(stage),
+      plan.get('R74_strict_identity_handoff',{}).get('max_native_s')==1500 and plan.get('R74_strict_identity_handoff',{}).get('max_acquisition_wall_s')==4350,
+      plan.get('R74_strict_identity_handoff',{}).get('output_hard_B')==10000000000 and plan.get('R74_strict_identity_handoff',{}).get('strict_original_gates')is True,
       same(me,saved)and me.get('state')!='Z' and me.get('pid')==me.get('pgid')==me.get('session'),
       saved.get('owned_run')==run and saved.get('role')=='navigation_stack',
       saved.get('ownership_token')==owner.get('token')==permit.get('token') and permit.get('identity')==saved,
@@ -40,7 +40,7 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
       'navigation_stack'in owner.get('allowed_roles',[])and now<owner['wall_deadline'],
       parent_command[1:]==['-B',str(stage/'run.py'),'--execute'],
       heartbeat.get('state')=='RUNNING' and 0<=now-heartbeat['monotonic_wall']<3.,
-      plan.get('R73_strict_identity_handoff',{}).get('continuation_authority_sha256')==sha(stage/'AUTHORITY.json'),
+      plan.get('R74_strict_identity_handoff',{}).get('continuation_authority_sha256')==sha(stage/'AUTHORITY.json'),
       0<owner['wall_deadline']-now<=4590+240,
     ]
     if not all(checks):raise RuntimeError('C51 bounded launch identity/context differs: '+str([i for i,x in enumerate(checks)if not x]))
@@ -78,7 +78,7 @@ def verify_source_equivalence(here):
     prior=json.loads((baseline/'R33_STARTUP_PREFLIGHT.json').read_text())
     for name,digest in prior['verified_inputs_sha256'].items():
         if sha(name)!=digest:raise RuntimeError('Protected R57 external source changed: '+name)
-    if (baseline!=here.with_name('engineering_v52_r72_identity_timing_candidate')
+    if (baseline!=here.with_name('engineering_v53_r73_serialization_ready_candidate')
             or before.get('baseline')!=str(baseline) or before.get('candidate')!=str(here)):
         raise RuntimeError('R71 baseline identity differs')
     excluded=set(manifest['excluded_gate_files'])
