@@ -5,9 +5,11 @@ import json
 import subprocess
 import sys
 
-GATE_NAME='ENGINEERING_V34_PREFLIGHT.json'
-REVIEW_NAME='ENGINEERING_V34_SOURCE_REVIEW.json'
+GATE_NAME='R33_STARTUP_PREFLIGHT.json'
+REVIEW_NAME='R33_STARTUP_SOURCE_REVIEW.json'
 CHANGED_ADAPTERS=frozenset(('controller.py', 'corridor_preflight.py', 'full46_launch_contract.py', 'mission46.py', 'mission46_contract.py', 'mission46_obstacle_runtime.py', 'mission46_runtime.py', 'mission46_runtime_evidence.py', 'pid_scope.py', 'run.py', 'sensor_gate.py', 'shared_controller.py', 'slam.launch.py', 'stack.launch.py', 'teacher_wrapper.py'))
+
+CHANGED_ADAPTERS=CHANGED_ADAPTERS|frozenset(('slam_workspace.py','known_scene_adapter.py','known_scene_runtime.py','startup_trace.py','owned_guardian.py','pipeline_lifecycle.py'))
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -80,6 +82,7 @@ def required_review_files(here,profile=None):
     helper=here.parent/'evidence_runtime_v32'
     required += list(helper.glob('*.py'))+list(helper.glob('*.json'))
     root=here.parents[1]
+    required += [here/'R33_SHORT_STARTUP_CONTRACT.json', Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R31E_PLANNED_HOLD_RESUME_STAGE/native/teacher_actuator.cpp'), Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R31E_PLANNED_HOLD_RESUME_STAGE/native/diagnostic_collision_guard.hpp'), Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R31E_PLANNED_HOLD_RESUME_STAGE/native_build/libteacher_actuator.so'), Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R31D_COMPLETE_CYCLE_DIAGNOSTIC_STAGE/NATIVE_GUARD_TEST_RECEIPT.json')]
     required += [here/'README_V34.md',here/'SUBMAP_SHADOW.md',base/'README.md',root/'simulation/teacher_actuator.cpp',
         root/'simulation/build/libteacher_actuator.so',root/'policy/worker.py',
         root/'policy/observation.py',root/'policy/contract.json',root/'runs/acceptance.json']
@@ -97,6 +100,8 @@ def validate_review_evidence(here,tests,reviews):
             passed=d.get('passed') is True and d.get('failures')==0 and d.get('errors')==0
         elif d.get('schema')=='go2_v33_root_finite_tests/v1':
             passed=d.get('status')=='PASS_FINITE_ONLY' and all(x['returncode']==0 for x in d['tests'])
+        elif d.get('schema')=='R33_startup_finite_CPU_receipt/v1':
+            passed=d.get('tests_pass') is True and d.get('failures')==0
         else:raise RuntimeError('Unknown finite test receipt: '+str(name))
         if not passed:raise RuntimeError('Failed finite tests: '+str(name))
         for key in ('source_sha256','source_hashes'):
@@ -129,7 +134,7 @@ def verify_preflight(here,profile):
     validate_full46(profile,here);verify_original_v32(here)
     nav=unchanged_navigation_bindings(here)
     d=json.loads((here/GATE_NAME).read_text());review=json.loads((here/REVIEW_NAME).read_text())
-    if (d.get('schema')!='go2_engineering_v34_preflight/v1' or d.get('candidate_root')!=str(here)
+    if (d.get('schema')!='R33_original_startup_preflight/v1' or d.get('candidate_root')!=str(here)
         or d.get('status')!='PASS_LIMITED_ENGINEERING_SOURCE_REVIEW' or d.get('allowed') is not True
         or d.get('actual_navigation_verified') is not False or d.get('historical_pass_inherited') is not False
         or d.get('allowed_profiles')!=list(PROFILE_NAMES)
@@ -155,7 +160,7 @@ def freeze_source_review(here,finite_test_evidence,independent_review_evidence,*
     validate_review_evidence(here,finite_test_evidence,independent_review_evidence)
     from full46_launch_contract import PROFILE_NAMES,validate_full46
     for n in PROFILE_NAMES:validate_full46(json.loads((here/'profiles'/n).read_text()),here)
-    review=dict(schema='go2_engineering_v34_source_review/v1',candidate_root=str(here),
+    review=dict(schema='R33_original_startup_source_review/v1',candidate_root=str(here),
         actual_navigation_verified=False,historical_pass_inherited=False,root_review_complete=True,
         separate_contract_review_complete=True,unchanged_navigation_bindings=nav,
         finite_test_evidence=[str(Path(x).resolve()) for x in finite_test_evidence],
@@ -166,7 +171,7 @@ def freeze_source_review(here,finite_test_evidence,independent_review_evidence,*
     (here/REVIEW_NAME).write_text(json.dumps(review,indent=2)+'\n')
     inputs=set(required_review_files(here))|{here/REVIEW_NAME}|{
         Path(x).resolve() for x in [*finite_test_evidence,*independent_review_evidence]}
-    gate=dict(schema='go2_engineering_v34_preflight/v1',candidate_root=str(here),
+    gate=dict(schema='R33_original_startup_preflight/v1',candidate_root=str(here),
         status='PASS_LIMITED_ENGINEERING_SOURCE_REVIEW',allowed=True,
         actual_navigation_verified=False,historical_pass_inherited=False,
         allowed_profiles=list(PROFILE_NAMES),verified_inputs_sha256={str(x):sha(x) for x in sorted(inputs)})

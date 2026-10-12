@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint> // for int64_t
+#include <cmath>
 #include <limits>  // for std::numeric_limits
 #include <stdexcept> // for std::out_of_range
 #include <rclcpp/rclcpp.hpp>
@@ -21,10 +22,14 @@ inline double stamp2Sec(const builtin_interfaces::msg::Time& stamp)
 
 inline rclcpp::Time sec2Stamp(double timestamp)
 {
-  int32_t sec = std::floor(timestamp);
-  auto nanosec_d = (timestamp - std::floor(timestamp)) * 1e9;
-  uint32_t nanosec = nanosec_d;
-  return rclcpp::Time(sec, nanosec);
+  // Estimator seconds originate from integer ROS headers. Truncating their
+  // floating remainder loses a nanosecond (9.54 becomes 9539999999), breaking
+  // exact joins and strict observation-gap checks. Round the complete value;
+  // this changes encoding only, never acquisition time or a freshness limit.
+  if (!std::isfinite(timestamp) || timestamp < 0.0 ||
+      timestamp >= static_cast<double>(std::numeric_limits<int32_t>::max()) + 1.0)
+    throw std::out_of_range("Timestamp cannot be encoded as a ROS header");
+  return rclcpp::Time(static_cast<int64_t>(std::llround(timestamp * 1e9)));
 }
 
 namespace tf

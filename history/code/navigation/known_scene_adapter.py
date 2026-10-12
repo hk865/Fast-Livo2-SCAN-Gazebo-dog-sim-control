@@ -106,6 +106,13 @@ def validate_runtime_witness(witness, run_id):
                                                        separators=(',', ':')).encode()).hexdigest())
 
 
+class SourceGeometryMismatch(ValueError):
+    """Preserve the original veto while identifying the predicate it failed."""
+    def __init__(self, detail):
+        super().__init__('registered/source stage geometry inconsistent')
+        self.detail = dict(detail)
+
+
 class ExactSourceJoin:
     ROLES = ('raw', 'adapted', 'registered', 'body', 'mapper')
 
@@ -165,7 +172,17 @@ class ExactSourceJoin:
         try:
             return self._check(ns, slot)
         except (ValueError, KeyError, TypeError, AssertionError) as error:
-            return dict(source_ns=ns, rejected=type(error).__name__ + ':' + str(error))
+            # Keep the legacy reason stable; a stage-labelled error alone does
+            # not distinguish nearest-neighbour collisions from residuals.
+            name = 'ValueError' if isinstance(error, SourceGeometryMismatch) else type(error).__name__
+            result = dict(source_ns=ns, rejected=name + ':' + str(error))
+            if isinstance(error, SourceGeometryMismatch):
+                result['join_rejection_detail'] = dict(error.detail,
+                    role_source_ns={role:stamp_ns(pair[0]) for role,pair in slot.items()},
+                    original_received_wall_ns={role:pair[1] for role,pair in slot.items()},
+                    guard_clock_ns=clock_ns, guard_wall_ns=wall_ns,
+                    explicit_message_commit_token=False)
+            return result
 
     def _check(self, ns, slot):
         raw, adapted, registered, body, mapper = (slot[role][0] for role in self.ROLES)
@@ -198,9 +215,23 @@ class ExactSourceJoin:
         distance, index = cKDTree(local).query(reconstructed, workers=1)
         # Actual frozen Generic deskew is retained. These bounds allow its
         # measured millimetre same-time discrepancy, not a different pose epoch.
-        if (len(np.unique(index)) != len(index) or np.sqrt(np.mean(distance ** 2)) > .006
-                or np.max(distance) > .030):
-            raise ValueError('registered/source stage geometry inconsistent')
+        unique_count = len(np.unique(index))
+        rms_m = float(np.sqrt(np.mean(distance ** 2)))
+        maximum_m = float(np.max(distance))
+        if (unique_count != len(index) or rms_m > .006 or maximum_m > .030):
+            raise SourceGeometryMismatch(dict(
+                schema='exact_source_join_original_geometry_veto/v1',
+                source_points=len(local), registered_points=len(full),
+                unique_nearest_source_indices=unique_count,
+                nearest_source_collision_count=len(index)-unique_count,
+                nearest_index_bijection_failed=unique_count != len(index),
+                registered_source_rms_m=rms_m if np.isfinite(rms_m) else None,
+                rms_nonfinite=not bool(np.isfinite(rms_m)), rms_limit_m=.006,
+                rms_failed=rms_m > .006,
+                registered_source_max_m=maximum_m if np.isfinite(maximum_m) else None,
+                maximum_nonfinite=not bool(np.isfinite(maximum_m)), maximum_limit_m=.030,
+                maximum_failed=maximum_m > .030,
+                guard_predicates_changed=False))
         verified = self.witness.get('valid') is True
         provenance = dict(point_time_verified=verified,
                           post_lio_association_verified=verified,
@@ -282,6 +313,8 @@ class MatcherWorker:
                 if job.get('rejected'):
                     result = dict(source_ns=job['source_ns'], accepted=False, control_allowed=False,
                                   reason='exact_join:' + job['rejected'])
+                    if 'join_rejection_detail' in job:
+                        result['join_rejection_detail'] = job['join_rejection_detail']
                 else:
                     result = self.matcher.match(job['source_ns'], job['body_points'], job['T_odom_body'],
                                                 current_c=c, provenance=job['provenance'])

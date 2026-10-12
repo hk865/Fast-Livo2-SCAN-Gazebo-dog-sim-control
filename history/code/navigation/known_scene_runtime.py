@@ -96,6 +96,9 @@ def main():
     from std_msgs.msg import String
     ap=argparse.ArgumentParser();ap.add_argument('--run',type=Path,required=True)
     args,ros=ap.parse_known_args();run=args.run.resolve();here=Path(__file__).resolve().parent
+    sys.path.append(str(here.parent))
+    from runtime_io import EvidenceWriter
+    from startup_trace import CallbackTrace
     rclpy.init(args=ros)
     class Runtime(Node):
         def __init__(self):
@@ -117,6 +120,8 @@ def main():
             self.pending_body=None;self.pending_source_ns=None;self.startup_results=deque(maxlen=16)
             self.pending_recovery_count=0;self.last_complete_body=None
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
+            self.callback_writer=EvidenceWriter()
+            self.callback_trace=CallbackTrace(run,'canonical',self.callback_writer)
             self.history=(run/'known_scene_matches.jsonl').open('x',buffering=1)
             self.bundle_history=(run/'known_scene_bundles.jsonl').open('x',buffering=1)
             self.decision_history=(run/'known_scene_correction_decisions.jsonl').open('x',buffering=1)
@@ -170,9 +175,22 @@ def main():
             while len(self.slots)>12:self.slots.popitem(last=False)
             if all(k in slot for k in ('body','lidar','registered')):
                 self.publish_bundle(ns,slot,clock)
+        def trace_bundle(self,ns,slot,clock,decision):
+            measured_after_gate=time.monotonic()
+            self.callback_trace.record('actual_canonical_bundle_publication',clock,source_ns=int(ns),
+                actual_header_age_ns=int(clock-ns),initialized=self.initialized,original_decision=decision,
+                original_role_source_ns={role:stamp_ns(pair[0]) for role,pair in slot.items()},
+                original_role_received_wall_s={role:pair[1] for role,pair in slot.items()},
+                diagnostic_role_wall_age_after_gate_s={role:measured_after_gate-pair[1] for role,pair in slot.items()},
+                age_metrics_sampled_after_unchanged_original_gate=True)
         def publish_bundle(self,ns,slot,clock):
-            if not self.initialized or not -50_000_000<=clock-ns<300_000_000:return
-            if any(time.monotonic()-x[1]>=.3 for x in slot.values()):return
+            if not self.initialized or not -50_000_000<=clock-ns<300_000_000:
+                self.trace_bundle(ns,slot,clock,'original_initialized_or_header_veto')
+                return
+            if any(time.monotonic()-x[1]>=.3 for x in slot.values()):
+                self.trace_bundle(ns,slot,clock,'original_wall_age_veto')
+                return
+            self.trace_bundle(ns,slot,clock,'original_header_and_wall_gates_passed')
             if self.transition and not self.idle_or_stopped(slot['body'][0]):
                 # Freeze C until exact-zero navigation command and measured stop.
                 saved=self.correction.target.copy();self.correction.target=self.correction.applied.copy()
@@ -291,6 +309,7 @@ def main():
             else:atomic(run/'known_scene_diagnostic_capture_receipt.json',dict(schema='known_scene_diagnostic8MiB_receipt/v1',
                 status='NONFINAL_WORKER_NOT_DRAINED',final=False,worker_drained=False,
                 maximum_groups=2,maximum_bytes=8*1024*1024,navigation_verified=False))
+            self.callback_writer.close()
             self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
             atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))

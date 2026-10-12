@@ -12,7 +12,22 @@ class BoundedSourceFrames:
         if maximum_groups!=2 or maximum_bytes!=8*1024*1024:raise ValueError('Exact diagnostic8MiB contract required')
         self.run=Path(run);self.root=self.run/'known_scene_diagnostic_frames'
         self.maximum_groups=maximum_groups;self.maximum_bytes=maximum_bytes;self.saved=[];self.rejected=[]
+        self.temporal=None
+        import os
+        if os.environ.get('GO2_BASELINE_TEMPORAL_CAPTURE')=='R29_bounded_baseline':
+            try:
+                from known_scene_temporal_capture import TemporalFrames
+                self.temporal=TemporalFrames(run)
+            except Exception as error:self.temporal_failure('observer_init_failed:'+str(error))
+    def temporal_failure(self,reason):
+        try:
+            p=self.run/'known_scene_temporal_observer_error.json'
+            p.write_text(json.dumps(dict(schema='baseline_temporal_observer_only_error/v1',reason=str(reason)[:512],localization_decisions_changed=False))+'\n')
+        except Exception:pass
     def consider(self,job,result,current_c,parent_generation):
+        if self.temporal is not None:
+            try:self.temporal.consider(job,result,current_c,parent_generation)
+            except Exception as error:self.temporal_failure('observer_unhandled:'+str(error))
         candidates=result.get('candidates') or []
         if len(self.saved)>=self.maximum_groups or not candidates or candidates[0].get('rejections')!=['ray_p95']:return False
         source=job.get('source_ns');messages=job.get('source_messages',{})
@@ -67,4 +82,8 @@ class BoundedSourceFrames:
             budget_pass=max(usage.values())<=self.maximum_bytes,formal_R6_capture_complete=False,
             navigation_verified=False,quality_gates_changed=False)
         p=self.run/'known_scene_diagnostic_capture_receipt.json';p.write_text(json.dumps(receipt,indent=2)+'\n')
+        if self.temporal is not None:
+            try:
+                if not self.temporal.close():self.temporal_failure('observer_close_not_drained')
+            except Exception as error:self.temporal_failure('observer_close_failed:'+str(error))
         return receipt

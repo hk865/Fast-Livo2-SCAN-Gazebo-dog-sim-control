@@ -31,7 +31,10 @@ def expected_profile(here,name=PROFILE_NAME):
     result=json.loads(baseline_profile_path(here,name).read_text())
     result['pipeline']['mode']='serial'
     result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
-        mission46_required_source_files=[str(p.resolve()) for p in required_source_files()],
+        # Preserve the original profile bytes, including its historical source
+        # path metadata. The new candidate's actual sources are independently
+        # archived/hashed by pid_scope.runtime_files and explicit runtime plan.
+        mission46_required_source_files=[str((Path(here).resolve().with_name('engineering_v34_continuous_known_map')/p.relative_to(Path(here).resolve())).resolve()) if p.is_relative_to(Path(here).resolve()) else str(p.resolve()) for p in required_source_files()],
         route_prior_source='Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation')
     result['engineering_contract'].update(schema='go2_engineering_v34_launch/v1',
         backend_control_adoption=True,backend_control_scope='navigation frame only; frontend state never reset',
