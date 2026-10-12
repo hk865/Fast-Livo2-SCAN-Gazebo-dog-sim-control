@@ -128,7 +128,7 @@ class PIDNavigation(TeacherNavigation):
             if self.segment_start is None or not np.array_equal(self.segment_start,self.pose):
                 raise RuntimeError('Actual segment activation lacks its original SLAM pose')
             self.segment_references[key]=dict(segment_start=self.segment_start.tolist(),
-                source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
+                source_pose_stamp_ns=int(self.segment_start_pose_stamp_ns),control_stamp_ns=int(self.segment_started_ros_ns),
                 feedback=copy.deepcopy(self.feedback),request_id=self.request_id,waypoint_index=self.waypoint_index)
             self.evidence.append(self.run/'navigation_segment_activation.jsonl',dict(
                 **self.segment_references[key],navigation_ground_truth_used=False))

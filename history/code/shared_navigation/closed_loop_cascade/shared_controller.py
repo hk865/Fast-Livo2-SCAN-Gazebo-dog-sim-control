@@ -398,6 +398,8 @@ class Navigation(Node):
             request_id=self.request_id, goal_id=g.goal_id,
             waypoint_index=self.waypoint_index,
             goals_definition_sha256=self.goals_definition_sha256,
+            goal_activated_ros_clock_ns=getattr(self,'segment_started_ros_ns',None),
+            segment_start_pose_stamp_ns=getattr(self,'segment_start_pose_stamp_ns',None),
             stamp_ns=int(self.pose_stamp), start_stamp_ns=since,
             dwell_ns=0 if since is None else int(self.pose_stamp-since),
             raw_position=pose.tolist(), center_error_m=float(np.linalg.norm(pose-np.array(g.center))),
@@ -527,7 +529,8 @@ class Navigation(Node):
         if self.state != 'running':
             self.publish_command()
             return
-        ros_now = self.get_clock().now().nanoseconds / 1e9
+        control_clock_ns = self.get_clock().now().nanoseconds
+        ros_now = control_clock_ns / 1e9
         # A declared region deadline also bounds in-region dwell resets and
         # protected waits after this segment has actually started. Legacy
         # timer/arrival ordering retains its original behavior below.
@@ -563,6 +566,8 @@ class Navigation(Node):
         if self.segment_start is None:
             self.segment_start = self.pose.copy()
             self.segment_started_ros = ros_now
+            self.segment_started_ros_ns = control_clock_ns
+            self.segment_start_pose_stamp_ns = int(self.pose_stamp)
         distance = float(np.linalg.norm(goal-self.pose))
         if self.goals[self.waypoint_index].legacy:
             inside = distance < self.arrival_radius
@@ -728,6 +733,8 @@ class Navigation(Node):
         age = lambda updated: None if not math.isfinite(updated) else round(now-updated, 3)
         status = dict(request_id=self.request_id, state=self.state,
                       goals_definition_sha256=self.goals_definition_sha256,
+                      goal_activated_ros_clock_ns=getattr(self,'segment_started_ros_ns',None),
+                      segment_start_pose_stamp_ns=getattr(self,'segment_start_pose_stamp_ns',None),
                       goals_definitions=[g.definition() for g in self.goals],
                       current_goal=None if self.waypoint_index >= len(self.goals) else self.goals[self.waypoint_index].definition(),
                       region_arrival_evidence=self.region_arrival_evidence,
