@@ -18,7 +18,8 @@ def generate_launch_description():
         for path,digest in contract['artifacts'].items():
             if hashlib.sha256(Path(path).read_bytes()).hexdigest()!=digest:raise RuntimeError('CHAMP asset changed: '+path)
         selected=contract['selected_gait'];old=os.environ.get('LD_LIBRARY_PATH','')
-        gait_env={'LD_LIBRARY_PATH':str(Path(selected['library']['path']).parent)+(':'+old if old else '')}
+        gait_env={'LD_LIBRARY_PATH':str(Path(selected['library']['path']).parent)+':'+contract['loader']['gait_messages_library_dir']+(':'+old if old else ''),
+            'AMENT_PREFIX_PATH':contract['loader']['gait_messages_ament_prefix']+':'+os.environ.get('AMENT_PREFIX_PATH','')}
         urdf=(stage/'champ.urdf').read_text();params={'use_sim_time':True}
         gait=Node(executable=selected['executable']['path'],additional_env=gait_env,
             parameters=[params,{'urdf':urdf},str(stage/'joints.yaml'),str(stage/'links.yaml'),str(stage/'gait.yaml'),

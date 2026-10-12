@@ -35,6 +35,29 @@ def rpy(q):
     w,x,y,z=q
     return [math.atan2(2*(w*x+y*z),1-2*(x*x+y*y)),math.asin(float(np.clip(2*(w*y-z*x),-1,1))),math.atan2(2*(w*z+x*y),1-2*(y*y+z*z))]
 
+def finalize_receipts(run,stage,metadata,publish_zero,context_ok,rcle_error_type):
+    """Persist closed-log evidence even when ROS SIGINT invalidates publishing.
+
+    Only an already closed ROS context permits ignoring RCLError. All live
+    context publication errors are recorded as failures and re-raised.
+    """
+    initial={**metadata,'completed':False,'cleanup_state':'logs_closed_before_final_publish'}
+    atomic(run/'worker_result.json',initial);atomic(run/'policy_metadata.json',initial)
+    failure=None;shutdown_unavailable=None;attempted=False
+    try:
+        if context_ok():attempted=True;publish_zero()
+        else:shutdown_unavailable='ROS context already closed; final zero publish unavailable'
+    except rcle_error_type as error:
+        if context_ok():failure=error
+        else:shutdown_unavailable=str(error)
+    except Exception as error:failure=error
+    final={**metadata,'cleanup_state':'complete','final_zero_publish_attempted':attempted,'shutdown_publish_unavailable':shutdown_unavailable,
+        'final_zero_publish_error':None if failure is None else type(failure).__name__+': '+str(failure)}
+    if failure is not None:final['completed']=False;final['fault']=final.get('fault')or'final_zero_publication_failed'
+    atomic(run/'worker_result.json',final);atomic(run/'policy_metadata.json',final);atomic(stage/'monitor_done.json',final)
+    if failure is not None:raise failure
+    return final
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--command-file',type=Path,required=True)
     p.add_argument('--acceptance',type=Path,required=True);p.add_argument('--duration',type=float,required=True)
@@ -51,6 +74,7 @@ def main():
     sys.path.insert(0,str(TEACHER/'policy'));from observation import TerrainHeightMap
     safety=TerrainHeightMap.from_sdf(run/'world.sdf')
     import rclpy
+    from rclpy.impl.implementation_singleton import rclpy_implementation as _ros
     from rclpy.node import Node
     from rclpy.qos import qos_profile_sensor_data
     from rosgraph_msgs.msg import Clock
@@ -161,19 +185,26 @@ def main():
                 self.telemetry.write(json.dumps(row,allow_nan=False)+'\n')
             if t>=args.duration+8 or (self.failure and t>=2):self.finished=True;self.done=True
         def finish(self):
-            self.publish(np.zeros(3))
-            for stream in (self.target_log,self.telemetry,self.healthlog):stream.flush();stream.close()
+            close_errors=[]
+            for stream in (self.target_log,self.telemetry,self.healthlog):
+                try:
+                    try:stream.flush()
+                    finally:stream.close()
+                except Exception as error:close_errors.append(type(error).__name__+': '+str(error))
+            if close_errors:self.failure=self.failure or'CHAMP recorder close failed'
             metadata={'schema':1,'controller_kind':'champ','actor_device':None,'actor_started':False,'inference_threads':0,'cpu_only':True,'test_duration_s':args.duration+8,'navigation_duration_s':args.duration,
                 'completed':self.finished and self.failure is None,'fault':self.failure,'last_ros_sim_ns':self.clock_ns,'consumer_function_ast_sha256':function_sha,
                 'command_reader_sha256':sha(__file__),'accepted_scope':acceptance,'last_execution_health':self.last_health,'physical_state_phase':'PostUpdate','state_time_offset_s':0,
                 'torque_source':'native JointForceCmd component; not measured motor torque','startup_semantics':contract['initialization'],'final_parking_s':8,'truth_navigation_used':False,
-                'no_second_force_writer':True,'body_stabilizer':False,'body_servo':False,'raw_recorders_closed':True}
-            atomic(run/'policy_metadata.json',metadata);atomic(stage/'monitor_done.json',metadata)
+                'no_second_force_writer':True,'body_stabilizer':False,'body_servo':False,'raw_recorders_closed':not close_errors,'recorder_close_errors':close_errors}
+            finalize_receipts(run,stage,metadata,lambda:self.publish(np.zeros(3)),rclpy.ok,_ros.RCLError)
     node=Reader();exit_code=0
     try:
         while rclpy.ok()and not node.done:rclpy.spin_once(node,timeout_sec=.01)
+        if not node.finished:node.failure=node.failure or'ROS context ended before reviewed completion'
         if node.failure:exit_code=2
     except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):node.failure=node.failure or 'CHAMP monitor interrupted';exit_code=130
+    except Exception as error:node.failure=node.failure or(type(error).__name__+': '+str(error));raise
     finally:
         try:node.finish()
         finally:node.destroy_node();rclpy.try_shutdown()

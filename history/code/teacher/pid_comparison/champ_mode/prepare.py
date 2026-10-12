@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
@@ -58,6 +59,36 @@ def prepare(run,duration=120.):
         source=WORKSPACE/deployment[key]['relative_path'];target=stage/('bin'if key=='executable'else'lib')/source.name
         target.parent.mkdir(exist_ok=True);shutil.copy2(source,target)
         selected[key]={'path':str(target),'sha256':sha(target)}
+    # The qualified DSO depends on generated CHAMP message code. Freeze every
+    # original and exact run copy, including dynamically selected type support.
+    messages_prefix=DEMO.parent/'go2_sim_control/install/champ_msgs'
+    messages_stage=stage/'messages';messages_stage.mkdir()
+    loader_sources={};loader_copies={}
+    for source in sorted((messages_prefix/'lib').glob('*.so*')):
+        if not source.is_file():continue
+        target=messages_stage/source.name;shutil.copy2(source,target)
+        loader_sources[str(source.resolve())]=sha(source);loader_copies[str(target)]=sha(target)
+    if not loader_copies:raise RuntimeError('Existing CHAMP message libraries are absent')
+    for name in ('libchamp_msgs__rosidl_generator_c.so','libchamp_msgs__rosidl_typesupport_cpp.so'):
+        source=messages_prefix/'lib'/name;record=deployment['baseline_loader_libraries'][name]
+        if str(source.resolve())!=str(Path(record['path']).resolve())or sha(source)!=record['sha256']:
+            raise RuntimeError('CHAMP message library differs from qualified deployment: '+name)
+    for source in sorted((messages_prefix/'share').rglob('*')):
+        if source.is_file():loader_sources[str(source.resolve())]=sha(source)
+    # ldd only resolves ELF libraries. It does not initialize ROS or execute gait.
+    gait_loader_env={**os.environ,'LD_LIBRARY_PATH':str(Path(selected['library']['path']).parent)+':'+str(messages_stage)+':'+os.environ.get('LD_LIBRARY_PATH','')}
+    loader_receipts={}
+    for path in [Path(selected['executable']['path']),Path(selected['library']['path']),*sorted(messages_stage.glob('*.so*'))]:
+        result=subprocess.run(['ldd',str(path)],env=gait_loader_env,text=True,capture_output=True)
+        if result.returncode or 'not found'in result.stdout:raise RuntimeError('Unresolved CHAMP library: '+str(path)+' '+result.stdout+result.stderr)
+        loader_receipts[str(path)]={'returncode':result.returncode,'stdout':result.stdout,'stderr':result.stderr}
+    gz_plugin=Path('/opt/ros/jazzy/lib/libgz_ros2_control-system.so')
+    gz_loader_env={**os.environ,'LD_LIBRARY_PATH':str(controller_manager_library().parent)+':'+os.environ.get('LD_LIBRARY_PATH','')}
+    result=subprocess.run(['ldd',str(gz_plugin)],env=gz_loader_env,text=True,capture_output=True)
+    if result.returncode or 'not found'in result.stdout:raise RuntimeError('Unresolved Gazebo ros2_control plugin: '+result.stdout+result.stderr)
+    loader_receipts[str(gz_plugin)]={'returncode':result.returncode,'stdout':result.stdout,'stderr':result.stderr}
+    (stage/'loader_resolution.json').write_text(json.dumps({'schema':1,'ROS_started':False,'gait_child_LD_LIBRARY_PATH':gait_loader_env['LD_LIBRARY_PATH'],
+        'gazebo_child_LD_LIBRARY_PATH':gz_loader_env['LD_LIBRARY_PATH'],'resolved_not_found':0,'libraries':loader_receipts},indent=2)+'\n')
     shutil.copy2(SIM/'config/gait.yaml',stage/'gait.yaml');shutil.copy2(SIM/'config/ros_control.yaml',stage/'ros_control.yaml')
     share=DEMO.parent/'go2_sim_control/install/unitree_go2_sim/share/unitree_go2_sim/config'
     for part in ('joints','links'):shutil.copy2(share/part/(part+'.yaml'),stage/(part+'.yaml'))
@@ -77,7 +108,7 @@ def prepare(run,duration=120.):
     save_xml(stage/'champ.urdf',urdf)
     # The RSP used by the SLAM launch, if any, must be disabled in CHAMP mode.
     save_xml(run/'frames.urdf',urdf)
-    p=ET.SubElement(model,'plugin',{'filename':'gz_ros2_control-system','name':'gz_ros2_control::GazeboSimROS2ControlPlugin'})
+    p=ET.SubElement(model,'plugin',{'filename':str(gz_plugin),'name':'gz_ros2_control::GazeboSimROS2ControlPlugin'})
     ET.SubElement(p,'parameters').text=str(stage/'ros_control.yaml')
     ET.SubElement(p,'robot_param_node').text='robot_state_publisher'
     o=ET.SubElement(model,'plugin',{'filename':str(stage/native.name),'name':'champ_compare::NativeObserver'})
@@ -104,8 +135,10 @@ def prepare(run,duration=120.):
         'health':{'topic':'/demo/champ/execution_health','schema':1,'mode':'champ','source':'scan_slam','states':['ready','hold','failed'],'requires':['actual controller_state feedback fresh','actual Adapter nominal calibration','unique command/target publishers']},
         'selected_gait':selected,'qualified_gait_deployment':{'path':str(WORKSPACE/'deployment_manifest.json'),'sha256':sha(WORKSPACE/'deployment_manifest.json')},
         'controller_manager_library':{'path':str(controller_manager_library()),'sha256':sha(controller_manager_library())},
-        'gz_ros2_control_plugin':{'path':'/opt/ros/jazzy/lib/libgz_ros2_control-system.so','sha256':sha('/opt/ros/jazzy/lib/libgz_ros2_control-system.so')},
-        'executor_source_sha256':{str(p):sha(p)for p in [HERE/'prepare.py',HERE/'baseline.launch.py',HERE/'command_file_reader.py',HERE/'native/champ_native_observer.cpp',HERE/'native/CMakeLists.txt',TEACHER/'policy/worker.py',TEACHER/'policy/observation.py']},
+        'gz_ros2_control_plugin':{'path':str(gz_plugin),'sha256':sha(gz_plugin)},
+        'loader':{'gait_messages_library_dir':str(messages_stage),'gait_messages_ament_prefix':str(messages_prefix),'original_sha256':loader_sources,'copied_sha256':loader_copies,
+            'scope':'Only gait child LD and AMENT prefix; Gazebo CM override remains separate','resolution_receipt':str(stage/'loader_resolution.json'),'resolved_not_found':0},
+        'executor_source_sha256':{**{str(p):sha(p)for p in [HERE/'prepare.py',HERE/'baseline.launch.py',HERE/'command_file_reader.py',HERE/'native/champ_native_observer.cpp',HERE/'native/CMakeLists.txt',TEACHER/'policy/worker.py',TEACHER/'policy/observation.py']},**loader_sources},
         'artifacts':{str(p):sha(p)for p in stage.rglob('*')if p.is_file()},'protected_before':protected,
         'teacher_actor_started':False,'actual_runtime_verified':False,'historical_camera_demo_used_as_motion_evidence':False}
     if any(sha(p)!=h for p,h in protected.items()):raise RuntimeError('Protected original file changed during preparation')
