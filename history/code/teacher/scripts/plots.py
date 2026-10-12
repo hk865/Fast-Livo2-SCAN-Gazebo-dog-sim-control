@@ -14,7 +14,7 @@ import sys
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from aggregate import START, TESTS, REF_NAMES, collect, trace, digest
+from aggregate import START, TESTS, REF_NAMES, collect, trace, digest, terrain_references
 
 
 def render_group(test, entries, output, reference):
@@ -56,17 +56,21 @@ def render_group(test, entries, output, reference):
         plt.close(figure)
         manifest['status'] = 'unverified_no_recorded_telemetry'
         return manifest
-    ref = trace(reference / (REF_NAMES.get(test, test) + '_trace.json'), True)
+    reference_file = reference / (REF_NAMES.get(test, test) + '_trace.json')
+    ref = trace(reference_file, True)
     if ref:
         rt = np.asarray([row['t'] for row in ref]); rv = np.asarray([row['measured'] for row in ref])
         for axis in range(3):
             axes[axis].plot(rt, rv[:, axis], color='#666666', ls=':', lw=1.5, label='Recorded PhysX reference')
-        manifest['reference_sha256'] = digest(reference / (REF_NAMES.get(test, test) + '_trace.json'))
+        positions = np.asarray([row['position'] for row in ref if isinstance(row.get('position'), list) and len(row['position']) == 3], dtype=float)
+        if len(positions) and np.isfinite(positions).all():
+            axes[3].plot(positions[:, 0], positions[:, 1], color='#666666', ls=':', lw=1.5, label='Recorded PhysX truth')
+        manifest.update(reference_sha256=digest(reference_file), reference_file=str(reference_file.resolve()))
     for axis in range(3):
         axes[axis].set(title=names[axis], xlabel='Simulation time [s]', ylabel=f'{names[axis]} [{units[axis]}]')
         axes[axis].grid(alpha=.2)
         axes[axis].legend(fontsize=8, loc='best')
-    axes[3].set(title='Recorded Gazebo x/y trajectory (truth diagnostic)', xlabel='World x [m]', ylabel='World y [m]')
+    axes[3].set(title='Recorded x/y trajectory (truth diagnostic)', xlabel='World x [m]', ylabel='World y [m]')
     axes[3].set_aspect('equal', adjustable='datalim')
     axes[3].grid(alpha=.2); axes[3].legend(fontsize=8, loc='best')
     figure.suptitle(f'Go2 frozen Teacher: {test} | all selected recorded attempts, including failures', fontsize=13)
@@ -83,6 +87,8 @@ def main():
     parser.add_argument('--campaign-start', default=START)
     parser.add_argument('--run', type=Path, action='append', help='Explicit recorded runs; otherwise plot every baseline campaign attempt')
     parser.add_argument('--reference', type=Path, default=ROOT / 'runs/isaac_cpu_matched_reference_20261003_c')
+    parser.add_argument('--terrain-reference', type=Path, help='Root containing the recorded e/f/g terrain reference directories')
+    parser.add_argument('--original-origin-reference', type=Path, default=ROOT / 'runs/isaac_cpu_original_origin_20261003_h')
     parser.add_argument('--output', type=Path, default=ROOT / 'plots')
     parser.add_argument('--render', action='store_true')
     args = parser.parse_args()
@@ -91,7 +97,7 @@ def main():
         selected = {str(path.resolve()) for path in args.run}
         entries = [entry for entry in entries if entry['path'] in selected]
     else:
-        entries = [entry for entry in entries if entry['formal']]
+        entries = [entry for entry in entries if entry['formal'] or entry['original_origin']]
     groups = {}
     for entry in entries:
         name = 'stand_original_origin' if entry['original_origin'] else entry['test']
@@ -101,7 +107,10 @@ def main():
                           'output': str(args.output.resolve()), 'scope': 'Scientific PNGs from recorded commands and motion only; no SLAM route is fabricated'}, ensure_ascii=False, indent=2))
         return 0
     args.output.mkdir(parents=True, exist_ok=True)
-    results = [render_group(name, group, args.output, args.reference) for name, group in groups.items()]
+    terrains = terrain_references(args.runs.resolve(), args.terrain_reference)
+    results = [render_group(name, group, args.output,
+                args.original_origin_reference if name == 'stand_original_origin' else terrains.get(name, args.reference))
+               for name, group in groups.items()]
     manifest = {'status': 'recorded_plots_exported', 'plots': results, 'script_sha256': digest(Path(__file__)),
                 'scope': 'Simulation truth is a diagnostic. Missing telemetry is skipped and remains unverified. PNG output is not a motion or navigation pass.'}
     (args.output / 'plot_manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')

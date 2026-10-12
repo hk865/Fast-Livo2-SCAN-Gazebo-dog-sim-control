@@ -70,7 +70,9 @@ class _Box:
         valid = np.ones(len(starts), dtype=bool)
         for axis in range(3):
             if abs(direction[axis]) < 1e-12:
-                valid &= abs(origins[:, axis]) <= self.half_size[axis] + 1e-9
+                # Expanding XY bounds even 1e-9 m can select an upper deck
+                # 2.4 m above a ray just outside its edge. Keep exact bounds.
+                valid &= abs(origins[:, axis]) <= self.half_size[axis]
             else:
                 a = (-self.half_size[axis] - origins[:, axis]) / direction[axis]
                 b = (self.half_size[axis] - origins[:, axis]) / direction[axis]
@@ -100,7 +102,7 @@ class _Plane:
         # Current demo planes are horizontal in their local frames.
         if not np.allclose(self.normal, [0., 0., 1.]):
             raise ValueError("Finite plane with non-z local normal is unsupported")
-        inside = (np.abs(hits[:, :2]) <= self.half_size + 1e-9).all(axis=1)
+        inside = (np.abs(hits[:, :2]) <= self.half_size).all(axis=1)
         return np.where(inside & (distance >= 0.), distance, np.inf)
 
 
