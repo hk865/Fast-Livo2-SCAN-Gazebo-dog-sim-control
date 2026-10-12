@@ -81,6 +81,12 @@ def prepare(run,profile):
     params['extrin_calib'].update(extrinsic_T=(ri.T@(pl-pi)).tolist(),extrinsic_R=(ri.T@rl).reshape(-1).tolist(),
         Rcl=(optical@rc.T@rl).reshape(-1).tolist(),Pcl=(optical@rc.T@(pl-pc)).tolist())
     params['imu'].update(imu_int_frame=int(round(s['imu']['rate_hz']*3)),init_min_span=2.9)
+    if profile.get('slam_imu_online_estimation'):
+        estimation=profile['slam_imu_online_estimation']
+        if estimation!={'gravity_est_en':True,'ba_bg_est_en':True}:
+            raise ValueError('Explicit prospective actual-SLAM estimation configuration required')
+        params['imu'].update(estimation)
+
     write(run/'navigation_fastlivo.yaml',cfg);write(run/'navigation_camera.yaml',yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text()))
     write(run/'navigation_profile.json',profile);write(run/'navigation_scenario.json',{'mode':'teacher','sensors':s})
     terrain=ROOT/profile['terrain_target_manifest'];write(run/'terrain_target_manifest.json',json.loads(terrain.read_text()))
