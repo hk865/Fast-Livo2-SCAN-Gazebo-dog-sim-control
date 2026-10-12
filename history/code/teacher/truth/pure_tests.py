@@ -178,8 +178,8 @@ class ActiveParking(unittest.TestCase):
             elapsed=3.+frame*.02
             native=state(elapsed+.01,c.path.final_xyz,world_velocity=(-1.,1.,0.))
             with patch('core.time.monotonic',return_value=100.+frame*.02):command,_=c.update(native,elapsed)
-            self.assertTrue(np.all(abs(command)<=c.hold_limits+1e-12))
-            self.assertLessEqual(np.linalg.norm(command[:2]),.06+1e-12)
+            self.assertTrue(np.all(abs(command)<=c.capture_limits+1e-12))
+            self.assertLessEqual(np.linalg.norm(command[:2]),.15+1e-12)
             self.assertTrue(np.all(abs(c.applied_command_estimate-previous)<=np.array([.6,.6,.8])*.02+1e-12))
             previous=c.applied_command_estimate.copy()
             if c.row['controller_updated']:blocked=blocked or any(c.row['velocity_PI']['blocked_axis'])
@@ -193,6 +193,23 @@ class ActiveParking(unittest.TestCase):
         self.assertEqual(c._target_sha,p['active_parking']['target_sha256'])
         p=profile();p['active_parking']['target']['position_world_xyz'][0]+=2e-12
         p['active_parking']['target_sha256']=parameter_hash(p['active_parking']['target'])
+        with self.assertRaises(ValueError):Controller(p)
+
+    def test_capture_approach_and_hold_envelopes_are_distinct(self):
+        c=Controller(profile());c.progress=c.path.length-.08
+        with patch('core.time.monotonic',return_value=100.):c.update(at_endpoint(c,(-.08,0.)),3.)
+        self.assertEqual(c.row['mode'],'capture')
+        np.testing.assert_array_equal(c.row['parking_command_limits_body'],[.15,.07,.10])
+        self.assertAlmostEqual(np.linalg.norm(c.row['reference_velocity_world'][:2]),.05)
+        self.assertGreater(c.row['command_body'][0],.06)
+        for frame in range(1,34):
+            elapsed=3.+frame*.02
+            with patch('core.time.monotonic',return_value=100.+frame*.02):c.update(at_endpoint(c,world_t=elapsed+.01),elapsed)
+        self.assertEqual(c.row['mode'],'active_hold')
+        np.testing.assert_array_equal(c.row['parking_command_limits_body'],[.06,.04,.10])
+        self.assertLessEqual(np.linalg.norm(c.row['reference_velocity_world'][:2]),.025)
+        self.assertLessEqual(np.linalg.norm(c.row['command_body'][:2]),.06)
+        p=profile();p['active_parking']['capture_command_limits_body'][0]=.151
         with self.assertRaises(ValueError):Controller(p)
 
     def test_invalid_profile_target_or_envelope_rejected(self):

@@ -91,7 +91,7 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(m.archive_key('/freeze/policy/worker.py'), 'policy/worker.py')
         self.assertEqual(m.archive_key('/freeze/navigation/curvature_tracking_v2/worker.py'), 'truth/worker.py')
 
-    def pi_fixture(self):
+    def pi_fixture(self, phase='active_hold'):
         # Independent closed-form stationary measurement and nonzero fixed
         # endpoint correction; no Controller call is used to produce expected PI.
         dt = .04; control = []; integral = 0.; last_pi = None
@@ -104,20 +104,25 @@ class ReceiptTests(unittest.TestCase):
                                I=[.5*integral, 0., 0.], filtered_actual_body=[0., 0., 0.],
                                blocked_axis=[False]*3, blocked_slew=[False]*3)
             raw = target+np.asarray(last_pi['P'])+np.asarray(last_pi['I'])
-            control.append(dict(mode='capture', controller_updated=fresh,
+            control.append(dict(mode=phase, controller_updated=fresh,
                 feedback_time_s=1.+(frame if fresh else frame-1)*.02,
                 header_dt_s=actual_dt, active_integral_dt_s=actual_dt,
                 entry_integral_reset=frame == 0, velocity_PI=copy.deepcopy(last_pi),
                 v_reference_body=target.tolist(), raw_command_body=raw.tolist(), command_body=raw.tolist(),
                 reference_velocity_world=target.tolist(), parking_reference_yaw_rate_radps=0.))
         t = np.arange(41)*.005+1.
-        a = dict(t=t, position=np.tile([-.02, 0., .32], (len(t), 1)),
+        # Same small reference in the two laws, obtained from different actual
+        # endpoint error; independently checks capture uses its stronger P.
+        distance = .003+velocity/(.8 if phase == 'capture' else .18)
+        a = dict(t=t, position=np.tile([-distance, 0., .32], (len(t), 1)),
                  quaternion_wxyz=np.tile([1., 0., 0., 0.], (len(t), 1)),
                  body_COM_velocity=np.zeros((len(t), 3)), body_omega=np.zeros((len(t), 3)),
                  origin_world_velocity=np.zeros((len(t), 3)), Euler_yaw_rate=np.zeros(len(t)),
                  unwrapped_yaw=np.zeros(len(t)))
         ap = dict(target=dict(position_world_xyz=[0., 0., .32], heading0_rad=0.),
                   command_limits_body=[.06, .04, .1], position_kp=.18, position_kd=.2,
+                  reference_xy_norm_limit_mps=.025, capture_position_kp=.8, capture_position_kd=.2,
+                  capture_reference_xy_norm_limit_mps=.05, capture_command_limits_body=[.15, .07, .1],
                   yaw_kp=.65, yaw_kd=.18, position_deadband_m=.003, yaw_deadband_rad=.005)
         class Rotations:
             @staticmethod
@@ -129,6 +134,59 @@ class ReceiptTests(unittest.TestCase):
     def test_causal_nonzero_weak_hold_PI_reconstruction(self):
         result = m.hold_pi_replay(*self.pi_fixture())
         self.assertTrue(result['passed']); self.assertLess(result['maximum_absolute_replay_error'], 1e-12)
+
+    def test_capture_uses_new_stronger_P_with_same_PI_law(self):
+        result = m.hold_pi_replay(*self.pi_fixture('capture'))
+        self.assertTrue(result['passed']); self.assertLess(result['maximum_absolute_replay_error'], 1e-12)
+
+    def test_phase_limits_explicit_no_fallback(self):
+        _, _, ap, _, _ = self.pi_fixture()
+        kp, kd, xy, limits = m.phase_parameters(ap, 'capture')
+        self.assertEqual((kp, kd, xy), (.8, .2, .05)); np.testing.assert_array_equal(limits, [.15, .07, .1])
+        kp, kd, xy, limits = m.phase_parameters(ap, 'active_hold')
+        self.assertEqual((kp, kd, xy), (.18, .2, .025)); np.testing.assert_array_equal(limits, [.06, .04, .1])
+        with self.assertRaises(ValueError): m.phase_parameters(ap, 'parking')
+        del ap['capture_command_limits_body']
+        with self.assertRaises(KeyError): m.phase_parameters(ap, 'capture')
+
+    def test_phase_switch_cannot_reuse_strong_capture_law_in_hold(self):
+        c, a, ap, helper, gains = self.pi_fixture('capture')
+        for row in c: row['mode'] = 'active_hold'
+        self.assertFalse(m.hold_pi_replay(c, a, ap, helper, gains)['passed'])
+
+    def test_pi_not_reset_when_active_hold_mode_begins(self):
+        c, a, ap, helper, gains = self.pi_fixture()
+        # Preserve equivalent references through the transition, then prove an
+        # additional reset in that transition differs from the actual I log.
+        for frame in range(6):
+            c[frame]['mode'] = 'capture'
+            i = m.native_index(a['t'], c[frame]['feedback_time_s'])
+            a['position'][i, 0] = -(.003+.18*(.02-.003)/.8)
+        self.assertTrue(m.hold_pi_replay(c, a, ap, helper, gains)['passed'])
+        c[6]['entry_integral_reset'] = True
+        self.assertFalse(m.hold_pi_replay(c, a, ap, helper, gains)['passed'])
+
+    def target_contract_fixture(self):
+        p = m.load_module(Path(__file__).with_name('profiles.py'), '_hold_v4_test_profiles')
+        reference = m.load_module(Path(__file__).with_name('reference_v1_core.py'), '_hold_v4_test_geometry')
+        geometry = reference.StaticPath(dict(kind='s_curve', origin_world_xyz=[0., 0., .32], heading0_rad=0.,
+            entry_straight_m=2., exit_straight_m=2., direction_sign=1,
+            curve_length_m=6., heading_amplitude_rad=1.))
+        return dict(active_parking=p.parking_contract(geometry)), geometry
+
+    def test_exact_frozen_target_preserved_across_last_bit_geometry_difference(self):
+        p, geometry = self.target_contract_fixture()
+        p['active_parking']['target']['position_world_xyz'][0] += 2e-15
+        p['active_parking']['target_sha256'] = m.canonical_sha(p['active_parking']['target'])
+        _, target = m.validate_contract(p, geometry)
+        self.assertEqual(target, p['active_parking']['target'])
+
+    def test_canonical_target_hash_or_spatial_target_change_rejected(self):
+        p, geometry = self.target_contract_fixture(); p['active_parking']['target_sha256'] = '0'*64
+        with self.assertRaises(ValueError): m.validate_contract(p, geometry)
+        p, geometry = self.target_contract_fixture(); p['active_parking']['target']['position_world_xyz'][0] += .001
+        p['active_parking']['target_sha256'] = m.canonical_sha(p['active_parking']['target'])
+        with self.assertRaises(ValueError): m.validate_contract(p, geometry)
 
     def test_held_row_integral_forgery_rejects(self):
         c, a, ap, helper, gains = self.pi_fixture(); c[3]['velocity_PI']['I'][0] += .001

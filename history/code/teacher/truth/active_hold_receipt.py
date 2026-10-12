@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append-only active endpoint hold evidence; never an old parking upgrade.
+"""Append-only staged capture/active hold V4; never an old parking upgrade.
 
 Only hash-verified archived references are imported. No Controller is created,
 no policy is inferred and no simulator/process/control interface is used.
@@ -125,9 +125,18 @@ def archive_key(original):
 
 
 def validate_contract(p, path):
-    target = dict(position_world_xyz=path.final_xyz.tolist(), heading0_rad=path.heading0,
-                  path_parameters_sha256=path.sha256)
     ap = p['active_parking']
+    # Preserve the exact prospective JSON target/hash across NumPy versions.
+    # Analytic quadrature agreement is numerical; 1e-15m last-bit variation is
+    # not a new measured-pose target and must not refresh its canonical hash.
+    target = json.loads(json.dumps(ap['target'], allow_nan=False))
+    point = np.asarray(target['position_world_xyz'], float)
+    if (point.shape != (3,) or not np.isfinite(point).all() or
+        not math.isfinite(float(target['heading0_rad'])) or
+        target.get('path_parameters_sha256') != path.sha256 or
+        np.max(abs(point-path.final_xyz)) > 1e-12 or
+        abs(float(wrapped(target['heading0_rad']-path.heading0))) > 1e-12):
+        raise ValueError('Frozen target is not numerically the original analytic endpoint')
     exact = dict(position_kp=.18, position_kd=.20, yaw_kp=.65, yaw_kd=.18,
         position_deadband_m=.003, yaw_deadband_rad=.005,
         reference_xy_norm_limit_mps=.025, reference_yaw_limit_radps=.07,
@@ -136,14 +145,26 @@ def validate_contract(p, path):
         capture_actual_xy_speed_mps=.03, capture_actual_yawrate_radps=.06, capture_fresh_dwell_s=.6,
         first_fixed_parking_window_s=5., maximum_xy_drift_m=.05, maximum_yaw_drift_rad=.1,
         maximum_native_xy_speed_mps=.08, maximum_native_Euler_yawrate_radps=.1, maximum_native_body_wz_radps=.1,
-        command_slew_per_s=[.6, .6, .8], feedback_TTL_sim_and_wall_s=.3)
-    if (ap.get('schema') != 'fixed_endpoint_active_parking/v1' or ap.get('target') != target or
+        command_slew_per_s=[.6, .6, .8], feedback_TTL_sim_and_wall_s=.3,
+        capture_position_kp=.8, capture_position_kd=.2,
+        capture_reference_xy_norm_limit_mps=.05, capture_command_limits_body=[.15, .07, .10])
+    if (ap.get('schema') != 'fixed_endpoint_active_parking/v2' or
         ap.get('target_sha256') != canonical_sha(target) or
         ap.get('target_kind') != 'prospective_fixed_path_endpoint' or
         ap.get('actual_command_must_be_zero') is not False or
         any(ap.get(k) != v for k, v in exact.items())):
-        raise ValueError('Prospective weak_hold_p1 contract differs; use a new receipt revision')
+        raise ValueError('Prospective staged capture/weak hold V4 contract differs; use a new receipt revision')
     return ap, target
+
+
+def phase_parameters(ap, mode):
+    if mode == 'capture':
+        return (float(ap['capture_position_kp']), float(ap['capture_position_kd']),
+                float(ap['capture_reference_xy_norm_limit_mps']), np.asarray(ap['capture_command_limits_body'], float))
+    if mode == 'active_hold':
+        return (float(ap['position_kp']), float(ap['position_kd']),
+                float(ap['reference_xy_norm_limit_mps']), np.asarray(ap['command_limits_body'], float))
+    raise ValueError('No capture/hold law for mode '+str(mode))
 
 
 def capture_evidence(control, a, path, ap):
@@ -204,8 +225,8 @@ def hold_pi_replay(control, a, ap, helper, gains):
     integral = np.zeros(3); filt = None; outer = None; errors = []; previous_estimate = np.zeros(3)
     kp = np.asarray([gains['velocity_kp_x'], gains['velocity_kp_y'], gains['rate_kp']])
     ki = np.asarray([gains['velocity_ki_x'], gains['velocity_ki_y'], gains['rate_ki']])
-    limits = np.asarray(ap['command_limits_body']); last_ft = None
-    def limit(v):
+    last_ft = None
+    def limit(v, limits):
         v = np.clip(v, -limits, limits)
         n = np.linalg.norm(v[:2])
         if n > limits[0]: v[:2] *= limits[0]/n
@@ -226,12 +247,13 @@ def hold_pi_replay(control, a, ap, helper, gains):
             filt = actual.copy() if filt is None else filt+beta*(actual-filt)
             outer = measurement.copy() if outer is None else outer+alpha*(measurement-outer)
             if hold:
+                position_kp, position_kd, xy_limit, limits = phase_parameters(ap, c['mode'])
                 if c.get('entry_integral_reset') is True: integral[:] = 0.
                 delta = np.asarray(ap['target']['position_world_xyz'])[:2]-a['position'][i, :2]
                 eyaw = float(wrapped(ap['target']['heading0_rad']-a['unwrapped_yaw'][i]))
-                velocity = np.r_[ap['position_kp']*deadband(delta, ap['position_deadband_m'])-ap['position_kd']*outer[:2], 0.]
+                velocity = np.r_[position_kp*deadband(delta, ap['position_deadband_m'])-position_kd*outer[:2], 0.]
                 norm = np.linalg.norm(velocity[:2])
-                if norm > .025: velocity[:2] *= .025/norm
+                if norm > xy_limit: velocity[:2] *= xy_limit/norm
                 yaw_ref = float(np.clip(ap['yaw_kp']*deadband(eyaw, ap['yaw_deadband_rad'])-ap['yaw_kd']*outer[2], -.07, .07))
                 roll = math.atan2(R[2, 1], R[2, 2]); pitch = math.asin(np.clip(-R[2, 0], -1, 1))
                 wref = (yaw_ref*math.cos(pitch)-math.sin(roll)*a['body_omega'][i, 1])/math.cos(roll)
@@ -239,13 +261,13 @@ def hold_pi_replay(control, a, ap, helper, gains):
                 com_target = origin_target+np.cross([0., 0., wref], np.asarray(gains['COM_offset']))
                 target = np.r_[com_target[:2], wref]; error = target-filt
                 candidate = np.clip(integral+dt*error, -.5, .5)
-                raw = target+kp*error+ki*candidate; clipped = limit(raw)
+                raw = target+kp*error+ki*candidate; clipped = limit(raw, limits)
                 blocked_axis = error*(raw-clipped) > 0
                 candidate = np.where(blocked_axis, integral, candidate)
                 next_slew = previous_estimate+np.clip(clipped-previous_estimate, -SLEW*.02, SLEW*.02)
                 blocked_slew = error*(raw-next_slew) > 1e-9
                 candidate = np.where(blocked_slew, integral, candidate); integral = candidate
-                raw = target+kp*error+ki*candidate; clipped = limit(raw)
+                raw = target+kp*error+ki*candidate; clipped = limit(raw, limits)
                 pi = c['velocity_PI']
                 values = ((filt, pi['filtered_actual_body']), (error, pi['error']),
                           (kp*error, pi['P']), (ki*candidate, pi['I']),
@@ -263,7 +285,7 @@ def hold_pi_replay(control, a, ap, helper, gains):
         previous_estimate += np.clip(np.asarray(c['command_body'])-previous_estimate, -SLEW*.02, SLEW*.02)
     return dict(rows=len(errors), maximum_absolute_replay_error=max(errors, default=math.inf),
                 passed=bool(errors) and max(errors) <= 1e-8,
-                method='Native COM/body/Euler measurements, original filters, immutable goal weak PD, separate bounded antiwindup PI; actual fresh selector only')
+                method='Native COM/body/Euler measurements, original filters, immutable target staged capture/weak hold PD, continuous bounded parking PI; actual fresh selector only')
 
 
 def evaluate(run, write=True):
@@ -479,15 +501,24 @@ def evaluate(run, write=True):
         for r in requested:
             current = current+np.clip(r-current, -SLEW*.02, SLEW*.02); rebuilt.append(current.copy())
         rebuilt = np.asarray(rebuilt); parking_actor = np.isin(cmode, ['capture', 'active_hold'])
-        limits = np.asarray(ap['command_limits_body'])
-        cap_ok = np.all(abs(requested[parking_actor]) <= limits+1e-9) and np.all(np.linalg.norm(requested[parking_actor, :2], axis=1) <= .06+1e-9)
-        target_cap_ok = all(np.linalg.norm(c['reference_velocity_world'][:2]) <= .025+1e-9 and
-                            abs(c['parking_reference_yaw_rate_radps']) <= .07+1e-9 for c in parking_fresh)
+        cap_ok = True; target_cap_ok = True; phase_stats = {}
+        for phase in ('capture', 'active_hold'):
+            _, _, reference_cap, limits = phase_parameters(ap, phase)
+            phase_actor = cmode == phase
+            cap_ok &= (phase_actor.any() and np.all(abs(requested[phase_actor]) <= limits+1e-9) and
+                       np.all(np.linalg.norm(requested[phase_actor, :2], axis=1) <= limits[0]+1e-9) and
+                       all(c['parking_command_limits_body'] == limits.tolist() for c in control if c['mode'] == phase))
+            phase_fresh = [c for c in parking_fresh if c['mode'] == phase]
+            target_cap_ok &= (bool(phase_fresh) and all(np.linalg.norm(c['reference_velocity_world'][:2]) <= reference_cap+1e-9 and
+                             abs(c['parking_reference_yaw_rate_radps']) <= .07+1e-9 for c in phase_fresh))
+            phase_stats[phase] = dict(requested_caps=limits.tolist(), reference_XY_norm_cap_mps=reference_cap,
+                actor_rows=int(phase_actor.sum()), actual_fresh_rows=len(phase_fresh),
+                maximum_actual_requested_abs_body=np.max(abs(requested[phase_actor]), axis=0).tolist() if phase_actor.any() else None)
         slew_error = float(np.max(abs(command-rebuilt))); estimate_error = float(np.max(abs(command-estimate)))
         check('actual_bounded_command_and_unchanged_teacher_slew', cap_ok and target_cap_ok and
               slew_error <= 1e-8 and estimate_error <= 1e-8 and np.max(abs(control_command-requested)) <= 1e-9,
               maximum_slew_replay_error=slew_error, maximum_estimated_vs_actual_command_error=estimate_error,
-              requested_caps=limits, actual_nonzero_parking_commands=int(np.count_nonzero(np.linalg.norm(command[parking_actor], axis=1) > 1e-9)),
+              stage_limits=phase_stats, actual_nonzero_parking_commands=int(np.count_nonzero(np.linalg.norm(command[parking_actor], axis=1) > 1e-9)),
               action_zero_never_required=True)
         fresh = [c for c in control if c.get('controller_updated') is True]
         ttl_ok = all(type(c.get('controller_updated')) is bool and
@@ -526,8 +557,8 @@ def evaluate(run, write=True):
     except Exception as error:
         check('complete_parseable_active_hold_evidence', None, error=repr(error), incomplete_evidence_never_passes=True)
     status = status_from_checks(checks)
-    result = dict(schema='independent_truth_teacher_active_endpoint_hold/v2', run=str(run), status=status,
-        scope='Truth-feedback continuous curve with prospective bounded active endpoint hold; different stopping semantics from v1',
+    result = dict(schema='independent_truth_teacher_active_endpoint_hold/v4', run=str(run), status=status,
+        scope='Truth-feedback continuous curve with prospective stronger capture then weak active endpoint hold; different stopping semantics from v1',
         navigation_ground_truth_used=True, SLAM_navigation_verified=False, SCAN_verified=False,
         full_multifloor_verified=False, Isaac_new_controller_verified=False, real_robot_verified=False,
         actor_input_dimensions=247, privileged_actor_observation_dimensions=232, score=None,

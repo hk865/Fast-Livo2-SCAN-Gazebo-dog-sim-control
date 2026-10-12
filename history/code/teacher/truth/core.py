@@ -381,7 +381,7 @@ class Controller(FrozenV1Controller):
         if hashlib.sha256(Path(__file__).read_bytes()[:V1_DRIVE_SOURCE_SIZE_BYTES]).hexdigest()!=V1_DRIVE_SOURCE_SHA256:
             raise ValueError('Frozen v1 drive prefix differs')
         self.parking=json.loads(json.dumps(self.p['active_parking'],allow_nan=False))
-        if self.parking['schema']!='fixed_endpoint_active_parking/v1':
+        if self.parking['schema']!='fixed_endpoint_active_parking/v2':
             raise ValueError('Explicit active parking contract required')
         # Preserve the exact prospective target and its byte-level canonical
         # SHA. NumPy versions may differ in quadrature by a few femtometres;
@@ -429,6 +429,13 @@ class Controller(FrozenV1Controller):
             SLAM_verified=False,real_robot_verified=False)
         if any(self.parking.get(k)!=v for k,v in fixed_contract.items()):
             raise ValueError('Frozen parking numerical/source contract differs')
+        self.capture_limits=np.asarray(self.parking['capture_command_limits_body'],float)
+        if (self.capture_limits.shape!=(3,) or not np.isfinite(self.capture_limits).all() or
+            np.any(self.capture_limits<=0) or np.any(self.capture_limits>[.15,.07,.10]) or
+            not 0<float(self.parking['capture_position_kp'])<=.8 or
+            not 0<float(self.parking['capture_position_kd'])<=.2 or
+            not 0<float(self.parking['capture_reference_xy_norm_limit_mps'])<=.05):
+            raise ValueError('Capture approach envelope exceeded')
         self.hold_integral=np.zeros(3)
         self.capture_stamp=None;self.hold_stamp=None;self.capture_dwell_start=None
         self.arrival_pose=None;self.capture_elapsed=None;self.capture_world=None
@@ -445,15 +452,16 @@ class Controller(FrozenV1Controller):
             parking_hold_declared_state_time_s=self.hold_stamp,
             arrival_capture_position_world=None if self.arrival_pose is None else list(self.arrival_pose['position_world_xyz']),
             arrival_capture_yaw_rad=None if self.arrival_pose is None else self.arrival_pose['yaw_rad'],
-            entry_integral_reset=bool(entry_reset),parking_command_limits_body=self.hold_limits.tolist(),
+            entry_integral_reset=bool(entry_reset),parking_command_limits_body=(self.capture_limits if self.hold_stamp is None else self.hold_limits).tolist(),
             v1_drive_source_prefix_sha256=V1_DRIVE_SOURCE_SHA256,
             v1_drive_source_prefix_size_bytes=V1_DRIVE_SOURCE_SIZE_BYTES,
             parking_is_old_zero_command_protocol=False)
 
     def _limit_hold(self, raw):
-        limited=np.clip(raw,-self.hold_limits,self.hold_limits)
+        limits=self.capture_limits if self.hold_stamp is None else self.hold_limits
+        limited=np.clip(raw,-limits,limits)
         norm=np.linalg.norm(limited[:2])
-        if norm>self.hold_limits[0]:limited[:2]*=self.hold_limits[0]/norm
+        if norm>limits[0]:limited[:2]*=limits[0]/norm
         return limited
 
     def _hold_fresh(self, s, t, stamp, dt, entry_reset=False):
@@ -494,10 +502,11 @@ class Controller(FrozenV1Controller):
                         world_time_s=float(s[0]),elapsed_s=t,target_sha256=self._target_sha))
             else:self.capture_dwell_start=None
         mode='active_hold' if self.hold_stamp is not None else 'capture'
-        position_P=self.parking['position_kp']*_deadband(error_world,self.parking['position_deadband_m'])
-        position_D=-self.parking['position_kd']*self.filtered[:2]
+        phase='capture_' if mode=='capture' else ''
+        position_P=self.parking[phase+'position_kp']*_deadband(error_world,self.parking['position_deadband_m'])
+        position_D=-self.parking[phase+'position_kd']*self.filtered[:2]
         velocity_world=np.r_[position_P+position_D,0.]
-        xy_norm=np.linalg.norm(velocity_world[:2]);xy_limit=self.parking['reference_xy_norm_limit_mps']
+        xy_norm=np.linalg.norm(velocity_world[:2]);xy_limit=self.parking[phase+'reference_xy_norm_limit_mps']
         if xy_norm>xy_limit:velocity_world[:2]*=xy_limit/xy_norm
         yaw_P=self.parking['yaw_kp']*float(_deadband(error_yaw,self.parking['yaw_deadband_rad']))
         yaw_D=-self.parking['yaw_kd']*self.filtered[2]

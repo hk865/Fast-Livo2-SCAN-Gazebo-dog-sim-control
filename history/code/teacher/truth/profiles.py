@@ -18,7 +18,9 @@ def sha(path):
 
 def parking_contract(path):
     target=core.parking_target_record(path)
-    return dict(schema='fixed_endpoint_active_parking/v1',candidate='weak_hold_p1',
+    return dict(schema='fixed_endpoint_active_parking/v2',candidate='capture_approach_p2',
+        capture_position_kp=.8,capture_position_kd=.20,capture_reference_xy_norm_limit_mps=.05,
+        capture_command_limits_body=[.15,.07,.10],
         target_kind='prospective_fixed_path_endpoint',target=target,target_sha256=core.parameter_hash(target),
         position_kp=.18,position_kd=.20,yaw_kp=.65,yaw_kd=.18,
         position_deadband_m=.003,yaw_deadband_rad=.005,
@@ -54,8 +56,8 @@ def from_v1(source_path,expected_sha256,trial_role='pilot',repetition=1):
     if old['path_parameters_sha256']!=path.sha256:raise ValueError('Original path parameter SHA mismatch')
     profile=json.loads(json.dumps(old,allow_nan=False))
     profile.update(schema='truth_teacher_static_curve_active_hold_profile/v2',
-        scenario=old['scenario']+'_active_hold_weak_p1',design='curvature_cascade_pi_active_hold',
-        controller_revision='v3 numerical target binding; weak_p1 active parking; frozen v1 drive preserved',
+        scenario=old['scenario']+'_active_hold_capture_p2',design='curvature_cascade_pi_active_hold',
+        controller_revision='v4 bounded capture approach then weak active hold; frozen v1 drive preserved',
         campaign_phase='active_parking_pilot' if trial_role=='pilot' else 'active_parking_confirmation',
         trial_role=trial_role,repetition=repetition,
         active_parking=parking_contract(path),
