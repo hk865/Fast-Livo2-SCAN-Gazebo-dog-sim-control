@@ -34,6 +34,33 @@ def profile_for(selector,kind='teacher'):
         profile['controller_kind']='champ';profile['experiment']=profile['experiment'].replace('teacher_pid_','champ_pid_',1)
         profile['policy_observations']='No Teacher actor or privileged actor inputs; CHAMP gait/IK/effort PID executes actual sensor SLAM/SCAN outer PID commands'
     return profile
+def cloud_transport_refs(run):
+    """Optional prospective run-only DDS configuration; never an old-scope override."""
+    run=Path(run).resolve();manifest=run/'cloud_transport_manifest.json'
+    if not manifest.exists():return [],None
+    data=json.loads(manifest.read_text())
+    if(data.get('schema')!='cloud_transport_experiment/v1'or data.get('run')!=str(run)
+        or data.get('profile')not in ('shm_512k','shm_64m')):
+        raise RuntimeError('Unknown run-scoped cloud transport experiment')
+    xml=Path(data['xml_path']).resolve()
+    if not xml.is_relative_to(run)or xml.suffix!='.xml'or sha(xml)!=data['xml_sha256']:
+        raise RuntimeError('Run-scoped copied cloud transport XML differs')
+    sources=data.get('source_hashes',{})
+    if not sources or any(not Path(p).is_absolute()or not isinstance(h,str)or len(h)!=64 for p,h in sources.items()):
+        raise RuntimeError('Cloud transport sources are not explicitly frozen')
+    for name,expected in sources.items():
+        if sha(name)!=expected:raise RuntimeError('Cloud transport source changed: '+name)
+    environment=data.get('environment',{})
+    if(environment.get('ROS_LOCALHOST_ONLY')!='0'or environment.get('ROS_AUTOMATIC_DISCOVERY_RANGE')!='SYSTEM_DEFAULT'
+       or environment.get('RMW_IMPLEMENTATION')!='rmw_fastrtps_cpp'):
+        raise RuntimeError('Prospective cloud transport must explicitly select its reviewed middleware/discovery mode')
+    xml_environment=[environment.get(key)for key in ('FASTRTPS_DEFAULT_PROFILES_FILE','FASTDDS_DEFAULT_PROFILES_FILE')if key in environment]
+    if not xml_environment or any(Path(value).resolve()!=xml for value in xml_environment):
+        raise RuntimeError('Cloud transport environment does not reference its exact copied XML')
+    return [manifest,xml]+[Path(p)for p in sources],{
+        'manifest_path':str(manifest),'manifest_sha256':sha(manifest),'profile':data['profile'],
+        'xml_path':str(xml),'xml_sha256':data['xml_sha256'],'environment':environment,
+        'meaning':'Prospective transport experiment only; no cloud delivery, motion or navigation pass claim'}
 def verify_scope(path,raw=None):
     path=Path(path).resolve();raw=path.read_bytes()if raw is None else raw;d=json.loads(raw);digest=hashlib.sha256(raw).hexdigest()
     if(d.get('schema')!=SCHEMA or d.get('allowed')is not True or d.get('status')!='experimental_unverified'
@@ -44,12 +71,20 @@ def verify_scope(path,raw=None):
     if run.parent!=(ROOT/'runs').resolve()or path.parent!=run or d['experiment']!=profile['experiment']or d['profile']!=profile:
         raise RuntimeError('PID scope/profile/run mismatch')
     refs=d.get('references',{});fingerprints={str(p):(Path(p).stat().st_size,Path(p).stat().st_mtime_ns)for p in refs}
+    if(run/'cloud_transport_manifest.json').exists():
+        fingerprints['run_cloud_transport_manifest_present']=True
     if not refs or any(not Path(p).is_absolute()or len(v)!=64 for p,v in refs.items()):raise RuntimeError('Malformed PID references')
     if CACHE.get(str(path))!=(digest,fingerprints):
         mandatory=runtime_files()+[run/n for n in('world.sdf','asset_manifest.json','sensor_contract.json','navigation_profile.json',
             'navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','navigation_slam_contract.json',
             'pid_navigation_protocol.json','pid_navigation_case.json','navigation_pid_source_manifest.json',
             'terrain_target_manifest.json','pid_navigation_freeze.json')]+[ROOT/profile['terrain_target_manifest']]
+        transport_files,transport=cloud_transport_refs(run);mandatory+=transport_files
+        if transport is not None:
+            if d.get('cloud_transport_experiment')!=transport:raise RuntimeError('PID scope omits/differs from its transport experiment')
+            data=json.loads((run/'cloud_transport_manifest.json').read_text())
+            if any(refs.get(p)!=h for p,h in data['source_hashes'].items()):raise RuntimeError('PID scope omits cloud transport source hashes')
+        elif 'cloud_transport_experiment'in d:raise RuntimeError('PID scoped cloud transport manifest is missing')
         if d['controller_kind']=='champ':
             mandatory += [run/'champ_contract.json']
             contract=json.loads((run/'champ_contract.json').read_text())
@@ -130,6 +165,8 @@ def prepare(run,selector='flat_short',controller_kind='teacher'):
     records=[{'path':str(Path(row['run_dir'])/'summary_navigation_independent.json'),'run_id':row['run_id']}for row in basis['runs']]
     files=runtime_files()+slam_files+[campaign]+[Path(row['path'])for row in records]+[run/n for n in('navigation_profile.json','navigation_slam_contract.json','pid_navigation_case.json','pid_navigation_protocol.json','terrain_target_manifest.json')]+[terrain_source]
     refs={str(p.resolve()):sha(p)for p in files};snapshots={}
+    transport_files,transport=cloud_transport_refs(run)
+    refs.update({str(p.resolve()):sha(p)for p in transport_files})
     if controller_kind=='champ':
         contract=json.loads((run/'champ_contract.json').read_text());refs[str(run/'champ_contract.json')]=sha(run/'champ_contract.json')
         for group in ('artifacts','executor_source_sha256','protected_before'):refs.update(contract[group])
@@ -155,6 +192,7 @@ def prepare(run,selector='flat_short',controller_kind='teacher'):
         'navigation_ground_truth_used':False,'review_basis':profile['review_basis'],'checkpoint_sha256':FROZEN_SHA,
         'run_dir':str(run),'profile':profile,'global_levels_preserved':json.loads((ROOT/'runs/acceptance.json').read_text())['levels'],
         'finite_flat_basis':records,'references':refs,'meaning':'Explicit permission to test this PID scene; never an actual pass receipt'}
+    if transport is not None:receipt['cloud_transport_experiment']=transport
     write(run/'navigation_scope.json',receipt);return verify_scope(run/'navigation_scope.json')
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--profile',default='flat_short');p.add_argument('--controller-kind',default='teacher');p.add_argument('--check-only',action='store_true')

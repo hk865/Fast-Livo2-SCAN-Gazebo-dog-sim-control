@@ -1,0 +1,188 @@
+{
+  "schema": "teacher_champ_pid_navigation_protocol/v1",
+  "status": "criteria_approved_before_first_actual_run",
+  "scope": "Independent matched measured-SLAM navigation and physical route audit of Teacher outer PID and CHAMP; simulation only. Historical camera Demo and previous short routes provide no result for this campaign.",
+  "controllers": [
+    "teacher_pid",
+    "champ"
+  ],
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "repetitions_required": 3,
+  "stage_gate": "One new diagnostic per controller/case may expose failure. Three repetitions with one frozen version are required for campaign passage; keep every failed diagnostic and never pool prior scopes.",
+  "localization": {
+    "source": "/demo/slam/body_odom",
+    "frame_id": "camera_init",
+    "cloud": "/cloud_registered_full",
+    "imu": "/livox/imu",
+    "ground_truth_navigation_used": false,
+    "anchor": "One immutable initial accepted raw SLAM position and yaw; predefined relative fixture geometry only. No simulator pose/yaw used to update goals, PID, navigation region or planner."
+  },
+  "arrival": {
+    "control_radius_m": 0.17,
+    "height_half_span_m": 0.1,
+    "dwell_s": 0.6,
+    "maximum_raw_pose_gap_s": 0.2,
+    "require_exact_integer_begin_end_stamps": true,
+    "tracking_or_predicted_pose_allowed": false,
+    "protected_dwell_allowed": false,
+    "stop_policy": "after_measured_dwell",
+    "deadline_scope": "From actual per-goal activation; sensor holds and replans consume the same deadline."
+  },
+  "transport": {
+    "maximum_source_sim_age_s": 0.3,
+    "maximum_source_wall_age_s": 0.3,
+    "minimum_source_age_s": -0.05,
+    "expired_requested_command": [
+      0,
+      0,
+      0
+    ],
+    "worker_slew_acceleration": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "no_refresh_of_stale_source_stamp": true,
+    "ttl_physical_claim": "Requires new moving-to-expired event and complete settling+parking window. Brief holds or standing alone remain unverified."
+  },
+  "physical": {
+    "physics_dt_s": 0.005,
+    "native_sample_gap_max_s": 0.005001,
+    "audit_start_s": 0.1,
+    "maximum_abs_roll_pitch_rad": 0.65,
+    "minimum_support_clearance_m": 0.18,
+    "body_contact_allowed": false,
+    "fault_allowed": false,
+    "body_pose_resets_allowed": 0,
+    "native_truth_use": "Independent post-run pose/COM velocity/contact/clearance/joint/torque evaluation only.",
+    "maximum_actual_joint_forcecmd_abs_Nm": 23.5000001,
+    "maximum_actual_joint_velocity_radps": 30.001,
+    "complete_200hz_force_components_required": true,
+    "pose_translation_integral_error_m": 0.0001
+  },
+  "route": {
+    "maximum_lateral_error_m": 0.45,
+    "maximum_active_lateral_rms_m": 0.2,
+    "maximum_drive_heading_error_rad": 0.35,
+    "minimum_commanded_forward_axis_ratio": 0.4,
+    "rolling_window_s": 0.5,
+    "minimum_projected_world_forward_window_mean_mps": 0.05,
+    "minimum_positive_window_fraction": 0.9,
+    "minimum_measured_motion_m": 0.5,
+    "truth_alignment": "One frozen SE3 at raw SLAM anchor only; causal native state <= stamp, maximum match gap .005001. Report independent SLAM error; never feed this alignment to runtime."
+  },
+  "parking": {
+    "settling_s": 3,
+    "evaluation_s": 5,
+    "maximum_translation_drift_m": 0.15,
+    "maximum_yaw_drift_rad": 0.2,
+    "maximum_world_planar_component_rms_mps": 0.08,
+    "maximum_body_yaw_rate_rms_radps": 0.1,
+    "require_continuous_controller": true,
+    "Teacher_policy": "Every frame actor inferred with zero velocity command, never action=0 or captured support pose.",
+    "window": "First actual navigation succeeded status ROS clock +3s, fixed following5s. The corresponding original rawSLAM region end is independently verified; never select a later favorable window."
+  },
+  "contact": {
+    "actual_position_and_normal_required": true,
+    "surface_local_xy_margin_m": 0.005,
+    "surface_normal_distance_tolerance_m": 0.015,
+    "minimum_absolute_normal_dot_surface_normal": 0.8,
+    "foot_center_height_tolerance_m": 0.025,
+    "each_foot_initial_landing_support_s": 0.1,
+    "each_foot_active_ramp_support_s": 0.1,
+    "each_foot_final_landing_support_s": 0.1,
+    "final_simultaneous_four_foot_landing_support_s": 0.1,
+    "ramp_coverage_bin_m": 1,
+    "each_coverage_bin_any_foot_support_s": 0.1,
+    "maximum_all_feet_unsupported_s": 0.3,
+    "load_statement": "Actual top-face contact support proxy. Raw wrenches are not validated vertical load measurements."
+  },
+  "ramp_fixtures": {
+    "ramp_23": {
+      "ramp": "ramp_23",
+      "nominal_x_limits_m": [
+        2,
+        14
+      ],
+      "center_y_m": 7,
+      "width_m": 2,
+      "slope_z_per_world_x": -0.1,
+      "surface_equation": "z=2.6-0.1*x",
+      "floor_at_x_low": "floor_3",
+      "floor_at_x_high": "floor_2",
+      "floor_heights_m": [
+        2.4,
+        1.2
+      ]
+    },
+    "ramp_12": {
+      "ramp": "ramp_12",
+      "nominal_x_limits_m": [
+        2,
+        14
+      ],
+      "center_y_m": 2,
+      "width_m": 2,
+      "slope_z_per_world_x": 0.1,
+      "surface_equation": "z=0.1*x-0.2",
+      "floor_at_x_low": "floor_1",
+      "floor_at_x_high": "floor_2",
+      "floor_heights_m": [
+        0,
+        1.2
+      ]
+    }
+  },
+  "fair_comparison": {
+    "same_original_world_collisions": true,
+    "same_route_regions_and_deadlines": true,
+    "same_localization_sensor_inputs_and_renderer": true,
+    "same_metrics_and_safety_gates": true,
+    "controller_specific_gains_must_be_frozen": true,
+    "mass_inertia_collision_friction_and_joint_limits_must_match": true,
+    "Teacher_scan": "Explicit frozen selected collision targets, source and source SHA. Teacher may retain privileged actor inputs; neither controller may use truth for navigation.",
+    "CHAMP_status": "unverified until an actual new run satisfies this protocol; successful camera Demo is not evidence.",
+    "actuator_difference": "CHAMP legacy effortPID/initialjointpose versus Teacher PD25/.5+DCmotor. Same force23.5 and physicaljointvelocity30 safety bounds required; no claim that the motor models are equivalent."
+  },
+  "runtime": {
+    "sole_actuator_writer_required": true,
+    "Teacher_device": "cpu",
+    "Teacher_threads": 1,
+    "all_owned_processes_returncode_required": 0,
+    "all_launch_children_clean_required": true,
+    "source_snapshots_and_pre_run_freeze_required": true,
+    "original_camera_demo_unchanged": true,
+    "training_unchanged": true
+  },
+  "body_height_gain_is_ability_gate": false,
+  "exclusions": [
+    "stairs",
+    "real_robot",
+    "global Sim2Sim",
+    "unbounded navigation",
+    "full46region mission"
+  ],
+  "durations_s": {
+    "flat_goal_deadline": 120,
+    "ramp_goal_deadline": 140,
+    "single_flat_max": 180,
+    "roundtrip_flat_max": 300,
+    "single_ramp_max": 190,
+    "continuous_two_ramps_max": 500,
+    "request_startup_wall_max": 600,
+    "short_flat_goal_deadline": 90,
+    "short_flat_max": 180
+  },
+  "continuous_stage_gate": "Only after all four original-width single-ramp directions and flat roundtrip have3/3passes for the chosen controller. The continuous route is a separate unverified test until actually executed.",
+  "stage_sequence": [
+    "flat_short_1m_roundtrip",
+    "flat_straight_6m",
+    "flat_roundtrip_6m",
+    "ramp12_up_full",
+    "ramp12_down_full",
+    "ramp23_up_full",
+    "ramp23_down_full",
+    "continuous_two_ramps_up",
+    "continuous_two_ramps_down"
+  ]
+}

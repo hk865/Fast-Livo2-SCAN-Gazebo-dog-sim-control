@@ -1,0 +1,22 @@
+{
+  "schema": "actual_cloud_paired_qos_protocol/v1",
+  "purpose": "Actual registered cloud publisher/consumer timestamp and large-message delivery diagnosis; no navigation acceptance",
+  "ros_domain": 79,
+  "duration_sim_s": 60.0,
+  "wall_deadline_s": 90.0,
+  "clock": "Single explicit BEST_EFFORT KEEP_LAST depth1 /clock subscription; original integer Clock stamp; no additional rclpy TimeSource or synthetic clock",
+  "topics": {
+    "cloud_reliable": {"topic": "/cloud_registered_full", "reliability": "RELIABLE", "depth": 1},
+    "cloud_best_effort": {"topic": "/cloud_registered_full", "reliability": "BEST_EFFORT", "depth": 1},
+    "body_odom": {"topic": "/demo/slam/body_odom", "reliability": "BEST_EFFORT", "depth": 1},
+    "clock": {"topic": "/clock", "reliability": "BEST_EFFORT", "depth": 1}
+  },
+  "receipt": "Every actually delivered callback preserves integer header stamp, receive monotonic wall, current actually received Clock stamp and age, original frame, PointCloud2 fields/shape/stride/data bytes, and available actual MessageInfo fields. No payload decoding, copying, hashing, interpolation or republishing.",
+  "limits": {"async_receipt_queue_records": 8192, "graph_period_wall_s": 2.0},
+  "observer_complete_requires": ["Observed at least60sim seconds from first actual clock", "All four subscription streams actually received", "No clock regression", "No write/overflow/close/source integrity errors", "All submitted receipts drained"],
+  "simulation_fixture": {"teacher_actor": "frozen CPU actor", "spawn": [6, -0.7, 0.4, 0], "camera_rate_hz": 10, "vehicle_fov_degrees": 80, "real_time_factor": 1.0, "command": [0, 0, 0], "schedule": "zero60.json"},
+  "analysis": "Compare unique source stamps, DDS publisher sequence if available, matching actual odometry stamps, payload byte distribution, delivery gaps and current source age; unavailable MessageInfo remains null.",
+  "limitations": ["Paired subscribers share one lightweight process and publisher", "Reliable reader may change retransmission/backpressure of the shared publisher", "Endpoint and loaded middleware evidence only identifies what was actually observed, not every transport path", "observation_complete never means every cloud was delivered, motion passed, navigation passed or a DDS cause was proven"],
+  "actuation_or_navigation_command_sent": false,
+  "navigation_validation": "unverified"
+}

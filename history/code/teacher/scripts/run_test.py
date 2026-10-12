@@ -47,6 +47,7 @@ def main():
     p.add_argument('--navigation-stack',action='store_true',help='Finite scoped experiment with actual SLAM/SCAN inputs')
     p.add_argument('--navigation-pid',choices=['flat_short','flat_straight','flat_long','flat_roundtrip','ramp12_up','ramp12_down','ramp23_up','ramp23_down'],help='Independent actual SLAM/SCAN PID route profile; historical navigation scopes remain unchanged')
     p.add_argument('--navigation-champ',action='store_true',help='Explicit CHAMP executor baseline with the selected independent PID route')
+    p.add_argument('--cloud-transport-profile',choices=['shm_512k','shm_64m'],help='Independent frozen loopback-only DDS capacity diagnostic; only new PID or SLAM-only stand')
     p.add_argument('--navigation-dynamic',action='store_true',help='Finite flat experiment with one real Gazebo moving obstacle; implies navigation stack')
     p.add_argument('--navigation-dynamic-turn20',action='store_true',help='Explicit calibrated dynamic-only 0.2 rad/s alignment profile; implies dynamic mode')
     p.add_argument('--navigation-dynamic-dwell',action='store_true',help='Independent dynamic profile that stops on confirmed original measured region dwell; implies turn20 dynamic mode')
@@ -78,6 +79,8 @@ def main():
     if args.slam_only_stack:
         if args.navigation_stack or args.tests!=['stand']:p.error('SLAM-only stack requires stand, without navigation')
         args.sensors=True;args.shadow=True
+    if args.cloud_transport_profile and not (pid_profile or (args.slam_only_stack and args.tests==['stand'])):
+        p.error('Cloud transport diagnostics require the independent PID or SLAM-only stand scope')
     if args.sensor_feedback:args.sensors=True
     schedule=json.loads(args.schedule.read_text())if args.schedule else None
     if schedule and 'navigation'in args.tests:p.error('Scripted schedules cannot drive navigation tests')
@@ -120,6 +123,10 @@ def main():
             if args.navigation_dynamic:
                 subprocess.run([sys.executable,str(ROOT/'navigation/dynamic/prepare.py'),'--stage','asset','--run',str(run)],check=True,
                                stdout=(run/'dynamic_prepare.log').open('w'),stderr=subprocess.STDOUT)
+            if args.cloud_transport_profile:
+                subprocess.run([sys.executable,str(ROOT/'tests/cloud_transport_probe_20261004/prepare_transport.py'),
+                    '--run',str(run),'--profile',args.cloud_transport_profile],check=True,
+                    stdout=(run/'cloud_transport_prepare.log').open('w'),stderr=subprocess.STDOUT)
             if args.navigation_stack or args.slam_only_stack:
                 config_path=ROOT/'navigation/pid_mode/scoped_profile.py'if pid_profile else ROOT/'navigation/scoped_profile.py'
                 config_cmd=[sys.executable,str(config_path),'--run',str(run)]
@@ -141,6 +148,26 @@ def main():
                  'GZ_SIM_SYSTEM_PLUGIN_PATH':str(ROOT/'simulation/build')+':'+os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH',''),
                  'TEACHER_SOCKET':'/tmp/teacher_'+uuid.uuid4().hex[:12]+'.sock','TEACHER_ACTUATOR_LOG':str(run/'actuator.jsonl'),
                  'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'}
+            transport_manifest=None
+            if args.cloud_transport_profile:
+                transport_manifest=json.loads((run/'cloud_transport_manifest.json').read_text())
+                transport_env=transport_manifest['environment']
+                allowed={'ROS_LOCALHOST_ONLY','ROS_AUTOMATIC_DISCOVERY_RANGE','ROS_STATIC_PEERS',
+                    'RMW_IMPLEMENTATION','FASTRTPS_DEFAULT_PROFILES_FILE','FASTDDS_DEFAULT_PROFILES_FILE',
+                    'RMW_FASTRTPS_USE_QOS_FROM_XML','RMW_FASTRTPS_PUBLICATION_MODE','SKIP_DEFAULT_XML'}
+                if (not set(transport_env)<=allowed or transport_env.get('ROS_LOCALHOST_ONLY')!='0'
+                    or transport_env.get('ROS_AUTOMATIC_DISCOVERY_RANGE')!='SYSTEM_DEFAULT'
+                    or transport_env.get('RMW_IMPLEMENTATION')!='rmw_fastrtps_cpp'
+                    or transport_env.get('FASTRTPS_DEFAULT_PROFILES_FILE')!=str(run/'cloud_transport.xml')):
+                    raise ValueError('Cloud transport environment differs from the frozen isolated scope')
+                removal=set(transport_manifest.get('remove_environment_keys',[]))
+                if not removal<={'FASTDDS_DEFAULT_PROFILES_FILE','FASTRTPS_DEFAULT_PROFILES_FILE',
+                    'FASTDDS_BUILTIN_TRANSPORTS','FASTDDS_ENVIRONMENT_FILE','ROS_DISCOVERY_SERVER',
+                    'ROS_SUPER_CLIENT','ROS_STATIC_PEERS','RMW_FASTRTPS_USE_QOS_FROM_XML',
+                    'RMW_FASTRTPS_PUBLICATION_MODE','SKIP_DEFAULT_XML','CYCLONEDDS_URI'}:
+                    raise ValueError('Transport scope attempted to change unrelated environment')
+                for key in removal:env.pop(key,None)
+                env.update(transport_env)
             if args.navigation_champ:
                 champ_contract=json.loads((run/'champ_contract.json').read_text())
                 cm_dir=str(Path(champ_contract['controller_manager_library']['path']).parent)
@@ -284,6 +311,13 @@ def main():
                           'navigation_pid_profile':pid_selector,'navigation_controller_kind':'champ'if args.navigation_champ else'teacher',
                           'actor_started':not args.navigation_champ,'navigation_duration_s':args.navigation_duration if args.navigation_stack else None,
                           'training_process_untouched':True,'real_robot':False}
+                if transport_manifest is not None:
+                    manifest['cloud_transport']={'profile':args.cloud_transport_profile,
+                        'manifest_sha256':sha(run/'cloud_transport_manifest.json'),
+                        'copied_xml_sha256':sha(run/'cloud_transport.xml'),
+                        'environment':{key:env.get(key)for key in transport_env},
+                        'removed_environment_keys':sorted(removal),
+                        'scope':'Run-only frozen loopback DDS diagnostic; no global transport or training changes'}
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))
                 if args.navigation_champ:
                     summary={'run':str(run),'status':'unverified','levels':{'interface':'unverified','motion':'unverified','sim2sim':'unverified','navigation':'unverified','real_robot':'unverified'},
