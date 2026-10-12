@@ -1,0 +1,65 @@
+{
+  "schema": "truth_teacher_velocity_pid_benchmark_protocol/v1",
+  "status": "prospective_frozen_before_actual",
+  "scope": "Simulation benchmark using simulator feedback in the outer velocity controller; never sensor-SLAM navigation or real-robot acceptance",
+  "time": {
+    "physical_pose_source": "telemetry.state_physics_world_time",
+    "expected_pose_offset_from_world_sim_time_s": -0.005,
+    "pose_offset_tolerance_s": 0.00000001,
+    "bootstrap_excluded_s": 0.1,
+    "maximum_telemetry_gap_s": 0.041,
+    "maximum_causal_control_age_s": 0.301,
+    "minimum_stable_speed_duration_s": 0.5,
+    "speed_startup_excluded_s": 1.0
+  },
+  "route": {
+    "maximum_xy_distance_m": 0.2,
+    "drive_xy_distance_rms_m": 0.08,
+    "maximum_drive_heading_error_rad": 0.2,
+    "goal_xy_tolerance_m": 0.15,
+    "every_waypoint_must_be_visited_in_order": true,
+    "heading_reference": "causal controller reference_yaw; requested route/heading and feedback time are retained for independent review",
+    "no_world_z_gain_ratio_gate": true
+  },
+  "speed": {
+    "metric": "mean absolute actual COM velocity projected on the causal nonzero reference velocity minus its norm",
+    "error_limit_mps": "max(0.05, 0.25 * mean_reference_speed)",
+    "full_speed_reference_fraction_min": 0.8,
+    "maximum_absolute_error_floor_mps": 0.05,
+    "maximum_relative_error_fraction": 0.25,
+    "active_reference_min_mps": 0.03
+  },
+  "parking": {
+    "fixed_window_s": 5.0,
+    "trigger": "first completed ordered route inside final XY goal with requested and actor command zero; reference velocity also zero",
+    "maximum_xy_drift_m": 0.05,
+    "maximum_yaw_drift_rad": 0.1,
+    "must_continuously_keep_requested_and_actor_command_zero": true
+  },
+  "safety": {
+    "maximum_abs_roll_pitch_rad": 0.65,
+    "minimum_body_clearance_m": 0.18,
+    "maximum_abs_applied_torque_Nm": 23.50001,
+    "maximum_abs_joint_velocity_radps": 30.001,
+    "body_contact_count": 0,
+    "fault_count": 0,
+    "semantics": "As-recorded telemetry safety only; 50 Hz evidence does not certify unrecorded 200 Hz extrema or measured motor torque"
+  },
+  "terrain": {
+    "ramp_full_length_m": 12.0,
+    "strict_foot_support_requires_actual_contact_xyz_normal_and_collision_geometry": true,
+    "foot_support_continuity_s": 0.1,
+    "ramp_each_foot_entry_surface_exit_and_each_1m_bin_required": true,
+    "step_functional": "each actual foot supports the true tread; base proceeds at least 1 m after edge+0.5 m, then final parking; world Z rise alone is diagnostic",
+    "missing_foot_geometry_status": "unverified; no strict full ramp or step pass"
+  },
+  "score": {
+    "eligible_only_if_all_required_checks_passed": true,
+    "expression": "100 / (1 + RMS_route/0.08 + mean_absolute_speed_error/speed_limit + max_drive_heading/0.2 + parking_XY_drift/0.05 + parking_yaw_drift/0.1)",
+    "unsafe_or_incomplete_or_unverified_score": null
+  },
+  "model_training_changed": false,
+  "navigation_ground_truth_used": true,
+  "SLAM_navigation_verified": false,
+  "real_robot_verified": false
+}
