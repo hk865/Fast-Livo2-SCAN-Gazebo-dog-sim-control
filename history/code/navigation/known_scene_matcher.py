@@ -241,6 +241,25 @@ class KnownSceneMatcher:
                         observed_range_m=float(observed[i]), expected_first_hit_range_m=float(first[i]),
                         range_error_m=float(observed[i] - first[i]), surface_distance_m=float(d[i]))
                    for i in sample_indices]
+        ray_valid=np.isfinite(first)
+        error=observed-first
+        ray_static=ray_valid & static
+        def ray_summary(mask):
+            values=error[mask]
+            return dict(count=int(mask.sum()),abs_p95_m=float(np.quantile(np.abs(values),.95)) if len(values) else None,
+                negative_beyond_original_p95_limit=int((values < -p.ray_abs_p95_max_m).sum()),
+                positive_beyond_original_p95_limit=int((values > p.ray_abs_p95_max_m).sum()))
+        tails=np.flatnonzero(ray_static & (observed>0) & (np.abs(error)>p.ray_abs_p95_max_m))
+        tails=tails[np.linspace(0,len(tails)-1,min(32,len(tails)),dtype=int)] if len(tails) else []
+        origin=pose[:3,3]+pose[:3,:3]@mount
+        tail_samples=[dict(point_body_xyz=body_points[i].tolist(),point_world_xyz=moved[i].tolist(),
+            observed_range_m=float(observed[i]),expected_first_hit_range_m=float(first[i]),range_error_m=float(error[i]),
+            surface_distance_m=float(d[i]),surface_id=self.reference.boxes[owners[i]]['surface_ids'][faces[i]],
+            nearest_surface_normal_world=n[i].tolist(),ray_direction_world=((moved[i]-origin)/observed[i]).tolist()) for i in tails]
+        ray_diagnostic=dict(schema='known_scene_signed_ray_tail_diagnostic/v1',quality_gates_changed=False,
+            world_lidar_origin=origin.tolist(),all_valid=ray_summary(ray_valid),nonforeground=ray_summary(ray_static),
+            foreground=ray_summary(ray_valid & foreground),nonforeground_tail_sample_count=len(tail_samples),
+            nonforeground_tail_samples=tail_samples)
         foreground_fraction = float(foreground.mean())
         result = dict(T_world_body=pose.tolist(), converged=bool(converged),
                       rms_capped_m=float(np.sqrt(np.mean(np.minimum(d, .5) ** 2))),
@@ -273,6 +292,7 @@ class KnownSceneMatcher:
                  (rays['abs_median_m'] <= p.ray_abs_median_max_m, 'ray_median'),
                  (rays['abs_p95_m'] <= p.ray_abs_p95_max_m, 'ray_p95')]
         reasons.extend(name for passed, name in gates if not passed)
+        result['ray_tail_diagnostic']=ray_diagnostic
         result['quality_passed'] = not reasons
         result['rejections'] = reasons
         # Rays dominate aliases, but never replace the individual gates.

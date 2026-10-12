@@ -3708,6 +3708,17 @@
     "translation_rate_mps": 0.04,
     "rotation_rate_radps": 0.02,
     "startup_correction_commit_requires_navigation_idle": true,
+    "quality_diagnostic_capture": {
+      "version": "known_scene_complete_CDR_diagnostic_v34r16",
+      "maximum_groups": 2,
+      "maximum_logical_and_allocated_bytes": 8388608,
+      "maximum_whole_raw_adapted_CDR_bytes": 1048576,
+      "maximum_whole_registered_CDR_bytes": 1572864,
+      "final_receipt_requires_worker_drained": true,
+      "trigger": "top_candidate_only_ray_p95_rejected",
+      "quality_gates_changed": false,
+      "formal_R6_capture_complete": false
+    },
     "navigation_world_transform_source": "original_scenario.slam_origin_in_world",
     "frontend_velocity_or_bias_repaired": false,
     "correction_trigger": {

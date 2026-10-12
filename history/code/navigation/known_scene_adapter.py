@@ -215,7 +215,8 @@ class ExactSourceJoin:
         return dict(source_ns=ns, body_points=local, T_odom_body=t,
                     registered_odom_xyz=full, provenance=provenance,
                     witness_status=self.witness,
-                    original_received_wall_ns={role: slot[role][1] for role in self.ROLES})
+                    original_received_wall_ns={role: slot[role][1] for role in self.ROLES},
+                    source_messages={role:slot[role][0] for role in self.ROLES})
 
 
 class MatcherWorker:
@@ -225,8 +226,9 @@ class MatcherWorker:
     importing numpy in the integration launch. Do not call submit/match while
     holding the controller or command publication lock.
     """
-    def __init__(self, matcher):
+    def __init__(self, matcher, diagnostic_capture=None):
         self.matcher = matcher
+        self.diagnostic_capture=diagnostic_capture
         self.condition = threading.Condition()
         self.job = None
         self.result = None
@@ -285,6 +287,10 @@ class MatcherWorker:
                                                 current_c=c, provenance=job['provenance'])
                     result['T_odom_body']=checked_transform(job['T_odom_body']).tolist()
                     result['T_odom_body_source_ns']=job['source_ns']
+                    if self.diagnostic_capture is not None:
+                        try:self.diagnostic_capture.consider(job,result,c,parent_generation)
+                        except (OSError,ValueError,KeyError,TypeError) as error:
+                            self.diagnostic_capture.reject(job['source_ns'],'capture_exception:'+str(error))
             except Exception as error:
                 result = dict(source_ns=None if job is None else job.get('source_ns'),
                               accepted=False, control_allowed=False,

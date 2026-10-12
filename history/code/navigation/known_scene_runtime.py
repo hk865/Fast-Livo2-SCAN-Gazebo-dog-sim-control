@@ -91,7 +91,10 @@ def main():
             self.correction=CorrectionState(initial_c=baseline)
             reference_path=run/'known_scene_reference.json'
             reference=SceneReference.load(reference_path,sha(reference_path),sha(run/'world.sdf'))
-            self.matcher=KnownSceneMatcher(reference);self.worker=MatcherWorker(self.matcher)
+            self.matcher=KnownSceneMatcher(reference)
+            from known_scene_diagnostic_capture import BoundedSourceFrames
+            self.diagnostic_capture=BoundedSourceFrames(run)
+            self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
@@ -217,7 +220,12 @@ def main():
             self.status_pub.publish(String(data=json.dumps(status,allow_nan=False)))
             atomic(run/'known_scene_status.json',status)
         def close(self):
-            clean=self.worker.close();self.history.close();self.bundle_history.close();self.decision_history.close()
+            clean=self.worker.close()
+            if clean:self.diagnostic_capture.close()
+            else:atomic(run/'known_scene_diagnostic_capture_receipt.json',dict(schema='known_scene_diagnostic8MiB_receipt/v1',
+                status='NONFINAL_WORKER_NOT_DRAINED',final=False,worker_drained=False,
+                maximum_groups=2,maximum_bytes=8*1024*1024,navigation_verified=False))
+            self.history.close();self.bundle_history.close();self.decision_history.close()
             atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
     node=Runtime()
