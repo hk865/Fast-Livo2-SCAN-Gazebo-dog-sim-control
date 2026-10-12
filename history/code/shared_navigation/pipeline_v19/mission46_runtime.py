@@ -84,7 +84,7 @@ def build_node(run, scope, profile):
             self.pose_rows=deque(maxlen=3000);self.imu_rows=deque(maxlen=4000)
             self.status_rows=deque(maxlen=1000);self.native_records=deque(maxlen=1000)
             self.guard_records=deque(maxlen=2000);self.obstacle_records=[]
-            self.telemetry=FileTail(run/'telemetry.jsonl',project=native_projection);self.guards=FileTail(run/'navigation_guard_history.jsonl')
+            self.telemetry=FileTail(run/'telemetry.jsonl',project=native_projection);self.guard_tail=FileTail(run/'navigation_guard_history.jsonl')
             self.obstacle_calls=FileTail(run/'mission46_obstacle_calls.jsonl')
             self.init_try_sim=-math.inf;self.dynamic_try_sim=-math.inf;self.parking_origin=None
             self.anchor=None;self.request=None;self.request_ready=False;self.last_emit=-math.inf
@@ -324,7 +324,7 @@ def build_node(run, scope, profile):
                 terminal_receipt_binding=None if self.mission.parking_receipt is None else {
                     key:self.mission.parking_receipt[key] for key in ('source_evidence_file','source_evidence_sha256')},
                 source='actual_SLAM_IMU_SCAN_Teacher46_coordinator',
-                raw_source_offsets=dict(telemetry=self.telemetry.offset,guard=self.guards.offset,obstacle=self.obstacle_calls.offset))
+                raw_source_offsets=dict(telemetry=self.telemetry.offset,guard=self.guard_tail.offset,obstacle=self.obstacle_calls.offset))
             if self.sticky_failure is not None:data.update(stage='failed',message=self.sticky_failure,functional_sequence_completed=False)
             self.writer.atomic(run/'mission46_status.json',data)
             self.writer.append(run/'mission46_status_history.jsonl',data)
@@ -341,7 +341,7 @@ def build_node(run, scope, profile):
                     self.started=True;self.apply(self.mission.start(run.name,wall_s=now,sim_ns=ns))
                 if not self.started:return
                 if self.writer.error:raise RuntimeError(self.writer.error)
-                self.native_records.extend(self.telemetry.poll());self.guard_records.extend(self.guards.poll())
+                self.native_records.extend(self.telemetry.poll());self.guard_records.extend(self.guard_tail.poll())
                 self.obstacle_records.extend(self.obstacle_calls.poll())
                 if self.native_records and self.native_records[-1]['data'].get('fault')is not None:
                     self.fail('Actual native Teacher fault: '+str(self.native_records[-1]['data']['fault']))
