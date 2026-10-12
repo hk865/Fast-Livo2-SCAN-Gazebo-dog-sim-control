@@ -36,10 +36,18 @@ def run(profile,camera=False):
     (directory/'truth_profile_input.json').write_text(json.dumps(profile,indent=2)+'\n')
     prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(directory),'--terrain',profile['terrain'],
              '--real-time-factor','1','--render-engine','ogre2']
-    if camera:prepare+=['--camera-only','--camera-rate','2','--overview-pose',*map(str,profile.get('overview_pose',[7,-3,2,0,.4,1.2]))]
+    camera_rate=float(profile.get('camera_rate_hz',2))
+    if not 1<=camera_rate<=20:raise ValueError('Observer camera rate must be 1..20 Hz')
+    if camera:prepare+=['--camera-only','--camera-rate',str(camera_rate),'--overview-pose',*map(str,profile.get('overview_pose',[7,-3,2,0,.4,1.2]))]
     subprocess.run(prepare,check=True,stdout=(directory/'prepare.log').open('w'))
     tree=ET.parse(directory/'world.sdf');model=tree.getroot().find("world/model[@name='go2']")
     model.find('pose').text=' '.join(map(str,[*profile['spawn'][:3],0,0,profile['spawn'][3]]))
+    if camera:
+        tree.getroot().find("world/model[@name='teacher_overview_camera']/link/sensor/update_rate").text=str(camera_rate)
+        sensor_path=directory/'sensor_contract.json'
+        sensor_contract=json.loads(sensor_path.read_text())
+        sensor_contract['overview']['rate_hz']=camera_rate
+        sensor_path.write_text(json.dumps(sensor_contract,indent=2)+'\n')
     # Keep original scene/colliders and exclusive actuator. Only observer cameras are optional.
     ET.indent(tree);tree.write(directory/'world.sdf',encoding='unicode')
     asset=json.loads((directory/'asset_manifest.json').read_text());asset.update(spawn=profile['spawn'],world_sha256=sha(directory/'world.sdf'))
@@ -53,6 +61,7 @@ def run(profile,camera=False):
     sources=[(ROOT/'policy'/name,Path('policy')/name)for name in ('worker.py','observation.py','contract.json')]
     sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json','terrain_receipt.py')if (HERE/name).exists()]
     sources += [(ROOT/'simulation/teacher_actuator.cpp',Path('native/teacher_actuator.cpp'))]
+    if camera:sources += [(ROOT/'scripts/capture.py',Path('observer/capture.py'))]
     for source,relative in sources:
         dest=directory/'sources'/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,dest);refs[str(relative)]=sha(dest)
     (directory/'source_manifest.json').write_text(json.dumps(refs,indent=2)+'\n')
@@ -79,7 +88,7 @@ def run(profile,camera=False):
         if camera:
             children['bridge']=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','--ros-args','-p','config_file:='+str(directory/'sensor_bridge.yaml')],env=env,
                 stdout=(directory/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-            children['capture']=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(directory),'--topic','/demo/teacher/overview','--archive-stride','1'],env=env,
+            children['capture']=subprocess.Popen([sys.executable,str(directory/'sources/observer/capture.py'),'--run',str(directory),'--topic','/demo/teacher/overview','--archive-stride','1'],env=env,
                 stdout=(directory/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
             time.sleep(.7)
         children['gazebo']=subprocess.Popen(['gz','sim','-s','-r',str(directory/'world.sdf')],env=env,stdout=(directory/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
