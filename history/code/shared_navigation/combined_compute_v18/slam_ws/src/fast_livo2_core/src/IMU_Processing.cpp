@@ -12,6 +12,9 @@ which is included as part of this source code package.
 
 #include "IMU_Processing.h"
 #include "diagnostics.h"
+// BOUNDARY_TIMING_BEGIN include
+#include "boundary_timing.h"
+// BOUNDARY_TIMING_END include
 #include <rcpputils/asserts.hpp>
 
 const bool time_list(PointType &x, PointType &y) { return (x.curvature < y.curvature); }
@@ -283,6 +286,9 @@ void ImuProcess::Forward_without_imu(LidarMeasureGroup &meas, StatesGroup &state
 
 void ImuProcess::UndistortPcl(LidarMeasureGroup &lidar_meas, StatesGroup &state_inout, PointCloudXYZI &pcl_out)
 {
+// BOUNDARY_TIMING_BEGIN undistort_all
+  fastlivo_timing::Scope timing_undistort_all(1);
+// BOUNDARY_TIMING_END undistort_all
   double t0 = omp_get_wtime();
   pcl_out.clear();
   /*** add the imu of the last frame-tail to the of current frame-head ***/
@@ -553,6 +559,9 @@ void ImuProcess::UndistortPcl(LidarMeasureGroup &lidar_meas, StatesGroup &state_
    * update ***/
   if (lidar_meas.lio_vio_flg == LIO)
   {
+// BOUNDARY_TIMING_BEGIN deskew_points
+    fastlivo_timing::Scope timing_deskew_points(2);
+// BOUNDARY_TIMING_END deskew_points
     const bool instantaneous_lidar = lidar_type == 0;
     bool point_begin_processed = false;
     auto it_pcl = pcl_wait_proc.points.end() - 1;
@@ -614,6 +623,9 @@ void ImuProcess::UndistortPcl(LidarMeasureGroup &lidar_meas, StatesGroup &state_
 
 void ImuProcess::Process2(LidarMeasureGroup &lidar_meas, StatesGroup &stat, PointCloudXYZI::Ptr cur_pcl_un_)
 {
+// BOUNDARY_TIMING_BEGIN process2
+  fastlivo_timing::Scope timing_process2(0);
+// BOUNDARY_TIMING_END process2
   double t1, t2, t3;
   t1 = omp_get_wtime();
   rcpputils::assert_true(lidar_meas.lidar != nullptr);

@@ -12,6 +12,9 @@ which is included as part of this source code package.
 
 #include "LIVMapper.h"
 #include "diagnostics.h"
+// BOUNDARY_TIMING_BEGIN include
+#include "boundary_timing.h"
+// BOUNDARY_TIMING_END include
 #include <chrono>
 #include <filesystem>
 #include <thread>
@@ -482,6 +485,9 @@ void LIVMapper::stateEstimationAndMapping()
 
 void LIVMapper::handleVIO() 
 {
+// BOUNDARY_TIMING_BEGIN handle_vio_all
+  fastlivo_timing::Scope timing_handle_vio_all(15);
+// BOUNDARY_TIMING_END handle_vio_all
   // fprintf(stderr, "[ VIO ] handleVIO entered, img empty=%d\n", LidarMeasures.measures.empty() ? -1 : LidarMeasures.measures.back().img.empty());
   // fflush(stderr);
   euler_cur = RotMtoEuler(_state.rot_end);
@@ -504,7 +510,13 @@ void LIVMapper::handleVIO()
     vio_manager->plot_flag = false;
   }
 
+// BOUNDARY_TIMING_BEGIN vio_process_open
+  { fastlivo_timing::Scope timing_vio_process(6);
+// BOUNDARY_TIMING_END vio_process_open
   vio_manager->processFrame(LidarMeasures.measures.back().img, _pv_list, voxelmap_manager->voxel_map_, LidarMeasures.last_lio_update_time - _first_lidar_time);
+// BOUNDARY_TIMING_BEGIN vio_process_close
+  }
+// BOUNDARY_TIMING_END vio_process_close
 
   diag_stage(12,1,_state);
   if (imu_prop_enable) 
@@ -538,6 +550,9 @@ void LIVMapper::handleVIO()
 
 void LIVMapper::handleLIO() 
 {    
+// BOUNDARY_TIMING_BEGIN handle_lio_all
+  fastlivo_timing::Scope timing_handle_lio_all(14);
+// BOUNDARY_TIMING_END handle_lio_all
   euler_cur = RotMtoEuler(_state.rot_end);
   fout_pre << setw(20) << LidarMeasures.last_lio_update_time - _first_lidar_time << " " << euler_cur.transpose() * 57.3 << " "
            << _state.pos_end.transpose() << " " << _state.vel_end.transpose() << " " << _state.bias_g.transpose() << " "
@@ -655,11 +670,17 @@ void LIVMapper::handleLIO()
 
   // Occupancy mapping needs the complete deskewed scan, including points
   // outside the camera field of view. Keep the coloured topic unchanged.
+// BOUNDARY_TIMING_BEGIN navigation_cloud_open
+  { fastlivo_timing::Scope timing_navigation_cloud(7);
+// BOUNDARY_TIMING_END navigation_cloud_open
   sensor_msgs::msg::PointCloud2 navigation_cloud;
   pcl::toROSMsg(*laserCloudWorld, navigation_cloud);
   navigation_cloud.header.frame_id = "camera_init";
   navigation_cloud.header.stamp = sec2Stamp(LidarMeasures.last_lio_update_time);
   pubNavigationCloud->publish(navigation_cloud);
+// BOUNDARY_TIMING_BEGIN navigation_cloud_close
+  }
+// BOUNDARY_TIMING_END navigation_cloud_close
 
   publish_frame_world(pubLaserCloudFullRes, vio_manager);
   if (pub_effect_point_en) publish_effect_world(pubLaserCloudEffect, voxelmap_manager->ptpl_list_);
@@ -766,7 +787,13 @@ void LIVMapper::run(rclcpp::Node::SharedPtr &node)
   int status_interval = 0;
   while (rclcpp::ok()) 
   {
+// BOUNDARY_TIMING_BEGIN spin_some_open
+  { fastlivo_timing::Scope timing_spin_some(8);
+// BOUNDARY_TIMING_END spin_some_open
     rclcpp::spin_some(this->node);
+// BOUNDARY_TIMING_BEGIN spin_some_close
+  }
+// BOUNDARY_TIMING_END spin_some_close
     // SIGINT may invalidate the context while spin_some() is returning.  Do
     // not enter one more synchronization / mapping cycle with that context.
     if (!rclcpp::ok()) break;
@@ -958,6 +985,9 @@ void LIVMapper::RGBpointBodyLidarToIMU(PointType const *const pi, PointType *con
 
 void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstSharedPtr &msg)
 {
+// BOUNDARY_TIMING_BEGIN standard_lidar_callback
+  fastlivo_timing::Scope timing_standard_lidar_callback(9);
+// BOUNDARY_TIMING_END standard_lidar_callback
   if(fastlivo_diag::Logger::instance().enabled()) {
     std::vector<double> values{diag_receipt(),double(lidar_en),lidar_time_offset,double(msg->width),double(msg->height),
       double(msg->point_step),double(msg->row_step)};
@@ -975,7 +1005,13 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
   }
   // ROS_INFO("get point cloud at time: %.6f", stamp2Sec(msg->header.stamp));
   PointCloudXYZI::Ptr ptr(new PointCloudXYZI());
+// BOUNDARY_TIMING_BEGIN standard_preprocess_open
+  { fastlivo_timing::Scope timing_standard_preprocess(12);
+// BOUNDARY_TIMING_END standard_preprocess_open
   p_pre->process(msg, ptr);
+// BOUNDARY_TIMING_BEGIN standard_preprocess_close
+  }
+// BOUNDARY_TIMING_END standard_preprocess_close
   if(fastlivo_diag::Logger::instance().detail_at(cur_head_time)) {
     std::vector<double> values{double(ptr->size()),5,cur_head_time};
     values.reserve(3+ptr->size()*5);
@@ -993,6 +1029,9 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
 
 void LIVMapper::livox_pcl_cbk(const livox_ros_driver2::msg::CustomMsg::ConstSharedPtr &msg_in)
 {
+// BOUNDARY_TIMING_BEGIN livox_lidar_callback
+  fastlivo_timing::Scope timing_livox_lidar_callback(9);
+// BOUNDARY_TIMING_END livox_lidar_callback
   if (!lidar_en) return;
   mtx_buffer.lock();
   livox_ros_driver2::msg::CustomMsg::SharedPtr msg(new livox_ros_driver2::msg::CustomMsg(*msg_in));
@@ -1018,7 +1057,13 @@ void LIVMapper::livox_pcl_cbk(const livox_ros_driver2::msg::CustomMsg::ConstShar
   }
   // RCLCPP_INFO(this->node->get_logger(), "get point cloud at time: %.6f", stamp2Sec(msg->header.stamp));
   PointCloudXYZI::Ptr ptr(new PointCloudXYZI());
+// BOUNDARY_TIMING_BEGIN livox_preprocess_open
+  { fastlivo_timing::Scope timing_livox_preprocess(12);
+// BOUNDARY_TIMING_END livox_preprocess_open
   p_pre->process(msg, ptr);
+// BOUNDARY_TIMING_BEGIN livox_preprocess_close
+  }
+// BOUNDARY_TIMING_END livox_preprocess_close
 
   if (!ptr || ptr->empty()) {
     RCLCPP_ERROR(this->node->get_logger(), "Received an empty point cloud");
@@ -1036,6 +1081,9 @@ void LIVMapper::livox_pcl_cbk(const livox_ros_driver2::msg::CustomMsg::ConstShar
 
 void LIVMapper::imu_cbk(const sensor_msgs::msg::Imu::ConstSharedPtr &msg_in)
 {
+// BOUNDARY_TIMING_BEGIN imu_callback
+  fastlivo_timing::Scope timing_imu_callback(10);
+// BOUNDARY_TIMING_END imu_callback
   if(fastlivo_diag::Logger::instance().enabled()) {
     std::vector<double> values{diag_receipt(),double(imu_en),last_timestamp_lidar,imu_time_offset,double(ros_driver_fix_en),
       msg_in->angular_velocity.x,msg_in->angular_velocity.y,msg_in->angular_velocity.z,
@@ -1120,6 +1168,9 @@ cv::Mat LIVMapper::getImageFromMsg(const sensor_msgs::msg::Image::ConstSharedPtr
 // static int i = 0;
 void LIVMapper::img_cbk(const sensor_msgs::msg::Image::ConstSharedPtr &msg_in)
 {
+// BOUNDARY_TIMING_BEGIN image_callback
+  fastlivo_timing::Scope timing_image_callback(11);
+// BOUNDARY_TIMING_END image_callback
   if(fastlivo_diag::Logger::instance().enabled()) {
     std::vector<double> values{diag_receipt(),double(img_en),img_time_offset,double(msg_in->width),double(msg_in->height),
       double(msg_in->step),double(hilti_en)};
@@ -1267,6 +1318,9 @@ void LIVMapper::gpsUpdate()
 
 bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
 {
+// BOUNDARY_TIMING_BEGIN sync_packages
+  fastlivo_timing::Scope timing_sync_packages(13);
+// BOUNDARY_TIMING_END sync_packages
   // fprintf(stderr, "[ sync ] enter, lid=%d img=%d imu=%d mode=%d\n",
   //  (int)!lid_raw_data_buffer.empty(), (int)!img_buffer.empty(), (int)!imu_buffer.empty(), (int)slam_mode_); fflush(stderr);
   if (lid_raw_data_buffer.empty() && lidar_en) return false;
@@ -1555,6 +1609,9 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
 
 void LIVMapper::publish_img_rgb(const rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr &pubImage, VIOManagerPtr vio_manager)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_img_rgb
+  fastlivo_timing::Scope timing_pub_publish_img_rgb(7);
+// BOUNDARY_TIMING_END pub_publish_img_rgb
   cv::Mat img_rgb = vio_manager->img_cp;
   if (img_rgb.empty()) {
     RCLCPP_WARN(this->node->get_logger(), "[ RGB ] img_cp is empty, skipping publish");
@@ -1573,6 +1630,9 @@ void LIVMapper::publish_img_rgb(const rclcpp::Publisher<sensor_msgs::msg::Image>
 // Provide output format for LiDAR-visual BA
 void LIVMapper::publish_frame_world(const rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr &pubLaserCloudFullRes, VIOManagerPtr vio_manager)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_frame_world
+  fastlivo_timing::Scope timing_pub_publish_frame_world(7);
+// BOUNDARY_TIMING_END pub_publish_frame_world
   if (pcl_w_wait_pub->empty()) return;
   const double update_time =
       (LidarMeasures.lio_vio_flg == VIO)
@@ -1779,6 +1839,9 @@ void LIVMapper::publish_visual_sub_map(const rclcpp::Publisher<sensor_msgs::msg:
 
 void LIVMapper::publish_effect_world(const rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr &pubLaserCloudEffect, const std::vector<PointToPlane> &ptpl_list)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_effect_world
+  fastlivo_timing::Scope timing_pub_publish_effect_world(7);
+// BOUNDARY_TIMING_END pub_publish_effect_world
   int effect_feat_num = ptpl_list.size();
   PointCloudXYZI::Ptr laserCloudWorld(new PointCloudXYZI(effect_feat_num, 1));
   for (int i = 0; i < effect_feat_num; i++)
@@ -1807,6 +1870,9 @@ template <typename T> void LIVMapper::set_posestamp(T &out)
 
 void LIVMapper::publish_odometry(const rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr &pubOdomAftMapped)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_odometry
+  fastlivo_timing::Scope timing_pub_publish_odometry(7);
+// BOUNDARY_TIMING_END pub_publish_odometry
   odomAftMapped.header.frame_id = "camera_init";
   odomAftMapped.child_frame_id = "aft_mapped";
   odomAftMapped.header.stamp = LidarMeasures.last_lio_update_time > 0.0
@@ -1841,6 +1907,9 @@ void LIVMapper::publish_odometry(const rclcpp::Publisher<nav_msgs::msg::Odometry
 
 void LIVMapper::publish_mavros(const rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr &mavros_pose_publisher)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_mavros
+  fastlivo_timing::Scope timing_pub_publish_mavros(7);
+// BOUNDARY_TIMING_END pub_publish_mavros
   msg_body_pose.header.stamp = this->node->get_clock()->now();
   msg_body_pose.header.frame_id = "camera_init";
   set_posestamp(msg_body_pose.pose);
@@ -1849,6 +1918,9 @@ void LIVMapper::publish_mavros(const rclcpp::Publisher<geometry_msgs::msg::PoseS
 
 void LIVMapper::publish_path(const rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr &pubPath)
 {
+// BOUNDARY_TIMING_BEGIN pub_publish_path
+  fastlivo_timing::Scope timing_pub_publish_path(7);
+// BOUNDARY_TIMING_END pub_publish_path
   set_posestamp(msg_body_pose.pose);
   msg_body_pose.header.stamp = this->node->get_clock()->now();
   msg_body_pose.header.frame_id = "camera_init";

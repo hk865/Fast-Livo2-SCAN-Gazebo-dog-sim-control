@@ -27,11 +27,12 @@ def runtime_files():
     build_files=[SLAM_WS/'build'/package/name for package in ('fast_livo2_core','fast_livo2_ros')
                  for name in ('compile_commands.json','CMakeCache.txt')]
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
-    preflight=[HERE/'diagnostic_preflight.json']if(HERE/'diagnostic_preflight.json').is_file()else[]
-    preflight+=[HERE/'clock_hold_preflight.json']if(HERE/'clock_hold_preflight.json').is_file()else[]
-    preflight+=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'LIO_MULTICORE_CONTRACT.json',HERE/'multicore_preflight.json']
-    preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json',HERE/'logging_acceleration_preflight.json']
+    preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'COMBINED_COMPUTE_PREFLIGHT.json']
+    preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json']
     preflight+=[HERE/'PUBLICATION_LEDGER_CONTRACT.json',HERE/'PUBLICATION_LEDGER_PREFLIGHT.json',HERE/'PROSPECTIVE_PUBLICATION_LEDGER_CRITERIA.json']
+    preflight+=[HERE/'LOCKFREE_RESIDUAL_CONTRACT.json',HERE/'BOUNDARY_TIMING_CONTRACT.json']
+    from combined_preflight import evidence_files
+    preflight+=evidence_files(HERE)
     return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
         HERE/'diagnostic_baseline.json',
         SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[
@@ -56,7 +57,9 @@ def verify_scope(path,raw=None):
         or d.get('review_basis')!='explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation'):
         raise RuntimeError('Invalid simulation-only closed-loop scope')
     run=Path(d['run_dir']).resolve();p=d['profile'];refs=d['references']
-    if run.parent!=(ROOT/'runs').resolve() or path.parent!=run or p.get('controller_kind')!='teacher':raise RuntimeError('Invalid run identity')
+    from run_storage import verify_run
+    verify_run(run,ROOT)
+    if path.parent!=run or p.get('controller_kind')!='teacher':raise RuntimeError('Invalid run identity')
     if p.get('navigation_ground_truth_used') is not False or p.get('pose_cloud_timeout_s')!=.3:raise RuntimeError('Source contract changed')
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise RuntimeError('Exact-zero control clock contract changed')
@@ -67,7 +70,7 @@ def verify_scope(path,raw=None):
         mandatory=runtime_files()+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
             'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json',
             'navigation_slam_contract.json','sensor_sampling_contract.json','terrain_target_manifest.json','cloud_transport_manifest.json','cloud_transport.xml',
-            'source_manifest.json','navigation_source_snapshots.json')]
+            'source_manifest.json','navigation_source_snapshots.json','run_storage_contract.json')]
         if any(str(x.resolve()) not in refs for x in mandatory):raise RuntimeError('Missing frozen source or configuration')
         for source,expected in refs.items():
             if sha(source)!=expected:raise RuntimeError('Frozen closed-loop input changed '+source)
@@ -121,7 +124,7 @@ def prepare(run,profile):
         write(run/'alternate_terrain_target_manifest.json',json.loads(alternate.read_text()))
         layer_files=[first,alternate,run/'alternate_terrain_target_manifest.json']
     files=runtime_files()+[terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
-        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json')]
+        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json','run_storage_contract.json')]
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
     write(run/'navigation_slam_contract.json',{'schema':1,'status':'prepared_unverified','ground_truth_used':False,

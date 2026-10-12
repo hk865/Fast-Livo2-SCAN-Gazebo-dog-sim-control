@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 from ament_index_python.packages import get_package_prefix
 from launch import LaunchDescription
@@ -21,6 +22,12 @@ def generate_launch_description():
             raise RuntimeError('Run scoped_profile.py --run <run> --slam-only before launching SLAM')
         if (run/'map_metadata.json').exists():
             raise RuntimeError('Reuse of an old SLAM map directory is forbidden')
+        sys.path.insert(0,str(here))
+        from combined_preflight import verify_preflight
+        profile=json.loads((run/'navigation_profile.json').read_text())
+        verify_preflight(here,profile)
+        for key,value in [('FASTLIVO_LIO_JACOBIAN_THREADS','4'),('FASTLIVO_VIO_PATCH_THREADS','1')]:
+            if os.environ.get(key)!=value:raise RuntimeError('V18 navigation env differs from compiled/frozen profile '+key)
         contract=json.loads((run/'navigation_slam_contract.json').read_text())
         for name,expected in contract['references'].items():
             if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=expected:

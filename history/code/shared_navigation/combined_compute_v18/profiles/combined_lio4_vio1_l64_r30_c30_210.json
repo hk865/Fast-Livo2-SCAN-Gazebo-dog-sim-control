@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_actual_SLAM_SCAN_lidar_sampling_l64_r30_c30_v9_clock_hold",
+  "experiment": "teacher_actual_SLAM_SCAN_lidar_sampling_l64_r30_c30_v12_lockfree4_clock_hold_detail3s_boundary_timing",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
   "distance_m": 13.6,
   "max_speed_mps": 0.2,
@@ -109,7 +109,7 @@
     0.4,
     0
   ],
-  "duration_s": 600,
+  "duration_s": 210,
   "overview_pose": [
     8,
     -1,
@@ -122,7 +122,7 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "lidar_sampling_v9",
+  "controller_selector": "lidar_sampling_v12",
   "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
   "cascade": {
     "desired_speed": 0.2,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "LiDAR64x480 nominal30Hz, actual body RGB nominal30Hz; V9 duplicate ROS clock protected exact-zero hold before mathematics/geometry, unchanged300ms source TTL and backward failure; estimator mathematics, controller gains, execution ownership unchanged; CPU Teacher; V10 source-specific existing LIO residual OpenMP loop enabled at two threads, VIO explicit loop serial; unchanged O3/unroll arithmetic, CPU Teacher single-thread; V11 combined configuration: source-specific LIO2 threads plus actual profile-defined diagnostic window115-118s, full solver/query/VIO copied diagnostics suppressed outside window; not a single-variable attribution experiment",
+  "prospective_change": "Only detailed logging window reduced from115-165 to115-118 seconds relative to V9 l64_r30_c30_210; same estimator mathematics, gains, sensor rates and V9 exact-zero clock hold; V10 source-specific existing LIO residual OpenMP loop enabled at two threads, VIO explicit loop serial; unchanged O3/unroll arithmetic, CPU Teacher single-thread; V11 diagnostic-only allocation and full solver/query/VIO diagnostic payloads limited to actual profile window115-118s; source cloud capture shares logger detail predicate using original corrected source header; estimator math unchanged; V12 per-point unpacked flags and removed shared flag/result mutex, residual float expressions and ordered merge identical; LIO4; optional kind300 timing default off; this combined software candidate requires independent physical testing; readonly boundary timing enabled, combined lockfree+timing experiment not a single-factor attribution",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
@@ -479,13 +479,13 @@
   "diagnostic_scope": {
     "baseline_version": "closed_loop_multifloor_v7",
     "route_controller_gates_unchanged": true,
-    "finite_horizon_s": 600,
+    "finite_horizon_s": 210,
     "detail_window_sim_s": [
       115,
       118
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "prospective combined sensor-rate/LIO2-thread/diagnostic-copy detail-window experiment; no estimator or controller algorithm changes",
+    "purpose": "prospective independent combined LIO row scheduling and ordered VIO patch computation; same observation/controller/route",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero"
   },
   "sensor_sampling": {
@@ -508,16 +508,39 @@
     "long_hold_integral_and_dwell": "protect_reset",
     "source_receipt_refresh_permitted": false
   },
-  "profile_version": "lidar_sampling_v11_logging_detail3s_lio2_clock_hold",
+  "profile_version": "combined_compute_v18_LIO_jacobian4_VIO_patch1",
   "software_multicore": {
-    "schema": "fastlivo_lio_existing_loop_two_threads/v1",
+    "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
     "lio_translation_unit": "voxel_map.cpp",
-    "compile_definitions": [
+    "lio_compile_definitions": [
       "MP_EN",
-      "MP_PROC_NUM=2"
+      "MP_PROC_NUM=4"
     ],
+    "vio_translation_unit": "vio.cpp",
     "VIO_explicit_parallel_loop_enabled": false,
+    "VIO_global_reduction_enabled": false,
     "teacher_cpu_threads": 1,
-    "estimator_arithmetic_or_plane_association_changed": false
+    "estimator_arithmetic_or_plane_association_changed": false,
+    "VIO_patch_team": 1
+  },
+  "boundary_timing": true,
+  "vio_patch_parallel": {
+    "threads": 1,
+    "serial_below_patch_count": 64,
+    "reduction": "original_index_order_float_error_and_int_count",
+    "offline_preflight_required": true,
+    "runtime_acceptance_inherited": false
+  },
+  "lio_jacobian_parallelism": {
+    "threads": 4,
+    "parallel_min_rows": 256,
+    "row_operation_order": "original_V12",
+    "floating_reduction_changed": false
+  },
+  "combined_compute_contract": {
+    "lio_jacobian_threads": 4,
+    "vio_patch_threads": 1,
+    "vio_patch_min_points": 64,
+    "actual_runtime_acceptance_inherited": false
   }
 }

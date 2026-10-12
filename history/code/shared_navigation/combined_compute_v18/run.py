@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/combined_compute_v18/run.py --profile combined_lio4_vio1_l64_r30_c30_210 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/run.py --profile l64_r30_c10_210 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/combined_compute_v18/run.py --profile combined_lio4_vio1_l64_r30_c30_210 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -83,10 +83,11 @@ def validate_profile(p):
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
     if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[115,118]:
-        raise ValueError('V11 allows only the prospective 3s diagnostic window')
-    logging_preflight=json.loads((HERE/'logging_acceleration_preflight.json').read_text())
-    if logging_preflight.get('status')!='PASS_LIMITED_BUILD_AND_NUMERIC':
-        raise ValueError('V11 is source prepared only; independent build and numeric fixture are required')
+        raise ValueError('V18 allows only the prospective 3s diagnostic window')
+    from combined_preflight import verify_preflight
+    verify_preflight(HERE,p)
+    if type(p.get('boundary_timing',False)) is not bool:
+        raise ValueError('Boundary timing must be explicit true/false')
     duration=float(p['duration_s']);spawn=p['spawn'];asset=p['expected_asset'];cascade=p['cascade']
     if not math.isfinite(duration) or not 30<=duration<=1500:raise ValueError('Invalid bounded simulation duration')
     if len(spawn)!=4 or not all(math.isfinite(float(v))for v in spawn) or asset['spawn']!=spawn:
@@ -167,7 +168,10 @@ def prepare(run,args):
     detail_window=p['diagnostic_scope']['detail_window_sim_s']
     diagnostic_environment={'FASTLIVO_DIAGNOSTIC_DIR':str(run/'fastlivo_diagnostics'),
                             'FASTLIVO_DIAGNOSTIC_BEGIN':str(detail_window[0]),
-                            'FASTLIVO_DIAGNOSTIC_END':str(detail_window[1])}
+                            'FASTLIVO_DIAGNOSTIC_END':str(detail_window[1]),
+                            'FASTLIVO_BOUNDARY_TIMING':'1' if p.get('boundary_timing',False) else '0',
+                            'FASTLIVO_LIO_JACOBIAN_THREADS':'4',
+                            'FASTLIVO_VIO_PATCH_THREADS':'1'}
     plan={'schema':'teacher_closed_loop_runtime_plan/v1','run':str(run),'simulation_only':True,'real_robot':False,
           'allowed':True,'navigation_ground_truth_used':False,'actor_privileged_dimensions':232,
           'profile_path':str(selected),'profile_sha256':sha(selected),'profile':p,
@@ -180,9 +184,12 @@ def prepare(run,args):
           'native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),
           'source_manifest_sha256':sha(run/'source_manifest.json'),'scope_sha256':receipt['sha256'],
           'world_sha256':sha(run/'world.sdf'),'cloud_transport_manifest_sha256':sha(run/'cloud_transport_manifest.json'),
+          'run_storage_contract':json.loads((run/'run_storage_contract.json').read_text()),
           'runtime_started':False,'renderer':'hardware/Ogre2','compatibility_motion_gate_applies':False,
-          'slam_multicore_contract':json.loads((HERE/'LIO_MULTICORE_CONTRACT.json').read_text()),
+          'slam_multicore_contract':json.loads((HERE/'COMBINED_COMPUTE_CONTRACT.json').read_text()),
           'slam_logging_acceleration_contract':json.loads((HERE/'LOGGING_ACCELERATION_CONTRACT.json').read_text()),
+          'slam_lockfree_contract':json.loads((HERE/'LOCKFREE_RESIDUAL_CONTRACT.json').read_text()),
+          'slam_boundary_timing_contract':json.loads((HERE/'BOUNDARY_TIMING_CONTRACT.json').read_text()),
           'slam_binary_contract':binary_contract,'navigation_stack_diagnostic_environment':diagnostic_environment,
           'diagnostic_prefix_only':bool(p.get('diagnostic_scope')),
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],
@@ -344,7 +351,7 @@ def execute(run,plan):
     env=ros_environment();transport=json.loads((run/'cloud_transport_manifest.json').read_text())
     for k in transport['remove_environment_keys']:env.pop(k,None)
     env.update(transport['environment'])
-    for k in ('FASTLIVO_DIAGNOSTIC_DIR','FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END'):
+    for k in ('FASTLIVO_DIAGNOSTIC_DIR','FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END','FASTLIVO_BOUNDARY_TIMING','FASTLIVO_LIO_JACOBIAN_THREADS','FASTLIVO_VIO_PATCH_THREADS'):
         env.pop(k,None)  # Diagnostic settings belong only to navigation_stack.
     sock='/tmp/teacher_closed_loop_'+uuid.uuid4().hex[:12]+'.sock'
     env.update(ROS_DOMAIN_ID=str(plan['ros_domain']),GZ_IP='127.0.0.1',GZ_PARTITION='teacher_closed_loop_'+run.name,
@@ -386,7 +393,7 @@ def execute(run,plan):
         navigation_env={**env,'DEMO_RUN_DIR':str(run),**plan['navigation_stack_diagnostic_environment']}
         write_new(run/'navigation_stack_effective_environment.json',{
             k:navigation_env.get(k)for k in (*selected_keys,'DEMO_RUN_DIR','FASTLIVO_DIAGNOSTIC_DIR',
-                                           'FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END')})
+                                           'FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END','FASTLIVO_BOUNDARY_TIMING','FASTLIVO_LIO_JACOBIAN_THREADS','FASTLIVO_VIO_PATCH_THREADS')})
         start('navigation_stack',['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)],navigation_env)
         time.sleep(.5)
         if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited before physics started')
@@ -453,10 +460,12 @@ def main():
     ap.add_argument('--label',default='candidate');ap.add_argument('--domain','--ros-domain',type=int,default=86)
     ap.add_argument('--cpu-python',type=Path,default=DEFAULT_CPU_PYTHON)
     ap.add_argument('--real-time-factor',type=float,default=1.)
+    ap.add_argument('--run-storage-root',type=Path,default=None,help='Explicit owned canonical root: /var/tmp/go2_teacher_simulation_20261005; default project/runs')
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
     label=''.join(c for c in args.label if c.isalnum()or c in '_-')or'candidate'
     stamp=dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
-    run=ROOT/'runs'/f'{stamp}_closed_loop_cascade_clock_hold_{label}_{uuid.uuid4().hex[:4]}';run.mkdir()
+    from run_storage import create_run
+    run,storage_contract=create_run(ROOT,f'{stamp}_closed_loop_cascade_clock_hold_{label}_{uuid.uuid4().hex[:4]}',args.run_storage_root)
     write_new(run/'runner_request.json',{'schema':'teacher_closed_loop_runner_request/v1','run':str(run),
         'argv':sys.argv,'runner_sha256':sha(__file__),'prepare_only':args.prepare_only,'simulation_only':True,
         'wall_begin':time.monotonic(),'no_other_process_signals_authorized':True})

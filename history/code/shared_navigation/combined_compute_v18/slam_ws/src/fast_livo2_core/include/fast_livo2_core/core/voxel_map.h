@@ -241,6 +241,11 @@ public:
   };
 
   void StateEstimation(StatesGroup &state_propagat);
+  // LIO_JACOBIAN_PARALLEL_BEGIN production_rows_interface
+  void BuildJacobianRows(StatesGroup &state_propagat, Eigen::MatrixXd &Hsub,
+      Eigen::MatrixXd &Hsub_T_R_inv, Eigen::VectorXd &R_inv, Eigen::VectorXd &meas_vec, bool diagnostic_detail,
+      std::vector<double> &diagnostic_solver_sigma, std::vector<M3D> &diagnostic_solver_body_world);
+  // LIO_JACOBIAN_PARALLEL_END production_rows_interface
   void TransformLidar(const Eigen::Matrix3d rot, const Eigen::Vector3d t, const PointCloudXYZI::Ptr &input_cloud,
                       pcl::PointCloud<pcl::PointXYZI>::Ptr &trans_cloud);
 

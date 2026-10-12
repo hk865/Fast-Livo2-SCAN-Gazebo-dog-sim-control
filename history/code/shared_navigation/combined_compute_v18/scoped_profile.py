@@ -73,7 +73,9 @@ def verify_scope(path, raw=None):
     if data.get('review_basis') != 'explicit_user_continuation_and_root_scope_authorization':
         raise RuntimeError('Missing bounded experiment authorization basis')
     run = Path(data['run_dir']).resolve()
-    if path.parent != run or run.parent != (ROOT/'runs').resolve():
+    from run_storage import verify_run
+    verify_run(run,ROOT)
+    if path.parent != run:
         raise RuntimeError('Scope must belong to its unique Teacher run directory')
     refs = data.get('references', {})
     if not isinstance(refs, dict) or not refs:
@@ -149,8 +151,8 @@ def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False, dynamic_d
     import yaml
     from scipy.spatial.transform import Rotation
     run = run.resolve()
-    if run.parent != (ROOT/'runs').resolve():
-        raise RuntimeError('Prepare inside teacher_mode/runs/<unique-run>')
+    from run_storage import verify_run
+    verify_run(run,ROOT)
     for name in ('world.sdf', 'asset_manifest.json', 'sensor_contract.json'):
         if not (run/name).is_file():
             raise RuntimeError('Generate the full-sensor Teacher assets first: '+name)

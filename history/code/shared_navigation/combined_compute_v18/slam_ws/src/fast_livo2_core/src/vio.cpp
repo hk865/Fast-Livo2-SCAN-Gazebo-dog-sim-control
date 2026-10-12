@@ -1577,10 +1577,8 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 
   if (total_points == 0) return;
   StatesGroup old_state = (*state);
-  V2D pc;
   MD(1, 2) Jimg;
   MD(2, 3) Jdpi;
-  MD(1, 3) Jdphi, Jdp, JdR, Jdt;
   VectorXd z;
   MatrixXd H_sub;
   bool EKF_end = false;
@@ -1603,6 +1601,9 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
     if (has_ref_patch_cache == false) precomputeReferencePatches(level);
     int n_meas = 0;
     float error = 0.0;
+    // Independent patch slots; serial i-order aggregation preserves float rounding.
+    std::vector<float> patch_errors(total_points, 0.0f);
+    std::vector<int> patch_measurements(total_points, 0);
     M3D Rwi(state->rot_end);
     V3D Pwi(state->pos_end);
     P_wi_hat << SKEW_SYM_MATRX(Pwi);
@@ -1611,9 +1612,13 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 
     M3D p_hat;
 
+    #ifdef V16_VIO_PATCH_THREADS
+      #pragma omp parallel for schedule(static) num_threads(V16_VIO_PATCH_THREADS) if(total_points >= V16_VIO_PATCH_MIN_POINTS)
+    #endif
     for (int i = 0; i < total_points; i++)
     {
       float patch_error = 0.0;
+      int patch_measurement_count = 0;
 
       const int scale = (1 << level);
 
@@ -1621,6 +1626,8 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 
       if (pt == nullptr) continue;
 
+      V2D pc;
+      MD(1, 3) JdR, Jdt;
       V3D pf = Rcw * pt->pos_ + Pcw;
       pc = cam->world2cam(pf);
 
@@ -1650,11 +1657,20 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
           JdR = J_dR * Rwi + J_dt * P_wi_hat * Rwi;
           Jdt = J_dt * Rwi;
           H_sub.block<1, 6>(i * patch_size_total + x * patch_size + y, 0) << JdR, Jdt;
-          n_meas++;
+          patch_measurement_count++;
         }
       }
       visual_submap->errors[i] = patch_error;
-      error += patch_error;
+      patch_errors[i] = patch_error;
+      patch_measurements[i] = patch_measurement_count;
+    }
+
+    for (int i = 0; i < total_points; i++)
+    {
+      // Keep the original nullptr continue and original float addition order.
+      if (visual_submap->voxel_points[i] == nullptr) continue;
+      error += patch_errors[i];
+      n_meas += patch_measurements[i];
     }
 
     error = error / n_meas;
@@ -1778,14 +1794,12 @@ void VIOManager::updateState(cv::Mat img, int level)
     Jdp_dt = Rci * Rwi.transpose();
     
     float error = 0.0;
+    // Independent patch slots; serial i-order aggregation preserves float rounding.
+    std::vector<float> patch_errors(total_points, 0.0f);
+    std::vector<int> patch_measurements(total_points, 0);
     int n_meas = 0;
-    // int max_threads = omp_get_max_threads();
-    // int desired_threads = std::min(max_threads, total_points);
-    // omp_set_num_threads(desired_threads);
-  
-    #ifdef MP_EN
-      omp_set_num_threads(MP_PROC_NUM);
-      #pragma omp parallel for reduction(+:error, n_meas)
+    #ifdef V16_VIO_PATCH_THREADS
+      #pragma omp parallel for schedule(static) num_threads(V16_VIO_PATCH_THREADS) if(total_points >= V16_VIO_PATCH_MIN_POINTS)
     #endif
     for (int i = 0; i < total_points; i++)
     {
@@ -1795,6 +1809,7 @@ void VIOManager::updateState(cv::Mat img, int level)
       MD(1, 3) Jdphi, Jdp, JdR, Jdt;
 
       float patch_error = 0.0;
+      int patch_measurement_count = 0;
       int search_level = visual_submap->search_levels[i];
       int pyramid_level = level + search_level;
       int scale = (1 << pyramid_level);
@@ -1857,14 +1872,23 @@ void VIOManager::updateState(cv::Mat img, int level)
           z(i * patch_size_total + x * patch_size + y) = res;
 
           patch_error += res * res;
-          n_meas += 1;
+          patch_measurement_count += 1;
           
           if (exposure_estimate_en) { H_sub.block<1, 7>(i * patch_size_total + x * patch_size + y, 0) << JdR, Jdt, cur_value; }
           else { H_sub.block<1, 6>(i * patch_size_total + x * patch_size + y, 0) << JdR, Jdt; }
         }
       }
       visual_submap->errors[i] = patch_error;
-      error += patch_error;
+      patch_errors[i] = patch_error;
+      patch_measurements[i] = patch_measurement_count;
+    }
+
+    for (int i = 0; i < total_points; i++)
+    {
+      // Keep the original nullptr continue and original float addition order.
+      if (visual_submap->voxel_points[i] == nullptr) continue;
+      error += patch_errors[i];
+      n_meas += patch_measurements[i];
     }
 
     error = error / n_meas;

@@ -12,8 +12,29 @@ which is included as part of this source code package.
 
 #include "voxel_map.h"
 #include "diagnostics.h"
+// BOUNDARY_TIMING_BEGIN include
+#include "boundary_timing.h"
+// BOUNDARY_TIMING_END include
 #include <limits>
 #include <optional>
+// LIO_JACOBIAN_PARALLEL_BEGIN configuration
+#include <cstdlib>
+#include <cstring>
+#include <stdexcept>
+namespace {
+int lio_jacobian_threads() {
+  // Read once per process. The run scope freezes this startup environment.
+  static const int threads = [] {
+    const char *value = std::getenv("FASTLIVO_LIO_JACOBIAN_THREADS");
+    if (!value || std::strcmp(value, "4") == 0) return 4;
+    if (std::strcmp(value, "1") == 0) return 1;
+    throw std::invalid_argument("FASTLIVO_LIO_JACOBIAN_THREADS must be 1 or 4");
+  }();
+  return threads;
+}
+constexpr int lio_jacobian_parallel_min_rows = 256;
+}
+// LIO_JACOBIAN_PARALLEL_END configuration
 using namespace Eigen;
 namespace {
 // Map construction/update is serial. Keep one bounded-size emission per call.
@@ -400,8 +421,74 @@ VoxelOctoTree *VoxelOctoTree::Insert(const pointWithVar &pv)
   return nullptr;
 }
 
+// LIO_JACOBIAN_PARALLEL_BEGIN production_rows_method
+void VoxelMapManager::BuildJacobianRows(StatesGroup &state_propagat, MatrixXd &Hsub,
+    MatrixXd &Hsub_T_R_inv, VectorXd &R_inv, VectorXd &meas_vec, bool diagnostic_detail,
+    std::vector<double> &diagnostic_solver_sigma, std::vector<M3D> &diagnostic_solver_body_world)
+{
+// LIO_JACOBIAN_PARALLEL_BEGIN independent_rows
+    const int jacobian_threads = lio_jacobian_threads();
+    // State/map/ptpl inputs are fixed for this iteration. Each i owns its
+    // Hsub row, Hsub_T_R_inv column and scalar/diagnostic slots. The implicit
+    // barrier precedes the unchanged original Eigen products and update.
+    #ifdef MP_EN
+      #pragma omp parallel for schedule(static) num_threads(jacobian_threads) if(jacobian_threads > 1 && effct_feat_num_ >= lio_jacobian_parallel_min_rows)
+    #endif
+// LIO_JACOBIAN_PARALLEL_END independent_rows
+    for (int i = 0; i < effct_feat_num_; i++)
+    {
+      auto &ptpl = ptpl_list_[i];
+      V3D point_this(ptpl.point_b_);
+      point_this = extR_ * point_this + extT_;
+      V3D point_body(ptpl.point_b_);
+      M3D point_crossmat;
+      point_crossmat << SKEW_SYM_MATRX(point_this);
+
+      /*** get the normal vector of closest surface/corner ***/
+
+      V3D point_world = state_propagat.rot_end * point_this + state_propagat.pos_end;
+      Eigen::Matrix<double, 1, 6> J_nq;
+      J_nq.block<1, 3>(0, 0) = point_world - ptpl_list_[i].center_;
+      J_nq.block<1, 3>(0, 3) = -ptpl_list_[i].normal_;
+
+      M3D var;
+      // V3D normal_b = state_.rot_end.inverse() * ptpl_list_[i].normal_;
+      // V3D point_b = ptpl_list_[i].point_b_;
+      // double cos_theta = fabs(normal_b.dot(point_b) / point_b.norm());
+      // ptpl_list_[i].body_cov_ = ptpl_list_[i].body_cov_ * (1.0 / cos_theta) * (1.0 / cos_theta);
+
+      // point_w cov
+      // var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose() +
+      //       state_propagat.cov.block<3, 3>(3, 3) + (-point_crossmat) * state_propagat.cov.block<3, 3>(0, 0) * (-point_crossmat).transpose();
+
+      // point_w cov (another_version)
+      // var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose() +
+      //       state_propagat.cov.block<3, 3>(3, 3) - point_crossmat * state_propagat.cov.block<3, 3>(0, 0) * point_crossmat;
+
+      // point_body cov
+      var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose();
+
+      double sigma_l = J_nq * ptpl_list_[i].plane_var_ * J_nq.transpose();
+      if(diagnostic_detail) { diagnostic_solver_sigma[i]=sigma_l; diagnostic_solver_body_world[i]=var; }
+
+      R_inv(i) = 1.0 / (0.001 + sigma_l + ptpl_list_[i].normal_.transpose() * var * ptpl_list_[i].normal_);
+      // R_inv(i) = 1.0 / (sigma_l + ptpl_list_[i].normal_.transpose() * var * ptpl_list_[i].normal_);
+
+      /*** calculate the Measuremnt Jacobian matrix H ***/
+      V3D A(point_crossmat * state_.rot_end.transpose() * ptpl_list_[i].normal_);
+      Hsub.row(i) << VEC_FROM_ARRAY(A), ptpl_list_[i].normal_[0], ptpl_list_[i].normal_[1], ptpl_list_[i].normal_[2];
+      Hsub_T_R_inv.col(i) << A[0] * R_inv(i), A[1] * R_inv(i), A[2] * R_inv(i), ptpl_list_[i].normal_[0] * R_inv(i),
+          ptpl_list_[i].normal_[1] * R_inv(i), ptpl_list_[i].normal_[2] * R_inv(i);
+      meas_vec(i) = -ptpl_list_[i].dis_to_plane_;
+    }
+ }
+// LIO_JACOBIAN_PARALLEL_END production_rows_method
+
 void VoxelMapManager::StateEstimation(StatesGroup &state_propagat)
 {
+// BOUNDARY_TIMING_BEGIN lio_estimate_all
+  fastlivo_timing::Scope timing_lio_estimate_all(4);
+// BOUNDARY_TIMING_END lio_estimate_all
   auto &diagnostics = fastlivo_diag::Logger::instance();
   const bool diagnostic_enabled = diagnostics.detail();
   const bool diagnostic_detail = diagnostics.detail();
@@ -484,52 +571,10 @@ void VoxelMapManager::StateEstimation(StatesGroup &state_propagat)
     std::vector<double> diagnostic_solver_sigma;
     std::vector<M3D> diagnostic_solver_body_world;
     if(diagnostic_detail) { diagnostic_solver_sigma.resize(effct_feat_num_); diagnostic_solver_body_world.resize(effct_feat_num_); }
-    for (int i = 0; i < effct_feat_num_; i++)
-    {
-      auto &ptpl = ptpl_list_[i];
-      V3D point_this(ptpl.point_b_);
-      point_this = extR_ * point_this + extT_;
-      V3D point_body(ptpl.point_b_);
-      M3D point_crossmat;
-      point_crossmat << SKEW_SYM_MATRX(point_this);
-
-      /*** get the normal vector of closest surface/corner ***/
-
-      V3D point_world = state_propagat.rot_end * point_this + state_propagat.pos_end;
-      Eigen::Matrix<double, 1, 6> J_nq;
-      J_nq.block<1, 3>(0, 0) = point_world - ptpl_list_[i].center_;
-      J_nq.block<1, 3>(0, 3) = -ptpl_list_[i].normal_;
-
-      M3D var;
-      // V3D normal_b = state_.rot_end.inverse() * ptpl_list_[i].normal_;
-      // V3D point_b = ptpl_list_[i].point_b_;
-      // double cos_theta = fabs(normal_b.dot(point_b) / point_b.norm());
-      // ptpl_list_[i].body_cov_ = ptpl_list_[i].body_cov_ * (1.0 / cos_theta) * (1.0 / cos_theta);
-
-      // point_w cov
-      // var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose() +
-      //       state_propagat.cov.block<3, 3>(3, 3) + (-point_crossmat) * state_propagat.cov.block<3, 3>(0, 0) * (-point_crossmat).transpose();
-
-      // point_w cov (another_version)
-      // var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose() +
-      //       state_propagat.cov.block<3, 3>(3, 3) - point_crossmat * state_propagat.cov.block<3, 3>(0, 0) * point_crossmat;
-
-      // point_body cov
-      var = state_propagat.rot_end * extR_ * ptpl_list_[i].body_cov_ * (state_propagat.rot_end * extR_).transpose();
-
-      double sigma_l = J_nq * ptpl_list_[i].plane_var_ * J_nq.transpose();
-      if(diagnostic_detail) { diagnostic_solver_sigma[i]=sigma_l; diagnostic_solver_body_world[i]=var; }
-
-      R_inv(i) = 1.0 / (0.001 + sigma_l + ptpl_list_[i].normal_.transpose() * var * ptpl_list_[i].normal_);
-      // R_inv(i) = 1.0 / (sigma_l + ptpl_list_[i].normal_.transpose() * var * ptpl_list_[i].normal_);
-
-      /*** calculate the Measuremnt Jacobian matrix H ***/
-      V3D A(point_crossmat * state_.rot_end.transpose() * ptpl_list_[i].normal_);
-      Hsub.row(i) << VEC_FROM_ARRAY(A), ptpl_list_[i].normal_[0], ptpl_list_[i].normal_[1], ptpl_list_[i].normal_[2];
-      Hsub_T_R_inv.col(i) << A[0] * R_inv(i), A[1] * R_inv(i), A[2] * R_inv(i), ptpl_list_[i].normal_[0] * R_inv(i),
-          ptpl_list_[i].normal_[1] * R_inv(i), ptpl_list_[i].normal_[2] * R_inv(i);
-      meas_vec(i) = -ptpl_list_[i].dis_to_plane_;
-    }
+// LIO_JACOBIAN_PARALLEL_BEGIN production_rows_call
+    BuildJacobianRows(state_propagat, Hsub, Hsub_T_R_inv, R_inv, meas_vec,
+        diagnostic_detail, diagnostic_solver_sigma, diagnostic_solver_body_world);
+// LIO_JACOBIAN_PARALLEL_END production_rows_call
     EKF_stop_flg = false;
     flg_EKF_converged = false;
     /*** Iterative Kalman Filter Update ***/
@@ -662,6 +707,9 @@ void VoxelMapManager::TransformLidar(const Eigen::Matrix3d rot, const Eigen::Vec
 
 void VoxelMapManager::BuildVoxelMap()
 {
+// BOUNDARY_TIMING_BEGIN map_build
+  fastlivo_timing::Scope timing_map_build(16);
+// BOUNDARY_TIMING_END map_build
   if (fastlivo_diag::Logger::instance().detail()) { diag_map_rows.clear(); diag_map_count=0; }
   float voxel_size = config_setting_.max_voxel_size_;
   float planer_threshold = config_setting_.planner_threshold_;
@@ -741,6 +789,9 @@ V3F VoxelMapManager::RGBFromVoxel(const V3D &input_point)
 
 void VoxelMapManager::UpdateVoxelMap(const std::vector<pointWithVar> &input_points)
 {
+// BOUNDARY_TIMING_BEGIN map_update
+  fastlivo_timing::Scope timing_map_update(5);
+// BOUNDARY_TIMING_END map_update
   if (fastlivo_diag::Logger::instance().detail()) { diag_map_rows.clear(); diag_map_count=0; }
   float voxel_size = config_setting_.max_voxel_size_;
   float planer_threshold = config_setting_.planner_threshold_;
@@ -777,15 +828,17 @@ void VoxelMapManager::UpdateVoxelMap(const std::vector<pointWithVar> &input_poin
 
 void VoxelMapManager::BuildResidualListOMP(std::vector<pointWithVar> &pv_list, std::vector<PointToPlane> &ptpl_list)
 {
+// BOUNDARY_TIMING_BEGIN residual_query
+  fastlivo_timing::Scope timing_residual_query(3);
+// BOUNDARY_TIMING_END residual_query
   const bool diag_enabled = fastlivo_diag::Logger::instance().detail();
   if (diag_enabled) diagnostic_query_rows_.assign(pv_list.size(), std::array<double,60>{});
   int max_layer = config_setting_.max_layer_;
   double voxel_size = config_setting_.max_voxel_size_;
   double sigma_num = config_setting_.sigma_num_;
-  std::mutex mylock;
   ptpl_list.clear();
   std::vector<PointToPlane> all_ptpl_list(pv_list.size());
-  std::vector<bool> useful_ptpl(pv_list.size());
+  std::vector<unsigned char> useful_ptpl(pv_list.size());
   std::vector<size_t> index(pv_list.size());
   for (size_t i = 0; i < index.size(); ++i)
   {
@@ -869,16 +922,12 @@ void VoxelMapManager::BuildResidualListOMP(std::vector<pointWithVar> &pv_list, s
       }
       if (is_sucess)
       {
-        mylock.lock();
         useful_ptpl[i] = true;
         all_ptpl_list[i] = single_ptpl;
-        mylock.unlock();
       }
       else
       {
-        mylock.lock();
         useful_ptpl[i] = false;
-        mylock.unlock();
       }
     }
   }

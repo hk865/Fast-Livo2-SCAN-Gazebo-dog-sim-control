@@ -27,10 +27,20 @@ endif()
 # Enable the existing independent per-point LIO residual loop only.
 # Keep VIO and every other translation unit serial; no arithmetic changes.
 if(NOT OpenMP_CXX_FOUND)
-  message(FATAL_ERROR "LIO two-thread candidate requires OpenMP")
+  message(FATAL_ERROR "LIO four-thread candidate requires OpenMP")
 endif()
 set_source_files_properties(src/voxel_map.cpp PROPERTIES
-  COMPILE_DEFINITIONS "MP_EN;MP_PROC_NUM=2"
+  COMPILE_DEFINITIONS "MP_EN;MP_PROC_NUM=4"
+)
+
+# V16 enables only the two audited VIO patch loops; no global MP_EN reduction.
+set(V16_VIO_PATCH_THREADS "4" CACHE STRING "V16 VIO patch team size: 1 or 4")
+set(V16_VIO_PATCH_MIN_POINTS "64" CACHE STRING "V16 minimum patch count for OpenMP")
+if(NOT V16_VIO_PATCH_THREADS MATCHES "^(1|4)$" OR NOT V16_VIO_PATCH_MIN_POINTS MATCHES "^[0-9]+$")
+  message(FATAL_ERROR "Invalid frozen V16 VIO patch configuration")
+endif()
+set_source_files_properties(src/vio.cpp PROPERTIES
+  COMPILE_DEFINITIONS "V16_VIO_PATCH_THREADS=${V16_VIO_PATCH_THREADS};V16_VIO_PATCH_MIN_POINTS=${V16_VIO_PATCH_MIN_POINTS}"
 )
 
 # Dependencies
