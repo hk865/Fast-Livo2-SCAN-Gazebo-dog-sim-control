@@ -29,6 +29,7 @@ def runtime_files():
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
     preflight=[HERE/'diagnostic_preflight.json']if(HERE/'diagnostic_preflight.json').is_file()else[]
     preflight+=[HERE/'clock_hold_preflight.json']if(HERE/'clock_hold_preflight.json').is_file()else[]
+    preflight+=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json']
     return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
         HERE/'diagnostic_baseline.json',
         SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[
