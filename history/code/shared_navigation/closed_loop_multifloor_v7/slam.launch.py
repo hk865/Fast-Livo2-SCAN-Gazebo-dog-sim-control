@@ -13,7 +13,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    teacher=Path(__file__).resolve().parents[1];demo=teacher.parent
+    here=Path(__file__).resolve().parent;teacher=here.parents[1];demo=teacher.parent
     run_dir=LaunchConfiguration('run_dir')
     def start(context):
         run=Path(run_dir.perform(context)).resolve()
@@ -26,9 +26,9 @@ def generate_launch_description():
             if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=expected:
                 raise RuntimeError('Actual SLAM source/configuration hash changed: '+name)
         for package in ('fast_livo2_core','fast_livo2_ros'):
-            expected=(demo/'slam/ros2_ws/install'/package).resolve()
+            expected=(here/'slam_ws/install'/package).resolve()
             if Path(get_package_prefix(package)).resolve()!=expected:
-                raise RuntimeError('Source the existing isolated SLAM overlay; package mismatch '+package)
+                raise RuntimeError('Source the V7 diagnostic SLAM overlay; package mismatch '+package)
         ros=['--ros-args','-p','use_sim_time:=true']
         processes=[
             ExecuteProcess(cmd=['python3',str(teacher/'navigation/sensor_relay.py'),*ros],output='screen'),

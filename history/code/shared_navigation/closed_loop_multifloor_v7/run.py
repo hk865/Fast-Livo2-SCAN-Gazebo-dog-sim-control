@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v6/run.py --profile ramp12_segmented_turn06 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/run.py --profile multifloor_diagnostic210 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v6/run.py --profile ramp12_segmented_turn06 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/run.py --profile multifloor_diagnostic210 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -36,7 +36,9 @@ DEMO=ROOT.parent
 SYSTEM_PYTHON=Path('/usr/bin/python3')
 DEFAULT_CPU_PYTHON=Path('/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/bin/python3')
 ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
-SLAM_OVERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
+SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
+SLAM_WORKSPACE=HERE/'slam_ws'
+SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
 SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
 CHECKPOINT=Path('/__LOCAL_HOME__/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt')
@@ -101,7 +103,7 @@ def run_command(command,log):
 def prepare(run,args):
     selected=profile_path(args.profile);p=json.loads(selected.read_text());duration,overview=validate_profile(p)
     if not 1<=args.domain<=232 or not .1<=args.real_time_factor<=1:raise ValueError('Private domain/RTF invalid')
-    for f in (SYSTEM_PYTHON,args.cpu_python,ROS_BASE,SLAM_OVERLAY,SCAN_OVERLAY,BRIDGE,CHECKPOINT):
+    for f in (SYSTEM_PYTHON,args.cpu_python,ROS_BASE,SLAM_UNDERLAY,SLAM_OVERLAY,SCAN_OVERLAY,BRIDGE,CHECKPOINT):
         if not f.is_file():raise RuntimeError('Existing runtime dependency missing '+str(f))
     if sha(CHECKPOINT)!=MODEL_SHA:raise RuntimeError('Frozen Teacher model hash changed')
     # Dependency-location inspection does not load the Actor or create ROS nodes.
@@ -149,6 +151,11 @@ def prepare(run,args):
     scope_runtime=json.loads((run/'navigation_scope.json').read_text()).get('runtime',{})
     if scope_runtime.get('required_owned_roles')!=list(REQUIRED_ROLES)or scope_runtime.get('expected_launch_children')!=EXPECTED_CHILDREN:
         raise RuntimeError('New scope and runner process contracts disagree')
+    binary_contract={name:{'path':str(path.resolve()),'sha256':sha(path)} for name,path in (
+        ('executable',SLAM_WORKSPACE/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping'),
+        ('core',SLAM_WORKSPACE/'install/fast_livo2_core/lib/libfast_livo2_core.so'))}
+    diagnostic_environment={'FASTLIVO_DIAGNOSTIC_DIR':str(run/'fastlivo_diagnostics'),
+                            'FASTLIVO_DIAGNOSTIC_BEGIN':'115','FASTLIVO_DIAGNOSTIC_END':'165'}
     plan={'schema':'teacher_closed_loop_runtime_plan/v1','run':str(run),'simulation_only':True,'real_robot':False,
           'allowed':True,'navigation_ground_truth_used':False,'actor_privileged_dimensions':232,
           'profile_path':str(selected),'profile_sha256':sha(selected),'profile':p,
@@ -162,6 +169,8 @@ def prepare(run,args):
           'source_manifest_sha256':sha(run/'source_manifest.json'),'scope_sha256':receipt['sha256'],
           'world_sha256':sha(run/'world.sdf'),'cloud_transport_manifest_sha256':sha(run/'cloud_transport_manifest.json'),
           'runtime_started':False,'renderer':'hardware/Ogre2','compatibility_motion_gate_applies':False,
+          'slam_binary_contract':binary_contract,'navigation_stack_diagnostic_environment':diagnostic_environment,
+          'diagnostic_prefix_only':bool(p.get('diagnostic_scope')),
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],
                               'navigation_stack':['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)]},
           'limitations':'Plan is launch provenance only, never a route/SLAM/Sim2Sim pass'}
@@ -170,8 +179,10 @@ def prepare(run,args):
 
 
 def ros_environment():
-    r=subprocess.run(['bash','-c','set -e; source "$1" >/dev/null; source "$2" >/dev/null; source "$3" >/dev/null; env -0',
-        'closed-loop-ros-env',str(ROS_BASE),str(SLAM_OVERLAY),str(SCAN_OVERLAY)],check=True,capture_output=True)
+    # SCAN's generated setup may source the old core underlay again. Apply the
+    # independent overlay's local_setup LAST, without replaying its underlays.
+    r=subprocess.run(['bash','-c','set -e; source "$1" >/dev/null; source "$2" >/dev/null; source "$3" >/dev/null; source "$4" >/dev/null; env -0',
+        'closed-loop-ros-env',str(ROS_BASE),str(SLAM_UNDERLAY),str(SCAN_OVERLAY),str(SLAM_OVERLAY)],check=True,capture_output=True)
     return dict(x.decode().split('=',1)for x in r.stdout.split(b'\0')if b'='in x)
 
 
@@ -189,6 +200,62 @@ def group_members(pgid):
             r=identity(int(p.name))
             if r and r['pgid']==pgid and r['state']!='Z':rows.append(r)
     return rows
+
+
+def verify_loaded_slam(run,plan,navigation_identity):
+    """Witness the launched child's actual executable and mapped core before physics.
+
+    Scope hashing alone does not prove which shared library the dynamic loader
+    selected. No process outside this runner's saved navigation group is used.
+    Any old/different core is a protected failure, never a fallback.
+    """
+    expected=plan['slam_binary_contract'];deadline=time.monotonic()+30
+    receipt={'schema':'teacher_v7_loaded_slam_binary/v1','run':str(run),
+             'expected':expected,'navigation_group_identity':navigation_identity,
+             'verified':False,'simulation_only':True,'before_physics':True}
+    try:
+        while time.monotonic()<deadline:
+            candidates=[]
+            for member in group_members(navigation_identity['pgid']):
+                try:
+                    exe_raw=os.readlink(f"/proc/{member['pid']}/exe")
+                    if Path(exe_raw.removesuffix(' (deleted)')).name=='fastlivo_mapping':
+                        candidates.append((member,exe_raw))
+                except (OSError,ValueError):continue
+            if len(candidates)>1:raise RuntimeError('Multiple mapping executables in owned navigation group')
+            if not candidates:
+                time.sleep(.05);continue
+            member,exe_raw=candidates[0];pid=member['pid']
+            receipt.update(mapping_identity=member,actual_executable_path=exe_raw)
+            if exe_raw.endswith(' (deleted)')or str(Path(exe_raw).resolve())!=expected['executable']['path']:
+                raise RuntimeError('Mapping executable is not the frozen V7 independent binary')
+            maps_raw=Path(f'/proc/{pid}/maps').read_bytes();core_rows=[];loaded_paths=set()
+            for line in maps_raw.decode().splitlines():
+                fields=line.split(maxsplit=5)
+                if len(fields)==6 and 'libfast_livo2_core.so' in Path(fields[5].removesuffix(' (deleted)')).name:
+                    core_rows.append(line);loaded_paths.add(fields[5])
+            if not loaded_paths:
+                time.sleep(.05);continue
+            receipt.update(core_mapping_rows=core_rows,loaded_core_paths=sorted(loaded_paths),
+                           process_maps_sha256=hashlib.sha256(maps_raw).hexdigest())
+            if len(loaded_paths)!=1:raise RuntimeError('More than one core library mapped by V7 executable')
+            core_raw=next(iter(loaded_paths))
+            if core_raw.endswith(' (deleted)')or str(Path(core_raw).resolve())!=expected['core']['path']:
+                raise RuntimeError('Protected failure: V7 mapping loaded the old or an unexpected core')
+            actual_exe_sha=sha(f'/proc/{pid}/exe');actual_core_sha=sha(core_raw)
+            receipt.update(actual_executable_sha256=actual_exe_sha,actual_core_sha256=actual_core_sha)
+            if actual_exe_sha!=expected['executable']['sha256']or actual_core_sha!=expected['core']['sha256']:
+                raise RuntimeError('Actual mapping/core binary differs from frozen preparation hash')
+            after=identity(pid)
+            if not after or after['start_ticks']!=member['start_ticks']or after['pgid']!=navigation_identity['pgid']:
+                raise RuntimeError('Mapping process identity changed during binary witness')
+            receipt.update(verified=True,witness_monotonic_wall_ns=time.monotonic_ns())
+            write_new(run/'slam_loaded_binary.json',receipt);return receipt
+        raise TimeoutError('V7 loaded mapping/core witness unavailable within30wall seconds')
+    except Exception as error:
+        receipt.update(error=f'{type(error).__name__}: {error}',witness_monotonic_wall_ns=time.monotonic_ns())
+        write_new(run/'slam_loaded_binary.json',receipt)
+        raise
 
 
 def stop_owned(proc,saved,parent_first=False):
@@ -263,6 +330,8 @@ def execute(run,plan):
     env=ros_environment();transport=json.loads((run/'cloud_transport_manifest.json').read_text())
     for k in transport['remove_environment_keys']:env.pop(k,None)
     env.update(transport['environment'])
+    for k in ('FASTLIVO_DIAGNOSTIC_DIR','FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END'):
+        env.pop(k,None)  # Diagnostic settings belong only to navigation_stack.
     sock='/tmp/teacher_closed_loop_'+uuid.uuid4().hex[:12]+'.sock'
     env.update(ROS_DOMAIN_ID=str(plan['ros_domain']),GZ_IP='127.0.0.1',GZ_PARTITION='teacher_closed_loop_'+run.name,
         GZ_SIM_SYSTEM_PLUGIN_PATH=str(ROOT/'simulation/build'),TEACHER_SOCKET=sock,TEACHER_ACTUATOR_LOG=str(run/'actuator.jsonl'),
@@ -270,10 +339,11 @@ def execute(run,plan):
     env.pop('LIBGL_ALWAYS_SOFTWARE',None);env.pop('GALLIUM_DRIVER',None)
     selected_keys=('ROS_DOMAIN_ID','ROS_LOCALHOST_ONLY','ROS_AUTOMATIC_DISCOVERY_RANGE','RMW_IMPLEMENTATION',
                    'FASTRTPS_DEFAULT_PROFILES_FILE','FASTDDS_DEFAULT_PROFILES_FILE','GZ_PARTITION','GZ_IP','DISPLAY',
-                   'LIBGL_ALWAYS_SOFTWARE','GALLIUM_DRIVER','OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS')
+                   'LIBGL_ALWAYS_SOFTWARE','GALLIUM_DRIVER','OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS',
+                   'AMENT_PREFIX_PATH','COLCON_PREFIX_PATH','LD_LIBRARY_PATH','PYTHONPATH')
     write_new(run/'effective_environment.json',{k:env.get(k)for k in selected_keys})
     before=resource();write_new(run/'resources_before.json',before)
-    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False
+    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False;loaded_slam=None
     stream=(run/'owned_resources.jsonl').open('x',buffering=1)
     def start(role,command,child_env=None):
         log=(run/(role+'.log')).open('x');handles.append(log)
@@ -299,9 +369,15 @@ def execute(run,plan):
         start('bridge',[str(BRIDGE),'--ros-args','-r','__node:=ros_gz_bridge','-p','config_file:='+str(run/'sensor_bridge.yaml')])
         start('capture',[str(SYSTEM_PYTHON),'-B',str(ROOT/'scripts/capture.py'),'--run',str(run),
                          '--topic','/demo/teacher/overview','--archive-stride','1'])
-        start('navigation_stack',['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)],{**env,'DEMO_RUN_DIR':str(run)})
+        navigation_env={**env,'DEMO_RUN_DIR':str(run),**plan['navigation_stack_diagnostic_environment']}
+        write_new(run/'navigation_stack_effective_environment.json',{
+            k:navigation_env.get(k)for k in (*selected_keys,'DEMO_RUN_DIR','FASTLIVO_DIAGNOSTIC_DIR',
+                                           'FASTLIVO_DIAGNOSTIC_BEGIN','FASTLIVO_DIAGNOSTIC_END')})
+        start('navigation_stack',['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)],navigation_env)
         time.sleep(.5)
         if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited before physics started')
+        loaded_slam=verify_loaded_slam(run,plan,identities['navigation_stack'])
+        if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited during V7 binary witness')
         gazebo=start('gazebo',['gz','sim','-s','-r',str(run/'world.sdf')])
         write_new(run/'owned_processes_started.json',{role:{**identities[role],'role':role}for role in children})
         camera_deadline=time.monotonic()+30;wall_deadline=time.monotonic()+plan['wall_budget_s'];last_resource=-math.inf
@@ -335,6 +411,8 @@ def execute(run,plan):
         clean=roles_complete and all(x['returncode']==0 for x in actual)and child_proof['all_expected_children_clean']and all(not x.get('remaining_owned_group_members')and not x.get('identity_mismatch')and not x.get('identity_unavailable')for x in cleanup.values())
         if not clean:error=error or 'Owned role/launch child cleanup incomplete or nonzero'
         manifest={**plan,'error':error,'owned_processes':actual,'cleanup':cleanup,
+            'slam_loaded_binary_verified':bool(loaded_slam and loaded_slam.get('verified')),
+            'slam_loaded_binary_receipt_sha256':sha(run/'slam_loaded_binary.json')if(run/'slam_loaded_binary.json').is_file()else None,
             'required_owned_roles_complete':roles_complete,'all_owned_and_children_clean':clean,
             'launch_child_exit_evidence':child_proof,'gazebo_partition':env['GZ_PARTITION'],
             'native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),'plugin_sha256':plan['native_plugin_sha256'],

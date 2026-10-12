@@ -62,7 +62,7 @@ def generate_launch_description():
                 ExecuteProcess(cmd=['python3',str(dynamic/'dynamic_obstacle.py'),'--execute','--run',str(run),
                     '--role','mover',*ros],output='screen')]
         required=[RegisterEventHandler(OnProcessExit(target_action=p,on_exit=[EmitEvent(event=Shutdown(reason='Teacher finite navigation child ended'))]))for p in processes]
-        slam=IncludeLaunchDescription(PythonLaunchDescriptionSource(str(nav/'slam.launch.py')),
+        slam=IncludeLaunchDescription(PythonLaunchDescriptionSource(str(here/'slam.launch.py')),
                                       launch_arguments={'run_dir':str(run)}.items())
         return [slam,*processes,*required]
     return LaunchDescription([DeclareLaunchArgument('run_dir',default_value=os.environ.get('DEMO_RUN_DIR','')),

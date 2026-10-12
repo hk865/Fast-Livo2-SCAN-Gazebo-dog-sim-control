@@ -8,6 +8,7 @@ import hashlib,json,math
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent;NAV=HERE.parent;ROOT=NAV.parent;DEMO=ROOT.parent
+SLAM_WS=HERE/'slam_ws'
 SCHEMA='teacher_closed_loop_navigation_scope/v1'
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 CACHE={}
@@ -19,13 +20,23 @@ def write(p,x):
     if not p.exists():p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
 
 def runtime_files():
-    return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+[
-        NAV/n for n in ('runtime_io.py','teacher_transition.py','guard_audit.py','slam.launch.py','sensor_relay.py')]+[
+    # Hash the actual independent core source, build settings and installed
+    # artifacts, rather than claiming the protected camera core was executed.
+    core_sources=sorted(p for p in (SLAM_WS/'src').rglob('*') if p.is_file() and
+        (p.suffix in ('.cpp','.h','.hpp') or p.name in ('CMakeLists.txt','package.xml')))
+    build_files=[SLAM_WS/'build'/package/name for package in ('fast_livo2_core','fast_livo2_ros')
+                 for name in ('compile_commands.json','CMakeCache.txt')]
+    schemas=sorted(HERE.glob('*diagnostic_schema.json'))
+    preflight=[HERE/'diagnostic_preflight.json']if(HERE/'diagnostic_preflight.json').is_file()else[]
+    return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
+        HERE/'diagnostic_baseline.json',
+        SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[
+        NAV/n for n in ('runtime_io.py','teacher_transition.py','guard_audit.py','sensor_relay.py')]+[
         DEMO/'navigation'/n for n in ('control_core.py','trajectory_contract.py','goal_regions.py','event_archive.py')]+[
         DEMO/'slam'/n for n in ('odom_adapter.py','self_echo_filter.py','geometry.py','map_archive.py','heading_alignment.py')]+[
         DEMO/'camera_mode/slam/fastlivo.yaml',DEMO/'camera_mode/slam/camera.yaml',
-        DEMO/'slam/ros2_ws/install/fast_livo2_core/lib/libfast_livo2_core.so',
-        DEMO/'slam/ros2_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',
+        SLAM_WS/'install/fast_livo2_core/lib/libfast_livo2_core.so',
+        SLAM_WS/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',
         DEMO/'navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node',
         ROOT/'policy/worker.py',ROOT/'policy/observation.py',ROOT/'policy/contract.json',
         ROOT/'simulation/prepare.py',ROOT/'simulation/teacher_actuator.cpp',ROOT/'simulation/build/libteacher_actuator.so',
@@ -107,6 +118,9 @@ def prepare(run,profile):
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
     write(run/'navigation_slam_contract.json',{'schema':1,'status':'prepared_unverified','ground_truth_used':False,
+        'independent_diagnostic_workspace':str(SLAM_WS.resolve()),
+        'expected_package_prefixes':{package:str((SLAM_WS/'install'/package).resolve())
+            for package in ('fast_livo2_core','fast_livo2_ros')},
         'actual_sensor_sources':{'imu':'/livox/imu','image':'/demo/camera','camera_info':'/demo/camera_info','raw_lidar':'/demo/teacher/raw_lidar'},
         'image_relay':'Original real Gazebo body camera stamp/frame; overview excluded','references':slamrefs})
     files += [run/'navigation_slam_contract.json']
