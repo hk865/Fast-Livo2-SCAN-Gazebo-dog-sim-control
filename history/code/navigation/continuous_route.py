@@ -221,6 +221,8 @@ class RouteProgress:
             goals_definition_sha256=self.goal_hash, route_sha256=self.route_sha,
             route_points_xyz=None if self.points is None else self.points.tolist(),
             route_activation_stamp_ns=self.activated_ns,
+            next_activated_ns=self.next_activated_ns if self.next_index < len(self.goals) else None,
+            next_timeout_ns=round(self.goals[self.next_index].timeout_sim_s*1e9) if self.next_index < len(self.goals) else None,
             next_coverage_index=self.next_index, hard_target_index=self.target_index,
             hard_stop_indices=list(self.hard), monotonic_progress_m=self.progress,
             measured_projection=copy.deepcopy(self.last_projection),

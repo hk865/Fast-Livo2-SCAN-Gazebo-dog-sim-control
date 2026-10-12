@@ -199,7 +199,7 @@ def prepare(run,args):
     # Bind event capture before the one-time source archive/scope freeze.
     capture=json.loads((HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json').read_text())
     capture['run_id']=run.name
-    capture['authorization']['delegation']='root authorized R40 autonomous original-route continuation; bounded P1 capture is evidence only; no shadow scoring'
+    capture['authorization']['delegation']='R42 user-approved10GB single round; source-bound observer capture is evidence only; no shadow scoring'
     capture['authorization']['runtime_started_by_reviewer']=False
     for item in capture['source_bindings']:
         if sha(item['path'])!=item['sha256']:raise RuntimeError('Frozen event source binding changed: '+item['role'])
@@ -660,8 +660,35 @@ def execute(run,plan):
         from pipeline_lifecycle import request_normal_stop
         pipeline_stop=request_normal_stop(run,loaded_slam,identities.get('navigation_stack',{}),identity)
         if not pipeline_stop['normal_completed']:error=error or 'V19 normal pipeline drain failed: '+str(pipeline_stop['error'])
-        for role in ('shadow_sampler','navigation_stack','capture','bridge','gazebo','worker'):
+        for role in ('shadow_sampler','navigation_stack','capture','bridge','gazebo'):
             cleanup[role]=stop_owned(children.get(role),identities.get(role),parent_first=role=='navigation_stack')
+        # Native physics is stopped before waiting for the unmodified Actor's
+        # normal EOF/final archive; hard gates and original escalation remain.
+        from worker_archive_shutdown import await_archive_close,inspect_worker_archive
+        from owned_guardian import validated_members
+        def archive_abort_reason():
+            normal_diagnostic=bool(startup_stop and startup_stop.get('reason')in(
+                'actual_original_mission_failed','actual_original_navigation_failed'))
+            if not(normal_diagnostic or sample_complete or children.get('worker')is not None and children['worker'].poll()is not None):
+                return 'exceptional/hard shutdown uses original immediate escalation'
+            if not pipeline_stop.get('normal_completed'):
+                return 'original pipeline normal drain failed'
+            for role,result in cleanup.items():
+                if(result.get('remaining_owned_group_members')or result.get('identity_mismatch')
+                        or result.get('identity_unavailable')or result.get('started')and result.get('returncode')!=0):
+                    return 'original owned role cleanup incomplete: '+role
+            if watchdog and watchdog.error:return 'storage watchdog: '+str(watchdog.error)
+            if guardian and guardian.error:return 'owned guardian: '+str(guardian.error)
+            if time.monotonic()>=wall_deadline:return 'original frozen wall deadline'
+            return None
+        worker_archive_close=await_archive_close(children.get('worker'),identities.get('worker'),
+            cleanup.get('gazebo',{}),identity,validated_members,abort_reason=archive_abort_reason)
+        cleanup['worker']=stop_owned(children.get('worker'),identities.get('worker'))
+        worker_archive_integrity=inspect_worker_archive(run)if'worker'in children else None
+        if worker_archive_integrity is not None and not worker_archive_integrity['verified']:
+            error=error or 'Worker archive incomplete: '+str(worker_archive_integrity['error'])
+        write_new(run/'worker_archive_close.json',worker_archive_close)
+        write_new(run/'worker_archive_integrity.json',worker_archive_integrity)
         Path(sock).unlink(missing_ok=True);stream.close()
         for f in handles:f.close()
         guardian_receipt=guardian.close()if guardian else None
@@ -673,6 +700,7 @@ def execute(run,plan):
         manifest={**plan,'error':error,'owned_processes':actual,'cleanup':cleanup,
              'independent_owned_guardian':guardian_receipt,'bounded_shadow_sampling_complete':sample_complete,
              'R33_actual_diagnostic_stop':startup_stop,'R33_last_actual_native_ns':native_last_ns,
+             'worker_archive_close':worker_archive_close,'worker_archive_integrity':worker_archive_integrity,
             'slam_loaded_binary_verified':bool(loaded_slam and loaded_slam.get('verified')),
             'slam_loaded_binary_receipt_sha256':sha(run/'slam_loaded_binary.json')if(run/'slam_loaded_binary.json').is_file()else None,
             'scan_loaded_binary_verified':bool(loaded_scan and loaded_scan.get('verified')),
@@ -720,6 +748,16 @@ def main():
     ap.add_argument('--shadow-sample-contract',type=Path,default=None,help='User-approved whole-frame24MiB capture; groups7/8 only, no control adoption')
     ap.add_argument('--prepared-run',type=Path,default=None)
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
+    launch_authority=json.loads((HERE/'R33_SHORT_STARTUP_CONTRACT.json').read_text())
+    if not args.prepare_only and launch_authority.get('runtime_launch_authorized')is not True:
+        raise RuntimeError('R42 preparation only: budget/runtime approval pending; no run may start')
+    if not args.prepare_only:
+        launch_latch=Path(launch_authority['source_stage'])/'ONE_SIMULATION_LATCH.json'
+        if launch_latch.exists():raise RuntimeError('R42 authorized single simulation attempt already consumed')
+        # A source-review PASS and the exact current user authority are both
+        # required before creating any run, registration, alias or execution request.
+        from corridor_preflight import verify_preflight
+        verify_preflight(HERE,json.loads(profile_path(args.profile).read_text()))
     label=''.join(c for c in args.label if c.isalnum()or c in '_-')or'candidate'
     from run_storage import create_run,verify_run
     from storage_guard import SESSION,register
@@ -747,7 +785,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r40_continue_original_route';tmp=ROOT/'runs'/('latest_engineering_v34_r40_continue_original_route.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r42_archive_diagnostics';tmp=ROOT/'runs'/('latest_engineering_v34_r42_archive_diagnostics.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

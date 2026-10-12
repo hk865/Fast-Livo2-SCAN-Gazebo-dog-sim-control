@@ -113,8 +113,8 @@ def main():
             reference_path=run/'known_scene_reference.json'
             reference=SceneReference.load(reference_path,sha(reference_path),sha(run/'world.sdf'))
             self.matcher=KnownSceneMatcher(reference)
-            from event_aware_source_capture import BoundedSourceFrames
-            self.diagnostic_capture=BoundedSourceFrames(run)
+            from p95_capture import P95SourceFrames
+            self.diagnostic_capture=P95SourceFrames(run)
             self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None

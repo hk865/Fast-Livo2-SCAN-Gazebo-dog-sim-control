@@ -111,7 +111,8 @@ class KnownSceneInputMixin:
                 if self.state=='failed':
                     self.reset_region_arrival('failed');self.publish_command();return
             self.publish_command();self.reset_region_arrival('known_scene_fresh_transaction_hold')
-            self.message='等待同一定位版本的新鲜位姿、点云或停车修正事务'
+            if self.state!='failed':
+                self.message='等待同一定位版本的新鲜位姿、点云或停车修正事务'
             return
         return super()._control_candidate(now)
 

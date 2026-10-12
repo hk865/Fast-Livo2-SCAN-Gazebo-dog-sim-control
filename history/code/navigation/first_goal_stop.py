@@ -221,7 +221,7 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
     from startup_trace import read_live_json
     run = Path(run)
     # Caps and original failures precede a success observation.
-    if run_output_bytes >= 5_000_000_000:
+    if run_output_bytes >= 10_000_000_000:
         return dict(stop=True, reason='new_output_cap', navigation_PASS=False)
     result = read_live_json(run/'R33_INITIALIZATION_RESULT.json')
     waiting = None

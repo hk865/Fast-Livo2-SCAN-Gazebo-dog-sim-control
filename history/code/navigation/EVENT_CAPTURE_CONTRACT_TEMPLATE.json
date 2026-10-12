@@ -1,5 +1,5 @@
 {
-  "schema": "go2_P1_association_source_capture_contract/v1",
+  "schema": "go2_P95_quality_source_capture_contract/v1",
   "run_id": "__PREPARED_RUN_NAME__",
   "caps": {
     "groups": 3,
@@ -36,71 +36,81 @@
   "source_bindings": [
     {
       "role": "event_collector",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/event_aware_source_capture.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/event_aware_source_capture.py",
       "sha256": "db98476740a59205e6478f065dad6addda3f24ab7379238d46b9b26a763a3af2"
     },
     {
       "role": "event_runtime",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/known_scene_runtime.py",
-      "sha256": "49fab83e3660587320bc96b98db341a8304ab9ef0a8310ded84d43be6635bb90"
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/known_scene_runtime.py",
+      "sha256": "8a1a04c3e51cf81d31fc5a69666238ddaa3e55105b6a16f86c6ba23b88e1269f"
     },
     {
       "role": "known_scene_adapter.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/known_scene_adapter.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/known_scene_adapter.py",
       "sha256": "b22a9fb91c30752abe2fe5c3e4fd7e576f2125a597aeeb1f804d0376ea6cdeae"
     },
     {
       "role": "known_scene_matcher.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/known_scene_matcher.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/known_scene_matcher.py",
       "sha256": "c5e58a401a71627b7461e75ddba4306893a6a8e29f14fa969baef8670a37ab7d"
     },
     {
       "role": "known_scene_inputs.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/known_scene_inputs.py",
-      "sha256": "98432913aa3fe6eb5288de083247c1a9b783f2fad9fe609960ef4084863feef0"
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/known_scene_inputs.py",
+      "sha256": "98ce090e94f5f210bca4a07c9ba0862048b3cdb66e1f44546708f4ec2cdbb66b"
     },
     {
       "role": "scan_epoch_supervisor.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/scan_epoch_supervisor.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/scan_epoch_supervisor.py",
       "sha256": "0a73193e64a99cc4e026bd9a681d81c991fb2226f0248b7b1f7af6c332781c78"
     },
     {
       "role": "mission46_runtime.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/mission46_runtime.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/mission46_runtime.py",
       "sha256": "8d9191c7edd1a6eac4dbea25cb5e563585f927cda760747f3e6c925ece061038"
     },
     {
       "role": "mission46.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/mission46.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/mission46.py",
       "sha256": "da77755c84aadc02559ad4a93505fb32452d47d15416c57b9f1515520b91ffa0"
     },
     {
       "role": "sensor_relay",
       "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/sensor_relay.py",
       "sha256": "765641bac4e90f4e36624fe750848935cb3336730dcb63ac86c4c246178b58f2"
+    },
+    {
+      "role": "P95_event_observer",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r42_archive_diagnostics/p95_capture.py",
+      "sha256": "21aeed69fab8b89531e3d802c5f7ad2150da14ce6f15f83ace84d6f070cccf69"
     }
   ],
   "authorization": {
     "parent_thread": "<PRIVATE_SESSION_ID>",
-    "user_message": "Sentinel_239acb653ffc8191815d1663aeffb3a7",
-    "delegation": "R40 autonomous original-route continuation; sampling completion is evidence only",
-    "runtime_started_by_reviewer": false
+    "user_message": "Sentinel_7b9e2ac7a0f08191b6648401e0a6751a",
+    "delegation": "R42 approved10GB single round; source-bound first actual final-request P95 observer; sampling soft conditions do not stop task",
+    "runtime_started_by_reviewer": false,
+    "runtime_launch_authorized": true,
+    "authority_file": "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R42_ISOLATED_CANDIDATE_PREP_STAGE/USER_10GB_APPROVAL.json",
+    "authority_sha256": "1f6c46fe835b9d6d9a99c8c954991bfc41c9c5bf8196f342e453f3ead487b232"
   },
   "runtime_budget": {
     "native_seconds": 1500,
     "wall_seconds": 9090,
-    "new_output_cap_bytes": 5000000000,
+    "new_output_cap_bytes": 10000000000,
     "shared_hard_cap_bytes": 80000000000,
     "original_profile_duration_seconds": 1500
   },
   "limitations": [
-    "Original exact source rejection and all map/control gates unchanged.",
-    "Direct original evaluated NN arrays; writer does not rerun or replace pairing.",
-    "PRE/POST are association-checked jobs, not automatically accepted control.",
+    "Original matcher/controller gates and 0.35m P95 rejection threshold unchanged.",
+    "Only the original checked worker job owns source pins; no shadow matcher or cache replacement.",
+    "First qualifying P95 event in the actual final-navigation request is captured; no promise to reproduce or target historical849.025s.",
+    "PRE and POST are original checked jobs, not automatically accepted control; terminal-before-POST remains incomplete.",
+    "Registered full payload is /demo/slam/raw_registered_full; canonical bundle is metadata, not a second full registered cloud.",
     "Absent point-ID/stage commit remains UNVERIFIED.",
-    "Complete received ROS message reserialization, not original wire CDR.",
+    "Complete received ROS message reserialization, not original wire CDR; whole group rejected if over cap.",
     "No GTpose/IMU world quaternion/frontend z prior; no fabricated point timing.",
-    "IMU arrival/coverage does not establish frontend consumption; require_complete_imu=false.",
+    "Only actual source bracketing auxiliary messages retained; full LIO IMU consumption is not claimed; require_complete_imu=false.",
     "R6 formal eight-group contract remains separate and unchanged.",
     "No online shadow scoring; fixed16MiB logical and allocated capture cap."
   ],
@@ -110,8 +120,10 @@
     "navigating": "navigation_f1_f3"
   },
   "diagnostic_trigger": {
-    "original_predicate": "nearest_index_bijection_failed",
+    "original_predicate": "top_candidate_only_ray_p95_failed",
     "first_real_failure": true,
+    "mission_stage": "navigating",
+    "current_request_phase": "navigation_f1_f3",
     "complete_previous_jobs": 1,
     "post_original_checked_job": true
   }
