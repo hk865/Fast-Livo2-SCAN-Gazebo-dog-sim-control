@@ -8,7 +8,7 @@ from __future__ import annotations
 import numpy as np
 
 DEFAULTS = dict(plane_tolerance_m=.025, min_plane_points=80, ransac_trials=180,
-                max_planes=10, max_fit_points=30000, horizontal_max_deg=3.,
+                max_planes=10, max_fit_points=30000, horizontal_max_deg=1.5,
                 ramp_min_deg=3., ramp_max_deg=20., bin_m=.25, min_bin_points=6,
                 minimum_supported_width_m=1., side_drop_min_m=.06,
                 side_evidence_distance_m=.20, seam_tolerance_m=.25,
@@ -25,8 +25,8 @@ def unit(value):
 
 def extract_planes(xyz, up, cfg):
     """Deterministic, point-order invariant under rigid coordinate transforms."""
-    rng = np.random.default_rng(42); left = np.arange(len(xyz)); planes = []
-    for _ in range(cfg['max_planes']):
+    rng = np.random.default_rng(42); left = np.arange(len(xyz)); planes = []; horizontal_phase=True
+    while len(planes)<cfg['max_planes']:
         if len(left) < cfg['min_plane_points']: break
         sample = left if len(left) <= cfg['max_fit_points'] else left[np.linspace(0, len(left)-1, cfg['max_fit_points'], dtype=int)]
         points = xyz[sample]; best = None; best_count = 0
@@ -36,16 +36,28 @@ def extract_planes(xyz, up, cfg):
             if length < 1e-8: continue
             n /= length
             if abs(n @ up) < np.cos(np.deg2rad(cfg['ramp_max_deg'])): continue
+            if horizontal_phase and abs(n @ up)<np.cos(np.deg2rad(cfg['horizontal_max_deg'])):continue
             good = np.abs((points-a) @ n) <= cfg['plane_tolerance_m']; count = int(good.sum())
             if count > best_count: best_count, best = count, (a, n)
-        if best is None or best_count < cfg['min_plane_points']: break
+        if best is None or best_count < cfg['min_plane_points']:
+            if horizontal_phase:horizontal_phase=False;continue
+            break
         mask = np.abs((xyz[left]-best[0]) @ best[1]) <= cfg['plane_tolerance_m']
         indexes = left[mask]; p = xyz[indexes]; center = p.mean(axis=0)
-        _, _, vh = np.linalg.svd(p-center, full_matrices=False); normal = vh[-1]
+        normal=best[1]
+        for _refine in range(3):
+            core=p[np.abs((p-center)@normal)<=cfg['plane_tolerance_m']*.5]
+            if len(core)<cfg['min_plane_points']:core=p
+            center=core.mean(axis=0);_,_,vh=np.linalg.svd(core-center,full_matrices=False);normal=vh[-1]
         if normal @ up < 0: normal = -normal
+        # A thin height slice of a ramp can resemble a horizontal RANSAC
+        # proposal. Its fitted normal exposes it; do not remove that slice as
+        # a floor before fitting the real ramp.
+        if horizontal_phase and normal@up<np.cos(np.deg2rad(cfg['horizontal_max_deg'])):
+            horizontal_phase=False;continue
         # Refine the membership after the least-squares fit, retaining every layer.
         mask = np.abs((xyz[left]-center) @ normal) <= cfg['plane_tolerance_m']
-        indexes = left[mask]; p = xyz[indexes]; center = p.mean(axis=0)
+        indexes = left[mask]; p = xyz[indexes]
         if len(p) < cfg['min_plane_points']: break
         tilt = float(np.arccos(np.clip(normal @ up, -1, 1)))
         planes.append(dict(plane_id=len(planes), center=center, normal=normal, indices=indexes,
@@ -95,9 +107,25 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
         heading = up-(up @ p['normal'])*p['normal']; heading -= (heading @ up)*up; heading = unit(heading)
         lateral = unit(np.cross(up, heading)); center = p['center']; delta = xyz-center
         u, v, h = delta @ heading, delta @ lateral, delta @ up
-        pts = xyz[p['indices']]; uv = (pts-center) @ np.column_stack([heading, lateral])
+        # Reconsider original measurements near a fitted ramp, including seam
+        # samples that a horizontal component also legitimately owns.
+        pts=xyz[np.abs((xyz-center)@p['normal'])<=cfg['plane_tolerance_m']]
+        uv = (pts-center) @ np.column_stack([heading, lateral])
         low, high = np.quantile(uv[:, 0], [.005, .995]); length = float(high-low)
         slope = float(-(p['normal'] @ heading)/(p['normal'] @ up))
+        # Clip seam-contaminated plane membership only when both actual
+        # adjoining platform levels and center-strip measurements support it.
+        tentative=[];middle0=float(np.median(uv[:,1]))
+        for plat in horizontals:
+            seam=float((plat['center']-center)@up)/slope
+            if not low-cfg['seam_tolerance_m']<=seam<=high+cfg['seam_tolerance_m']:continue
+            kind='entry_low'if abs(seam-low)<=cfg['seam_tolerance_m']else'exit_high'if abs(seam-high)<=cfg['seam_tolerance_m']else None
+            if kind is None:continue
+            pu=(xyz[plat['indices']]-center)@heading;pv=(xyz[plat['indices']]-center)@lateral
+            band=(pu>=seam-.45)&(pu<=seam-.05)if kind=='entry_low'else(pu<=seam+.45)&(pu>=seam+.05)
+            if (band&(np.abs(pv-middle0)<=.4)).sum()>=cfg['min_bin_points']:tentative.append((kind,seam))
+        entries=[s for kind,s in tentative if kind=='entry_low'];exits=[s for kind,s in tentative if kind=='exit_high']
+        if len(entries)==len(exits)==1:low,high=entries[0],exits[0];length=float(high-low)
         candidate = {'plane_id': p['plane_id'], 'heading_camera_init': heading.tolist(),
                      'lateral_camera_init': lateral.tolist(), 'observed_u_interval_m': [float(low), float(high)],
                      'observed_length_m': length, 'gradient': slope, 'bins': [], 'connections': [],

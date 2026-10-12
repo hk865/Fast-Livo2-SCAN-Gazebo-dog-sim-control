@@ -89,6 +89,7 @@ class GravityCalibration:
                 or not 0<=imu['received_monotonic_wall']-imu_pose['received_monotonic_wall']<.3
                 or not 0<=imu['received_monotonic_wall']-body_pose['received_monotonic_wall']<.3
                 or max(body_pose.get('twist_covariance',[1e6]*36)[7*k]for k in range(3))>=1.
+                or not np.isfinite(imu['angular_velocity']).all()
                 or np.linalg.norm(imu['angular_velocity']) > .1
                 or np.linalg.norm(body_pose['body_linear_velocity']) > .05):
             return None
@@ -115,5 +116,7 @@ class GravityCalibration:
                        'first_stamp_ns': self.samples[0][0], 'last_stamp_ns': self.samples[-1][0],
                        'samples': len(self.samples), 'unique_slam_imu_pose_samples': len({s[2] for s in self.samples}),
                        'maximum_axis_deviation_rad': float(np.max(deviations)), 'frozen_once': True,
+                       'calibration_sample_receipts': [{'imu_stamp_ns':s[0],'slam_imu_pose_stamp_ns':s[2],
+                           'transformed_up_camera_init':s[1].tolist()}for s in self.samples],
                        'imu_orientation_field_used': False, 'ground_truth_used': False}
         return self.result

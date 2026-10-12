@@ -78,6 +78,7 @@ class CaptureWriter:
         row['background_queue_delay_wall_s']=row['processed_monotonic_wall']-row['received_monotonic_wall']
         if stream in self.histories:
             values=row['position']+row['quaternion']+row.get('body_linear_velocity',[])
+            values+=row.get('pose_covariance',[])+row.get('twist_covariance',[])
             history=self.histories[stream];child='demo_slam_body' if stream=='body_odom' else 'aft_mapped'
             accepted=(np.isfinite(values).all() and row['frame_id']=='camera_init' and row['child_frame_id']==child
                 and .98<=sum(v*v for v in row['quaternion'])<=1.02
@@ -91,6 +92,9 @@ class CaptureWriter:
             fresh=(clock is not None and -50_000_000<=clock-row['original_stamp_ns']<300_000_000
                 and ca is not None and 0<=ca<.3)
             if ip is not None and bp is not None and self.gravity.result is None and fresh:
+                row['gravity_pairing']={'slam_imu_pose_stamp_ns':ip['original_stamp_ns'],'body_pose_stamp_ns':bp['original_stamp_ns'],
+                    'slam_imu_quaternion':ip['quaternion'],'slam_imu_pose_received_wall':ip['received_monotonic_wall'],
+                    'body_pose_received_wall':bp['received_monotonic_wall'],'body_linear_velocity':bp['body_linear_velocity']}
                 if self.gravity.observe(row,ip,bp) is not None: atomic_json(self.output/'gravity.json',self.gravity.result)
         elif stream=='full_cloud':
             decode_error=None
