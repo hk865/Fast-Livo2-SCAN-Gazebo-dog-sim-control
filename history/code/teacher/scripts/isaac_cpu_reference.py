@@ -225,6 +225,7 @@ try:
                     trace[-1]['scanner_position_world']=base.scene.sensors['height_scanner'].data.pos_w.torch[0].numpy().tolist()
                     trace[-1]['body_names']=list(robot.body_names)
                     trace[-1]['body_positions_world']=robot.data.body_link_pos_w.torch[0].numpy().tolist()
+                    trace[-1]['body_quaternions_xyzw']=robot.data.body_link_quat_w.torch[0].numpy().tolist()
                     trace[-1]['contact_body_names']=list(contact.body_names)
                     trace[-1]['base_contact_force_world']=base.scene.sensors['base_contact_forces'].data.net_forces_w.torch[0].numpy().tolist()
                 _,_,terminated,truncated,_=env.step(action)
