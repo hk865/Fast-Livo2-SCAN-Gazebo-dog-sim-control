@@ -30,6 +30,7 @@ parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--duration', type=float, default=10.)
 parser.add_argument('--only-stand', action='store_true')
 parser.add_argument('--schedule', type=Path, help='JSON cases with duration, segments[start,end,command,mode], optional command_slew xyz per second')
+parser.add_argument('--terrain-sdf', type=Path, help='Exact Gazebo static box/plane collisions imported as real PhysX triangle mesh, including overhead decks')
 add_launcher_args(parser)
 args, hydra_args = setup_preset_cli(parser)
 if args.device != 'cpu':
@@ -70,6 +71,45 @@ config.scene.terrain.terrain_generator.num_cols = 1
 config.scene.terrain.terrain_generator.border_width = 100.
 config.scene.terrain.max_init_terrain_level = 0
 config.scene.terrain.terrain_generator.use_cache = False
+terrain_manifest = None
+if args.terrain_sdf:
+    # All collisions share the same physical and ray-cast mesh. No analytical
+    # scan override is supplied to Isaac or the actor.
+    import trimesh
+    from isaaclab.terrains import TerrainImporter
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'policy'))
+    from observation import TerrainHeightMap
+    args.terrain_sdf = args.terrain_sdf.resolve()
+    sdf_geometry = TerrainHeightMap.from_sdf(args.terrain_sdf)
+    meshes = []
+    for shape in sdf_geometry.shapes:
+        if len(shape.half_size) == 3:
+            mesh = trimesh.creation.box(extents=2 * shape.half_size)
+        else:
+            x,y = shape.half_size
+            mesh = trimesh.Trimesh(vertices=[[-x,-y,0],[x,-y,0],[x,y,0],[-x,y,0]], faces=[[0,1,2],[0,2,3]], process=False)
+        matrix = np.eye(4)
+        matrix[:3,:3] = shape.rotation
+        matrix[:3,3] = shape.center
+        mesh.apply_transform(matrix)
+        meshes.append(mesh)
+    fixture_mesh = trimesh.util.concatenate(meshes)
+    class SDFTerrainImporter(TerrainImporter):
+        def import_ground_plane(self, name, size=(2e6,2e6)):
+            self.import_mesh(name, fixture_mesh)
+    config.scene.terrain.class_type = SDFTerrainImporter
+    config.scene.terrain.terrain_type = 'plane'
+    config.scene.terrain.terrain_generator = None
+    config.scene.terrain.env_spacing = 3.
+    config.scene.terrain.use_terrain_origins = False
+    config.curriculum.terrain_levels = None if hasattr(config.curriculum,'terrain_levels') else None
+    (args.output/'fixture_world.sdf').write_bytes(args.terrain_sdf.read_bytes())
+    fixture_mesh.export(args.output/'fixture_collision_mesh.obj')
+    terrain_manifest = {'source_sdf': str(args.terrain_sdf), 'source_sdf_sha256': sdf_geometry.source_sha256,
+        'static_shape_count':len(sdf_geometry.shapes), 'mesh_vertices':len(fixture_mesh.vertices), 'mesh_faces':len(fixture_mesh.faces),
+        'shape_names':[s.name for s in sdf_geometry.shapes], 'excluded_models':list(sdf_geometry.excluded_models),
+        'geometry':'Exact SDF static box/plane world transforms converted to one real triangle mesh under /World/ground/terrain. Same mesh used for PhysX collision and Isaac vertical height scanner; robot/self and moving_obstacle excluded.'}
+    (args.output/'fixture_manifest.json').write_text(json.dumps(terrain_manifest,indent=2)+'\n')
 longest_duration = max(c['duration'] for c in schedule['cases']) if schedule else args.duration
 config.episode_length_s = max(20., longest_duration + 2.)
 config.seed = 42
@@ -103,6 +143,7 @@ protocol = {'checkpoint':str(args.checkpoint), 'checkpoint_sha256':sha,
             'criterion':{'fall':'termination before timeout or roll/pitch >0.8rad or base clearance<0.16m', 'velocity_rmse_xy_max_mps':.15, 'velocity_rmse_yaw_max_radps':.2, 'stand_drift_max_m':.15},
             'physics_dt':config.sim.dt, 'decimation':config.decimation,
             'schedule':schedule, 'schedule_sha256':hashlib.sha256(args.schedule.read_bytes()).hexdigest() if args.schedule else None,
+            'terrain_fixture':terrain_manifest,
             'no_training':True, 'started_at':time.time()}
 (args.output/'protocol.json').write_text(json.dumps(protocol,indent=2)+'\n')
 cases=[{'name':name,'command':command,'duration':args.duration} for name,command in [('stand',[0.,0.,0.]),('forward',[.3,0.,0.]),('backward',[-.3,0.,0.]),('left',[0.,.2,0.]),('right',[0.,-.2,0.]),('yaw_positive',[0.,0.,.3]),('yaw_negative',[0.,0.,-.3]),('switch',None)]]
@@ -125,6 +166,12 @@ try:
             cmd.is_heading_env.fill_(False)
         for case in cases:
             name, value = case['name'], case.get('command')
+            if 'spawn_xyz_yaw' in case:
+                spawn=np.asarray(case['spawn_xyz_yaw'],dtype=float)
+                if spawn.shape!=(4,) or not np.isfinite(spawn).all(): raise ValueError('spawn_xyz_yaw must contain finite4')
+                default=robot.data.default_root_pose.torch[0,:3].numpy()
+                event=base.event_manager.get_term_cfg('reset_base')
+                event.params['pose_range']={axis:(float(offset),float(offset)) for axis,offset in zip(('x','y','z','yaw'),np.r_[spawn[:3]-default,spawn[3]])}
             env.reset()
             start_pos=robot.data.root_link_pos_w.torch[0].numpy().copy()
             trace=[]; failed=False
@@ -170,6 +217,12 @@ try:
                     'torque':torque.tolist(),'action':action[0].numpy().tolist(),
                     'q_target':(action_term._offset[0]+action_term._scale*action[0]).numpy().tolist(),
                     'height_scan':obs[0,60:].numpy().tolist(),'observation247':obs[0].numpy().tolist(),'observed_command':obs[0,9:12].numpy().tolist(),'last_action_observed':obs[0,48:60].numpy().tolist(),'height_scan_raw':(base.scene.sensors['height_scanner'].data.pos_w.torch[0,2]-base.scene.sensors['height_scanner'].data.ray_hits_w.torch[0,:,2]-.5).numpy().tolist(),'contact_forces':cf.tolist()})
+                if terrain_manifest is not None:
+                    trace[-1]['height_ray_hits_world']=base.scene.sensors['height_scanner'].data.ray_hits_w.torch[0].numpy().tolist()
+                    trace[-1]['scanner_position_world']=base.scene.sensors['height_scanner'].data.pos_w.torch[0].numpy().tolist()
+                    trace[-1]['body_names']=list(robot.body_names)
+                    trace[-1]['body_positions_world']=robot.data.body_link_pos_w.torch[0].numpy().tolist()
+                    trace[-1]['contact_body_names']=list(contact.body_names)
                 _,_,terminated,truncated,_=env.step(action)
                 if terminated.item() or max(abs(roll),abs(pitch))>.8 or (clearance is not None and clearance<.16):
                     failed=True; break
