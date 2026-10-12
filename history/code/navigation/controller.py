@@ -3,6 +3,7 @@
 import argparse,copy,hashlib,json,math,os,time
 from collections import deque
 from pathlib import Path
+from path_handoff import stopped_rebind as stopped_path_rebind
 import numpy as np
 from teacher_wrapper import TeacherNavigation
 from pid_core import slew
@@ -278,6 +279,10 @@ class PIDNavigation(TeacherNavigation):
         return dict(conditions=conditions,samples_present=conditions['samples_present'],
             clock_ns=ns,checked_monotonic_wall=now,actual_source_times_refreshed=False)
     def retain_admitted_path(self,points,config):
+        retained_context=handoff_context(self)
+        if not retained_context['allowed']:
+            return dict(allowed=False,reason='old_path_coverage_or_context_not_eligible',
+                eligibility=retained_context,conditions=retained_context['conditions'],samples_present=self.samples is not None)
         # New planner reference stamps are pending identities, not new receipts
         # for the path being executed. Progress is projected spatially only.
         eligibility=self.path_execution_eligibility()
@@ -410,6 +415,10 @@ class PIDNavigation(TeacherNavigation):
         if proof['allowed']:
             try:
                 handoff=preview_path_handoff(self,check,value,metadata)
+                if not handoff['allowed'] and handoff.get('reason')=='handoff_not_ready':
+                    rebind=stopped_path_rebind(self,handoff,proof)
+                    handoff=dict(handoff,stopped_rebind=rebind,allowed=rebind['allowed'],
+                        reason='handoff_measured_stop_rebind' if rebind['allowed'] else 'handoff_not_ready')
                 if not handoff['allowed']:proof=dict(proof,original_geometry_allowed=True,original_geometry_reason=proof.get('reason'),allowed=False,reason=handoff['reason'])
             except (ValueError,TypeError,KeyError,AttributeError,OverflowError) as error:
                 proof=dict(proof,allowed=False,reason='handoff_preview_invalid:'+type(error).__name__+':'+str(error))
@@ -421,6 +430,11 @@ class PIDNavigation(TeacherNavigation):
         if capture and proof['allowed']:
             retain=self.retain_admitted_path(points,config)
             if not retain['allowed']:recovery=self.capture_replacement_eligibility(retain)
+        if proof['allowed'] and handoff is not None and handoff.get('stopped_rebind',{}).get('allowed'):
+            commit_recheck=stopped_path_rebind(self,handoff,proof)
+            handoff=dict(handoff,commit_stop_recheck=commit_recheck)
+            if not commit_recheck['allowed']:
+                proof=dict(proof,allowed=False,reason='handoff_stop_or_source_changed_before_commit')
         if time.monotonic()-started>.100:
             proof=dict(allowed=False,reason='admission_callback_budget_exhausted');recovery=None
         if not proof['allowed'] or capture and (recovery is None or not recovery['allowed']):
@@ -473,6 +487,9 @@ class PIDNavigation(TeacherNavigation):
                 request_id=self.request_id,waypoint_index=self.waypoint_index,
                 trajectory_id=self.active_trajectory_id,metadata=copy.deepcopy(metadata))
             self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
+            if handoff is not None and handoff.get('stopped_rebind',{}).get('allowed'):
+                # The original Teacher owns all turn/settle commands after this real commit.
+                self.heading_gate.reset()
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
             self.archive_admission(value,metadata,dict(admitted=True,reason='exhausted_capture_rebound_after_all_execution_gates' if capture_clear is not None else 'continuous_fence_and_existing_execution_gates_passed',
                 proof=proof,handoff=handoff,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear),started)

@@ -102,7 +102,9 @@ def main():
     sys.path.append(str(here.parent))
     from runtime_io import EvidenceWriter
     from startup_trace import CallbackTrace
-    rclpy.init(args=ros)
+    from owned_ros_lifecycle import OwnedRosLifecycle
+    from rclpy.signals import SignalHandlerOptions
+    lifecycle=OwnedRosLifecycle(rclpy,ros,SignalHandlerOptions.NO)
     class Runtime(Node):
         def __init__(self):
             super().__init__('demo_slam_odom_adapter')
@@ -345,10 +347,9 @@ def main():
             self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
             atomic(run/'known_scene_exit.json',dict(positive_capture=positive_capture,worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
-    node=Runtime()
-    try:rclpy.spin(node)
+    node=None
+    try:
+        node=Runtime();lifecycle.spin(node)
     except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):pass
-    finally:
-        node.close();node.destroy_node()
-        if rclpy.ok():rclpy.shutdown()
+    finally:lifecycle.close(node)
 if __name__=='__main__':main()
