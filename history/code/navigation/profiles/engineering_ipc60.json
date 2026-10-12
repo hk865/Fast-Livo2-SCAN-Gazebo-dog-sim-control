@@ -3710,6 +3710,14 @@
     "startup_correction_commit_requires_navigation_idle": true,
     "navigation_world_transform_source": "original_scenario.slam_origin_in_world",
     "frontend_velocity_or_bias_repaired": false,
+    "correction_trigger": {
+      "version": "known_scene_body_effect_v34r15",
+      "translation_m": 0.04,
+      "rotation_rad": 0.025,
+      "translation_reference": "same_source_corrected_body_position",
+      "exact_worker_captured_body_required": true,
+      "origin_translation_is_diagnostic_only": true
+    },
     "bounded_foreground_surface_policy": {
       "version": "known_scene_unmapped_foreground_v34r14",
       "maximum_fraction": 0.05,

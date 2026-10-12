@@ -283,6 +283,8 @@ class MatcherWorker:
                 else:
                     result = self.matcher.match(job['source_ns'], job['body_points'], job['T_odom_body'],
                                                 current_c=c, provenance=job['provenance'])
+                    result['T_odom_body']=checked_transform(job['T_odom_body']).tolist()
+                    result['T_odom_body_source_ns']=job['source_ns']
             except Exception as error:
                 result = dict(source_ns=None if job is None else job.get('source_ns'),
                               accepted=False, control_allowed=False,

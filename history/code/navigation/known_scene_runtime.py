@@ -7,7 +7,7 @@ from collections import OrderedDict
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
-from known_scene_matcher import SceneReference,KnownSceneMatcher,CorrectionState,transform_distance
+from known_scene_matcher import SceneReference,KnownSceneMatcher,CorrectionState,transform_distance,checked_transform
 from known_scene_adapter import ExactSourceJoin,MatcherWorker,validate_runtime_witness,stamp_ns,odometry_transform,pointcloud_xyz
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -19,6 +19,33 @@ def proposal_epoch_valid(result,generation,pending_target,transition):
     if pending_target is None:return False
     distance,angle=transform_distance(np.asarray(result['C_world_odom']),pending_target)
     return distance<.08 and angle<.05
+
+def proposal_body_effect(result,applied):
+    """Measure a correction on its captured body, independently of world origin.
+
+    The worker preserves the exact body pose that produced C. Never use a latest
+    or nearest pose to decide a transaction on an older matching result.
+    """
+    source=result.get('source_ns')
+    if type(source) is not int or source<=0 or result.get('T_odom_body_source_ns')!=source:
+        raise ValueError('Correction trigger requires the actual same-source body pose')
+    raw=checked_transform(result['T_odom_body'])
+    candidate=checked_transform(result['C_world_odom'])
+    matched=checked_transform(result['T_world_body'])
+    current=checked_transform(applied)
+    proposed=candidate@raw
+    if not np.allclose(proposed,matched,rtol=0,atol=1e-7):
+        raise ValueError('Correction body pose and candidate association inconsistent')
+    before=current@raw
+    translation=float(np.linalg.norm(proposed[:3,3]-before[:3,3]))
+    angle=float(Rotation.from_matrix(proposed[:3,:3]@before[:3,:3].T).magnitude())
+    return dict(schema='known_scene_same_source_body_correction_effect/v1',source_ns=source,
+        translation_m=translation,rotation_rad=angle,
+        translation_trigger_m=.04,rotation_trigger_rad=.025,
+        requires_transaction=translation>.04 or angle>.025,
+        origin_translation_diagnostic_m=float(np.linalg.norm(candidate[:3,3]-current[:3,3])),
+        before_world_body_position=before[:3,3].tolist(),after_world_body_position=proposed[:3,3].tolist(),
+        pose_association='exact_worker_captured_body_stamp',robot_truth_pose_used=False)
 
 def corrected_odom(msg,c):
     out=copy.deepcopy(msg);t=c@odometry_transform(msg);q=Rotation.from_matrix(t[:3,:3]).as_quat()
@@ -70,6 +97,7 @@ def main():
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
             self.history=(run/'known_scene_matches.jsonl').open('x',buffering=1)
             self.bundle_history=(run/'known_scene_bundles.jsonl').open('x',buffering=1)
+            self.decision_history=(run/'known_scene_correction_decisions.jsonl').open('x',buffering=1)
             self.pubs={k:self.create_publisher(Odometry,'/demo/slam/'+k+'_odom',10) for k in ('body','lidar')}
             self.cloud_pub=self.create_publisher(PointCloud2,'/cloud_registered_full',qos_profile_sensor_data)
             self.bundle_pub=self.create_publisher(String,'/demo/navigation/localization_bundle',10)
@@ -168,11 +196,15 @@ def main():
                             self.correction.generation+=1;self.initialized=True;self.transaction_count+=1
                     elif result is not None:
                         self.correction.last_match_ns=result['source_ns']
-                        delta=transform_distance(self.correction.applied,candidate)
+                        effect=proposal_body_effect(result,self.correction.applied)
                         try:nav_state=json.loads((run/'navigation_status.json').read_text()).get('state')
                         except (OSError,ValueError):nav_state=None
                         # Keep a single frame through the bounded terminal active-hold proof.
-                        if not self.transition and nav_state=='running' and (delta[0]>.04 or delta[1]>.025):
+                        start=not self.transition and nav_state=='running' and effect['requires_transaction']
+                        self.decision_history.write(json.dumps(dict(effect=effect,generation=self.correction.generation,
+                            navigation_state=nav_state,transition_already_active=self.transition,
+                            transaction_started=start,original_stop_and_rate_limits_preserved=True),allow_nan=False)+'\n')
+                        if start:
                             self.correction.target=candidate.copy();self.pending_target=candidate.copy();self.stop_since_ns=None;self.transition=True
             if self.join is not None and clock-self.last_submit>=1_000_000_000:
                 self.worker.submit_join(self.join,clock,self.correction.applied.copy(),parent_generation=self.correction.generation);self.last_submit=clock
@@ -185,7 +217,7 @@ def main():
             self.status_pub.publish(String(data=json.dumps(status,allow_nan=False)))
             atomic(run/'known_scene_status.json',status)
         def close(self):
-            clean=self.worker.close();self.history.close();self.bundle_history.close()
+            clean=self.worker.close();self.history.close();self.bundle_history.close();self.decision_history.close()
             atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
     node=Runtime()
