@@ -223,7 +223,8 @@ class Dashboard:
         directory = self.resolve(run)
         if directory is None:
             return {'available': False, 'run_id': None, 'state': {}, 'summary': {},
-                    'telemetry': {'rows': [], 'trajectory': [], 'latest': None}, 'frame': {'available': False}}
+                    'telemetry': {'rows': [], 'trajectory': [], 'latest': None}, 'frame': {'available': False},
+                    'acceptance': read_json(self.runs / 'acceptance.json')}
         state_path = directory / 'state.json'
         frame = self.frame(directory)
         try:
@@ -233,6 +234,7 @@ class Dashboard:
         return {'available': True, 'run_id': directory.name, 'selected': run,
                 'state': read_json(state_path), 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
+                'acceptance': read_json(self.runs / 'acceptance.json'),
                 'telemetry': self.telemetry.read(directory / 'telemetry.jsonl'),
                 'frame': {'available': frame is not None,
                           'age_s': max(0., time.time() - frame.stat().st_mtime) if frame else None,
@@ -276,6 +278,8 @@ def handler_for(dashboard):
                 self.json({'runs': dashboard.directories(), 'read_only': True})
             elif parsed.path == '/api/run':
                 self.json(dashboard.snapshot(run))
+            elif parsed.path == '/api/acceptance':
+                self.json(read_json(dashboard.runs / 'acceptance.json'))
             elif parsed.path == '/api/frame':
                 directory = dashboard.resolve(run)
                 frame = dashboard.frame(directory) if directory else None

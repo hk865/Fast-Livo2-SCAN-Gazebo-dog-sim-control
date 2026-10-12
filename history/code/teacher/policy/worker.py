@@ -36,10 +36,10 @@ def requested(test,t):
         elif t<13:cmd=[0,.2,0]
         elif t<18:cmd=[0,0,-.3]
         else:cmd=[0,0,0]
-    else:cmd=COMMANDS[test]if t<11 else [0,0,0]
+    else:cmd=COMMANDS[test]if t<(14 if test.startswith('step')else 11) else [0,0,0]
     return np.array(cmd,dtype=float),'tracking' if any(cmd) else 'stop_transition'
 
-def duration(test):return 26. if test=='switch' else 20. if test.startswith('step') else 15. if test=='stand' else 18.
+def duration(test):return 26. if test=='switch' else 25. if test.startswith('step') else 15. if test=='stand' else 18.
 def recv_exact(conn,n):
     buf=b''
     while len(buf)<n:
@@ -65,7 +65,8 @@ def main():
               'observation_source':'Gazebo privileged COM twist, quaternion, joint physics, applied DCMotor torque, static SDF terrain raycast',
               'navigation_truth_used':False,'action_clip':None,'test':args.test,'seed':args.seed,
               'stop_strategy':'slew command to zero and continue Teacher closed loop; never freeze joint targets or replace action with zero',
-              'bootstrap_PD_seconds':.1,'command_start_seconds':3.,'command_slew_acceleration':[.6,.6,.8]}
+              'bootstrap_PD_seconds':.1,'command_start_seconds':3.,'command_slew_acceleration':[.6,.6,.8],
+              'test_duration_s':duration(args.test),'command_end_s':14. if args.test.startswith('step')else 11.}
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
     (args.run/'worker_ready').write_text(str(os.getpid()))
