@@ -86,7 +86,9 @@ def sensor_terms(run,state,obs,broker_sha):
         graph=data['publisher_graph'].get(key,[])
         if len(graph)!=1 or graph[0].get('node_name')!='ros_gz_bridge':raise ValueError('Actual sensor publisher is not unique Gazebo bridge')
         eligible=[v for v in data['histories'][key]if 0<=stamp_ns-int(v['stamp_ns'])<=25000000 and 0<=now-float(v['received_monotonic_wall'])<=.3]
-        if not eligible:raise ValueError('No causal fresh actual '+key+' sample')
+        if not eligible:
+            history=data['histories'][key];latest_stamp=int(history[-1]['stamp_ns'])if history else None
+            raise ValueError('No causal fresh actual '+key+' sample; reference_ns='+str(stamp_ns)+' latest_ns='+str(latest_stamp)+' age_sim_s='+str((stamp_ns-latest_stamp)*1e-9 if latest_stamp is not None else None)+' broker_sequence='+str(data['broker_sequence']))
         selected[key]=max(eligible,key=lambda v:int(v['stamp_ns']))
     imu,joints=selected['imu'],selected['joints'];gyro=np.asarray(imu['gyro_body']);gravity=np.asarray(imu['gravity_body']);q=np.asarray(joints['q']);qd=np.asarray(joints['qd'])
     if gyro.shape!=(3,)or gravity.shape!=(3,)or q.shape!=(12,)or qd.shape!=(12,)or not all(np.isfinite(v).all()for v in (gyro,gravity,q,qd)):

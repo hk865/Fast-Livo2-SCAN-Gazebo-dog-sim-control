@@ -416,6 +416,13 @@ def evaluate(run):
         'evaluator_sha256':digest(Path(__file__)),
         'scope':'Actual Gazebo physics with privileged policy observations; no navigation localization claim. Low-step ascent and ramps do not demonstrate stairs. Three independent repetitions remain required for full motion acceptance.'}
     summary=clean(summary)
+    if name=='navigation':
+        summary['generic_motion_diagnostic_status']=summary['tests'][0]['status']
+        summary['requires_independent_navigation_evaluation']=True
+        summary['tests'][0]['name']='Generic motion/safety diagnostic during navigation experiment'
+        if motion_pass:
+            summary['tests'][0]['status']='unverified';summary['levels']['motion']='unverified'
+            summary['tests'][0]['reason']='Generic safety diagnostic passed; SLAM/SCAN movement, trajectories and arrival require independent route evidence'
     (run/'summary.json').write_text(json.dumps(summary,indent=2,ensure_ascii=False,allow_nan=False)+'\n')
     return summary
 
