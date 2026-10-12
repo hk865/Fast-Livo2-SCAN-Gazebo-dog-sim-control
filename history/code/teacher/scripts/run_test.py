@@ -9,6 +9,7 @@ PYTHON=Path('/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/bin/python3')
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def stop(proc):
     if proc is None:return
+    if proc.poll()is not None:return
     try:os.killpg(proc.pid,signal.SIGINT)
     except ProcessLookupError:return
     try:proc.wait(timeout=5)
@@ -60,7 +61,7 @@ def main():
                  'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'}
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
-            worker=gazebo=capture=bridge=shadow=None;error=shadow_error=None;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
+            worker=gazebo=capture=bridge=shadow=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
             try:
                 worker=subprocess.Popen(worker_cmd,env={**env,'CUDA_VISIBLE_DEVICES':''},stdout=(run/'worker.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 deadline=time.monotonic()+20
@@ -106,8 +107,13 @@ def main():
                 if worker.returncode:raise RuntimeError('Policy test process failed')
                 # Retain two more physics steps so terminate/damping is visible.
                 time.sleep(.1)
+                # Let renderer resources finish naturally before sending a
+                # cleanup signal. Exit failures remain visible to evaluation.
+                try:gazebo.wait(timeout=8 if args.sensors or args.camera_only else 2)
+                except subprocess.TimeoutExpired:gazebo_grace_expired=True
             except Exception as e:error=f'{type(e).__name__}: {e}'
             finally:
+                if resource_stream and not resource_stream.closed:resource_stream.close()
                 if shadow and shadow.poll()is None:
                     time.sleep(.5) # drain actual ROS messages before final causal comparison
                     stop(shadow)
@@ -120,6 +126,7 @@ def main():
                 manifest={'run':str(run),'test':test,'owned_processes':[{ 'role':role,'pid':proc.pid,'returncode':proc.returncode}for role,proc in [('worker',worker),('gazebo',gazebo),('bridge',bridge),('capture',capture),('shadow',shadow)]if proc],
                           'error':error,'ros_domain':79,'gazebo_partition':env['GZ_PARTITION'],
                           'sensors':args.sensors,'camera_only':args.camera_only,'shadow_requested':args.shadow,'shadow_error':shadow_error,
+                          'gazebo_natural_exit_grace_expired':gazebo_grace_expired,
                           'plugin_sha256':plugin_hash,
                           'training_process_untouched':True,'real_robot':False}
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))

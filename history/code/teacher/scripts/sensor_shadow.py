@@ -13,6 +13,7 @@ import json
 import math
 import os
 from pathlib import Path
+import signal
 import sys
 import time
 
@@ -94,6 +95,48 @@ def observed_scan(points, position, body_rotation, grid, radius=.075):
             'observed_overhead_columns': int(np.sum(hits > position[2])),
             'semantics': 'highest observed local-cloud column; overhead occlusion and unobserved surfaces are unresolved',
             'eligible_for_policy_replacement': False}
+
+
+def phase_diagnostic(run,output):
+    """Explain native PreUpdate vs ROS PostUpdate using actual archived samples.
+
+    The original same-clock live comparison is preserved. This separate audit
+    only pairs an earlier sample; it never retimes data or changes an actor.
+    """
+    import numpy as np
+    source=run/'sensor_shadow/sensor_samples.jsonl'
+    telemetry=run/'telemetry.jsonl';asset=load(run/'asset_manifest.json')
+    dt=float(asset['physics_step_s']);dt_ns=round(dt*1e9)
+    samples={'imu':{},'joints':{}}
+    for line in source.open():
+        row=json.loads(line)
+        if row['source']in samples:samples[row['source']][row['stamp_ns']]=row
+    offsets=[0,-dt_ns];metrics={};references=[json.loads(line)for line in telemetry.open()]
+    for offset in offsets:
+        errors={'q':[],'qd':[],'gyro_body':[],'gravity_body':[]};paired=[]
+        for ref in references:
+            clock_ns=round(ref['world_sim_time']*1e9);stamp_ns=clock_ns+offset
+            imu=samples['imu'].get(stamp_ns);joints=samples['joints'].get(stamp_ns)
+            if joints:
+                errors['q'].append(np.asarray(joints['q'])-ref['q']);errors['qd'].append(np.asarray(joints['qd'])-ref['qd'])
+            if imu:
+                errors['gyro_body'].append(np.asarray(imu['gyro_body'])-ref['body_ang_vel'])
+                w,x,y,z=ref['quaternion_wxyz'];gravity=rotation([x,y,z,w]).T@np.asarray([0.,0.,-1.])
+                errors['gravity_body'].append(np.asarray(imu['gravity_body'])-gravity)
+            if imu and joints:paired.append({'reference_world_stamp_ns':clock_ns,'sensor_stamp_ns':stamp_ns,'imu_frame':imu['frame'],'joints_frame':joints['frame']})
+        metrics[str(offset)]={'offset_s':offset*1e-9,'paired_rows':len(paired),'future_samples':0,
+             'metrics':{key:{'samples':len(values),'raw_rmse':np.sqrt(np.mean(np.asarray(values)**2,axis=0)).tolist(),
+                             'raw_abs_error_max':np.max(np.abs(values),axis=0).tolist()}for key,values in errors.items()if values}}
+        with(output/f'pairs_offset_{offset}_ns.jsonl').open('w')as stream:
+            for pair in paired:stream.write(json.dumps(pair)+'\n')
+    summary={'status':'phase_diagnostic_only_unverified_sensor_policy','policy_changed':False,'navigation_validation':'unverified',
+        'reference_run':str(run),'references':len(references),'physics_step_s':dt,
+        'source_semantics':'Teacher native PreUpdate(world_t) reads prior Physics results; JointStatePublisher and IMU PostUpdate use world_t header. Comparing prior-step ROS stamp world_t-dt is causal.',
+        'clock_offsets':metrics,'original_live_comparison_preserved':str(run/'sensor_shadow/summary.json'),
+        'missing_slam_and_cloud':'unverified; raw sensor-frame LiDAR cannot provide SLAM body velocity or registered local height scan',
+        'input_hashes':{str(p):digest(p)for p in [source,telemetry,run/'asset_manifest.json',run/'actuator.jsonl']},'script_sha256':digest(Path(__file__))}
+    (output/'summary.json').write_text(json.dumps(clean(summary),indent=2,allow_nan=False)+'\n')
+    print(json.dumps(clean(summary),indent=2,allow_nan=False))
 
 
 def make_node(rclpy, args, run, output, contract):
@@ -456,6 +499,7 @@ def main():
     parser.add_argument('--ros-domain', type=int, default=79)
     parser.add_argument('--scenario', type=Path, default=ROOT.parent / 'simulation/scenario.json')
     parser.add_argument('--prepare', action='store_true')
+    parser.add_argument('--phase-diagnostic',action='store_true')
     args, ros_args = parser.parse_known_args()
     if args.prepare:
         print(json.dumps({'status': 'prepared_unverified', 'policy_changed': False, 'starts_ros': False,
@@ -473,12 +517,21 @@ def main():
     os.environ['ROS_LOCALHOST_ONLY'] = '1'
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=False)
+    if args.phase_diagnostic:
+        phase_diagnostic(run,output)
+        return 0
     contract = load(ROOT / 'policy/contract.json')
     import rclpy
-    rclpy.init(args=ros_args)
+    from rclpy.signals import SignalHandlerOptions
+    rclpy.init(args=ros_args,signal_handler_options=SignalHandlerOptions.NO)
     node = make_node(rclpy, args, run, output, contract)
+    stopped=False
+    def requested_stop(signum,frame):
+        nonlocal stopped
+        stopped=True
+    signal.signal(signal.SIGINT,requested_stop);signal.signal(signal.SIGTERM,requested_stop)
     try:
-        while rclpy.ok() and time.monotonic() - node.started < args.duration:
+        while not stopped and rclpy.ok() and time.monotonic() - node.started < args.duration:
             rclpy.spin_once(node, timeout_sec=.05)
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         pass

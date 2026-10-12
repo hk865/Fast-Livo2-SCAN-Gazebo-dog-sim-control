@@ -81,7 +81,8 @@ def main():
     if args.sensors or args.camera_only:
         # A separate static, collision-free observer shows actual leg motion.
         # It is never part of the robot or the policy observation geometry.
-        overview=E.fromstring('<model name="teacher_overview_camera"><static>true</static><pose>7 -3.5 2 0 .5 1.5708</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>2</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>1.4</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
+        overview_pose=[5,-3.2,1.7,0,.4,.95]
+        overview=E.fromstring(f'<model name="teacher_overview_camera"><static>true</static><pose>{" ".join(map(str,overview_pose))}</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>2</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>1.4</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
         w.append(overview)
     if args.terrain.startswith('step'):
         height=.05 if args.terrain=='step05' else .1
@@ -94,7 +95,7 @@ def main():
                          'publisher':'gz::sim::systems::JointStatePublisher','reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
     if args.sensors or args.camera_only:
         sensor_contract['overview']={'gz_topic':'/demo/teacher/overview','ros_topic':'/demo/teacher/overview','frame':'teacher_overview_frame',
-                                     'world_pose':[7,-3.5,2,0,.5,1.5708],'rate_hz':2,'width':640,'height':480,'horizontal_fov':1.4,'collision_geometry':False}
+                                     'world_pose':overview_pose,'rate_hz':2,'width':640,'height':480,'horizontal_fov':1.4,'collision_geometry':False}
     for link in model.findall('link'):
         for sensor in link.findall('sensor'):
             kind=sensor.get('type')
