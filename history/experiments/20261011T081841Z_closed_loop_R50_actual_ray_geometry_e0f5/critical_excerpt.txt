@@ -1,0 +1,74 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+ [python3-14]: sending signal 'SIGINT' to process[python3-14]
+[INFO] [parameter_bridge-13]: sending signal 'SIGINT' to process[parameter_bridge-13]
+[INFO] [python3-12]: sending signal 'SIGINT' to process[python3-12]
+[INFO] [python3-11]: sending signal 'SIGINT' to process[python3-11]
+[INFO] [python3-10]: sending signal 'SIGINT' to process[python3-10]
+[INFO] [python3-9]: sending signal 'SIGINT' to process[python3-9]
+[INFO] [python3-8]: sending signal 'SIGINT' to process[python3-8]
+[INFO] [python3-7]: sending signal 'SIGINT' to process[python3-7]
+[INFO] [python3-6]: sending signal 'SIGINT' to process[python3-6]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [parameter_blackboard-3]: sending signal 'SIGINT' to process[parameter_blackboard-3]
+[INFO] [python3-2]: sending signal 'SIGINT' to process[python3-2]
+[INFO] [python3-1]: sending signal 'SIGINT' to process[python3-1]
+[parameter_bridge-13] [INFO] [1791707008.100718319] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] [INFO] [1791707008.103826834] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_blackboard-3] [INFO] [1791707008.104743408] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] des manager
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 1383568]
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 1383548]
+[INFO] [python3-5]: process has finished cleanly [pid 1383550]
+[INFO] [python3-1]: process has finished cleanly [pid 1383546]
+[INFO] [python3-14]: process has finished cleanly [pid 1383569]
+[INFO] [python3-9]: process has finished cleanly [pid 1383564]
+[INFO] [python3-11]: process has finished cleanly [pid 1383566]
+[INFO] [python3-2]: process has finished cleanly [pid 1383547]
+[INFO] [python3-10]: process has finished cleanly [pid 1383565]
+[INFO] [python3-12]: process has finished cleanly [pid 1383567]
+[INFO] [python3-8]: process has finished cleanly [pid 1383563]
+[INFO] [python3-7]: process has finished cleanly [pid 1383552]
+[INFO] [python3-6]: process has finished cleanly [pid 1383551]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+Traceback (most recent call last):
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/ipc_request_window.py", line 381, in <module>
+    main(owned_cli=True)
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/ipc_request_window.py", line 363, in main
+    return partition.run(ipc_fault_window.main)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/gc_startup_partition.py", line 203, in run
+    return original(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/ipc_fault_window.py", line 144, in main
+    return run_original_worker(worker.main, ipc_evidence, capture)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/ipc_fault_window.py", line 131, in run_original_worker
+    return worker_main()
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/worker.py", line 254, in main
+    log.close();ack_log.close()
+    ^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/ipc_evidence.py", line 126, in close
+    def close(self):self.closed=True
+
+KeyboardInterrupt
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+_mode/runs/20261011T081841Z_closed_loop_R50_actual_ray_geometry_e0f5/world.sdf:L2035]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261011T081841Z_closed_loop_R50_actual_ray_geometry_e0f5/world.sdf:L2089]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261011T081841Z_closed_loop_R50_actual_ray_geometry_e0f5/world.sdf:L2119]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261011T081841Z_closed_loop_R50_actual_ray_geometry_e0f5/world.sdf:L2124]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+GO2_R50_GEOMETRY_FIRST_PASS source_ns=10000000 face_units=6 uv_sampler=1 uv_equal=1 rays_equal=1 GZ_FLOAT32=6
