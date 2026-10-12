@@ -29,6 +29,7 @@ parser.add_argument('--checkpoint', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--duration', type=float, default=10.)
 parser.add_argument('--only-stand', action='store_true')
+parser.add_argument('--schedule', type=Path, help='JSON cases with duration, segments[start,end,command,mode], optional command_slew xyz per second')
 add_launcher_args(parser)
 args, hydra_args = setup_preset_cli(parser)
 if args.device != 'cpu':
@@ -39,6 +40,25 @@ torch.set_num_threads(1)
 args.output = args.output.resolve()
 args.checkpoint = args.checkpoint.resolve()
 args.output.mkdir(parents=True, exist_ok=False)
+schedule = json.loads(args.schedule.read_text()) if args.schedule else None
+if schedule is not None:
+    for case in schedule['cases']:
+        end = 0.
+        for segment in case['segments']:
+            if abs(float(segment['start']) - end) > 1e-8 or float(segment['end']) <= end:
+                raise ValueError('Schedule segments must continuously cover a case from time0')
+            end = float(segment['end'])
+            vector = np.asarray(segment['command'], dtype=float)
+            if vector.shape != (3,) or not np.isfinite(vector).all():
+                raise ValueError('Schedule command must be finite3')
+            if segment.get('mode', 'teacher') not in ('teacher', 'pd_init'):
+                raise ValueError('Schedule mode is teacher or explicit pd_init')
+        if abs(end - float(case['duration'])) > 1e-8:
+            raise ValueError('Schedule duration must equal its final segment end')
+        if 'command_slew' in case:
+            slew = np.asarray(case['command_slew'], dtype=float)
+            if slew.shape != (3,) or not np.isfinite(slew).all() or (slew <= 0).any():
+                raise ValueError('Schedule command_slew must be finite positive3')
 sha = hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
 if sha != 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34':
     raise RuntimeError('Frozen checkpoint SHA mismatch')
@@ -50,7 +70,8 @@ config.scene.terrain.terrain_generator.num_cols = 1
 config.scene.terrain.terrain_generator.border_width = 100.
 config.scene.terrain.max_init_terrain_level = 0
 config.scene.terrain.terrain_generator.use_cache = False
-config.episode_length_s = max(20., args.duration + 2.)
+longest_duration = max(c['duration'] for c in schedule['cases']) if schedule else args.duration
+config.episode_length_s = max(20., longest_duration + 2.)
 config.seed = 42
 for group in ('policy', 'teacher_noisy', 'teacher_full'):
     getattr(config.observations, group).enable_corruption = False
@@ -81,10 +102,12 @@ protocol = {'checkpoint':str(args.checkpoint), 'checkpoint_sha256':sha,
             'diagnostic_conditions':'nominal dynamics, reset default at rest, no pushes/no observation noise, flat mesh, single seed42',
             'criterion':{'fall':'termination before timeout or roll/pitch >0.8rad or base clearance<0.16m', 'velocity_rmse_xy_max_mps':.15, 'velocity_rmse_yaw_max_radps':.2, 'stand_drift_max_m':.15},
             'physics_dt':config.sim.dt, 'decimation':config.decimation,
+            'schedule':schedule, 'schedule_sha256':hashlib.sha256(args.schedule.read_bytes()).hexdigest() if args.schedule else None,
             'no_training':True, 'started_at':time.time()}
 (args.output/'protocol.json').write_text(json.dumps(protocol,indent=2)+'\n')
-cases=[('stand',[0.,0.,0.]),('forward',[.3,0.,0.]),('backward',[-.3,0.,0.]),('left',[0.,.2,0.]),('right',[0.,-.2,0.]),('yaw_positive',[0.,0.,.3]),('yaw_negative',[0.,0.,-.3])]
-if args.only_stand: cases=cases[:1]
+cases=[{'name':name,'command':command,'duration':args.duration} for name,command in [('stand',[0.,0.,0.]),('forward',[.3,0.,0.]),('backward',[-.3,0.,0.]),('left',[0.,.2,0.]),('right',[0.,-.2,0.]),('yaw_positive',[0.,0.,.3]),('yaw_negative',[0.,0.,-.3]),('switch',None)]]
+if schedule is not None: cases=schedule['cases']
+if args.only_stand: cases=[case for case in cases if case['name']=='stand']
 results=[]
 try:
     with launch_simulation(config, args):
@@ -100,19 +123,32 @@ try:
             cmd.time_left.fill_(1000.)
             cmd.is_standing_env.fill_(False)
             cmd.is_heading_env.fill_(False)
-        for name, value in cases + ([] if args.only_stand else [('switch',None)]):
+        for case in cases:
+            name, value = case['name'], case.get('command')
             env.reset()
             start_pos=robot.data.root_link_pos_w.torch[0].numpy().copy()
             trace=[]; failed=False
-            n=int(round(args.duration/base.step_dt))
+            n=int(round(case['duration']/base.step_dt))
+            previous_command=np.zeros(3)
             for index in range(n):
                 t=index*base.step_dt
                 target=value
-                if target is None:
+                control_mode='teacher'
+                if 'segments' in case:
+                    segment=next(s for s in case['segments'] if s['start']<=t<s['end'])
+                    target=segment['command']
+                    control_mode=segment.get('mode','teacher')
+                elif target is None:
                     target=[0.,0.,0.] if t<2. or t>=8. else ([.3,0.,0.] if t<5. else [-.3,0.,0.])
+                requested_target=np.asarray(target,dtype=float)
+                target=requested_target.copy()
+                if 'command_slew' in case:
+                    delta=np.asarray(case['command_slew'])*base.step_dt
+                    target=previous_command+np.clip(target-previous_command,-delta,delta)
+                previous_command=target.copy()
                 command(target)
-                obs=base.observation_manager.compute_group('teacher_full')
-                with torch.inference_mode(): action=actor(obs)
+                obs=base.observation_manager.compute_group('teacher_full', update_history=True)
+                with torch.inference_mode(): action=actor(obs) if control_mode=='teacher' else torch.zeros((1,12),device='cpu')
                 if not torch.isfinite(obs).all() or not torch.isfinite(action).all():
                     raise RuntimeError('Nonfinite Teacher inference')
                 pos=robot.data.root_link_pos_w.torch[0].numpy().copy()
@@ -128,12 +164,12 @@ try:
                 ray=base.scene.sensors['height_scanner'].data.ray_hits_w.torch[0,:,2].numpy().copy()
                 clearance=float(pos[2]-np.median(ray[np.isfinite(ray)])) if np.isfinite(ray).any() else None
                 cf=contact.data.net_forces_w.torch[0].numpy().copy()
-                trace.append({'t':t,'command':target,'position':pos.tolist(),'quaternion_xyzw':quat.tolist(),
+                trace.append({'t':t,'command':target.tolist(),'requested_command':requested_target.tolist(),'controller_mode':control_mode,'position':pos.tolist(),'quaternion_xyzw':quat.tolist(),
                     'linear_velocity_body_com':vx.tolist(),'angular_velocity_body':wz.tolist(),
                     'roll':roll,'pitch':pitch,'clearance':clearance,'q':q.tolist(),'qd':qd.tolist(),
                     'torque':torque.tolist(),'action':action[0].numpy().tolist(),
                     'q_target':(action_term._offset[0]+action_term._scale*action[0]).numpy().tolist(),
-                    'height_scan':obs[0,60:].numpy().tolist(),'contact_forces':cf.tolist()})
+                    'height_scan':obs[0,60:].numpy().tolist(),'observation247':obs[0].numpy().tolist(),'observed_command':obs[0,9:12].numpy().tolist(),'last_action_observed':obs[0,48:60].numpy().tolist(),'height_scan_raw':(base.scene.sensors['height_scanner'].data.pos_w.torch[0,2]-base.scene.sensors['height_scanner'].data.ray_hits_w.torch[0,:,2]-.5).numpy().tolist(),'contact_forces':cf.tolist()})
                 _,_,terminated,truncated,_=env.step(action)
                 if terminated.item() or max(abs(roll),abs(pitch))>.8 or (clearance is not None and clearance<.16):
                     failed=True; break

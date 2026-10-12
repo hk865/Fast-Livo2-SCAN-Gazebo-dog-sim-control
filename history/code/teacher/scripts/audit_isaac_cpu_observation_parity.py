@@ -33,4 +33,29 @@ for row in rows:
 np.savez_compressed(out/'reconstructed_observation_parity.npz', reconstructed_observation247=allobs, recorded_action=allactions,reconstructed_actor_action=predicted,reconstructed_raw_height=rawheight,reset_frame_mask=resets,cases=np.asarray(cases))
 result={'scope':'All recorded frames, reconstruct247 observation from physical snapshots, last raw actions, synthetic equivalent flat SDF. Raw full247 inputs were not saved in initial baseline; do not present reconstructed arrays as directly recorded Isaac obs.', 'frames':len(allobs),'reset_frames':int(resets.sum()),'nonreset_frames':int((~resets).sum()),'max_scan_error':max(scandiffs),'max_action_error_all':float(actiondiff.max()),'max_action_error_nonreset':float(actiondiff[~resets].max()),'max_action_error_reset':float(actiondiff[resets].max()),'tolerance_height':1e-5,'tolerance_action':2e-5,'passed_all_frames':bool(max(scandiffs)<1e-5 and (actiondiff<2e-5).all()),'passed_nonreset_frames':bool(max(scandiffs)<1e-5 and (actiondiff[~resets]<2e-5).all()),'reset_discrepancy':'Initial reference PhysX reset snapshot and actor input disagree for frame0; raw obs was not recorded, so exact source of reset snapshot timing mismatch remains unverified. Preserve as failed initialization parity until full247 replay confirms.', 'audit_script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'observation_module_sha256':hashlib.sha256((ROOT/'policy/observation.py').read_bytes()).hexdigest(),'contract_sha256':hashlib.sha256((ROOT/'policy/contract.json').read_bytes()).hexdigest(),'rows':rows}
 (out/'observation_parity_full.json').write_text(json.dumps(result,indent=2)+'\n')
-print(json.dumps(result,indent=2))
+
+# The captured baseline used compute_group(update_history=False), so a manually
+# changed command does not enter its one-frame group history until env.step.
+# This correction is tied to the retained, hashed executed source, never applied
+# silently to fresh runs or Gazebo inputs.
+source=(out/'executed_source.py').read_text()
+if "compute_group('teacher_full')" in source:
+    effective=allobs.copy();transition_indices=[]
+    for row in rows:
+        start,end=row['frame_slice']
+        for index in range(start+1,end):
+            if not np.array_equal(allobs[index,9:12], allobs[index-1,9:12]):
+                effective[index,9:12]=allobs[index-1,9:12]
+                transition_indices.append(index)
+    with torch.inference_mode(): effective_actions=actor(torch.from_numpy(effective)).numpy()
+    effective_error=np.max(abs(effective_actions-allactions),axis=1)
+    for row in rows:
+        start,end=row['frame_slice']
+        row['effective_command_nonreset_action_max_error']=float(effective_error[start+1:end].max())
+    evidence={'frames':len(allobs),'reset_frames_unverified':int(resets.sum()),'nonreset_frames':int((~resets).sum()),'command_transition_indices':transition_indices,'command_transition_note':'Requested command vs actor command differed for precisely one frame at each manual switch because archived reference omitted update_history=True. Effective actor command at these transitions is previous requested command.', 'all_frames_passed':False, 'nonreset_effective_command_passed':bool((effective_error[~resets]<2e-5).all()), 'max_action_abs_error_nonreset_effective_command':float(effective_error[~resets].max()), 'max_scan_error':max(scandiffs), 'executed_source_sha256':hashlib.sha256(source.encode()).hexdigest(),'rows':rows}
+    (out/'observation_parity_effective_command.json').write_text(json.dumps(evidence,indent=2)+'\n')
+    np.savez_compressed(out/'effective_command_parity.npz', reconstructed_observation247=effective, recorded_action=allactions,reconstructed_actor_action=effective_actions,reset_frame_mask=resets,cases=np.asarray(cases))
+    print(json.dumps(evidence,indent=2))
+else:
+    print(json.dumps(result,indent=2))
+

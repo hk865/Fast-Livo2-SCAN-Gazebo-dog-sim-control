@@ -51,7 +51,7 @@ def main():
     # Flat tests are away from upper-deck overhead and scene walls. The
     # original (0,0) spawn has a third-floor deck above its height scan.
     x,y,z,yaw=6,-.7,.40,0
-    if args.terrain=='ramp_up': x,y,z=2.4,2,.44
+    if args.terrain=='ramp_up': x,y,z=4,2,.60
     if args.terrain=='ramp_down': x,y,z,yaw=8,2,1.,math.pi
     pose=model.find('pose')
     if pose is None:pose=E.SubElement(model,'pose')

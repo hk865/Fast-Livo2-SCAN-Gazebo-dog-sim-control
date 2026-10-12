@@ -29,7 +29,7 @@ def load_actor():
     return actor
 
 def requested(test,t):
-    if t<3:return np.zeros(3), 'initializing' if t<1.5 else 'teacher_stand'
+    if t<3:return np.zeros(3), 'initializing' if t<.1 else 'teacher_stand'
     if test=='stand':return np.zeros(3),'teacher_stand'
     if test=='switch':
         if t<8:cmd=[.3,0,0]
@@ -64,7 +64,8 @@ def main():
               'observation_noise':'teacher_noisy matched uniform' if args.noisy else 'clean teacher_full evaluation',
               'observation_source':'Gazebo privileged COM twist, quaternion, joint physics, applied DCMotor torque, static SDF terrain raycast',
               'navigation_truth_used':False,'action_clip':None,'test':args.test,'seed':args.seed,
-              'stop_strategy':'slew command to zero and continue Teacher closed loop; never freeze joint targets or replace action with zero'}
+              'stop_strategy':'slew command to zero and continue Teacher closed loop; never freeze joint targets or replace action with zero',
+              'bootstrap_PD_seconds':.1,'command_start_seconds':3.,'command_slew_acceleration':[.6,.6,.8]}
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
     (args.run/'worker_ready').write_text(str(os.getpid()))
@@ -97,7 +98,7 @@ def main():
                 if t>1.5 and (max(abs(angles[0]),abs(angles[1]))>.8 or s[3]-ground<.15):fault=fault or 'fallen_or_low_clearance'
                 if t>1.5 and contacts[0]>0:fault=fault or 'body_contact'
                 target=QDEFAULT+.25*action
-                if t<1.5:target=QDEFAULT.copy();phase='initializing';last_action=np.zeros(12)
+                if t<.1:target=QDEFAULT.copy();phase='initializing';last_action=np.zeros(12)
                 else:last_action=action.copy()
                 # Parking keeps the learned posture feedback active. Freezing
                 # a single support target was tested, failed, and is archived.

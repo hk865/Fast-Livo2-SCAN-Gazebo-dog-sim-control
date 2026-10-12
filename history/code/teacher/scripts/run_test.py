@@ -59,7 +59,9 @@ def main():
                     if time.monotonic()>deadline:raise TimeoutError('Policy initialization timeout')
                     time.sleep(.05)
                 cmd=['gz','sim','-s','-r',str(run/'world.sdf')]
-                if args.sensors or args.camera_only:cmd.insert(4,'--headless-rendering')
+                # Mesa llvmpipe uses the inherited X display. EGL headless
+                # explicitly selects the NVIDIA device and crashed Mesa here;
+                # those failed runs are retained rather than hidden.
                 gazebo=subprocess.Popen(cmd,env=env,stdout=(run/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 if args.sensors or args.camera_only:
                     bridge=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','/demo/camera@sensor_msgs/msg/Image[gz.msgs.Image'],env=env,stdout=(run/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
