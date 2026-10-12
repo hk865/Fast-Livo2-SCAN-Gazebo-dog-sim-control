@@ -15,7 +15,8 @@ def xml(p, e):
 def main():
     a=argparse.ArgumentParser(); a.add_argument('--output',type=Path,default=ROOT/'simulation/generated')
     a.add_argument('--terrain',choices=['flat','ramp_up','ramp_down','step05','step10'],default='flat')
-    a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true');args=a.parse_args()
+    a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true')
+    a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre');args=a.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
     model=copy.deepcopy(E.parse(source).getroot().find('model'))
@@ -74,7 +75,7 @@ def main():
     if args.sensors or args.camera_only:
         # Ogre1 uses GLX llvmpipe. Ogre2 EGL device selection crashes Mesa
         # against this NVIDIA device when software rendering is requested.
-        for engine in w.findall('plugin/render_engine'):engine.text='ogre'
+        for engine in w.findall('plugin/render_engine'):engine.text=args.render_engine
     if not args.sensors and not args.camera_only:
         for wp in list(w.findall('plugin')):
             if any(n in wp.get('name','') for n in ['Sensors','Imu']):w.remove(wp)
@@ -89,7 +90,7 @@ def main():
         step=E.fromstring(f'<model name="teacher_low_step"><static>true</static><pose>8 -.7 {height/2} 0 0 0</pose><link name="link"><collision name="collision"><geometry><box><size>2 1.4 {height}</size></box></geometry></collision><visual name="visual"><geometry><box><size>2 1.4 {height}</size></box></geometry><material><ambient>.8 .5 .2 1</ambient><diffuse>.8 .5 .2 1</diffuse></material></visual></link></model>')
         w.append(step)
     w.append(model);xml(args.output/'world.sdf',world)
-    sensor_contract={'schema_version':1,'renderer':'ogre'if args.sensors or args.camera_only else None,
+    sensor_contract={'schema_version':1,'renderer':args.render_engine if args.sensors or args.camera_only else None,
                      'scope':'read-only sensor diagnostics; privileged actor remains unchanged; no SLAM or navigation started',
                      'joint_states':{'gz_topic':'/demo/teacher/physical_joint_states','ros_topic':'/demo/control/measured_joint_states',
                          'publisher':'gz::sim::systems::JointStatePublisher','reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
@@ -139,7 +140,7 @@ def main():
     for tag in ['ros2_control','gazebo','transmission']:
         for e in list(urdf.findall(tag)):urdf.remove(e)
     xml(args.output/'frames.urdf',urdf)
-    meta={'terrain':args.terrain,'sensors':args.sensors,'camera_only':args.camera_only,'spawn':[x,y,z,yaw],
+    meta={'terrain':args.terrain,'sensors':args.sensors,'camera_only':args.camera_only,'render_engine':args.render_engine if args.sensors or args.camera_only else None,'spawn':[x,y,z,yaw],
           'physics_step_s':.005,'decimation':4,'policy_hz':50,'exclusive_writer':'teacher_sim::TeacherActuator',
           'disabled':['CHAMP','body_stabilizer','ros2_control','JointTrajectoryController'],
           'joint_mapping':dict(zip(['FR','FL','RR','RL'],['rf','lf','rh','lh'])),

@@ -340,7 +340,7 @@ def original_origin_reference(runs):
         'path': str(path.resolve()), 'checkpoint_matches': protocol.get('checkpoint_sha256') == SHA,
         'analysis': analysis, 'protocol': protocol,
         'source_sha256': {name: digest(path / name) for name in ('original_origin_analysis.json', 'protocol.json', 'execution.json',
-            'default_native_height_termination_receipt.json', 'height_ray_hit_sources.json')},
+            'default_native_height_termination_receipt.json', 'height_ray_hit_sources.json', 'analytic_ray_boundary_diagnostic.json')},
         'scope': 'Additional original-origin zero-command failure diagnostic, not a completed 15s repetition or navigation run. Native scan-based height termination disabled for this single case; actor overhead scan retained. Counterfactual native termination replay is labelled, not an executed rollout.'}
 
 
@@ -405,6 +405,14 @@ def aggregate(runs, start=START, flat_reference=None, terrain_reference=None):
                 'isaac_nominal_model_mass_kg': 16.087, 'gazebo_robot_friction': .7, 'isaac_robot_friction': 1., 'ground_friction': 1.,
                 'renderer': 'Formal Gazebo baseline removes Sensors/IMU rendering; PhysX reference is CPU/headless. Camera/sensor renderer diagnostics are excluded and listed separately.',
                 'note': 'Matched commands and PD do not imply identical mass, inertia, contacts, friction or solver dynamics'}},
+        'ray_boundary_correction': {'receipt': read(ROOT / 'test_results/raycast_boundary_v1/regression.json'),
+            'receipt_sha256': digest(ROOT / 'test_results/raycast_boundary_v1/regression.json'),
+            'scope': 'Corrected 1e-9 m XY expansion; offline all42 recorded-state parity does not replace new physical evidence. Original-origin corrected physical rerun is retained in additional_scene_gate.'},
+        'sensor_shadow_diagnostics': [{'run_id': entry['run_id'], 'interface': entry['interface'], 'motion': entry['motion'],
+            'summary': read(Path(entry['path']) / 'sensor_shadow/summary.json'),
+            'summary_sha256': digest(Path(entry['path']) / 'sensor_shadow/summary.json'),
+            'scope': 'Read-only real sensor shadow; raw LiDAR is not a registered SLAM cloud; no policy observation switch'}
+            for entry in entries if (Path(entry['path']) / 'sensor_shadow/summary.json').exists()],
         'history': {'runs_total': len(entries), 'failed_runs_total': len(history_failures), 'formal_excluded_runs': sum(not entry['formal'] for entry in entries),
             'source_versions': source_versions(entries),
             'failure_categories_overlap': dict(failure_counts), 'failure_runs': [compact(entry) for entry in history_failures],

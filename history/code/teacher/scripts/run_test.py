@@ -27,6 +27,8 @@ def resource():
 def main():
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
+    p.add_argument('--renderer',choices=['software','hardware'],default='software')
+    p.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre')
     args=p.parse_args();suite=[]
     if args.shadow and not args.sensors:p.error('--shadow requires --sensors; no unavailable input is fabricated')
     for repeat in range(args.repeat):
@@ -38,6 +40,7 @@ def main():
             tmp.symlink_to(run.name);tmp.replace(latest)
             terrain=test if test in ['ramp_up','ramp_down','step05','step10']else 'flat'
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
+            prepare+=['--render-engine',args.render_engine]
             if args.sensors:prepare+=['--sensors']
             if args.camera_only:prepare+=['--camera-only']
             subprocess.run(prepare,check=True,stdout=(run/'prepare.log').open('w'))
@@ -59,9 +62,22 @@ def main():
                  'GZ_SIM_SYSTEM_PLUGIN_PATH':str(ROOT/'simulation/build')+':'+os.environ.get('GZ_SIM_SYSTEM_PLUGIN_PATH',''),
                  'TEACHER_SOCKET':'/tmp/teacher_'+uuid.uuid4().hex[:12]+'.sock','TEACHER_ACTUATOR_LOG':str(run/'actuator.jsonl'),
                  'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1'}
+            if args.renderer=='hardware':
+                # Only this run's graphics environment changes. The actor is
+                # separately forced to CPU; the training environment is untouched.
+                env.pop('LIBGL_ALWAYS_SOFTWARE',None);env.pop('GALLIUM_DRIVER',None)
+            renderer_env={key:env.get(key)for key in ['DISPLAY','WAYLAND_DISPLAY','LIBGL_ALWAYS_SOFTWARE','GALLIUM_DRIVER','__GLX_VENDOR_LIBRARY_NAME','__NV_PRIME_RENDER_OFFLOAD','CUDA_VISIBLE_DEVICES']}
+            render_manifest={'mode':args.renderer,'engine':args.render_engine,'graphics_environment':renderer_env,
+                             'actor_device':'cpu','hardware_startup_ready_timeout_s':30 if args.renderer=='hardware'else None}
+            (run/'rendering_manifest.json').write_text(json.dumps(render_manifest,indent=2)+'\n')
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
             worker=gazebo=capture=bridge=shadow=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
+            actual_sensors_ready=False;gpu_samples=[];gpu_guard_mb=None
+            if args.renderer=='hardware':
+                gpu_guard_mb=min(14000,int(baseline['gpu'].split()[0])+2048)
+                render_manifest['gpu_memory_guard_total_mb']=gpu_guard_mb
+                (run/'rendering_manifest.json').write_text(json.dumps(render_manifest,indent=2)+'\n')
             try:
                 worker=subprocess.Popen(worker_cmd,env={**env,'CUDA_VISIBLE_DEVICES':''},stdout=(run/'worker.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 deadline=time.monotonic()+20
@@ -90,8 +106,17 @@ def main():
                 # those failed runs are retained rather than hidden.
                 gazebo=subprocess.Popen(cmd,env=env,stdout=(run/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 deadline=time.monotonic()+180
+                sensor_deadline=time.monotonic()+30;gpu_last=-float('inf')
                 resource_stream=(run/'process_resources.jsonl').open('w',buffering=1);resource_last=-float('inf')
                 while worker.poll()is None:
+                    if args.renderer=='hardware':
+                        actual_sensors_ready=(run/'sensor_shadow/actual_sensor_ready.json').exists()if args.shadow else (run/'frame_source.json').exists()
+                        if (args.sensors or args.camera_only)and not actual_sensors_ready and time.monotonic()>sensor_deadline:
+                            raise TimeoutError('Hardware renderer did not produce actual sensor/RGB ready within 30 s')
+                        if time.monotonic()-gpu_last>=2:
+                            value=subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader'],text=True)
+                            gpu_samples.append({'monotonic_wall':time.monotonic(),'gpu':value});gpu_last=time.monotonic()
+                            if int(value.split()[0])>gpu_guard_mb:raise RuntimeError('Hardware diagnostic GPU resource guard exceeded; stopping own run')
                     if shadow and shadow.poll()is not None:shadow_error='Read-only shadow observer exited before policy completed'
                     if time.monotonic()-resource_last>=2:
                         owned=[proc.pid for proc in [worker,gazebo,bridge,capture,shadow]if proc and proc.poll()is None]
@@ -127,6 +152,7 @@ def main():
                           'error':error,'ros_domain':79,'gazebo_partition':env['GZ_PARTITION'],
                           'sensors':args.sensors,'camera_only':args.camera_only,'shadow_requested':args.shadow,'shadow_error':shadow_error,
                           'gazebo_natural_exit_grace_expired':gazebo_grace_expired,
+                          'rendering':render_manifest,'actual_sensors_ready':actual_sensors_ready,'gpu_resource_samples':gpu_samples,
                           'plugin_sha256':plugin_hash,
                           'training_process_untouched':True,'real_robot':False}
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))

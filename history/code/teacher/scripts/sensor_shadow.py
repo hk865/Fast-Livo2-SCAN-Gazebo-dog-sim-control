@@ -234,6 +234,10 @@ def make_node(rclpy, args, run, output, contract):
             # Actual sensor values remain reviewable independently of truth diagnostics.
             archived={k:v for k,v in sample.items()if k!='points'}
             self.sensor_records.write(json.dumps(clean({'source':key,'topic':TOPICS[key],**archived}),allow_nan=False)+'\n')
+            required=('imu','joints','clock','raw_lidar','camera','overview')
+            if not(output/'actual_sensor_ready.json').exists()and all(self.counts[k]>0 for k in required):
+                (output/'actual_sensor_ready.json').write_text(json.dumps({'source':'actual received ROS sensor callbacks','counts':dict(self.counts),
+                    'first_stamps_ns':{k:self.histories[k][0]['stamp_ns']for k in required},'frames':{k:dict(self.frames[k])for k in required},'readonly':True})+'\n')
 
         def clock_message(self,message):
             self.add_sample('clock',message.clock.sec*1000000000+message.clock.nanosec,'world_simulation_clock')

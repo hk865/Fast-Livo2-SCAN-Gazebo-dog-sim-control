@@ -100,6 +100,7 @@ def main():
               'navigation_truth_used':False,'action_clip':None,'test':args.test,'seed':args.seed,
               'stop_strategy':'slew command to zero and continue Teacher closed loop; never freeze joint targets or replace action with zero',
               'bootstrap_PD_seconds':.1,'command_start_seconds':3.,'command_slew_acceleration':[.6,.6,.8],
+              'physics_state_phase':'Gazebo PreUpdate reads previous Physics result; effective state time = world_sim_time - 0.005s',
               'test_duration_s':duration(args.test),'command_end_s':14. if args.test.startswith('step')else 11.}
     if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance)
     atomic_json(args.run/'policy_manifest.json',metadata)
@@ -154,6 +155,7 @@ def main():
                 done=t>=duration(args.test) or (fault is not None and t>=2)
                 response=np.zeros(16,dtype='<f8');response[:12]=target;response[12]=1 if fault else 0;response[13]=1 if done else 0
                 row={'sim_time':t,'world_sim_time':float(s[0]),'command':cmd.tolist(),'requested':request.tolist(),
+                     'state_physics_world_time':float(s[0]-.005),
                      'measured':[float(s[8]),float(s[9]),float(s[13])], 'body_lin_vel':s[8:11].tolist(),
                      'body_ang_vel':s[11:14].tolist(),'position':s[1:4].tolist(),'quaternion_wxyz':s[4:8].tolist(),
                      'rpy':angles,'contacts':dict(zip(['body','FR','FL','RR','RL'],contacts)),
