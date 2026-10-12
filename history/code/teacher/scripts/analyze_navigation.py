@@ -50,7 +50,7 @@ def longest(mask,t,gap):
     return best,bestpair
 
 
-def evaluate(run):
+def evaluate(run, write_outputs=True):
     run=Path(run).resolve();checks={};metrics={};errors=[];scope={};profile={};sources={};telemetry=[];native=[];slam=[];status=[]
     try:
         scope=read(run/'navigation_scope.json');profile=read(run/'navigation_profile.json');meta=read(run/'policy_manifest.json');runtime=read(run/'runtime_manifest.json');result=read(run/'worker_result.json')
@@ -128,7 +128,7 @@ def evaluate(run):
             before=max(0,i-25)
             if np.linalg.norm(cmd[before:i,:2],axis=1).max()>.015 if i>before else False:moving_stale.append(float(r['sim_time']))
         metrics['TTL']={'moving_stale_transition_times_s':moving_stale,'expired_samples':len(expirations),'expired_zero_request_samples':len(expirations)-expired_nonzero,'nominal_timeout_s':.3}
-        timing_helper=load(Path(__file__).with_name('audit_navigation_timing.py'),'nav_timing_');timing=timing_helper.evaluate(run);timing_checks=timing['checks'];checks['causal_worker_command_source']=check(timing_checks['worker_read_envelope_lineage']['status']=='passed' and timing_checks['observed_command_TTL_boundary']['status']=='passed' and timing_checks['actual_teacher_command_slew']['status']=='passed',checks=timing_checks,read_status_counts=timing['metrics']['worker_read_status_counts'],accepted_nonzero_frames=timing['metrics']['accepted_nonzero_planar_velocity_frames'],timing_analyzer_sha256=timing['analyzer_sha256'])
+        timing_helper=load(Path(__file__).with_name('audit_navigation_timing.py'),'nav_timing_');timing=timing_helper.evaluate(run,write=write_outputs);timing_checks=timing['checks'];checks['causal_worker_command_source']=check(timing_checks['worker_read_envelope_lineage']['status']=='passed' and timing_checks['observed_command_TTL_boundary']['status']=='passed' and timing_checks['actual_teacher_command_slew']['status']=='passed',checks=timing_checks,read_status_counts=timing['metrics']['worker_read_status_counts'],accepted_nonzero_frames=timing['metrics']['accepted_nonzero_planar_velocity_frames'],timing_analyzer_sha256=timing['analyzer_sha256'])
         metrics['execution_timing']=timing['metrics'];moving_nonzero_frames=timing['metrics']['accepted_nonzero_planar_velocity_frames'];checks['nonzero_commands_have_accepted_slam_source']=check(moving_nonzero_frames>=25,accepted_nonzero_frames=moving_nonzero_frames,minimum_nonzero_source_frames=25,meaning='No route execution pass from stale input, unrelated bootstrap motion or stand-only actor loading')
         protocol_path=run/'sources/tests/protocol.json';stop_protocol=read(protocol_path)['stand_stop']if protocol_path.exists()else read(ROOT/'tests/protocol.json')['stand_stop'];settling=float(stop_protocol['settling_seconds']);physical_times=nt-.005;all_yaw=np.unwrap(np.arctan2(rot[:,1,0],rot[:,0,0]));omega=array(native,'body_ang_vel',3)
         def stop_window(start,seconds=3.):
@@ -163,7 +163,7 @@ def evaluate(run):
             if 0<=ni<len(nt)and anchor_world_s-physical_times[ni]<=.005001:
                 a=sq[anchor_index[0]];slamrot=observation.quaternion_rotation(a[[3,0,1,2]]);alignment=slamrot@rot[ni].T;translation=origin-alignment@pos[ni];match=np.searchsorted(physical_times,stamps/1e9,side='right')-1;valid=(match>=0)&(match<len(nt));match=np.clip(match,0,len(nt)-1);valid&=(stamps/1e9-physical_times[match]<=.005001);mapped=pos[match]@alignment.T+translation;error=np.linalg.norm(sp[valid]-mapped[valid],axis=1)
                 metrics['independent_truth_error']={'used_for_navigation':False,'alignment':'one immutable rigid transform at SLAM anchor; no online correction','causal_matched_poses':int(valid.sum()),'median_error_m':float(np.median(error)),'p95_error_m':float(np.percentile(error,95)),'maximum_error_m':float(error.max()),'alignment_world_to_slam_rotation':alignment,'alignment_translation':translation,'native_state_time':'PreUpdate t minus0.005s','actual_anchor_world_position':pos[ni]}
-                np.savez_compressed(run/'navigation_independent_truth_error.npz',slam_stamp_ns=stamps[valid],slam_position=sp[valid],truth_aligned_position=mapped[valid],position_error_m=error,alignment_rotation=alignment,alignment_translation=translation)
+                if write_outputs:np.savez_compressed(run/'navigation_independent_truth_error.npz',slam_stamp_ns=stamps[valid],slam_position=sp[valid],truth_aligned_position=mapped[valid],position_error_m=error,alignment_rotation=alignment,alignment_translation=translation)
             else:metrics['independent_truth_error']={'used_for_navigation':False,'status':'unverified','reason':'No causal native state at anchor stamp'}
         else:
             checks['immutable_slam_relative_route_anchor']=check(None,request_recorded=request_path.exists(),anchor_recorded=anchor_path.exists(),raw_slam_recorded=bool(slam));checks['both_regions_confirmed_by_raw_slam_dwell']=check(False if runtime.get('error')is None else None,reason='Actual finite route has no complete anchor/request/pose evidence',last_navigation_state=status[-1].get('state')if status else None)
@@ -179,7 +179,8 @@ def evaluate(run):
     required=['cpu_teacher_and_exclusive_actuation','teacher_continuous_actor_and_command_input','actual_runtime_continuity','native_physical_safety','teacher_received_and_executed_motion','nonzero_commands_have_accepted_slam_source','causal_worker_command_source','scope_is_finite_and_truth_not_navigation','source_integrity','actual_sensor_slam_publisher_chain','measured_slam_pose_stream','actual_registered_cloud_inputs','actual_scan_trajectory_association','native_scan_payload_available','healthy_command_source_ages','immutable_slam_relative_route_anchor','both_regions_confirmed_by_raw_slam_dwell','post_arrival_actual_teacher_stop']
     outcome=status_of(checks,required);outcome='failed'if errors else outcome;levels['finite_flat_navigation']=outcome
     receipt=clean({'schema_version':1,'scope':'One metre out/return measuredSLAM/SCAN finite integration audit only; privileged Teacher observations retained','status':outcome,'levels':levels,'checks':checks,'metrics':metrics,'errors':errors,'profile':profile,'source_hashes':sources,'analyzer_sha256':digest(__file__),'global_acceptance_overwritten':False,'truth_scope':'Only separate post-run causal error analysis; never used for NAV anchor, goals, planner, command, or arrival','limits':'Missing raw command/health/trajectory/TTL evidence remains unverified. Static code presence is not closed-loop pass.'})
-    (run/'summary_navigation_independent.json').write_text(json.dumps(receipt,indent=2,allow_nan=False)+'\n');return receipt
+    if write_outputs:(run/'summary_navigation_independent.json').write_text(json.dumps(receipt,indent=2,allow_nan=False)+'\n')
+    return receipt
 
 
 def steps_terminate(native):return bool(native and native[-1].get('terminating')is True)
