@@ -131,7 +131,33 @@ class PIDNavigation(TeacherNavigation):
             self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
     def follow_checked_trajectory(self,*args,**kwargs):
-        kwargs['tracking_pose']=self.pose;return follow_trajectory(*args,**kwargs)
+        kwargs['tracking_pose']=self.pose
+        result=follow_trajectory(*args,**kwargs)
+        if not kwargs.get('return_steering'):return result
+        self.ensure_cascade()
+        # Preview the same immutable SCAN projection without committing source
+        # progress or integrating a timer duplicate. Both heading owners use it.
+        preview=copy.deepcopy(self.cascade)
+        segment,point,tangent,normal,cross,grade,nearest_s=preview._project(self.pose)
+        remaining=float(preview.cumulative[-1]-preview.progress)
+        yaw=math.atan2(tangent[1],tangent[0])
+        if np.linalg.norm(preview.path[-1]-preview.goal)<=.2 and remaining<=.15:
+            yaw=preview.goal_yaw
+        velocity,rate,target,steering=result
+        original=copy.deepcopy(steering)
+        steering=dict(steering,heading=yaw,error=math.atan2(math.sin(yaw-math.atan2(self.rotation[1,0],self.rotation[0,0])),
+            math.cos(yaw-math.atan2(self.rotation[1,0],self.rotation[0,0]))),
+            heading_reference='same actual SCAN nearest directed 3D projection as cascade',
+            original_lookahead_steering=original,
+            cascade_projection=dict(path_id=preview.path_id,path_sha256=preview.path_sha,segment=segment,
+                point=point.tolist(),tangent=tangent.tolist(),nearest_s=nearest_s,remaining=remaining,
+                actual_pose_stamp_ns=int(self.pose_stamp),navigation_ground_truth_used=False))
+        self.evidence.append(self.run/'navigation_heading_projection.jsonl',dict(
+            request_id=self.request_id,waypoint_index=self.waypoint_index,
+            source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
+            steering=copy.deepcopy(steering),feedback=copy.deepcopy(self.feedback),
+            navigation_ground_truth_used=False))
+        return velocity,rate,target,steering
     def measured_region_arrival(self):
         key=(self.request_id,self.waypoint_index)
         if key not in self.segment_references:
@@ -180,6 +206,7 @@ class PIDNavigation(TeacherNavigation):
         ns=self.get_clock().now().nanoseconds;wall=time.monotonic_ns();self.ensure_cascade()
         mode=mode_override or ('hold'if self.obstacle_hold or self.heading_gate.phase in ('pre_turn','settle')
             else 'drive'if allow_translation else 'turn')
+        heading_reference=copy.deepcopy(self.steering);gate_heading=self.heading_gate.heading
         ack=self.get_ack();guard=None
         if self.feedback is None or self.paired_imu is None or ack is None:guard='actual_causal_feedback_or_ack_missing'
         cmd,diagnostic=self.cascade.update(self.feedback,self.paired_imu,ack,ns,wall,guard_reason=guard,mode_override=mode)
@@ -197,6 +224,7 @@ class PIDNavigation(TeacherNavigation):
             paired_imu_stamp_ns=None if self.paired_imu is None else self.paired_imu['stamp_ns'],
             control_stamp_ns=ns,compute_ros_clock_ns=ns,compute_monotonic_wall=wall/1e9,
             feedback=copy.deepcopy(self.feedback),imu=copy.deepcopy(self.paired_imu),ack=copy.deepcopy(ack),
+            heading_gate_reference=dict(phase=self.heading_gate.phase,locked_heading=gate_heading,steering=heading_reference),
             path_receipt=None if self.path_receipt is None else {k:copy.deepcopy(v) for k,v in self.path_receipt.items()if k!='points_xyz'},cascade=diagnostic,
             control_pose=self.pose.tolist(),control_quaternion=self.pose_quaternion,control_rotation=self.rotation.tolist(),
             request_id=self.request_id,waypoint_index=self.waypoint_index,trajectory_id=self.active_trajectory_id,

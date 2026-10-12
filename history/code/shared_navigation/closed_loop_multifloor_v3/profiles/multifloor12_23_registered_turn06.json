@@ -122,8 +122,8 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_multifloor_v2",
-  "cascade_runtime_revision": "v2_frozen_sensor_scene_axis_seams_turn06_no_legacy_pid_object",
+  "controller_selector": "closed_loop_multifloor_v3",
+  "cascade_runtime_revision": "v3_single_nearest_SCAN_projection_heading",
   "cascade": {
     "desired_speed": 0.2,
     "command_limits": [
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "Turn input cap .3→.6 within archived Teacher boundary; only independent experimental simulation evidence. Gains/source/stop/native safety unchanged.",
+  "prospective_change": "Same directed nearest SCAN projection yaw supplies parent stop/align gate and cascade drive/turn; original lookahead retained for checked-target obstacle guard. Core gains/PI/TTL/native safety unchanged.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
