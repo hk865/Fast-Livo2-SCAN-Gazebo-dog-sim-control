@@ -2,9 +2,12 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  python3 -B navigation/height_diagnostic_v26/run.py --profile height_fault270 --label v25_prepare --prepare-only
+  python3 -B navigation/path_admission_v27/run.py --profile repair_prefix270 --label V27_prepare270 --prepare-only
 Run after source review (root/user only):
-  python3 -B navigation/height_diagnostic_v26/run.py --profile height_fault270 --label v25_terrain_event --domain 89
+  python3 -B navigation/path_admission_v27/run.py --profile repair_prefix270 --label V27_repair270 --domain 91
+Root first evaluates the270s prefix; repair_original46 repeats the original
+1500s mission only when root judges the prefix useful. Both exact profiles are
+source-bound in one V27 gate; no historical full46 pass is inherited.
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -82,8 +85,8 @@ def validate_profile(p):
     if p.get('pose_cloud_timeout_s')!=.3:raise ValueError('Source freshness must remain300ms')
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
-    if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[214,226]:
-        raise ValueError('V26 requires the prospective failure detail window214–226s')
+    if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[140,235]:
+        raise ValueError('V27 requires the prospective path-admission detail window140–235s')
     from corridor_preflight import verify_preflight
     from full46_launch_contract import validate_full46
     validate_full46(p,HERE)
@@ -206,7 +209,8 @@ def prepare(run,args):
               'workspace':str(scan_workspace),'data':scan_contract_data},
           'scan_binary_contract':{'path':str((scan_workspace/'install/scan_planner/lib/scan_planner/scan_planner_node').resolve()),
               'sha256':sha(scan_workspace/'install/scan_planner/lib/scan_planner/scan_planner_node')},
-          'diagnostic_prefix_only':bool(p.get('diagnostic_scope')),
+          'diagnostic_prefix_only':p['path_admission_contract']['prefix_only'],
+          'path_admission_contract':p['path_admission_contract'],
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],
                               'navigation_stack':['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)]},
           'limitations':'Plan is launch provenance only, never a route/SLAM/Sim2Sim pass'}
@@ -515,7 +519,7 @@ def execute(run,plan):
 def main():
     ap=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--profile',required=True,help='New closed-loop profile name or JSON path')
-    ap.add_argument('--label',default='V26_height_diagnostic270');ap.add_argument('--domain','--ros-domain',type=int,default=86)
+    ap.add_argument('--label',default='V27_repair_prefix270');ap.add_argument('--domain','--ros-domain',type=int,default=86)
     ap.add_argument('--cpu-python',type=Path,default=DEFAULT_CPU_PYTHON)
     ap.add_argument('--real-time-factor',type=float,default=1.)
     ap.add_argument('--run-storage-root',type=Path,default=None,help='Optional dedicated V19 root declared in run_storage.py; default project/runs')

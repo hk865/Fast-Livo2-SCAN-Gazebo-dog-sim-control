@@ -87,6 +87,7 @@ class Navigation(Node):
         self.planning_start_state = None
         self.steering = None
         self.active_trajectory_id = None
+        self.active_reference_stamp = None
         self.obstacle_resume_pending = False
         self.obstacle_hold_started_ros = None
         self.obstacle_stopped_duration = 0.
@@ -339,6 +340,7 @@ class Navigation(Node):
         self.planning_start_state = None
         self.steering = None
         self.active_trajectory_id = None
+        self.active_reference_stamp = None
         self.obstacle_resume_pending = False
         self.obstacle_hold_started_ros = None
         self.aligned_obstacle_resumes = 0
@@ -455,11 +457,13 @@ class Navigation(Node):
                 self.message = self.last_spline_rejected
                 self.samples = None
                 self.active_trajectory_id = None
+                self.active_reference_stamp = None
                 self.publish_command()
                 self.path_pub.publish(self.make_path([]))
                 return
             self.samples = samples
             self.active_trajectory_id = int(msg.traj_id)
+            self.active_reference_stamp = tuple(metadata['reference_stamp'])
             self.planning_start_state = metadata.get('start_state')
             self.last_spline_rejected = None
             self.replans += 1
@@ -587,6 +591,7 @@ class Navigation(Node):
                 self.planning_start_state = None
                 self.steering = None
                 self.active_trajectory_id = None
+                self.active_reference_stamp = None
                 self.obstacle_resume_pending = False
                 self.arrival_since = None
                 self.segment_start = None
@@ -666,7 +671,7 @@ class Navigation(Node):
                              cloud_input=self.cloud_input_context,
                              guard_result=self.obstacle_result, request_id=self.request_id,
                              waypoint_index=self.waypoint_index, trajectory_id=self.active_trajectory_id,
-                             reference_stamp=self.trajectory_association.reference_stamp,
+                             reference_stamp=self.active_reference_stamp,
                              raw_imu_stamp=self.raw_imu.stamp, raw_imu_tilt=self.raw_imu.tilt,
                              protect_result=protected, tilt_hold=self.tilt_hold, tilt_source=self.tilt_source,
                              execution_bridge_safety=copy.deepcopy(self.bridge_safety)))
@@ -753,7 +758,8 @@ class Navigation(Node):
                       replans=self.replans, reference_requests=self.reference_requests,
                       degenerate_splines=self.degenerate_splines,
                       last_spline_rejected=self.last_spline_rejected,
-                      trajectory_reference_stamp=self.trajectory_association.reference_stamp,
+                      trajectory_reference_stamp=self.active_reference_stamp,
+                      pending_trajectory_reference_stamp=self.trajectory_association.reference_stamp,
                       trajectory_association_rejected=self.trajectory_association.rejected,
                       last_trajectory_association_rejected=self.trajectory_association.last_rejected,
                       planning_start_state=self.planning_start_state,

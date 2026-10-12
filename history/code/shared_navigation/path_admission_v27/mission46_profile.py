@@ -25,6 +25,7 @@ ROUTE_COUNTS = {'exploration': 18, 'return_origin': 14, 'navigation_f1_f3': 14}
 SPAWN = [0., 0., .3, 0.]
 SIMULATION_MAX_S = 1500.
 DIAGNOSTIC_DURATION_S = 270.
+ALLOWED_DURATION_S = (DIAGNOSTIC_DURATION_S, SIMULATION_MAX_S)
 RAW_BUDGET_BYTES = 48 * 1024**3
 MIN_FREE_BYTES = 90 * 1024**3
 
@@ -37,7 +38,8 @@ def canonical_sha(data):
 def required_source_files():
     """Root must archive/hash these, in addition to its existing runtime set."""
     return [HERE / name for name in ('mission46.py', 'mission46_profile.py', 'mission46_contract.py',
-        'mission46_runtime.py', 'mission46_runtime_evidence.py', 'mission46_obstacle_runtime.py')] + [
+        'mission46_runtime.py', 'mission46_runtime_evidence.py', 'mission46_obstacle_runtime.py',
+        'path_admission.py')] + [
         DEMO / name for name in ('simulation/scenario.json', 'simulation/obstacle_trigger.py',
                                  'mission/state_machine.py', 'mission/route_regions.py',
                                  'navigation/goal_regions.py', 'slam/map_archive.py')]
@@ -92,11 +94,11 @@ def build_profile(base_profile=None):
     integrate TeacherMission46 and its explicit runtime actions before prepare.
     """
     if base_profile is None:
-        base_profile = json.loads((HERE / 'profiles/pipeline_staged_600.json').read_text())
+        base_profile = json.loads((HERE.parent / 'corridor_tracking_v25_terrain_event/profiles/curvature_original46_on.json').read_text())
     result = copy.deepcopy(base_profile)
     scenario = scenario_for_teacher()
     result.update(experiment='teacher_original46_actual_SLAM_SCAN_corridor_v20',
-                  selector='original_46_region_mission_v20', duration_s=DIAGNOSTIC_DURATION_S,
+                  selector='original_46_region_mission_v20', duration_s=SIMULATION_MAX_S,
                   spawn=SPAWN, navigation_ground_truth_used=False,
                   return_to_origin=True, mission46_required=True,
                   original_scenario_sha256=ORIGINAL_SCENARIO_SHA,
@@ -129,7 +131,7 @@ def build_profile(base_profile=None):
     result['mission46_final_hold_sim_s'] = 5.
     result['mission46_source_timeout_s'] = .3
     result['diagnostic_scope'] = dict(result.get('diagnostic_scope', {}),
-        finite_horizon_s=DIAGNOSTIC_DURATION_S,
+        finite_horizon_s=SIMULATION_MAX_S,
         arrival_gate_source='original46 three_platform_body_arrival_v2, not inherited32 uniform discs')
     result['policy_observations'] = (
         'Teacher CPU single-thread: 232 privileged simulator-state/height dimensions '
@@ -149,8 +151,8 @@ def validate_profile(profile):
         raise ValueError('Mission46 profile identity/source contract differs')
     duration = profile.get('duration_s')
     if (type(duration) not in (int, float) or not math.isfinite(duration)
-            or duration != DIAGNOSTIC_DURATION_S or profile.get('max_simulation_duration_s') != SIMULATION_MAX_S):
-        raise ValueError('V26 requires its 270s diagnostic cutoff and the original 1500s mission cap')
+            or duration not in ALLOWED_DURATION_S or profile.get('max_simulation_duration_s') != SIMULATION_MAX_S):
+        raise ValueError('V27 requires270s repair prefix or1500s original46, retaining the original1500s mission cap')
     if (profile.get('raw_budget_bytes') != RAW_BUDGET_BYTES or
             profile.get('minimum_available_storage_bytes') != MIN_FREE_BYTES):
         raise ValueError('Original46 storage contract differs')

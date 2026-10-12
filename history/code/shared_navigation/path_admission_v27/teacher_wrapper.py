@@ -42,6 +42,13 @@ class RecordedPublisher:
         data['controller_kind']=self.node.profile['controller_kind']
         data['outer_velocity_controller']='Actual SLAM header-event geometric path/yaw PD and COM speed PI; causal IMU and actual Teacher input ACK; native SCAN collision guard'
         data['cascade_parking']=copy.deepcopy(getattr(self.node,'cascade_last_row',None))
+        data['path_admission']=dict(hold=getattr(self.node,'path_admission_hold',False),
+            replan_pending=getattr(self.node,'path_admission_replan_pending',False),
+            decision_sequence=getattr(self.node,'path_admission_sequence',0),
+            last_decision=copy.deepcopy(getattr(self.node,'path_admission_last_decision',None)),
+            active_reference_stamp=getattr(self.node,'active_reference_stamp',None),
+            pending_reference_stamp=self.node.trajectory_association.reference_stamp,
+            occupancy_or_terrain_support_certified=False)
         data['teacher_transition']=self.node.heading_gate.evidence(self.node.get_clock().now().nanoseconds/1e9,time.monotonic())
         if self.node.profile.get('arrival_stop_policy')=='after_measured_dwell':
             data['motion_limits']['pure_turn_rate_rad_s']=self.node.heading_gate.max_turn_rate
@@ -191,7 +198,7 @@ class TeacherNavigation(base.Navigation):
         array_path=directory/f'{self.replans:06d}_trajectory_{self.active_trajectory_id}.npz'
         coefficients=np.array([[p.x,p.y,p.z]for p in msg.pos_pts]);knots=np.array(msg.knots);samples=self.samples.copy()
         document={'trajectory_id':self.active_trajectory_id,'order':int(msg.order),'metadata':metadata,
-            'reference_stamp':self.trajectory_association.reference_stamp,'request_id':self.request_id,
+            'reference_stamp':self.active_reference_stamp,'request_id':self.request_id,
             'waypoint_index':self.waypoint_index,'accepted_slam_stamp_ns':self.pose_stamp,
             'array_file':array_path.name,
             'source':'actual SCAN committed B-spline and associated metadata; sensor SLAM feedback'}
@@ -281,7 +288,7 @@ class TeacherNavigation(base.Navigation):
         self.pending_guard_row={'schema':'teacher_native_steering_guard/v1','sequence':self.guard_sequence,
             'compute_ros_clock_ns':ns,'compute_sim_time_s':ns/1e9,'compute_monotonic_wall':received,
             'request_id':self.request_id,'waypoint_index':self.waypoint_index,
-            'trajectory_id':self.active_trajectory_id,'reference_stamp':self.trajectory_association.reference_stamp,
+            'trajectory_id':self.active_trajectory_id,'reference_stamp':self.active_reference_stamp,
             'trajectory_archive_file':self.trajectory_archive_reference,
             'control_pose_stamp_ns':int(self.pose_stamp),'control_pose':np.asarray(pose).tolist(),
             'control_quaternion':list(self.pose_quaternion),'control_rotation':self.rotation.tolist(),

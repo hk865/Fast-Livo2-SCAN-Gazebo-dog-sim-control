@@ -97,7 +97,7 @@
     0.3,
     0.0
   ],
-  "duration_s": 270.0,
+  "duration_s": 1500.0,
   "overview_pose": [
     8,
     -1,
@@ -110,7 +110,7 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "height_diagnostic_v26",
+  "controller_selector": "path_admission_v27",
   "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
   "cascade": {
     "desired_speed": 0.2,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V26 independent height-failure recording only: 270s diagnostic cutoff, 214-226s detailed solver window, 48GiB recording cap/90GiB startup reserve/30GiB runtime reserve and independent source identity. Original V25 64x480 LiDAR30/RGB30, 46 regions, scenario/global mission cap 1500s, geometry, gains, observations, arrival gates, 300ms freshness, parking and sole actuator protections are unchanged. A cutoff is never navigation success; no historical runtime pass is inherited.",
+  "prospective_change": "V27 independent SCAN path-admission repair only; retain original V25 route/regions, gains, stops, TTL, Actor, observations, frontend and planner. Recording window140-235s, 48GiB cap/90GiB startup reserve/30GiB runtime reserve and independent identity are explicit recording changes. 270s cutoff is not success; original mission global cap stays1500s. No historical navigation result or backend correction is adopted.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -197,13 +197,13 @@
   "diagnostic_scope": {
     "baseline_version": "closed_loop_multifloor_v7",
     "route_controller_gates_unchanged": true,
-    "finite_horizon_s": 270.0,
+    "finite_horizon_s": 1500.0,
     "detail_window_sim_s": [
-      214,
-      226
+      140,
+      235
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "Current V25 height-failure evidence: IMU/LIO/VIO state, covariance, residual/plane and real motion; recording-only diagnostic, no algorithm repair",
+    "purpose": "V27 path admission repair evidence under unchanged original46 navigation/control gates; detailed frontend recording140-235s",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
     "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
   },
@@ -227,7 +227,7 @@
     "long_hold_integral_and_dwell": "protect_reset",
     "source_receipt_refresh_permitted": false
   },
-  "profile_version": "height_diagnostic_v26",
+  "profile_version": "path_admission_v27",
   "software_multicore": {
     "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
     "lio_translation_unit": "voxel_map.cpp",
@@ -3536,12 +3536,13 @@
   "requires_original_dynamic_obstacle": true,
   "requires_bidirectional_layer_switches": true,
   "mission46_required_source_files": [
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46_profile.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46_contract.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46_runtime_evidence.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/height_diagnostic_v26/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_profile.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_contract.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_runtime_evidence.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/path_admission.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
@@ -3571,14 +3572,18 @@
     "retain_valid_plan": false,
     "snapshot_request_period_s": 0.5
   },
-  "height_diagnostic_contract": {
-    "schema": "height_diagnostic_v26_cutoff/v1",
+  "path_admission_contract": {
+    "schema": "path_admission_v27_launch/v1",
+    "profile_name": "repair_original46.json",
     "simulation_only": true,
-    "cutoff_sim_elapsed_s": 270.0,
+    "runtime_cutoff_sim_elapsed_s": 1500.0,
     "cutoff_is_success": false,
+    "prefix_only": false,
     "full46_verified": false,
     "actual_navigation_verified": false,
     "historical_pass_inherited": false,
+    "algorithm_change": "SCAN path admission only",
+    "backend_connected": false,
     "original_46_region_definitions_and_arrival_gates_unchanged": true,
     "original_mission_global_cap_s": 1500.0
   }

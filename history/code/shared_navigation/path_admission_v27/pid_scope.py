@@ -27,7 +27,7 @@ def runtime_files(profile=None):
     build_files=[SLAM_WS/'build'/package/name for package in ('fast_livo2_core','fast_livo2_ros')
                  for name in ('compile_commands.json','CMakeCache.txt')]
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
-    preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'PIPELINE_V19_CONTRACT.json',HERE/'DIAGNOSTIC_V26_PREFLIGHT.json']
+    preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'PIPELINE_V19_CONTRACT.json',HERE/'PATH_ADMISSION_V27_PREFLIGHT.json']
     preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json']
     preflight+=[HERE/'PUBLICATION_LEDGER_CONTRACT.json',HERE.parent/'corridor_tracking_v21_curvature/PUBLICATION_LEDGER_PREFLIGHT.json',HERE/'PROSPECTIVE_PUBLICATION_LEDGER_CRITERIA.json']
     preflight+=[HERE/'LOCKFREE_RESIDUAL_CONTRACT.json',HERE/'BOUNDARY_TIMING_CONTRACT.json']

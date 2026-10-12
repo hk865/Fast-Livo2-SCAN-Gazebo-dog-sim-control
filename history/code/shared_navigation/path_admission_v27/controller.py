@@ -7,7 +7,9 @@ import numpy as np
 from teacher_wrapper import TeacherNavigation
 from pid_core import slew
 from cascade_core import Controller
-from control_core import follow_trajectory
+from control_core import follow_trajectory, trajectory_has_progress
+from scipy.interpolate import BSpline
+from path_admission import FrozenFence, candidate, payload, replayable, certify_curve, remaining_certificate
 from clock_hold import ControlClockHold
 
 class ResetBookkeeping:
@@ -32,6 +34,9 @@ class PIDNavigation(TeacherNavigation):
         self.imu_records=0;self.cloud_archive_records=0
         self.segment_references={}
         self.reference_replan_pending=False
+        self.path_admission_fence=FrozenFence(self.run,self.profile)
+        self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
+        self.path_admission_sequence=0;self.path_admission_last_decision=None
         self.control_clock_hold=ControlClockHold()
         self.corridor_observer=None
         self.corridor_last_certificate=None
@@ -67,6 +72,7 @@ class PIDNavigation(TeacherNavigation):
             self.cascade=None;self.cascade_key=None;self.cascade_last_row=None
             self.cascade_path_id=None;self.path_receipt=None;self.final_bundle=None
             self.reference_replan_pending=False
+            self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
             self.pid_row=None;self.pid_prepared_output=None
             self.publish_command()
     def on_corridor_snapshot(self,msg):
@@ -212,30 +218,115 @@ class PIDNavigation(TeacherNavigation):
             document={**record,'array_sha256':hashlib.sha256(array.read_bytes()).hexdigest()}
             with (self.run/'navigation_cloud_xyz.jsonl').open('a')as out:out.write(json.dumps(document,allow_nan=False)+'\n')
         self.evidence.enqueue(archive)
+    def admission_identity(self):
+        return dict(request_id=self.request_id,waypoint_index=self.waypoint_index,
+            goal_xyz=self.waypoints[self.waypoint_index].tolist())
+    def retain_admitted_path(self,points,config):
+        # New planner reference stamps are pending identities, not new receipts
+        # for the path being executed. Progress is projected spatially only.
+        active=self.path_admission_active;now=time.monotonic();ns=self.get_clock().now().nanoseconds
+        if (active is None or active['identity']!=self.admission_identity()
+                or active['trajectory_id']!=self.active_trajectory_id or self.samples is None
+                or self.state!='running' or now-self.pose_updated>.3 or now-self.cloud_updated>.3
+                or not self.raw_imu.fresh(now,ns/1e9) or now-self.bridge_updated>.3
+                or self.bridge_safety.get('state')!='ready' or self.obstacle_hold or self.tilt_hold):
+            return dict(allowed=False,reason='old_path_identity_or_native_sources_not_eligible')
+        return remaining_certificate(active,self.samples,self.pose,points,config)
+    def archive_admission(self,value,metadata,decision,started):
+        self.path_admission_sequence+=1;sequence=self.path_admission_sequence
+        decision=dict(decision,schema='SCAN_path_execution_admission/v1',sequence=sequence,
+            request_id=self.request_id,waypoint_index=self.waypoint_index,
+            association_payload_id=None if value is None else value.get('traj_id'),
+            active_trajectory_id=self.active_trajectory_id,
+            active_reference_stamp=self.active_reference_stamp,
+            admission_replan_pending=self.path_admission_replan_pending,
+            pending_reference_stamp=self.trajectory_association.reference_stamp,
+            control_stamp_ns=self.get_clock().now().nanoseconds,source_pose_stamp_ns=int(self.pose_stamp),
+            callback_elapsed_wall_ms=(time.monotonic()-started)*1000,
+            navigation_ground_truth_used=False,occupancy_or_terrain_support_certified=False)
+        self.path_admission_last_decision=copy.deepcopy(decision)
+        document=replayable(dict(decision=decision,payload=value,metadata=copy.deepcopy(metadata)))
+        relative=Path('path_admission_candidates')/(str(sequence).zfill(6)+'_trajectory_'+str(decision['association_payload_id'])+'.json')
+        def archive():
+            target=self.run/relative;target.parent.mkdir(exist_ok=True)
+            with target.open('x')as out:out.write(json.dumps(document,allow_nan=False,ensure_ascii=False)+'\n')
+        self.evidence.enqueue(archive)
+        self.evidence.append(self.run/'path_admission_decisions.jsonl',dict(document['decision'],candidate_file=str(relative)))
     def accept_spline(self,msg,metadata):
-        if self.cascade is not None and self.cascade_key==(self.request_id,self.waypoint_index) and self.cascade.capture_stamp is not None:
-            self.last_spline_rejected='固定终点捕获阶段保留已检查SCAN路径，实际点云guard继续工作'
+        # Admission is a transaction BEFORE base acceptance, publication, PI
+        # path replacement and the accepted trajectory archive. Association's
+        # payload high-water is deliberately not rolled back on a rejection.
+        started=time.monotonic();value=None;binding=None;points=None;config=None
+        try:
+            if len(msg.pos_pts)>512 or len(msg.knots)>516:raise ValueError('candidate_input_count_budget')
+            value=payload(msg)
+            value=candidate(msg,metadata,self.trajectory_association.reference_stamp,
+                self.waypoints[self.waypoint_index])
+            points,config,binding=self.path_admission_fence.load()
+            proof=certify_curve(value,points,config)
+            if proof['allowed']:
+                begin,end=value['knots'][3],value['knots'][-4]
+                check=BSpline(value['knots'],value['pos_pts'],3)(np.linspace(begin,end,min(2000,max(2,int((end-begin)/.08)+1))))
+                if not np.isfinite(check).all():proof=dict(allowed=False,reason='nonfinite_execution_samples')
+                elif self.pose is not None and np.linalg.norm(check[0]-self.pose)>1.2:
+                    proof=dict(allowed=False,reason='execution_start_far_from_actual_pose')
+                elif (not trajectory_has_progress(check,self.pose,self.waypoints[self.waypoint_index],self.arrival_radius)
+                        or not np.any(np.linalg.norm(check[1:,:2]-check[0,:2],axis=1)>=1e-5)):
+                    proof=dict(allowed=False,reason='execution_path_degenerate')
+            if time.monotonic()-started>.100:proof=dict(allowed=False,reason='admission_callback_budget_exhausted')
+        except (OSError,KeyError,ValueError,TypeError,OverflowError,IndexError,FloatingPointError)as error:
+            proof=dict(allowed=False,reason='admission_input_or_anchor:'+type(error).__name__+':'+str(error))
+        capture=(self.cascade is not None and self.cascade_key==(self.request_id,self.waypoint_index)
+            and self.cascade.capture_stamp is not None)
+        if not proof['allowed'] or capture:
+            # Only a geometrically outside candidate (or an existing terminal
+            # capture) may keep an independently certified old same-goal path.
+            # Invalid anchor/numbers and exhausted proofs always stop/replan.
+            retain=(self.retain_admitted_path(points,config) if points is not None
+                and (proof.get('reason')=='outside_fence' or proof['allowed'] and capture)
+                else dict(allowed=False,reason='fail_closed_rejection_requires_stop'))
+            if time.monotonic()-started>.100:retain=dict(allowed=False,reason='retention_callback_budget_exhausted')
+            self.path_admission_hold=not retain['allowed']
+            self.last_spline_rejected='V27 SCAN整条路径接纳拒绝：'+str(proof.get('reason'))
+            self.path_admission_replan_pending=True
+            if retain['allowed']:
+                self.pid_guard_needs_evaluation=True
+            else:
+                self.message=self.last_spline_rejected+'；停车等待重规划'
+                self.publish_command()
+            self.archive_admission(value,metadata,dict(admitted=False,
+                reason='terminal_capture_kept_checked_path' if capture and proof['allowed'] else proof.get('reason'),
+                proof=proof,anchor_binding=binding,old_path_retention=retain,
+                exact_zero_requested=not retain['allowed']),started)
             return
         before=self.replans;wall=time.monotonic_ns();super().accept_spline(msg,metadata)
         if self.replans>before and self.samples is not None:
-            self.reference_replan_pending=False
+            self.path_admission_active=dict(payload=copy.deepcopy(value),metadata=copy.deepcopy(metadata),
+                identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
+                active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding)
+            self.path_admission_hold=False;self.path_admission_replan_pending=False;self.reference_replan_pending=False
             indices=[0]
             for i in range(1,len(self.samples)):
                 if np.linalg.norm(self.samples[i,:2]-self.samples[indices[-1],:2])>=1e-5:indices.append(i)
-            if len(indices)<2:
-                self.samples=None;self.last_reference=-math.inf
-                self.last_spline_rejected='实际SCAN未提供非退化水平路径，停车等待新规划';return
             points=self.samples[indices]
             self.path_receipt=dict(points_xyz=points.tolist(),
                 source_sample_indices=indices,source_samples_count=len(self.samples),
                 source_samples_float64_sha256=hashlib.sha256(np.asarray(self.samples,dtype='<f8').tobytes()).hexdigest(),
                 path_id=str(self.request_id)+':'+str(self.waypoint_index)+':'+str(self.replans)+':'+str(self.active_trajectory_id),
-                stamp_ns=int(self.trajectory_association.reference_stamp[0])*1_000_000_000+int(self.trajectory_association.reference_stamp[1]),
+                stamp_ns=int(self.active_reference_stamp[0])*1_000_000_000+int(self.active_reference_stamp[1]),
                 received_wall_ns=wall,frame_id='camera_init',array_file=self.trajectory_archive_reference,
                 request_id=self.request_id,waypoint_index=self.waypoint_index,
                 trajectory_id=self.active_trajectory_id,metadata=copy.deepcopy(metadata))
             self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
+            self.archive_admission(value,metadata,dict(admitted=True,reason='continuous_fence_and_existing_execution_gates_passed',
+                proof=proof,anchor_binding=binding),started)
+        else:
+            # Existing execution guards still own final admission. Their
+            # refusal never becomes an admitted path in this separate ledger.
+            self.path_admission_hold=True;self.path_admission_replan_pending=True;self.publish_command()
+            self.archive_admission(value,metadata,dict(admitted=False,reason='existing_execution_gate_rejected',proof=proof,
+                anchor_binding=binding,exact_zero_requested=True),started)
     def follow_checked_trajectory(self,*args,**kwargs):
         kwargs['tracking_pose']=self.pose
         result=follow_trajectory(*args,**kwargs)
@@ -260,7 +351,7 @@ class PIDNavigation(TeacherNavigation):
             steering=copy.deepcopy(steering),feedback=copy.deepcopy(self.feedback),
             navigation_ground_truth_used=False))
         return velocity,rate,target,steering
-    def measured_region_arrival(self):
+    def record_segment_activation(self):
         key=(self.request_id,self.waypoint_index)
         if key not in self.segment_references:
             if self.segment_start is None or not np.array_equal(self.segment_start,self.pose):
@@ -270,6 +361,8 @@ class PIDNavigation(TeacherNavigation):
                 feedback=copy.deepcopy(self.feedback),request_id=self.request_id,waypoint_index=self.waypoint_index)
             self.evidence.append(self.run/'navigation_segment_activation.jsonl',dict(
                 **self.segment_references[key],navigation_ground_truth_used=False))
+    def measured_region_arrival(self):
+        self.record_segment_activation()
         return super().measured_region_arrival()
     def ensure_cascade(self):
         key=(self.request_id,self.waypoint_index)
@@ -373,14 +466,9 @@ class PIDNavigation(TeacherNavigation):
         # a new actual geometry check is mandatory before any nonzero command.
         if self.control_clock_hold.before_control(self,self.get_clock().now().nanoseconds,round(now*1e9)):
             return
-        if self.reference_replan_pending and self.state=='running' and now-self.last_reference>3.:
-            self.evidence.append(self.run/'reference_replan_events.jsonl',dict(
-                reason='reference_constraint_hold',request_id=self.request_id,
-                waypoint_index=self.waypoint_index,trajectory_id=self.active_trajectory_id,
-                source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
-                navigation_ground_truth_used=False))
-            self.reference_replan_pending=False
-            self.request_plan()
+        self.request_admission_replan_if_due(now)
+        if self.path_admission_hold:
+            return self.control_admission_hold(now)
         if self.profile.get('mission46_required'):
             from mission46_guard import mission_hold
             hold,reason=mission_hold(self.run,self.request_id,self.region_arrivals,
@@ -399,12 +487,53 @@ class PIDNavigation(TeacherNavigation):
             self.ensure_cascade()
             self.final_bundle=dict(index=self.waypoint_index,start=self.segment_start.copy(),
                 trajectory_id=self.active_trajectory_id,array=self.trajectory_archive_reference,
-                path_receipt=copy.deepcopy(self.path_receipt),reference_stamp=self.trajectory_association.reference_stamp)
+                path_receipt=copy.deepcopy(self.path_receipt),reference_stamp=tuple(self.active_reference_stamp))
         return super().control(now)
+    def request_admission_replan_if_due(self,now):
+        pending=(self.reference_replan_pending or self.path_admission_replan_pending or self.path_admission_hold)
+        if pending and self.state=='running' and now-self.last_reference>3.:
+            self.evidence.append(self.run/'reference_replan_events.jsonl',dict(
+                reason='path_admission_rejection' if self.path_admission_replan_pending or self.path_admission_hold else 'reference_constraint_hold',
+                admission_reason=None if self.path_admission_last_decision is None else self.path_admission_last_decision['reason'],
+                request_id=self.request_id,waypoint_index=self.waypoint_index,trajectory_id=self.active_trajectory_id,
+                source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
+                navigation_ground_truth_used=False))
+            before=self.reference_requests;self.request_plan()
+            if self.reference_requests>before:
+                self.reference_replan_pending=False;self.path_admission_replan_pending=False
+    def control_admission_hold(self,now):
+        # Keep the inherited deadlines, measured IMU/bridge protection and
+        # source-loss failure active while no execution-admitted path exists.
+        # Holding does not tick the cascade, heading or arrival integrators.
+        ns=self.get_clock().now().nanoseconds;ros_now=ns/1e9
+        if self.state!='running':self.publish_command();return
+        if (self.segment_start is not None and not self.goals[self.waypoint_index].legacy
+                and ros_now-self.segment_started_ros>self.goals[self.waypoint_index].timeout_sim_s):
+            self.reset_region_arrival('failed')
+            self.state,self.message='failed','当前航点超过仿真时间限制，停车'
+            self.publish_command();return
+        protected=self.apply_tilt_guard(now,ros_now)
+        if self.state=='failed':
+            self.reset_region_arrival('failed');self.publish_command();return
+        stale=(now-self.pose_updated>self.pose_timeout or now-self.cloud_updated>self.cloud_timeout
+            or not self.raw_imu.fresh(now,ros_now))
+        if stale:
+            self.reset_region_arrival('stale');self.stale_since=self.stale_since or now
+            self.message='SLAM、点云或原始 IMU 超时，停车等待传感器'
+            if now-self.stale_since>8.:self.state,self.message='failed','SLAM、点云或原始 IMU 连续失联超过 8 秒'
+        elif self.state=='failed':self.reset_region_arrival('failed')
+        elif protected:self.reset_region_arrival('protected')
+        else:
+            self.stale_since=None;self.reset_region_arrival('path_admission_hold')
+            if self.segment_start is None:
+                self.segment_start=self.pose.copy();self.segment_started_ros=ros_now
+                self.segment_started_ros_ns=ns;self.segment_start_pose_stamp_ns=int(self.pose_stamp)
+                self.record_segment_activation()
+        self.publish_command()
     def control_parking(self,now):
         ns=self.get_clock().now().nanoseconds
-        bundle=self.final_bundle;index=self.waypoint_index;old_reference=self.trajectory_association.reference_stamp
-        self.waypoint_index=bundle['index'];self.trajectory_association.reference_stamp=bundle['reference_stamp']
+        bundle=self.final_bundle;index=self.waypoint_index
+        self.waypoint_index=bundle['index'];self.active_reference_stamp=bundle['reference_stamp']
         self.active_trajectory_id=bundle['trajectory_id'];self.trajectory_archive_reference=bundle['array']
         self.path_receipt=bundle['path_receipt'];self.segment_start=bundle['start']
         goal=self.waypoints[self.waypoint_index]
@@ -429,7 +558,7 @@ class PIDNavigation(TeacherNavigation):
                     obstacle_hold_after=self.obstacle_hold,evidence_queue_error=self.evidence.error)
                 self.evidence.append(self.run/'navigation_guard_history.jsonl',self.pending_guard_row);self.pending_guard_row=None
         finally:
-            self.waypoint_index=index;self.trajectory_association.reference_stamp=old_reference
+            self.waypoint_index=index
     def publish_command(self,velocity=None,yaw_rate=0.):
         from geometry_msgs.msg import Twist
         from std_msgs.msg import Bool
