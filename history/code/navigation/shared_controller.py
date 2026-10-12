@@ -519,6 +519,11 @@ class Navigation(Node):
             msg.poses.append(pose)
         return msg
 
+    def planner_reference_points(self,goal):
+        # Subclasses may provide planning-only guides. Execution still requires
+        # an associated checked SCAN curve ending at this original goal.
+        return [goal]
+
     def request_plan(self):
         if self.reference_pub.get_subscription_count() == 0:
             self.message = '等待 SCAN 规划器订阅就绪'
@@ -527,7 +532,7 @@ class Navigation(Node):
         # SCAN REFERENCE_PATH adds grid_map.body_height to every input z. Public
         # mission waypoints are already body centers, so cancel that internal
         # convention at this boundary (without altering requested coordinates).
-        reference = self.make_path([goal], height_offset=0.4)
+        reference = self.make_path(self.planner_reference_points(goal), height_offset=0.4)
         # Stamp is an immutable request identity echoed by the planner. Ensure
         # uniqueness even when ROS time pauses or multiple requests share a tick.
         stamp = max(self.last_reference_stamp+1, self.stamp(reference))
@@ -683,7 +688,12 @@ class Navigation(Node):
             if self.heading_gate.resume_after_stop(current_yaw,desired_yaw,self.obstacle_stopped_duration):
                 self.aligned_obstacle_resumes += 1
             self.obstacle_resume_pending = False
-        allow_translation, yaw_rate = self.heading_gate.update(ros_now,current_yaw,desired_yaw)
+        if getattr(self, 'reference_consistency_hold', False):
+            # Direction inconsistency has no authority to substitute a chord.
+            # Hold the heading state too, and obtain a new checked SCAN curve.
+            allow_translation, yaw_rate = False, 0.0
+        else:
+            allow_translation, yaw_rate = self.heading_gate.update(ros_now,current_yaw,desired_yaw)
         self.alignment_hold = not allow_translation
         if not allow_translation:
             velocity = np.zeros(2)
@@ -757,6 +767,10 @@ class Navigation(Node):
         if self.samples is None:
             self.publish_command()
             self.request_plan()
+            return
+        if getattr(self, 'reference_consistency_hold', False):
+            self.message = 'SCAN 近端方向不一致，零速等待新的可执行参考'
+            self.publish_command()
             return
         if self.heading_gate.phase in ('pre_turn', 'settle'):
             self.message = '转向前制动，保持零速停稳 1 秒' if self.heading_gate.phase == 'pre_turn' else '转向完成，保持零速停稳 1 秒'

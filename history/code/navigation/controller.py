@@ -11,6 +11,8 @@ from control_core import follow_trajectory, trajectory_has_progress
 from scipy.interpolate import BSpline
 from path_admission import FrozenFence, candidate, payload, replayable, certify_curve, remaining_certificate
 from clock_hold import ControlClockHold
+from global_route_reference import (contract as global_reference_contract, SegmentGuides,
+    StableProjectionController, direction_check, admission_direction_check)
 
 class ResetBookkeeping:
     """Legacy archive reset counter only; cascade_core owns all control maths."""
@@ -33,6 +35,12 @@ class PIDNavigation(TeacherNavigation):
         self.path_receipt=None;self.cascade_path_id=None;self.final_bundle=None
         self.imu_records=0;self.cloud_archive_records=0
         self.segment_references={}
+        self.global_reference_settings=global_reference_contract(self.profile)
+        self.global_route_guides=SegmentGuides()
+        self.reference_consistency_hold=False;self.reference_consistency_check=None
+        self.registered_cloud_archive_mode=self.profile.get('engineering_recording',{}).get('registered_cloud_archive','legacy_all')
+        if self.registered_cloud_archive_mode not in ('legacy_all','disabled'):
+            raise ValueError('Unsupported registered_cloud_archive mode; bounded_event is not yet implemented')
         self.reference_replan_pending=False
         self.path_admission_fence=FrozenFence(self.run,self.profile)
         self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
@@ -74,6 +82,7 @@ class PIDNavigation(TeacherNavigation):
             self.reference_replan_pending=False
             self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
             self.pid_row=None;self.pid_prepared_output=None
+            self.reference_consistency_hold=False;self.reference_consistency_check=None
             self.publish_command()
     def on_corridor_snapshot(self,msg):
         from corridor_runtime import decode_snapshot,sha_text
@@ -195,6 +204,21 @@ class PIDNavigation(TeacherNavigation):
             self.evidence.append(self.run/'navigation_cloud_callbacks.jsonl',row);self.pending_cloud_callback_row=None
     def archive_cloud(self,msg):
         self.cloud_archive_records+=1;seq=self.cloud_archive_records
+        if getattr(self,'registered_cloud_archive_mode','legacy_all')=='disabled':
+            # Keep the accepted live geometry and exact native guard receipt.
+            # Do not allocate an additional point copy or write payload files.
+            self.guard_cloud_receipt.update(cloud_array_file=None,cloud_raw_payload_file=None,
+                cloud_archive_sequence=None,cloud_archive_collected=False)
+            self.evidence.append(self.run/'navigation_cloud_xyz.jsonl',dict(
+                schema='actual_registered_cloud_archive_disabled/v1',sequence=seq,
+                stamp_ns=int(self.cloud_stamp),frame_id=msg.header.frame_id,
+                filtered_xyz_float64_sha256=self.guard_cloud_receipt['filtered_xyz_float64_sha256'],
+                filtered_points=int(len(self.guard_cloud)),input_payload_bytes=len(msg.data),
+                array_file=None,raw_payload_file=None,archive_mode='disabled',
+                cloud_archive_collected=False,cloud_replay_verified=False,
+                historical_full_cloud_evidence_pass=False,live_guard_input_preserved=True,
+                navigation_ground_truth_used=False))
+            return
         xyz=np.array(self.guard_cloud,dtype='<f8',copy=True);raw=bytes(msg.data)
         directory=self.run/'navigation_cloud_arrays';name=f'{seq:06d}_{self.cloud_stamp}'
         array=directory/(name+'.npy');payload=directory/(name+'.bin')
@@ -340,6 +364,15 @@ class PIDNavigation(TeacherNavigation):
                 elif (not trajectory_has_progress(check,self.pose,self.waypoints[self.waypoint_index],self.arrival_radius)
                         or not np.any(np.linalg.norm(check[1:,:2]-check[0,:2],axis=1)>=1e-5)):
                     proof=dict(allowed=False,reason='execution_path_degenerate')
+            if proof['allowed'] and self.global_reference_settings['enabled']:
+                if self.segment_start is None:raise ValueError('direction_check_requires_original_segment_activation')
+                delta=self.waypoints[self.waypoint_index][:2]-self.segment_start[:2]
+                check_direction=admission_direction_check(check,self.pose,self.waypoints[self.waypoint_index],
+                    math.atan2(delta[1],delta[0]),self.profile['cascade'],
+                    self.profile['teacher_transition']['drive_heading_max_rad'],self.global_reference_settings)
+                proof=dict(proof,direction_coherence=check_direction)
+                if not check_direction['allowed']:
+                    proof=dict(proof,allowed=False,reason='execution_direction_incoherent')
             if time.monotonic()-started>.100:proof=dict(allowed=False,reason='admission_callback_budget_exhausted')
         except (OSError,KeyError,ValueError,TypeError,OverflowError,IndexError,FloatingPointError)as error:
             proof=dict(allowed=False,reason='admission_input_or_anchor:'+type(error).__name__+':'+str(error))
@@ -387,6 +420,7 @@ class PIDNavigation(TeacherNavigation):
                 identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
                 active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding)
             self.path_admission_hold=False;self.path_admission_replan_pending=False;self.reference_replan_pending=False
+            self.reference_consistency_hold=False;self.reference_consistency_check=None
             indices=[0]
             for i in range(1,len(self.samples)):
                 if np.linalg.norm(self.samples[i,:2]-self.samples[indices[-1],:2])>=1e-5:indices.append(i)
@@ -420,6 +454,11 @@ class PIDNavigation(TeacherNavigation):
         # rule. Preview neither advances progress nor integrates a held sample.
         reference=self.cascade.preview_reference(self.pose)
         yaw=reference['heading_rad']
+        if getattr(self,'global_reference_settings',{'enabled':False})['enabled']:
+            self.reference_consistency_check=direction_check(self.cascade,reference,
+                self.profile['teacher_transition']['drive_heading_max_rad'],self.global_reference_settings)
+            self.reference_consistency_hold=not self.reference_consistency_check['allowed']
+            if self.reference_consistency_hold:self.reference_replan_pending=True
         velocity,rate,target,steering=result
         original=copy.deepcopy(steering)
         steering=dict(steering,heading=yaw,error=math.atan2(math.sin(yaw-math.atan2(self.rotation[1,0],self.rotation[0,0])),
@@ -428,13 +467,23 @@ class PIDNavigation(TeacherNavigation):
             original_lookahead_steering=original,
             cascade_projection=dict(path_id=self.cascade.path_id,path_sha256=self.cascade.path_sha,
                 reference=copy.deepcopy(reference),
-                actual_pose_stamp_ns=int(self.pose_stamp),navigation_ground_truth_used=False))
+                actual_pose_stamp_ns=int(self.pose_stamp),navigation_ground_truth_used=False),
+            direction_coherence=copy.deepcopy(getattr(self,'reference_consistency_check',None)))
         self.evidence.append(self.run/'navigation_heading_projection.jsonl',dict(
             request_id=self.request_id,waypoint_index=self.waypoint_index,
             source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
             steering=copy.deepcopy(steering),feedback=copy.deepcopy(self.feedback),
             navigation_ground_truth_used=False))
         return velocity,rate,target,steering
+    def planner_reference_points(self,goal):
+        if not self.global_reference_settings['enabled']:return [goal]
+        if self.segment_start is None:raise ValueError('Global planning reference lacks original measured segment activation')
+        points,receipt=self.global_route_guides.remaining((self.request_id,self.waypoint_index),
+            self.segment_start,goal,self.pose,self.global_reference_settings)
+        self.evidence.append(self.run/'navigation_global_reference_requests.jsonl',dict(receipt,
+            source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds,
+            goals_definition_sha256=self.goals_definition_sha256))
+        return points
     def record_segment_activation(self):
         key=(self.request_id,self.waypoint_index)
         if key not in self.segment_references:
@@ -455,7 +504,9 @@ class PIDNavigation(TeacherNavigation):
             goal=self.waypoints[self.waypoint_index];delta=goal[:2]-self.segment_start[:2]
             if np.linalg.norm(delta)<1e-6:raise ValueError('Frozen goal heading requires a nondegenerate actual SLAM segment')
             yaw=math.atan2(delta[1],delta[0])
-            self.cascade=Controller(self.profile['cascade'],goal.tolist(),yaw,':'.join(map(str,key)))
+            core=StableProjectionController if getattr(self,'global_reference_settings',{'enabled':False})['enabled'] else Controller
+            self.cascade=core(self.profile['cascade'],goal.tolist(),yaw,':'.join(map(str,key)))
+            self.reference_consistency_hold=False;self.reference_consistency_check=None
             self.cascade_key=key;self.cascade_path_id=None
             self.evidence.append(self.run/'navigation_fixed_goal_references.jsonl',dict(
                 request_id=self.request_id,waypoint_index=self.waypoint_index,
@@ -485,7 +536,7 @@ class PIDNavigation(TeacherNavigation):
         except (OSError,KeyError,ValueError,TypeError):return None
     def select_pid_velocity(self,velocity,yaw_rate,target,allow_translation,mode_override=None):
         ns=self.get_clock().now().nanoseconds;wall=time.monotonic_ns();self.ensure_cascade()
-        mode=mode_override or ('hold'if self.obstacle_hold or self.heading_gate.phase in ('pre_turn','settle')
+        mode=mode_override or ('hold'if self.obstacle_hold or getattr(self,'reference_consistency_hold',False) or self.heading_gate.phase in ('pre_turn','settle')
             else 'drive'if allow_translation else 'turn')
         heading_reference=copy.deepcopy(self.steering);gate_heading=self.heading_gate.heading
         ack=self.get_ack();guard=None
@@ -496,7 +547,8 @@ class PIDNavigation(TeacherNavigation):
             self.state='failed';self.message='串级真实输入保护锁定：'+str(diagnostic['failure_latched'])
         self.cascade_last_row=diagnostic;self.pid_guard_needs_evaluation=(bool(diagnostic.get('controller_updated'))
             or self.control_clock_hold.guard_required)
-        self.reference_replan_pending=diagnostic['mode']=='reference_constraint_hold'
+        self.reference_replan_pending=(getattr(self,'reference_consistency_hold',False)
+            or diagnostic['mode']=='reference_constraint_hold')
         desired=cmd.copy()
         cmd=(np.zeros(3)if diagnostic['mode']in ('protect','recovering','pre_turn','settle','path_end_hold','reference_constraint_hold')
             else slew(self.command,desired,ns/1e9-self.last_command_time,[.6,.6,.8]))
@@ -535,7 +587,7 @@ class PIDNavigation(TeacherNavigation):
             # A reference/handoff error must stop this tick, not escape the
             # executor and rely only on the 300 ms downstream watchdog.
             self.state='failed'
-            self.message='V20控制参考异常，停车：'+type(error).__name__+': '+str(error)
+            self.message='V33控制参考异常，停车：'+type(error).__name__+': '+str(error)
             self.reference_replan_pending=False
             self.publish_command()
             self.evidence.append(self.run/'navigation_controller_errors.jsonl',dict(
@@ -613,6 +665,36 @@ class PIDNavigation(TeacherNavigation):
                 self.segment_start=self.pose.copy();self.segment_started_ros=ros_now
                 self.segment_started_ros_ns=ns;self.segment_start_pose_stamp_ns=int(self.pose_stamp)
                 self.record_segment_activation()
+            # Path admission must not starve the existing obstacle-clear
+            # observation gate. This checks the original native geometry at
+            # exact zero; it cannot release path admission or arrival dwell.
+            if (getattr(self,'global_reference_settings',{'enabled':False})['enabled']
+                    and self.obstacle_hold and (now-self.last_obstacle_check>.10 or self.pid_guard_needs_evaluation)):
+                self.publish_command()
+                goal=self.waypoints[self.waypoint_index]
+                target=np.asarray((self.steering or {}).get('target',goal),dtype=float)
+                direction=np.asarray((self.steering or {}).get('direction',(goal-self.pose)[:2]),dtype=float)
+                result=self.evaluate_motion_guard(self.cloud,self.pose,target,direction,np.vstack([self.segment_start,goal]))
+                self.obstacle_result=result;self.last_obstacle_check=now
+                if result[0] or not self.heading_gate.stopped(ros_now,now):
+                    self.obstacle_clear_since=None
+                else:
+                    self.obstacle_clear_since=self.obstacle_clear_since or ros_now
+                    if ros_now-self.obstacle_clear_since>=1.:
+                        self.obstacle_hold=False;self.obstacle_resumes+=1
+                        self.obstacle_stopped_duration=ros_now-(ros_now if self.obstacle_hold_started_ros is None else self.obstacle_hold_started_ros)
+                        self.obstacle_resume_pending=False;self.heading_gate.reset()
+                        self.samples=None;self.execution_path_exhaustion=None
+                        # Retain the admission hold. Only a newly associated,
+                        # execution-admitted curve can authorize future motion.
+                if self.pending_guard_row is not None:
+                    row=self.pending_guard_row
+                    row.update(obstacle_hold_after=bool(self.obstacle_hold),clear_start_after_s=self.obstacle_clear_since,
+                        after_control_ros_clock_ns=ns,command_after_control=list(self.command),
+                        zero_requested_after_control=True,state_after_control=self.state,
+                        admission_hold_observation_only=True,path_admission_hold_after=self.path_admission_hold,
+                        obstacle_resumes_after=self.obstacle_resumes,evidence_queue_error=self.evidence.error)
+                    self.evidence.append(self.run/'navigation_guard_history.jsonl',row);self.pending_guard_row=None
         self.publish_command()
     def control_parking(self,now):
         ns=self.get_clock().now().nanoseconds

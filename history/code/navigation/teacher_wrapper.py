@@ -267,7 +267,8 @@ class TeacherNavigation(base.Navigation):
                     evidence_queue_error=self.evidence.error)
                 self.evidence.append(self.run/'navigation_guard_history.jsonl',row)
                 self.pending_guard_row=None
-        if self.heading_gate.phase in ('pre_turn','settle'):
+        if (self.state=='running' and not getattr(self,'reference_consistency_hold',False)
+                and self.heading_gate.phase in ('pre_turn','settle')):
             self.message='Teacher 等待实际SLAM机身速度和IMU角速确认停车，保持零速度'
 
     def record_native_guard(self,cloud,pose,checked_target,steering_direction,route):

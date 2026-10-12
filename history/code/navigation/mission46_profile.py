@@ -25,9 +25,9 @@ ROUTE_COUNTS = {'exploration': 18, 'return_origin': 14, 'navigation_f1_f3': 14}
 SPAWN = [0., 0., .3, 0.]
 SIMULATION_MAX_S = 1500.
 DIAGNOSTIC_DURATION_S = 270.
-ALLOWED_DURATION_S = (DIAGNOSTIC_DURATION_S, SIMULATION_MAX_S)
-RAW_BUDGET_BYTES = 48 * 1024**3
-MIN_FREE_BYTES = 90 * 1024**3
+ALLOWED_DURATION_S = (60., DIAGNOSTIC_DURATION_S, SIMULATION_MAX_S)
+RAW_BUDGET_BYTES = 4 * 1024**3
+MIN_FREE_BYTES = 100 * 1024**3
 
 
 def canonical_sha(data):
@@ -152,7 +152,7 @@ def validate_profile(profile):
     duration = profile.get('duration_s')
     if (type(duration) not in (int, float) or not math.isfinite(duration)
             or duration not in ALLOWED_DURATION_S or profile.get('max_simulation_duration_s') != SIMULATION_MAX_S):
-        raise ValueError('V28 requires270s repair prefix or1500s original46, retaining the original1500s mission cap')
+        raise ValueError('V33 requires60s/270s bounded prefix or1500s original46, retaining original1500s mission cap')
     if (profile.get('raw_budget_bytes') != RAW_BUDGET_BYTES or
             profile.get('minimum_available_storage_bytes') != MIN_FREE_BYTES):
         raise ValueError('Original46 storage contract differs')
