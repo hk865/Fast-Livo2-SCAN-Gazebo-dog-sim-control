@@ -136,6 +136,9 @@ def run_command(command,log):
 
 def prepare(run,args):
     selected=profile_path(args.profile);p=json.loads(selected.read_text());duration,overview=validate_profile(p)
+    if selected.name!='engineering_nav46.json' or args.shadow_sample_contract is not None:raise RuntimeError('R33 permits only the original46 startup profile without an extra collector')
+    startup=json.loads((HERE/'R33_SHORT_STARTUP_CONTRACT.json').read_text())
+    if startup.get('candidate_root')!=str(HERE) or startup.get('maximum_simulator_attempts')!=1 or startup.get('GT_carrier_allowed')is not False:raise RuntimeError('R33 startup authorization/source contract differs')
     verify_slam_workspace()
     if args.surface_validity!=p['engineering_contract']['surface_validity_flag']:
         raise RuntimeError('V33 freezes surface validity0 for engineering isolation')
@@ -165,12 +168,19 @@ def prepare(run,args):
     before=structural(robot,True);x,y,z,yaw=p['spawn']
     robot.find('pose').text=f'{x} {y} {z} 0 0 {yaw}'
     if structural(robot,True)!=before:raise RuntimeError('Unexpected robot mutation')
+    native_path=Path(startup['native_guard_private_reuse_path'])
+    if sha(native_path)!=startup['native_guard_private_reuse_sha256']:raise RuntimeError('Frozen actual-contact native guard changed')
+    actuator_plugins=[q for q in robot.findall('plugin') if 'TeacherActuator' in q.get('name','')]
+    if len(actuator_plugins)!=1:raise RuntimeError('R33 requires the original sole native actuator')
+    actuator_plugins[0].set('filename',str(native_path))
     ET.indent(tree);tree.write(run/'world.sdf',encoding='unicode')
     from sampling import override_sensors
     sampling_receipt=override_sensors(run,p)
     asset=json.loads((run/'asset_manifest.json').read_text())
     asset.update(spawn=p['spawn'],spawn_override=True,scenario_label=args.label,world_sha256=sha(run/'world.sdf'),
-                 sensor_contract_sha256=sha(run/'sensor_contract.json'),sensor_sampling_override=sampling_receipt)
+                 sensor_contract_sha256=sha(run/'sensor_contract.json'),sensor_sampling_override=sampling_receipt,
+                 actual_native_guard_path=str(native_path),actual_native_guard_sha256=sha(native_path),
+                 native_guard_reused_unchanged=True,Actor_and_PD_sources_modified=False)
     # The only rewritten input is this fresh, unlaunched generated asset receipt.
     (run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
     names=[c.get('name','')for c in robot.findall('plugin')]
@@ -186,6 +196,17 @@ def prepare(run,args):
     write_new(run/'known_scene_reference.json',build_known_scene_reference(run/'world.sdf'))
     from scan_runtime_parameters import parameters as scan_parameters
     write_new(run/'v34_scan_overrides.yaml',{'scan_planner_node':{'ros__parameters':scan_parameters(p)}})
+    # Bind event capture before the one-time source archive/scope freeze.
+    capture=json.loads((HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json').read_text())
+    capture['run_id']=run.name
+    capture['authorization']['delegation']='root authorized R40 autonomous original-route continuation; bounded P1 capture is evidence only; no shadow scoring'
+    capture['authorization']['runtime_started_by_reviewer']=False
+    for item in capture['source_bindings']:
+        if sha(item['path'])!=item['sha256']:raise RuntimeError('Frozen event source binding changed: '+item['role'])
+    for role,path in [('diagnostic_stop_owner',HERE/'first_goal_stop.py'),
+                      ('sensor_contract',run/'sensor_contract.json')]:
+        capture['source_bindings'].append(dict(role=role,path=str(path.resolve()),sha256=sha(path)))
+    write_new(run/'known_scene_event_capture_contract.json',capture)
     scope=module(HERE/'pid_scope.py','closed_loop_prepare_'+uuid.uuid4().hex)
     receipt=scope.prepare(run,p)
     ramp_contract=None
@@ -224,7 +245,8 @@ def prepare(run,args):
           'ros_domain':args.domain,'actor_python':str(args.cpu_python.resolve()),'system_python':str(SYSTEM_PYTHON),
           'actor_device':'cpu','actor_threads':1,'physics_step_s':.005,'Actor_hz':50,'native_PD_hz':200,
           'exclusive_writer':'teacher_sim::TeacherActuator','checkpoint_path':str(CHECKPOINT),'model_sha256':MODEL_SHA,
-          'native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),
+          'native_plugin_sha256':sha(native_path),'native_plugin_path':str(native_path),
+           'protected_production_native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),
           'source_manifest_sha256':sha(run/'source_manifest.json'),'scope_sha256':receipt['sha256'],
           'world_sha256':sha(run/'world.sdf'),'cloud_transport_manifest_sha256':sha(run/'cloud_transport_manifest.json'),
           'run_storage_contract':json.loads((run/'run_storage_contract.json').read_text()),
@@ -236,7 +258,8 @@ def prepare(run,args):
           'slam_boundary_timing_contract':json.loads((HERE/'BOUNDARY_TIMING_CONTRACT.json').read_text()),
           'slam_binary_contract':binary_contract,'navigation_stack_diagnostic_environment':diagnostic_environment,
           'independent_SLAM_workspace':str(SLAM_WORKSPACE.resolve()),'SLAM_build_copied':False,
-           'SLAM_existing_V32_build_reused_read_only':True,'SLAM_CPP_changed_by_V33':False,
+           'SLAM_existing_V32_build_reused_read_only':False,'SLAM_CPP_changed_by_V33':True,
+            'R33_full_source_rebuilt_timestamp_codec':True,
            'engineering_contract':p['engineering_contract'],'engineering_recording':p['engineering_recording'],
           'surface_validity_experiment':{'enabled':bool(args.surface_validity), 'flag':args.surface_validity,
               'source_semantics':'new V32 binary both flags; baseline0 retains original plane acceptance',
@@ -267,7 +290,29 @@ def prepare(run,args):
         plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
             'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
         plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
-    baseline_temporal_capture_limits(plan,run,HERE)
+    plan['event_aware_source_capture']=dict(contract_path=str(run/'known_scene_event_capture_contract.json'),contract_sha256=sha(run/'known_scene_event_capture_contract.json'),window_native_seconds=15,groups=3,total_logical_and_allocated_cap_bytes=16*1024**2,diagnostic_only=True,profile_diagnostic_metadata='historical2groups8MiB retained; effective event contract overrides capture diagnostics only',file_sha256_kind='exact_indented_file_bytes',group_contract_sha256_kind='canonical_sorted_compact_JSON_with_newline')
+    plan['selected_policy_binding']=json.loads((run/'selected_policy_binding.json').read_text())
+    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=startup['max_native_seconds'],max_wall_seconds=startup['max_wall_seconds'],new_output_cap_bytes=startup['new_output_cap_bytes'],original_profile_duration_preserved=duration,no_GT_carrier=True)
+    plan['wall_budget_s']=float(startup['max_wall_seconds'])
+    from mission46_profile import required_source_files as actual_mission_sources
+    actual_sources=actual_mission_sources()
+    declared_sources=p['mission46_required_source_files']
+    if len(actual_sources)!=len(declared_sources):raise RuntimeError('R33 profile source relocation count differs')
+    relocation=[]
+    for declared,actual in zip(declared_sources,actual_sources):
+        expected=HERE.with_name('engineering_v34_continuous_known_map')/actual.relative_to(HERE) if actual.is_relative_to(HERE) else actual
+        if Path(declared).resolve()!=expected.resolve():raise RuntimeError('R33 unexpected original profile source path metadata')
+        relocation.append(dict(original_profile_declared_path=declared,actual_executed_source_path=str(actual.resolve()),
+            actual_source_sha256=sha(actual),original_declared_source_sha256=sha(declared)))
+    plan['R33_original_profile_source_path_metadata_relocation']=relocation
+    baseline_profile=json.loads((Path(startup['base_R36_source_root'])/'profiles/engineering_nav46.json').read_text())
+    budget_expected=json.loads(json.dumps(baseline_profile))
+    budget_expected['raw_storage_budget']['max_run_bytes']=80_000_000_000
+    budget_expected['raw_budget_bytes']=80_000_000_000
+    if p!=budget_expected:raise RuntimeError('R37 permits only80GB budget profile delta; original mission and safety fields must remain')
+    plan['R33_original_profile_bytes_retained']=False
+    plan['R37_original_profile_budget_only_delta']={'raw_budget_bytes':[50_000_000_000,80_000_000_000],'raw_storage_budget.max_run_bytes':[50_000_000_000,80_000_000_000]}
+    plan['R37_original_mission_behavior_and_safety_fields_preserved']=True
     write_new(run/'runtime_plan.json',plan)
     return plan
 
@@ -341,12 +386,16 @@ def verify_loaded_slam(run,plan,navigation_identity):
             if actual_exe_sha!=expected['executable']['sha256']or actual_core_sha!=expected['core']['sha256']:
                 raise RuntimeError('Actual mapping/core binary differs from frozen preparation hash')
             mode_keys=('FASTLIVO_SURFACE_VALIDITY','FASTLIVO_SURFACE_DIAG_WINDOWS','FASTLIVO_SURFACE_DIAG_BOUNDS','FASTLIVO_SURFACE_DIAG_MAX_BYTES')
-            process_environment=dict(item.split(b'=',1) for item in Path(f'/proc/{pid}/environ').read_bytes().split(b'\0') if b'=' in item)
-            actual_mode={key:process_environment.get(key.encode(),b'').decode() for key in mode_keys}
+            launch_environment=json.loads((run/'navigation_stack_effective_environment.json').read_text())
+            if launch_environment.get('DEMO_RUN_DIR')!=str(run.resolve()):raise RuntimeError('Owned launch DEMO_RUN_DIR differs from this run')
+            receipt.update(source_bound_run_dir=str(run.resolve()),launch_environment_receipt_file=str((run/'navigation_stack_effective_environment.json').resolve()),launch_environment_receipt_sha256=sha(run/'navigation_stack_effective_environment.json'))
+            actual_mode={key:launch_environment.get(key) for key in mode_keys}
             expected_mode={key:plan['navigation_stack_diagnostic_environment'][key] for key in mode_keys}
-            receipt.update(actual_surface_environment=actual_mode,expected_surface_environment=expected_mode,
-                surface_environment_verified=actual_mode==expected_mode)
-            if actual_mode!=expected_mode:raise RuntimeError('Loaded mapping process surface mode differs from frozen experiment')
+            receipt.update(actual_surface_launch_environment=actual_mode,expected_surface_environment=expected_mode,
+                source_bound_launch_environment_verified=actual_mode==expected_mode,
+                process_environment_directly_read=False,
+                mode_provenance='Owned launch checks exact environment before Node creation; child inherits it, frozen source changes only DEMO_RUN_DIR')
+            if actual_mode!=expected_mode:raise RuntimeError('Owned SLAM launch mode differs from frozen experiment')
             after=identity(pid)
             if not after or after['start_ticks']!=member['start_ticks']or after['pgid']!=navigation_identity['pgid']:
                 raise RuntimeError('Mapping process identity changed during binary witness')
@@ -438,16 +487,46 @@ def resource_guard(d):
 
 
 def require_private_domain(domain):
-    """Refuse sharing an active ROS control domain; never signal its processes."""
-    for p in Path('/proc').iterdir():
-        if not p.name.isdigit()or int(p.name)==os.getpid():continue
-        try:
-            argv=p.joinpath('cmdline').read_bytes().replace(b'\x00',b' ').decode(errors='replace')
-            if not any(x in argv for x in ('parameter_bridge','fastlivo_mapping','scan_planner_node','odom_adapter.py','ros2 launch')):continue
-            values=dict(x.split(b'=',1)for x in p.joinpath('environ').read_bytes().split(b'\x00')if b'='in x)
-            if values.get(b'ROS_DOMAIN_ID')==str(domain).encode():
-                raise RuntimeError('ROS domain already owned by active process '+p.name+'; choose another --domain')
-        except (OSError,ValueError):continue
+    # Query a private DDS graph without reading any process environment.
+    probe=ros_environment();probe['ROS_DOMAIN_ID']=str(domain)
+    result=subprocess.run(['ros2','node','list','--no-daemon'],env=probe,capture_output=True,text=True,timeout=10)
+    if result.returncode or result.stdout.strip():
+        raise RuntimeError('Private DDS domain query failed or existing nodes are present: '+result.stdout[-400:]+result.stderr[-400:])
+
+
+def verify_loaded_native(run,plan,owned):
+    deadline=time.monotonic()+15;expected=Path(plan['native_plugin_path']).resolve()
+    while time.monotonic()<deadline:
+        paths=set();proof=[]
+        for member in group_members(owned['pgid']):
+            try:raw=Path('/proc',str(member['pid']),'maps').read_text()
+            except OSError:continue
+            rows=[line for line in raw.splitlines() if 'libteacher_actuator.so' in line]
+            for line in rows:
+                fields=line.split(maxsplit=5)
+                if len(fields)==6:paths.add(fields[5])
+            if rows:proof.append(dict(process=member,actual_map_rows=rows,maps_sha256=hashlib.sha256(raw.encode()).hexdigest()))
+        if paths:
+            if paths!={str(expected)} or sha(expected)!=plan['native_plugin_sha256']:
+                raise RuntimeError('Owned Gazebo loaded unexpected native actuator')
+            contract_line=None
+            log=run/'actuator.jsonl'
+            if log.is_file():
+                with log.open() as f:
+                    for _ in range(8):
+                        line=f.readline()
+                        if not line:break
+                        row=json.loads(line)
+                        if row.get('kind')=='actuator_contract':contract_line=row;break
+            if contract_line is not None:
+                if contract_line.get('diagnostic_native_collision_guard')!='actual_ContactSensorData_200Hz_v1':
+                    raise RuntimeError('Actual native actuator lacks its frozen contact guard')
+                receipt=dict(schema='R33_actual_native_loaded_guard/v1',verified=True,actual_library_path=str(expected),
+                    actual_library_sha256=sha(expected),owned_identity=owned,actual_process_maps=proof,
+                    actual_contract_line=contract_line,source_reused_unchanged=True,no_GT_carrier=True)
+                write_new(run/'R33_native_loaded_guard.json',receipt);return receipt
+        time.sleep(.05)
+    raise TimeoutError('R33 actual native loading/contact marker witness unavailable')
 
 
 def launch_child_receipt(log,expected=EXPECTED_CHILDREN):
@@ -479,7 +558,7 @@ def execute(run,plan):
     write_new(run/'effective_environment.json',{k:env.get(k)for k in selected_keys})
     from storage_guard import observe as storage_observe, Watchdog
     before=resource();before['storage']=storage_observe(run,plan['profile'],starting=True,count_files=True);write_new(run/'resources_before.json',before)
-    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False;loaded_slam=None;loaded_scan=None;guardian=None;sample_complete=False
+    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False;loaded_slam=None;loaded_scan=None;guardian=None;sample_complete=False;startup_stop=None;native_last_ns=0;native_tail=None
     stream=(run/'owned_resources.jsonl').open('x',buffering=1)
     def start(role,command,child_env=None):
         log=(run/(role+'.log')).open('x');handles.append(log)
@@ -525,6 +604,11 @@ def execute(run,plan):
         if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited during V7 binary witness')
         gazebo=start('gazebo',['gz','sim','-s','-r',str(run/'world.sdf')])
         from known_scene_witness import record as record_known_scene_witness
+        verify_loaded_native(run,plan,identities['gazebo'])
+        from mission46_runtime_evidence import FileTail,native_projection,native_ns
+        from startup_trace import startup_stop_decision
+        from storage_guard import usage
+        native_tail=FileTail(run/'telemetry.jsonl',project=native_projection)
         record_known_scene_witness(run,plan,identities,HERE,SLAM_WORKSPACE)
         write_new(run/'owned_processes_started.json',{role:{**identities[role],'role':role}for role in children})
         camera_deadline=time.monotonic()+30;wall_deadline=time.monotonic()+plan['wall_budget_s'];last_resource=-math.inf;last_storage=-math.inf
@@ -540,6 +624,14 @@ def execute(run,plan):
                     elif rc is not None:raise RuntimeError('Bounded shadow sampler incomplete; inspect its receipt')
                 elif role not in ('worker','gazebo')and child.poll()is not None:raise RuntimeError(role+' exited while Actor remained active')
             if sample_complete:break
+            from first_goal_stop import observe_native_tail,first_goal_runtime_decision
+            observed_native=observe_native_tail(native_tail,native_last_ns)
+            native_last_ns=observed_native['native_ns']
+            current_run_storage=usage([run])
+            decision=first_goal_runtime_decision(run,observed_native,
+                now-(wall_deadline-plan['wall_budget_s']),max(current_run_storage['allocated_bytes'],current_run_storage['logical_bytes']))
+            if decision['stop']:
+                startup_stop=decision;write_new(run/'R33_DIAGNOSTIC_STOP.json',dict(decision,actual_native_ns=native_last_ns,actual_monotonic_wall=now));break
             sensors_ready=(run/'frame_source.json').exists()
             if now>camera_deadline and not sensors_ready:raise TimeoutError('Actual overview camera failed to publish in30wall seconds')
             if now-last_resource>=2:
@@ -552,7 +644,9 @@ def execute(run,plan):
                 worker.wait(timeout=10);break
             if now>wall_deadline:raise TimeoutError('Owned closed-loop run exceeded frozen wall budget')
             time.sleep(.2)
-        if sample_complete:
+        if startup_stop:
+            error='R33 intentional diagnostic stop: '+startup_stop['reason']+'; no autonomous route PASS'
+        elif sample_complete:
             error='Bounded shadow data collected; navigation horizon intentionally interrupted, no navigation PASS'
         else:
             if worker.returncode!=0:raise RuntimeError('CPU Teacher worker returned nonzero')
@@ -578,6 +672,7 @@ def execute(run,plan):
         if not clean:error=error or 'Owned role/launch child cleanup incomplete or nonzero'
         manifest={**plan,'error':error,'owned_processes':actual,'cleanup':cleanup,
              'independent_owned_guardian':guardian_receipt,'bounded_shadow_sampling_complete':sample_complete,
+             'R33_actual_diagnostic_stop':startup_stop,'R33_last_actual_native_ns':native_last_ns,
             'slam_loaded_binary_verified':bool(loaded_slam and loaded_slam.get('verified')),
             'slam_loaded_binary_receipt_sha256':sha(run/'slam_loaded_binary.json')if(run/'slam_loaded_binary.json').is_file()else None,
             'scan_loaded_binary_verified':bool(loaded_scan and loaded_scan.get('verified')),
@@ -586,7 +681,10 @@ def execute(run,plan):
             'pipeline_normal_completed':pipeline_stop['normal_completed'],
             'required_owned_roles_complete':roles_complete,'all_owned_and_children_clean':clean,
             'launch_child_exit_evidence':child_proof,'gazebo_partition':env['GZ_PARTITION'],
-            'native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),'plugin_sha256':plan['native_plugin_sha256'],
+            'native_plugin_sha256':plan['native_plugin_sha256'],'plugin_sha256':plan['native_plugin_sha256'],
+             'protected_production_native_plugin_sha256':sha(ROOT/'simulation/build/libteacher_actuator.so'),
+             'R33_native_loaded_guard_verified':(run/'R33_native_loaded_guard.json').is_file() and json.loads((run/'R33_native_loaded_guard.json').read_text()).get('verified') is True,
+             'R33_native_loaded_guard_receipt_sha256':sha(run/'R33_native_loaded_guard.json') if (run/'R33_native_loaded_guard.json').is_file() else None,
             'source_manifest_sha256':sha(run/'source_manifest.json'),'runtime_plan_sha256':sha(run/'runtime_plan.json'),
             'gazebo_natural_exit_grace_expired':natural_timeout,'actual_sensors_ready':sensors_ready,
             'runtime_started':bool(children),'runtime_status':'failed'if error else'completed_requires_independent_navigation_evaluation',
@@ -620,30 +718,43 @@ def main():
     ap.add_argument('--surface-validity',type=int,choices=(0,1),required=True,help='Prospective V32 switch: 0 frozen acceptance baseline, 1 support-consistency candidate; captured before physics')
     ap.add_argument('--run-storage-root',type=Path,default=None,help='Optional dedicated V19 root declared in run_storage.py; default project/runs')
     ap.add_argument('--shadow-sample-contract',type=Path,default=None,help='User-approved whole-frame24MiB capture; groups7/8 only, no control adoption')
+    ap.add_argument('--prepared-run',type=Path,default=None)
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
     label=''.join(c for c in args.label if c.isalnum()or c in '_-')or'candidate'
-    stamp=dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
-    from run_storage import create_run
-    from storage_guard import SESSION,initialize,register
-    if not SESSION.exists():initialize([HERE,Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33')])
-    run,storage_contract=create_run(ROOT,f'{stamp}_closed_loop_cascade_clock_hold_{label}_{uuid.uuid4().hex[:4]}',args.run_storage_root)
-    register(run)
-    write_new(run/'runner_request.json',{'schema':'teacher_closed_loop_runner_request/v1','run':str(run),
-        'argv':sys.argv,'runner_sha256':sha(__file__),'prepare_only':args.prepare_only,'simulation_only':True,
-        'wall_begin':time.monotonic(),'no_other_process_signals_authorized':True})
-    try:plan=prepare(run,args)
-    except Exception as e:
-        failure={'schema':'teacher_closed_loop_prepare_failure/v1','run':str(run),'status':'failed',
-            'error':f'{type(e).__name__}: {e}','ROS_started':False,'Gazebo_started':False,'Actor_started':False,
-            'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
-        write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
-        print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_continuous_known_map';tmp=ROOT/'runs'/('latest_engineering_v34_continuous_known_map.'+uuid.uuid4().hex[:8]+'.tmp')
+    from run_storage import create_run,verify_run
+    from storage_guard import SESSION,register
+    if not SESSION.exists():raise RuntimeError('R33 must preserve the existing shared storage baseline')
+    if args.prepared_run is not None:
+        run=args.prepared_run.resolve();verify_run(run,ROOT)
+        if (run/'runtime_manifest.json').exists() or (run/'worker_ready').exists():raise RuntimeError('Prepared R33 run already executed')
+        plan=json.loads((run/'runtime_plan.json').read_text())
+        if (plan.get('ros_domain')!=args.domain or plan.get('real_time_factor')!=args.real_time_factor
+            or plan.get('profile_path')!=str(profile_path(args.profile))):raise RuntimeError('Prepared R33 invocation differs')
+        validate_profile(plan['profile']);verify_slam_workspace()
+        module(HERE/'pid_scope.py','R33_prepared_source').verify_scope(run/'navigation_scope.json')
+        write_new(run/'R33_execution_request.json',dict(argv=sys.argv,plan_sha256=sha(run/'runtime_plan.json'),runner_sha256=sha(__file__)))
+    else:
+        stamp=dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+        run,storage_contract=create_run(ROOT,f'{stamp}_closed_loop_cascade_clock_hold_{label}_{uuid.uuid4().hex[:4]}',args.run_storage_root)
+        register(run)
+        write_new(run/'runner_request.json',{'schema':'teacher_closed_loop_runner_request/v1','run':str(run),
+            'argv':sys.argv,'runner_sha256':sha(__file__),'prepare_only':args.prepare_only,'simulation_only':True,
+            'wall_begin':time.monotonic(),'no_other_process_signals_authorized':True})
+        try:plan=prepare(run,args)
+        except Exception as e:
+            failure={'schema':'teacher_closed_loop_prepare_failure/v1','run':str(run),'status':'failed',
+                'error':f'{type(e).__name__}: {e}','ROS_started':False,'Gazebo_started':False,'Actor_started':False,
+                'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
+            write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
+            print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
+    latest=ROOT/'runs/latest_engineering_v34_r40_continue_original_route';tmp=ROOT/'runs'/('latest_engineering_v34_r40_continue_original_route.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,
             'runtime_plan_sha256':sha(run/'runtime_plan.json'),'navigation_scope_sha256':plan['scope_sha256']}
     else:
+        latch=Path(json.loads((HERE/'R33_SHORT_STARTUP_CONTRACT.json').read_text())['source_stage'])/'ONE_SIMULATION_LATCH.json'
+        write_new(latch,dict(run=str(run),runner_sha256=sha(__file__),parent_authorization_thread='<PRIVATE_SESSION_ID>',maximum_attempts=1))
         try:error=execute(run,plan)
         except Exception as e:
             error=f'{type(e).__name__}: {e}'

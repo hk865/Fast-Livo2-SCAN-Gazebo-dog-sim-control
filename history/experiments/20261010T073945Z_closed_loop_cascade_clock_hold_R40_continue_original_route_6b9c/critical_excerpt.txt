@@ -1,0 +1,76 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+e-13]
+[INFO] [python3-12]: sending signal 'SIGINT' to process[python3-12]
+[INFO] [python3-11]: sending signal 'SIGINT' to process[python3-11]
+[INFO] [python3-10]: sending signal 'SIGINT' to process[python3-10]
+[INFO] [python3-9]: sending signal 'SIGINT' to process[python3-9]
+[INFO] [python3-8]: sending signal 'SIGINT' to process[python3-8]
+[INFO] [python3-7]: sending signal 'SIGINT' to process[python3-7]
+[INFO] [python3-6]: sending signal 'SIGINT' to process[python3-6]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [fastlivo_mapping-4]: sending signal 'SIGINT' to process[fastlivo_mapping-4]
+[INFO] [parameter_blackboard-3]: sending signal 'SIGINT' to process[parameter_blackboard-3]
+[INFO] [python3-2]: sending signal 'SIGINT' to process[python3-2]
+[INFO] [python3-1]: sending signal 'SIGINT' to process[python3-1]
+[parameter_bridge-13] [INFO] [1791619495.435944892] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] [INFO] [1791619495.439935050] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_blackboard-3] [INFO] [1791619495.441900957] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] des manager
+[INFO] [fastlivo_mapping-4]: process has finished cleanly [pid 448701]
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 448716]
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 448700]
+[INFO] [python3-9]: process has finished cleanly [pid 448712]
+[INFO] [python3-14]: process has finished cleanly [pid 448717]
+[INFO] [python3-1]: process has finished cleanly [pid 448698]
+[INFO] [python3-11]: process has finished cleanly [pid 448714]
+[INFO] [python3-2]: process has finished cleanly [pid 448699]
+[INFO] [python3-5]: process has finished cleanly [pid 448702]
+[INFO] [python3-10]: process has finished cleanly [pid 448713]
+[INFO] [python3-8]: process has finished cleanly [pid 448711]
+[INFO] [python3-7]: process has finished cleanly [pid 448704]
+[INFO] [python3-12]: process has finished cleanly [pid 448715]
+[INFO] [python3-6]: process has finished cleanly [pid 448703]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+rojects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/gc_startup_partition.py", line 203, in run
+    return original(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/ipc_fault_window.py", line 144, in main
+    return run_original_worker(worker.main, ipc_evidence, capture)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/ipc_fault_window.py", line 131, in run_original_worker
+    return worker_main()
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/worker.py", line 252, in main
+    try:legacy.main()
+        ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c/sources/policy/worker.py", line 304, in main
+    np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 753, in savez_compressed
+    _savez(file, args, kwds, True, allow_pickle=allow_pickle)
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 786, in _savez
+    format.write_array(fid, val,
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/site-packages/numpy/lib/_format_impl.py", line 777, in write_array
+    fp.write(chunk.tobytes('C'))
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/zipfile/__init__.py", line 1235, in write
+    data = self._compressor.compress(data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+floor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c/world.sdf:L2035]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c/world.sdf:L2089]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c/world.sdf:L2119]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c/world.sdf:L2124]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+

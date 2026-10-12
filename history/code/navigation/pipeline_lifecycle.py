@@ -52,9 +52,14 @@ def request_normal_stop(run, witness, navigation_identity, identity_fn, timeout_
         exe=Path('/proc')/str(saved['pid'])/'exe'
         if os.readlink(exe)!=witness['actual_executable_path']or sha(exe)!=witness['actual_executable_sha256']:
             raise RuntimeError('Owned mapper executable changed')
-        env=dict(x.split(b'=',1)for x in(Path('/proc')/str(saved['pid'])/'environ').read_bytes().split(b'\0')if b'='in x)
-        if env.get(b'DEMO_RUN_DIR')!=str(run).encode():
-            raise RuntimeError('Mapper run directory differs from the owned run')
+        launch=run/'navigation_stack_effective_environment.json'
+        if (witness.get('source_bound_run_dir')!=str(run)
+                or witness.get('launch_environment_receipt_file')!=str(launch)
+                or witness.get('launch_environment_receipt_sha256')!=sha(launch)
+                or json.loads(launch.read_text()).get('DEMO_RUN_DIR')!=str(run)):
+            raise RuntimeError('Mapper source-bound launch run directory differs from owned run')
+        receipt.update(run_directory_proof='frozen actual owned launch environment and source-bound mapper witness',
+                       process_environment_directly_read=False)
         if target.exists():raise RuntimeError('Unexpected pre-existing pipeline shutdown summary')
         os.kill(saved['pid'],signal.SIGUSR1)
         receipt.update(signal_sent=True,signal=int(signal.SIGUSR1),sent_monotonic_wall=time.monotonic())
