@@ -119,10 +119,12 @@ def main():
     p.add_argument('--command-file',type=Path);p.add_argument('--acceptance',type=Path,default=ROOT/'runs/acceptance.json')
     p.add_argument('--schedule',type=Path)
     p.add_argument('--terrain-target-manifest',type=Path)
+    p.add_argument('--navigation-duration',type=float,default=120.)
     args=p.parse_args();schedule=load_schedule(args.schedule);actor=load_actor();args.run.mkdir(parents=True,exist_ok=True)
     if schedule and args.test=='navigation':raise ValueError('A scripted schedule cannot replace SLAM navigation')
     acceptance=None
     if args.test=='navigation':
+        if not 30<=args.navigation_duration<=300:raise ValueError('Navigation experiment duration must be 30..300 seconds')
         if args.command_file is None:raise ValueError('Navigation requires a reviewed command file')
         sys.path.insert(0,str(ROOT/'navigation'))
         from bridge import check_acceptance
@@ -155,7 +157,7 @@ def main():
                         command_end_s=float(schedule['commands'][-1]['start_s']),schedule=str(args.schedule),schedule_sha256=hashlib.sha256(args.schedule.read_bytes()).hexdigest(),
                         protocol_scope=schedule.get('scope','independent bounded simulation protocol'),legacy_motion_evaluation_applicable=False)
         metadata['physical_test_completion_source']='privileged base x only for test termination; no position servo or navigation localization'if schedule.get('completion_stop')else None
-    if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance)
+    if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance,test_duration_s=args.navigation_duration,legacy_motion_evaluation_applicable=False)
     if terrain_manifest:
         metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),'sha256':hashlib.sha256(args.terrain_target_manifest.read_bytes()).hexdigest(),
             'definition':terrain_manifest,'selected_collision_names':[shape.name for shape in terrain.shapes],

@@ -34,7 +34,16 @@ def main():
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
     p.add_argument('--terrain-target-manifest',type=Path)
+    p.add_argument('--navigation-stack',action='store_true',help='Finite scoped experiment with actual SLAM/SCAN inputs')
+    p.add_argument('--slam-only-stack',action='store_true',help='Actual stationary SLAM sensor validation without navigation commands')
+    p.add_argument('--navigation-duration',type=float,default=120.)
     args=p.parse_args();suite=[]
+    if args.navigation_stack:
+        if args.tests!=['navigation']or args.schedule or args.terrain_target_manifest:p.error('Scoped navigation requires exactly navigation, no scripted schedule or terrain override')
+        args.sensors=True;args.shadow=True
+    if args.slam_only_stack:
+        if args.navigation_stack or args.tests!=['stand']:p.error('SLAM-only stack requires stand, without navigation')
+        args.sensors=True;args.shadow=True
     schedule=json.loads(args.schedule.read_text())if args.schedule else None
     if schedule and 'navigation'in args.tests:p.error('Scripted schedules cannot drive navigation tests')
     if args.shadow and not args.sensors:p.error('--shadow requires --sensors; no unavailable input is fabricated')
@@ -67,6 +76,10 @@ def main():
                 asset=json.loads((run/'asset_manifest.json').read_text());asset['spawn']=spawn
                 asset['spawn_override']=True;asset['scenario_label']=args.label
                 asset['world_sha256']=sha(run/'world.sdf');(run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
+            if args.navigation_stack or args.slam_only_stack:
+                config_cmd=[sys.executable,str(ROOT/'navigation/scoped_profile.py'),'--run',str(run)]
+                if args.slam_only_stack:config_cmd+=['--slam-only']
+                subprocess.run(config_cmd,check=True,stdout=(run/'navigation_prepare.log').open('w'),stderr=subprocess.STDOUT)
             baseline=resource();(run/'resources_before.json').write_text(json.dumps(baseline,indent=2))
             sourcefiles=[f for f in ROOT.rglob('*')if f.is_file()and not any(d in f.parts for d in ['runs','build','__pycache__','test_results'])]
             sources={str(f.relative_to(ROOT)):sha(f)for f in sourcefiles}
@@ -93,7 +106,8 @@ def main():
             if args.noisy:worker_cmd+=['--noisy']
             if schedule:worker_cmd+=['--schedule',str(run/'independent_protocol.json')]
             if args.terrain_target_manifest:worker_cmd+=['--terrain-target-manifest',str(run/'terrain_target_manifest.json')]
-            worker=gazebo=capture=bridge=shadow=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
+            if args.navigation_stack:worker_cmd+=['--command-file',str(run/'navigation_command.json'),'--acceptance',str(run/'navigation_scope.json'),'--navigation-duration',str(args.navigation_duration)]
+            worker=gazebo=capture=bridge=shadow=navstack=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
             actual_sensors_ready=False;gpu_samples=[];gpu_guard_mb=None
             if args.renderer=='hardware':
                 gpu_guard_mb=min(14000,int(baseline['gpu'].split()[0])+2048)
@@ -121,12 +135,17 @@ def main():
                     # DDS discovery occurs before the first physics samples.
                     time.sleep(.5)
                     if bridge.poll()is not None:raise RuntimeError('Sensor bridge failed before simulation')
+                if args.navigation_stack or args.slam_only_stack:
+                    launch_env={**env,'DEMO_RUN_DIR':str(run)}
+                    launch_file='slam.launch.py'if args.slam_only_stack else 'stack.launch.py'
+                    launch_shell='source /opt/ros/jazzy/setup.bash\nsource '+str(ROOT.parent/'slam/ros2_ws/install/setup.bash')+'\nsource '+str(ROOT.parent/'navigation/ros2_ws/install/setup.bash')+'\nexec ros2 launch '+str(ROOT/'navigation'/launch_file)+' run_dir:='+str(run)
+                    navstack=subprocess.Popen(['bash','-c',launch_shell],env=launch_env,stdout=(run/'navigation_stack.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 cmd=['gz','sim','-s','-r',str(run/'world.sdf')]
                 # Mesa llvmpipe uses the inherited X display. EGL headless
                 # explicitly selects the NVIDIA device and crashed Mesa here;
                 # those failed runs are retained rather than hidden.
                 gazebo=subprocess.Popen(cmd,env=env,stdout=(run/'gazebo.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-                deadline=time.monotonic()+max(180,float(schedule['duration_s'])*3+60 if schedule else 180)
+                deadline=time.monotonic()+max(180,args.navigation_duration*3+60 if args.navigation_stack else float(schedule['duration_s'])*3+60 if schedule else 180)
                 sensor_deadline=time.monotonic()+30;gpu_last=-float('inf')
                 resource_stream=(run/'process_resources.jsonl').open('w',buffering=1);resource_last=-float('inf')
                 while worker.poll()is None:
@@ -140,13 +159,14 @@ def main():
                             if int(value.split()[0])>gpu_guard_mb:raise RuntimeError('Hardware diagnostic GPU resource guard exceeded; stopping own run')
                     if shadow and shadow.poll()is not None:shadow_error='Read-only shadow observer exited before policy completed'
                     if time.monotonic()-resource_last>=2:
-                        owned=[proc.pid for proc in [worker,gazebo,bridge,capture,shadow]if proc and proc.poll()is None]
+                        owned=[proc.pid for proc in [worker,gazebo,bridge,capture,shadow,navstack]if proc and proc.poll()is None]
                         ps=subprocess.run(['ps','-p',','.join(map(str,owned)),'-o','pid,ppid,%cpu,%mem,rss,args'],text=True,stdout=subprocess.PIPE)
                         resource_stream.write(json.dumps({'monotonic_wall':time.monotonic(),'owned_processes':ps.stdout})+'\n');resource_last=time.monotonic()
                     if gazebo.poll()is not None:
                         try:worker.wait(timeout=2)
                         except subprocess.TimeoutExpired:raise RuntimeError('Gazebo exited before policy test finished')
                         break
+                    if navstack and navstack.poll()is not None:raise RuntimeError('Navigation stack exited before policy test finished')
                     if time.monotonic()>deadline:raise TimeoutError('Simulation test wall timeout')
                     time.sleep(.5)
                 resource_stream.close()
@@ -165,11 +185,11 @@ def main():
                     stop(shadow)
                 if shadow and (not (run/'sensor_shadow/summary.json').exists()or shadow.returncode):
                     shadow_error=shadow_error or 'Read-only shadow observer did not finish successfully; see shadow.log'
-                for proc in [capture,bridge,gazebo,worker]:stop(proc)
+                for proc in [navstack,capture,bridge,gazebo,worker]:stop(proc)
                 try:Path(env['TEACHER_SOCKET']).unlink()
                 except FileNotFoundError:pass
                 (run/'resources_after.json').write_text(json.dumps(resource(),indent=2))
-                manifest={'run':str(run),'test':test,'owned_processes':[{ 'role':role,'pid':proc.pid,'returncode':proc.returncode}for role,proc in [('worker',worker),('gazebo',gazebo),('bridge',bridge),('capture',capture),('shadow',shadow)]if proc],
+                manifest={'run':str(run),'test':test,'owned_processes':[{ 'role':role,'pid':proc.pid,'returncode':proc.returncode}for role,proc in [('worker',worker),('gazebo',gazebo),('bridge',bridge),('capture',capture),('shadow',shadow),('navigation_stack',navstack)]if proc],
                           'error':error,'ros_domain':79,'gazebo_partition':env['GZ_PARTITION'],
                           'sensors':args.sensors,'camera_only':args.camera_only,'shadow_requested':args.shadow,'shadow_error':shadow_error,
                           'gazebo_natural_exit_grace_expired':gazebo_grace_expired,
