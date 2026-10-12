@@ -16,6 +16,7 @@ def main():
     a=argparse.ArgumentParser(); a.add_argument('--output',type=Path,default=ROOT/'simulation/generated')
     a.add_argument('--terrain',choices=['flat','ramp_up','ramp_down','step05','step10','step05_continue','step10_continue'],default='flat')
     a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true')
+    a.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'),help='Override only the collision-free overview camera world pose')
     a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre2');args=a.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
@@ -83,6 +84,7 @@ def main():
         # A separate static, collision-free observer shows actual leg motion.
         # It is never part of the robot or the policy observation geometry.
         overview_pose=[8.5,-3.,1.4,0,.3,math.pi/2]if args.terrain.endswith('_continue')else [5,-3.2,1.7,0,.4,.95]
+        if args.overview_pose is not None:overview_pose=args.overview_pose
         overview_rate=10 if args.terrain.endswith('_continue')else 2
         overview_fov=1.8 if args.terrain.endswith('_continue')else 1.4
         overview=E.fromstring(f'<model name="teacher_overview_camera"><static>true</static><pose>{" ".join(map(str,overview_pose))}</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>{overview_rate}</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>{overview_fov}</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')

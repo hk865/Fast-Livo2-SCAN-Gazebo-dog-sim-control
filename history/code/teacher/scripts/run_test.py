@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Own only this test's children; keep training and camera service untouched."""
 import argparse, datetime, hashlib, json, os, signal, subprocess, sys, time, uuid, shutil
+import importlib.util
 import xml.etree.ElementTree as E
 from pathlib import Path
 from evaluate import evaluate
@@ -27,6 +28,7 @@ def resource():
 def main():
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
+    p.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'))
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     args=p.parse_args();suite=[]
@@ -45,6 +47,7 @@ def main():
             terrain=test if test in ['ramp_up','ramp_down','step05','step10','step05_continue','step10_continue']else 'flat'
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
+            if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
             if args.sensors:prepare+=['--sensors']
             if args.camera_only:prepare+=['--camera-only']
             subprocess.run(prepare,check=True,stdout=(run/'prepare.log').open('w'))
@@ -165,9 +168,19 @@ def main():
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))
                 summary=evaluate(run);suite.append({'run':str(run),'summary':summary})
                 if test.endswith('_continue'):
-                    from evaluate_step_functional import evaluate as evaluate_functional
-                    functional=evaluate_functional(run)
+                    module_name='teacher_functional_'+uuid.uuid4().hex
+                    evaluator_path=run/'sources/scripts/evaluate_step_functional.py'
+                    spec=importlib.util.spec_from_file_location(module_name,evaluator_path)
+                    if spec is None or spec.loader is None:raise RuntimeError('Archived functional evaluator cannot be loaded')
+                    evaluator_module=importlib.util.module_from_spec(spec)
+                    sys.modules[module_name]=evaluator_module
+                    spec.loader.exec_module(evaluator_module)
+                    functional=evaluator_module.evaluate(run)
                     suite[-1]['functional_summary']=functional
-                print(json.dumps({'run':str(run),'test':test,'result':summary['tests'][0]},ensure_ascii=False),flush=True)
+                    console={'run':str(run),'test':test,'functional_result':functional['tests'][0],
+                             'legacy_result':summary['tests'][0],
+                             'legacy_scope':'Compatibility record only; historical command timing and height-gain protocol do not apply to the independent functional retest'}
+                else:console={'run':str(run),'test':test,'result':summary['tests'][0]}
+                print(json.dumps(console,ensure_ascii=False),flush=True)
     (ROOT/'runs/suite_latest.json').write_text(json.dumps(suite,indent=2,ensure_ascii=False)+'\n')
 if __name__=='__main__':main()

@@ -149,7 +149,18 @@ def collect(runs, protocol_path):
         case = next((name for name in CASES if policy.get('test') == name or ('_' + name + '_') in directory.name), None)
         if case is None:
             continue
-        legacy, functional, runtime = (read(directory / name) for name in ('summary.json', 'summary_functional.json', 'runtime_manifest.json'))
+        legacy, original, runtime = (read(directory / name) for name in ('summary.json', 'summary_functional.json', 'runtime_manifest.json'))
+        reproduced, correction, safety = (read(directory / name) for name in ('summary_functional.reproduced.json', 'provenance_correction.json', 'supplemental_native_safety.json'))
+        correction_valid = bool(reproduced and correction.get('status') == 'reproduced_identical'
+            and all(correction.get(key) is True for key in ('all_checks_identical', 'all_metrics_identical', 'all_derived_arrays_identical',
+                'all_protocol_values_identical', 'original_summary_bytes_preserved', 'original_feet_bytes_preserved'))
+            and original.get('checks') == reproduced.get('checks') and original.get('metrics') == reproduced.get('metrics')
+            and original.get('protocol') == reproduced.get('protocol')
+            and correction.get('original_summary_sha256_before') == correction.get('original_summary_sha256_after') == sha(directory / 'summary_functional.json')
+            and correction.get('original_feet_sha256_before') == correction.get('original_feet_sha256_after') == sha(directory / 'functional_feet.npz')
+            and correction.get('reproduced_summary_sha256') == sha(directory / 'summary_functional.reproduced.json')
+            and correction.get('reproduced_feet_sha256') == sha(directory / 'functional_feet.reproduced.npz'))
+        functional = reproduced if correction_valid else original
         frames, malformed = captured_frames(directory)
         actual_status = status(functional.get('functional_status', functional.get('status', functional.get('levels', {}).get('functional_step'))))
         codes = runtime.get('owned_processes', [])
@@ -159,23 +170,43 @@ def collect(runs, protocol_path):
         archived_protocol = sha(directory / 'sources/tests/step_functional_protocol.json')
         evaluated_protocol = functional.get('protocol_file_sha256', functional.get('protocol_sha256'))
         evaluator_sha = functional.get('evaluator_sha256')
+        evaluator_source = directory / 'sources/scripts/evaluate_step_functional.py'
+        if correction_valid:
+            candidate = Path(correction.get('actual_executed_source', ''))
+            try:
+                candidate.resolve().relative_to(runs.resolve())
+                evaluator_source = candidate
+            except (ValueError, OSError):
+                correction_valid = False
+        safety_valid = safety.get('status') == 'passed' and bool(safety.get('checks')) and all(safety['checks'].values()) \
+            and safety.get('metrics', {}).get('start_s') == .1 and safety.get('metrics', {}).get('end_s') == 30 \
+            and all(value == sha(directory / name) for name, value in safety.get('source_hashes', {}).items())
         receipt_valid = bool(frozen_protocol and archived_protocol == frozen_protocol
             and evaluated_protocol == frozen_protocol
-            and evaluator_sha and evaluator_sha == sha(directory / 'sources/scripts/evaluate_step_functional.py')
+            and evaluator_sha and evaluator_sha == sha(evaluator_source)
+            and (not correction or correction_valid and evaluator_sha == correction.get('actual_executed_evaluator_sha256'))
+            and safety_valid
             and policy.get('checkpoint_sha256') == FROZEN_SHA and policy.get('inference_device') == 'cpu')
         entries.append({'run_id': directory.name, 'directory': str(directory.resolve()), 'case': case,
             'functional_status': actual_status, 'interface': interface, 'complete': complete,
+            'role': 'supplemental_visibility' if 'visible_retest' in directory.name else 'primary_repetition',
             'legacy_motion': status(legacy.get('levels', {}).get('motion')), 'legacy_summary': legacy,
-            'summary_functional': functional, 'runtime': runtime, 'policy': policy,
+            'summary_functional': functional, 'original_summary_functional': original,
+            'provenance_correction': correction, 'provenance_correction_verified': correction_valid,
+            'supplemental_native_safety': safety, 'native_safety_verified': safety_valid,
+            'functional_summary_source': 'summary_functional.reproduced.json' if correction_valid else 'summary_functional.json',
+            'runtime': runtime, 'policy': policy,
             'asset': read(directory / 'asset_manifest.json'), 'fixture': fixture(directory),
             'frozen_receipt_verified': receipt_valid,
             'protocol_receipt': {'expected_file_sha256': frozen_protocol, 'archived_file_sha256': archived_protocol,
                 'functional_file_sha256': evaluated_protocol, 'actual_evaluator_sha256': evaluator_sha,
-                'archived_evaluator_sha256': sha(directory / 'sources/scripts/evaluate_step_functional.py')},
+                'archived_evaluator_sha256': sha(directory / 'sources/scripts/evaluate_step_functional.py'),
+                'effective_evaluator_source': str(evaluator_source.resolve()), 'effective_source_sha256': sha(evaluator_source)},
             'resources': resource_receipt(directory, runtime), 'captured_frame_count': len(frames),
             'malformed_frame_names': malformed, 'frame_source': read(directory / 'frame_source.json'),
             'source_sha256': {name: sha(directory / name) for name in ('summary.json', 'summary_functional.json', 'runtime_manifest.json',
-                'policy_manifest.json', 'asset_manifest.json', 'source_manifest.json', 'world.sdf', 'telemetry.jsonl', 'actuator.jsonl', 'frame_source.json', 'functional_feet.npz')},
+                'policy_manifest.json', 'asset_manifest.json', 'source_manifest.json', 'world.sdf', 'telemetry.jsonl', 'actuator.jsonl', 'frame_source.json', 'functional_feet.npz',
+                'summary_functional.reproduced.json', 'functional_feet.reproduced.npz', 'provenance_correction.json', 'supplemental_native_safety.json')},
             'functional_protocol_sha256': sha(protocol_path), 'artifacts': {}})
     return entries
 
@@ -184,6 +215,12 @@ def replay(directory):
     """Encode actual captured pixels; no overlays, resize, interpolation or new frames."""
     from PIL import Image
     rows, malformed = captured_frames(directory)
+    cached = read(directory / 'step_retest_evidence_manifest.json').get('replay', {})
+    previous = cached.get('frames', [])
+    if len(previous) == len(rows) and all(old.get('sha256') == row['sha256'] and old.get('sensor_stamp_s') == row['sensor_stamp_s'] for old, row in zip(previous, rows)) \
+            and 'gif' in cached and 'mp4' in cached \
+            and all(cached[kind].get('sha256') == sha(directory / ('frame_replay.' + kind)) for kind in ('gif', 'mp4')):
+        return cached
     receipt = {'source': 'Actual Gazebo RGB archived by capture.py', 'frame_count': len(rows), 'frames':
                [{'file': str(row['file'].resolve()), 'sensor_stamp_s': row['sensor_stamp_s'], 'sha256': row['sha256']} for row in rows],
         'malformed_frame_names': malformed, 'interpolation': False, 'synthetic_frames': False,
@@ -328,8 +365,8 @@ def markdown(report):
     lines = ['# 5 / 10 cm 持续上台阶重测', '', f"本次单项结果：**{report['status']}**。要求两种高度各3独立轮；共收集{len(report['runs'])}轮，所有轮次与失败保留。", '',
         '冻结Teacher不重新训练，CPU推理。速度命令在3–22秒持续前进，随后闭环停车至30秒。实际相机帧、原始telemetry、原生接触收据与哈希逐轮保存。', '',
         '测试平台前沿x=7 m、宽1.4 m及高度0.05/0.10 m保留；台面由原x=7..9延长至x=7..13，以让上台后继续行走而不在测试末尾下台。它是新fixture，不能当成原2 m台面相同条件。是低台阶登上台面，不是完整障碍跨越或真实楼梯。', '',
-        '本次功能复核使用预先冻结的足部上台支持、持续运动、安全与停车判据。world body height gain仅为诊断，原数值门summary.json逐轮原样保留，不被新判据覆盖。原42轮验收、原起点场景失败、Sim2Sim与导航结论保持原记录。', '',
-        '| 运行 | 单项interface | 功能复核 | 旧数值motion | 完整结束 | 冻结收据核对 | 实际画面数 |', '|---|---|---|---|---|---|---:|']
+        '本次功能复核使用预先冻结的足部上台支持、持续运动、安全与26–30秒停车判据。world body height gain仅为诊断。新增continue测试的summary.json由兼容旧评估器生成，旧时窗18–30秒含18–22秒前进、5cm_continue旧高度分支误按10cm，因此不适用于本轮能力判定；错误兼容记录原样保留。原42轮历史判据与summary另列，历史高度比未达不等于实际无法登台。原起点场景、Sim2Sim与导航结论保持原记录。', '',
+        '| 运行 | 单项interface | 功能复核 | 兼容旧summary（不适用） | 完整结束 | 冻结收据核对 | 实际画面数 |', '|---|---|---|---|---|---|---:|']
     for row in report['runs']:
         lines.append(f"| {row['run_id']} | {row['interface']} | {row['functional_status']} | {row['legacy_motion']} | {row['complete']} | {row['frozen_receipt_verified']} | {row['captured_frame_count']} |")
     for row in report['runs']:
@@ -344,7 +381,7 @@ def markdown(report):
         metrics = functional.get('metrics', {})
         if metrics:
             lines += ['', '原始功能指标：', '', '```json', json.dumps(metrics, ensure_ascii=False, indent=2), '```']
-        lines += ['', '原数值门失败/通过记录：', '', '```json', json.dumps(row['legacy_summary'].get('tests', []), ensure_ascii=False, indent=2), '```']
+        lines += ['', '新增continue轮兼容旧summary原记录（时窗/高度规则不适用，不据此判断能否登台）：', '', '```json', json.dumps(row['legacy_summary'].get('tests', []), ensure_ascii=False, indent=2), '```']
         artifacts = row.get('artifacts', {})
         for key in ('mp4', 'gif'):
             media = artifacts.get('replay', {}).get(key, {})
@@ -372,12 +409,15 @@ def main():
     parser.add_argument('--report', type=Path, default=ROOT / 'docs/STEP_RETEST_REPORT.md')
     parser.add_argument('--manifest', type=Path, default=ROOT / 'test_results/step_retest_report_manifest.json')
     parser.add_argument('--write', action='store_true', help='Export actual recorded evidence and report; no reevaluation or acceptance update')
+    parser.add_argument('--media-only', action='store_true', help='Encode captures and telemetry plots now; defer campaign report until corrected receipts are ready')
     args = parser.parse_args()
     entries = collect(args.runs.resolve(), args.protocol)
-    count = Counter(row['case'] for row in entries)
+    primary = [row for row in entries if row['role'] == 'primary_repetition']
+    supplements = [row for row in entries if row['role'] == 'supplemental_visibility']
+    count = Counter(row['case'] for row in primary)
     identities = [tuple(item.get('pid') for item in row['runtime'].get('owned_processes', []) if item.get('role') in ('worker', 'gazebo')) for row in entries]
     independent = bool(identities) and len(identities) == len(set(identities)) and all(len(value) == 2 and all(isinstance(v, int) for v in value) for value in identities)
-    complete = len(entries) == 6 and all(count[name] == 3 for name in CASES) and all(row['complete'] for row in entries) and independent
+    complete = len(primary) == 6 and all(count[name] == 3 for name in CASES) and all(row['complete'] for row in primary) and independent
     failed = any(row['functional_status'] == 'failed' or row['interface'] == 'failed' for row in entries)
     campaign_status = 'failed' if failed else 'passed' if complete and all(row['functional_status'] == row['interface'] == 'passed' and row['frozen_receipt_verified'] for row in entries) else 'unverified'
     acceptance = read(args.runs / 'acceptance.json')
@@ -391,12 +431,13 @@ def main():
                 'reason': '; '.join(item.get('reason', '') for item in summary.get('tests', [])), 'tests': summary.get('tests', [])})
     report = {'schema_version': 1, 'status': campaign_status, 'scope': 'Sustained 5/10cm step functional retest only; not overall acceptance',
         'generated_at_local': datetime.now(timezone(timedelta(hours=8))).isoformat(),
-        'expected_rounds': 6, 'case_counts': dict(count), 'exact_six_coverage': complete, 'independent_processes': independent,
+        'expected_primary_rounds': 6, 'primary_rounds': len(primary), 'supplemental_visibility_rounds': len(supplements),
+        'case_counts': dict(count), 'exact_six_primary_coverage': complete, 'independent_processes': independent,
         'functional_protocol': read(args.protocol), 'functional_protocol_sha256': sha(args.protocol), 'checkpoint_sha256': FROZEN_SHA,
         'global_acceptance_levels': acceptance.get('levels', {}), 'global_acceptance_sha256': sha(args.runs / 'acceptance.json'),
         'historical_step_runs': historical, 'historical_review_sha256': sha(ROOT / 'test_results/step_historical_functional_review_20261003.json'),
         'script_sha256': sha(Path(__file__)), 'source_images_modified': False, 'acceptance_written': False, 'runs': entries}
-    if args.write:
+    if args.write or args.media_only:
         for entry in entries:
             directory = Path(entry['directory'])
             entry['artifacts'] = {'replay': replay(directory), 'plot': plot(directory, entry['summary_functional'], entry['fixture'])}
@@ -404,12 +445,16 @@ def main():
                 'replay': entry['artifacts']['replay'], 'plot': entry['artifacts']['plot'], 'resources': entry['resources'],
                 'source_sha256': entry['source_sha256'], 'fixture': entry['fixture'], 'script_sha256': report['script_sha256'],
                 'functional_protocol_sha256': report['functional_protocol_sha256'], 'checkpoint_sha256': entry['policy'].get('checkpoint_sha256'),
-                'functional_status': entry['functional_status'], 'legacy_motion': entry['legacy_motion'], 'scope': report['scope']})
-        args.report.parent.mkdir(parents=True, exist_ok=True)
-        args.manifest.parent.mkdir(parents=True, exist_ok=True)
-        args.report.write_text(markdown(clean(report)))
-        dump(args.manifest, report)
-    print(json.dumps({'status': campaign_status, 'writes': args.write, 'rounds': len(entries), 'expected': 6,
+                'functional_status': entry['functional_status'], 'legacy_motion': entry['legacy_motion'],
+                'role': entry['role'], 'functional_summary_source': entry['functional_summary_source'],
+                'provenance_correction_verified': entry['provenance_correction_verified'], 'native_safety_verified': entry['native_safety_verified'],
+                'frozen_receipt_verified': entry['frozen_receipt_verified'], 'scope': report['scope']})
+        if args.write:
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            args.manifest.parent.mkdir(parents=True, exist_ok=True)
+            args.report.write_text(markdown(clean(report)))
+            dump(args.manifest, report)
+    print(json.dumps({'status': campaign_status, 'writes': args.write or args.media_only, 'report_written': args.write, 'rounds': len(entries), 'expected': 6,
         'case_counts': dict(count), 'independent_processes': independent, 'complete': complete,
         'runs': [{'id': row['run_id'], 'functional': row['functional_status'], 'interface': row['interface'],
                   'legacy_motion': row['legacy_motion'], 'frames': row['captured_frame_count']} for row in entries],
