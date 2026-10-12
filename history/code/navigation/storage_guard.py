@@ -4,13 +4,13 @@ import hashlib
 import importlib.util
 from pathlib import Path
 import sys
-S=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R59_REFERENCE_LIFECYCLE_STAGE')
+S=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R58_REFERENCE_NIGHT_STAGE')
 sys.path.insert(0,str(S))
 
-PATH=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R59_REFERENCE_LIFECYCLE_STAGE/shared_storage_guard.py')
+PATH=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R58_REFERENCE_NIGHT_STAGE/shared_storage_guard.py')
 if hashlib.sha256(PATH.read_bytes()).hexdigest()!='685629328b68cf132f0107222b6a1f3233dd5a02fe448f56bc21f81a461b2bf7':
     raise RuntimeError('Original budget guard changed')
-spec=importlib.util.spec_from_file_location('R59_original_storage_guard',PATH)
+spec=importlib.util.spec_from_file_location('R58_original_storage_guard',PATH)
 base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
 register=base.register
 usage=base.usage
@@ -25,13 +25,13 @@ threading=base.threading
 def observe(run, profile, starting=False, count_files=True, previous=None):
     result=base.observe(run,profile,starting=starting,count_files=count_files,previous=previous)
     from round_budget import measure
-    result['R59_round_budget']=measure(result,run,usage,previous)
-    round_row=result['R59_round_budget']
+    result['R58_round_budget']=measure(result,run,usage,previous)
+    round_row=result['R58_round_budget']
     if round_row['hard_stop']:
-        result['stop_reasons'].append('R59_hard_round_budget')
+        result['stop_reasons'].append('R58_hard_round_budget')
         raise StorageStop(result)
     if starting and round_row['predictive_soft_stop']:
-        raise RuntimeError('R59 insufficient predicted round startup/closure budget')
+        raise RuntimeError('R58 insufficient predicted round startup/closure budget')
     return result
 
 

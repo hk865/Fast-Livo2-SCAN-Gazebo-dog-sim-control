@@ -11,8 +11,6 @@ from scipy.spatial.transform import Rotation
 from known_scene_matcher import SceneReference,KnownSceneMatcher,CorrectionState,transform_distance,checked_transform
 from known_scene_adapter import ExactSourceJoin,MatcherWorker,validate_runtime_witness,stamp_ns,odometry_transform,pointcloud_xyz
 from known_scene_stale_recovery import recovery_proposal
-from point_provenance import decode,geometry_bundle,message_sha
-from delivery_diagnostics import DeliveryDiagnostics,delivery_span
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def atomic(p,x):
@@ -103,9 +101,7 @@ def main():
     sys.path.append(str(here.parent))
     from runtime_io import EvidenceWriter
     from startup_trace import CallbackTrace
-    from owned_ros_lifecycle import OwnedRosLifecycle
-    from rclpy.signals import SignalHandlerOptions
-    lifecycle=OwnedRosLifecycle(rclpy,ros,SignalHandlerOptions.NO)
+    rclpy.init(args=ros)
     class Runtime(Node):
         def __init__(self):
             super().__init__('demo_slam_odom_adapter')
@@ -121,15 +117,12 @@ def main():
             from collision_minimal_capture import CollisionObservedP95SourceFrames as P95SourceFrames
             self.diagnostic_capture=P95SourceFrames(run)
             self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
-            from first_identity_capture import FirstIdentityCapture
-            self.positive_capture=FirstIdentityCapture(run)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None
             self.pending_body=None;self.pending_source_ns=None;self.startup_results=deque(maxlen=16)
             self.pending_recovery_count=0;self.last_complete_body=None
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
             self.callback_writer=EvidenceWriter()
-            self.delivery_diagnostics=DeliveryDiagnostics(run,self.callback_writer)
             self.callback_trace=CallbackTrace(run,'canonical',self.callback_writer)
             self.history=(run/'known_scene_matches.jsonl').open('x',buffering=1)
             self.bundle_history=(run/'known_scene_bundles.jsonl').open('x',buffering=1)
@@ -144,13 +137,9 @@ def main():
                 ('body',Odometry,'/demo/slam/raw_body_odom'),('lidar',Odometry,'/demo/slam/raw_lidar_odom'),
                 ('mapper',Odometry,'/aft_mapped_to_init')]:
                 self.create_subscription(typ,topic,lambda m,k=role:self.receive(k,m),qos_profile_sensor_data)
-            for role,topic,schema in [('source_identity','/demo/slam/raw_point_identity','raw_filtered_point_identity/v1'),
-                ('point_identity','/demo/slam/point_identity','post_lio_source_point_commit/v1'),
-                ('odom_identity','/demo/slam/odom_identity','mapper_body_lidar_commit/v1')]:
-                self.create_subscription(String,topic,lambda m,k=role,s=schema:self.receive(k,self.delivery_diagnostics.call('decode',-1,decode,m.data,s)),10)
             # Data-only event observer; original matcher and publishers unchanged.
             self.create_subscription(String,'/demo/teacher/mission46/state',
-                lambda m:self.delivery_diagnostics.mission(self,m.data,int(self.get_clock().now().nanoseconds),self.diagnostic_capture.observe_mission),10)
+                lambda m:self.diagnostic_capture.observe_mission(m.data,int(self.get_clock().now().nanoseconds)),10)
             self.create_subscription(String,'/demo/obstacle/state',
                 lambda m:self.diagnostic_capture.observe_obstacle(m.data,int(self.get_clock().now().nanoseconds)),10)
             for role,typ,topic in [('imu_source',Imu,'/livox/imu'),
@@ -190,17 +179,15 @@ def main():
             ns=stamp_ns(body)
             if self.stop_since_ns is None:self.stop_since_ns=ns
             return ns-self.stop_since_ns>=100_000_000
-        @delivery_span('receive')
         def receive(self,role,msg):
             ns=stamp_ns(msg);clock=self.get_clock().now().nanoseconds
-            self.delivery_diagnostics.receive_clock(role,ns,clock)
-            if self.join is not None and role in (*self.join.ROLES,*self.join.META_ROLES,*self.join.AUX_ROLES):
-                accepted=self.delivery_diagnostics.call('join_put',ns,self.join.put,role,msg)
-                if accepted:self.delivery_diagnostics.call('observe_source',ns,self.diagnostic_capture.observe_source,self.join,ns,int(clock))
-            if ns<=self.last_published:return
+            if self.join is not None and role in self.join.ROLES:
+                accepted=self.join.put(role,msg)
+                if accepted:self.diagnostic_capture.observe_source(self.join,ns,int(clock))
+            if role not in ('body','lidar','registered') or ns<=self.last_published:return
             slot=self.slots.setdefault(ns,{});slot[role]=(msg,time.monotonic())
-            while len(self.slots)>12:self.delivery_diagnostics.evict(self.slots)
-            if all(k in slot for k in ('body','lidar','registered','raw','adapted','mapper','source_identity','point_identity','odom_identity')):
+            while len(self.slots)>12:self.slots.popitem(last=False)
+            if all(k in slot for k in ('body','lidar','registered')):
                 self.publish_bundle(ns,slot,clock)
         def trace_bundle(self,ns,slot,clock,decision):
             measured_after_gate=time.monotonic()
@@ -210,8 +197,6 @@ def main():
                 original_role_received_wall_s={role:pair[1] for role,pair in slot.items()},
                 diagnostic_role_wall_age_after_gate_s={role:measured_after_gate-pair[1] for role,pair in slot.items()},
                 age_metrics_sampled_after_unchanged_original_gate=True)
-            self.delivery_diagnostics.gate(ns,clock,decision)
-        @delivery_span('publish_bundle')
         def publish_bundle(self,ns,slot,clock):
             if not self.initialized or not -50_000_000<=clock-ns<KNOWN_BUNDLE_FRESHNESS_NS:
                 self.trace_bundle(ns,slot,clock,'original_initialized_or_header_veto')
@@ -220,16 +205,6 @@ def main():
                 self.trace_bundle(ns,slot,clock,'original_wall_age_veto')
                 return
             self.trace_bundle(ns,slot,clock,'original_header_and_wall_gates_passed')
-            try:
-                if self.join is None or slot['odom_identity'][0].get('adapter_pid')!=self.join.witness.get('adapter_producer_pid'):
-                    raise ValueError('actual adapter owner differs')
-                parent=self.delivery_diagnostics.call('geometry_bundle',ns,geometry_bundle,slot,run.name,
-                    self.join.witness.get('mapper_producer_pid') if self.join is not None else None,
-                    self.join.witness.get('source_producer_pid') if self.join is not None else None)
-            except (ValueError,KeyError,TypeError,AssertionError) as error:
-                self.trace_bundle(ns,slot,clock,'explicit_source_commit_veto:'+str(error))
-                return
-            self.positive_capture.observe(slot,parent,clock)
             if self.transition and not self.idle_or_stopped(slot['body'][0]):
                 # Freeze C until exact-zero navigation command and measured stop.
                 saved=self.correction.target.copy();self.correction.target=self.correction.applied.copy()
@@ -255,21 +230,17 @@ def main():
                 transaction_count=self.transaction_count,control_allowed=not self.transition and not snapshot['correction_stale'],
                 exact_body_lidar_registered_stamp=True,known_scene_map_assisted_navigation=True,
                 robot_truth_pose_used=False,frontend_state_reset=False,frontend_velocity_or_bias_repaired=False)
-            body=self.delivery_diagnostics.call('corrected_odom',ns,corrected_odom,slot['body'][0],c);lidar=self.delivery_diagnostics.call('corrected_odom',ns,corrected_odom,slot['lidar'][0],c)
-            cloud=self.delivery_diagnostics.call('corrected_cloud',ns,corrected_cloud,slot['registered'][0],c)
-            metadata.update(source_commit=parent,corrected_body_message_sha256=self.delivery_diagnostics.call('message_sha',ns,message_sha,body),
-                corrected_lidar_message_sha256=self.delivery_diagnostics.call('message_sha',ns,message_sha,lidar),corrected_cloud_message_sha256=self.delivery_diagnostics.call('message_sha',ns,message_sha,cloud))
-            self.delivery_diagnostics.call('publish_metadata',ns,self.bundle_pub.publish,String(data=json.dumps(metadata,allow_nan=False)))
-            self.delivery_diagnostics.call('publish_body',ns,self.pubs['body'].publish,body);self.delivery_diagnostics.call('publish_lidar',ns,self.pubs['lidar'].publish,lidar);self.delivery_diagnostics.call('publish_cloud',ns,self.cloud_pub.publish,cloud)
+            body=corrected_odom(slot['body'][0],c);lidar=corrected_odom(slot['lidar'][0],c)
+            cloud=corrected_cloud(slot['registered'][0],c)
+            self.bundle_pub.publish(String(data=json.dumps(metadata,allow_nan=False)))
+            self.pubs['body'].publish(body);self.pubs['lidar'].publish(lidar);self.cloud_pub.publish(cloud)
             self.last_published=ns;self.bundle_count+=1
             # One small exact published-body witness; no retained cloud payload.
             self.last_complete_body=(slot['body'][0],time.monotonic(),ns)
-            self.delivery_diagnostics.call('bundle_history',ns,self.bundle_history.write,json.dumps(metadata,allow_nan=False)+'\n')
+            self.bundle_history.write(json.dumps(metadata,allow_nan=False)+'\n')
             self.diagnostic_capture.observe_metadata(metadata,int(clock))
-            self.delivery_diagnostics.cleanup(ns,self.slots)
             for key in list(self.slots):
                 if key<=ns:del self.slots[key]
-        @delivery_span('tick')
         def tick(self):
             if not self.loaded_witness:self.load_witness()
             clock=self.get_clock().now().nanoseconds
@@ -346,20 +317,18 @@ def main():
                 known_scene_map_assisted_navigation=True,independent_sensor_map=False,robot_truth_pose_used=False,
                 monotonic_wall=time.monotonic(),ros_clock_ns=clock,error=self.error)
             self.status_pub.publish(String(data=json.dumps(status,allow_nan=False)))
-            self.delivery_diagnostics.call('status_write',clock,atomic,run/'known_scene_status.json',status)
+            atomic(run/'known_scene_status.json',status)
         def close(self):
-            positive_capture=self.positive_capture.close()
             clean=self.worker.close()
             self.diagnostic_capture.close(worker_drained=clean)
-            self.delivery_diagnostics.close()
             self.callback_writer.close()
             self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
-            atomic(run/'known_scene_exit.json',dict(positive_capture=positive_capture,worker_drained=clean,bundles=self.bundle_count,
-                transactions=self.transaction_count,initialized=self.initialized,simulation_only=True,
-                delivery_diagnostics=self.delivery_diagnostics.receipt()))
-    node=None
-    try:
-        node=Runtime();lifecycle.spin(node)
+            atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
+                transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
+    node=Runtime()
+    try:rclpy.spin(node)
     except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):pass
-    finally:lifecycle.close(node)
+    finally:
+        node.close();node.destroy_node()
+        if rclpy.ok():rclpy.shutdown()
 if __name__=='__main__':main()

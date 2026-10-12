@@ -29,8 +29,6 @@ which is included as part of this source code package.
 #include <nav_msgs/msg/path.hpp>
 
 
-
-#include <std_msgs/msg/string.hpp>
 class LIVMapper
 {
 public:
@@ -48,7 +46,6 @@ public:
     sensor_msgs::msg::Image::ConstSharedPtr image_message;
     sensor_msgs::msg::Imu::ConstSharedPtr imu_message;
     PointCloudXYZI::Ptr cloud;
-    std::vector<fastlivo_identity::Ref> identity;
     cv::Mat image;
   };
   bool ingress_enabled=true,image_copy_opt=false,ingress_started=false,ingress_stopped=false;
@@ -178,12 +175,7 @@ public:
   double plot_time;
   int frame_cnt;
   double img_time_offset = 0.0;
-  struct PairedCloud { PointCloudXYZI::Ptr cloud; std::vector<fastlivo_identity::Ref> identity; };
-  deque<PairedCloud> lid_raw_data_buffer;
-  std::vector<fastlivo_identity::Ref> feats_identity;
-  const std::string identity_epoch;
-  uint64_t identity_commit=0;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pubPointIdentity;
+  deque<PointCloudXYZI::Ptr> lid_raw_data_buffer;
   deque<double> lid_header_time_buffer;
   deque<sensor_msgs::msg::Imu::ConstSharedPtr> imu_buffer;
   deque<cv::Mat> img_buffer;

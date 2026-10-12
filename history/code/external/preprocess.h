@@ -160,7 +160,6 @@ public:
   void set(bool feat_en, int lid_type, double bld, int pfilt_num);
 
   // sensor_msgs::msg::PointCloud2::ConstSharedPtr pointcloud;
-  std::vector<uint32_t> identity_input_ordinals;
   PointCloudXYZI pl_full, pl_corn, pl_surf;
   PointCloudXYZI pl_buff[128]; // maximum 128 line lidar
   vector<orgtype> typess[128]; // maximum 128 line lidar

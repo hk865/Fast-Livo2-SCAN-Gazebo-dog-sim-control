@@ -17,11 +17,9 @@ import numpy as np
 from scipy.spatial import cKDTree
 from scipy.spatial.transform import Rotation
 from known_scene_matcher import checked_transform
-from point_provenance import exact_indices,commit_messages
 
 
 def stamp_ns(msg):
-    if isinstance(msg,dict):return msg['stamp_ns']
     return int(msg.header.stamp.sec) * 1_000_000_000 + int(msg.header.stamp.nanosec)
 
 
@@ -104,26 +102,7 @@ def validate_runtime_witness(witness, run_id):
                     raise ValueError('loading observation not bound to this library')
         except (OSError, KeyError, TypeError, ValueError) as error:
             reasons.append('binding:' + str(b.get('role')) + ':' + str(error))
-    processes=witness.get('identity_producer_process_bindings',{})
-    if witness.get('explicit_point_commit_required')is not True or witness.get('identity_fingerprint_model')!='go2_ros_semantic/v1':
-        reasons.append('explicit_point_commit_witness')
-    for role in ('mapper','source','adapter'):
-        binding=processes.get(role,{})
-        if type(binding.get('pid'))is not int or type(binding.get('start_ticks'))is not int:reasons.append('identity_producer_'+role)
-    for role in ('source','adapter'):
-        try:
-            binding=processes[role];raw=Path(binding['observation']).read_bytes()
-            if hashlib.sha256(raw).hexdigest()!=binding['observation_sha256'] or binding['source_path'].encode()not in raw or hashlib.sha256(Path(binding['source_path']).read_bytes()).hexdigest()!=binding['source_sha256']:
-                raise ValueError('identity producer source/observation changed')
-        except (OSError,ValueError,KeyError):reasons.append('identity_producer_binding_'+role)
-    try:
-        loaded=json.loads(Path(witness['loaded_SLAM_receipt_path']).read_text())
-        if loaded.get('verified')is not True or loaded['mapping_identity']!=processes['mapper']:raise ValueError('mapper actual ELF witness')
-    except (OSError,ValueError,KeyError):reasons.append('identity_mapper_loaded_witness')
     return dict(valid=not reasons, reasons=reasons, run_id=run_id,
-                mapper_producer_pid=processes.get('mapper',{}).get('pid'),
-                source_producer_pid=processes.get('source',{}).get('pid'),
-                adapter_producer_pid=processes.get('adapter',{}).get('pid'),
                 witness_sha256=hashlib.sha256(json.dumps(witness, sort_keys=True,
                                                        separators=(',', ':')).encode()).hexdigest())
 
@@ -138,8 +117,6 @@ class SourceGeometryMismatch(ValueError):
 
 class ExactSourceJoin:
     ROLES = ('raw', 'adapted', 'registered', 'body', 'mapper')
-    META_ROLES = ('source_identity','point_identity','odom_identity')
-    AUX_ROLES = ('lidar',)
 
     def __init__(self, witness_status, maximum_stamps=12, maximum_source_age_ns=SOURCE_JOIN_SLOT_MAX_AGE_NS,
                  interval_ns=1_000_000_000, mount=LIDAR_BODY_TRANSLATION_M):
@@ -156,7 +133,7 @@ class ExactSourceJoin:
         self.rejections = []
 
     def put(self, role, msg, received_wall_ns=None):
-        if role not in (*self.ROLES,*self.META_ROLES,*self.AUX_ROLES):
+        if role not in self.ROLES:
             raise ValueError('unknown join role')
         ns = stamp_ns(msg)
         wall = time.monotonic_ns() if received_wall_ns is None else received_wall_ns
@@ -179,7 +156,7 @@ class ExactSourceJoin:
         wall_ns = time.monotonic_ns() if wall_ns is None else wall_ns
         with self.lock:
             complete = [ns for ns, slot in self.slots.items()
-                        if all(role in slot for role in (*self.ROLES,*self.META_ROLES,*self.AUX_ROLES))]
+                        if all(role in slot for role in self.ROLES)]
             if not complete:
                 return None
             ns = max(complete)
@@ -209,8 +186,7 @@ class ExactSourceJoin:
                     explicit_message_commit_token=False)
             if isinstance(error, SourceGeometryMismatch) and error.evidence is not None:
                 result['_diagnostic_failed_source'] = dict(source_ns=ns,
-                    source_messages={role:slot[role][0] for role in self.ROLES},
-                    source_identity_metadata={role:slot[role][0] for role in self.META_ROLES},
+                    source_messages={role:pair[0] for role,pair in slot.items()},
                     original_received_wall_ns={role:pair[1] for role,pair in slot.items()},
                     T_odom_body=error.evidence['T_odom_body'],
                     _diagnostic_evidence=error.evidence)
@@ -219,25 +195,6 @@ class ExactSourceJoin:
     def _check(self, ns, slot):
         check_started_wall_ns = time.monotonic_ns()
         raw, adapted, registered, body, mapper = (slot[role][0] for role in self.ROLES)
-        point_commit=slot["point_identity"][0];adapter_commit=slot["odom_identity"][0]
-        from point_provenance import commit_messages
-        commit_messages(registered,mapper,body,slot['lidar'][0],point_commit,adapter_commit,
-            self.witness.get('run_id'),self.witness.get('mapper_producer_pid'))
-        if (self.witness.get('adapter_producer_pid')is not None
-                and adapter_commit.get('adapter_pid')!=self.witness['adapter_producer_pid']):
-            raise ValueError('matching adapter owner differs')
-        if point_commit.get('schema')!='post_lio_source_point_commit/v1' or point_commit.get('stage')!='post_lio_dense' or point_commit.get('run_id')!=self.witness.get('run_id') or point_commit.get('navigation_ground_truth_used')is not False:
-            raise ValueError('source point commit contract differs')
-        from point_provenance import message_sha
-        if point_commit.get('registered_message_sha256')!=message_sha(registered):raise ValueError('registered complete stage message differs')
-        if (point_commit.get('fingerprint_model')!='go2_ros_semantic/v1'
-            or adapter_commit.get('schema')!='mapper_body_lidar_commit/v1'
-            or adapter_commit.get('fingerprint_model')!='go2_ros_semantic/v1'
-            or adapter_commit.get('run_id')!=self.witness.get('run_id')
-            or adapter_commit.get('stamp_ns')!=ns or point_commit.get('stamp_ns')!=ns
-            or adapter_commit.get('navigation_ground_truth_used')is not False):
-            raise ValueError('adapter commit schema/run/stamp/authority differs')
-        source_proof=slot["source_identity"][0]
         if raw.header.frame_id != 'velodyne' or adapted.header.frame_id != 'velodyne':
             raise ValueError('unexpected source lidar frame')
         if body.header.frame_id != mapper.header.frame_id or registered.header.frame_id != body.header.frame_id:
@@ -255,7 +212,8 @@ class ExactSourceJoin:
         if any(name.lower() in ('time', 't', 'timestamp', 'offset_time') for name, *_ in raw_fields):
             raise ValueError('per_point_time_requires_separate_verified_model')
         raw_records, adapted_records = point_records(raw), point_records(adapted)
-        # Exact input IDs below prove intact source records without sorting records.
+        if not np.isin(adapted_records, np.unique(raw_records)).all():
+            raise ValueError('adapted point is not intact source record')
         adapted_xyz = pointcloud_xyz(adapted)
         eligible = np.isfinite(adapted_xyz).all(1) & (np.linalg.norm(adapted_xyz, axis=1) >= .3)
         local = adapted_xyz[eligible] + self.mount
@@ -263,23 +221,10 @@ class ExactSourceJoin:
         if len(local) != len(full) or not np.isfinite(full).all():
             raise ValueError('Generic/full registered point cardinality differs')
         reconstructed = (full - t[:3, 3]) @ t[:3, :3]
-        indices,raw_ordinals=exact_indices(raw,adapted,source_proof,point_commit,registered,eligible,
-            self.witness.get('run_id'),self.witness.get('source_producer_pid'))
-        # Mapper/body identity is exact; raw lidar pose has the frozen mechanical offset.
-        if point_commit['mapper_message_sha256']!=__import__('point_provenance').message_sha(mapper) or adapter_commit['body_message_sha256']!=__import__('point_provenance').message_sha(body):
-            raise ValueError('exact source mapper/body commit message differs')
-        if (point_commit['producer_epoch'],point_commit['commit'])!=(adapter_commit['producer_epoch'],adapter_commit['commit']):
-            raise ValueError('exact source adapter stage commit differs')
-        if point_commit.get('producer_pid')!=self.witness.get('mapper_producer_pid',point_commit.get('producer_pid')):
-            raise ValueError('exact source mapper owner differs')
-        expected_local=adapted_xyz[indices]+self.mount
-        distance=np.linalg.norm(reconstructed-expected_local,axis=1);index=indices
-        # Original k1 uniqueness is diagnostic only; true ID coverage owns identity.
-        nn_distance,nn_index=cKDTree(local).query(reconstructed,workers=1)
-        unique_count = len(np.unique(indices))
+        distance, index = cKDTree(local).query(reconstructed, workers=1)
         # Actual frozen Generic deskew is retained. These bounds allow its
         # measured millimetre same-time discrepancy, not a different pose epoch.
-        unique_count = len(np.unique(indices))
+        unique_count = len(np.unique(index))
         rms_m = float(np.sqrt(np.mean(distance ** 2)))
         maximum_m = float(np.max(distance))
         evidence = None
@@ -301,22 +246,19 @@ class ExactSourceJoin:
                 registered_source_max_m=maximum_m if np.isfinite(maximum_m) else None,
                 maximum_nonfinite=not bool(np.isfinite(maximum_m)), maximum_limit_m=.030,
                 maximum_failed=maximum_m > .030,
-                original_geometry_thresholds_changed=False,identity_predicate_revision='actual_source_ID_coverage/v1'), evidence=evidence)
+                guard_predicates_changed=False), evidence=evidence)
         verified = self.witness.get('valid') is True
         provenance = dict(point_time_verified=verified,
                           post_lio_association_verified=verified,
                           source_hashes_verified=verified, no_robot_truth_pose=True,
                           stage='frozen_post_LIO_single_owner_publication',
-                          explicit_message_commit_token=True,
-                          producer_epoch=point_commit["producer_epoch"],stage_commit=point_commit["commit"],
-                          point_identity_coverage_verified=True,
-                          legacy_nearest_collisions=len(nn_index)-len(np.unique(nn_index)),
+                          explicit_message_commit_token=False,
                           integer_stamp_join=True,
                           witness_sha256=self.witness.get('witness_sha256'),
                           registered_source_rms_m=float(np.sqrt(np.mean(distance ** 2))),
                           registered_source_max_m=float(np.max(distance)),
                           source_membership_verified=True)
-        checked_job = dict(source_ns=ns, body_points=expected_local, T_odom_body=t,
+        checked_job = dict(source_ns=ns, body_points=local, T_odom_body=t,
                     registered_odom_xyz=full, provenance=provenance,
                     witness_status=self.witness,
                     original_received_wall_ns={role: slot[role][1] for role in self.ROLES},

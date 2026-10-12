@@ -45,34 +45,14 @@ def record(run,plan,identities,here,slam_workspace,timeout_s=25):
         raise RuntimeError('Actual loaded snapshot producer witness incomplete: '+str(set(roles)|{'ros_gz_bridge'}-set(found)))
     source=slam_workspace/'src/fast_livo2_core/src'
     sources={'LIVMapper':source/'LIVMapper.cpp','preprocess':source/'preprocess.cpp',
-        'odom_adapter':here/'odom_adapter.py',
-        'self_echo_filter':here/'self_echo_filter.py'}
+        'odom_adapter':here.parents[2]/'slam/odom_adapter.py',
+        'self_echo_filter':here.parents[2]/'slam/self_echo_filter.py'}
     stage=[]
     for name,path in sources.items():
         if not path.exists():raise RuntimeError('Required post-LIO stage source absent: '+str(path))
         stage.append(dict(role=name,path=str(path),sha256=sha(path)))
-    process_bindings={}
-    loaded=json.loads((run/'slam_loaded_binary.json').read_text())
-    process_bindings['mapper']=loaded['mapping_identity']
-    if loaded.get('verified')is not True:raise RuntimeError('New mapper actual binary witness missing')
-    for role,file in [('source',here/'self_echo_filter.py'),('adapter',here/'odom_adapter.py')]:
-        matches=[]
-        for p in group(identities['navigation_stack']['pgid']):
-            try:
-                raw=(p/'cmdline').read_bytes();arguments=raw.decode().strip('\0').split('\0')
-                if str(file) not in arguments:continue
-                text=(p/'stat').read_text();fields=text[text.rfind(')')+2:].split()
-                target=run/('identity_producer_'+role+'_cmdline.txt');target.write_bytes(raw)
-                matches.append(dict(pid=int(p.name),start_ticks=int(fields[19]),pgid=int(fields[2]),
-                    session=int(fields[3]),source_path=str(file),source_sha256=sha(file),
-                    observation=str(target),observation_sha256=sha(target)))
-            except OSError:continue
-        if len(matches)!=1:raise RuntimeError('R60 actual identity producer not unique: '+role)
-        process_bindings[role]=matches[0]
-    scenario=run/'navigation_scenario.json' 
+    scenario=run/'navigation_scenario.json'
     witness=dict(schema='go2_known_scene_runtime_witness/v1',run_id=run.name,
-        explicit_point_commit_required=True,identity_fingerprint_model='go2_ros_semantic/v1',
-        identity_producer_process_bindings=process_bindings,
         producer_model='gz_gpu_lidar_instantaneous_header_snapshot',actual_loaded_libraries_verified=True,
         header_snapshot_time_verified=True,post_lio_single_owner_publication_verified=True,no_robot_truth_pose=True,
         producer_bindings=list(found.values()),stage_source_bindings=stage,
