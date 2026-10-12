@@ -9,6 +9,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from known_scene_matcher import SceneReference,KnownSceneMatcher,CorrectionState,transform_distance,checked_transform
 from known_scene_adapter import ExactSourceJoin,MatcherWorker,validate_runtime_witness,stamp_ns,odometry_transform,pointcloud_xyz
+from known_scene_stale_recovery import recovery_proposal
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def atomic(p,x):
@@ -114,6 +115,7 @@ def main():
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None
             self.pending_body=None;self.pending_source_ns=None;self.startup_results=deque(maxlen=16)
+            self.pending_recovery_count=0;self.last_complete_body=None
             self.transaction_count=0;self.bundle_count=0;self.error=None;self.loaded_witness=False;self.stop_since_ns=None
             self.history=(run/'known_scene_matches.jsonl').open('x',buffering=1)
             self.bundle_history=(run/'known_scene_bundles.jsonl').open('x',buffering=1)
@@ -201,6 +203,8 @@ def main():
             self.bundle_pub.publish(String(data=json.dumps(metadata,allow_nan=False)))
             self.pubs['body'].publish(body);self.pubs['lidar'].publish(lidar);self.cloud_pub.publish(cloud)
             self.last_published=ns;self.bundle_count+=1
+            # One small exact published-body witness; no retained cloud payload.
+            self.last_complete_body=(slot['body'][0],time.monotonic(),ns)
             self.bundle_history.write(json.dumps(metadata,allow_nan=False)+'\n')
             for key in list(self.slots):
                 if key<=ns:del self.slots[key]
@@ -215,7 +219,25 @@ def main():
                     candidate=np.asarray(result['C_world_odom'])
                     parent_matches=result.get('parent_generation')==self.correction.generation
                     continuation=self.transition and self.pending_target is not None and transform_distance(candidate,self.pending_target)[0]<.08 and transform_distance(candidate,self.pending_target)[1]<.05
-                    if not proposal_epoch_valid(result,self.correction.generation,self.pending_target,self.transition):
+                    recovery=None
+                    epoch_valid=proposal_epoch_valid(result,self.correction.generation,self.pending_target,self.transition)
+                    if not epoch_valid and self.transition and self.last_complete_body is not None:
+                        body,received,complete_ns=self.last_complete_body
+                        try:
+                            if json.loads((run/'navigation_status.json').read_text()).get('state')!='running':
+                                raise ValueError('Recovery cannot restart an ended navigation mission')
+                            payload=(run/'scan_epoch_ready.json').read_bytes()
+                            if len(payload)>65536:raise ValueError('SCAN receipt exceeds64KiB')
+                            scan=json.loads(payload)
+                            recovery=recovery_proposal(result,self.correction,self.pending_target,
+                                self.pending_body,self.pending_source_ns,self.pending_recovery_count,clock,
+                                complete_ns,received,time.monotonic(),scan,run.name,
+                                self.join.witness.get('witness_sha256') if self.join is not None else None)
+                        except (OSError,ValueError,TypeError):recovery=None
+                        if recovery is not None:
+                            if not self.idle_or_stopped(body):recovery=None
+                            else:recovery['physical_zero_stop100ms_verified']=True
+                    if not epoch_valid and recovery is None:
                         self.history.write(json.dumps(dict(event='stale_parent_proposal_not_adopted',source_ns=result['source_ns'],parent_generation=result.get('parent_generation'),applied_generation=self.correction.generation))+'\n')
                         result=None
                     latest=self.slots.get(max(self.slots),{}) if self.slots else {}
@@ -234,18 +256,24 @@ def main():
                                 IMU_world_orientation_used=False,robot_truth_pose_used=False,
                                 frontend_state_reset=False,initial_commit_navigation_idle_verified=True))
                     elif result is not None:
+                        if recovery is not None:
+                            # Record an explicit ABORT, never a release. Transition
+                            # remains true throughout this single owner callback.
+                            self.history.write(json.dumps(recovery,allow_nan=False)+'\n')
                         self.correction.last_match_ns=result['source_ns']
                         effect=proposal_body_effect(result,self.correction.applied)
                         try:nav_state=json.loads((run/'navigation_status.json').read_text()).get('state')
                         except (OSError,ValueError):nav_state=None
                         # Keep a single frame through the bounded terminal active-hold proof.
-                        start=not self.transition and nav_state=='running' and effect['requires_transaction']
+                        start=(not self.transition and nav_state=='running' and effect['requires_transaction']) or recovery is not None
                         self.decision_history.write(json.dumps(dict(effect=effect,generation=self.correction.generation,
                             navigation_state=nav_state,transition_already_active=self.transition,
-                            transaction_started=start,original_stop_and_rate_limits_preserved=True),allow_nan=False)+'\n')
+                            transaction_started=start,expired_transaction_recovery=recovery is not None,
+                            original_stop_and_rate_limits_preserved=True),allow_nan=False)+'\n')
                         if start:
                             self.correction.target=candidate.copy();self.pending_target=candidate.copy()
                             self.pending_body=checked_transform(result['T_odom_body']);self.pending_source_ns=result['source_ns']
+                            self.pending_recovery_count=self.pending_recovery_count+1 if recovery is not None else 0
                             self.stop_since_ns=None;self.transition=True
             if self.join is not None and clock-self.last_submit>=1_000_000_000:
                 self.worker.submit_join(self.join,clock,self.correction.applied.copy(),parent_generation=self.correction.generation);self.last_submit=clock
