@@ -24,6 +24,11 @@ class ResetBookkeeping:
         self.reset_reason=reason
 
 
+from navigation.goal_regions import ArrivalWindow
+from continuous_route import (configuration as continuous_configuration, RouteProgress,
+    CausalHandoffProjectionController)
+
+
 class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
         super().__init__(run);self.pid=ResetBookkeeping()  # no legacy controller mathematics
@@ -37,6 +42,8 @@ class PIDNavigation(TeacherNavigation):
         self.segment_references={}
         self.global_reference_settings=global_reference_contract(self.profile)
         self.global_route_guides=SegmentGuides()
+        self.continuous_settings=continuous_configuration(self.profile)
+        self.continuous_route=None;self.coverage_replan_index=None
         self.reference_consistency_hold=False;self.reference_consistency_check=None
         self.registered_cloud_archive_mode=self.profile.get('engineering_recording',{}).get('registered_cloud_archive','legacy_all')
         if self.registered_cloud_archive_mode not in ('legacy_all','disabled'):
@@ -84,6 +91,10 @@ class PIDNavigation(TeacherNavigation):
             self.pid_row=None;self.pid_prepared_output=None
             self.reference_consistency_hold=False;self.reference_consistency_check=None
             self.publish_command()
+            self.continuous_route=(RouteProgress(self.request_id,self.goals,
+                self.goals_definition_sha256,self.continuous_settings)
+                if self.continuous_settings["enabled"] else None)
+            self.coverage_replan_index=None
     def on_corridor_snapshot(self,msg):
         from corridor_runtime import decode_snapshot,sha_text
         wall=time.monotonic_ns();clock=self.get_clock().now().nanoseconds
@@ -368,7 +379,7 @@ class PIDNavigation(TeacherNavigation):
                 if self.segment_start is None:raise ValueError('direction_check_requires_original_segment_activation')
                 delta=self.waypoints[self.waypoint_index][:2]-self.segment_start[:2]
                 check_direction=admission_direction_check(check,self.pose,self.waypoints[self.waypoint_index],
-                    math.atan2(delta[1],delta[0]),self.profile['cascade'],
+                    self.fixed_terminal_heading(self.waypoint_index,self.segment_start),self.profile['cascade'],
                     self.profile['teacher_transition']['drive_heading_max_rad'],self.global_reference_settings)
                 proof=dict(proof,direction_coherence=check_direction)
                 if not check_direction['allowed']:
@@ -475,7 +486,59 @@ class PIDNavigation(TeacherNavigation):
             steering=copy.deepcopy(steering),feedback=copy.deepcopy(self.feedback),
             navigation_ground_truth_used=False))
         return velocity,rate,target,steering
+    def continuous_before_region(self,now,clock_ns):
+        ledger=self.continuous_route
+        if ledger is None:return
+        if ledger.points is None:
+            ledger.activate(self.region_raw_pose,int(self.pose_stamp),clock_ns)
+            self.waypoint_index=ledger.target_index
+            self.region_arrival=ArrivalWindow(self.goals[self.waypoint_index])
+        receipt=ledger.observe(self.region_raw_pose,int(self.pose_stamp),clock_ns,
+            protected=self.obstacle_hold or self.tilt_hold or self.bridge_safety.get("state")!="ready")
+        if receipt is not None:
+            self.region_arrivals.append(copy.deepcopy(receipt))
+            self.evidence.append(self.run/"navigation_region_passes.jsonl",receipt)
+        if ledger.missed_pass_requires_replan() and self.coverage_replan_index!=ledger.next_index:
+            self.coverage_replan_index=ledger.next_index
+            self.evidence.append(self.run/"navigation_coverage_replans.jsonl",dict(
+                ledger.status(),reason="ordinary_region_not_observed_replan_through_original_volume",
+                source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=clock_ns,
+                old_trajectory_id=self.active_trajectory_id,safety_gates_preserved=True))
+            self.samples=None;self.execution_path_exhaustion=None
+            self.trajectory_association.reset();self.planning_start_state=None
+            self.active_trajectory_id=None;self.active_reference_stamp=None
+            self.last_reference=-math.inf
+            return True
+        return False
+    def continuous_record_hard(self,receipt,clock_ns):
+        if self.continuous_route is not None:
+            self.continuous_route.accept_hard_receipt(receipt,clock_ns)
+    def continuous_release_target(self):
+        ledger=self.continuous_route
+        if ledger is None or self.state!="running" or ledger.points is None:return
+        target=ledger.release_hard_target()
+        if target!=self.waypoint_index and ledger.next_index<=target:
+            self.waypoint_index=target
+            self.region_arrival=ArrivalWindow(self.goals[target])
+            self.region_arrival.last_stamp=int(self.pose_stamp)
+            self.region_arrival_evidence=None
+    def execution_guard_route(self,start,goal):
+        ledger=self.continuous_route
+        return ledger.guard_route() if ledger is not None and ledger.points is not None else np.vstack([start,goal])
+    def fixed_terminal_heading(self,index,start):
+        ledger=self.continuous_route
+        if ledger is not None and ledger.points is not None:return ledger.terminal_heading(index)
+        delta=self.waypoints[index][:2]-start[:2]
+        if np.linalg.norm(delta)<1e-6:raise ValueError("Frozen goal heading requires nondegenerate actual SLAM segment")
+        return math.atan2(delta[1],delta[0])
     def planner_reference_points(self,goal):
+        if self.continuous_route is not None:
+            points=self.continuous_route.reference_points()
+            self.evidence.append(self.run/"navigation_global_reference_requests.jsonl",dict(
+                self.continuous_route.status(),guide_points_xyz=copy.deepcopy(points),guide_count=len(points),
+                frame_id="camera_init",guide_only_not_arrival=True,collision_or_support_certified=False,
+                source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds))
+            return points
         if not self.global_reference_settings['enabled']:return [goal]
         if self.segment_start is None:raise ValueError('Global planning reference lacks original measured segment activation')
         points,receipt=self.global_route_guides.remaining((self.request_id,self.waypoint_index),
@@ -496,15 +559,18 @@ class PIDNavigation(TeacherNavigation):
                 **self.segment_references[key],navigation_ground_truth_used=False))
     def measured_region_arrival(self):
         self.record_segment_activation()
+        if self.continuous_route is not None and self.continuous_route.next_index!=self.waypoint_index:
+            self.reset_region_arrival("ordered_pass_coverage_pending")
+            return False,False
         return super().measured_region_arrival()
     def ensure_cascade(self):
         key=(self.request_id,self.waypoint_index)
         if self.cascade_key!=key:
             self.reference_replan_pending=False
-            goal=self.waypoints[self.waypoint_index];delta=goal[:2]-self.segment_start[:2]
-            if np.linalg.norm(delta)<1e-6:raise ValueError('Frozen goal heading requires a nondegenerate actual SLAM segment')
-            yaw=math.atan2(delta[1],delta[0])
-            core=StableProjectionController if getattr(self,'global_reference_settings',{'enabled':False})['enabled'] else Controller
+            goal=self.waypoints[self.waypoint_index]
+            yaw=self.fixed_terminal_heading(self.waypoint_index,self.segment_start)
+            core=(CausalHandoffProjectionController if self.continuous_route is not None else
+                StableProjectionController if getattr(self,"global_reference_settings",{"enabled":False})["enabled"] else Controller)
             self.cascade=core(self.profile['cascade'],goal.tolist(),yaw,':'.join(map(str,key)))
             self.reference_consistency_hold=False;self.reference_consistency_check=None
             self.cascade_key=key;self.cascade_path_id=None
@@ -618,6 +684,7 @@ class PIDNavigation(TeacherNavigation):
                     return self.control_parking(now)
                 self.apply_tilt_guard(now,self.get_clock().now().nanoseconds/1e9)
                 self.publish_command();return
+        self.continuous_release_target()
         if self.state=='succeeded' and self.final_bundle is not None:return self.control_parking(now)
         if self.state=='running'and self.samples is not None and self.waypoint_index==len(self.waypoints)-1 and self.segment_start is not None:
             self.ensure_cascade()
@@ -648,7 +715,7 @@ class PIDNavigation(TeacherNavigation):
         ns=self.get_clock().now().nanoseconds;ros_now=ns/1e9
         if self.state!='running':self.publish_command();return
         if (self.segment_start is not None and not self.goals[self.waypoint_index].legacy
-                and ros_now-self.segment_started_ros>self.goals[self.waypoint_index].timeout_sim_s):
+                and self.segment_deadline_exceeded(ns)):
             self.reset_region_arrival('failed')
             self.state,self.message='failed','当前航点超过仿真时间限制，停车'
             self.publish_command();return
@@ -678,7 +745,7 @@ class PIDNavigation(TeacherNavigation):
                 goal=self.waypoints[self.waypoint_index]
                 target=np.asarray((self.steering or {}).get('target',goal),dtype=float)
                 direction=np.asarray((self.steering or {}).get('direction',(goal-self.pose)[:2]),dtype=float)
-                result=self.evaluate_motion_guard(self.cloud,self.pose,target,direction,np.vstack([self.segment_start,goal]))
+                result=self.evaluate_motion_guard(self.cloud,self.pose,target,direction,self.execution_guard_route(self.segment_start,goal))
                 self.obstacle_result=result;self.last_obstacle_check=now
                 if result[0] or not self.heading_gate.stopped(ros_now,now):
                     self.obstacle_clear_since=None
@@ -715,7 +782,7 @@ class PIDNavigation(TeacherNavigation):
                 self.select_pid_velocity(np.zeros(2),0.,goal,False,mode_override='hold')
                 self.publish_command();return
             velocity,yawrate=self.select_pid_velocity(np.zeros(2),0.,goal,True,mode_override='capture')
-            result=self.evaluate_motion_guard(self.cloud,self.pose,goal,self.steering['direction'],np.vstack([bundle['start'],goal]))
+            result=self.evaluate_motion_guard(self.cloud,self.pose,goal,self.steering['direction'],self.execution_guard_route(bundle['start'],goal))
             if result[0]:
                 self.message='终点实际点云保护停车'
                 self.publish_command()  # Stop immediately and archive the guarded candidate.
@@ -779,7 +846,9 @@ def main():
     import rclpy
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True)
     args,ros=p.parse_known_args();run=args.run.resolve();os.environ['DEMO_RUN_DIR']=str(run)
-    rclpy.init(args=ros);node=PIDNavigation(run)
+    from known_scene_inputs import KnownSceneInputMixin
+    class IntegratedNavigation(KnownSceneInputMixin,PIDNavigation):pass
+    rclpy.init(args=ros);node=IntegratedNavigation(run)
     try:rclpy.spin(node)
     except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):pass
     finally:

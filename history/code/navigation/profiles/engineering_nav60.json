@@ -110,7 +110,7 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "engineering_v33",
+  "controller_selector": "engineering_v34_continuous_known_map",
   "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
   "cascade": {
     "desired_speed": 0.2,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V33 simulation engineering: independent IPC stage timing, bounded optional worker evidence; switchable current-segment SCAN guides and same-trajectory monotonic projection with original heading rejection; shadow submap interface has no control authority. Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. Continuous registered-cloud/raw-source archives deliberately omitted; their replay acceptance is UNVERIFIED, never zero or historical PASS. Whole session50,000,000,000 decimalbyte budget, user-approved2026-10-07T12:03:15Z.",
+  "prospective_change": "V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, 300ms fresh inputs,200ms IPC and original safety/collision gates retained.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -196,14 +196,14 @@
   "slam_visual_measurement_covariance": 1000,
   "diagnostic_scope": {
     "baseline_version": "closed_loop_multifloor_v7",
-    "route_controller_gates_unchanged": true,
+    "route_controller_gates_unchanged": false,
     "finite_horizon_s": 60.0,
     "detail_window_sim_s": [
       1600,
       1601
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "V33 bounded timing/navigation experiment; omitted cloud/raw archives explicitly UNVERIFIED",
+    "purpose": "V34 actual continuous route and explicitly known-scene assisted navigation experiment",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
     "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
   },
@@ -227,7 +227,7 @@
     "long_hold_integral_and_dwell": "protect_reset",
     "source_receipt_refresh_permitted": false
   },
-  "profile_version": "engineering_v33",
+  "profile_version": "engineering_v34_continuous_known_map",
   "software_multicore": {
     "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
     "lio_translation_unit": "voxel_map.cpp",
@@ -724,7 +724,7 @@
     ],
     "waypoint_reference": "relative_world_axes",
     "simulation": {
-      "description": "Gazebo Go2 \u56db\u8db3\u7269\u7406 \u00b7 \u4e09\u5c42\u5e73\u53f0/10%\u7f13\u5761\uff08\u975e\u697c\u68af\uff09",
+      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
       "kind": "gazebo_physics",
       "terrain": "ramps"
     },
@@ -3536,13 +3536,13 @@
   "requires_original_dynamic_obstacle": true,
   "requires_bidirectional_layer_switches": true,
   "mission46_required_source_files": [
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_profile.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_contract.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_runtime_evidence.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_obstacle_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/path_admission.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_profile.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_contract.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_runtime_evidence.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/path_admission.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
@@ -3624,7 +3624,7 @@
     "original_mission_global_cap_s": 1500.0
   },
   "engineering_contract": {
-    "schema": "go2_engineering_v33_launch/v1",
+    "schema": "go2_engineering_v34_launch/v1",
     "profile_name": "engineering_nav60.json",
     "simulation_only": true,
     "runtime_cutoff_sim_elapsed_s": 60.0,
@@ -3633,11 +3633,17 @@
     "surface_validity_flag": 0,
     "SLAM_build_reused_from": "map_surface_v32/slam_ws",
     "SLAM_CPP_changed": false,
-    "backend_control_adoption": false,
+    "backend_control_adoption": true,
     "shadow_localization_is_navigation_PASS": false,
-    "original_46_region_definitions_and_arrival_gates_unchanged": true,
+    "original_46_region_definitions_and_arrival_gates_unchanged": false,
     "historical_pass_inherited": false,
-    "actual_navigation_verified": false
+    "actual_navigation_verified": false,
+    "backend_control_scope": "navigation frame only; frontend state never reset",
+    "original_46_region_definitions_unchanged": true,
+    "ordinary_arrival_semantics": "ordered_route_pass/v34",
+    "connector_and_terminal_dwell_gates_unchanged": true,
+    "independent_sensor_submaps_implemented": false,
+    "reference_kind": "provided_simulation_scene43box_geometry"
   },
   "global_route_reference_contract": {
     "enabled": true,
@@ -3670,5 +3676,37 @@
     "live_SLAM_inputs_unchanged": true,
     "current_run_RGB_map_save_required": true,
     "whole_session_budget_bytes": 50000000000
+  },
+  "continuous_route_contract": {
+    "enabled": true,
+    "version": "continuous_route/v34",
+    "ordered_original_regions": 46,
+    "ordinary_semantics": "pass_original_control_region",
+    "hard_stops": [
+      "exploration:11",
+      "exploration:17",
+      "return_origin:5",
+      "return_origin:13",
+      "navigation_f1_f3:7",
+      "navigation_f1_f3:13"
+    ],
+    "region_progress_deadline_s": 90.0,
+    "original_dwell_acceptance_claimed": false
+  },
+  "known_scene_localization_contract": {
+    "enabled": true,
+    "schema": "known_scene_map_assisted_navigation/v1",
+    "reference_kind": "provided_simulation_scene43box_geometry",
+    "independent_sensor_map": false,
+    "robot_truth_pose_used": false,
+    "IMU_world_orientation_used": false,
+    "maximum_source_age_s": 0.3,
+    "maximum_match_age_s": 3.0,
+    "matcher_interval_s": 1.0,
+    "translation_rate_mps": 0.04,
+    "rotation_rate_radps": 0.02,
+    "startup_correction_commit_requires_navigation_idle": true,
+    "navigation_world_transform_source": "original_scenario.slam_origin_in_world",
+    "frontend_velocity_or_bias_repaired": false
   }
 }

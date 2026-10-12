@@ -18,6 +18,7 @@ from mission46_profile import (FROZEN_SHA, ORIGINAL_SCENARIO_SHA, ROUTE_COUNTS,
 from mission.state_machine import Mission, ObstacleEvidence, ACTIVE_STAGES
 from navigation.goal_regions import contains_control, parse_goal
 from simulation.obstacle_trigger import SceneTrigger
+from continuous_route import ContinuousMission
 
 SHA = re.compile(r'^[0-9a-f]{64}$')
 INTERFACES = {'multi_request_controller', 'whole_mission_worker',
@@ -54,10 +55,11 @@ class TeacherMission46:
     must preserve the independent controller/bridge 300ms watchdog.
     """
 
-    def __init__(self, scenario=None):
+    def __init__(self, scenario=None, *, continuous_route=False):
         self.scenario = copy.deepcopy(scenario if scenario is not None else scenario_for_teacher())
         validate_original_scenario(self.scenario)
-        self.original = Mission()
+        self.continuous_route = continuous_route
+        self.original = ContinuousMission() if continuous_route else Mission()
         self.trigger = SceneTrigger()
         self.obstacle_evidence = ObstacleEvidence()
         self.interfaces = {}
@@ -93,7 +95,7 @@ class TeacherMission46:
             raise ValueError('Mission already active')
         # Reset evidence when restarting, preserving only the source declarations.
         interfaces = copy.deepcopy(self.interfaces)
-        self.__init__(self.scenario)
+        self.__init__(self.scenario,continuous_route=self.continuous_route)
         self.interfaces = interfaces
         self._time(wall_s, sim_ns)
         self.start_sim_ns = sim_ns
@@ -296,7 +298,7 @@ class TeacherMission46:
                 r['phase'] == self.original.stage for r in self.terrain_receipts)):
             return self._fail(wall_s, 'phase succeeded without its required terrain switch ack')
         if not self.original.region_completion_valid(status, pose):
-            return self._fail(wall_s, 'original complete region/dwell evidence failed')
+            return self._fail(wall_s, 'continuous ordered region coverage/hard dwell evidence failed' if self.continuous_route else 'original complete region/dwell evidence failed')
         if self.original.stage == 'navigating':
             if self.dynamic_receipt is None or not self.obstacle_evidence.verified:
                 return self._fail(wall_s, 'original dynamic obstacle stop/recovery evidence missing')
@@ -386,6 +388,8 @@ class TeacherMission46:
     def snapshot(self):
         result = self.original.snapshot()
         result.update(schema='teacher_original_mission46_state/v1',
+                      completion_semantics=("ordinary_ordered_pass_and_original_hard_stop_dwell" if self.continuous_route else "original_all_region_dwell"),
+                      legacy_all_region_dwell_claimed=not self.continuous_route,
                       adapter_stage='final_active_hold' if self.pending_final else self.original.stage,
                       functional_sequence_completed=self.completed,
                       navigation_is_verified=False,

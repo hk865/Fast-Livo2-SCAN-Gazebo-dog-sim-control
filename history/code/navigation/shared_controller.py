@@ -570,6 +570,11 @@ class Navigation(Node):
             self.publish_status()
             self.last_status = now
 
+    def segment_deadline_exceeded(self,clock_ns):
+        ledger=getattr(self,"continuous_route",None)
+        if ledger is not None:return ledger.deadline_exceeded(clock_ns)
+        return clock_ns/1e9-self.segment_started_ros>self.goals[self.waypoint_index].timeout_sim_s
+
     def control(self, now):
         if self.state != 'running':
             self.publish_command()
@@ -580,7 +585,7 @@ class Navigation(Node):
         # protected waits after this segment has actually started. Legacy
         # timer/arrival ordering retains its original behavior below.
         if (self.segment_start is not None and not self.goals[self.waypoint_index].legacy
-                and ros_now-self.segment_started_ros > self.goals[self.waypoint_index].timeout_sim_s):
+                and self.segment_deadline_exceeded(control_clock_ns)):
             self.reset_region_arrival('failed')
             self.state, self.message = 'failed', '当前航点超过仿真时间限制，停车'
             self.publish_command()
@@ -607,6 +612,8 @@ class Navigation(Node):
             self.reset_region_arrival('protected')
             self.publish_command()
             return
+        if hasattr(self,"continuous_before_region") and self.continuous_before_region(now,control_clock_ns):
+            self.publish_command();self.request_plan();return
         goal = self.waypoints[self.waypoint_index]
         if self.segment_start is None:
             self.segment_start = self.pose.copy()
@@ -624,6 +631,8 @@ class Navigation(Node):
             self.publish_command()
             if arrived:
                 if self.region_arrival is not None:
+                    if hasattr(self,"continuous_record_hard"):
+                        self.continuous_record_hard(self.region_arrival_evidence,control_clock_ns)
                     self.region_arrivals.append(copy.deepcopy(self.region_arrival_evidence))
                 self.waypoint_index += 1
                 self.samples = None
@@ -699,7 +708,8 @@ class Navigation(Node):
             velocity = np.zeros(2)
         velocity, yaw_rate = self.select_pid_velocity(velocity, yaw_rate, target, allow_translation)
         if now-self.last_obstacle_check > 0.10 or getattr(self,'pid_guard_needs_evaluation',False):
-            route = np.vstack([self.segment_start, goal])
+            route = (self.execution_guard_route(self.segment_start,goal) if hasattr(self,"execution_guard_route")
+                     else np.vstack([self.segment_start,goal]))
             self.obstacle_result = self.evaluate_motion_guard(
                 self.cloud,self.pose,target,self.steering['direction'],route)
             self.last_obstacle_check = now
@@ -805,6 +815,7 @@ class Navigation(Node):
                       current_goal=None if self.waypoint_index >= len(self.goals) else self.goals[self.waypoint_index].definition(),
                       region_arrival_evidence=self.region_arrival_evidence,
                       region_arrivals=self.region_arrivals,
+                      continuous_route=(self.continuous_route.status() if getattr(self,"continuous_route",None) is not None and self.continuous_route.request_id==self.request_id else None),
                       waypoint_index=self.waypoint_index, total=len(self.waypoints),
                       message=self.message, obstacle_hold=self.obstacle_hold,
                       obstacle_stops=self.obstacle_stops, obstacle_resumes=self.obstacle_resumes,

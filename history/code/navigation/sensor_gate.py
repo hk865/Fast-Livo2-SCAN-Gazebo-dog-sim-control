@@ -159,10 +159,13 @@ def main():
             self.warmup.record(name,stamp)
         def graph(self):
             expected={'/aft_mapped_to_init':'laserMapping','/demo/slam/body_odom':'demo_slam_odom_adapter',
-                '/cloud_registered_full':'laserMapping','/demo/slam/lidar_filtered':'demo_slam_self_echo_filter',
+                '/cloud_registered_full':('demo_slam_odom_adapter' if profile.get('known_scene_localization_contract',{}).get('enabled') else 'laserMapping'),'/demo/slam/lidar_filtered':'demo_slam_self_echo_filter',
                 '/demo/teacher/slam/image':'teacher_slam_actual_sensor_relay',
                 '/demo/teacher/slam/imu':'teacher_slam_actual_sensor_relay'}
             results={}
+            if profile.get('known_scene_localization_contract',{}).get('enabled'):
+                expected.update({'/demo/slam/raw_body_odom':'demo_slam_raw_odom_adapter',
+                    '/demo/slam/raw_registered_full':'laserMapping'})
             for topic,name in expected.items():
                 infos=self.get_publishers_info_by_topic(topic)
                 results[topic]={'expected':name,'publishers':[i.node_namespace+'/'+i.node_name for i in infos],

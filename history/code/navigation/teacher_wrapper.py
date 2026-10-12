@@ -40,6 +40,9 @@ class RecordedPublisher:
         data.update(mode=self.node.profile['controller_kind'],scope=self.node.profile['experiment'],navigation_ground_truth_used=False,
             policy_observations=self.node.profile['policy_observations'],
             navigation_validation='unverified',acceptance_is_global=False)
+        data['known_scene_localization']=copy.deepcopy(getattr(self.node,'known_scene_inputs',None))
+        data['known_scene_runtime_status']=copy.deepcopy(getattr(self.node,'known_scene_status',None))
+        data['known_scene_scan_epoch']=copy.deepcopy(getattr(self.node,'known_scene_scan_epoch',None))
         data['controller_kind']=self.node.profile['controller_kind']
         data['outer_velocity_controller']='Actual SLAM header-event geometric path/yaw PD and COM speed PI; causal IMU and actual Teacher input ACK; native SCAN collision guard'
         data['cascade_parking']=copy.deepcopy(getattr(self.node,'cascade_last_row',None))

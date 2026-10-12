@@ -73,7 +73,8 @@ def build_node(run, scope, profile):
             for path in required_runtime_files():
                 if scope['references'].get(str(path.resolve()))!=hashlib.sha256(path.read_bytes()).hexdigest():
                     raise ValueError('Mission46 runtime source is not frozen: '+str(path))
-            self.mission=TeacherMission46(profile['original_scenario'])
+            self.mission=TeacherMission46(profile['original_scenario'],
+                continuous_route=profile.get("continuous_route_contract",{}).get("enabled",False))
             self.mission.bind_runtime_interfaces(load_interfaces(run,scope))
             self.writer=make_evidence_writer(run,profile);self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix='teacher-mission46-audit')
             self.jobs={};self.last_errors={};self.started_wall=time.monotonic()

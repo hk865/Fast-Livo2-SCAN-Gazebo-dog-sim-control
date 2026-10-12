@@ -1,0 +1,30 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/navigation_scenario.json --ros-args -p use_sim_time:=true -r __node:=demo_slam_raw_odom_adapter -r /demo/slam/body_odom:=/demo/slam/raw_body_odom -r /demo/slam/lidar_odom:=/demo/slam/raw_lidar_odom'].
+[ERROR] [python3-12]: process has died [pid 1001547, exit code 1, cmd 'python3 /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/mission46_runtime.py --run /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9 --ros-args -p use_sim_time:=true'].
+[INFO] [python3-7]: process has finished cleanly [pid 1001537]
+[ERROR] [fastlivo_mapping-4]: process[fastlivo_mapping-4] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [fastlivo_mapping-4]: sending signal 'SIGTERM' to process[fastlivo_mapping-4]
+[fastlivo_mapping-4] [INFO] [1791435369.543261008] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ERROR] [fastlivo_mapping-4]: process[fastlivo_mapping-4] failed to terminate '10.0' seconds after receiving 'SIGTERM', escalating to 'SIGKILL'
+[INFO] [fastlivo_mapping-4]: sending signal 'SIGKILL' to process[fastlivo_mapping-4]
+[ERROR] [fastlivo_mapping-4]: process has died [pid 1001534, exit code -9, cmd '/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/slam_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping --ros-args -r __node:=laserMapping --params-file /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/navigation_fastlivo.yaml --params-file /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/navigation_camera.yaml --params-file /tmp/launch_params_8n4i29ck -r /cloud_registered_full:=/demo/slam/raw_registered_full'].
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/world.sdf:L2035]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/world.sdf:L2089]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/world.sdf:L2119]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9/world.sdf:L2124]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+libEGL warning: pci id for fd 62: 10de:2c05, driver (null)
+
+pci id for fd 63: 10de:2c05, driver (null)
+pci id for fd 64: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 62: 10de:2c05, driver (null)
+
+pci id for fd 63: 10de:2c05, driver (null)
+pci id for fd 64: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 62: 10de:2c05, driver (null)
+

@@ -1,8 +1,8 @@
-"""V33 exact profiles: original V32 mission and safety, declared engineering edits."""
+"""Exact V34 continuous-route, known-scene assisted simulation profiles.
+Ordinary passage is a NEW versioned outcome, not the old46 dwell pass.
+"""
 from pathlib import Path
-import copy
-import json
-
+import copy,json
 PROFILE_NAMES=('engineering_ipc60.json','engineering_nav30.json','engineering_nav60.json','engineering_nav270.json','engineering_nav46.json')
 PROFILE_NAME=PROFILE_NAMES[0]
 DURATIONS=dict(zip(PROFILE_NAMES,(60.,30.,60.,270.,1500.)))
@@ -11,78 +11,62 @@ SURFACE_PARAMETERS=dict(minimum_support_points=6,minimum_mid_max_ratio=.05,
     original_min_eigenvalue_threshold_m2=.005)
 SURFACE_DIAGNOSTIC=dict(windows='0:15,209:215',bounds='14:18,-1:3,0:1.5',
     max_bytes=67108864,source_kinds=[104,105],raw_truth_navigation_used=False)
-CHANGE=('V33 simulation engineering: independent IPC stage timing, bounded optional worker evidence; '
-    'switchable current-segment SCAN guides and same-trajectory monotonic projection with '
-    'original heading rejection; shadow submap interface has no control authority. '
-    'Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, '
-    'arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. '
-    'Continuous registered-cloud/raw-source archives deliberately omitted; their replay '
-    'acceptance is UNVERIFIED, never zero or historical PASS. Whole session50,000,000,000 decimalbyte budget, user-approved2026-10-07T12:03:15Z.')
-DECLARED_FIELDS=('controller_selector','profile_version','prospective_change',
-    'mission46_required_source_files','duration_s','diagnostic_scope','raw_budget_bytes',
-    'minimum_available_storage_bytes','raw_storage_budget',
-    'raw_budget_is_limit_not_permission_to_drop_evidence')
-
+VERSION='engineering_v34_continuous_known_map'
+CHANGE=('V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, '
+        'original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted '
+        'navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; '
+        'no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, '
+        '300ms fresh inputs,200ms IPC and original safety/collision gates retained.')
 def baseline_profile_path(here,name=PROFILE_NAME):
-    if name not in PROFILE_NAMES:raise ValueError('Unknown V33 profile')
-    base='repair_original46.json' if name==PROFILE_NAMES[-1] else 'repair_prefix270.json'
-    return Path(here).resolve().parent/'map_surface_v32/profiles'/base
-
+    if name not in PROFILE_NAMES:raise ValueError('Unknown V34 profile')
+    return Path(here).resolve().parent/'engineering_v33/profiles'/name
 def profile_name(profile):
     name=profile.get('engineering_contract',{}).get('profile_name')
-    if name not in PROFILE_NAMES:raise ValueError('Missing exact V33 profile identity')
+    if name not in PROFILE_NAMES:raise ValueError('Missing exact V34 profile identity')
     return name
-
-def normal_form(profile,here):
-    baseline=json.loads(baseline_profile_path(here,profile_name(profile)).read_text())
-    result=copy.deepcopy(profile)
-    for key in DECLARED_FIELDS:result[key]=copy.deepcopy(baseline[key])
-    for key in ('engineering_contract','global_route_reference_contract','engineering_recording'):
-        result.pop(key,None)
-    return result
-
 def expected_profile(here,name=PROFILE_NAME):
     from mission46_profile import required_source_files
-    from storage_guard import HARD_BYTES,HOME_RESERVE
-    if name not in PROFILE_NAMES:raise ValueError('Unknown V33 profile')
     result=json.loads(baseline_profile_path(here,name).read_text())
-    result.update(controller_selector='engineering_v33',profile_version='engineering_v33',
-        prospective_change=CHANGE,mission46_required_source_files=[str(p.resolve()) for p in required_source_files()],
-        duration_s=DURATIONS[name],raw_budget_bytes=HARD_BYTES,
-        minimum_available_storage_bytes=HOME_RESERVE,
-        raw_budget_is_limit_not_permission_to_drop_evidence=False,
-        raw_storage_budget=dict(max_run_bytes=HARD_BYTES,minimum_start_available_bytes=HOME_RESERVE,
-            minimum_runtime_available_bytes=HOME_RESERVE))
-    result['diagnostic_scope'].update(finite_horizon_s=DURATIONS[name],detail_window_sim_s=[1600,1601],
-        route_controller_gates_unchanged=True,
-        purpose='V33 bounded timing/navigation experiment; omitted cloud/raw archives explicitly UNVERIFIED')
-    result['engineering_contract']=dict(schema='go2_engineering_v33_launch/v1',profile_name=name,
-        simulation_only=True,runtime_cutoff_sim_elapsed_s=DURATIONS[name],cutoff_is_success=False,
-        original_mission_global_cap_s=1500.,surface_validity_flag=0,
-        SLAM_build_reused_from='map_surface_v32/slam_ws',SLAM_CPP_changed=False,
-        backend_control_adoption=False,shadow_localization_is_navigation_PASS=False,
-        original_46_region_definitions_and_arrival_gates_unchanged=True,
-        historical_pass_inherited=False,actual_navigation_verified=False)
-    result['global_route_reference_contract']=dict(enabled=name!=PROFILE_NAME,guide_spacing_m=1.,
-        guide_start_ahead_m=.35,direction_audit_arc_m=.8,max_guide_points=64)
-    result['engineering_recording']=dict(registered_cloud_archive='disabled',
-        raw_source_capture=False,overview_archive_stride=30,omitted_cloud_replay_acceptance='UNVERIFIED',
-        dense_solver_payload_collected=False,dense_solver_payload_acceptance='UNVERIFIED',
-        state_stage_timing_kept=True,dense_window_outside_original1500s_cap=True,
-        compact_histories=dict(enabled=True,codec='v33_dictionary_jsonl/v1',
-            streams=['navigation_command_history.jsonl','navigation_status.jsonl','mission46_status_history.jsonl'],
-            original_JSON_values_preserved=True,live_inputs_unchanged=True),
-        optional_IPC_payload_max_bytes=68*1024**2,live_SLAM_inputs_unchanged=True,
-        current_run_RGB_map_save_required=True,whole_session_budget_bytes=HARD_BYTES)
+    result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
+        mission46_required_source_files=[str(p.resolve()) for p in required_source_files()])
+    result['engineering_contract'].update(schema='go2_engineering_v34_launch/v1',
+        backend_control_adoption=True,backend_control_scope='navigation frame only; frontend state never reset',
+        original_46_region_definitions_and_arrival_gates_unchanged=False,
+        original_46_region_definitions_unchanged=True,ordinary_arrival_semantics='ordered_route_pass/v34',
+        connector_and_terminal_dwell_gates_unchanged=True,
+        independent_sensor_submaps_implemented=False,reference_kind='provided_simulation_scene43box_geometry')
+    result['global_route_reference_contract']['enabled']=True
+    result['continuous_route_contract']=dict(enabled=True,version='continuous_route/v34',
+        ordered_original_regions=46,ordinary_semantics='pass_original_control_region',
+        hard_stops=['exploration:11','exploration:17','return_origin:5','return_origin:13',
+                    'navigation_f1_f3:7','navigation_f1_f3:13'],
+        region_progress_deadline_s=90.,original_dwell_acceptance_claimed=False)
+    result['known_scene_localization_contract']=dict(enabled=True,
+        schema='known_scene_map_assisted_navigation/v1',reference_kind='provided_simulation_scene43box_geometry',
+        independent_sensor_map=False,robot_truth_pose_used=False,IMU_world_orientation_used=False,
+        maximum_source_age_s=.3,maximum_match_age_s=3.,matcher_interval_s=1.,
+        translation_rate_mps=.04,rotation_rate_radps=.02,
+        startup_correction_commit_requires_navigation_idle=True,
+        navigation_world_transform_source='original_scenario.slam_origin_in_world',
+        frontend_velocity_or_bias_repaired=False)
+    result['diagnostic_scope'].update(route_controller_gates_unchanged=False,
+        purpose='V34 actual continuous route and explicitly known-scene assisted navigation experiment')
     return result
-
+def normal_form(profile,here):
+    base=json.loads(baseline_profile_path(here,profile_name(profile)).read_text())
+    result=copy.deepcopy(profile)
+    for key in ('controller_selector','profile_version','prospective_change',
+                'mission46_required_source_files','engineering_contract','diagnostic_scope',
+                'global_route_reference_contract'):
+        result[key]=copy.deepcopy(base[key])
+    result.pop('continuous_route_contract',None);result.pop('known_scene_localization_contract',None)
+    return result
 def validate_full46(profile,here):
     from mission46_profile import validate_profile
     validate_profile(profile);name=profile_name(profile)
-    if profile!=expected_profile(here,name):raise ValueError('Only exact V33 engineering profiles allowed')
+    if profile!=expected_profile(here,name):raise ValueError('Only exact reviewed V34 profiles allowed')
     if normal_form(profile,here)!=json.loads(baseline_profile_path(here,name).read_text()):
-        raise ValueError('Undeclared mission/controller/safety change')
-    if (profile.get('mission46_required') is not True or profile.get('pose_cloud_timeout_s')!=.3
-        or profile['cascade']['feedback_ttl_sim_and_wall_s']!=.3):
-        raise ValueError('Original mission freshness required')
+        raise ValueError('Undeclared inherited safety/profile change')
+    if profile['pose_cloud_timeout_s']!=.3 or profile['cascade']['feedback_ttl_sim_and_wall_s']!=.3:
+        raise ValueError('Original freshness changed')
     return profile

@@ -293,6 +293,7 @@ def verify_dynamic(run, request_id, status_rows, pose_rows, guard_records, obsta
     remain available for the final independent evaluator to check that limit.
     """
     from simulation.obstacle_trigger import SceneTrigger
+    from continuous_scene_trigger import scene_trigger_view
     import sys
     from mission46_profile import DEMO
     if str(DEMO/'navigation') not in sys.path:sys.path.append(str(DEMO/'navigation'))
@@ -302,7 +303,13 @@ def verify_dynamic(run, request_id, status_rows, pose_rows, guard_records, obsta
     triggers=[r for r in records if r['data'].get('operation')=='trigger_armed']
     acks=[r for r in records if r['data'].get('operation')=='SetEntityPose_response' and r['data'].get('success')is True]
     if len(triggers)!=1:raise ValueError('Exactly one actual original dynamic scene trigger required')
-    trigger=triggers[0]['data'];scene=SceneTrigger();scene.observe(trigger['mission_state'])
+    trigger=triggers[0]['data'];scene=SceneTrigger()
+    trigger_view,adapter=scene_trigger_view(trigger['mission_state'])
+    if adapter["continuous_route"] and (
+            adapter["applied"] is not True or trigger.get("trigger_scene_view")!=trigger_view
+            or trigger.get("trigger_view_adapter")!=adapter):
+        raise ValueError("Actual continuous trigger lacks replayable original pass receipt/view binding")
+    scene.observe(trigger_view)
     if not scene.nearby(trigger['actual_slam_pose']['position'][:2]) or not scene.ready:
         raise ValueError('Actual dynamic trigger does not replay original SceneTrigger')
     if (trigger['mission_state']['current_request']!=request_id or
@@ -400,6 +407,18 @@ def verify_parking(run, request_id, start_ns, pose_rows, native_records, status_
     statuses=[r for r in status_rows if start_ns<=r['received_sim_ns']<=end]
     if len(poses)<25 or len(natives)<200 or len(statuses)<20:
         raise ValueError('First5s hold has insufficient actual pose/native/status records')
+    profile_path=Path(run)/'navigation_profile.json'
+    assisted=profile_path.exists() and json.loads(profile_path.read_text()).get('known_scene_localization_contract',{}).get('enabled')
+    if assisted:
+        generations=set()
+        for row in statuses:
+            data=row['data'];m=data.get('known_scene_localization') or {};s=data.get('known_scene_runtime_status') or {};e=data.get('known_scene_scan_epoch') or {}
+            if (not m.get('control_allowed') or m.get('correction_stale') or m.get('correction_transition')
+                    or not s.get('initialized') or s.get('correction_transition') or not e.get('ready')
+                    or not (m.get('generation')==s.get('generation')==e.get('generation'))):
+                raise ValueError('Known-scene parking requires a fresh committed pose/cloud/planner epoch, never a correction hold')
+            generations.add(m['generation'])
+        if len(generations)!=1:raise ValueError('Parking5s crosses a localization correction epoch')
     def cover(stamps,gap):
         return stamps[0]-start_ns<=gap and end-stamps[-1]<=gap and np.all(np.diff(stamps)>0) and max(np.diff(stamps))<=gap
     if not cover([r['stamp_ns'] for r in poses],200_000_000) or not cover([native_ns(r['data']) for r in natives],30_000_000):

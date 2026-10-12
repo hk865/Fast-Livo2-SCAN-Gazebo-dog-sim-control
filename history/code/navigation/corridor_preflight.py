@@ -1,16 +1,13 @@
-"""Fresh V33 source review, explicitly reusing frozen V32 build provenance."""
+"""Fresh V34 source review, explicitly reusing frozen V32 build provenance."""
 from pathlib import Path
 import hashlib
 import json
 import subprocess
 import sys
 
-GATE_NAME='ENGINEERING_V33_PREFLIGHT.json'
-REVIEW_NAME='ENGINEERING_V33_SOURCE_REVIEW.json'
-CHANGED_ADAPTERS=frozenset(('controller.py','shared_controller.py','teacher_wrapper.py','worker.py',
-    'run.py','pid_scope.py','slam_workspace.py','slam.launch.py','storage_guard.py',
-    'mission46_profile.py','full46_launch_contract.py','corridor_preflight.py',
-    'bridge.py','mission46_runtime.py','pipeline_lifecycle.py'))
+GATE_NAME='ENGINEERING_V34_PREFLIGHT.json'
+REVIEW_NAME='ENGINEERING_V34_SOURCE_REVIEW.json'
+CHANGED_ADAPTERS=frozenset(('controller.py', 'corridor_preflight.py', 'full46_launch_contract.py', 'mission46.py', 'mission46_obstacle_runtime.py', 'mission46_runtime.py', 'mission46_runtime_evidence.py', 'pid_scope.py', 'run.py', 'sensor_gate.py', 'shared_controller.py', 'slam.launch.py', 'stack.launch.py', 'teacher_wrapper.py'))
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -50,19 +47,19 @@ def verify_original_v32(here):
     return d
 
 def unchanged_navigation_bindings(here):
-    here=Path(here).resolve();base=here.parent/'map_surface_v32';rows={}
+    here=Path(here).resolve();base=here.parent/'engineering_v33';rows={}
     for p in sorted(base.glob('*.py')):
         if p.name in CHANGED_ADAPTERS:continue
         q=here/p.name
-        if sha(q)!=sha(p):raise RuntimeError('Undeclared V33 edit: '+p.name)
+        if sha(q)!=sha(p):raise RuntimeError('Undeclared V34 edit: '+p.name)
         rows[p.name]=dict(baseline=str(p),candidate=str(q),sha256=sha(p))
-    if not {'cascade_core.py','path_admission.py','sensor_gate.py','spatial_reference.py'}.issubset(rows):
+    if not {'cascade_core.py','path_admission.py','clock_hold.py','spatial_reference.py','worker.py','bridge.py'}.issubset(rows):
         raise RuntimeError('Original safety/control sources missing')
     return rows
 
 def evidence_files(here):
     p=Path(here)/GATE_NAME
-    if not p.is_file():raise RuntimeError('V33 source review not frozen yet')
+    if not p.is_file():raise RuntimeError('V34 source review not frozen yet')
     d=json.loads(p.read_text())
     return [p,*[Path(x) for x in d['verified_inputs_sha256']]]
 
@@ -83,7 +80,7 @@ def required_review_files(here,profile=None):
     helper=here.parent/'evidence_runtime_v32'
     required += list(helper.glob('*.py'))+list(helper.glob('*.json'))
     root=here.parents[1]
-    required += [here/'README_V33.md',here/'SUBMAP_SHADOW.md',base/'README.md',root/'simulation/teacher_actuator.cpp',
+    required += [here/'README_V34.md',here/'SUBMAP_SHADOW.md',base/'README.md',root/'simulation/teacher_actuator.cpp',
         root/'simulation/build/libteacher_actuator.so',root/'policy/worker.py',
         root/'policy/observation.py',root/'policy/contract.json',root/'runs/acceptance.json']
     return sorted(set(p.resolve() for p in required))
@@ -132,22 +129,22 @@ def verify_preflight(here,profile):
     validate_full46(profile,here);verify_original_v32(here)
     nav=unchanged_navigation_bindings(here)
     d=json.loads((here/GATE_NAME).read_text());review=json.loads((here/REVIEW_NAME).read_text())
-    if (d.get('schema')!='go2_engineering_v33_preflight/v1' or d.get('candidate_root')!=str(here)
+    if (d.get('schema')!='go2_engineering_v34_preflight/v1' or d.get('candidate_root')!=str(here)
         or d.get('status')!='PASS_LIMITED_ENGINEERING_SOURCE_REVIEW' or d.get('allowed') is not True
         or d.get('actual_navigation_verified') is not False or d.get('historical_pass_inherited') is not False
         or d.get('allowed_profiles')!=list(PROFILE_NAMES)
         or review.get('unchanged_navigation_bindings')!=nav
-        or review.get('root_review_complete') is not True or review.get('independent_review_complete') is not True
+        or review.get('root_review_complete') is not True or review.get('separate_contract_review_complete') is not True
         or not review.get('finite_test_evidence') or not review.get('independent_review_evidence')):
-        raise RuntimeError('V33 finite tests/source review incomplete')
+        raise RuntimeError('V34 finite tests/source review incomplete')
     bindings=d['verified_inputs_sha256']
     validate_review_evidence(here,review['finite_test_evidence'],review['independent_review_evidence'])
     required=[*required_review_files(here,profile),here/REVIEW_NAME]
-    if any(str(p) not in bindings for p in required):raise RuntimeError('V33 inputs incompletely bound')
+    if any(str(p) not in bindings for p in required):raise RuntimeError('V34 inputs incompletely bound')
     for name,digest in bindings.items():
-        if not Path(name).is_absolute() or sha(name)!=digest:raise RuntimeError('V33 frozen source/evidence changed: '+name)
+        if not Path(name).is_absolute() or sha(name)!=digest:raise RuntimeError('V34 frozen source/evidence changed: '+name)
     if profile!=json.loads((here/'profiles'/profile_name(profile)).read_text()):
-        raise RuntimeError('Only the exact frozen V33 profile may run')
+        raise RuntimeError('Only the exact frozen V34 profile may run')
     return d
 
 def freeze_source_review(here,finite_test_evidence,independent_review_evidence,*,root_review_complete=False):
@@ -158,18 +155,18 @@ def freeze_source_review(here,finite_test_evidence,independent_review_evidence,*
     validate_review_evidence(here,finite_test_evidence,independent_review_evidence)
     from full46_launch_contract import PROFILE_NAMES,validate_full46
     for n in PROFILE_NAMES:validate_full46(json.loads((here/'profiles'/n).read_text()),here)
-    review=dict(schema='go2_engineering_v33_source_review/v1',candidate_root=str(here),
+    review=dict(schema='go2_engineering_v34_source_review/v1',candidate_root=str(here),
         actual_navigation_verified=False,historical_pass_inherited=False,root_review_complete=True,
-        independent_review_complete=True,unchanged_navigation_bindings=nav,
+        separate_contract_review_complete=True,unchanged_navigation_bindings=nav,
         finite_test_evidence=[str(Path(x).resolve()) for x in finite_test_evidence],
         independent_review_evidence=[str(Path(x).resolve()) for x in independent_review_evidence],
         limitations=['Finite tests permit bounded simulation only; no native stop or full46 success inherited',
             'No cloud/raw source replay acceptance when archive deliberately disabled',
-            'Submap matcher/map/calibration absent; interface shadow tests are not localization validation'])
+            'Known-scene static-map assistance is not independent sensor-map generalization; actual46 coverage and final parking require new runtime evidence'])
     (here/REVIEW_NAME).write_text(json.dumps(review,indent=2)+'\n')
     inputs=set(required_review_files(here))|{here/REVIEW_NAME}|{
         Path(x).resolve() for x in [*finite_test_evidence,*independent_review_evidence]}
-    gate=dict(schema='go2_engineering_v33_preflight/v1',candidate_root=str(here),
+    gate=dict(schema='go2_engineering_v34_preflight/v1',candidate_root=str(here),
         status='PASS_LIMITED_ENGINEERING_SOURCE_REVIEW',allowed=True,
         actual_navigation_verified=False,historical_pass_inherited=False,
         allowed_profiles=list(PROFILE_NAMES),verified_inputs_sha256={str(x):sha(x) for x in sorted(inputs)})

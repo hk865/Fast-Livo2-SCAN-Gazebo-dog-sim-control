@@ -161,6 +161,10 @@ def prepare(run,args):
         raise RuntimeError('Controller COM differs from unchanged physical asset')
     run_command([str(SYSTEM_PYTHON),'-B',str(ROOT/'tests/cloud_transport_probe_20261004/prepare_transport.py'),
                  '--run',str(run),'--profile','shm_64m'],run/'cloud_transport_prepare.log')
+    from known_scene_reference_builder import build as build_known_scene_reference
+    write_new(run/'known_scene_reference.json',build_known_scene_reference(run/'world.sdf'))
+    from scan_runtime_parameters import parameters as scan_parameters
+    write_new(run/'v34_scan_overrides.yaml',{'scan_planner_node':{'ros__parameters':scan_parameters(p)}})
     scope=module(HERE/'pid_scope.py','closed_loop_prepare_'+uuid.uuid4().hex)
     receipt=scope.prepare(run,p)
     ramp_contract=None
@@ -171,7 +175,7 @@ def prepare(run,args):
             '--segments',segments],run/'ramp_contract_prepare.log')
         ramp_contract=sha(run/'ramp_acceptance_contract.json')
     scope_runtime=json.loads((run/'navigation_scope.json').read_text()).get('runtime',{})
-    expected_children=(14 if p.get('mission46_required') else EXPECTED_CHILDREN+1)-int(not p['engineering_recording']['raw_source_capture'])
+    expected_children=(14 if p.get('mission46_required') else EXPECTED_CHILDREN+1)-int(not p['engineering_recording']['raw_source_capture'])+1
     if scope_runtime.get('required_owned_roles')!=list(REQUIRED_ROLES)or scope_runtime.get('expected_launch_children')!=expected_children:
         raise RuntimeError('New scope and runner process contracts disagree')
     binary_contract={name:{'path':str(path.resolve()),'sha256':sha(path)} for name,path in (
@@ -494,6 +498,8 @@ def execute(run,plan):
         loaded_scan=verify_loaded_scan(run,plan,identities['navigation_stack'])
         if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited during V7 binary witness')
         gazebo=start('gazebo',['gz','sim','-s','-r',str(run/'world.sdf')])
+        from known_scene_witness import record as record_known_scene_witness
+        record_known_scene_witness(run,plan,identities,HERE,SLAM_WORKSPACE)
         write_new(run/'owned_processes_started.json',{role:{**identities[role],'role':role}for role in children})
         camera_deadline=time.monotonic()+30;wall_deadline=time.monotonic()+plan['wall_budget_s'];last_resource=-math.inf;last_storage=-math.inf
         while worker.poll()is None:
@@ -606,7 +612,7 @@ def main():
             'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
         write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
         print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v33';tmp=ROOT/'runs'/('latest_engineering_v33.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_continuous_known_map';tmp=ROOT/'runs'/('latest_engineering_v34_continuous_known_map.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

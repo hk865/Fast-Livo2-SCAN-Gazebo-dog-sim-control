@@ -97,7 +97,7 @@
     0.3,
     0.0
   ],
-  "duration_s": 1500.0,
+  "duration_s": 60.0,
   "overview_pose": [
     8,
     -1,
@@ -110,7 +110,7 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "map_surface_v32",
+  "controller_selector": "engineering_v33",
   "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
   "cascade": {
     "desired_speed": 0.2,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V32 independently built SLAM surface-support validity 0/1 intervention. Original V28 controller, gains, SCAN, Teacher, 46-region geometry, arrivals, dwell,90s region deadlines,300ms freshness and200ms native IPC remain frozen. State/P/IMU/stage/timing remain enabled; detail[209,215], bounded early support evidence[0,15] and bounded async binary/worker/raw-cloud recording are explicit diagnostic/storage changes. Validity0/1 is frozen in the runtime plan before launch, never a postselected profile variant. No historical navigation/height acceptance is inherited; cutoff is not success.",
+  "prospective_change": "V33 simulation engineering: independent IPC stage timing, bounded optional worker evidence; switchable current-segment SCAN guides and same-trajectory monotonic projection with original heading rejection; shadow submap interface has no control authority. Frozen V32 SLAM build reused read-only with surface validity0. Original46 goals, arrival/dwell,90s deadline,300ms freshness,200ms IPC and native physics unchanged. Continuous registered-cloud/raw-source archives deliberately omitted; their replay acceptance is UNVERIFIED, never zero or historical PASS. Whole session50,000,000,000 decimalbyte budget, user-approved2026-10-07T12:03:15Z.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -197,13 +197,13 @@
   "diagnostic_scope": {
     "baseline_version": "closed_loop_multifloor_v7",
     "route_controller_gates_unchanged": true,
-    "finite_horizon_s": 1500.0,
+    "finite_horizon_s": 60.0,
     "detail_window_sim_s": [
-      209,
-      215
+      1600,
+      1601
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "V32 support validity A/B with unchanged V28 navigation; dense[209,215], bounded early support[0,15]; finite source/math evidence never proves height or46 success",
+    "purpose": "V33 bounded timing/navigation experiment; omitted cloud/raw archives explicitly UNVERIFIED",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
     "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
   },
@@ -227,7 +227,7 @@
     "long_hold_integral_and_dwell": "protect_reset",
     "source_receipt_refresh_permitted": false
   },
-  "profile_version": "map_surface_v32",
+  "profile_version": "engineering_v33",
   "software_multicore": {
     "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
     "lio_translation_unit": "voxel_map.cpp",
@@ -270,9 +270,9 @@
     "reserved_bytes": 67108864
   },
   "raw_storage_budget": {
-    "max_run_bytes": 51539607552,
-    "minimum_start_available_bytes": 96636764160,
-    "minimum_runtime_available_bytes": 32212254720
+    "max_run_bytes": 50000000000,
+    "minimum_start_available_bytes": 107374182400,
+    "minimum_runtime_available_bytes": 107374182400
   },
   "mission46_required": true,
   "original_scenario_sha256": "6111db95f08adba2a16c086d74e85c5135823ac1e2b7380f8c882538fd441804",
@@ -285,9 +285,9 @@
     "navigation_f1_f3": 14
   },
   "max_simulation_duration_s": 1500.0,
-  "raw_budget_bytes": 51539607552,
-  "minimum_available_storage_bytes": 96636764160,
-  "raw_budget_is_limit_not_permission_to_drop_evidence": true,
+  "raw_budget_bytes": 50000000000,
+  "minimum_available_storage_bytes": 107374182400,
+  "raw_budget_is_limit_not_permission_to_drop_evidence": false,
   "original_scenario": {
     "world": "multifloor_demo",
     "geometry": "three physical platforms connected by 10% ramps; not stair climbing",
@@ -724,7 +724,7 @@
     ],
     "waypoint_reference": "relative_world_axes",
     "simulation": {
-      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
+      "description": "Gazebo Go2 \u56db\u8db3\u7269\u7406 \u00b7 \u4e09\u5c42\u5e73\u53f0/10%\u7f13\u5761\uff08\u975e\u697c\u68af\uff09",
       "kind": "gazebo_physics",
       "terrain": "ramps"
     },
@@ -3536,13 +3536,13 @@
   "requires_original_dynamic_obstacle": true,
   "requires_bidirectional_layer_switches": true,
   "mission46_required_source_files": [
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46_profile.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46_contract.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46_runtime_evidence.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/mission46_obstacle_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/map_surface_v32/path_admission.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_profile.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_contract.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_runtime_evidence.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v33/path_admission.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
@@ -3574,11 +3574,11 @@
   },
   "path_admission_contract": {
     "schema": "path_admission_v28_capture_launch/v1",
-    "profile_name": "repair_original46.json",
+    "profile_name": "repair_prefix270.json",
     "simulation_only": true,
-    "runtime_cutoff_sim_elapsed_s": 1500.0,
+    "runtime_cutoff_sim_elapsed_s": 270.0,
     "cutoff_is_success": false,
-    "prefix_only": false,
+    "prefix_only": true,
     "full46_verified": false,
     "actual_navigation_verified": false,
     "historical_pass_inherited": false,
@@ -3589,11 +3589,11 @@
   },
   "map_surface_contract": {
     "schema": "map_surface_v32_launch/v1",
-    "profile_name": "repair_original46.json",
+    "profile_name": "repair_prefix270.json",
     "simulation_only": true,
-    "runtime_cutoff_sim_elapsed_s": 1500.0,
+    "runtime_cutoff_sim_elapsed_s": 270.0,
     "cutoff_is_success": false,
-    "prefix_only": false,
+    "prefix_only": true,
     "full46_verified": false,
     "actual_navigation_verified": false,
     "historical_pass_inherited": false,
@@ -3622,5 +3622,53 @@
     "backend_connected": false,
     "original_46_region_definitions_and_arrival_gates_unchanged": true,
     "original_mission_global_cap_s": 1500.0
+  },
+  "engineering_contract": {
+    "schema": "go2_engineering_v33_launch/v1",
+    "profile_name": "engineering_nav60.json",
+    "simulation_only": true,
+    "runtime_cutoff_sim_elapsed_s": 60.0,
+    "cutoff_is_success": false,
+    "original_mission_global_cap_s": 1500.0,
+    "surface_validity_flag": 0,
+    "SLAM_build_reused_from": "map_surface_v32/slam_ws",
+    "SLAM_CPP_changed": false,
+    "backend_control_adoption": false,
+    "shadow_localization_is_navigation_PASS": false,
+    "original_46_region_definitions_and_arrival_gates_unchanged": true,
+    "historical_pass_inherited": false,
+    "actual_navigation_verified": false
+  },
+  "global_route_reference_contract": {
+    "enabled": true,
+    "guide_spacing_m": 1.0,
+    "guide_start_ahead_m": 0.35,
+    "direction_audit_arc_m": 0.8,
+    "max_guide_points": 64
+  },
+  "engineering_recording": {
+    "registered_cloud_archive": "disabled",
+    "raw_source_capture": false,
+    "overview_archive_stride": 30,
+    "omitted_cloud_replay_acceptance": "UNVERIFIED",
+    "dense_solver_payload_collected": false,
+    "dense_solver_payload_acceptance": "UNVERIFIED",
+    "state_stage_timing_kept": true,
+    "dense_window_outside_original1500s_cap": true,
+    "compact_histories": {
+      "enabled": true,
+      "codec": "v33_dictionary_jsonl/v1",
+      "streams": [
+        "navigation_command_history.jsonl",
+        "navigation_status.jsonl",
+        "mission46_status_history.jsonl"
+      ],
+      "original_JSON_values_preserved": true,
+      "live_inputs_unchanged": true
+    },
+    "optional_IPC_payload_max_bytes": 71303168,
+    "live_SLAM_inputs_unchanged": true,
+    "current_run_RGB_map_save_required": true,
+    "whole_session_budget_bytes": 50000000000
   }
 }

@@ -52,10 +52,16 @@ def generate_launch_description():
                  output='screen',parameters=[str(run/'navigation_camera.yaml'),{'use_sim_time':True}]),
             Node(package='fast_livo2_ros',executable='fastlivo_mapping',name='laserMapping',output='screen',
                  additional_env={'DEMO_RUN_DIR':str(run)},parameters=[str(run/'navigation_fastlivo.yaml'),
-                    str(run/'navigation_camera.yaml'),{'use_sim_time':True}]),
-            ExecuteProcess(cmd=['python3',str(demo/'slam/odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros],output='screen'),
+                    str(run/'navigation_camera.yaml'),{'use_sim_time':True}],
+                 remappings=[('/cloud_registered_full','/demo/slam/raw_registered_full')]),
+            ExecuteProcess(cmd=['python3',str(demo/'slam/odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros,
+                '-r','__node:=demo_slam_raw_odom_adapter',
+                '-r','/demo/slam/body_odom:=/demo/slam/raw_body_odom',
+                '-r','/demo/slam/lidar_odom:=/demo/slam/raw_lidar_odom'],output='screen'),
             ExecuteProcess(cmd=['python3',str(demo/'slam/map_archive.py'),'--run-dir',str(run),*ros,
-                                '-r','/livox/lidar:=/demo/teacher/raw_lidar','-r','/camera/image_color:=/demo/camera'],output='screen'),
+                                '-r','/livox/lidar:=/demo/teacher/raw_lidar','-r','/camera/image_color:=/demo/camera',
+                '-r','/demo/slam/body_odom:=/demo/slam/raw_body_odom',
+                '-r','/cloud_registered_full:=/demo/slam/raw_registered_full'],output='screen'),
         ]
         if profile['engineering_recording']['raw_source_capture']:
             raise RuntimeError('V33 initial profiles forbid another raw point-cloud collector')

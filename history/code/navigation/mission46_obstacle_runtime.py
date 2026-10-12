@@ -19,6 +19,7 @@ HERE=Path(__file__).resolve().parent
 sys.path.append(str(HERE.parent))
 from mission46_profile import validate_profile
 from simulation.obstacle_trigger import SceneTrigger
+from continuous_scene_trigger import scene_trigger_view
 from runtime_io import EvidenceWriter,latest_sensor_qos
 
 
@@ -44,7 +45,7 @@ def build_node(run):
         def __init__(self):
             super().__init__('teacher_mission46_obstacle')
             self.set_parameters([rclpy.parameter.Parameter('use_sim_time',value=True)])
-            self.writer=EvidenceWriter();self.enabled=False;self.started=None;self.trigger=SceneTrigger()
+            self.writer=EvidenceWriter();self.enabled=False;self.started=None;self.trigger=SceneTrigger();self.trigger_scene_view=None;self.trigger_view_adapter=None
             self.state={};self.state_wall=-math.inf;self.pose=None;self.pose_wall=-math.inf
             self.pending=None;self.sent=None;self.successes=0;self.failures=0;self.sequence=0
             self.position=[1.,4.,.6];self.visible_phase='parked';self.request_id=None;self.armed_once=False
@@ -63,7 +64,9 @@ def build_node(run):
             try:
                 state=json.loads(msg.data)
                 if state.get('run_id')!=run.name:return
-                self.state=state;self.state_wall=time.monotonic();self.trigger.observe(state)
+                self.state=state;self.state_wall=time.monotonic()
+                self.trigger_scene_view,self.trigger_view_adapter=scene_trigger_view(state)
+                self.trigger.observe(self.trigger_scene_view)
                 if state.get('stage') in {'completed','failed','stopped'}:
                     self.enabled=False;self.started=None
             except (ValueError,TypeError):self.trigger.error='invalid actual mission state'
@@ -106,6 +109,8 @@ def build_node(run):
                 self.started=ns;self.request_id=self.state['current_request'];self.armed_once=True
                 self.record(dict(operation='trigger_armed',start_sim_ns=ns,start_monotonic_wall=now,
                     mission_state=copy.deepcopy(self.state),actual_slam_pose=copy.deepcopy(self.pose),
+                    trigger_scene_view=copy.deepcopy(self.trigger_scene_view),
+                    trigger_view_adapter=copy.deepcopy(self.trigger_view_adapter),
                     trigger_point=copy.deepcopy(self.trigger.point),radius_m=1.4))
             # Stale mission/body freezes obstacle motion until source returns.
             # Any actual pause is recorded; the verifier cannot call it the
@@ -126,6 +131,8 @@ def build_node(run):
                 actual_pose_info_observer_collected=False,failure=self.failure,
                 trigger_navigation_ready=self.trigger.navigation_ready,trigger_waypoint_index=self.trigger.navigation_index,
                 trigger_position=self.trigger.point,trigger_error=self.trigger.error,mission_stage=self.trigger.stage,
+                actual_controller_waypoint_index=(self.state.get("navigation")or{}).get("waypoint_index"),
+                trigger_view_semantics=None if self.trigger_view_adapter is None else self.trigger_view_adapter["schema"],
                 navigation_ground_truth_used=False,robot_pose_service_called=False)
             self.writer.atomic(run/'mission46_obstacle_state.json',data)
             self.writer.append(run/'mission46_obstacle_state_history.jsonl',data)

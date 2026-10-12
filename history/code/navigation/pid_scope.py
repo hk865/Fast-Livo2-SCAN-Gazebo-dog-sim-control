@@ -27,7 +27,7 @@ def runtime_files(profile=None):
     build_files=[SLAM_WS/'build'/package/name for package in ('fast_livo2_core','fast_livo2_ros')
                  for name in ('compile_commands.json','CMakeCache.txt')]
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
-    preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'PIPELINE_V19_CONTRACT.json',HERE/'ENGINEERING_V33_PREFLIGHT.json']
+    preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'PIPELINE_V19_CONTRACT.json',HERE/'ENGINEERING_V34_PREFLIGHT.json']
     preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json']
     preflight+=[HERE/'PUBLICATION_LEDGER_CONTRACT.json',HERE.parent/'corridor_tracking_v21_curvature/PUBLICATION_LEDGER_PREFLIGHT.json',HERE/'PROSPECTIVE_PUBLICATION_LEDGER_CRITERIA.json']
     preflight+=[HERE/'LOCKFREE_RESIDUAL_CONTRACT.json',HERE/'BOUNDARY_TIMING_CONTRACT.json']
@@ -75,7 +75,7 @@ def verify_scope(path,raw=None):
     if CACHE.get(str(path))!=(digest,fp):
         mandatory=runtime_files(p)+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
             'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json',
-            'navigation_slam_contract.json','sensor_sampling_contract.json','terrain_target_manifest.json','cloud_transport_manifest.json','cloud_transport.xml',
+            'navigation_slam_contract.json','sensor_sampling_contract.json','terrain_target_manifest.json','known_scene_reference.json','v34_scan_overrides.yaml','cloud_transport_manifest.json','cloud_transport.xml',
             'source_manifest.json','navigation_source_snapshots.json','run_storage_contract.json')]
         if any(str(x.resolve()) not in refs for x in mandatory):raise RuntimeError('Missing frozen source or configuration')
         for source,expected in refs.items():
@@ -156,7 +156,7 @@ def prepare(run,profile):
         write(run/'alternate_terrain_target_manifest.json',json.loads(alternate.read_text()))
         layer_files=[first,alternate,run/'alternate_terrain_target_manifest.json']
     files=runtime_files(profile)+[terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
-        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json','run_storage_contract.json')]
+        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json','known_scene_reference.json','v34_scan_overrides.yaml','run_storage_contract.json')]
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
     write(run/'navigation_slam_contract.json',{'schema':1,'status':'prepared_unverified','ground_truth_used':False,
@@ -182,7 +182,7 @@ def prepare(run,profile):
         'review_basis':'explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation',
         'run_dir':str(run),'profile':profile,'references':refs,'historical_acceptance_sha256':sha(ROOT/'runs/acceptance.json'),
         'runtime':{'required_owned_roles':['worker','bridge','capture','navigation_stack','gazebo'],
-                   'expected_launch_children':(14 if profile.get('mission46_required') else 12)-int(not profile.get('engineering_recording',{}).get('raw_source_capture',True))},
+                   'expected_launch_children':(14 if profile.get('mission46_required') else 12)-int(not profile.get('engineering_recording',{}).get('raw_source_capture',True))+1},
         'prospective_gates':{'route_xy_max_m':.20,'route_xy_rms_m':.08,'heading_max_rad':.2,
             'COM_speed_MAE_floor_mps':.05,'COM_speed_MAE_reference_fraction':.25,
             'native_roll_pitch_max_rad':.65,'native_clearance_min_m':.18,'body_contact_max':0,
