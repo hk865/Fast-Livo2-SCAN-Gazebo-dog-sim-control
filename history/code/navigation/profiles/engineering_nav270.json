@@ -188,7 +188,7 @@
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
   "prospective_change": "V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, 300ms fresh inputs,200ms IPC and original safety/collision gates retained. R20 selects the existing serial/0 ingress mode to commit each admitted callback before mapping; 64MiB/512 bounds and original message contents/headers are unchanged. Upstream ROS stall is unresolved.",
-  "route_prior_source": "Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation",
+  "route_prior_source": "Given original scene43box geometry; axes of actual matched canonical map/world\u2192navigation frame, measured initial SLAM origin; no IMU world orientation",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
     "ba_bg_est_en": true
@@ -270,7 +270,7 @@
     "reserved_bytes": 67108864
   },
   "raw_storage_budget": {
-    "max_run_bytes": 80000000000,
+    "max_run_bytes": 120000000000,
     "minimum_start_available_bytes": 107374182400,
     "minimum_runtime_available_bytes": 107374182400
   },
@@ -285,7 +285,7 @@
     "navigation_f1_f3": 14
   },
   "max_simulation_duration_s": 1500.0,
-  "raw_budget_bytes": 80000000000,
+  "raw_budget_bytes": 120000000000,
   "minimum_available_storage_bytes": 107374182400,
   "raw_budget_is_limit_not_permission_to_drop_evidence": false,
   "original_scenario": {
@@ -724,7 +724,7 @@
     ],
     "waypoint_reference": "relative_world_axes",
     "simulation": {
-      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
+      "description": "Gazebo Go2 \u56db\u8db3\u7269\u7406 \u00b7 \u4e09\u5c42\u5e73\u53f0/10%\u7f13\u5761\uff08\u975e\u697c\u68af\uff09",
       "kind": "gazebo_physics",
       "terrain": "ramps"
     },

@@ -11,6 +11,10 @@ which is included as part of this source code package.
 */
 
 #include "LIVMapper.h"
+#include "identity_ros.h"
+#include <nlohmann/json.hpp>
+#include <map>
+#include <set>
 #include "diagnostics.h"
 // BOUNDARY_TIMING_BEGIN include
 #include "boundary_timing.h"
@@ -48,7 +52,7 @@ void diag_stage(uint64_t kind,double flag,const StatesGroup& state) {
 LIVMapper::LIVMapper(rclcpp::Node::SharedPtr &node, std::string node_name)
     : node(node ? node : std::make_shared<rclcpp::Node>(node_name)),
       extT(0, 0, 0),
-      extR(M3D::Identity())
+      extR(M3D::Identity()), identity_epoch(fastlivo_identity::epoch())
 {
   (void)fastlivo_diag::Logger::instance();
   extrinT.assign(3, 0.0);
@@ -68,6 +72,7 @@ LIVMapper::LIVMapper(rclcpp::Node::SharedPtr &node, std::string node_name)
   image_copy_opt=copy&&std::string(copy)=="1";
   if(p_pre->lidar_type!=0||use_gps||hilti_en||this->node->get_parameter("preprocess.hilti_en").as_bool()||!lidar_en||!img_en||!imu_en)
     throw std::runtime_error("V19 requires generic cloud, IMU+RGB, GPS off, HILTI off");
+  if(!dense_map_en||!imu_en||p_pre->lidar_type!=0)throw std::runtime_error("R60 explicit identity requires dense Generic IMU path");
   VoxelMapConfig voxel_config;
   loadVoxelConfig(this->node, voxel_config);
 
@@ -387,6 +392,7 @@ void LIVMapper::initializeSubscribersAndPublishers(rclcpp::Node::SharedPtr &node
     RCLCPP_INFO(this->node->get_logger(), "[ GPS ] GPS/ground-truth fusion ENABLED");
   }
   
+  pubPointIdentity = this->node->create_publisher<std_msgs::msg::String>("/demo/slam/point_identity", 10);
   pubNavigationCloud = this->node->create_publisher<sensor_msgs::msg::PointCloud2>("/cloud_registered_full", 10);
   pubLaserCloudFullRes = this->node->create_publisher<sensor_msgs::msg::PointCloud2>("/cloud_registered", 100);
   pubNormal = this->node->create_publisher<visualization_msgs::msg::MarkerArray>("/visualization_marker", 100);
@@ -459,7 +465,13 @@ void LIVMapper::processImu()
     fastlivo_diag::state(values,_state); fastlivo_diag::append(values,_state.cov);
     diag.emit(10,-1,-1,std::move(values));
   }
+  feats_identity.clear();
+  const bool identity_lio = LidarMeasures.lio_vio_flg==LIO && imu_en && !p_imu->imu_need_init;
   p_imu->Process2(LidarMeasures, _state, feats_undistort);
+  if(identity_lio && !feats_undistort->empty()) {
+    fastlivo_identity::validate(LidarMeasures.identity_cur,feats_undistort->size());
+    feats_identity=LidarMeasures.identity_cur;
+  }
 
   if (gravity_align_en) gravityAlignment();
 
@@ -640,7 +652,14 @@ void LIVMapper::handleLIO()
   
   euler_cur = RotMtoEuler(_state.rot_end);
   geoQuat = tf::createQuaternionMsgFromRollPitchYaw(euler_cur(0), euler_cur(1), euler_cur(2));
+  const auto identity_rotation=_state.rot_end;
+  const auto identity_position=_state.pos_end;
+  const auto identity_quaternion=geoQuat;
+  const auto identity_stage_commit=++identity_commit;
+  if(feats_identity.size()>65536)throw std::runtime_error("R60 identity commit exceeds65536points");
+  fastlivo_identity::validate(feats_identity,feats_undistort->size());
   publish_odometry(pubOdomAftMapped);
+  const auto identity_mapper_sha=fastlivo_identity::message_sha(odomAftMapped);
 
   double t3 = omp_get_wtime();
 
@@ -692,7 +711,41 @@ void LIVMapper::handleLIO()
   pcl::toROSMsg(*laserCloudWorld, navigation_cloud);
   navigation_cloud.header.frame_id = "camera_init";
   navigation_cloud.header.stamp = sec2Stamp(LidarMeasures.last_lio_update_time);
+  if(!(_state.rot_end.array()==identity_rotation.array()).all() ||
+      !(_state.pos_end.array()==identity_position.array()).all() ||
+      geoQuat!=identity_quaternion || odomAftMapped.header.stamp!=navigation_cloud.header.stamp)
+    throw std::runtime_error("R60 post-LIO commit state/stamp changed");
+  fastlivo_identity::validate(feats_identity,navigation_cloud.width*navigation_cloud.height);
+  std::set<std::pair<uint64_t,uint32_t>> identity_unique;
+  std::map<uint64_t,std::shared_ptr<const fastlivo_identity::Source>> identity_sources;
+  for(const auto&r:feats_identity){
+    if(!identity_unique.insert({r.source->packet,r.input_ordinal}).second)
+      throw std::runtime_error("R60 duplicate source point identity");
+    auto existing=identity_sources.find(r.source->packet);
+    if(existing!=identity_sources.end() && existing->second!=r.source)
+      throw std::runtime_error("R60 packet identity alias");
+    identity_sources[r.source->packet]=r.source;
+  }
+  if(identity_sources.size()>256)throw std::runtime_error("R60 source set cap");
+  nlohmann::json sources=nlohmann::json::array();
+  for(const auto&entry:identity_sources){const auto&s=*entry.second;
+    sources.push_back({{"packet",s.packet},{"stamp_ns",s.stamp_ns},
+        {"adapted_message_sha256",s.adapted_message_sha256},{"input_count",s.input_count}});}
+  const auto identity_binary=fastlivo_identity::binary(feats_identity);
+  nlohmann::json identity_message={{"schema","post_lio_source_point_commit/v1"},{"fingerprint_model","go2_ros_semantic/v1"},
+      {"producer_epoch",identity_epoch},{"producer_pid",getpid()},
+      {"run_id",std::filesystem::path(std::getenv("DEMO_RUN_DIR")?std::getenv("DEMO_RUN_DIR"):"").filename().string()},
+      {"commit",identity_stage_commit},{"stage","post_lio_dense"},
+      {"stamp_ns",diag_stamp(navigation_cloud.header.stamp)},{"sources",sources},
+      {"point_count",feats_identity.size()},{"point_ref_layout","LE:u64packet,u32input_ordinal"},
+      {"point_refs_base64",fastlivo_identity::base64(identity_binary)},
+      {"point_refs_sha256",fastlivo_identity::hash(reinterpret_cast<const unsigned char*>(identity_binary.data()),identity_binary.size())},
+      {"registered_message_sha256",fastlivo_identity::message_sha(navigation_cloud)},
+      {"mapper_message_sha256",identity_mapper_sha},{"navigation_ground_truth_used",false}};
+  std_msgs::msg::String identity_out;identity_out.data=identity_message.dump();
+  if(identity_out.data.size()>2*1024*1024)throw std::runtime_error("R60 identity message exceeds bound");
   pubNavigationCloud->publish(navigation_cloud);
+  pubPointIdentity->publish(identity_out);
 // BOUNDARY_TIMING_BEGIN navigation_cloud_close
   }
 // BOUNDARY_TIMING_END navigation_cloud_close
@@ -1015,14 +1068,14 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
     fastlivo_diag::Logger::instance().raw(2,diag_stamp(msg->header.stamp),std::move(values));
   }
   if (!lidar_en) return;
-  mtx_buffer.lock();
+  std::unique_lock<std::mutex> identity_buffer_lock(mtx_buffer);
 
   double cur_head_time = stamp2Sec(msg->header.stamp) + lidar_time_offset;
   // cout<<"got feature"<<endl;
   if (cur_head_time < last_timestamp_lidar)
   {
     RCLCPP_ERROR(this->node->get_logger(),"lidar loop back, clear buffer");
-    lid_raw_data_buffer.clear();
+    throw std::runtime_error("R60 source timestamp rollback requires a new owned run");
   }
   // ROS_INFO("get point cloud at time: %.6f", stamp2Sec(msg->header.stamp));
   PointCloudXYZI::Ptr ptr=committing_ingress ? committing_ingress->cloud : PointCloudXYZI::Ptr(new PointCloudXYZI());
@@ -1041,11 +1094,14 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
       values.insert(values.end(),{point.x,point.y,point.z,point.intensity,point.curvature});
     fastlivo_diag::Logger::instance().raw(4,diag_stamp(msg->header.stamp),std::move(values));
   }
-  lid_raw_data_buffer.push_back(ptr);
+  if(!committing_ingress)throw std::runtime_error("R60 identity requires owned ingress");
+  fastlivo_identity::validate(committing_ingress->identity,ptr->size());
+  if(lid_raw_data_buffer.size()>=8 || ptr->size()>65536)throw std::runtime_error("R60 identity buffered source cap");
+  lid_raw_data_buffer.push_back(PairedCloud{ptr,committing_ingress->identity});
   lid_header_time_buffer.push_back(cur_head_time);
   last_timestamp_lidar = cur_head_time;
 
-  mtx_buffer.unlock();
+  identity_buffer_lock.unlock();
   sig_buffer.notify_all();
 }
 
@@ -1093,7 +1149,7 @@ void LIVMapper::livox_pcl_cbk(const livox_ros_driver2::msg::CustomMsg::ConstShar
     return;
   }
 
-  lid_raw_data_buffer.push_back(ptr);
+  lid_raw_data_buffer.push_back(PairedCloud{ptr,{}});
   lid_header_time_buffer.push_back(cur_head_time);
   last_timestamp_lidar = cur_head_time;
 
@@ -1358,12 +1414,13 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
     if (!lidar_pushed)
     {
       // If not push the lidar into measurement data buffer
-      meas.lidar = lid_raw_data_buffer.front(); // push the first lidar topic
+      meas.lidar = lid_raw_data_buffer.front().cloud; // push the first lidar topic
       if (meas.lidar->points.size() <= 1) return false;
 
       meas.lidar_frame_beg_time = lid_header_time_buffer.front();                                                // generate lidar_frame_beg_time
       meas.lidar_frame_end_time = meas.lidar_frame_beg_time + meas.lidar->points.back().curvature / double(1000); // calc lidar scan end time
       meas.pcl_proc_cur = meas.lidar;
+      meas.identity_cur = lid_raw_data_buffer.front().identity;
       lidar_pushed = true;                                                                                       // flag
     }
 
@@ -1434,7 +1491,7 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
       }
 
       // Safety: check for empty point cloud (Gazebo may emit empty scans)
-      auto last_pcl = lid_raw_data_buffer.back();
+      auto last_pcl = lid_raw_data_buffer.back().cloud;
       if (!last_pcl || last_pcl->points.empty()) {
         fprintf(stderr, "[ sync ] empty point cloud, skip (ptr=%p ptsize=%zu buf=%zu)\n",
           (void*)last_pcl.get(), last_pcl ? last_pcl->points.size() : 0UL, lid_raw_data_buffer.size()); fflush(stderr);
@@ -1494,6 +1551,9 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
           static_cast<int>(imu_newest_time >= img_capture_time));
       }
 
+      if(meas.identity_next.size()>65536)throw std::runtime_error("R60 identity carry cap");
+      fastlivo_identity::validate(meas.identity_next,meas.pcl_proc_next->size());
+      fastlivo_identity::carry(meas.identity_cur,meas.identity_next);
       *(meas.pcl_proc_cur) = *(meas.pcl_proc_next);
       PointCloudXYZI().swap(*meas.pcl_proc_next);
 
@@ -1506,7 +1566,11 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
       while (!lid_raw_data_buffer.empty())
       {
         if (lid_header_time_buffer.front() > img_capture_time + instantaneous_time_tolerance) break;
-        auto pcl(lid_raw_data_buffer.front()->points);
+        const auto&paired=lid_raw_data_buffer.front();
+        fastlivo_identity::validate(paired.identity,paired.cloud->size());
+        if(paired.cloud->size()>65536 || meas.identity_cur.size()+meas.identity_next.size()+paired.identity.size()>131072)
+          throw std::runtime_error("R60 identity merge preallocation cap");
+        auto pcl(paired.cloud->points);
         double frame_header_time(lid_header_time_buffer.front());
         float max_offs_time_ms = (m.lio_time - frame_header_time) * 1000.0f;
 
@@ -1522,12 +1586,16 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
                 std::abs(frame_header_time - img_capture_time) <= instantaneous_time_tolerance
                 ? img_capture_time : frame_header_time;
             pt.curvature += (point_frame_time - meas.last_lio_update_time) * 1000.0f;
+            if(meas.identity_cur.size()>=65536)throw std::runtime_error("R60 current identity point cap");
             meas.pcl_proc_cur->points.push_back(pt);
+            fastlivo_identity::append_ref(meas.identity_cur,meas.identity_next,paired.identity[i],true);
           }
           else
           {
             pt.curvature += (frame_header_time - m.lio_time) * 1000.0f;
+            if(meas.identity_next.size()>=65536)throw std::runtime_error("R60 next identity point cap");
             meas.pcl_proc_next->points.push_back(pt);
+            fastlivo_identity::append_ref(meas.identity_cur,meas.identity_next,paired.identity[i],false);
           }
         }
         lid_raw_data_buffer.pop_front();
@@ -1602,7 +1670,7 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
     { 
       // If not in lidar scan, need to generate new meas
       if (lid_raw_data_buffer.empty())  return false;
-      meas.lidar = lid_raw_data_buffer.front(); // push the first lidar topic
+      meas.lidar = lid_raw_data_buffer.front().cloud; // push the first lidar topic
       meas.lidar_frame_beg_time = lid_header_time_buffer.front(); // generate lidar_beg_time
       meas.lidar_frame_end_time  = meas.lidar_frame_beg_time + meas.lidar->points.back().curvature / double(1000); // calc lidar scan end time
       lidar_pushed = true;             
@@ -1969,7 +2037,8 @@ void LIVMapper::admit_ingress(const std::shared_ptr<IngressPacket>&p){
 void LIVMapper::receive_cloud(const sensor_msgs::msg::PointCloud2::ConstSharedPtr&msg){
   if(!ingress_enabled){standard_pcl_cbk(msg);return;}
   auto p=std::make_shared<IngressPacket>();p->kind=2;p->receipt=diag_receipt();p->receipt_wall_ns=uint64_t(p->receipt*1e9);p->receive_cpu_begin=ingress_thread_cpu();p->receive_tid=syscall(SYS_gettid);p->source_ns=diag_stamp(msg->header.stamp);p->cloud_message=msg;
-  try{const auto count=pipeline_mul(msg->width,msg->height);p->reserved_bytes=pipeline_add(sizeof(*p)+sizeof(*msg)*2,pipeline_add(pipeline_mul(msg->data.capacity(),2),pipeline_mul(count,3*sizeof(PointType)+2*sizeof(pcl::PointXYZI))));
+  try{const auto count=pipeline_mul(msg->width,msg->height);
+    if(count>65536 || msg->data.size()>2*1024*1024)throw std::runtime_error("R60 raw annotation allocation cap");p->reserved_bytes=pipeline_add(sizeof(*p)+sizeof(*msg)*2,pipeline_add(pipeline_mul(msg->data.capacity(),2),pipeline_mul(count,3*sizeof(PointType)+2*sizeof(pcl::PointXYZI)+6*sizeof(fastlivo_identity::Ref)+32)));
     p->reserved_bytes=pipeline_add(p->reserved_bytes,pipeline_mul(msg->fields.capacity(),sizeof(sensor_msgs::msg::PointField)));for(const auto&f:msg->fields)p->reserved_bytes=pipeline_add(p->reserved_bytes,f.name.capacity());p->reserved_bytes=pipeline_add(p->reserved_bytes,msg->header.frame_id.capacity());
   }catch(...){p->reserved_bytes=std::numeric_limits<size_t>::max();}
   admit_ingress(p);
@@ -1990,7 +2059,13 @@ void LIVMapper::receive_tick(){
 }
 void LIVMapper::decode_ingress(const std::shared_ptr<IngressPacket>&p){
   p->decoder_pop_wall_ns=pipeline_wall();p->decode_tid=syscall(SYS_gettid);p->decode_begin_wall_ns=pipeline_wall();p->decode_cpu_begin=ingress_thread_cpu();
-  try{if(p->kind==2){p->cloud.reset(new PointCloudXYZI());p_pre->process(p->cloud_message,p->cloud);}else if(p->kind==3)p->image=getImageFromMsg(p->image_message);else throw std::logic_error("invalid decoder kind");}
+  try{if(p->kind==2){p->cloud.reset(new PointCloudXYZI());p_pre->process(p->cloud_message,p->cloud);
+    auto source=std::make_shared<fastlivo_identity::Source>();source->packet=p->sequence;
+    source->stamp_ns=p->source_ns;source->adapted_message_sha256=fastlivo_identity::message_sha(*p->cloud_message);
+    const uint64_t count=uint64_t(p->cloud_message->width)*p->cloud_message->height;
+    if(count>std::numeric_limits<uint32_t>::max())throw std::overflow_error("R60 input identity ordinal");
+    source->input_count=uint32_t(count);
+    p->identity=fastlivo_identity::selected(source,p_pre->identity_input_ordinals,p->cloud->size());}else if(p->kind==3)p->image=getImageFromMsg(p->image_message);else throw std::logic_error("invalid decoder kind");}
   catch(...){p->decode_error=std::current_exception();}
   if(p->kind==2){PointCloudXYZI empty;empty.swap(p_pre->pl_surf);PointCloudXYZI empty2;empty2.swap(p_pre->pl_corn);PointCloudXYZI empty3;empty3.swap(p_pre->pl_full);}
   p->decode_cpu_end=ingress_thread_cpu();p->decode_end_wall_ns=pipeline_wall();p->decoded_at=diag_receipt();p->ready_enqueue_wall_ns=pipeline_wall();ingress_queue.ready(p->sequence);

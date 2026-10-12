@@ -13,6 +13,7 @@ from scipy.interpolate import BSpline
 from path_admission import FrozenFence, candidate, payload, replayable, certify_curve, remaining_certificate
 from known_scene_route_registration import KnownSceneFrozenFence
 from clock_hold import ControlClockHold
+from path_handoff import preview as preview_path_handoff, context as handoff_context, early_request as early_handoff_request
 from global_route_reference import (contract as global_reference_contract, SegmentGuides,
     StableProjectionController, direction_check, admission_direction_check)
 
@@ -52,6 +53,7 @@ class PIDNavigation(TeacherNavigation):
         if self.registered_cloud_archive_mode not in ('legacy_all','disabled'):
             raise ValueError('Unsupported registered_cloud_archive mode; bounded_event is not yet implemented')
         self.reference_replan_pending=False
+        self.path_handoff_early_requested_for=None;self.path_handoff_last_check=None
         self.path_admission_fence=KnownSceneFrozenFence(self.run,self.profile)
         self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
         self.path_admission_sequence=0;self.path_admission_last_decision=None
@@ -404,6 +406,13 @@ class PIDNavigation(TeacherNavigation):
             if time.monotonic()-started>.100:proof=dict(allowed=False,reason='admission_callback_budget_exhausted')
         except (OSError,KeyError,ValueError,TypeError,OverflowError,IndexError,FloatingPointError)as error:
             proof=dict(allowed=False,reason='admission_input_or_anchor:'+type(error).__name__+':'+str(error))
+        handoff=None
+        if proof['allowed']:
+            try:
+                handoff=preview_path_handoff(self,check,value,metadata)
+                if not handoff['allowed']:proof=dict(proof,original_geometry_allowed=True,original_geometry_reason=proof.get('reason'),allowed=False,reason=handoff['reason'])
+            except (ValueError,TypeError,KeyError,AttributeError,OverflowError) as error:
+                proof=dict(proof,allowed=False,reason='handoff_preview_invalid:'+type(error).__name__+':'+str(error))
         capture=(self.cascade is not None and self.cascade_key==(self.request_id,self.waypoint_index)
             and self.cascade.capture_stamp is not None)
         if self.cascade is not None and self.cascade.capture_stamp is not None and not capture:
@@ -419,7 +428,7 @@ class PIDNavigation(TeacherNavigation):
             # capture) may keep an independently certified old same-goal path.
             # Invalid anchor/numbers and exhausted proofs always stop/replan.
             retain=(retain if retain is not None else self.retain_admitted_path(points,config) if points is not None
-                and (proof.get('reason')=='outside_fence' or proof['allowed'] and capture)
+                and (proof.get('reason')=='outside_fence' or proof['allowed'] and capture or handoff is not None and not handoff['allowed'] and handoff_context(self)['allowed'])
                 else dict(allowed=False,reason='fail_closed_rejection_requires_stop',samples_present=self.samples is not None,
                     conditions=self.path_execution_eligibility()['conditions']))
             if time.monotonic()-started>.100:retain=dict(retain,allowed=False,reason='retention_callback_budget_exhausted',samples_present=self.samples is not None)
@@ -434,7 +443,7 @@ class PIDNavigation(TeacherNavigation):
             self.archive_admission(value,metadata,dict(admitted=False,
                 reason=('terminal_capture_kept_checked_path' if retain['allowed'] else 'terminal_capture_stopped_no_eligible_path')
                     if capture and proof['allowed'] else proof.get('reason'),
-                proof=proof,anchor_binding=binding,old_path_retention=retain,capture_replacement=recovery,
+                proof=proof,handoff=handoff,anchor_binding=binding,old_path_retention=retain,capture_replacement=recovery,
                 exact_zero_requested=not retain['allowed']),started)
             return
         previous_execution=(dict(samples=self.samples,active_trajectory_id=self.active_trajectory_id,
@@ -446,7 +455,9 @@ class PIDNavigation(TeacherNavigation):
             capture_clear=(self.clear_committed_exhausted_capture() if recovery is not None and recovery['allowed'] else None)
             self.path_admission_active=dict(payload=copy.deepcopy(value),metadata=copy.deepcopy(metadata),
                 identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
-                active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding)
+                active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding,
+                correction_generation=self.known_scene_inputs["generation"],
+                ordered_coverage_index=None if self.continuous_route is None else self.continuous_route.next_index)
             self.path_admission_hold=False;self.path_admission_replan_pending=False;self.reference_replan_pending=False
             self.reference_consistency_hold=False;self.reference_consistency_check=None
             indices=[0]
@@ -464,7 +475,7 @@ class PIDNavigation(TeacherNavigation):
             self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
             self.archive_admission(value,metadata,dict(admitted=True,reason='exhausted_capture_rebound_after_all_execution_gates' if capture_clear is not None else 'continuous_fence_and_existing_execution_gates_passed',
-                proof=proof,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear),started)
+                proof=proof,handoff=handoff,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear),started)
         else:
             # Existing execution guards still own final admission. Their
             # refusal never becomes an admitted path in this separate ledger.
@@ -487,6 +498,8 @@ class PIDNavigation(TeacherNavigation):
                 self.profile['teacher_transition']['drive_heading_max_rad'],self.global_reference_settings)
             self.reference_consistency_hold=not self.reference_consistency_check['allowed']
             if self.reference_consistency_hold:self.reference_replan_pending=True
+        if not self.reference_consistency_hold:
+            early_handoff_request(self,reference)
         velocity,rate,target,steering=result
         original=copy.deepcopy(steering)
         steering=dict(steering,heading=yaw,error=math.atan2(math.sin(yaw-math.atan2(self.rotation[1,0],self.rotation[0,0])),

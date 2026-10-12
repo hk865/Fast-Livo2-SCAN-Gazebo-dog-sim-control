@@ -46,7 +46,7 @@ def generate_launch_description():
         ros=['--ros-args','-p','use_sim_time:=true']
         processes=[
             ExecuteProcess(cmd=['python3',str(teacher/'navigation/sensor_relay.py'),*ros],output='screen'),
-            ExecuteProcess(cmd=['python3',str(demo/'slam/self_echo_filter.py'),'--scenario',str(run/'navigation_scenario.json'),
+            ExecuteProcess(cmd=['python3',str(here/'self_echo_filter.py'),'--scenario',str(run/'navigation_scenario.json'),
                                 *ros,'-r','/livox/lidar:=/demo/teacher/raw_lidar'],output='screen'),
             Node(package='demo_nodes_cpp',executable='parameter_blackboard',name='parameter_blackboard',
                  output='screen',parameters=[str(run/'navigation_camera.yaml'),{'use_sim_time':True}]),
@@ -54,7 +54,7 @@ def generate_launch_description():
                  additional_env={'DEMO_RUN_DIR':str(run)},parameters=[str(run/'navigation_fastlivo.yaml'),
                     str(run/'navigation_camera.yaml'),{'use_sim_time':True}],
                  remappings=[('/cloud_registered_full','/demo/slam/raw_registered_full')]),
-            ExecuteProcess(cmd=['python3',str(demo/'slam/odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros,
+            ExecuteProcess(cmd=['python3',str(here/'odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros,
                 '-r','__node:=demo_slam_raw_odom_adapter',
                 '-r','/demo/slam/body_odom:=/demo/slam/raw_body_odom',
                 '-r','/demo/slam/lidar_odom:=/demo/slam/raw_lidar_odom'],output='screen'),

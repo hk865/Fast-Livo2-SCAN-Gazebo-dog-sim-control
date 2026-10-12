@@ -11,6 +11,7 @@ from scipy.spatial.transform import Rotation
 from known_scene_matcher import SceneReference,KnownSceneMatcher,CorrectionState,transform_distance,checked_transform
 from known_scene_adapter import ExactSourceJoin,MatcherWorker,validate_runtime_witness,stamp_ns,odometry_transform,pointcloud_xyz
 from known_scene_stale_recovery import recovery_proposal
+from point_provenance import decode,geometry_bundle,message_sha
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def atomic(p,x):
@@ -117,6 +118,8 @@ def main():
             from collision_minimal_capture import CollisionObservedP95SourceFrames as P95SourceFrames
             self.diagnostic_capture=P95SourceFrames(run)
             self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
+            from first_identity_capture import FirstIdentityCapture
+            self.positive_capture=FirstIdentityCapture(run)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
             self.initialized=False;self.transition=False;self.pending_target=None;self.last_result=None
             self.pending_body=None;self.pending_source_ns=None;self.startup_results=deque(maxlen=16)
@@ -137,6 +140,10 @@ def main():
                 ('body',Odometry,'/demo/slam/raw_body_odom'),('lidar',Odometry,'/demo/slam/raw_lidar_odom'),
                 ('mapper',Odometry,'/aft_mapped_to_init')]:
                 self.create_subscription(typ,topic,lambda m,k=role:self.receive(k,m),qos_profile_sensor_data)
+            for role,topic,schema in [('source_identity','/demo/slam/raw_point_identity','raw_filtered_point_identity/v1'),
+                ('point_identity','/demo/slam/point_identity','post_lio_source_point_commit/v1'),
+                ('odom_identity','/demo/slam/odom_identity','mapper_body_lidar_commit/v1')]:
+                self.create_subscription(String,topic,lambda m,k=role,s=schema:self.receive(k,decode(m.data,s)),10)
             # Data-only event observer; original matcher and publishers unchanged.
             self.create_subscription(String,'/demo/teacher/mission46/state',
                 lambda m:self.diagnostic_capture.observe_mission(m.data,int(self.get_clock().now().nanoseconds)),10)
@@ -181,13 +188,13 @@ def main():
             return ns-self.stop_since_ns>=100_000_000
         def receive(self,role,msg):
             ns=stamp_ns(msg);clock=self.get_clock().now().nanoseconds
-            if self.join is not None and role in self.join.ROLES:
+            if self.join is not None and role in (*self.join.ROLES,*self.join.META_ROLES,*self.join.AUX_ROLES):
                 accepted=self.join.put(role,msg)
                 if accepted:self.diagnostic_capture.observe_source(self.join,ns,int(clock))
-            if role not in ('body','lidar','registered') or ns<=self.last_published:return
+            if ns<=self.last_published:return
             slot=self.slots.setdefault(ns,{});slot[role]=(msg,time.monotonic())
             while len(self.slots)>12:self.slots.popitem(last=False)
-            if all(k in slot for k in ('body','lidar','registered')):
+            if all(k in slot for k in ('body','lidar','registered','raw','adapted','mapper','source_identity','point_identity','odom_identity')):
                 self.publish_bundle(ns,slot,clock)
         def trace_bundle(self,ns,slot,clock,decision):
             measured_after_gate=time.monotonic()
@@ -205,6 +212,16 @@ def main():
                 self.trace_bundle(ns,slot,clock,'original_wall_age_veto')
                 return
             self.trace_bundle(ns,slot,clock,'original_header_and_wall_gates_passed')
+            try:
+                if self.join is None or slot['odom_identity'][0].get('adapter_pid')!=self.join.witness.get('adapter_producer_pid'):
+                    raise ValueError('actual adapter owner differs')
+                parent=geometry_bundle(slot,run.name,
+                    self.join.witness.get('mapper_producer_pid') if self.join is not None else None,
+                    self.join.witness.get('source_producer_pid') if self.join is not None else None)
+            except (ValueError,KeyError,TypeError,AssertionError) as error:
+                self.trace_bundle(ns,slot,clock,'explicit_source_commit_veto:'+str(error))
+                return
+            self.positive_capture.observe(slot,parent,clock)
             if self.transition and not self.idle_or_stopped(slot['body'][0]):
                 # Freeze C until exact-zero navigation command and measured stop.
                 saved=self.correction.target.copy();self.correction.target=self.correction.applied.copy()
@@ -232,6 +249,8 @@ def main():
                 robot_truth_pose_used=False,frontend_state_reset=False,frontend_velocity_or_bias_repaired=False)
             body=corrected_odom(slot['body'][0],c);lidar=corrected_odom(slot['lidar'][0],c)
             cloud=corrected_cloud(slot['registered'][0],c)
+            metadata.update(source_commit=parent,corrected_body_message_sha256=message_sha(body),
+                corrected_lidar_message_sha256=message_sha(lidar),corrected_cloud_message_sha256=message_sha(cloud))
             self.bundle_pub.publish(String(data=json.dumps(metadata,allow_nan=False)))
             self.pubs['body'].publish(body);self.pubs['lidar'].publish(lidar);self.cloud_pub.publish(cloud)
             self.last_published=ns;self.bundle_count+=1
@@ -319,11 +338,12 @@ def main():
             self.status_pub.publish(String(data=json.dumps(status,allow_nan=False)))
             atomic(run/'known_scene_status.json',status)
         def close(self):
+            positive_capture=self.positive_capture.close()
             clean=self.worker.close()
             self.diagnostic_capture.close(worker_drained=clean)
             self.callback_writer.close()
             self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
-            atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,
+            atomic(run/'known_scene_exit.json',dict(positive_capture=positive_capture,worker_drained=clean,bundles=self.bundle_count,
                 transactions=self.transaction_count,initialized=self.initialized,simulation_only=True))
     node=Runtime()
     try:rclpy.spin(node)
