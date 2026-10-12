@@ -39,6 +39,10 @@ class RecordedPublisher:
             policy_observations='Gazebo privileged Teacher inputs; navigation localization is sensor SLAM',
             navigation_validation='unverified',acceptance_is_global=False)
         data['teacher_transition']=self.node.heading_gate.evidence(self.node.get_clock().now().nanoseconds/1e9,time.monotonic())
+        if self.node.profile.get('arrival_stop_policy')=='after_measured_dwell':
+            data['motion_limits']['pure_turn_rate_rad_s']=self.node.heading_gate.max_turn_rate
+            data['arrival_stop_policy']='after_measured_dwell'
+            data['arrival_stop_policy_source']='Actual raw SLAM original control-region ArrivalWindow; no tracking-pose arrival'
         self.publisher.publish(String(data=json.dumps(data,ensure_ascii=False,allow_nan=False)))
         self.node.evidence.append(self.run/'navigation_status.jsonl',{**data,'monotonic_wall':time.monotonic(),
             'ros_sim_time':self.node.get_clock().now().nanoseconds/1e9})
@@ -55,6 +59,7 @@ class TeacherNavigation(base.Navigation):
         self.bridge_updated=-math.inf
         self.guard_cloud=None;self.guard_cloud_receipt=None;self.pose_quaternion=None
         self.guard_sequence=0;self.pending_guard_row=None;self.trajectory_archive_reference=None
+        self.last_actual_guard_clock_ns=None;self.guard_continuity_resets=0
         self.native_guard_audit=NativeGuardAudit(NATIVE_STEERING_GUARD)
         # This module instance belongs only to the independent Teacher process.
         # The shared camera-mode files and native geometry remain unchanged.
@@ -190,11 +195,42 @@ class TeacherNavigation(base.Navigation):
         except (OSError,ValueError,TypeError)as error:
             self.last_rejected=str(error);self.publish_status();return
         super().on_request(msg)
+    def measured_region_arrival(self):
+        inside,arrived=super().measured_region_arrival()
+        if self.profile.get('arrival_stop_policy')=='after_measured_dwell':
+            # The original raw-SLAM ArrivalWindow, protection flags, integer
+            # stamps, observation gap and dwell remain unchanged. Continue only
+            # the checked SCAN route until that same window confirms arrival;
+            # all native path-end/obstacle/tilt/stale stops still run below.
+            return inside and arrived,arrived
+        return inside,arrived
     def control(self,now):
         # Shared recovery already requires one clear second and a new checked
         # trajectory; additionally hold it until measured body motion is small.
         if self.evidence.error:
             self.state='failed';self.message=self.evidence.error;self.publish_command();return
+        if self.profile.get('clear_guard_gap_max_sim_s')is not None and self.obstacle_hold:
+            ns=self.get_clock().now().nanoseconds
+            if not self.guard_continuity(ns,now):
+                # Keep the existing physical protections active even when an
+                # extra actual-source freshness check holds this callback.
+                self.apply_tilt_guard(now,ns/1e9);self.reset_region_arrival('stale')
+                self.stale_since=self.stale_since or now
+                if now-self.stale_since>8.:
+                    self.state='failed';self.message='实际SLAM/点云guard输入连续失联超过8秒，停车'
+                self.publish_command();return
+            if (self.obstacle_clear_since is not None and ns/1e9-self.obstacle_clear_since>=1.
+                    and not now-self.last_obstacle_check>.10):
+                # A cached clear result cannot finish the original one-second
+                # gate. Wait for the next already scheduled native evaluation;
+                # do not run another geometry check or refresh input stamps.
+                protected=self.apply_tilt_guard(now,ns/1e9)
+                stale=(now-self.pose_updated>self.pose_timeout or now-self.cloud_updated>self.cloud_timeout
+                       or not self.raw_imu.fresh(now,ns/1e9))
+                if protected or stale:
+                    self.reset_region_arrival('protected'if protected else 'stale')
+                    self.obstacle_clear_since=None
+                self.publish_command();return
         if self.obstacle_hold and not self.heading_gate.stopped(self.get_clock().now().nanoseconds/1e9,now):
             self.obstacle_clear_since=None
         self.pending_guard_row=None
@@ -216,10 +252,18 @@ class TeacherNavigation(base.Navigation):
 
     def record_native_guard(self,cloud,pose,checked_target,steering_direction,route):
         ns=self.get_clock().now().nanoseconds;received=time.monotonic()
+        previous_guard_ns=self.last_actual_guard_clock_ns
+        if self.profile.get('clear_guard_gap_max_sim_s')is not None:
+            if previous_guard_ns is not None and ns<=previous_guard_ns:
+                self.state='failed';self.message='实际native guard时钟重复或倒退，停车'
+                raise RuntimeError(self.message)
+            if self.obstacle_hold and not self.guard_continuity(ns,received):
+                raise RuntimeError('Actual native guard source ceased being fresh before evaluation')
         if (cloud is not self.guard_cloud or self.guard_cloud_receipt is None
                 or self.guard_cloud_receipt['stamp_ns']!=self.cloud_stamp or self.pose_quaternion is None):
             raise RuntimeError('Actual native guard lacks an exact accepted cloud/SLAM input receipt')
         result=self.native_guard_audit(cloud,pose,checked_target,steering_direction,route)
+        self.last_actual_guard_clock_ns=ns
         self.guard_sequence+=1;c=self.guard_cloud_receipt
         self.pending_guard_row={'schema':'teacher_native_steering_guard/v1','sequence':self.guard_sequence,
             'compute_ros_clock_ns':ns,'compute_sim_time_s':ns/1e9,'compute_monotonic_wall':received,
@@ -245,7 +289,37 @@ class TeacherNavigation(base.Navigation):
             'union_result':result_json(result),'obstacle_hold_before':bool(self.obstacle_hold),
             'clear_start_before_s':self.obstacle_clear_since,'clear_elapsed_before_s':None if self.obstacle_clear_since is None else ns/1e9-self.obstacle_clear_since,
             'native_geometry_source':'unchanged control_core.steering_obstacle_ahead code object and original two obstacle_ahead evaluations'}
+        if self.profile.get('clear_guard_gap_max_sim_s')is not None:
+            self.pending_guard_row.update(previous_actual_guard_clock_ns=previous_guard_ns,
+                clear_guard_gap_max_sim_s=self.profile['clear_guard_gap_max_sim_s'],
+                clear_guard_continuity_resets=self.guard_continuity_resets,
+                clear_release_requires_this_callback_actual_guard=True)
         return result
+
+    def guard_continuity(self,ns,wall):
+        """V44 only: original clear timer cannot span missing actual checks."""
+        maximum_ns=round(self.profile['clear_guard_gap_max_sim_s']*1e9)
+        previous=self.last_actual_guard_clock_ns
+        if previous is not None and ns<previous:
+            self.state='failed';self.message='实际native guard时钟倒退，停车';self.obstacle_clear_since=None
+            return False
+        reset=previous is None or ns-previous>maximum_ns
+        fresh_ns=round(self.profile['pose_cloud_timeout_s']*1e9)
+        source_fresh=all(stamp>=0 and -50_000_000<=ns-stamp<fresh_ns for stamp in (self.pose_stamp,self.cloud_stamp))
+        if reset or not source_fresh:
+            before=self.obstacle_clear_since;self.obstacle_clear_since=None
+            if before is not None:
+                self.guard_continuity_resets+=1
+                self.evidence.append(self.run/'navigation_guard_continuity_history.jsonl',{
+                    'schema':'teacher_actual_guard_continuity/v1','compute_ros_clock_ns':ns,
+                    'compute_monotonic_wall':wall,'previous_actual_guard_clock_ns':previous,
+                    'actual_guard_gap_ns':None if previous is None else ns-previous,
+                    'pose_stamp_ns':self.pose_stamp,'cloud_stamp_ns':self.cloud_stamp,
+                    'clear_start_before_s':before,'clear_start_after_s':None,
+                    'reason':'actual_source_stale'if not source_fresh else 'actual_guard_gap',
+                    'extra_geometry_computed':False})
+        if not source_fresh:self.message='实际SLAM/点云header超时，停车等待fresh guard输入'
+        return source_fresh
 
 
 def main():
@@ -265,6 +339,7 @@ def main():
                     'schema':'teacher_native_steering_guard_writer/v1','expected_records':node.guard_sequence,
                     'status':'failed'if node.evidence.error else 'drained',
                     'queue_error':node.evidence.error,'silent_record_loss_permitted':False,
+                    'clear_guard_continuity_resets':node.guard_continuity_resets,
                     'source':'actual dynamic controller shutdown after bounded evidence queue drain',
                     'navigation_verified':False},allow_nan=False,ensure_ascii=False)+'\n')
             node.destroy_node();rclpy.try_shutdown()

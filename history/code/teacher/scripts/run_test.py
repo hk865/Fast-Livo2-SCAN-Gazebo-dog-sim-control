@@ -47,10 +47,12 @@ def main():
     p.add_argument('--navigation-stack',action='store_true',help='Finite scoped experiment with actual SLAM/SCAN inputs')
     p.add_argument('--navigation-dynamic',action='store_true',help='Finite flat experiment with one real Gazebo moving obstacle; implies navigation stack')
     p.add_argument('--navigation-dynamic-turn20',action='store_true',help='Explicit calibrated dynamic-only 0.2 rad/s alignment profile; implies dynamic mode')
+    p.add_argument('--navigation-dynamic-dwell',action='store_true',help='Independent dynamic profile that stops on confirmed original measured region dwell; implies turn20 dynamic mode')
     p.add_argument('--slam-only-stack',action='store_true',help='Actual stationary SLAM sensor validation without navigation commands')
     p.add_argument('--navigation-duration',type=float,default=None)
     p.add_argument('--sensor-feedback',action='store_true')
     args=p.parse_args();suite=[]
+    if args.navigation_dynamic_dwell:args.navigation_dynamic_turn20=True
     if args.navigation_dynamic_turn20:args.navigation_dynamic=True
     if args.navigation_duration is None:args.navigation_duration=240. if args.navigation_dynamic else 120.
     if args.navigation_dynamic:
@@ -105,6 +107,7 @@ def main():
                 if args.slam_only_stack:config_cmd+=['--slam-only']
                 if args.navigation_dynamic:config_cmd+=['--dynamic']
                 if args.navigation_dynamic_turn20:config_cmd+=['--dynamic-turn20']
+                if args.navigation_dynamic_dwell:config_cmd+=['--dynamic-dwell']
                 subprocess.run(config_cmd,check=True,stdout=(run/'navigation_prepare.log').open('w'),stderr=subprocess.STDOUT)
             baseline=resource();(run/'resources_before.json').write_text(json.dumps(baseline,indent=2))
             sourcefiles=[f for f in ROOT.rglob('*')if f.is_file()and not any(d in f.parts for d in ['runs','build','__pycache__','test_results'])]

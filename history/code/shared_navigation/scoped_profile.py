@@ -21,9 +21,12 @@ SCHEMA = 'teacher_navigation_scope/v1'
 PROFILE = Path(__file__).with_name('flat_relative_roundtrip.json')
 DYNAMIC_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile.json'
 DYNAMIC_TURN20_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile_turn20.json'
-DYNAMIC_EXPERIMENTS = {'finite_flat_dynamic_stop_resume_v1', 'finite_flat_dynamic_stop_resume_turn20_v1'}
+DYNAMIC_DWELL_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile_dwell.json'
+DYNAMIC_EXPERIMENTS = {'finite_flat_dynamic_stop_resume_v1', 'finite_flat_dynamic_stop_resume_turn20_v1',
+                       'finite_flat_dynamic_stop_resume_dwell_v1'}
 EXPERIMENTS = {'flat_relative_roundtrip_v1': PROFILE, 'finite_flat_dynamic_stop_resume_v1': DYNAMIC_PROFILE,
-              'finite_flat_dynamic_stop_resume_turn20_v1': DYNAMIC_TURN20_PROFILE}
+              'finite_flat_dynamic_stop_resume_turn20_v1': DYNAMIC_TURN20_PROFILE,
+              'finite_flat_dynamic_stop_resume_dwell_v1': DYNAMIC_DWELL_PROFILE}
 FLAT = ('stand', 'forward', 'backward', 'left', 'right', 'turn_positive',
         'turn_negative', 'walk_stop', 'command_timeout', 'switch')
 _cache = {}
@@ -133,8 +136,9 @@ def verify_scope(path, raw=None):
                 profile=data['profile'], scope='Finite flat SLAM/SCAN integration experiment only')
 
 
-def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False):
+def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False, dynamic_dwell=False):
     if dynamic_turn20 and not dynamic:raise RuntimeError('Turn20 is an explicit dynamic experiment only')
+    if dynamic_dwell and (not dynamic or not dynamic_turn20 or slam_only):raise RuntimeError('Dwell policy requires explicit dynamic Turn20 navigation')
     import numpy as np
     import yaml
     from scipy.spatial.transform import Rotation
@@ -182,7 +186,7 @@ def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False):
     camera_cfg = yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text())
     write(run/'navigation_camera.yaml', camera_cfg)
     write(run/'navigation_scenario.json', {'mode':'teacher', 'sensors':sensors})
-    profile_path=DYNAMIC_TURN20_PROFILE if dynamic_turn20 else DYNAMIC_PROFILE if dynamic else PROFILE
+    profile_path=DYNAMIC_DWELL_PROFILE if dynamic_dwell else DYNAMIC_TURN20_PROFILE if dynamic_turn20 else DYNAMIC_PROFILE if dynamic else PROFILE
     profile = json.loads(profile_path.read_text())
     write(run/'navigation_profile.json', profile)
     slam_files = [run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
@@ -276,10 +280,12 @@ def main():
     parser.add_argument('--slam-only', action='store_true', help='Prepare only actual sensor SLAM configuration; no navigation command eligibility')
     parser.add_argument('--dynamic', action='store_true', help='Explicit bounded physical moving-obstacle experiment; requires asset-stage preparation and three actual finite-navigation passes')
     parser.add_argument('--dynamic-turn20', action='store_true', help='Prospective dynamic-only0.2rad/s heading alignment profile; keeps0.12flat and90s goal deadline')
+    parser.add_argument('--dynamic-dwell', action='store_true', help='Prospective dynamic Turn20 arrival parking only after original measured0.6s dwell; all native safety stops remain')
     args = parser.parse_args()
     if args.dynamic_turn20 and not args.dynamic:parser.error('--dynamic-turn20 requires --dynamic')
+    if args.dynamic_dwell and (not args.dynamic or not args.dynamic_turn20 or args.slam_only):parser.error('--dynamic-dwell requires --dynamic --dynamic-turn20 navigation')
     if args.dynamic and args.slam_only:parser.error('--dynamic requires actual navigation')
-    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only,args.dynamic,args.dynamic_turn20)
+    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only,args.dynamic,args.dynamic_turn20,args.dynamic_dwell)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

@@ -123,8 +123,8 @@ def basis():
 
 
 def runtime_files():
-    return [HERE/n for n in ('dynamic_obstacle.py','prepare.py','protocol.json','flat_dynamic_profile.json','flat_dynamic_profile_turn20.json',
-             'guard_trace_schema.json','obstacle_pose_observer.cpp','CMakeLists.txt','build/obstacle_pose_observer')]+[NAV/'guard_audit.py']
+    return [HERE/n for n in ('dynamic_obstacle.py','prepare.py','protocol.json','flat_dynamic_profile.json','flat_dynamic_profile_turn20.json','flat_dynamic_profile_dwell.json',
+             'guard_trace_schema.json','guard_continuity_schema.json','obstacle_pose_observer.cpp','CMakeLists.txt','build/obstacle_pose_observer')]+[NAV/'guard_audit.py']
 
 
 def prepare_scope(run):
