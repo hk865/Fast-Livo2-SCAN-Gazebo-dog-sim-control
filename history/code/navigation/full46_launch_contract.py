@@ -50,8 +50,9 @@ def expected_profile(here,name=PROFILE_NAME):
         startup_correction_commit_requires_navigation_idle=True,
         navigation_world_transform_source='original_scenario.slam_origin_in_world',
         frontend_velocity_or_bias_repaired=False,
-        bounded_foreground_surface_policy=dict(version='known_scene_foreground_v34r13',
+        bounded_foreground_surface_policy=dict(version='known_scene_unmapped_foreground_v34r14',
             maximum_fraction=.05,negative_static_first_hit_threshold_m=.12,
+            minimum_static_surface_distance_m=.1,
             original_all_point_coverage_and_ray_gates_retained=True,
             original_full_capped_RMS_ranking_retained=True))
     result['diagnostic_scope'].update(route_controller_gates_unchanged=False,

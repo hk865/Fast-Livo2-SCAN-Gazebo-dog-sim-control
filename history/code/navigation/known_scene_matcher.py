@@ -44,6 +44,7 @@ class MatchPolicy:
     rms_max_m: float = .060
     foreground_max_fraction: float = .05
     foreground_negative_first_hit_threshold_m: float = .12
+    foreground_minimum_surface_distance_m: float = .1
     surface_p95_max_m: float = .12
     inlier_fraction_min: float = .90
     ray_hit_fraction_min: float = .90
@@ -217,7 +218,8 @@ class KnownSceneMatcher:
             moved, pose[:3, 3] + pose[:3, :3] @ mount, return_arrays=True)
         foreground = (np.isfinite(observed) & (observed > 0)
                       & np.isfinite(first) & (first > 0)
-                      & (observed - first < -p.foreground_negative_first_hit_threshold_m))
+                      & (observed - first < -p.foreground_negative_first_hit_threshold_m)
+                      & (d >= p.foreground_minimum_surface_distance_m))
         static = ~foreground
         static_valid = valid & static
         j = np.column_stack((n[static_valid],
@@ -250,10 +252,11 @@ class KnownSceneMatcher:
                       geometry_eigenvalues=eigen.tolist(), surface_counts=counts,
                       static_support_points=int(static_valid.sum()),
                       nonforeground_points=int(static.sum()), static_surface_counts=static_counts,
-                      foreground=dict(schema='bounded_negative_static_first_hit_foreground/v1',
+                      foreground=dict(schema='bounded_unmapped_negative_static_first_hit_foreground/v2',
                           count=int(foreground.sum()), total_scored_points=len(d), fraction=foreground_fraction,
                           max_fraction=p.foreground_max_fraction,
                           negative_first_hit_threshold_m=p.foreground_negative_first_hit_threshold_m,
+                          minimum_surface_distance_m=p.foreground_minimum_surface_distance_m,
                           classification_is_dynamic_object_proof=False,
                           static_support_required_points=p.minimum_points,
                           sample_count=len(samples), samples=samples))

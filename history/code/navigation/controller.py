@@ -44,6 +44,7 @@ class PIDNavigation(TeacherNavigation):
         self.global_route_guides=SegmentGuides()
         self.continuous_settings=continuous_configuration(self.profile)
         self.continuous_route=None;self.coverage_replan_index=None
+        self.scan_reference_coverage_index=None
         self.reference_consistency_hold=False;self.reference_consistency_check=None
         self.registered_cloud_archive_mode=self.profile.get('engineering_recording',{}).get('registered_cloud_archive','legacy_all')
         if self.registered_cloud_archive_mode not in ('legacy_all','disabled'):
@@ -563,7 +564,7 @@ class PIDNavigation(TeacherNavigation):
             points=self.continuous_route.reference_points(end_index=self.continuous_route.next_index)
             self.evidence.append(self.run/"navigation_global_reference_requests.jsonl",dict(
                 self.continuous_route.status(),guide_points_xyz=copy.deepcopy(points),guide_count=len(points),
-                local_body_goal=list(map(float,goal)),local_endpoint_coverage_index=self.scan_reference_coverage_index,
+                local_body_goal=list(map(float,goal)),local_endpoint_coverage_index=self.continuous_route.next_index,
                 fixed_hard_target_index=self.waypoint_index,
                 frame_id="camera_init",guide_only_not_arrival=True,collision_or_support_certified=False,
                 source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds))
