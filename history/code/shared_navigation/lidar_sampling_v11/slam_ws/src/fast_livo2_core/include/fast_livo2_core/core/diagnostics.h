@@ -42,10 +42,10 @@ class Logger {
  public:
   static Logger& instance() { static Logger logger; return logger; }
   bool enabled() const { return enabled_; }
-  bool detail() const {
-    const double t=context_.stamp_ns*1e-9;
-    return enabled_ && t>=detail_begin_ && t<=detail_end_;
+  bool detail_at(double source_s) const {
+    return enabled_ && source_s>=detail_begin_ && source_s<=detail_end_;
   }
+  bool detail() const { return detail_at(context_.stamp_ns*1e-9); }
   Context context() const { return context_; }
   void set_context(uint64_t stage,uint64_t stamp_ns) {
     if(!enabled_) return;

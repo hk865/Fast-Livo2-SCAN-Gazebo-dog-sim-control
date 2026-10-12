@@ -976,7 +976,7 @@ void LIVMapper::standard_pcl_cbk(const sensor_msgs::msg::PointCloud2::ConstShare
   // ROS_INFO("get point cloud at time: %.6f", stamp2Sec(msg->header.stamp));
   PointCloudXYZI::Ptr ptr(new PointCloudXYZI());
   p_pre->process(msg, ptr);
-  if(fastlivo_diag::Logger::instance().enabled() && cur_head_time>=115 && cur_head_time<=165) {
+  if(fastlivo_diag::Logger::instance().detail_at(cur_head_time)) {
     std::vector<double> values{double(ptr->size()),5,cur_head_time};
     values.reserve(3+ptr->size()*5);
     for(const auto& point:ptr->points)

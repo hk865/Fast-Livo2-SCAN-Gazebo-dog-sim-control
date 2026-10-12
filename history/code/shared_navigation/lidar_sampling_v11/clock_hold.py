@@ -166,6 +166,9 @@ class ControlClockHold:
             schema='teacher_control_clock_exact_zero_hold/v1', sequence=self.records,
             compute_ros_clock_ns=clock_ns, compute_monotonic_wall=now,
             publish_ros_clock_ns=node.last_publication_ros_clock_ns,
+            # PUBLICATION_OBSERVER_BEGIN actual_publication_link
+            command_publication_sequence=getattr(node,'publication_records',None),
+            # PUBLICATION_OBSERVER_END actual_publication_link
             previous_control_clock_ns=previous_clock, previous_actual_guard_clock_ns=previous_guard,
             last_clock_progress_monotonic_wall=None if self.last_progress_wall_ns is None else self.last_progress_wall_ns / 1e9,
             decision=decision, source_stale_reasons=stale, original_300ms_TTL_preserved=True,

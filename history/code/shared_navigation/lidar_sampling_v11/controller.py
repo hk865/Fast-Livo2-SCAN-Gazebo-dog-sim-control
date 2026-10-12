@@ -32,6 +32,9 @@ class PIDNavigation(TeacherNavigation):
         self.imu_records=0;self.cloud_archive_records=0
         self.segment_references={}
         self.control_clock_hold=ControlClockHold()
+        # PUBLICATION_OBSERVER_BEGIN init_counter
+        self.publication_records=0
+        # PUBLICATION_OBSERVER_END init_counter
     def on_imu(self,msg):
         before=self.gyro_stamp;wall=time.monotonic_ns();clock=self.get_clock().now().nanoseconds
         super().on_imu(msg);stamp=int(self.stamp(msg));q=msg.orientation;v=msg.angular_velocity
@@ -293,6 +296,10 @@ class PIDNavigation(TeacherNavigation):
     def publish_command(self,velocity=None,yaw_rate=0.):
         from geometry_msgs.msg import Twist
         from std_msgs.msg import Bool
+        # PUBLICATION_OBSERVER_BEGIN entry_snapshot
+        from publication_ledger import PublicationLedger
+        publication_before=PublicationLedger.begin(self,velocity is None)
+        # PUBLICATION_OBSERVER_END entry_snapshot
         msg=Twist();ns=self.get_clock().now().nanoseconds
         self.last_publication_ros_clock_ns=ns
         if velocity is not None:
@@ -323,7 +330,13 @@ class PIDNavigation(TeacherNavigation):
             tmp=self.run/'cascade_command_source.tmp';tmp.write_text(json.dumps(source,allow_nan=False)+'\n')
             tmp.replace(self.run/'cascade_command_source.json')
             self.evidence.append(self.run/'navigation_pid_history.jsonl',row);self.pid_row=None
+        # PUBLICATION_OBSERVER_BEGIN actual_publish_start
+        publication_started_wall_ns=PublicationLedger.publication_started()
+        # PUBLICATION_OBSERVER_END actual_publish_start
         self.cmd_pub.publish(msg);self.counts['commands']+=1
+        # PUBLICATION_OBSERVER_BEGIN actual_publish_completed
+        PublicationLedger.completed(self,publication_before,ns,publication_started_wall_ns)
+        # PUBLICATION_OBSERVER_END actual_publish_completed
         self.freeze_pub.publish(Bool(data=bool(self.state!='running'or self.obstacle_hold or np.linalg.norm(self.command[:2])<.015)))
 
 def main():
@@ -342,6 +355,10 @@ def main():
                 expected_imu_records=node.imu_records,expected_cloud_archive_records=node.cloud_archive_records,
                 expected_cloud_callback_records=node.cloud_callback_records,queue_error=node.evidence.error,
                 expected_control_clock_hold_records=node.control_clock_hold.records,
+                # PUBLICATION_OBSERVER_BEGIN writer_expected_count
+                expected_command_publication_records=node.publication_records,
+                final_commands_published_count=node.counts['commands'],
+                # PUBLICATION_OBSERVER_END writer_expected_count
                 status='failed'if node.evidence.error else 'drained',navigation_verified=False))+'\n')
             node.destroy_node();rclpy.try_shutdown()
 if __name__=='__main__':main()

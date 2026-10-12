@@ -403,7 +403,7 @@ VoxelOctoTree *VoxelOctoTree::Insert(const pointWithVar &pv)
 void VoxelMapManager::StateEstimation(StatesGroup &state_propagat)
 {
   auto &diagnostics = fastlivo_diag::Logger::instance();
-  const bool diagnostic_enabled = diagnostics.enabled();
+  const bool diagnostic_enabled = diagnostics.detail();
   const bool diagnostic_detail = diagnostics.detail();
   cross_mat_list_.clear();
   cross_mat_list_.reserve(feats_down_size_);
@@ -777,7 +777,7 @@ void VoxelMapManager::UpdateVoxelMap(const std::vector<pointWithVar> &input_poin
 
 void VoxelMapManager::BuildResidualListOMP(std::vector<pointWithVar> &pv_list, std::vector<PointToPlane> &ptpl_list)
 {
-  const bool diag_enabled = fastlivo_diag::Logger::instance().enabled();
+  const bool diag_enabled = fastlivo_diag::Logger::instance().detail();
   if (diag_enabled) diagnostic_query_rows_.assign(pv_list.size(), std::array<double,60>{});
   int max_layer = config_setting_.max_layer_;
   double voxel_size = config_setting_.max_voxel_size_;

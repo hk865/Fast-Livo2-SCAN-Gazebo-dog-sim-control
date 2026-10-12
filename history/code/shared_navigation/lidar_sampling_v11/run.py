@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v10/run.py --profile l64_r30_c10_210 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v11/run.py --profile l64_r30_c10_210 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -82,6 +82,11 @@ def validate_profile(p):
     if p.get('pose_cloud_timeout_s')!=.3:raise ValueError('Source freshness must remain300ms')
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
+    if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[115,118]:
+        raise ValueError('V11 allows only the prospective 3s diagnostic window')
+    logging_preflight=json.loads((HERE/'logging_acceleration_preflight.json').read_text())
+    if logging_preflight.get('status')!='PASS_LIMITED_BUILD_AND_NUMERIC':
+        raise ValueError('V11 is source prepared only; independent build and numeric fixture are required')
     duration=float(p['duration_s']);spawn=p['spawn'];asset=p['expected_asset'];cascade=p['cascade']
     if not math.isfinite(duration) or not 30<=duration<=1500:raise ValueError('Invalid bounded simulation duration')
     if len(spawn)!=4 or not all(math.isfinite(float(v))for v in spawn) or asset['spawn']!=spawn:
@@ -159,8 +164,10 @@ def prepare(run,args):
     binary_contract={name:{'path':str(path.resolve()),'sha256':sha(path)} for name,path in (
         ('executable',SLAM_WORKSPACE/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping'),
         ('core',SLAM_WORKSPACE/'install/fast_livo2_core/lib/libfast_livo2_core.so'))}
+    detail_window=p['diagnostic_scope']['detail_window_sim_s']
     diagnostic_environment={'FASTLIVO_DIAGNOSTIC_DIR':str(run/'fastlivo_diagnostics'),
-                            'FASTLIVO_DIAGNOSTIC_BEGIN':'115','FASTLIVO_DIAGNOSTIC_END':'165'}
+                            'FASTLIVO_DIAGNOSTIC_BEGIN':str(detail_window[0]),
+                            'FASTLIVO_DIAGNOSTIC_END':str(detail_window[1])}
     plan={'schema':'teacher_closed_loop_runtime_plan/v1','run':str(run),'simulation_only':True,'real_robot':False,
           'allowed':True,'navigation_ground_truth_used':False,'actor_privileged_dimensions':232,
           'profile_path':str(selected),'profile_sha256':sha(selected),'profile':p,
@@ -175,6 +182,7 @@ def prepare(run,args):
           'world_sha256':sha(run/'world.sdf'),'cloud_transport_manifest_sha256':sha(run/'cloud_transport_manifest.json'),
           'runtime_started':False,'renderer':'hardware/Ogre2','compatibility_motion_gate_applies':False,
           'slam_multicore_contract':json.loads((HERE/'LIO_MULTICORE_CONTRACT.json').read_text()),
+          'slam_logging_acceleration_contract':json.loads((HERE/'LOGGING_ACCELERATION_CONTRACT.json').read_text()),
           'slam_binary_contract':binary_contract,'navigation_stack_diagnostic_environment':diagnostic_environment,
           'diagnostic_prefix_only':bool(p.get('diagnostic_scope')),
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],

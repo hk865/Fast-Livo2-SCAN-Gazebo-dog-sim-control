@@ -377,7 +377,7 @@ void VIOManager::retrieveFromVisualSparseMap(cv::Mat img, vector<pointWithVar> &
 {
 // FASTLIVO_DIAG_BEGIN retrieval_init
   auto &diag_log = fastlivo_diag::Logger::instance();
-  const bool diag_enabled = diag_log.enabled();
+  const bool diag_enabled = diag_log.detail();
   std::vector<double> diag_counts;
   if (diag_enabled) {
     diag_counts.assign(24, 0.0);
@@ -906,7 +906,7 @@ void VIOManager::computeJacobianAndUpdateEKF(cv::Mat img)
 // FASTLIVO_DIAG_BEGIN frame_cov_before
   auto &diag_log = fastlivo_diag::Logger::instance();
   std::vector<double> diag_frame_cov;
-  if (diag_log.enabled()) {
+  if (diag_log.detail()) {
     diag_frame_cov = {3.0, total_points == 0 ? 3.0 : 0.0, static_cast<double>(new_frame_->id_),
       static_cast<double>(total_points), img_point_cov, inverse_composition_en ? 1.0 : 0.0};
     fastlivo_diag::append(diag_frame_cov, state->cov);
@@ -937,7 +937,7 @@ void VIOManager::computeJacobianAndUpdateEKF(cv::Mat img)
   }
   state->cov -= G * state->cov;
 // FASTLIVO_DIAG_BEGIN frame_cov_after
-  if (diag_log.enabled()) {
+  if (diag_log.detail()) {
     fastlivo_diag::append(diag_frame_cov, state->cov); fastlivo_diag::state(diag_frame_cov, *state);
     fastlivo_diag::append(diag_frame_cov, G);
     diag_log.emit(200, -1, -1, std::move(diag_frame_cov));
@@ -1570,7 +1570,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 {
 // FASTLIVO_DIAG_BEGIN iter_init_updateStateInverse
   auto &diag_log = fastlivo_diag::Logger::instance();
-  const bool diag_enabled = diag_log.enabled();
+  const bool diag_enabled = diag_log.detail();
   if (diag_enabled && total_points == 0)
     diag_log.emit(201, -1, level, std::vector<double>{1.0, 6.0, 3.0});
 // FASTLIVO_DIAG_END iter_init_updateStateInverse
@@ -1748,7 +1748,7 @@ void VIOManager::updateState(cv::Mat img, int level)
 {
 // FASTLIVO_DIAG_BEGIN iter_init_updateState
   auto &diag_log = fastlivo_diag::Logger::instance();
-  const bool diag_enabled = diag_log.enabled();
+  const bool diag_enabled = diag_log.detail();
   if (diag_enabled && total_points == 0)
     diag_log.emit(201, -1, level, std::vector<double>{0.0, 7.0, 3.0});
 // FASTLIVO_DIAG_END iter_init_updateState
