@@ -5,13 +5,23 @@ from collections import deque
 from pathlib import Path
 import numpy as np
 from teacher_wrapper import TeacherNavigation
-from pid_core import HeaderPID,slew
+from pid_core import slew
 from cascade_core import Controller
 from control_core import follow_trajectory
 
+class ResetBookkeeping:
+    """Legacy archive reset counter only; cascade_core owns all control maths."""
+    def __init__(self):
+        self.resets=0
+        self.reset('startup')
+    def reset(self,reason):
+        self.resets+=1
+        self.reset_reason=reason
+
+
 class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
-        super().__init__(run);self.pid=HeaderPID(self.profile)  # reset bookkeeping only
+        super().__init__(run);self.pid=ResetBookkeeping()  # no legacy controller mathematics
         self.pid_velocity=None;self.pid_pose_stamp=None;self.pid_row=None
         self.pid_records=0;self.pid_guard_needs_evaluation=False;self.pid_prepared_output=None
         self.cloud_callback_records=0;self.pending_cloud_callback_row=None
