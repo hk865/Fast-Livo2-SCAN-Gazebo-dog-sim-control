@@ -4,6 +4,7 @@ import argparse,copy,hashlib,json,math,os,time
 from collections import deque
 from pathlib import Path
 from handoff_stop_policy import tail_stop_request
+from launch_command_policy import constrain_exactzero_launch
 from path_handoff import stopped_rebind as stopped_path_rebind, retention_reference_eligibility
 import numpy as np
 from teacher_wrapper import TeacherNavigation
@@ -726,6 +727,7 @@ class PIDNavigation(TeacherNavigation):
         desired=cmd.copy()
         cmd=(np.zeros(3)if diagnostic['mode']in ('protect','recovering','pre_turn','settle','path_end_hold','reference_constraint_hold')
             else slew(self.command,desired,ns/1e9-self.last_command_time,[.6,.6,.8]))
+        cmd,launch_constraint=constrain_exactzero_launch(self.command,desired,cmd,diagnostic['mode'],self.rotation[:2,:2])
         self.pid_prepared_output=cmd.copy();world_direction=self.rotation[:2,:2]@cmd[:2]
         if np.linalg.norm(world_direction)>1e-9:self.steering['direction']=world_direction.tolist()
         self.pid_records+=1
@@ -741,7 +743,7 @@ class PIDNavigation(TeacherNavigation):
             trajectory_archive_file=self.trajectory_archive_reference,mode=diagnostic['mode'],
             checked_target=np.asarray(target).tolist(),goal=self.waypoints[self.waypoint_index].tolist(),
             actual_pid_world_direction=world_direction.tolist(),steering_direction=self.steering['direction'],
-            desired_body_command=desired.tolist(),prepared_after_slew_command=cmd.tolist(),
+            desired_body_command=desired.tolist(),prepared_after_slew_command=cmd.tolist(),launch_output_constraint=launch_constraint,
             navigation_ground_truth_used=False)
         return cmd[:2],float(cmd[2])
     def evaluate_motion_guard(self,*args):
