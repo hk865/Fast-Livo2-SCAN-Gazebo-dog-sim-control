@@ -10,6 +10,8 @@
 #include <sys/syscall.h>
 #include <sstream>
 #include <iomanip>
+#include <charconv>
+#include <nlohmann/json.hpp>
 
 namespace fastlivo_timing {
 constexpr size_t boundary_count=17;
@@ -27,10 +29,15 @@ struct ScalarWriter {
     try {
       if(fd<0)return;
       std::ostringstream text;
-      text<<"{\"schema\":\"R71_native_boundary_timing/v1\",\"tid\":"<<::syscall(SYS_gettid)<<",\"values\":[";
+      text<<"{\"schema\":\"R72_native_boundary_timing/v1\",\"tid\":"<<::syscall(SYS_gettid)<<",\"values\":[";
       for(size_t i=0;i<values.size();++i) {if(i)text<<',';text<<std::setprecision(17)<<values[i];}
       text<<"]}\n";
-      const auto raw=text.str();if(raw.size()>4096)return;
+      emit_raw(text.str());
+    } catch(...) {}  // Observation must never replace a primary exception.
+  }
+  void emit_raw(const std::string& raw) noexcept {
+    try {
+      if(fd<0 || raw.size()>4096)return;
       std::lock_guard<std::mutex> guard(mutex);
       struct stat st{};struct statvfs fs{};
       if(::fstat(fd,&st)||::fstatvfs(fd,&fs)||!S_ISREG(st.st_mode)||!fs.f_frsize)return;
@@ -83,6 +90,50 @@ inline void completed(size_t boundary,const Sample& before,const Sample& after) 
     else fastlivo_diag::Logger::instance().raw(300,context.stamp_ns,std::move(values));
     w.begin=after.wall; w.totals={};
   }
+}
+// Integers from the same CLOCK_MONOTONIC domain as original pipeline CSV.
+// Diagnostic source selection does not select estimator data or grant health.
+inline uint64_t frame_from_ns() noexcept {
+  static const uint64_t from=[]() noexcept {
+    const char* text=std::getenv("FASTLIVO_FRAME_TIMING_FROM_NS");
+    if(!text || !*text)return UINT64_MAX;
+    uint64_t out=0;const char* end=text+std::strlen(text);
+    const auto parsed=std::from_chars(text,end,out);
+    return parsed.ec==std::errc{} && parsed.ptr==end ? out : UINT64_MAX;
+  }();return from;
+}
+inline std::array<uint64_t,11>& frame_wall() noexcept {
+  static thread_local std::array<uint64_t,11> value{};return value;
+}
+inline std::array<uint64_t,11>& frame_cpu() noexcept {static thread_local std::array<uint64_t,11> value{};return value;}
+inline void frame_mark(size_t i) noexcept {
+  if(frame_from_ns()==UINT64_MAX || i>=frame_wall().size())return;
+  const auto measured=sample();
+  frame_wall()[i]=measured.valid?measured.wall:0;
+  frame_cpu()[i]=measured.valid?measured.thread_cpu:0;
+}
+inline void frame_reset() noexcept {frame_wall().fill(0);frame_cpu().fill(0);frame_mark(0);}
+inline void emit_frame(const nlohmann::json& identity) noexcept {
+  try {
+    const auto source=identity.at("stamp_ns").get<uint64_t>();
+    if(frame_from_ns()==UINT64_MAX || source<frame_from_ns())return;
+    const auto& times=frame_wall();
+    for(size_t i=0;i<times.size();++i)if(!times[i] || (i && times[i]<times[i-1]))return;
+    nlohmann::json row={{"schema","R72_native_source_frame_timing/v1"},
+      {"tid",::syscall(SYS_gettid)},{"producer_epoch",identity.at("producer_epoch")},
+      {"run_id",identity.at("run_id")},{"stage",identity.at("stage")},
+      {"post_lio_header_ns",source},{"commit",identity.at("commit")},
+      {"source_set",identity.at("sources")},{"point_count",identity.at("point_count")},
+      {"point_refs_sha256",identity.at("point_refs_sha256")},
+      {"registered_message_sha256",identity.at("registered_message_sha256")},
+      {"mapper_message_sha256",identity.at("mapper_message_sha256")},
+      {"wall_ns",times},{"thread_cpu_ns",frame_cpu()},{"clock_valid",true},
+      {"wall_labels",{"sync_begin","sync_selected","imu_begin","imu_done","lio_begin",
+        "odom_publish_begin","odom_publish_return","navigation_construct_begin","navigation_construct_ready","cloud_publish_return",
+        "identity_publish_return"}},
+      {"observation_only",true},{"publication_return_is_DDS_delivery_receipt",false}};
+    scalar_writer().emit_raw(row.dump()+"\n");
+  } catch(...) {} // Missing diagnostic fields never replace original result.
 }
 class Scope {
  public:

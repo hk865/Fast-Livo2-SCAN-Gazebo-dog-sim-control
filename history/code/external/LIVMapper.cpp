@@ -11,6 +11,7 @@ which is included as part of this source code package.
 */
 
 #include "LIVMapper.h"
+#include <unordered_set>
 #include <cstdio>
 #include <exception>
 #include "identity_ros.h"
@@ -578,7 +579,8 @@ void LIVMapper::handleVIO()
 }
 
 void LIVMapper::handleLIO() 
-{    
+{
+  fastlivo_timing::frame_mark(4);    
 // BOUNDARY_TIMING_BEGIN handle_lio_all
   fastlivo_timing::Scope timing_handle_lio_all(14);
 // BOUNDARY_TIMING_END handle_lio_all
@@ -660,7 +662,9 @@ void LIVMapper::handleLIO()
   const auto identity_stage_commit=++identity_commit;
   if(feats_identity.size()>65536)throw std::runtime_error("R60 identity commit exceeds65536points");
   fastlivo_identity::validate(feats_identity,feats_undistort->size());
+  fastlivo_timing::frame_mark(5);
   publish_odometry(pubOdomAftMapped);
+  fastlivo_timing::frame_mark(6);
   const auto identity_mapper_sha=fastlivo_identity::message_sha(odomAftMapped);
 
   double t3 = omp_get_wtime();
@@ -709,6 +713,7 @@ void LIVMapper::handleLIO()
 // BOUNDARY_TIMING_BEGIN navigation_cloud_open
   { fastlivo_timing::Scope timing_navigation_cloud(7);
 // BOUNDARY_TIMING_END navigation_cloud_open
+  fastlivo_timing::frame_mark(7);
   sensor_msgs::msg::PointCloud2 navigation_cloud;
   pcl::toROSMsg(*laserCloudWorld, navigation_cloud);
   navigation_cloud.header.frame_id = "camera_init";
@@ -718,7 +723,14 @@ void LIVMapper::handleLIO()
       geoQuat!=identity_quaternion || odomAftMapped.header.stamp!=navigation_cloud.header.stamp)
     throw std::runtime_error("R60 post-LIO commit state/stamp changed");
   fastlivo_identity::validate(feats_identity,navigation_cloud.width*navigation_cloud.height);
-  std::set<std::pair<uint64_t,uint32_t>> identity_unique;
+  struct IdentityPairHash {
+    size_t operator()(const std::pair<uint64_t,uint32_t>& key) const noexcept {
+      const size_t a=std::hash<uint64_t>{}(key.first),b=std::hash<uint32_t>{}(key.second);
+      return a ^ (b + size_t(0x9e3779b9U) + (a<<6) + (a>>2));
+    }
+  };
+  std::unordered_set<std::pair<uint64_t,uint32_t>,IdentityPairHash> identity_unique;
+  identity_unique.reserve(feats_identity.size());
   std::map<uint64_t,std::shared_ptr<const fastlivo_identity::Source>> identity_sources;
   for(const auto&r:feats_identity){
     if(!identity_unique.insert({r.source->packet,r.input_ordinal}).second)
@@ -746,8 +758,12 @@ void LIVMapper::handleLIO()
       {"mapper_message_sha256",identity_mapper_sha},{"navigation_ground_truth_used",false}};
   std_msgs::msg::String identity_out;identity_out.data=identity_message.dump();
   if(identity_out.data.size()>2*1024*1024)throw std::runtime_error("R60 identity message exceeds bound");
+  fastlivo_timing::frame_mark(8);
   pubNavigationCloud->publish(navigation_cloud);
+  fastlivo_timing::frame_mark(9);
   pubPointIdentity->publish(identity_out);
+  fastlivo_timing::frame_mark(10);
+  fastlivo_timing::emit_frame(identity_message);
 // BOUNDARY_TIMING_BEGIN navigation_cloud_close
   }
 // BOUNDARY_TIMING_END navigation_cloud_close
@@ -890,6 +906,7 @@ void LIVMapper::run(rclcpp::Node::SharedPtr &node)
       }
     }
     // fprintf(stderr, "[ Main ] after spin_some\n"); fflush(stderr);
+    fastlivo_timing::frame_reset();
     if (!sync_packages(LidarMeasures)) 
     {
       // rclcpp::Rate::sleep() may throw after SIGINT invalidates the context,
@@ -898,10 +915,13 @@ void LIVMapper::run(rclcpp::Node::SharedPtr &node)
       continue;
     }
     // fprintf(stderr, "[ Main ] after sync_packages\n"); fflush(stderr);
+    fastlivo_timing::frame_mark(1);
     handleFirstFrame();
 
     // fprintf(stderr, "[ Main ] before processImu\n"); fflush(stderr);
+    fastlivo_timing::frame_mark(2);
     processImu();
+    fastlivo_timing::frame_mark(3);
     // fprintf(stderr, "[ Main ] before stateEstimation\n"); fflush(stderr);
 
     stateEstimationAndMapping();
