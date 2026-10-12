@@ -193,13 +193,17 @@ class FreshBinding:
             return False
         if stamp < self.last_imu_stamp:
             self.fault = 'imu_header_backwards'; return False
-        R = rotation_xyzw(row['quaternion_xyzw'])
-        if row.get('orientation_available') is not True:
-            raise ValueError('IMU actual orientation unavailable')
+        # sensor_msgs/Imu can validly provide gyro without an orientation
+        # estimate. A covariance[0] of -1 forbids treating its quaternion as
+        # an attitude measurement; body SLAM still supplies the tilt guard.
+        orientation_available = row.get('orientation_available') is True
+        R = rotation_xyzw(row['quaternion_xyzw']) if orientation_available else None
         gyro = self.R_bi@finite(row['angular_velocity_sensor'], 3)
         if not fresh(stamp, row['received_monotonic_wall'], row['callback_ros_clock_ns'], row['received_monotonic_wall']):
             raise ValueError('IMU original header is stale/future')
-        item = {**row, 'gyro_body': gyro.tolist(), 'tilt_rad': tilt(self.R_wi@R@self.R_bi.T)}
+        item = {**row, 'gyro_body': gyro.tolist(),
+                'tilt_rad': tilt(self.R_wi@R@self.R_bi.T) if R is not None else None,
+                'attitude_source': 'declared_IMU_orientation' if R is not None else 'orientation_unavailable; tilt_from_SLAM_body_only'}
         self.gyros.append(item)
         self.last_imu_stamp = stamp
         return True
@@ -258,7 +262,7 @@ class FreshBinding:
             gap = self.c.get('maximum_gyro_pair_gap_s', .02)
             if gyro is None or (pose_stamp-gyro['stamp_ns'])/1e9 > gap or not fresh(gyro['stamp_ns'], gyro['received_monotonic_wall'], ns, wall):
                 reason = 'causal_IMU_pair_stale_or_missing'
-            elif max(self.pose['tilt_rad'], gyro['tilt_rad']) > self.c.get('maximum_tilt_rad', .65):
+            elif max(self.pose['tilt_rad'], gyro['tilt_rad'] if gyro['tilt_rad'] is not None else self.pose['tilt_rad']) > self.c.get('maximum_tilt_rad', .65):
                 self.fault = reason = 'actual_attitude_limit_latched'
         if reason is None and self.hold:
             if len(self.recovery_stamps) < 2 or (self.recovery_stamps[-1]-self.recovery_stamps[0])/1e9 < .099999:
@@ -553,14 +557,19 @@ def main():
                 self.binding.protect('rejected_SLAM_input')
                 self.reject('SLAM', exc)
         def on_imu(self, msg):
+            row = None
             try:
                 q, w = msg.orientation, msg.angular_velocity
                 row = {**self.source_context(msg), 'quaternion_xyzw': [q.x, q.y, q.z, q.w],
                        'angular_velocity_sensor': [w.x, w.y, w.z],
-                       'orientation_available': msg.orientation_covariance[0] >= 0}
+                       'orientation_available': msg.orientation_covariance[0] >= 0,
+                       'orientation_covariance': list(msg.orientation_covariance),
+                       'angular_velocity_covariance': list(msg.angular_velocity_covariance)}
                 row['accepted'] = self.binding.imu(row)
                 self.recorder.append('adapter_IMU_inputs.jsonl', row)
             except Exception as exc:
+                if row is not None:
+                    self.recorder.append('adapter_IMU_inputs.jsonl', {**row, 'accepted': False, 'rejection': str(exc)})
                 self.binding.protect('rejected_IMU_input')
                 self.reject('IMU', exc)
         def reject(self, source, exc):
