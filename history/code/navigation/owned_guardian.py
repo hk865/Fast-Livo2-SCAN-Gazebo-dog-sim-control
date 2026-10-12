@@ -173,10 +173,34 @@ def watch(run, storage_check=None):
     cleanup={}
     for role in ('shadow_sampler','navigation_stack','capture','bridge','gazebo','worker'):
         if role in roles:
-            try: cleanup[role]=stop_group(roles[role],parent_first=role=='navigation_stack',
+            try:
+                if role=='worker':
+                    try:
+                        from guardian_archive_shutdown import observe_archive_close
+                        archive_close=observe_archive_close(run,reason,owner,plan,roles,cleanup,pipeline,
+                            storage_check,last_storage,ident,validated_members)
+                        atomic(run/'guardian_worker_archive_close.json',archive_close,exclusive=True)
+                    except Exception as e:
+                        try:
+                            atomic(run/'guardian_worker_archive_close_error.json',dict(
+                                error=type(e).__name__+': '+str(e),worker_returncode='UNVERIFIED',
+                                navigation_verified=False),exclusive=True)
+                        except Exception: pass
+                cleanup[role]=stop_group(roles[role],parent_first=role=='navigation_stack',
                                          grace=(15. if role=='navigation_stack' else 2.,3.,2.))
             except Exception as e: cleanup[role]=dict(error=type(e).__name__+': '+str(e))
     remaining={role:members(x['pgid']) for role,x in roles.items()}
+    if 'worker' in roles:
+        try:
+            from guardian_archive_shutdown import inspect_archive_after_recovery
+            archive_integrity=inspect_archive_after_recovery(run,reason,roles,cleanup,pipeline,validated_members)
+            atomic(run/'guardian_worker_archive_integrity.json',archive_integrity,exclusive=True)
+        except Exception as e:
+            try:
+                atomic(run/'guardian_worker_archive_integrity_error.json',dict(
+                    error=type(e).__name__+': '+str(e),worker_returncode='UNVERIFIED',
+                    navigation_verified=False),exclusive=True)
+            except Exception: pass
     atomic(run/'guardian_result.json',dict(status='recovered_failed',reason=reason,
         utc=dt.datetime.now(dt.timezone.utc).isoformat(),cleanup=cleanup,pipeline=pipeline,
         remaining=remaining,all_owned_groups_absent=not any(remaining.values()),
