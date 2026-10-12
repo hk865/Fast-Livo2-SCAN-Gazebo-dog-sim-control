@@ -279,8 +279,8 @@ def prepare(run,args):
         plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
             'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
         plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
-    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=60,max_wall_seconds=240,new_output_cap_bytes=2000000000,original_profile_duration_preserved=duration,no_GT_carrier=True)
-    plan['wall_budget_s']=240.
+    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=1500,max_wall_seconds=9090,new_output_cap_bytes=5000000000,original_profile_duration_preserved=duration,no_GT_carrier=True)
+    plan['wall_budget_s']=9090.
     from mission46_profile import required_source_files as actual_mission_sources
     actual_sources=actual_mission_sources()
     declared_sources=p['mission46_required_source_files']
@@ -727,7 +727,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r35_first_goal_wait';tmp=ROOT/'runs'/('latest_engineering_v34_r35_first_goal_wait.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r36_full_route_acceptance';tmp=ROOT/'runs'/('latest_engineering_v34_r36_full_route_acceptance.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

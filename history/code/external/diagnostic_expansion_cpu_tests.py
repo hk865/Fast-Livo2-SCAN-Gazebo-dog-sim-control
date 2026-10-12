@@ -1,0 +1,154 @@
+"""Finite diagnostic fixtures only; no verifier, ROS, drive or runtime ACK."""
+from pathlib import Path
+import copy
+import hashlib
+import json
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+T = Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33')
+S = T/'R36_FULL_ROUTE_ACCEPTANCE_STAGE'
+C = Path('/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r36_full_route_acceptance')
+sys.path.insert(0, str(C))
+from first_goal_stop import initialization_rejection_diagnostic, first_goal_stop_decision, first_goal_runtime_decision
+R = Path(json.loads((T/'R34_FIRST_GOAL_STAGE/FAILURE_ANALYSIS.json').read_text())['run'])
+
+class DiagnosticBoundary(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='CPU_FIXTURE_ONLY_', dir=S)
+        self.run = Path(self.temp.name)
+        self.result = json.loads((R/'R33_INITIALIZATION_RESULT.json').read_text())
+        with (R/'R33_INITIALIZATION_JOBS.jsonl').open() as stream:
+            self.job = json.loads(stream.readline())
+        config = (R/'navigation_fastlivo.yaml').read_bytes()
+        (self.run/'navigation_fastlivo.yaml').write_bytes(config)
+        scope = {'references': {str(self.run/'navigation_fastlivo.yaml'): hashlib.sha256(config).hexdigest()}}
+        raw = json.dumps(scope).encode(); (self.run/'navigation_scope.json').write_bytes(raw)
+        self.job['scope_file_sha256'] = hashlib.sha256(raw).hexdigest()
+        self.result['job_token'] = self.job['job_token'] = self.run.name+':init:1'
+        self.save()
+    def tearDown(self): self.temp.cleanup()  # Only newly generated CPU fixtures.
+    def save(self):
+        self.job['predicates'] = copy.deepcopy(self.result['predicates'])
+        raw = (json.dumps(self.job, sort_keys=True)+'\n').encode()
+        path = self.run/'R33_INITIALIZATION_JOBS.jsonl'; path.write_bytes(raw)
+        self.result['snapshot'] = dict(file=str(path), offset=0, bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+        (self.run/'R33_INITIALIZATION_RESULT.json').write_text(json.dumps(self.result))
+    def test_actual_saved_R34_rejection_is_recognized_without_verifier_replay(self):
+        original = json.loads((R/'R33_INITIALIZATION_RESULT.json').read_text())
+        d = initialization_rejection_diagnostic(R, original)
+        self.assertTrue(d['recoverable_wait']); self.assertEqual(d['shortfall_ns'], 25_000_000)
+    def test_only_short_pose_window_waits_and_records_once(self):
+        for _ in range(2):
+            d = first_goal_stop_decision(self.run, 8_125_000_000, 1, 0)
+            self.assertFalse(d['stop']); self.assertEqual(d['initialization_wait']['marker'], 'INIT_WAIT_POSE_SPAN')
+        rows = (self.run/'R35_INITIALIZATION_WAIT.jsonl').read_text().splitlines()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(json.loads(rows[0])['actual_pose_span_ns'], 2_875_000_000)
+        for name in ['mission46_initialization_receipt.json', 'navigation_anchor.json', 'navigation_request.json']:
+            self.assertFalse((self.run/name).exists())
+    def test_unsafe_or_other_rejection_is_not_ignored(self):
+        for predicate in ['pose_speed', 'pose_displacement', 'pose_max_gap', 'gyro_norm', 'native_original_safe', 'imu_span', 'sensor_health_ready']:
+            with self.subTest(predicate=predicate):
+                value = copy.deepcopy(self.result); value['predicates']['predicates'][predicate] = False
+                self.assertFalse(initialization_rejection_diagnostic(self.run, value)['recoverable_wait'])
+    def test_missing_null_numeric_and_unknown_predicate_fail_closed(self):
+        for variant in ['missing', 'null', 'numeric', 'unknown']:
+            value = copy.deepcopy(self.result); checks = value['predicates']['predicates']
+            if variant == 'missing': del checks['pose_speed']
+            elif variant == 'null': checks['pose_speed'] = None
+            elif variant == 'numeric': checks['pose_speed'] = 1
+            else: checks['unknown'] = True
+            self.assertFalse(initialization_rejection_diagnostic(self.run, value)['recoverable_wait'])
+    def test_snapshot_incomplete_wrong_run_or_changed_bytes_is_not_wait(self):
+        for variant in ['incomplete', 'wrong_run', 'wrong_path', 'bad_hash', 'bool_offset', 'excess_size']:
+            value = copy.deepcopy(self.result)
+            if variant == 'incomplete': value['snapshot_complete'] = False
+            elif variant == 'wrong_run': value['job_token'] = 'another:init:1'
+            elif variant == 'wrong_path': value['snapshot']['file'] = str(R/'R33_INITIALIZATION_JOBS.jsonl')
+            elif variant == 'bad_hash': value['snapshot']['sha256'] = '0'*64
+            elif variant == 'bool_offset': value['snapshot']['offset'] = False
+            else: value['snapshot']['bytes'] = 1_572_865
+            self.assertFalse(initialization_rejection_diagnostic(self.run, value)['recoverable_wait'])
+    def test_unknown_exception_or_missing_metric_is_not_wait(self):
+        for change in ['unknown_error', 'no_metrics', 'list_metrics', 'list_checks', 'modified_threshold']:
+            value = copy.deepcopy(self.result)
+            if change == 'unknown_error': value['original_exception'] = 'ValueError:unknown'
+            elif change == 'no_metrics': value['predicates'] = None
+            elif change == 'list_metrics': value['predicates'] = []
+            elif change == 'list_checks': value['predicates']['predicates'] = []
+            else: value['predicates']['thresholds_modified'] = True
+            self.assertFalse(initialization_rejection_diagnostic(self.run, value)['recoverable_wait'])
+    def test_zero_shortfall_or_nonmonotone_actual_pose_is_not_wait(self):
+        self.result['predicates']['pose']['span_ns'] = 2_900_000_000; self.save()
+        self.assertFalse(initialization_rejection_diagnostic(self.run, self.result)['recoverable_wait'])
+        self.job['actual_pose_tuple'][1]['stamp_ns'] = self.job['actual_pose_tuple'][0]['stamp_ns']; self.save()
+        self.assertFalse(initialization_rejection_diagnostic(self.run, self.result)['recoverable_wait'])
+    def test_wait_does_not_mask_caps_or_original_navigation_failure(self):
+        for clock, wall, size, reason in [(1_500_000_000_000, 1, 0, 'native1500s_original_route_cutoff'),
+            (8_125_000_000, 9090, 0, 'wall9090s_original_route_cutoff'),
+            (8_125_000_000, 1, 5_000_000_000, 'new_output_cap')]:
+            self.assertEqual(first_goal_stop_decision(self.run, clock, wall, size)['reason'], reason)
+        (self.run/'navigation_status.json').write_text(json.dumps(dict(state='failed')))
+        self.assertEqual(first_goal_stop_decision(self.run, 8_125_000_000, 1, 0)['reason'], 'actual_original_navigation_failed')
+    def test_original_mission_failure_or_timeout_overrides_wait(self):
+        (self.run/'mission46_status.json').write_text(json.dumps(dict(run_id=self.run.name, stage='failed', message='CPU_FIXTURE_ONLY original timeout')))
+        d = first_goal_stop_decision(self.run, 8_125_000_000, 1, 0)
+        self.assertEqual(d['reason'], 'actual_original_mission_failed')
+        self.assertTrue(d['stop'])
+    def test_native_fault_has_priority_even_over_recoverable_wait(self):
+        observed = dict(fault_record=dict(data=dict(fault='CPU_FIXTURE_ONLY')), native_ns=8_125_000_000, caught_up=True)
+        with patch('first_goal_stop.first_goal_stop_decision') as observer:
+            decision = first_goal_runtime_decision(self.run, observed, 1, 0); observer.assert_not_called()
+        self.assertEqual(decision['reason'], 'actual_original_native_fault')
+    def test_new_nonrecoverable_job_replaces_prior_wait(self):
+        self.assertFalse(first_goal_stop_decision(self.run, 8_125_000_000, 1, 0)['stop'])
+        self.result['job_token'] = self.job['job_token'] = self.run.name+':init:2'
+        self.result['predicates']['predicates']['pose_speed'] = False; self.save()
+        d = first_goal_stop_decision(self.run, 8_620_000_000, 2, 0)
+        self.assertTrue(d['stop']); self.assertEqual(d['reason'], 'actual_initialization_nonrecoverable_rejection')
+    def test_wait_state_cannot_be_used_as_original_pass(self):
+        d = first_goal_stop_decision(self.run, 8_125_000_000, 1, 0)
+        self.assertFalse(d['navigation_PASS']); self.assertNotIn('first_goal_ordered_pass_verified', d)
+        self.assertFalse(d['initialization_wait']['admission_by_diagnostic'])
+
+class ExpandedWindowBoundary(DiagnosticBoundary):
+    # Inherit fixture setup, not the twelve already-listed base tests.
+    def test_first_region_and_multiple_region_progress_never_terminate(self):
+        (self.run/'R33_INITIALIZATION_RESULT.json').write_text(json.dumps(dict(original_verifier_passed=True)))
+        for count in [1,2,4,11,18,32,45]:
+            (self.run/'navigation_status.json').write_text(json.dumps(dict(state='running',continuous_route=dict(next_coverage_index=count),region_arrivals=[dict(goal_id='CPU_FIXTURE_ONLY')]*count)))
+            with patch('first_goal_stop.verified_first_goal',side_effect=AssertionError('first-region termination must not execute')):
+                d=first_goal_stop_decision(self.run,100_000_000_000,300,100000)
+            self.assertFalse(d['stop']);self.assertFalse(d['navigation_PASS'])
+    def test_caps_exact_and_just_before(self):
+        for clock,wall,size in [(1_499_999_999_999,9089.999,4_999_999_999),(60_000_000_000,240,2_000_000_000)]:
+            self.assertFalse(first_goal_stop_decision(self.run,clock,wall,size)['stop'])
+        for clock,wall,size in [(1_500_000_000_000,1,0),(1,9090,0),(1,1,5_000_000_000)]:
+            self.assertTrue(first_goal_stop_decision(self.run,clock,wall,size)['stop'])
+    def test_original_pending_and_middle_success_continue(self):
+        for state in ['running','succeeded','stopped','idle']:
+            (self.run/'navigation_status.json').write_text(json.dumps(dict(state=state)))
+            for stage in ['initializing','exploring','returning','saving_map','navigating','completed']:
+                (self.run/'mission46_status.json').write_text(json.dumps(dict(run_id=self.run.name,stage=stage,adapter_stage='final_active_hold',terrain_pending=dict(effective_sim_ns=9999999999999))))
+                d=first_goal_stop_decision(self.run,100_000_000_000,300,100000)
+                self.assertFalse(d['stop']);self.assertFalse(d['navigation_PASS'])
+    def test_completed_is_not_a_diagnostic_navigation_PASS(self):
+        for valid in [True,False]:
+            (self.run/'mission46_status.json').write_text(json.dumps(dict(run_id=self.run.name if valid else 'other',stage='completed',functional_sequence_completed=True,completed_region_count=46 if valid else 45)))
+            d=first_goal_stop_decision(self.run,100_000_000_000,300,100000)
+            self.assertFalse(d['stop']);self.assertFalse(d['navigation_PASS'])
+    def test_aborted_original_failures_still_stop(self):
+        (self.run/'navigation_status.json').write_text(json.dumps(dict(state='aborted')))
+        self.assertEqual(first_goal_stop_decision(self.run,100_000_000_000,300,100000)['reason'],'actual_original_navigation_failed')
+        (self.run/'mission46_status.json').write_text(json.dumps(dict(run_id=self.run.name,stage='aborted')))
+        self.assertEqual(first_goal_stop_decision(self.run,100_000_000_000,300,100000)['reason'],'actual_original_mission_failed')
+    def test_native_backlog_has_no_success_shortcut(self):
+        d=first_goal_runtime_decision(self.run,dict(fault_record=None,native_ns=100_000_000_000,caught_up=False),300,100000)
+        self.assertFalse(d['stop']);self.assertFalse(d['navigation_PASS'])
+# Avoid re-running inherited test methods under the expansion subclass.
+for name in list(DiagnosticBoundary.__dict__):
+    if name.startswith('test_'):setattr(ExpandedWindowBoundary,name,None)
+if __name__ == '__main__': unittest.main(verbosity=2)

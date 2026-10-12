@@ -221,7 +221,7 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
     from startup_trace import read_live_json
     run = Path(run)
     # Caps and original failures precede a success observation.
-    if run_output_bytes >= 2_000_000_000:
+    if run_output_bytes >= 5_000_000_000:
         return dict(stop=True, reason='new_output_cap', navigation_PASS=False)
     result = read_live_json(run/'R33_INITIALIZATION_RESULT.json')
     waiting = None
@@ -243,27 +243,12 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
         return dict(stop=True, reason='actual_original_mission_failed', actual_mission_status=mission, navigation_PASS=False)
     if isinstance(status, dict) and status.get('state') in ('failed', 'aborted'):
         return dict(stop=True, reason='actual_original_navigation_failed', actual_status=status, navigation_PASS=False)
-    if clock_ns >= 60_000_000_000:
-        return dict(stop=True, reason='native60s_first_goal_cutoff', navigation_PASS=False)
-    if wall_elapsed >= 240:
-        return dict(stop=True, reason='wall240s_first_goal_cutoff', navigation_PASS=False)
-    required = ['mission46_initialization_receipt.json', 'mission46_initialization_evidence.json', 'navigation_anchor.json']
-    if (isinstance(result, dict) and result.get('original_verifier_passed') is True
-        and result.get('snapshot_complete') is True and all((run/n).is_file() for n in required)
-        and isinstance(status, dict) and isinstance(actual, dict)):
-        initialization = read_live_json(run/'mission46_initialization_receipt.json')
-        anchor = read_live_json(run/'navigation_anchor.json')
-        if (isinstance(initialization, dict) and initialization.get('passed') is True
-            and initialization.get('navigation_ground_truth_used') is False
-            and initialization.get('binding_verified') is True
-            and initialization.get('run_id') == run.name
-            and result.get('original_receipt') == initialization
-            and str(result.get('job_token', '')).startswith(run.name + ':init:')
-            and isinstance(anchor, dict) and anchor.get('ground_truth_navigation_used') is False):
-            requests = [x for x, _ in rows_with_refs(run/'mission46_requests.jsonl')]
-            proof = verified_first_goal(run, status, actual, requests)
-            if proof is not None and proof['actual_first_goal_receipt']['stamp_ns'] <= clock_ns:
-                return dict(stop=True, reason='real_first_goal_original_ordered_pass', **proof)
+    if clock_ns >= 1_500_000_000_000:
+        return dict(stop=True, reason='native1500s_original_route_cutoff', navigation_PASS=False)
+    if wall_elapsed >= 9090:
+        return dict(stop=True, reason='wall9090s_original_route_cutoff', navigation_PASS=False)
+    # Original coordinator and worker own full-route completion and final hold.
+    # Ordinary region passage is progress; it never terminates this expanded run.
     return dict(stop=False, navigation_PASS=False, initialization_wait=waiting)
 
 
