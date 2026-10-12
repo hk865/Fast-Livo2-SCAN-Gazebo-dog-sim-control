@@ -39,6 +39,7 @@ class Controller:
         self.integral=np.zeros(3);self.velocity_integral=np.zeros(3);self.filtered=None
         self.last_mode=None;self.completed_t=None;self.dwell=None;self.row={}
         self.turn_phase=None;self.stop_since=None;self.inner_filtered=None
+        self.applied_command_estimate=np.zeros(3)
         self.com_offset=np.asarray(p['base_com_offset'])
         self.waypoint_events=[]
 
@@ -50,8 +51,15 @@ class Controller:
         if t<3. or self.completed_t is not None:
             self.command[:]=0.;updated=False
             mode='initializing' if t<3. else'parking'
-            self.row={**self.row,'mode':mode,'controller_updated':False,'command_body':[0.,0.,0.],
-                      'control_t_s':float(s[0]),'feedback_time_s':stamp,'elapsed_s':t,'completed_t_s':self.completed_t}
+            a,b=self.route[self.segment:self.segment+2];heading=math.atan2(b[1]-a[1],b[0]-a[0])
+            self.row={**self.row,'kind':'controller_hold','mode':mode,'controller_updated':False,
+                      'command_body':[0.,0.,0.],'raw_command_body':[0.,0.,0.],
+                      'reference_xy':b[:2].tolist(),'reference_yaw':heading,
+                      'reference_velocity_world':[0.,0.,0.],'v_reference_body':[0.,0.,0.],
+                      'control_t_s':float(s[0]),'feedback_time_s':stamp,'elapsed_s':t,'completed_t_s':self.completed_t,
+                      'feedback_hz':self.hz,'design':self.p['design'],'segment':self.segment,
+                      'route_reference_changes':0,'counts_as_SLAM_navigation':False}
+            self.applied_command_estimate+=np.clip(-self.applied_command_estimate,-np.array([.6,.6,.8])*.02,np.array([.6,.6,.8])*.02)
             return self.command.copy(),mode
         if updated:
             dt=0. if self.last_feedback is None else stamp-self.last_feedback
@@ -74,7 +82,7 @@ class Controller:
                 along=float((s[1:3]-a[:2])@tan);cross=float((s[1:3]-a[:2])@normal)
                 remaining=L-along;distance=float(np.linalg.norm(b[:2]-s[1:3]))
             heading=math.atan2(tan[1],tan[0]);eyaw=wrap(heading-yaw)
-            if self.turn_phase is None and abs(eyaw)>.20:
+            if self.p['design']!='open_loop' and self.turn_phase is None and abs(eyaw)>.20:
                 self.turn_phase='pre_turn';self.stop_since=None
             if self.turn_phase=='pre_turn':
                 stopped=np.linalg.norm(origin_body[:2])<.04 and abs(yawdot)<.05
@@ -93,7 +101,7 @@ class Controller:
             reference_xy=a[:2]+tan*np.clip(along+.8,0,L)
             err=np.r_[reference_xy-s[1:3],eyaw]
             final=self.segment==len(self.route)-2
-            if final and distance<=.12:
+            if final and distance<=.12 and np.linalg.norm(origin_body[:2])<.08 and abs(yawdot)<.1 and abs(eyaw)<.2:
                 self.dwell=t if self.dwell is None else self.dwell
                 mode='goal_dwell';self.command[:]=0.
                 if t-self.dwell>=.6:self.completed_t=t;mode='parking'
@@ -106,6 +114,8 @@ class Controller:
                     speed=float(self.p['desired_speed'])
             velocity_world=np.r_[speed*tan, speed*(b[2]-a[2])/L]
             g=self.g
+            effective_limits=self.limits.copy()
+            if self.p['design']=='legacy_position':effective_limits[0]=min(effective_limits[0],float(self.p['desired_speed']))
             outer_I=np.array([0.,0.,0.]);outer_P=np.zeros(3);outer_D=np.zeros(3)
             if self.p['design']=='legacy_position':
                 kp=np.array([.6,.6,1.1]);ki=np.array([.08,.08,.04]);kd=np.array([.12,.12,.15])
@@ -115,7 +125,7 @@ class Controller:
                 target_body=np.r_[(R.T@np.r_[world[:2],0.])[:2],world[2]]
                 raw=target_body.copy();vel_terms={}
                 # Reject increments that increase saturation in the same world direction.
-                limited=np.clip(raw,-self.limits,self.limits)
+                limited=np.clip(raw,-effective_limits,effective_limits)
                 bodyerr=(R.T@np.r_[err[:2],0.])[:2]
                 blocked=bodyerr*(raw[:2]-limited[:2])>0
                 ibody=(R.T@np.r_[candidate[:2]-self.integral[:2],0.])[:2];ibody[blocked]=0.
@@ -127,9 +137,9 @@ class Controller:
             else:
                 self.integral[1]=np.clip(self.integral[1]-dt*cross,-.3,.3)
                 self.integral[2]=np.clip(self.integral[2]+dt*eyaw,-.3,.3)
-                lateral=-g['cross_kp']*cross-g['cross_kd']*float(origin_world[:2]@normal)+g['cross_ki']*self.integral[1]
+                lateral=-g['cross_kp']*cross-g['cross_kd']*float(self.filtered[:2]@normal)+g['cross_ki']*self.integral[1]
                 velocity_world[:2]+=np.clip(lateral,-.20,.20)*normal
-                wref=g['yaw_kp']*eyaw-g['yaw_kd']*yawdot+g['yaw_ki']*self.integral[2]
+                wref=g['yaw_kp']*eyaw-g['yaw_kd']*self.filtered[2]+g['yaw_ki']*self.integral[2]
                 if mode in ('turn','pre_turn','settle'):velocity_world[:]=0.
                 # Position is the link origin; velocity command is COM. Preserve lever arm semantics.
                 origin_ref_body=R.T@velocity_world
@@ -149,14 +159,17 @@ class Controller:
                     raw=target_body+kp*ev+ki*candidate
                     clipped=np.clip(raw,-self.limits,self.limits)
                     candidate=np.where(ev*(raw-clipped)>0,self.velocity_integral,candidate)
+                    slewed=self.applied_command_estimate+np.clip(clipped-self.applied_command_estimate,-np.array([.6,.6,.8])*.02,np.array([.6,.6,.8])*.02)
+                    candidate=np.where(ev*(raw-slewed)>1e-9,self.velocity_integral,candidate)
                     self.velocity_integral=candidate;raw=target_body+kp*ev+ki*candidate
                     vel_terms={'error':ev.tolist(),'P':(kp*ev).tolist(),'I':(ki*candidate).tolist(),'filtered_actual_body':self.inner_filtered.tolist()}
             if mode=='turn':raw[:2]=0.
-            if mode in ('parking','goal_dwell','pre_turn','settle'):raw[:]=0.
-            clipped=np.clip(raw,-self.limits,self.limits)
+            if mode in ('parking','goal_dwell','pre_turn','settle'):
+                raw[:]=0.;target_body[:]=0.;velocity_world[:]=0.
+            clipped=np.clip(raw,-effective_limits,effective_limits)
             if mode=='drive':clipped[0]=max(0.,clipped[0])
             norm=np.linalg.norm(clipped[:2])
-            if norm>self.limits[0]:clipped[:2]*=self.limits[0]/norm
+            if norm>effective_limits[0]:clipped[:2]*=effective_limits[0]/norm
             self.command=clipped
             self.row={'kind':'controller_update','controller_updated':True,'control_t_s':float(s[0]),
                 'feedback_time_s':stamp,'elapsed_s':t,'header_dt_s':dt,'feedback_hz':self.hz,
@@ -179,4 +192,6 @@ class Controller:
             self.row={**self.row,'kind':'controller_hold','controller_updated':False,
                 'control_t_s':float(s[0]),'elapsed_s':t,'command_body':self.command.tolist()}
         self.row.update(feedback_age_sim_s=sim_age,feedback_age_wall_s=wall_age)
+        self.applied_command_estimate+=np.clip(self.command-self.applied_command_estimate,-np.array([.6,.6,.8])*.02,np.array([.6,.6,.8])*.02)
+        self.row['estimated_teacher_command_body']=self.applied_command_estimate.tolist()
         return self.command.copy(),self.row['mode']

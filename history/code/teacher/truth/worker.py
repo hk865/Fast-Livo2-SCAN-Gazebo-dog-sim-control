@@ -25,7 +25,7 @@ def main():
         cmd,phase=controller.update(capture['state'],t)
         log.write(json.dumps(controller.row,allow_nan=False)+'\n')
         if controller.completed_t is not None and capture['metadata']is not None:
-            capture['metadata']['test_duration_s']=min(p['duration_s'],controller.completed_t+7.)
+            capture['metadata']['test_duration_s']=min(p['duration_s'],controller.completed_t+p['post_completion_s'])
         return cmd, 'initializing'if t<.1 else 'tracking'if np.linalg.norm(cmd)>1e-9 else'stop_transition'
     def write(path,obj):
         if path.name=='policy_manifest.json':
@@ -36,7 +36,8 @@ def main():
                 truth_profile=p,legacy_motion_evaluation_applicable=False)
             capture['metadata']=obj
         if path.name=='worker_result.json':obj.update(truth_controller_completed_t_s=controller.completed_t,
-            waypoint_events=controller.waypoint_events,counts_as_SLAM_navigation=False)
+            waypoint_events=controller.waypoint_events,counts_as_SLAM_navigation=False,
+            termination_reason='truth_controller_completed'if controller.completed_t is not None else'duration_limit')
         old_atomic(path,obj)
     legacy.recv_exact=receive;legacy.requested=command;legacy.atomic_json=write;legacy.duration=lambda _:float(p['duration_s'])
     sys.argv=[str(run/'sources/policy/worker.py'),'--run',str(run),'--test','forward','--socket',args.socket]
