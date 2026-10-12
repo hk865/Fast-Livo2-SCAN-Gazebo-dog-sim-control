@@ -42,6 +42,8 @@ class MatchPolicy:
     correspondence_gate_m: float = .5
     huber_m: float = .06
     rms_max_m: float = .060
+    foreground_max_fraction: float = .05
+    foreground_negative_first_hit_threshold_m: float = .12
     surface_p95_max_m: float = .12
     inlier_fraction_min: float = .90
     ray_hit_fraction_min: float = .90
@@ -119,7 +121,7 @@ class SceneReference:
             faces[take] = label[take]
         return best, nearest, normal, owners, faces
 
-    def rays(self, points, origin):
+    def rays(self, points, origin, *, return_arrays=False):
         delta = points - origin
         observed = np.linalg.norm(delta, axis=1)
         direction = delta / np.maximum(observed[:, None], 1e-12)
@@ -138,12 +140,15 @@ class SceneReference:
         valid = np.isfinite(first)
         error = observed[valid] - first[valid]
         if not len(error):
-            return dict(hit_fraction=0., behind_fraction=1., abs_median_m=1e6,
-                        abs_p95_m=1e6)
-        return dict(hit_fraction=float(valid.mean()),
-                    behind_fraction=float(np.mean(error > .1)),
-                    abs_median_m=float(np.median(np.abs(error))),
-                    abs_p95_m=float(np.quantile(np.abs(error), .95)))
+            summary = dict(hit_fraction=0., behind_fraction=1., abs_median_m=1e6,
+                           abs_p95_m=1e6)
+        else:
+            summary = dict(hit_fraction=float(valid.mean()),
+                           behind_fraction=float(np.mean(error > .1)),
+                           abs_median_m=float(np.median(np.abs(error))),
+                           abs_p95_m=float(np.quantile(np.abs(error), .95)))
+        # The original summary and its denominators never exclude foreground.
+        return (summary, observed, first) if return_arrays else summary
 
     def seed_heights(self, xy, clearance):
         # Map geometry determines hypotheses only. No expected route floor enters
@@ -168,6 +173,11 @@ class KnownSceneMatcher:
     def __init__(self, reference, policy=None):
         self.reference = reference
         self.policy = policy or MatchPolicy()
+        if (not math.isfinite(self.policy.foreground_max_fraction)
+                or not 0 <= self.policy.foreground_max_fraction <= .05
+                or not math.isfinite(self.policy.foreground_negative_first_hit_threshold_m)
+                or self.policy.foreground_negative_first_hit_threshold_m < .12):
+            raise ValueError('foreground policy must retain the .05/.12 safety bounds')
         self.pending = None
         self.confirmations = 0
 
@@ -203,22 +213,55 @@ class KnownSceneMatcher:
         moved = body_points @ pose[:3, :3].T + pose[:3, 3]
         d, _, n, owners, faces = self.reference.nearest(moved)
         valid = d < .1
-        j = np.column_stack((n[valid], np.cross(moved[valid] - pose[:3, 3], n[valid])))
+        rays, observed, first = self.reference.rays(
+            moved, pose[:3, 3] + pose[:3, :3] @ mount, return_arrays=True)
+        foreground = (np.isfinite(observed) & (observed > 0)
+                      & np.isfinite(first) & (first > 0)
+                      & (observed - first < -p.foreground_negative_first_hit_threshold_m))
+        static = ~foreground
+        static_valid = valid & static
+        j = np.column_stack((n[static_valid],
+                             np.cross(moved[static_valid] - pose[:3, 3], n[static_valid])))
         eigen = np.linalg.eigvalsh(j.T @ j / max(len(j), 1))
-        rays = self.reference.rays(moved, pose[:3, 3] + pose[:3, :3] @ mount)
         counts = {}
         for owner, face in zip(owners[valid], faces[valid]):
             label = self.reference.boxes[owner]['surface_ids'][face]
             counts[label] = counts.get(label, 0) + 1
+        static_counts = {}
+        for owner, face in zip(owners[static_valid], faces[static_valid]):
+            label = self.reference.boxes[owner]['surface_ids'][face]
+            static_counts[label] = static_counts.get(label, 0) + 1
+        indices = np.flatnonzero(foreground)
+        sample_indices = indices[np.linspace(0, len(indices) - 1,
+                                  min(32, len(indices)), dtype=int)] if len(indices) else []
+        samples = [dict(point_index_in_score_cloud=int(i),
+                        point_world_xyz=moved[i].tolist(), point_body_xyz=body_points[i].tolist(),
+                        observed_range_m=float(observed[i]), expected_first_hit_range_m=float(first[i]),
+                        range_error_m=float(observed[i] - first[i]), surface_distance_m=float(d[i]))
+                   for i in sample_indices]
+        foreground_fraction = float(foreground.mean())
         result = dict(T_world_body=pose.tolist(), converged=bool(converged),
                       rms_capped_m=float(np.sqrt(np.mean(np.minimum(d, .5) ** 2))),
+                      static_surface_rms_capped_m=(float(np.sqrt(np.mean(np.minimum(d[static], .5) ** 2)))
+                                                   if np.any(static) else 1e6),
                       surface_p95_m=float(np.quantile(d, .95)),
                       inlier_fraction=float(valid.mean()), rays=rays,
                       geometry_ratio=float(eigen[0] / max(eigen[-1], 1e-12)),
-                      geometry_eigenvalues=eigen.tolist(), surface_counts=counts)
+                      geometry_eigenvalues=eigen.tolist(), surface_counts=counts,
+                      static_support_points=int(static_valid.sum()),
+                      nonforeground_points=int(static.sum()), static_surface_counts=static_counts,
+                      foreground=dict(schema='bounded_negative_static_first_hit_foreground/v1',
+                          count=int(foreground.sum()), total_scored_points=len(d), fraction=foreground_fraction,
+                          max_fraction=p.foreground_max_fraction,
+                          negative_first_hit_threshold_m=p.foreground_negative_first_hit_threshold_m,
+                          classification_is_dynamic_object_proof=False,
+                          static_support_required_points=p.minimum_points,
+                          sample_count=len(samples), samples=samples))
         reasons = []
         gates = [(converged, 'fit_not_converged'),
-                 (result['rms_capped_m'] <= p.rms_max_m, 'surface_rms'),
+                 (foreground_fraction <= p.foreground_max_fraction, 'foreground_budget'),
+                 (result['static_support_points'] >= p.minimum_points, 'static_support'),
+                 (result['static_surface_rms_capped_m'] <= p.rms_max_m, 'surface_rms'),
                  (result['surface_p95_m'] <= p.surface_p95_max_m, 'surface_p95'),
                  (result['inlier_fraction'] >= p.inlier_fraction_min, 'surface_coverage'),
                  (result['geometry_ratio'] >= p.geometry_ratio_min, 'geometry_degenerate'),

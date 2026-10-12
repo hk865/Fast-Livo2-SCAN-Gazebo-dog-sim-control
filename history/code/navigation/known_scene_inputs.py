@@ -91,6 +91,25 @@ class KnownSceneInputMixin:
 
     def _control_candidate(self,now):
         if not self._known_generation_ready():
+            if self.control_clock_hold.before_control(self,self.get_clock().now().nanoseconds,round(now*1e9)):
+                return
+            # Frame holds cannot bypass original deadlines or raw-source/tilt protection.
+            if self.state=='running':
+                ns=self.get_clock().now().nanoseconds
+                if (self.segment_start is not None and not self.goals[self.waypoint_index].legacy
+                        and self.segment_deadline_exceeded(ns)):
+                    self.state,self.message='failed','定位等待期间原区域超过仿真时间限制，停车'
+                    self.reset_region_arrival('failed');self.publish_command();return
+                self.apply_tilt_guard(now,ns/1e9)
+                stale=(now-self.pose_updated>self.pose_timeout or now-self.cloud_updated>self.cloud_timeout
+                    or not self.raw_imu.fresh(now,ns/1e9))
+                if stale:
+                    self.stale_since=self.stale_since or now
+                    if now-self.stale_since>8.:
+                        self.state,self.message='failed','定位等待期间原始传感器连续失联超过8秒，停车'
+                else:self.stale_since=None
+                if self.state=='failed':
+                    self.reset_region_arrival('failed');self.publish_command();return
             self.publish_command();self.reset_region_arrival('known_scene_fresh_transaction_hold')
             self.message='等待同一定位版本的新鲜位姿、点云或停车修正事务'
             return
@@ -98,8 +117,11 @@ class KnownSceneInputMixin:
 
     def request_plan(self):
         if not self._known_generation_ready():return
-        self.known_scene_reference_generation=None if self.known_scene_inputs is None else self.known_scene_inputs['generation']
-        return super().request_plan()
+        generation=None if self.known_scene_inputs is None else self.known_scene_inputs['generation']
+        before=self.reference_requests
+        result=super().request_plan()
+        if self.reference_requests>before:self.known_scene_reference_generation=generation
+        return result
 
     def accept_spline(self,msg,metadata):
         if (not self._known_generation_ready()

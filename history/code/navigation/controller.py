@@ -367,6 +367,9 @@ class PIDNavigation(TeacherNavigation):
             if (self.continuous_route is not None and
                     self.scan_reference_coverage_index != self.continuous_route.next_index):
                 raise ValueError('candidate_ordered_coverage_epoch_mismatch')
+            if (self.continuous_route is not None and not np.array_equal(
+                    self.trajectory_association.goal,self.waypoints[self.scan_reference_coverage_index])):
+                raise ValueError('candidate_ordered_reference_goal_mismatch')
             points,config,binding=self.path_admission_fence.load()
             proof=certify_curve(value,points,config)
             if proof['allowed'] and self.continuous_route is not None:
@@ -550,8 +553,11 @@ class PIDNavigation(TeacherNavigation):
             else super().planner_goal())
     def request_plan(self):
         ledger=self.continuous_route
-        self.scan_reference_coverage_index=None if ledger is None else ledger.next_index
-        return super().request_plan()
+        index=None if ledger is None else ledger.next_index
+        before=self.reference_requests
+        result=super().request_plan()
+        if self.reference_requests>before:self.scan_reference_coverage_index=index
+        return result
     def planner_reference_points(self,goal):
         if self.continuous_route is not None:
             points=self.continuous_route.reference_points(end_index=self.continuous_route.next_index)
