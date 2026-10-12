@@ -3,6 +3,7 @@ import copy
 import math
 import time
 import numpy as np
+from global_route_reference import direction_check
 
 def ordinary_coverage_advance(self,old,current):
     ledger=self.continuous_route
@@ -123,23 +124,34 @@ def early_request(self,reference):
     return receipt
 
 def retention_reference_eligibility(self):
-    """Original drive curvature gate must also hold for geometric retention.
+    """Retain only an old reference permitted by original drive execution gates.
     Preview clones the original controller: no progress, integral or command
     mutation. It grants no replacement, heading or stopping authority.
     """
-    required=(self.heading_gate.phase=='drive' and self.cascade is not None
-        and self.cascade.capture_stamp is None
-        and self.cascade.spatial_config['curvature_speed_limit_enabled'])
-    if not required:
+    drive=(self.heading_gate.phase=='drive' and self.cascade is not None
+        and self.cascade.capture_stamp is None)
+    settings=getattr(self,'global_reference_settings',{'enabled':False})
+    curvature_required=drive and self.cascade.spatial_config['curvature_speed_limit_enabled']
+    direction_required=drive and settings['enabled']
+    if not (curvature_required or direction_required):
         return dict(allowed=True,required=False,reason='original_drive_curvature_gate_not_required')
     try:
         reference=self.cascade.preview_reference(self.pose)
-        allowed=(reference['curvature_valid'] is True or reference['heading_source']=='fixed_goal_tail')
+        curvature_allowed=(not curvature_required or reference['curvature_valid'] is True
+            or reference['heading_source']=='fixed_goal_tail')
+        direction=(direction_check(self.cascade,reference,
+            self.profile['teacher_transition']['drive_heading_max_rad'],settings)
+            if direction_required else None)
+        direction_allowed=direction is None or direction['allowed'] is True
     except (ValueError,TypeError,KeyError,IndexError,FloatingPointError) as error:
         return dict(allowed=False,required=True,reason='old_reference_preview_failed',
             error=type(error).__name__+': '+str(error),preview_only=True)
+    allowed=curvature_allowed and direction_allowed
     return dict(allowed=allowed,required=True,
-        reason='original_current_reference_curvature_available' if allowed else 'old_reference_curvature_unavailable_requires_stop_or_new_path',
-        reference=reference,source_pose_stamp_ns=int(self.pose_stamp),
-        old_path_id=self.cascade.path_id,preview_only=True,
+        reason=('old_reference_curvature_unavailable_requires_stop_or_new_path' if not curvature_allowed
+            else 'old_reference_direction_incoherent_requires_stop_or_new_path' if not direction_allowed
+            else 'original_current_reference_curvature_available'),
+        reference=reference,direction_coherence=direction,
+        original_curvature_required=bool(curvature_required),original_direction_required=bool(direction_required),
+        source_pose_stamp_ns=int(self.pose_stamp),old_path_id=self.cascade.path_id,preview_only=True,
         original_curvature_or_heading_limits_changed=False)
