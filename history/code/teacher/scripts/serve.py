@@ -300,6 +300,7 @@ class Dashboard:
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
                 'targeted_ttl': read_json(directory / 'summary_ttl_dropout_independent.json'),
                 'dynamic_obstacle': read_json(directory / 'summary_dynamic_obstacle_independent.json'),
+                'runtime_processes': read_json(directory / 'runtime_manifest.json').get('owned_processes', []),
                 'navigation': self.navigation_view(directory),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),

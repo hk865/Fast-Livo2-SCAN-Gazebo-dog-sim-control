@@ -52,8 +52,8 @@ def generate_launch_description():
             verify_dynamic_scope(run,run/'dynamic_protocol.json')
             dynamic=here/'dynamic'
             processes += [
-                ExecuteProcess(cmd=['ros2','run','ros_gz_bridge','parameter_bridge',
-                    '/world/teacher_demo/set_pose@ros_gz_interfaces/srv/SetEntityPose'],output='screen'),
+                Node(package='ros_gz_bridge',executable='parameter_bridge',
+                    arguments=['/world/teacher_demo/set_pose@ros_gz_interfaces/srv/SetEntityPose'],output='screen'),
                 ExecuteProcess(cmd=[str(dynamic/'build/obstacle_pose_observer'),'/world/teacher_demo/pose/info',
                     str(run/'obstacle_actual_pose.jsonl'),'900'],output='screen'),
                 ExecuteProcess(cmd=['python3',str(dynamic/'dynamic_obstacle.py'),'--execute','--run',str(run),
