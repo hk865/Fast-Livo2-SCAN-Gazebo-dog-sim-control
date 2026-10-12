@@ -106,6 +106,8 @@ def status_projection(row):
     d={k:row.get(k) for k in fields}
     d['cascade_parking']={'mode':(row.get('cascade_parking')or{}).get('mode')}
     d['execution_bridge_safety']={'state':(row.get('execution_bridge_safety')or{}).get('state')}
+    for field in ('known_scene_localization','known_scene_runtime_status','known_scene_scan_epoch'):
+        d[field]=copy.deepcopy(row.get(field))
     return d
 
 

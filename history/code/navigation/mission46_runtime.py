@@ -37,6 +37,17 @@ def atomic_exact(path, data):
     return hashlib.sha256(raw).hexdigest()
 
 
+def terrain_ack_clock_ready(ack, now_ns):
+    """Defer a native ACK ahead of this callback's ROS clock snapshot.
+
+    This readiness check requires an integer ACK timestamp; it never supplies
+    a substitute clock or accepts a proof. The strict verifier stays unchanged.
+    """
+    effective=ack.get('effective_sim_ns')
+    if type(effective) is not int:raise ValueError('Terrain ACK requires integer native effective time')
+    return effective<=now_ns
+
+
 def required_runtime_files():
     return [HERE/name for name in ('mission46.py','mission46_profile.py','mission46_contract.py',
         'mission46_runtime.py','mission46_runtime_evidence.py','mission46_obstacle_runtime.py')]
@@ -93,6 +104,7 @@ def build_node(run, scope, profile):
             self.anchor=None;self.request=None;self.request_ready=False;self.last_emit=-math.inf
             self.save_future=None;self.save_requested_epoch=None;self.save_request_id=None
             self.control_sequence=0;self.status_sequence=0;self.sticky_failure=None
+            self.terrain_clock_wait_source_ns=None
             self.started=False;self.end_written=False
             self.pub=self.create_publisher(String,'/demo/navigation/request',10)
             latched=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
@@ -363,8 +375,15 @@ def build_node(run, scope, profile):
                         if self.mission.terrain_pending is not None and 'terrain' not in self.jobs and (run/'mission46_terrain_ack.json').exists():
                             ack=json.loads((run/'mission46_terrain_ack.json').read_text())
                             if ack.get('request_id')==self.mission.original.current_request:
-                                pending=copy.deepcopy(self.mission.terrain_pending)
-                                self.submit('terrain',lambda:verify_terrain(run,scope,ack,pending,ns))
+                                if terrain_ack_clock_ready(ack,ns):
+                                    pending=copy.deepcopy(self.mission.terrain_pending)
+                                    self.submit('terrain',lambda:verify_terrain(run,scope,ack,pending,ns))
+                                elif self.terrain_clock_wait_source_ns!=ack['effective_sim_ns']:
+                                    self.terrain_clock_wait_source_ns=ack['effective_sim_ns']
+                                    self.writer.append(run/'mission46_terrain_clock_wait.jsonl',dict(
+                                        request_id=ack['request_id'],captured_ros_clock_ns=ns,
+                                        native_effective_sim_ns=ack['effective_sim_ns'],
+                                        monotonic_wall=now,causal_verifier_unchanged=True))
                         if (stage=='navigating' and self.mission.dynamic_receipt is None
                                 and self.obstacle.get('visible_phase')=='clear'
                                 and self.nav.get('aligned_obstacle_resumes',0)>0
