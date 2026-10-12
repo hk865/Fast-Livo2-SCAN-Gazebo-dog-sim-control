@@ -3,9 +3,11 @@
 import argparse
 import difflib
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
+import sys
 
 import numpy as np
 
@@ -56,6 +58,22 @@ def audit(run, baseline):
     gpu_samples = [list(map(int, re.match(r'(\d+) MiB, (\d+) %', r['gpu']).groups())) for r in runtime.get('gpu_resource_samples', [])]
     roles = {r['role']: r['returncode'] for r in runtime['owned_processes']}
     nt = np.array([r['t'] for r in steps])
+    geometry_path = run / 'sources/policy/observation.py'
+    spec = importlib.util.spec_from_file_location('idle_safety_' + sha(geometry_path)[:12], geometry_path)
+    geometry = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = geometry
+    spec.loader.exec_module(geometry)
+    terrain = geometry.TerrainHeightMap.from_sdf(run / 'world.sdf')
+    native_pos = np.asarray([r['position'] for r in steps])
+    body_clearance = native_pos[:, 2] - terrain.height(native_pos[:, :2], ray_start_z=native_pos[:, 2])
+    quaternion = np.asarray([r['quaternion_wxyz'] for r in steps])
+    w, x, y, z = quaternion.T
+    native_rp = np.column_stack([np.arctan2(2*(w*x+y*z), 1-2*(x*x+y*y)), np.arcsin(np.clip(2*(w*y-z*x), -1, 1))])
+    safe = nt >= rows[0]['world_sim_time'] + .1
+    safety_metrics = {'start_relative_s': .1, 'native_samples': int(safe.sum()),
+                      'minimum_support_clearance_m': float(body_clearance[safe].min()),
+                      'maximum_abs_roll_pitch_rad': float(abs(native_rp[safe]).max()),
+                      'scope': 'Independent all-static collision directly below actual base; never policy terrain input'}
     old_meta = read(baseline / 'policy_manifest.json')
     checks = {
         'cpu_actor_single_thread': meta['inference_device'] == 'cpu' and meta['torch_threads'] == 1,
@@ -76,6 +94,7 @@ def audit(run, baseline):
         'frozen_legacy_stop_metrics': stop_endpoint_drift <= lim['translation_drift_m'] and stop_yaw_endpoint <= lim['yaw_drift_rad'] and stop_rms[:2].max() <= lim['linear_rms_mps'] and stop_rms[2] <= lim['yaw_rate_rms_radps'],
         'additional_max_excursion_stop_check': stop_max_excursion <= lim['translation_drift_m'] and stop_yaw_max_excursion <= lim['yaw_drift_rad'],
         'no_unknown_or_body_contacts': all(r['contacts'][0] == 0 and min(r['contacts']) >= 0 for r in steps),
+        'independent_200Hz_body_clearance_and_attitude': safety_metrics['minimum_support_clearance_m'] >= protocol['motion_limits']['min_body_clearance_m'] and safety_metrics['maximum_abs_roll_pitch_rad'] <= protocol['motion_limits']['max_abs_roll_pitch_rad'],
     }
     checks = {key: bool(value) for key, value in checks.items()}
     return {'run': str(run.resolve()), 'status': 'verified' if all(checks.values()) else 'failed', 'checks': checks,
@@ -83,7 +102,7 @@ def audit(run, baseline):
             'position_delta_m': (position[-1] - position[0]).tolist(), 'teacher_stop_window_s': [15, 18], 'stop_endpoint_translation_m': stop_endpoint_drift,
             'stop_max_translation_excursion_m': stop_max_excursion, 'stop_endpoint_yaw_rad': stop_yaw_endpoint, 'stop_max_yaw_excursion_rad': stop_yaw_max_excursion,
             'stop_velocity_rms': stop_rms.tolist(), 'thresholds': {k: protocol[k] for k in ['motion_limits', 'tracking', 'stand_stop']},
-            'callback_receive_interval_after_activation_s': observed_ages, 'gpu_sample_range': {'MiB': [min(s[0] for s in gpu_samples), max(s[0] for s in gpu_samples)], 'percent': [min(s[1] for s in gpu_samples), max(s[1] for s in gpu_samples)]},
+            'callback_receive_interval_after_activation_s': observed_ages, 'independent_native_safety': safety_metrics, 'gpu_sample_range': {'MiB': [min(s[0] for s in gpu_samples), max(s[0] for s in gpu_samples)], 'percent': [min(s[1] for s in gpu_samples), max(s[1] for s in gpu_samples)]},
             'source_hashes': {f: sha(run / f) for f in ['telemetry.jsonl', 'actuator.jsonl', 'policy_manifest.json', 'runtime_manifest.json', 'worker_result.json', 'sources/tests/protocol.json', 'sources/policy/worker.py', 'resources_before.json']}}
 
 
