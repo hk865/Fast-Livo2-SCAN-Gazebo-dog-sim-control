@@ -20,7 +20,7 @@ def override_sensors(run, profile):
         raise RuntimeError('Sampling changes require a fresh unlaunched scene')
     settings = profile['sensor_sampling']
     v, h, lr, cr = [settings[k] for k in ('vertical_lines','horizontal_samples','lidar_hz','camera_hz')]
-    if v != 64 or h != 480 or lr not in (10,30) or cr not in (10,30):
+    if v != 64 or h != 480 or lr not in (10,20,30) or cr not in (10,20,30):
         raise ValueError('Only reviewed64-line density/rate variants are allowed')
     tree = ET.parse(run/'world.sdf')
     world = tree.getroot().find('world')

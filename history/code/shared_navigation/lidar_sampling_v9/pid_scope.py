@@ -28,6 +28,7 @@ def runtime_files():
                  for name in ('compile_commands.json','CMakeCache.txt')]
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
     preflight=[HERE/'diagnostic_preflight.json']if(HERE/'diagnostic_preflight.json').is_file()else[]
+    preflight+=[HERE/'clock_hold_preflight.json']if(HERE/'clock_hold_preflight.json').is_file()else[]
     return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
         HERE/'diagnostic_baseline.json',
         SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[
@@ -54,6 +55,8 @@ def verify_scope(path,raw=None):
     run=Path(d['run_dir']).resolve();p=d['profile'];refs=d['references']
     if run.parent!=(ROOT/'runs').resolve() or path.parent!=run or p.get('controller_kind')!='teacher':raise RuntimeError('Invalid run identity')
     if p.get('navigation_ground_truth_used') is not False or p.get('pose_cloud_timeout_s')!=.3:raise RuntimeError('Source contract changed')
+    from clock_hold import CONTRACT
+    if p.get('control_clock_contract')!=CONTRACT:raise RuntimeError('Exact-zero control clock contract changed')
     if not (0<float(p['max_speed_mps'])<=.5 and len(p['cascade']['command_limits'])==3
             and all(0<float(x)<=y for x,y in zip(p['cascade']['command_limits'],[1,.4,1]))):raise RuntimeError('Command bounds invalid')
     fp={str(x):(Path(x).stat().st_size,Path(x).stat().st_mtime_ns) for x in refs}

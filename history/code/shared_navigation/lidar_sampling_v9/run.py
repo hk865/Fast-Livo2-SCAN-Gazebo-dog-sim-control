@@ -2,9 +2,9 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/run.py --profile multifloor_diagnostic210 --label preflight --prepare-only
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/run.py --profile l64_r30_c10_210 --label preflight --prepare-only
 Run after source review (root/user only):
-  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v7/run.py --profile multifloor_diagnostic210 --label actual --domain 86
+  /usr/bin/python3 -B /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/lidar_sampling_v9/run.py --profile l64_r30_c10_210 --label actual --domain 86
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -80,6 +80,8 @@ def validate_profile(p):
     if p.get('review_basis')!='explicit_user_closed_loop_controller_actual_SLAM_SCAN_multifloor_simulation':
         raise ValueError('Missing explicit new closed-loop scope')
     if p.get('pose_cloud_timeout_s')!=.3:raise ValueError('Source freshness must remain300ms')
+    from clock_hold import CONTRACT
+    if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
     duration=float(p['duration_s']);spawn=p['spawn'];asset=p['expected_asset'];cascade=p['cascade']
     if not math.isfinite(duration) or not 30<=duration<=1500:raise ValueError('Invalid bounded simulation duration')
     if len(spawn)!=4 or not all(math.isfinite(float(v))for v in spawn) or asset['spawn']!=spawn:
@@ -445,7 +447,7 @@ def main():
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
     label=''.join(c for c in args.label if c.isalnum()or c in '_-')or'candidate'
     stamp=dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
-    run=ROOT/'runs'/f'{stamp}_closed_loop_cascade_{label}_{uuid.uuid4().hex[:4]}';run.mkdir()
+    run=ROOT/'runs'/f'{stamp}_closed_loop_cascade_clock_hold_{label}_{uuid.uuid4().hex[:4]}';run.mkdir()
     write_new(run/'runner_request.json',{'schema':'teacher_closed_loop_runner_request/v1','run':str(run),
         'argv':sys.argv,'runner_sha256':sha(__file__),'prepare_only':args.prepare_only,'simulation_only':True,
         'wall_begin':time.monotonic(),'no_other_process_signals_authorized':True})

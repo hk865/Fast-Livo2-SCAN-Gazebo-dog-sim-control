@@ -8,6 +8,7 @@ from teacher_wrapper import TeacherNavigation
 from pid_core import slew
 from cascade_core import Controller
 from control_core import follow_trajectory
+from clock_hold import ControlClockHold
 
 class ResetBookkeeping:
     """Legacy archive reset counter only; cascade_core owns all control maths."""
@@ -30,6 +31,7 @@ class PIDNavigation(TeacherNavigation):
         self.path_receipt=None;self.cascade_path_id=None;self.final_bundle=None
         self.imu_records=0;self.cloud_archive_records=0
         self.segment_references={}
+        self.control_clock_hold=ControlClockHold()
     def on_imu(self,msg):
         before=self.gyro_stamp;wall=time.monotonic_ns();clock=self.get_clock().now().nanoseconds
         super().on_imu(msg);stamp=int(self.stamp(msg));q=msg.orientation;v=msg.angular_velocity
@@ -212,7 +214,8 @@ class PIDNavigation(TeacherNavigation):
         cmd,diagnostic=self.cascade.update(self.feedback,self.paired_imu,ack,ns,wall,guard_reason=guard,mode_override=mode)
         if diagnostic.get('failure_latched'):
             self.state='failed';self.message='串级真实输入保护锁定：'+str(diagnostic['failure_latched'])
-        self.cascade_last_row=diagnostic;self.pid_guard_needs_evaluation=bool(diagnostic.get('controller_updated'))
+        self.cascade_last_row=diagnostic;self.pid_guard_needs_evaluation=(bool(diagnostic.get('controller_updated'))
+            or self.control_clock_hold.guard_required)
         desired=cmd.copy()
         cmd=(np.zeros(3)if diagnostic['mode']in ('protect','recovering','pre_turn','settle','path_end_hold')
             else slew(self.command,desired,ns/1e9-self.last_command_time,[.6,.6,.8]))
@@ -243,8 +246,14 @@ class PIDNavigation(TeacherNavigation):
             if self.pid_row:self.pending_guard_row.update(pid_sequence=self.pid_row['sequence'],
                 cascade_sequence=self.pid_row['sequence'],pid_compute_ros_clock_ns=self.pid_row['compute_ros_clock_ns'],
                 pid_control_pose_stamp_ns=self.pid_row['control_pose_stamp_ns'])
-        self.pid_guard_needs_evaluation=False;return result
+        self.pid_guard_needs_evaluation=False;self.control_clock_hold.guard_completed();return result
     def control(self,now):
+        # The wall timer can run twice while real ROS /clock is unchanged.
+        # Before any PI, heading, arrival or geometry operation, emit exact
+        # zero and leave original source receipts untouched. On clock advance,
+        # a new actual geometry check is mandatory before any nonzero command.
+        if self.control_clock_hold.before_control(self,self.get_clock().now().nanoseconds,round(now*1e9)):
+            return
         if self.state=='succeeded' and self.final_bundle is not None:return self.control_parking(now)
         if self.state=='running'and self.samples is not None and self.waypoint_index==len(self.waypoints)-1 and self.segment_start is not None:
             self.ensure_cascade()
@@ -285,6 +294,7 @@ class PIDNavigation(TeacherNavigation):
         from geometry_msgs.msg import Twist
         from std_msgs.msg import Bool
         msg=Twist();ns=self.get_clock().now().nanoseconds
+        self.last_publication_ros_clock_ns=ns
         if velocity is not None:
             output=np.r_[velocity,yaw_rate]
             if self.pid_prepared_output is None or not np.allclose(output,self.pid_prepared_output,rtol=0,atol=1e-12):
@@ -331,6 +341,7 @@ def main():
                 expected_pid_records=node.pid_records,expected_guard_records=node.guard_sequence,
                 expected_imu_records=node.imu_records,expected_cloud_archive_records=node.cloud_archive_records,
                 expected_cloud_callback_records=node.cloud_callback_records,queue_error=node.evidence.error,
+                expected_control_clock_hold_records=node.control_clock_hold.records,
                 status='failed'if node.evidence.error else 'drained',navigation_verified=False))+'\n')
             node.destroy_node();rclpy.try_shutdown()
 if __name__=='__main__':main()
