@@ -6,12 +6,15 @@ import json
 PROFILE_NAMES = ('repair_prefix270.json', 'repair_original46.json')
 PROFILE_NAME = PROFILE_NAMES[0]
 DURATIONS = {'repair_prefix270.json': 270., 'repair_original46.json': 1500.}
-CHANGE = ('V27 independent SCAN path-admission repair only; retain original V25 '
-          'route/regions, gains, stops, TTL, Actor, observations, frontend and planner. '
-          'Recording window140-235s, 48GiB cap/90GiB startup reserve/30GiB runtime '
-          'reserve and independent identity are explicit recording changes. '
-          '270s cutoff is not success; original mission global cap stays1500s. '
-          'No historical navigation result or backend correction is adopted.')
+CHANGE = ('V27 independent steady-recording comparison; five production repair '
+          'files remain byte-identical to frozen V27. Detail window[0,0] retains '
+          'all-time state/IMU/stage/timing recording and omits dense H/R/plane/pixel '
+          'details, whose absence is UNVERIFIED. This isolates recording load; '
+          'the R1 IPC failure root cause is not established. Original V25 route, '
+          'regions, gains, stops, TTL, Actor, observations, frontend and planner '
+          'stay unchanged. Both270/1500s profiles retain48GiB cap/90GiB start '
+          'reserve/30GiB runtime reserve and original1500s mission global cap. '
+          'Cutoff is never success; no historical navigation result is adopted.')
 
 
 def baseline_profile_path(here):
@@ -48,8 +51,8 @@ def expected_profile(here, name=PROFILE_NAME):
         'minimum_start_available_bytes': 90*1024**3,
         'minimum_runtime_available_bytes': 30*1024**3}
     result['mission46_required_source_files'] = [str(p.resolve()) for p in required_source_files()]
-    result['diagnostic_scope'].update(finite_horizon_s=duration, detail_window_sim_s=[140, 235],
-        purpose='V27 path admission repair evidence under unchanged original46 navigation/control gates; detailed frontend recording140-235s')
+    result['diagnostic_scope'].update(finite_horizon_s=duration, detail_window_sim_s=[0, 0],
+        purpose='V27 byte-identical path admission with steady state/IMU/stage/timing recording; detail window[0,0] omits dense H/R/plane/pixel evidence (UNVERIFIED), isolating recording load without an I/O root-cause claim')
     result['path_admission_contract'] = {
         'schema': 'path_admission_v27_launch/v1',
         'profile_name': name,

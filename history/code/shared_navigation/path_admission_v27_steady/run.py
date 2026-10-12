@@ -85,8 +85,8 @@ def validate_profile(p):
     if p.get('pose_cloud_timeout_s')!=.3:raise ValueError('Source freshness must remain300ms')
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
-    if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[140,235]:
-        raise ValueError('V27 requires the prospective path-admission detail window140–235s')
+    if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[0,0]:
+        raise ValueError('V27 steady recording comparison requires detail window[0,0]')
     from corridor_preflight import verify_preflight
     from full46_launch_contract import validate_full46
     validate_full46(p,HERE)

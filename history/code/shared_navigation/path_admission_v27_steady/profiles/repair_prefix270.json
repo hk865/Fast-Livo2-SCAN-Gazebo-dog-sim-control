@@ -97,7 +97,7 @@
     0.3,
     0.0
   ],
-  "duration_s": 1500.0,
+  "duration_s": 270.0,
   "overview_pose": [
     8,
     -1,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V27 independent SCAN path-admission repair only; retain original V25 route/regions, gains, stops, TTL, Actor, observations, frontend and planner. Recording window140-235s, 48GiB cap/90GiB startup reserve/30GiB runtime reserve and independent identity are explicit recording changes. 270s cutoff is not success; original mission global cap stays1500s. No historical navigation result or backend correction is adopted.",
+  "prospective_change": "V27 independent steady-recording comparison; five production repair files remain byte-identical to frozen V27. Detail window[0,0] retains all-time state/IMU/stage/timing recording and omits dense H/R/plane/pixel details, whose absence is UNVERIFIED. This isolates recording load; the R1 IPC failure root cause is not established. Original V25 route, regions, gains, stops, TTL, Actor, observations, frontend and planner stay unchanged. Both270/1500s profiles retain48GiB cap/90GiB start reserve/30GiB runtime reserve and original1500s mission global cap. Cutoff is never success; no historical navigation result is adopted.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -197,13 +197,13 @@
   "diagnostic_scope": {
     "baseline_version": "closed_loop_multifloor_v7",
     "route_controller_gates_unchanged": true,
-    "finite_horizon_s": 1500.0,
+    "finite_horizon_s": 270.0,
     "detail_window_sim_s": [
-      140,
-      235
+      0,
+      0
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "V27 path admission repair evidence under unchanged original46 navigation/control gates; detailed frontend recording140-235s",
+    "purpose": "V27 byte-identical path admission with steady state/IMU/stage/timing recording; detail window[0,0] omits dense H/R/plane/pixel evidence (UNVERIFIED), isolating recording load without an I/O root-cause claim",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
     "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
   },
@@ -3536,13 +3536,13 @@
   "requires_original_dynamic_obstacle": true,
   "requires_bidirectional_layer_switches": true,
   "mission46_required_source_files": [
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_profile.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_contract.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_runtime_evidence.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/mission46_obstacle_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27/path_admission.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_profile.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_contract.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_runtime_evidence.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/path_admission.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
@@ -3574,11 +3574,11 @@
   },
   "path_admission_contract": {
     "schema": "path_admission_v27_launch/v1",
-    "profile_name": "repair_original46.json",
+    "profile_name": "repair_prefix270.json",
     "simulation_only": true,
-    "runtime_cutoff_sim_elapsed_s": 1500.0,
+    "runtime_cutoff_sim_elapsed_s": 270.0,
     "cutoff_is_success": false,
-    "prefix_only": false,
+    "prefix_only": true,
     "full46_verified": false,
     "actual_navigation_verified": false,
     "historical_pass_inherited": false,
