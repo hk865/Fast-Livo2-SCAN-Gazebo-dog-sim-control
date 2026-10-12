@@ -42,6 +42,7 @@ ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
 SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
 from slam_workspace import SLAM_WORKSPACE, verify_slam_workspace
 from ipc_fault_window import CONTRACT as IPC_FAULT_WINDOW_CONTRACT
+from ipc_request_window import CONTRACT as REQUEST_SUBSTAGE_CONTRACT
 SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
 SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
@@ -231,7 +232,9 @@ def prepare(run,args):
           'path_admission_contract':p['path_admission_contract'],
           'scalar_ipc_fault_window':dict(IPC_FAULT_WINDOW_CONTRACT, entrypoint=str(HERE/'ipc_fault_window.py'),
               entrypoint_sha256=sha(HERE/'ipc_fault_window.py'), artifact=str(run/'ipc_fault_window.jsonl')),
-          'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'ipc_fault_window.py'),'--run',str(run)],
+          'scalar_original_request_substages':dict(REQUEST_SUBSTAGE_CONTRACT, entrypoint=str(HERE/'ipc_request_window.py'),
+              entrypoint_sha256=sha(HERE/'ipc_request_window.py'), artifact=str(run/'ipc_request_substages.jsonl')),
+          'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'ipc_request_window.py'),'--run',str(run)],
                               'navigation_stack':['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)]},
           'limitations':'Plan is launch provenance only, never a route/SLAM/Sim2Sim pass'}
     contract_path=getattr(args,'shadow_sample_contract',None)
@@ -477,7 +480,7 @@ def execute(run,plan):
         scope.verify_scope(run/'navigation_scope.json')
         if sha(run/'source_manifest.json')!=plan['source_manifest_sha256']or sha(run/'world.sdf')!=plan['world_sha256']:
             raise RuntimeError('Run preparation changed before execution')
-        worker=start('worker',[plan['actor_python'],'-B',str(HERE/'ipc_fault_window.py'),'--run',str(run),'--socket',sock],{**env,'CUDA_VISIBLE_DEVICES':''})
+        worker=start('worker',[plan['actor_python'],'-B',str(HERE/'ipc_request_window.py'),'--run',str(run),'--socket',sock],{**env,'CUDA_VISIBLE_DEVICES':''})
         deadline=time.monotonic()+30
         while not(run/'worker_ready').exists():
             if worker.poll()is not None:raise RuntimeError('CPU Actor exited before native IPC readiness')
