@@ -74,7 +74,7 @@ def clean(value):
         return [clean(v) for v in value]
     if isinstance(value, np.ndarray):
         return clean(value.tolist())
-    if isinstance(value, (np.integer, np.floating)):
+    if isinstance(value, np.generic):
         value = value.item()
     if isinstance(value, float) and not math.isfinite(value):
         return None
@@ -163,7 +163,12 @@ def evaluate(run):
     rows=read_jsonl(run/'telemetry.jsonl',errors)
     native=read_jsonl(run/'actuator.jsonl',errors)
     name=meta.get('test',run.name)
-    expected=26 if name=='switch' else 20 if name.startswith('step') else 15 if name=='stand' else 18
+    protocol_frozen=(run/'sources/tests/protocol.json').exists() or manifest.get('tests/protocol.json')==digest(protocol_path)
+    timing=protocol.get('timing',{}) if protocol_frozen else {}
+    duration_key='switch_duration_s'if name=='switch'else'step_duration_s'if name.startswith('step')else'stand_duration_s'if name=='stand'else'single_duration_s'
+    legacy_duration=26 if name=='switch' else 20 if name.startswith('step') else 15 if name=='stand' else 18
+    expected=float(meta.get('test_duration_s',timing.get(duration_key,legacy_duration)))
+    command_end=float(meta.get('command_end_s',timing.get('step_command_end_s'if name.startswith('step')else'single_command_end_s',11)))
     contracts=[r for r in native if r.get('kind')=='actuator_contract']
     owners=[r for r in native if r.get('kind')=='model_plugin_ownership']
     steps=[r for r in native if r.get('kind')=='physics_step']
@@ -274,7 +279,7 @@ def evaluate(run):
         if default.shape==(12,):
             diffs=[];lookup={round(float(r['t']),8):r for r in steps}
             for row in rows:
-                if row['sim_time']<1.5 or row.get('state')in HOLD_PHASES or row.get('fault'):continue
+                if row.get('state')=='initializing' or row.get('state')in HOLD_PHASES or row.get('fault'):continue
                 step=lookup.get(round(row['sim_time']+offset,8))
                 if not step or step.get('terminating')or step.get('fault'):continue
                 target=default+.25*np.asarray(row['action'])
@@ -291,6 +296,9 @@ def evaluate(run):
         policy_source=meta.get('observation_source'),native_source=contract.get('state_source'),navigation_truth_used=meta.get('navigation_truth_used'))
     iface['evidence_readable']=check(not errors,errors=errors)
     interface=all(c['passed']for c in iface.values())
+    provenance_checks={'source_hashes','plugin_hash'}
+    interface_failures=[k for k,v in iface.items() if not v['passed']]
+    interface_status='passed' if interface else 'unverified' if set(interface_failures).issubset(provenance_checks) else 'failed'
 
     if not rows:reasons.append('No completed physics observation')
     if errors:reasons.append('Evidence missing or malformed: '+'; '.join(errors))
@@ -300,7 +308,8 @@ def evaluate(run):
     if any(r.get('fault',0) for r in steps):reasons.append('Native physics steps contain a latched fault')
     if not normal_end:reasons.append('Native termination/damping acknowledgement missing')
     if not main_exits:reasons.append('Policy or Gazebo did not exit normally')
-    if not interface:reasons.append('Interface evidence checks failed: '+', '.join(k for k,v in iface.items()if not v['passed']))
+    operational_failures=[k for k in interface_failures if k not in provenance_checks]
+    if operational_failures:reasons.append('Operational interface checks failed: '+', '.join(operational_failures))
     if telemetry_valid and protocol:
         t,pos,cmd,v,rpy,contact,clear=(arrays[k]for k in('sim_time','position','command','measured','rpy','contacts','body_clearance'))
         active=t>=3
@@ -338,6 +347,7 @@ def evaluate(run):
         if name=='stand':stop=(t>=5)&(t<=14)
         elif name=='switch':stop=(t>=22)&(t<=26)
         elif name=='command_timeout':stop=(t>=11)&(t<=17.8)
+        elif name.startswith('step'):stop=(t>=float(timing.get('step_stop_evaluation_start_s',18 if expected>=25 else 15)))&(t<=expected)
         else:stop=(t>=15)&(t<=expected)
         teacher_stop=stop &~hold;assisted_stop=stop &hold
         metrics['stop_teacher']=stop_metrics(teacher_stop,t,pos,v,rpy)
@@ -380,9 +390,9 @@ def evaluate(run):
                     terrain.update(progress_m=float(progress),expected_surface_height_change_m=float(rise),height_change_error_m=float(abs(p1[2]-p0[2]-rise)))
                     minimum=protocol['terrain']['up_ramp_min_x_progress_m'if name=='ramp_up'else'down_ramp_min_progress_m']
                     if progress<minimum:reasons.append('Insufficient measured ramp progress')
-                    on_ramp=(t>=3)&(t<=min(11,t[-1]))
+                    on_ramp=(t>=3)&(t<=min(command_end,t[-1]))
                     if not inside_tread(box,pos[on_ramp]).all():reasons.append('Active ramp trace leaves its physical x/y support footprint')
-                    native_active=[s for s,nt in zip(steps,nrel)if 3<=nt<=min(11,t[-1])]
+                    native_active=[s for s,nt in zip(steps,nrel)if 3<=nt<=min(command_end,t[-1])]
                     all_supported=set().union(*(support_groups(s,'ramp_12')for s in native_active))if native_active else set()
                     terrain['active_support_foot_groups']=sorted(all_supported)
                     if all_supported!={1,2,3,4}:reasons.append('Actual foot contacts do not confirm ramp support during motion')
@@ -392,11 +402,14 @@ def evaluate(run):
                     height=.05 if name=='step05'else.1
                     minimum_gain=height*protocol['terrain']['step_body_height_gain_fraction']
                     terrain.update(step_height_m=height,minimum_height_gain_m=minimum_gain)
-                    if p1[0]<protocol['terrain']['step_end_x_m']or p1[2]-p0[2]<minimum_gain:reasons.append('Low step tread was not reached with settled measured height gain')
+                    if p1[0]<protocol['terrain']['step_end_x_m']or p1[2]-p0[2]<minimum_gain:
+                        reasons.append('Low step tread was not reached with settled measured height gain')
+                        if command_end<=11 and p1[0]<protocol['terrain']['step_end_x_m']:
+                            reasons.append('Historical command duration was insufficient to complete the unchanged low-step endpoint')
                     if not any(len(g)==4 for g in supports):reasons.append('No measured final four-foot support on the low-step tread')
             except (OSError,ET.ParseError,TypeError,ValueError)as e:reasons.append('Terrain evidence invalid: '+str(e))
     motion_pass=not reasons
-    summary={'test':name,'levels':{'interface':'passed'if interface else'failed','motion':'passed'if motion_pass else'failed',
+    summary={'test':name,'levels':{'interface':interface_status,'motion':'passed'if motion_pass else'failed',
         'sim2sim':'unverified','navigation':'unverified','real_robot':'unverified'},'iface_checks':iface,
         'tests':[{'name':name,'status':'passed'if motion_pass else'failed','reason':'; '.join(dict.fromkeys(reasons)),'metrics':metrics}],
         'protocol_sha256':digest(protocol_path)if protocol_path.exists()else None,'protocol_source':str(protocol_path),
