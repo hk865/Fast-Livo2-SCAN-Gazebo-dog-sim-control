@@ -47,6 +47,9 @@ def check_acceptance(path):
     if isinstance(data, dict) and data.get('schema') == 'teacher_navigation_scope/v1':
         from scoped_profile import verify_scope
         return verify_scope(path, raw)
+    if isinstance(data, dict) and data.get('schema') == 'teacher_pid_navigation_scope/v1':
+        from pid_mode.scoped_profile import verify_scope
+        return verify_scope(path, raw)
     if not isinstance(levels, dict) or not all(passed(levels.get(k)) for k in ('motion', 'sim2sim')):
         raise RuntimeError('Navigation refused: runs/acceptance.json must explicitly pass both levels.motion and levels.sim2sim')
     if data.get('publication') != 'final':

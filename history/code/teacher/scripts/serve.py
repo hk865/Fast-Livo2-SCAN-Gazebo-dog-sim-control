@@ -298,6 +298,8 @@ class Dashboard:
                 'full_ramp_original': ramp_original,
                 'full_ramp_stop_addendum': stop_addendum,
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
+                'pid_navigation': read_json(directory / 'summary_pid_navigation_independent.json'),
+                'pid_scope': read_json(directory / 'navigation_scope.json') if (directory / 'pid_profile_input.json').is_file() else {},
                 'targeted_ttl': read_json(directory / 'summary_ttl_dropout_independent.json'),
                 'dynamic_obstacle': read_json(directory / 'summary_dynamic_obstacle_independent.json'),
                 'runtime_processes': read_json(directory / 'runtime_manifest.json').get('owned_processes', []),
