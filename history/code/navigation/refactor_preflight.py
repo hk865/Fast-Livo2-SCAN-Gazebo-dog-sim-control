@@ -7,7 +7,7 @@ def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def contract(here):
     here=Path(here).resolve();d=json.loads((here/'C51_REFACTOR_CONTRACT.json').read_text())
     if (d.get('schema')!='C51_bounded_source_equivalence/v1' or d['candidate_root']!=str(here)
-        or d.get('runtime_algorithm_changes')is not False or d.get('REPORT_mode')is not False
+        or d.get('runtime_algorithm_changes')is not True or d.get('native_geometry_fix')!='two_interval_quantity_assignments' or d.get('REPORT_mode')is not False
         or d.get('historical_runtime_PASS_inherited')is not False or d.get('maximum_simulation_attempts')!=1):
         raise RuntimeError('C51 admission identity/scope differs')
     return d
@@ -27,10 +27,10 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
       prepared['freeze'].get(str(Path(run)/'runtime_plan.json'))==plan_digest,
       plan.get('run')==run and plan.get('profile_path')==str(here/'profiles/engineering_nav46.json'),
       plan.get('simulation_only')is True and plan.get('real_robot')is False and plan.get('navigation_ground_truth_used')is False,
-      plan.get('ros_domain')==90 and plan.get('wall_budget_s')==180.,
-      plan.get('R55_shutdown_probe',{}).get('source_dir')==str(stage),
-      plan.get('R55_shutdown_probe',{}).get('max_native_s')==45 and plan.get('R55_shutdown_probe',{}).get('max_acquisition_wall_s')==120,
-      plan.get('R55_shutdown_probe',{}).get('output_hard_B')==2147483648 and plan.get('R55_shutdown_probe',{}).get('strict_original_gates')is True,
+      plan.get('ros_domain')==90 and plan.get('wall_budget_s')==1620.,
+      plan.get('R56_shutdown_probe',{}).get('source_dir')==str(stage),
+      plan.get('R56_shutdown_probe',{}).get('max_native_s')==750 and plan.get('R56_shutdown_probe',{}).get('max_acquisition_wall_s')==1500,
+      plan.get('R56_shutdown_probe',{}).get('output_hard_B')==10000000000 and plan.get('R56_shutdown_probe',{}).get('strict_original_gates')is True,
       same(me,saved)and me.get('state')!='Z' and me.get('pid')==me.get('pgid')==me.get('session'),
       saved.get('owned_run')==run and saved.get('role')=='navigation_stack',
       saved.get('ownership_token')==owner.get('token')==permit.get('token') and permit.get('identity')==saved,
