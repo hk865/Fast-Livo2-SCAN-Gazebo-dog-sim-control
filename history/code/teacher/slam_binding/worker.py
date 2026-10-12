@@ -85,7 +85,7 @@ def main():
                 'decoded_envelope': None, 'reason': reason}
         else:
             cmd, rejected, reason = read_command(run/'slam_velocity_command.json', latest['state_clock_ns'],
-                execution['binding_sha256'], limits, sequence, wall=now)
+                execution['binding_sha256'], limits, sequence)
         last_accepted_envelope = sequence.get('envelope')
         attempt = sequence.get('read_attempt')
         envelope = None if attempt is None else attempt.get('decoded_envelope')
@@ -96,7 +96,7 @@ def main():
             if latest['metadata'] is not None:
                 latest['metadata']['test_duration_s'] = min(execution['duration_s'], end)
         evidence = {'sim_time': float(t), 'physics_clock_ns': latest['state_clock_ns'],
-            'read_monotonic_wall': now, 'source': 'slam_fixed_route',
+            'read_monotonic_wall': attempt.get('read_monotonic_wall',now) if attempt else now, 'source': 'slam_fixed_route',
             'command': cmd.tolist(), 'rejected': rejected, 'reason': reason,
             'actual_original_envelope': envelope, 'command_config_sha256': execution['binding_sha256'],
             'last_accepted_envelope': last_accepted_envelope,

@@ -370,8 +370,10 @@ def read_command(path, clock_ns, config_sha256, limits, sequence_state=None, wal
     Returns (velocity, rejected, reason). Rejection means Teacher cmd=0 through
     its normal policy/slew; it does not mean actor action=0 or joint-position hold.
     """
-    wall = time.monotonic() if wall is None else wall
-    attempt = {'read_monotonic_wall': wall, 'read_clock_ns': clock_ns, 'path': str(path),
+    live_wall = wall is None
+    wall = time.monotonic() if live_wall else wall
+    read_begin = wall
+    attempt = {'read_begin_monotonic_wall': read_begin, 'read_monotonic_wall': wall, 'read_clock_ns': clock_ns, 'path': str(path),
                'status': 'reading', 'decoded_envelope': None}
     if sequence_state is not None:
         sequence_state['read_attempt'] = attempt
@@ -383,6 +385,12 @@ def read_command(path, clock_ns, config_sha256, limits, sequence_state=None, wal
         def invalid_constant(token):
             raise ValueError('Nonfinite JSON constant: '+token)
         data = json.loads(text, parse_constant=invalid_constant)
+        # A producer can atomically publish between read-begin and read_bytes.
+        # Assess freshness after the version actually read exists, without
+        # accepting negative source ages or rewriting any source timestamp.
+        wall = time.monotonic() if live_wall else wall
+        attempt.update(read_monotonic_wall=wall, read_completed_monotonic_wall=wall,
+                       read_span_s=wall-read_begin)
         attempt['decoded_envelope'] = data
         if not isinstance(data, dict):
             raise ValueError('Command envelope is not an object')
@@ -417,6 +425,9 @@ def read_command(path, clock_ns, config_sha256, limits, sequence_state=None, wal
         attempt['status'] = 'accepted'
         return np.zeros(3) if data['stop_requested'] else command, False, 'fresh actual SLAM/IMU fixed-route command'
     except (ValueError, TypeError, KeyError, OSError, OverflowError) as exc:
+        if 'read_completed_monotonic_wall' not in attempt:
+            wall = time.monotonic() if live_wall else wall
+            attempt.update(read_monotonic_wall=wall,read_completed_monotonic_wall=wall,read_span_s=wall-read_begin)
         attempt.update(status='rejected', reason=str(exc))
         return np.zeros(3), True, str(exc)
 
