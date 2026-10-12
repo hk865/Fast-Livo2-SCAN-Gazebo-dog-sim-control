@@ -76,7 +76,6 @@ if args.terrain_sdf:
     # All collisions share the same physical and ray-cast mesh. No analytical
     # scan override is supplied to Isaac or the actor.
     import trimesh
-    from isaaclab.terrains import TerrainImporter
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'policy'))
     from observation import TerrainHeightMap
     args.terrain_sdf = args.terrain_sdf.resolve()
@@ -94,10 +93,6 @@ if args.terrain_sdf:
         mesh.apply_transform(matrix)
         meshes.append(mesh)
     fixture_mesh = trimesh.util.concatenate(meshes)
-    class SDFTerrainImporter(TerrainImporter):
-        def import_ground_plane(self, name, size=(2e6,2e6)):
-            self.import_mesh(name, fixture_mesh)
-    config.scene.terrain.class_type = SDFTerrainImporter
     config.scene.terrain.terrain_type = 'plane'
     config.scene.terrain.terrain_generator = None
     config.scene.terrain.env_spacing = 3.
@@ -152,6 +147,14 @@ if args.only_stand: cases=[case for case in cases if case['name']=='stand']
 results=[]
 try:
     with launch_simulation(config, args):
+        if terrain_manifest is not None:
+            # TerrainImporter imports pxr: wait until SimulationApp exists to
+            # avoid the Kit/standalone USD double-registration crash.
+            from isaaclab.terrains import TerrainImporter
+            class SDFTerrainImporter(TerrainImporter):
+                def import_ground_plane(self, name, size=(2e6,2e6)):
+                    self.import_mesh(name, fixture_mesh)
+            config.scene.terrain.class_type = SDFTerrainImporter
         env=gym.make(protocol['task'],cfg=config)
         base=env.unwrapped
         robot=base.scene['robot']
