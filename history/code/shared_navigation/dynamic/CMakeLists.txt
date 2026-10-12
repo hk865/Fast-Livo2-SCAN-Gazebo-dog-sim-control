@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(teacher_obstacle_pose_observer LANGUAGES CXX)
+find_package(gz-transport13 REQUIRED)
+find_package(gz-msgs10 REQUIRED)
+add_executable(obstacle_pose_observer obstacle_pose_observer.cpp)
+target_compile_features(obstacle_pose_observer PRIVATE cxx_std_17)
+target_compile_options(obstacle_pose_observer PRIVATE -Wall -Wextra -Wpedantic)
+target_link_libraries(obstacle_pose_observer PRIVATE gz-transport13::core gz-msgs10::core)

@@ -47,6 +47,19 @@ def generate_launch_description():
             ExecuteProcess(cmd=['python3',str(here/'bridge.py'),'--acceptance',str(run/'navigation_scope.json'),
                                 '--command-file',str(run/'navigation_command.json'),*ros],output='screen'),
             ExecuteProcess(cmd=['python3',str(here/'request.py'),'--run',str(run),*ros],output='screen')]
+        if receipt['experiment']=='finite_flat_dynamic_stop_resume_v1':
+            from dynamic.dynamic_obstacle import verify_scope as verify_dynamic_scope
+            verify_dynamic_scope(run,run/'dynamic_protocol.json')
+            dynamic=here/'dynamic'
+            processes += [
+                ExecuteProcess(cmd=['ros2','run','ros_gz_bridge','parameter_bridge',
+                    '/world/teacher_demo/set_pose@ros_gz_interfaces/srv/SetEntityPose'],output='screen'),
+                ExecuteProcess(cmd=[str(dynamic/'build/obstacle_pose_observer'),'/world/teacher_demo/pose/info',
+                    str(run/'obstacle_actual_pose.jsonl'),'900'],output='screen'),
+                ExecuteProcess(cmd=['python3',str(dynamic/'dynamic_obstacle.py'),'--execute','--run',str(run),
+                    '--role','sensor_observer',*ros],output='screen'),
+                ExecuteProcess(cmd=['python3',str(dynamic/'dynamic_obstacle.py'),'--execute','--run',str(run),
+                    '--role','mover',*ros],output='screen')]
         required=[RegisterEventHandler(OnProcessExit(target_action=p,on_exit=[EmitEvent(event=Shutdown(reason='Teacher finite navigation child ended'))]))for p in processes]
         slam=IncludeLaunchDescription(PythonLaunchDescriptionSource(str(here/'slam.launch.py')),
                                       launch_arguments={'run_dir':str(run)}.items())

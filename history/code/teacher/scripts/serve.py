@@ -168,7 +168,7 @@ class Telemetry:
                 displayed.append(rows[-1])
             return {'rows': displayed, 'trajectory': entry['trajectory'], 'latest': entry['latest'],
                     'records': entry['records'], 'invalid_records': entry['invalid_records'],
-                    'age_s': max(0., time.time() - stat.st_mtime),
+                'age_s': None if entry['offset'] < stat.st_size else max(0., time.time() - stat.st_mtime),
                     'loading': entry['offset'] < stat.st_size}
 
 
@@ -298,6 +298,8 @@ class Dashboard:
                 'full_ramp_original': ramp_original,
                 'full_ramp_stop_addendum': stop_addendum,
                 'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
+                'targeted_ttl': read_json(directory / 'summary_ttl_dropout_independent.json'),
+                'dynamic_obstacle': read_json(directory / 'summary_dynamic_obstacle_independent.json'),
                 'navigation': self.navigation_view(directory),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),

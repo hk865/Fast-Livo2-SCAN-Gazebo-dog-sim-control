@@ -45,10 +45,15 @@ def main():
     p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
     p.add_argument('--terrain-target-manifest',type=Path)
     p.add_argument('--navigation-stack',action='store_true',help='Finite scoped experiment with actual SLAM/SCAN inputs')
+    p.add_argument('--navigation-dynamic',action='store_true',help='Finite flat experiment with one real Gazebo moving obstacle; implies navigation stack')
     p.add_argument('--slam-only-stack',action='store_true',help='Actual stationary SLAM sensor validation without navigation commands')
-    p.add_argument('--navigation-duration',type=float,default=120.)
+    p.add_argument('--navigation-duration',type=float,default=None)
     p.add_argument('--sensor-feedback',action='store_true')
     args=p.parse_args();suite=[]
+    if args.navigation_duration is None:args.navigation_duration=240. if args.navigation_dynamic else 120.
+    if args.navigation_dynamic:
+        if args.slam_only_stack or args.sensor_feedback:p.error('Dynamic fixture uses the separately frozen privileged policy and actual sensor navigation profile')
+        args.navigation_stack=True
     if args.navigation_stack:
         if args.tests!=['navigation']or args.schedule or args.terrain_target_manifest:p.error('Scoped navigation requires exactly navigation, no scripted schedule or terrain override')
         args.sensors=True;args.shadow=True
@@ -90,9 +95,13 @@ def main():
                 asset=json.loads((run/'asset_manifest.json').read_text());asset['spawn']=spawn
                 asset['spawn_override']=True;asset['scenario_label']=args.label
                 asset['world_sha256']=sha(run/'world.sdf');(run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
+            if args.navigation_dynamic:
+                subprocess.run([sys.executable,str(ROOT/'navigation/dynamic/prepare.py'),'--stage','asset','--run',str(run)],check=True,
+                               stdout=(run/'dynamic_prepare.log').open('w'),stderr=subprocess.STDOUT)
             if args.navigation_stack or args.slam_only_stack:
                 config_cmd=[sys.executable,str(ROOT/'navigation/scoped_profile.py'),'--run',str(run)]
                 if args.slam_only_stack:config_cmd+=['--slam-only']
+                if args.navigation_dynamic:config_cmd+=['--dynamic']
                 subprocess.run(config_cmd,check=True,stdout=(run/'navigation_prepare.log').open('w'),stderr=subprocess.STDOUT)
             baseline=resource();(run/'resources_before.json').write_text(json.dumps(baseline,indent=2))
             sourcefiles=[f for f in ROOT.rglob('*')if f.is_file()and not any(d in f.parts for d in ['runs','build','__pycache__','test_results'])]

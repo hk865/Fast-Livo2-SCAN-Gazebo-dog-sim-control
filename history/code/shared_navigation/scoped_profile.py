@@ -19,6 +19,8 @@ DEMO = ROOT.parent
 FROZEN_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 SCHEMA = 'teacher_navigation_scope/v1'
 PROFILE = Path(__file__).with_name('flat_relative_roundtrip.json')
+DYNAMIC_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile.json'
+EXPERIMENTS = {'flat_relative_roundtrip_v1': PROFILE, 'finite_flat_dynamic_stop_resume_v1': DYNAMIC_PROFILE}
 FLAT = ('stand', 'forward', 'backward', 'left', 'right', 'turn_positive',
         'turn_negative', 'walk_stop', 'command_timeout', 'switch')
 _cache = {}
@@ -48,7 +50,7 @@ def verify_scope(path, raw=None):
     raw = path.read_bytes() if raw is None else raw
     digest = hashlib.sha256(raw).hexdigest()
     data = json.loads(raw)
-    if data.get('schema') != SCHEMA or data.get('experiment') != 'flat_relative_roundtrip_v1':
+    if data.get('schema') != SCHEMA or data.get('experiment') not in EXPERIMENTS:
         raise RuntimeError('Unknown experimental navigation scope')
     if data.get('status') != 'experimental_unverified' or data.get('navigation_is_verified') is not False:
         raise RuntimeError('Experimental receipt must explicitly remain unverified')
@@ -76,9 +78,13 @@ def verify_scope(path, raw=None):
         fingerprints[name] = (st.st_size, st.st_mtime_ns)
     old = _cache.get(str(path))
     if old is None or old[0] != digest or old[1] != fingerprints:
-        mandatory=[PROFILE,ROOT/'runs/acceptance.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
+        reviewed_profile=EXPERIMENTS[data['experiment']]
+        mandatory=[reviewed_profile,ROOT/'runs/acceptance.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
             ROOT/'policy/contract.json',ROOT/'simulation/build/libteacher_actuator.so']
         mandatory+=list(Path(__file__).parent.glob('*.py'))
+        if data['experiment']=='finite_flat_dynamic_stop_resume_v1':
+            from dynamic.prepare import runtime_files
+            mandatory+=runtime_files()+[run/'dynamic_protocol.json',run/'dynamic_original_world.sdf',run/'dynamic_original_asset_manifest.json']
         mandatory+=[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
             'navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','navigation_profile.json')]
         if any(str(p.resolve())not in refs for p in mandatory):
@@ -87,7 +93,7 @@ def verify_scope(path, raw=None):
             if sha(name) != expected:
                 raise RuntimeError('Scoped source/evidence hash changed: '+name)
         profile = json.loads((run/'navigation_profile.json').read_text())
-        if profile != json.loads(PROFILE.read_text()):
+        if profile != json.loads(reviewed_profile.read_text()):
             raise RuntimeError('Scoped profile differs from reviewed finite experiment')
         actual_global=json.loads((ROOT/'runs/acceptance.json').read_text())
         if data.get('global_levels_preserved')!=actual_global['levels']:
@@ -97,6 +103,11 @@ def verify_scope(path, raw=None):
             raise RuntimeError('Only the previously tested open flat spawn is eligible')
         if asset.get('sensors') is not True or asset.get('exclusive_writer') != 'teacher_sim::TeacherActuator':
             raise RuntimeError('Full actual sensors and sole native Teacher actuator are required')
+        if data['experiment']=='flat_relative_roundtrip_v1'and asset.get('dynamic_fixture'):
+            raise RuntimeError('Old finite flat scope cannot authorize a changed dynamic fixture')
+        if data['experiment']=='finite_flat_dynamic_stop_resume_v1':
+            from dynamic.prepare import validate_asset
+            validate_asset(run)
         if sha(run/'world.sdf') != asset.get('world_sha256'):
             raise RuntimeError('World differs from generated asset receipt')
         sensor_contract=json.loads((run/'sensor_contract.json').read_text())
@@ -119,7 +130,7 @@ def verify_scope(path, raw=None):
                 profile=data['profile'], scope='Finite flat SLAM/SCAN integration experiment only')
 
 
-def prepare(run, slam_only=False):
+def prepare(run, slam_only=False, dynamic=False):
     import numpy as np
     import yaml
     from scipy.spatial.transform import Rotation
@@ -131,6 +142,8 @@ def prepare(run, slam_only=False):
             raise RuntimeError('Generate the full-sensor Teacher assets first: '+name)
     asset = json.loads((run/'asset_manifest.json').read_text())
     sensors = json.loads((run/'sensor_contract.json').read_text())
+    if asset.get('dynamic_fixture')and not dynamic:
+        raise RuntimeError('Changed dynamic fixture requires explicit --dynamic scope')
     if asset.get('terrain') != 'flat' or asset.get('spawn') != [6, -.7, .4, 0] or not asset.get('sensors'):
         raise RuntimeError('Initial experiment requires full sensors and the tested flat spawn [6,-.7,.4,0]')
     if not all(k in sensors for k in ('imu', 'camera', 'lidar')):
@@ -165,7 +178,8 @@ def prepare(run, slam_only=False):
     camera_cfg = yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text())
     write(run/'navigation_camera.yaml', camera_cfg)
     write(run/'navigation_scenario.json', {'mode':'teacher', 'sensors':sensors})
-    profile = json.loads(PROFILE.read_text())
+    profile_path=DYNAMIC_PROFILE if dynamic else PROFILE
+    profile = json.loads(profile_path.read_text())
     write(run/'navigation_profile.json', profile)
     slam_files = [run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
                                  'navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json')]
@@ -218,7 +232,13 @@ def prepare(run, slam_only=False):
                                       'interface':s['levels']['interface'], 'motion':s['levels']['motion']})
     if any(len(v) != 3 or any(x['interface'] != 'passed' or x['motion'] != 'passed' for x in v) for v in evidence.values()):
         raise RuntimeError('Required exact three formal flat repetitions are missing or failed')
-    files = list(Path(__file__).parent.glob('*.py')) + [PROFILE]
+    files = list(Path(__file__).parent.glob('*.py')) + [profile_path]
+    if dynamic:
+        from dynamic.prepare import runtime_files,basis
+        basis_records,basis_campaign=basis()
+        files+=runtime_files()+[run/'dynamic_protocol.json',run/'dynamic_original_world.sdf',run/'dynamic_original_asset_manifest.json',basis_campaign]+[Path(row['path'])for row in basis_records]
+        if asset.get('dynamic_fixture',{}).get('protocol_sha256')!=sha(run/'dynamic_protocol.json'):
+            raise RuntimeError('Prepare and freeze the physical dynamic asset before navigation scope')
     files += [run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','navigation_fastlivo.yaml',
                               'navigation_camera.yaml','navigation_scenario.json','navigation_profile.json')]
     files += [ROOT/'policy/worker.py', ROOT/'policy/observation.py', ROOT/'policy/contract.json',
@@ -238,7 +258,11 @@ def prepare(run, slam_only=False):
         references=references(files), prepared_wall_unix=time.time(),
         meaning='Permission to test a finite scope, not a pass receipt; existing failed and unverified global levels remain unchanged')
     write(run/'navigation_scope.json', receipt)
-    return verify_scope(run/'navigation_scope.json')
+    result=verify_scope(run/'navigation_scope.json')
+    if dynamic:
+        from dynamic.prepare import prepare_scope
+        prepare_scope(run)
+    return result
 
 
 def main():
@@ -246,8 +270,10 @@ def main():
     parser.add_argument('--run', type=Path, required=True)
     parser.add_argument('--check-only', action='store_true')
     parser.add_argument('--slam-only', action='store_true', help='Prepare only actual sensor SLAM configuration; no navigation command eligibility')
+    parser.add_argument('--dynamic', action='store_true', help='Explicit bounded physical moving-obstacle experiment; requires asset-stage preparation and three actual finite-navigation passes')
     args = parser.parse_args()
-    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only)
+    if args.dynamic and args.slam_only:parser.error('--dynamic requires actual navigation')
+    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only,args.dynamic)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

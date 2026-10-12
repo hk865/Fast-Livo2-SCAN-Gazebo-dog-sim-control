@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Exercise real controller methods on fake state, without rclpy.init/nodes."""
 import json
+import argparse
 import math
 from pathlib import Path
 import time
@@ -13,6 +14,7 @@ from teacher_transition import TeacherHeadingGate
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',type=Path);args=parser.parse_args()
     root=Path(__file__).resolve().parents[1];profile=json.loads((root/'navigation/flat_relative_roundtrip.json').read_text())
     checks={}
     def check(name,condition):
@@ -48,7 +50,7 @@ def main():
     check('stale_health_status_not_rejuvenated_on_receive',f.bridge_safety['state']=='hold')
     receipt={'schema':1,'status':'passed','checks':checks,'starts_ros_nodes':False,'rclpy_init_called':False,
         'starts_simulation':False,'runtime_validation':'unverified','scope':'Actual controller method fault checks using synthetic state only'}
-    output=root/'test_results/navigation_interface_v4_controller_method_checks.json'
+    output=args.output or root/'test_results/navigation_interface_v4_controller_method_checks.json'
     output.write_text(json.dumps(receipt,indent=2,ensure_ascii=False)+'\n');print(json.dumps({'status':'passed','checks':len(checks),'output':str(output)}))
 
 

@@ -216,7 +216,9 @@ class CommandFile:
                 temporary = Path(stream.name)
                 stream.write(payload)
                 stream.flush()
-                os.fsync(stream.fileno())
+                # Transient transport: close + atomic replace provide complete
+                # old/new JSON reads. No power-loss durability is promised.
+                # Original stamps remain unchanged; late delivery still expires.
             temporary.replace(self.path)
         finally:
             if temporary is not None:

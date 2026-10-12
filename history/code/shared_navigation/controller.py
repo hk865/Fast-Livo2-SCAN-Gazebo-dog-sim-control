@@ -32,7 +32,7 @@ class RecordedPublisher:
     def __init__(self,publisher,run,node):self.publisher=publisher;self.run=run;self.node=node
     def publish(self,msg):
         data=json.loads(msg.data)
-        data.update(mode='teacher',scope='flat_relative_roundtrip_v1',navigation_ground_truth_used=False,
+        data.update(mode='teacher',scope=self.node.profile['experiment'],navigation_ground_truth_used=False,
             policy_observations='Gazebo privileged Teacher inputs; navigation localization is sensor SLAM',
             navigation_validation='unverified',acceptance_is_global=False)
         data['teacher_transition']=self.node.heading_gate.evidence(self.node.get_clock().now().nanoseconds/1e9,time.monotonic())
