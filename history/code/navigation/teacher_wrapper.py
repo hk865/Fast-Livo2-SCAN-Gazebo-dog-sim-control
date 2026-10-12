@@ -18,6 +18,7 @@ import time
 import numpy as np
 
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];DEMO=ROOT.parent;NAV=HERE.parent
+sys.path.insert(0,str(DEMO))
 sys.path.append(str(NAV))
 sys.path.insert(0,str(DEMO/'navigation'))
 spec=importlib.util.spec_from_file_location('teacher_measured_scan_base',HERE/'shared_controller.py')
