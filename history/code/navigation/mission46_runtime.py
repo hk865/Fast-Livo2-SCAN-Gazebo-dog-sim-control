@@ -28,6 +28,7 @@ from mission46_runtime_evidence import (FileTail, native_ns, checked_json, seal,
 from request import SceneAxisRegistration, StartupDeadline
 from known_scene_route_registration import KnownSceneAxisRegistration,ROUTE_REFERENCE
 from known_scene_hold_guard import dynamic_payload_ready
+from initialization_ready import initialization_history_ready
 from runtime_io import EvidenceWriter, latest_sensor_qos
 from compact_archives import make_evidence_writer
 
@@ -243,13 +244,14 @@ def build_node(run, scope, profile):
                 heading.update(source=heading.get('source','actual_slam_and_imu'),source_evidence_sha256=reg_sha,ground_truth_used=False)
                 self.mission.set_heading_alignment(heading)
             if ns/1e9-self.init_try_sim<.5:return
-            self.init_try_sim=ns/1e9
             cutoff=ns-3_200_000_000
             # Callback records are append-only immutable dictionaries. Snapshot
             # references, not their large serialized histories, on the owner.
             poses=tuple(r for r in self.pose_rows if r['stamp_ns']>=cutoff)
             imus=tuple(r for r in self.imu_rows if r['stamp_ns']>=cutoff)
             native=tuple(r for r in self.native_records if native_ns(r['data'])>=cutoff)
+            if not initialization_history_ready(poses):return
+            self.init_try_sim=ns/1e9
             health=copy.deepcopy(self.health);reg=copy.deepcopy(registration)
             self.initialization_sequence+=1;token=run.name+':init:'+str(self.initialization_sequence)
             submitted_wall=time.monotonic_ns()
