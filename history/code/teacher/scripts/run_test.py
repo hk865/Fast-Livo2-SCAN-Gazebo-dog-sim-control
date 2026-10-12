@@ -33,6 +33,7 @@ def main():
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
+    p.add_argument('--terrain-target-manifest',type=Path)
     args=p.parse_args();suite=[]
     schedule=json.loads(args.schedule.read_text())if args.schedule else None
     if schedule and 'navigation'in args.tests:p.error('Scripted schedules cannot drive navigation tests')
@@ -50,6 +51,7 @@ def main():
             tmp.symlink_to(run.name);tmp.replace(latest)
             terrain=schedule.get('terrain','flat')if schedule else test if test in ['ramp_up','ramp_down','step05','step10','step05_continue','step10_continue']else 'flat'
             if schedule:shutil.copy2(args.schedule,run/'independent_protocol.json')
+            if args.terrain_target_manifest:shutil.copy2(args.terrain_target_manifest,run/'terrain_target_manifest.json')
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
             if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
@@ -90,6 +92,7 @@ def main():
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
             if schedule:worker_cmd+=['--schedule',str(run/'independent_protocol.json')]
+            if args.terrain_target_manifest:worker_cmd+=['--terrain-target-manifest',str(run/'terrain_target_manifest.json')]
             worker=gazebo=capture=bridge=shadow=resource_stream=None;error=shadow_error=None;gazebo_grace_expired=False;plugin_hash=sha(ROOT/'simulation/build/libteacher_actuator.so')
             actual_sensors_ready=False;gpu_samples=[];gpu_guard_mb=None
             if args.renderer=='hardware':

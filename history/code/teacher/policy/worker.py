@@ -118,6 +118,7 @@ def main():
     p.add_argument('--socket',required=True);p.add_argument('--noisy',action='store_true');p.add_argument('--seed',type=int,default=42)
     p.add_argument('--command-file',type=Path);p.add_argument('--acceptance',type=Path,default=ROOT/'runs/acceptance.json')
     p.add_argument('--schedule',type=Path)
+    p.add_argument('--terrain-target-manifest',type=Path)
     args=p.parse_args();schedule=load_schedule(args.schedule);actor=load_actor();args.run.mkdir(parents=True,exist_ok=True)
     if schedule and args.test=='navigation':raise ValueError('A scripted schedule cannot replace SLAM navigation')
     acceptance=None
@@ -126,7 +127,16 @@ def main():
         sys.path.insert(0,str(ROOT/'navigation'))
         from bridge import check_acceptance
         acceptance=check_acceptance(args.acceptance)
-    terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf');rng=np.random.default_rng(args.seed)
+    safety_terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf');terrain=safety_terrain
+    terrain_manifest=None
+    if args.terrain_target_manifest:
+        terrain_manifest=json.loads(args.terrain_target_manifest.read_text());selected=terrain_manifest['include_models']
+        if not isinstance(selected,list)or not selected or any(not isinstance(v,str)for v in selected)or len(set(selected))!=len(selected):
+            raise ValueError('Terrain target manifest requires explicit unique model names')
+        available={shape.name.split('/')[0]for shape in safety_terrain.shapes}
+        if set(selected)-available:raise ValueError('Requested terrain model absent from actual static collisions')
+        terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf',include_models=selected)
+    rng=np.random.default_rng(args.seed)
     last_action=np.zeros(12);cmd=np.zeros(3);fault=None;first_t=None;settled_frames=0
     last_command_t=0.;last_request=np.zeros(3);navigation_sequence={};completion_time=None
     metadata={'checkpoint':str(CHECKPOINT),'checkpoint_sha256':SHA,'inference_device':'cpu','torch_threads':1,
@@ -146,10 +156,16 @@ def main():
                         protocol_scope=schedule.get('scope','independent bounded simulation protocol'),legacy_motion_evaluation_applicable=False)
         metadata['physical_test_completion_source']='privileged base x only for test termination; no position servo or navigation localization'if schedule.get('completion_stop')else None
     if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance)
+    if terrain_manifest:
+        metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),'sha256':hashlib.sha256(args.terrain_target_manifest.read_bytes()).hexdigest(),
+            'definition':terrain_manifest,'selected_collision_names':[shape.name for shape in terrain.shapes],
+            'excluded_collision_names':[shape.name for shape in safety_terrain.shapes if shape.name not in {v.name for v in terrain.shapes}],
+            'world_sha256':terrain.source_sha256,'safety_source':'all static collisions, ray start at body height',
+            'equivalence':'Explicit deployment terrain provider; frozen grid/yaw/+20/clip retained. Terrain target geometry is not strict training equivalence.'}
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
     (args.run/'worker_ready').write_text(str(os.getpid()))
-    stream=(args.run/'telemetry.jsonl').open('w',buffering=1);observations=[];actions=[];latencies=[];rows=[]
+    stream=(args.run/'telemetry.jsonl').open('w',buffering=1);scan_stream=(args.run/'height_scan_sources.jsonl').open('w',buffering=1)if terrain_manifest else None;observations=[];actions=[];latencies=[];rows=[]
     try:
         conn,_=sock.accept();conn.settimeout(10)
         with conn,torch.inference_mode():
@@ -178,6 +194,7 @@ def main():
                 cmd+=np.clip(request-cmd,-np.array([.6,.6,.8])*.02,np.array([.6,.6,.8])*.02)
                 angles=rpy(s[4:8]);contacts=s[50:55].tolist()
                 obs,extra=build_observation(s,cmd,last_action,terrain,noisy=args.noisy,rng=rng)
+                if scan_stream:scan_stream.write(json.dumps({'sim_time':t,**extra},allow_nan=False)+'\n')
                 start=time.perf_counter_ns();action=actor(torch.from_numpy(np.asarray(obs,dtype=np.float32)).reshape(1,247)).numpy()[0]
                 latency=(time.perf_counter_ns()-start)/1e6;latencies.append(latency)
                 if not np.isfinite(action).all() or not np.isfinite(obs).all():fault=fault or 'nonfinite_policy'
@@ -185,7 +202,7 @@ def main():
                 # Clearance is privileged independent safety evidence, not a navigation pose.
                 # Safety clearance casts from the body downward, while the
                 # Teacher scan keeps the archived +20m ray-start semantics.
-                ground=float(terrain.height(s[None,1:3],ray_start_z=s[3])[0])
+                ground=float(safety_terrain.height(s[None,1:3],ray_start_z=s[3])[0])
                 if t>1.5 and (max(abs(angles[0]),abs(angles[1]))>.8 or s[3]-ground<.15):fault=fault or 'fallen_or_low_clearance'
                 if t>1.5 and contacts[0]>0:fault=fault or 'body_contact'
                 target=QDEFAULT+.25*action
@@ -226,6 +243,7 @@ def main():
         fault=fault or f'{type(e).__name__}: {e}'
     finally:
         stream.close();sock.close()
+        if scan_stream:scan_stream.close()
         try:Path(args.socket).unlink()
         except FileNotFoundError:pass
         np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
