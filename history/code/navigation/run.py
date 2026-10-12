@@ -199,7 +199,7 @@ def prepare(run,args):
     # Bind event capture before the one-time source archive/scope freeze.
     capture=json.loads((HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json').read_text())
     capture['run_id']=run.name
-    capture['authorization']['delegation']='root authorized original autonomous route event capture'
+    capture['authorization']['delegation']='root authorized P1 original association failure capture; no shadow scoring'
     capture['authorization']['runtime_started_by_reviewer']=False
     for item in capture['source_bindings']:
         if sha(item['path'])!=item['sha256']:raise RuntimeError('Frozen event source binding changed: '+item['role'])
@@ -290,7 +290,7 @@ def prepare(run,args):
         plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
             'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
         plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
-    plan['event_aware_source_capture']=dict(contract_path=str(run/'known_scene_event_capture_contract.json'),contract_sha256=sha(run/'known_scene_event_capture_contract.json'),window_native_seconds=90,groups=5,total_logical_and_allocated_cap_bytes=24*1024**2,diagnostic_only=True,profile_diagnostic_metadata='historical2groups8MiB retained; effective event contract overrides capture diagnostics only',file_sha256_kind='exact_indented_file_bytes',group_contract_sha256_kind='canonical_sorted_compact_JSON_with_newline')
+    plan['event_aware_source_capture']=dict(contract_path=str(run/'known_scene_event_capture_contract.json'),contract_sha256=sha(run/'known_scene_event_capture_contract.json'),window_native_seconds=15,groups=3,total_logical_and_allocated_cap_bytes=16*1024**2,diagnostic_only=True,profile_diagnostic_metadata='historical2groups8MiB retained; effective event contract overrides capture diagnostics only',file_sha256_kind='exact_indented_file_bytes',group_contract_sha256_kind='canonical_sorted_compact_JSON_with_newline')
     plan['selected_policy_binding']=json.loads((run/'selected_policy_binding.json').read_text())
     plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=startup['max_native_seconds'],max_wall_seconds=startup['max_wall_seconds'],new_output_cap_bytes=startup['new_output_cap_bytes'],original_profile_duration_preserved=duration,no_GT_carrier=True)
     plan['wall_budget_s']=float(startup['max_wall_seconds'])
@@ -747,7 +747,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r38_event_any_phase';tmp=ROOT/'runs'/('latest_engineering_v34_r38_event_any_phase.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r39_p1_association';tmp=ROOT/'runs'/('latest_engineering_v34_r39_p1_association.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

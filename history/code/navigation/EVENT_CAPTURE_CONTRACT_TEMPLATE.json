@@ -1,16 +1,18 @@
 {
-  "schema": "go2_event_source_capture_contract/v2",
+  "schema": "go2_P1_association_source_capture_contract/v1",
   "run_id": "__PREPARED_RUN_NAME__",
   "caps": {
-    "groups": 5,
-    "group_bytes": 4194304,
+    "groups": 3,
+    "group_bytes": 5242880,
     "raw_bytes": 1048576,
     "adapted_bytes": 1048576,
     "registered_bytes": 1572864,
+    "identity_bytes": 1048576,
     "auxiliary_bytes": 524288,
     "shared_bytes": 1048576,
-    "total_bytes": 25165824,
-    "event_window_ns": 90000000000
+    "total_bytes": 16777216,
+    "event_window_ns": 15000000000,
+    "maximum_query_points": 30720
   },
   "unchanged_gates": {
     "native_response_ns": 200000000,
@@ -34,42 +36,42 @@
   "source_bindings": [
     {
       "role": "event_collector",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/event_aware_source_capture.py",
-      "sha256": "7607662e1bde7422ebd497d18349ea3ca4be068eebd75b8c2ec5e46ced62b703"
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/event_aware_source_capture.py",
+      "sha256": "db98476740a59205e6478f065dad6addda3f24ab7379238d46b9b26a763a3af2"
     },
     {
       "role": "event_runtime",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/known_scene_runtime.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/known_scene_runtime.py",
       "sha256": "49fab83e3660587320bc96b98db341a8304ab9ef0a8310ded84d43be6635bb90"
     },
     {
       "role": "known_scene_adapter.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/known_scene_adapter.py",
-      "sha256": "dbc18a9681d3fd089a1650fd1618395bc3b16bc2314bf6a5ad9f7e65ad88eb9d"
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/known_scene_adapter.py",
+      "sha256": "b22a9fb91c30752abe2fe5c3e4fd7e576f2125a597aeeb1f804d0376ea6cdeae"
     },
     {
       "role": "known_scene_matcher.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/known_scene_matcher.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/known_scene_matcher.py",
       "sha256": "c5e58a401a71627b7461e75ddba4306893a6a8e29f14fa969baef8670a37ab7d"
     },
     {
       "role": "known_scene_inputs.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/known_scene_inputs.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/known_scene_inputs.py",
       "sha256": "98432913aa3fe6eb5288de083247c1a9b783f2fad9fe609960ef4084863feef0"
     },
     {
       "role": "scan_epoch_supervisor.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/scan_epoch_supervisor.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/scan_epoch_supervisor.py",
       "sha256": "0a73193e64a99cc4e026bd9a681d81c991fb2226f0248b7b1f7af6c332781c78"
     },
     {
       "role": "mission46_runtime.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/mission46_runtime.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/mission46_runtime.py",
       "sha256": "8d9191c7edd1a6eac4dbea25cb5e563585f927cda760747f3e6c925ece061038"
     },
     {
       "role": "mission46.py",
-      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/mission46.py",
+      "path": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/mission46.py",
       "sha256": "da77755c84aadc02559ad4a93505fb32452d47d15416c57b9f1515520b91ffa0"
     },
     {
@@ -81,23 +83,26 @@
   "authorization": {
     "parent_thread": "<PRIVATE_SESSION_ID>",
     "user_message": "Sentinel_f2eb91bddfac8191940b68f90f6f0f34",
-    "delegation": "R38 any actual phase sustained original quality rejection; independent review before bounded reproduction",
+    "delegation": "Root authorized bounded P1 original association collision evidence; one attempt after fresh review/freeze",
     "runtime_started_by_reviewer": false
   },
   "runtime_budget": {
-    "native_seconds": 900,
-    "wall_seconds": 5490,
-    "new_output_cap_bytes": 6000000000,
+    "native_seconds": 120,
+    "wall_seconds": 900,
+    "new_output_cap_bytes": 1000000000,
     "shared_hard_cap_bytes": 80000000000,
     "original_profile_duration_seconds": 1500
   },
   "limitations": [
-    "No explicit message commit token: diagnostic only.",
-    "No GTpose/IMU world quaternion/frontend z prior.",
-    "IMU arrival means arrival at this observer; frontend consumption is not observed.",
-    "R6 eight-group sampling contract unchanged.",
-    "Actual allray gate and 3s correction/300ms freshness/200ms IPC unchanged.",
-    "2.5s is a diagnostic lead trigger only, not a change to original3s correction expiry. One in-flight original job is pinned before fitting; no matcher algorithm change."
+    "Original exact source rejection and all map/control gates unchanged.",
+    "Direct original evaluated NN arrays; writer does not rerun or replace pairing.",
+    "PRE/POST are association-checked jobs, not automatically accepted control.",
+    "Absent point-ID/stage commit remains UNVERIFIED.",
+    "Complete received ROS message reserialization, not original wire CDR.",
+    "No GTpose/IMU world quaternion/frontend z prior; no fabricated point timing.",
+    "IMU arrival/coverage does not establish frontend consumption; require_complete_imu=false.",
+    "R6 formal eight-group contract remains separate and unchanged.",
+    "No online shadow scoring; fixed16MiB logical and allocated capture cap."
   ],
   "actual_mission_phases": {
     "exploring": "exploration",
@@ -105,9 +110,9 @@
     "navigating": "navigation_f1_f3"
   },
   "diagnostic_trigger": {
-    "original_reason": "no_quality_candidate",
-    "distinct_rejections": 2,
-    "anchor_age_lead_ns": 2500000000,
-    "complete_ring_groups": 4
+    "original_predicate": "nearest_index_bijection_failed",
+    "first_real_failure": true,
+    "complete_previous_jobs": 1,
+    "post_original_checked_job": true
   }
 }

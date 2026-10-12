@@ -62,8 +62,17 @@ def declared_R37_loading_budget_bindings(here):
             valid=candidate.read_text()==expected
             reason='actual selected private policy path/hash witness; original worker behavior retained'
         elif name=='storage_guard.py':
-            valid=sha(candidate)=='dba644e1a06f53a387302c4c819699eb6ec3126eff0d9ad4794b016e442547d6'
-            reason='independently reviewed80GB cumulative guard; historical baseline retained'
+            recovery=here/'STORAGE_REBOOT_RECOVERY_CONTRACT.json'
+            if recovery.exists():
+                rc=json.loads(recovery.read_text())
+                protected=Path(rc['archived_original_storage_guard'])
+                valid=(sha(protected)=='dba644e1a06f53a387302c4c819699eb6ec3126eff0d9ad4794b016e442547d6'
+                    and sha(candidate)==rc['recovery_storage_guard_sha256']
+                    and sha(here/'storage_recovery.py')==rc['recovery_helper_sha256'])
+                reason='explicit reviewed reboot recovery; original80GB limits and accounting baseline retained'
+            else:
+                valid=sha(candidate)=='dba644e1a06f53a387302c4c819699eb6ec3126eff0d9ad4794b016e442547d6'
+                reason='independently reviewed80GB cumulative guard; historical baseline retained'
         else:
             expected=original.read_text().replace('RAW_BUDGET_BYTES = 50_000_000_000','RAW_BUDGET_BYTES = 80_000_000_000')
             valid=candidate.read_text()==expected
