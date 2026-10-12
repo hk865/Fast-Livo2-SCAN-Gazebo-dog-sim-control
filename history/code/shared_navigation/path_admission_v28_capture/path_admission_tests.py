@@ -9,6 +9,7 @@ from pathlib import Path
 from types import SimpleNamespace as NS
 import numpy as np
 from scipy.interpolate import BSpline
+from cascade_core import Controller
 from path_admission import (FrozenFence,candidate,payload,replayable,certify_curve,
     remaining_certificate,split_bezier,MAX_CONTROL_POINTS)
 
@@ -20,7 +21,7 @@ from control_core import trajectory_has_progress
 R1=TEACHER/'runs/20261006_202609_closed_loop_cascade_clock_hold_V26_height_diag_actual_r1_d530'
 FIXTURE=TEACHER/'test_results/path_admission_v27_20261006/review/NEAREST_SWITCH_COUNTEREXAMPLE.json'
 CONFIG={'horizontal_radius_m':.45,'height_error_m':.3}
-REPORT={'schema':'path_admission_V27_production_replay/v1','tests':[],
+REPORT={'schema':'path_admission_V28_capture_production_replay/v1','tests':[],
     'simulation_launched':False,'navigation_ground_truth_used':False,'fixture_run':str(R1),
     'limitations':'ROS-free production-method replay validates admission transactions and proofs; not physical navigation success.'}
 
@@ -112,10 +113,10 @@ def actual_acceptance_layers():
     wrapper_tree=ast.parse((HERE/'teacher_wrapper.py').read_text())
     shared=copy.deepcopy(next(n for n in shared_tree.body if isinstance(n,ast.ClassDef)and n.name=='Navigation'))
     shared.name='SharedAcceptance';shared.bases=[]
-    shared.body=[n for n in shared.body if isinstance(n,ast.FunctionDef)and n.name=='accept_spline']
+    shared.body=[n for n in shared.body if isinstance(n,ast.FunctionDef)and n.name in ('accept_spline','mark_execution_path_exhausted')]
     teacher=copy.deepcopy(next(n for n in wrapper_tree.body if isinstance(n,ast.ClassDef)and n.name=='TeacherNavigation'))
     teacher.name='TeacherAcceptance';teacher.bases=[ast.Name(id='SharedAcceptance',ctx=ast.Load())]
-    teacher.body=[n for n in teacher.body if isinstance(n,ast.FunctionDef)and n.name=='accept_spline']
+    teacher.body=[n for n in teacher.body if isinstance(n,ast.FunctionDef)and n.name in ('accept_spline','mark_execution_path_exhausted')]
     namespace=dict(np=np,BSpline=BSpline,trajectory_has_progress=trajectory_has_progress,hashlib=hashlib,json=json)
     exec(compile(ast.fix_missing_locations(ast.Module(body=[shared,teacher],type_ignores=[])),str(HERE/'shared_controller.py'),'exec'),namespace)
     return namespace['TeacherAcceptance']
@@ -126,14 +127,14 @@ class FakeBase(actual_acceptance_layers()):
         super().accept_spline(msg,metadata)
         if self.replans>before:self.accepted_archives.append(msg.traj_id)
 
-METHODS={'admission_identity','retain_admitted_path','archive_admission','accept_spline','control_admission_hold','control_parking','request_admission_replan_if_due','record_segment_activation'}
+METHODS={'admission_identity','retain_admitted_path','archive_admission','accept_spline','control_admission_hold','control_parking','request_admission_replan_if_due','record_segment_activation','path_execution_eligibility','capture_replacement_eligibility','clear_committed_exhausted_capture','ensure_cascade'}
 def production_class():
     tree=ast.parse((HERE/'controller.py').read_text())
     cls=next(node for node in tree.body if isinstance(node,ast.ClassDef)and node.name=='PIDNavigation')
     cls=copy.deepcopy(cls);cls.body=[node for node in cls.body if isinstance(node,ast.FunctionDef)and node.name in METHODS]
     module=ast.Module(body=[cls],type_ignores=[])
     namespace=dict(TeacherNavigation=FakeBase,copy=copy,hashlib=hashlib,json=json,math=math,time=time,Path=Path,np=np,
-        BSpline=BSpline,FrozenFence=FrozenFence,candidate=candidate,payload=payload,replayable=replayable,
+        BSpline=BSpline,Controller=Controller,FrozenFence=FrozenFence,candidate=candidate,payload=payload,replayable=replayable,
         certify_curve=certify_curve,remaining_certificate=remaining_certificate,trajectory_has_progress=trajectory_has_progress)
     exec(compile(ast.fix_missing_locations(module),str(HERE/'controller.py'),'exec'),namespace)
     return namespace['PIDNavigation']

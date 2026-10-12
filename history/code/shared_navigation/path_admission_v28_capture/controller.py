@@ -221,17 +221,84 @@ class PIDNavigation(TeacherNavigation):
     def admission_identity(self):
         return dict(request_id=self.request_id,waypoint_index=self.waypoint_index,
             goal_xyz=self.waypoints[self.waypoint_index].tolist())
+    def path_execution_eligibility(self):
+        """Per-condition original live-source/identity evidence, without TTL refresh."""
+        active=self.path_admission_active;now=time.monotonic();ns=self.get_clock().now().nanoseconds
+        def fresh_wall(value):
+            return isinstance(value,(int,float)) and math.isfinite(value) and 0<=now-value<=.3
+        conditions=dict(active_present=active is not None,
+            same_request_waypoint_goal=active is not None and active['identity']==self.admission_identity(),
+            same_active_trajectory=active is not None and active['trajectory_id']==self.active_trajectory_id,
+            same_active_reference=active is not None and tuple(active['active_reference_stamp'])==tuple(self.active_reference_stamp or ()),
+            samples_present=self.samples is not None,state_running=self.state=='running',
+            pose_source_fresh=fresh_wall(self.pose_updated),cloud_source_fresh=fresh_wall(self.cloud_updated),
+            raw_imu_source_fresh=self.raw_imu.fresh(now,ns/1e9),
+            bridge_source_fresh=fresh_wall(self.bridge_updated),bridge_ready=self.bridge_safety.get('state')=='ready',
+            obstacle_not_held=not self.obstacle_hold,tilt_not_held=not self.tilt_hold)
+        return dict(conditions=conditions,samples_present=conditions['samples_present'],
+            clock_ns=ns,checked_monotonic_wall=now,actual_source_times_refreshed=False)
     def retain_admitted_path(self,points,config):
         # New planner reference stamps are pending identities, not new receipts
         # for the path being executed. Progress is projected spatially only.
-        active=self.path_admission_active;now=time.monotonic();ns=self.get_clock().now().nanoseconds
-        if (active is None or active['identity']!=self.admission_identity()
-                or active['trajectory_id']!=self.active_trajectory_id or self.samples is None
-                or self.state!='running' or now-self.pose_updated>.3 or now-self.cloud_updated>.3
-                or not self.raw_imu.fresh(now,ns/1e9) or now-self.bridge_updated>.3
-                or self.bridge_safety.get('state')!='ready' or self.obstacle_hold or self.tilt_hold):
-            return dict(allowed=False,reason='old_path_identity_or_native_sources_not_eligible')
-        return remaining_certificate(active,self.samples,self.pose,points,config)
+        eligibility=self.path_execution_eligibility()
+        if not all(eligibility['conditions'].values()):
+            return dict(allowed=False,reason='old_path_not_eligible_stopped',**eligibility)
+        proof=remaining_certificate(self.path_admission_active,self.samples,self.pose,points,config)
+        return dict(proof,eligibility=eligibility,conditions=eligibility['conditions'],samples_present=True,
+            retention_action='kept_checked_old_path' if proof['allowed'] else 'stopped_old_path_not_certified')
+    def capture_replacement_eligibility(self,retention):
+        """Recover only the recorded exhaustion of this immutable same-goal path.
+
+        A missing path, source loss, protection, or failed old proof by itself
+        cannot create this authorization. New-curve proof and base acceptance
+        remain separate necessary gates; this evidence never commands motion.
+        """
+        marker=getattr(self,'execution_path_exhaustion',None);active=self.path_admission_active
+        receipt=self.path_receipt or {};eligibility=self.path_execution_eligibility()
+        conditions={k:v for k,v in eligibility['conditions'].items() if k!='samples_present'}
+        conditions.update(samples_absent=self.samples is None,
+            capture_same_goal=self.cascade is not None and self.cascade_key==(self.request_id,self.waypoint_index)
+                and self.cascade.capture_stamp is not None,
+            cascade_not_protected=self.cascade is not None and not self.cascade.protected,
+            cascade_failure_not_latched=self.cascade is not None and self.cascade.failure_latched is None,
+            exhaustion_receipt_present=isinstance(marker,dict))
+        if isinstance(marker,dict):
+            conditions.update(exhaustion_internal_schema=marker.get('schema')=='internal_checked_path_exhaustion/v1'
+                    and marker.get('source')=='actual_shared_control_exhausted_clear_branch'
+                    and marker.get('navigation_ground_truth_used') is False,
+                exhaustion_allowed_reason=marker.get('reason') in ('steering_exhausted','low_command_exhausted_path'),
+                exhaustion_same_request_waypoint_goal=dict(request_id=marker.get('request_id'),
+                    waypoint_index=marker.get('waypoint_index'),goal_xyz=marker.get('goal_xyz'))==self.admission_identity(),
+                exhaustion_same_active_id=marker.get('active_trajectory_id')==self.active_trajectory_id,
+                exhaustion_same_active_reference=marker.get('active_reference_stamp')==list(self.active_reference_stamp or ()),
+                exhaustion_matches_accepted_samples=marker.get('previous_samples_sha256')==receipt.get('source_samples_float64_sha256')
+                    and marker.get('previous_samples_count')==receipt.get('source_samples_count')
+                    and type(marker.get('previous_samples_count')) is int and 2<=marker['previous_samples_count']<=2000,
+                exhaustion_matches_accepted_receipt=(receipt.get('request_id'),receipt.get('waypoint_index'),receipt.get('trajectory_id'))
+                    ==(self.request_id,self.waypoint_index,self.active_trajectory_id),
+                exhaustion_causal_stamps=type(marker.get('source_pose_stamp_ns')) is int
+                    and type(marker.get('control_stamp_ns')) is int
+                    and 0<=marker['source_pose_stamp_ns']<=marker['control_stamp_ns']<=eligibility['clock_ns'])
+        else:
+            conditions['exhaustion_internal_schema']=False
+        allowed=all(conditions.values())
+        return dict(allowed=allowed,reason='recorded_exhausted_capture_can_rebind' if allowed else 'capture_replacement_not_eligible_stopped',
+            conditions=conditions,samples_present=self.samples is not None,exhaustion_receipt=copy.deepcopy(marker),
+            source_eligibility=eligibility,old_retention_reason=retention.get('reason'),actual_source_times_refreshed=False)
+    def clear_committed_exhausted_capture(self):
+        # Only called after all existing execution gates committed a new path.
+        # Keep the fixed goal, its original activation/90s deadline, velocity PI,
+        # filters, feedback clocks and command slew state. A new capture must
+        # obtain fresh original dwell; old parking proof is not transferable.
+        cascade=self.cascade
+        old={key:copy.deepcopy(getattr(cascade,key)) for key in
+            ('capture_stamp','capture_wall','capture_clock','arrival','capture_dwell','hold_stamp','hold_wall','hold_clock')}
+        for key in old:setattr(cascade,key,None)
+        cascade.hold_integral[:]=0.
+        self.execution_path_exhaustion=None
+        self.pid_guard_needs_evaluation=True
+        return dict(cleared_capture=old,fixed_goal_and_deadline_preserved=True,
+            velocity_PI_filters_and_slew_preserved=True,fresh_capture_dwell_required=True)
     def archive_admission(self,value,metadata,decision,started):
         self.path_admission_sequence+=1;sequence=self.path_admission_sequence
         decision=dict(decision,schema='SCAN_path_execution_admission/v1',sequence=sequence,
@@ -278,16 +345,25 @@ class PIDNavigation(TeacherNavigation):
             proof=dict(allowed=False,reason='admission_input_or_anchor:'+type(error).__name__+':'+str(error))
         capture=(self.cascade is not None and self.cascade_key==(self.request_id,self.waypoint_index)
             and self.cascade.capture_stamp is not None)
-        if not proof['allowed'] or capture:
+        if self.cascade is not None and self.cascade.capture_stamp is not None and not capture:
+            proof=dict(allowed=False,reason='capture_goal_identity_mismatch')
+        retain=None;recovery=None
+        if capture and proof['allowed']:
+            retain=self.retain_admitted_path(points,config)
+            if not retain['allowed']:recovery=self.capture_replacement_eligibility(retain)
+        if time.monotonic()-started>.100:
+            proof=dict(allowed=False,reason='admission_callback_budget_exhausted');recovery=None
+        if not proof['allowed'] or capture and (recovery is None or not recovery['allowed']):
             # Only a geometrically outside candidate (or an existing terminal
             # capture) may keep an independently certified old same-goal path.
             # Invalid anchor/numbers and exhausted proofs always stop/replan.
-            retain=(self.retain_admitted_path(points,config) if points is not None
+            retain=(retain if retain is not None else self.retain_admitted_path(points,config) if points is not None
                 and (proof.get('reason')=='outside_fence' or proof['allowed'] and capture)
-                else dict(allowed=False,reason='fail_closed_rejection_requires_stop'))
-            if time.monotonic()-started>.100:retain=dict(allowed=False,reason='retention_callback_budget_exhausted')
+                else dict(allowed=False,reason='fail_closed_rejection_requires_stop',samples_present=self.samples is not None,
+                    conditions=self.path_execution_eligibility()['conditions']))
+            if time.monotonic()-started>.100:retain=dict(retain,allowed=False,reason='retention_callback_budget_exhausted',samples_present=self.samples is not None)
             self.path_admission_hold=not retain['allowed']
-            self.last_spline_rejected='V27 SCAN整条路径接纳拒绝：'+str(proof.get('reason'))
+            self.last_spline_rejected='V28 SCAN整条路径接纳拒绝：'+str(proof.get('reason'))
             self.path_admission_replan_pending=True
             if retain['allowed']:
                 self.pid_guard_needs_evaluation=True
@@ -295,12 +371,18 @@ class PIDNavigation(TeacherNavigation):
                 self.message=self.last_spline_rejected+'；停车等待重规划'
                 self.publish_command()
             self.archive_admission(value,metadata,dict(admitted=False,
-                reason='terminal_capture_kept_checked_path' if capture and proof['allowed'] else proof.get('reason'),
-                proof=proof,anchor_binding=binding,old_path_retention=retain,
+                reason=('terminal_capture_kept_checked_path' if retain['allowed'] else 'terminal_capture_stopped_no_eligible_path')
+                    if capture and proof['allowed'] else proof.get('reason'),
+                proof=proof,anchor_binding=binding,old_path_retention=retain,capture_replacement=recovery,
                 exact_zero_requested=not retain['allowed']),started)
             return
+        previous_execution=(dict(samples=self.samples,active_trajectory_id=self.active_trajectory_id,
+            active_reference_stamp=self.active_reference_stamp,planning_start_state=copy.deepcopy(self.planning_start_state),
+            execution_path_exhaustion=copy.deepcopy(getattr(self,'execution_path_exhaustion',None)))
+            if recovery is not None and recovery['allowed'] else None)
         before=self.replans;wall=time.monotonic_ns();super().accept_spline(msg,metadata)
         if self.replans>before and self.samples is not None:
+            capture_clear=(self.clear_committed_exhausted_capture() if recovery is not None and recovery['allowed'] else None)
             self.path_admission_active=dict(payload=copy.deepcopy(value),metadata=copy.deepcopy(metadata),
                 identity=self.admission_identity(),trajectory_id=self.active_trajectory_id,
                 active_reference_stamp=tuple(self.active_reference_stamp),proof=copy.deepcopy(proof),anchor_binding=binding)
@@ -319,14 +401,16 @@ class PIDNavigation(TeacherNavigation):
                 trajectory_id=self.active_trajectory_id,metadata=copy.deepcopy(metadata))
             self.path_receipt['points_float64_sha256']=hashlib.sha256(np.asarray(points,dtype='<f8').tobytes()).hexdigest()
             self.evidence.append(self.run/'cascade_path_history.jsonl',copy.deepcopy(self.path_receipt))
-            self.archive_admission(value,metadata,dict(admitted=True,reason='continuous_fence_and_existing_execution_gates_passed',
-                proof=proof,anchor_binding=binding),started)
+            self.archive_admission(value,metadata,dict(admitted=True,reason='exhausted_capture_rebound_after_all_execution_gates' if capture_clear is not None else 'continuous_fence_and_existing_execution_gates_passed',
+                proof=proof,anchor_binding=binding,capture_replacement=recovery,capture_clear=capture_clear),started)
         else:
             # Existing execution guards still own final admission. Their
             # refusal never becomes an admitted path in this separate ledger.
+            if previous_execution is not None:
+                for key,old in previous_execution.items():setattr(self,key,old)
             self.path_admission_hold=True;self.path_admission_replan_pending=True;self.publish_command()
             self.archive_admission(value,metadata,dict(admitted=False,reason='existing_execution_gate_rejected',proof=proof,
-                anchor_binding=binding,exact_zero_requested=True),started)
+                anchor_binding=binding,capture_replacement=recovery,lower_gate_execution_identity_restored=previous_execution is not None,exact_zero_requested=True),started)
     def follow_checked_trajectory(self,*args,**kwargs):
         kwargs['tracking_pose']=self.pose
         result=follow_trajectory(*args,**kwargs)

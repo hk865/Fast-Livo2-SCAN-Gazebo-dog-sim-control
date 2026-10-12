@@ -152,7 +152,7 @@ def validate_profile(profile):
     duration = profile.get('duration_s')
     if (type(duration) not in (int, float) or not math.isfinite(duration)
             or duration not in ALLOWED_DURATION_S or profile.get('max_simulation_duration_s') != SIMULATION_MAX_S):
-        raise ValueError('V27 requires270s repair prefix or1500s original46, retaining the original1500s mission cap')
+        raise ValueError('V28 requires270s repair prefix or1500s original46, retaining the original1500s mission cap')
     if (profile.get('raw_budget_bytes') != RAW_BUDGET_BYTES or
             profile.get('minimum_available_storage_bytes') != MIN_FREE_BYTES):
         raise ValueError('Original46 storage contract differs')

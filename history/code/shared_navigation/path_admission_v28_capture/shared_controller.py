@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import copy
 import json
+import hashlib
 import math
 import time
 from collections import deque
@@ -82,6 +83,7 @@ class Navigation(Node):
         self.obstacle_event_capture_error = None
         self.event_archive = EventArchive()
         self.samples = None
+        self.execution_path_exhaustion = None
         self.trajectory_association = TrajectoryAssociation()
         self.last_reference_stamp = -1
         self.planning_start_state = None
@@ -217,6 +219,7 @@ class Navigation(Node):
                     self.alignment_hold = True
                     self.heading_gate.reset()
                     self.samples = None
+                    self.execution_path_exhaustion = None
                     self.last_reference = -math.inf
             else:
                 self.tilt_clear_since = None
@@ -336,6 +339,7 @@ class Navigation(Node):
         self.state = 'running'
         self.message = '等待新鲜 SLAM 和点云，再请求 SCAN 规划'
         self.samples = None
+        self.execution_path_exhaustion = None
         self.trajectory_association.reset()
         self.planning_start_state = None
         self.steering = None
@@ -373,6 +377,7 @@ class Navigation(Node):
             self.reset_region_arrival('stopped')
             self.state, self.message = 'stopped', '任务已停止'
             self.samples = None
+            self.execution_path_exhaustion = None
             self.obstacle_resume_pending = False
             self.publish_command()
             self.publish_status()
@@ -456,12 +461,14 @@ class Navigation(Node):
                 self.last_spline_rejected = 'SCAN 返回原地停车样条，目标尚未到达；等待有效规划'
                 self.message = self.last_spline_rejected
                 self.samples = None
+                self.execution_path_exhaustion = None
                 self.active_trajectory_id = None
                 self.active_reference_stamp = None
                 self.publish_command()
                 self.path_pub.publish(self.make_path([]))
                 return
             self.samples = samples
+            self.execution_path_exhaustion = None
             self.active_trajectory_id = int(msg.traj_id)
             self.active_reference_stamp = tuple(metadata['reference_stamp'])
             self.planning_start_state = metadata.get('start_state')
@@ -470,6 +477,34 @@ class Navigation(Node):
             self.path_pub.publish(self.make_path(samples))
         except Exception as exc:
             self.message = f'拒绝无效 SCAN 轨迹: {exc}'
+
+    def mark_execution_path_exhausted(self, reason, now, ros_now):
+        """Internal evidence from the two real exhausted-clear branches only.
+
+        No timer/command zero by itself labels a path exhausted. Samples and
+        immutable execution identity are pinned before the inherited clear.
+        This receipt has no motion authority and never refreshes source times.
+        """
+        self.execution_path_exhaustion = None
+        values = np.asarray(self.samples)
+        reference = self.active_reference_stamp
+        if (reason not in ('steering_exhausted', 'low_command_exhausted_path')
+                or values.ndim != 2 or values.shape[1] != 3 or not 2 <= len(values) <= 2000
+                or not np.isfinite(values).all() or self.active_trajectory_id is None
+                or reference is None or len(reference) != 2):
+            return
+        self.execution_path_exhaustion = dict(
+            schema='internal_checked_path_exhaustion/v1', reason=reason,
+            request_id=self.request_id, waypoint_index=self.waypoint_index,
+            goal_xyz=self.waypoints[self.waypoint_index].tolist(),
+            active_trajectory_id=self.active_trajectory_id,
+            active_reference_stamp=list(reference),
+            previous_samples_sha256=hashlib.sha256(np.asarray(values, dtype='<f8').tobytes()).hexdigest(),
+            previous_samples_count=len(values), source_pose_stamp_ns=int(self.pose_stamp),
+            control_stamp_ns=round(ros_now*1e9), monotonic_wall=now,
+            steering_exhausted=bool(self.steering['exhausted']),
+            cascade_mode=(getattr(self, 'cascade_last_row', None) or {}).get('mode'),
+            source='actual_shared_control_exhausted_clear_branch', navigation_ground_truth_used=False)
 
     def make_path(self, points, height_offset=0.0):
         msg = Path()
@@ -587,6 +622,7 @@ class Navigation(Node):
                     self.region_arrivals.append(copy.deepcopy(self.region_arrival_evidence))
                 self.waypoint_index += 1
                 self.samples = None
+                self.execution_path_exhaustion = None
                 self.trajectory_association.reset()
                 self.planning_start_state = None
                 self.steering = None
@@ -639,6 +675,7 @@ class Navigation(Node):
             self.publish_command()
             self.message = '实际位置尚未到达，SCAN 已检查的路径结束；等待重新规划'
             if now-self.last_reference > 3.0:
+                self.mark_execution_path_exhausted('steering_exhausted', now, ros_now)
                 self.samples = None
                 self.request_plan()
             return
@@ -698,6 +735,7 @@ class Navigation(Node):
                 self.obstacle_resume_pending = True
                 self.heading_gate.reset()
                 self.samples = None
+                self.execution_path_exhaustion = None
                 self.last_reference = -math.inf
         if self.obstacle_hold:
             self.publish_command()
@@ -733,6 +771,7 @@ class Navigation(Node):
                     exhausted=self.steering['exhausted'],
                     has_geometric_progress=trajectory_has_progress(
                         self.samples,self.pose,goal,self.arrival_radius))):
+            self.mark_execution_path_exhausted('low_command_exhausted_path', now, ros_now)
             self.samples = None
             self.publish_command()
             self.request_plan()
@@ -743,7 +782,8 @@ class Navigation(Node):
     def publish_status(self):
         now = time.monotonic()
         age = lambda updated: None if not math.isfinite(updated) else round(now-updated, 3)
-        status = dict(request_id=self.request_id, state=self.state,
+        status = dict(execution_path_exhaustion=copy.deepcopy(self.execution_path_exhaustion),
+                      request_id=self.request_id, state=self.state,
                       goals_definition_sha256=self.goals_definition_sha256,
                       goal_activated_ros_clock_ns=getattr(self,'segment_started_ros_ns',None),
                       segment_start_pose_stamp_ns=getattr(self,'segment_start_pose_stamp_ns',None),

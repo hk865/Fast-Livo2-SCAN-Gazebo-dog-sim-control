@@ -1,4 +1,4 @@
-"""Exact V27 profiles: path admission repair only; original46 gates stay active."""
+"""Exact V28 profiles: path admission repair only; original46 gates stay active."""
 from pathlib import Path
 import copy
 import json
@@ -6,15 +6,16 @@ import json
 PROFILE_NAMES = ('repair_prefix270.json', 'repair_original46.json')
 PROFILE_NAME = PROFILE_NAMES[0]
 DURATIONS = {'repair_prefix270.json': 270., 'repair_original46.json': 1500.}
-CHANGE = ('V27 independent steady-recording comparison; five production repair '
-          'files remain byte-identical to frozen V27. Detail window[0,0] retains '
-          'all-time state/IMU/stage/timing recording and omits dense H/R/plane/pixel '
-          'details, whose absence is UNVERIFIED. This isolates recording load; '
-          'the R1 IPC failure root cause is not established. Original V25 route, '
-          'regions, gains, stops, TTL, Actor, observations, frontend and planner '
-          'stay unchanged. Both270/1500s profiles retain48GiB cap/90GiB start '
-          'reserve/30GiB runtime reserve and original1500s mission global cap. '
-          'Cutoff is never success; no historical navigation result is adopted.')
+CHANGE = ('V28 independent capture/exhaustion handoff repair. Only controller.py '
+          'and shared_controller.py production behavior changes: internal same-path '
+          'exhaustion receipts, per-condition live-source evidence, safe replacement '
+          'through all existing acceptance gates, and clearing stale capture only '
+          'after committed admission. Existing valid capture paths remain retained. '
+          'Fixed46 goals,3D/control arrival,dwell,90s region deadlines,300ms source '
+          'guards,200ms native IPC, gains, Teacher, frontend and planner remain '
+          'unchanged. State/P/IMU/stage/timing recording stays on,detail[0,0] '
+          'omits dense H/R/plane/point/pixel details. Repair does not correct SLAM '
+          'height or prove46 navigation. No historical acceptance inherited.')
 
 
 def baseline_profile_path(here):
@@ -37,13 +38,13 @@ def normal_form(profile, here):
 
 def expected_profile(here, name=PROFILE_NAME):
     if name not in PROFILE_NAMES:
-        raise ValueError('V27 has only two exact source-bound profiles')
+        raise ValueError('V28 has only two exact source-bound profiles')
     from mission46_profile import required_source_files
     here = Path(here).resolve()
     duration = DURATIONS[name]
     result = copy.deepcopy(json.loads(baseline_profile_path(here).read_text()))
-    result.update(controller_selector='path_admission_v27',
-                  profile_version='path_admission_v27', prospective_change=CHANGE,
+    result.update(controller_selector='path_admission_v28_capture',
+                  profile_version='path_admission_v28_capture', prospective_change=CHANGE,
                   duration_s=duration, raw_budget_bytes=48*1024**3,
                   minimum_available_storage_bytes=90*1024**3)
     result['raw_storage_budget'] = {
@@ -52,9 +53,9 @@ def expected_profile(here, name=PROFILE_NAME):
         'minimum_runtime_available_bytes': 30*1024**3}
     result['mission46_required_source_files'] = [str(p.resolve()) for p in required_source_files()]
     result['diagnostic_scope'].update(finite_horizon_s=duration, detail_window_sim_s=[0, 0],
-        purpose='V27 byte-identical path admission with steady state/IMU/stage/timing recording; detail window[0,0] omits dense H/R/plane/pixel evidence (UNVERIFIED), isolating recording load without an I/O root-cause claim')
+        purpose='V28 capture/exhaustion handoff only; state/P/IMU/stage/timing recording enabled,detail[0,0] omits dense H/R/plane/point/pixel detail. No height/46 navigation pass inferred')
     result['path_admission_contract'] = {
-        'schema': 'path_admission_v27_launch/v1',
+        'schema': 'path_admission_v28_capture_launch/v1',
         'profile_name': name,
         'simulation_only': True,
         'runtime_cutoff_sim_elapsed_s': duration,
@@ -63,7 +64,7 @@ def expected_profile(here, name=PROFILE_NAME):
         'full46_verified': False,
         'actual_navigation_verified': False,
         'historical_pass_inherited': False,
-        'algorithm_change': 'SCAN path admission only',
+        'algorithm_change': 'Only capture/exhaustion handoff after original continuous proof and existing acceptance gates',
         'backend_connected': False,
         'original_46_region_definitions_and_arrival_gates_unchanged': True,
         'original_mission_global_cap_s': 1500.}
@@ -73,7 +74,7 @@ def expected_profile(here, name=PROFILE_NAME):
 def profile_name(profile):
     name = profile.get('path_admission_contract', {}).get('profile_name')
     if name not in PROFILE_NAMES:
-        raise ValueError('Missing exact V27 profile identity')
+        raise ValueError('Missing exact V28 profile identity')
     return name
 
 
@@ -89,5 +90,5 @@ def validate_full46(profile, here):
             or profile.get('expected_region_count') != 46
             or profile.get('expected_stage_region_counts') != {'exploration': 18, 'return_origin': 14, 'navigation_f1_f3': 14}
             or profile.get('mission46_required_source_files') != [str(p.resolve()) for p in required_source_files()]):
-        raise ValueError('V27 permits only exact270s repair prefix or1500s original46 repair; cutoff never equals navigation success')
+        raise ValueError('V28 permits only exact270s repair prefix or1500s original46 repair; cutoff never equals navigation success')
     return profile

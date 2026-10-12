@@ -2,12 +2,12 @@
 """Own one actual SLAM/SCAN cascade CPU Teacher run; simulation only.
 
 Prepare without ROS/Gazebo:
-  python3 -B navigation/path_admission_v27/run.py --profile repair_prefix270 --label V27_prepare270 --prepare-only
+  python3 -B navigation/path_admission_v28_capture/run.py --profile repair_prefix270 --label V28_prepare270 --prepare-only
 Run after source review (root/user only):
-  python3 -B navigation/path_admission_v27/run.py --profile repair_prefix270 --label V27_repair270 --domain 91
+  python3 -B navigation/path_admission_v28_capture/run.py --profile repair_prefix270 --label V28_capture270 --domain 91
 Root first evaluates the270s prefix; repair_original46 repeats the original
 1500s mission only when root judges the prefix useful. Both exact profiles are
-source-bound in one V27 gate; no historical full46 pass is inherited.
+source-bound in one V28 gate; no historical full46 pass is inherited.
 The ROS/configuration interpreter is system Python. --cpu-python selects the
 already tested PyTorch interpreter for the CPU-only Actor: system Python here
 has ROS but does not have torch. No dependency installation or RL process edit.
@@ -86,7 +86,7 @@ def validate_profile(p):
     from clock_hold import CONTRACT
     if p.get('control_clock_contract')!=CONTRACT:raise ValueError('Prospective exact-zero clock hold contract differs')
     if p.get('diagnostic_scope',{}).get('detail_window_sim_s')!=[0,0]:
-        raise ValueError('V27 steady recording comparison requires detail window[0,0]')
+        raise ValueError('V28 steady recording comparison requires detail window[0,0]')
     from corridor_preflight import verify_preflight
     from full46_launch_contract import validate_full46
     validate_full46(p,HERE)
@@ -519,7 +519,7 @@ def execute(run,plan):
 def main():
     ap=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--profile',required=True,help='New closed-loop profile name or JSON path')
-    ap.add_argument('--label',default='V27_repair_prefix270');ap.add_argument('--domain','--ros-domain',type=int,default=86)
+    ap.add_argument('--label',default='V28_capture_prefix270');ap.add_argument('--domain','--ros-domain',type=int,default=86)
     ap.add_argument('--cpu-python',type=Path,default=DEFAULT_CPU_PYTHON)
     ap.add_argument('--real-time-factor',type=float,default=1.)
     ap.add_argument('--run-storage-root',type=Path,default=None,help='Optional dedicated V19 root declared in run_storage.py; default project/runs')

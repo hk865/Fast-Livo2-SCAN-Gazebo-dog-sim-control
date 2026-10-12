@@ -1,4 +1,4 @@
-"""Independent source-bound V27 repair gate; frozen V25/V26 remain evidence."""
+"""Independent source-bound V28 repair gate; frozen V25/V26 remain evidence."""
 from pathlib import Path
 import hashlib
 import json
@@ -6,10 +6,10 @@ import subprocess
 import sys
 
 if not __debug__:
-    raise RuntimeError('V27 preflight forbids optimized Python')
+    raise RuntimeError('V28 preflight forbids optimized Python')
 
-GATE_NAME = 'PATH_ADMISSION_V27_PREFLIGHT.json'
-REVIEW_NAME = 'PATH_ADMISSION_V27_SOURCE_REVIEW.json'
+GATE_NAME = 'PATH_ADMISSION_V28_CAPTURE_PREFLIGHT.json'
+REVIEW_NAME = 'PATH_ADMISSION_V28_CAPTURE_SOURCE_REVIEW.json'
 REQUIRED = frozenset(('original_V25_preflight_still_valid',
     'original_V26_receipts_bytes_unchanged', 'profile_normal_form_exactly_V25',
     'only_path_admission_algorithm_changed', 'whole_curve_route_fence_before_commit',
@@ -28,7 +28,7 @@ def sha(path):
 def evidence_files(here):
     path = Path(here)/GATE_NAME
     if not path.is_file():
-        raise RuntimeError('V27 has no independent source-bound repair receipt')
+        raise RuntimeError('V28 has no independent source-bound repair receipt')
     d = json.loads(path.read_text())
     return [path, *[Path(x) for x in d.get('verified_inputs_sha256', {})]]
 
@@ -60,7 +60,7 @@ def verify_original_v26(here):
     """The copied old receipts are immutable historical references, never gates."""
     original = Path(here).resolve().parent/'height_diagnostic_v26'
     for name in ('DIAGNOSTIC_V26_PREFLIGHT.json', 'DIAGNOSTIC_V26_SOURCE_REVIEW.json'):
-        if sha(Path(here)/name) != sha(original/name):
+        if sha(Path(here)/'historical_receipts'/name) != sha(original/name):
             raise RuntimeError('Frozen original V26 receipt copy changed: '+name)
 
 
@@ -74,6 +74,7 @@ def required_review_files(here, profile=None):
     from scan_workspace import evidence_files as scan_evidence_files
     required = list(here.glob('*.py')) + list((here/'profiles').glob('*.json'))
     required += [p for p in here.glob('*.json') if p.name != GATE_NAME]
+    required += list((here/'historical_receipts').glob('*.json'))
     required += [here/'README.md', baseline_profile_path(here),
         here.parent/'corridor_tracking_v25_terrain_event/TERRAIN_EVENT_V25_PREFLIGHT.json',
         *required_source_files(), *geometry_helper_files(here)]
@@ -99,8 +100,8 @@ def verify_preflight(here, profile):
     verify_original_v25(here)
     verify_original_v26(here)
     d = json.loads((here/GATE_NAME).read_text())
-    if (d.get('schema') != 'path_admission_v27_preflight/v1'
-            or d.get('status') != 'PASS_LIMITED_PATH_ADMISSION_EXPERIMENT'
+    if (d.get('schema') != 'path_admission_v28_capture_preflight/v1'
+            or d.get('status') != 'PASS_LIMITED_CAPTURE_HANDOFF_EXPERIMENT'
             or d.get('candidate_root') != str(here) or d.get('allowed') is not True
             or d.get('actual_navigation_verified') is not False
             or d.get('historical_pass_inherited') is not False
@@ -109,18 +110,18 @@ def verify_preflight(here, profile):
             or d.get('code_review_complete') is not True
             or set(d.get('checks', {})) != REQUIRED
             or any(value is not True for value in d['checks'].values())):
-        raise RuntimeError('Incomplete independent V27 path-admission source review')
+        raise RuntimeError('Incomplete independent V28 path-admission source review')
     review = json.loads((here/REVIEW_NAME).read_text())
-    if (review.get('schema') != 'path_admission_v27_source_review/v1'
+    if (review.get('schema') != 'path_admission_v28_capture_source_review/v1'
             or review.get('candidate_root') != str(here)
-            or review.get('status') != 'PASS_LIMITED_PATH_ADMISSION_SOURCE_REVIEW'
+            or review.get('status') != 'PASS_LIMITED_CAPTURE_HANDOFF_SOURCE_REVIEW'
             or review.get('actual_navigation_verified') is not False
             or review.get('historical_pass_inherited') is not False
             or review.get('root_review_complete') is not True
             or review.get('code_review_complete') is not True
             or set(review.get('checks', {})) != REQUIRED
             or any(value is not True for value in review['checks'].values())):
-        raise RuntimeError('V27 source review is pending or incomplete')
+        raise RuntimeError('V28 source review is pending or incomplete')
     bindings = d.get('verified_inputs_sha256')
     required = required_review_files(here, profile)
     evidence = review.get('review_evidence_sha256')
@@ -128,10 +129,10 @@ def verify_preflight(here, profile):
             or any(str(item) not in bindings for item in required)
             or not isinstance(evidence, dict) or not evidence
             or any(bindings.get(name) != digest for name, digest in evidence.items())):
-        raise RuntimeError('V27 candidate/configuration/binary/review evidence bindings incomplete')
+        raise RuntimeError('V28 candidate/configuration/binary/review evidence bindings incomplete')
     for name, digest in bindings.items():
         if not Path(name).is_absolute() or sha(name) != digest:
-            raise RuntimeError('V27 source or review evidence changed: '+name)
+            raise RuntimeError('V28 source or review evidence changed: '+name)
     if profile != json.loads((here/'profiles'/profile_name(profile)).read_text()):
-        raise RuntimeError('Only exact source-bound V27 repair profiles may run')
+        raise RuntimeError('Only exact source-bound V28 repair profiles may run')
     return d

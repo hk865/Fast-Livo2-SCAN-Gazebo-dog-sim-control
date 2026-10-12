@@ -110,7 +110,7 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "path_admission_v27",
+  "controller_selector": "path_admission_v28_capture",
   "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v9_clock_hold",
   "cascade": {
     "desired_speed": 0.2,
@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V27 independent steady-recording comparison; five production repair files remain byte-identical to frozen V27. Detail window[0,0] retains all-time state/IMU/stage/timing recording and omits dense H/R/plane/pixel details, whose absence is UNVERIFIED. This isolates recording load; the R1 IPC failure root cause is not established. Original V25 route, regions, gains, stops, TTL, Actor, observations, frontend and planner stay unchanged. Both270/1500s profiles retain48GiB cap/90GiB start reserve/30GiB runtime reserve and original1500s mission global cap. Cutoff is never success; no historical navigation result is adopted.",
+  "prospective_change": "V28 independent capture/exhaustion handoff repair. Only controller.py and shared_controller.py production behavior changes: internal same-path exhaustion receipts, per-condition live-source evidence, safe replacement through all existing acceptance gates, and clearing stale capture only after committed admission. Existing valid capture paths remain retained. Fixed46 goals,3D/control arrival,dwell,90s region deadlines,300ms source guards,200ms native IPC, gains, Teacher, frontend and planner remain unchanged. State/P/IMU/stage/timing recording stays on,detail[0,0] omits dense H/R/plane/point/pixel details. Repair does not correct SLAM height or prove46 navigation. No historical acceptance inherited.",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -203,7 +203,7 @@
       0
     ],
     "navigation_outcome_is_not_full_route_pass": true,
-    "purpose": "V27 byte-identical path admission with steady state/IMU/stage/timing recording; detail window[0,0] omits dense H/R/plane/pixel evidence (UNVERIFIED), isolating recording load without an I/O root-cause claim",
+    "purpose": "V28 capture/exhaustion handoff only; state/P/IMU/stage/timing recording enabled,detail[0,0] omits dense H/R/plane/point/pixel detail. No height/46 navigation pass inferred",
     "solver_diagnostics_outside_detail": "NOT_COLLECTED, not zero",
     "arrival_gate_source": "original46 three_platform_body_arrival_v2, not inherited32 uniform discs"
   },
@@ -227,7 +227,7 @@
     "long_hold_integral_and_dwell": "protect_reset",
     "source_receipt_refresh_permitted": false
   },
-  "profile_version": "path_admission_v27",
+  "profile_version": "path_admission_v28_capture",
   "software_multicore": {
     "schema": "fastlivo_independent_LIO4_VIO_patch1/v1",
     "lio_translation_unit": "voxel_map.cpp",
@@ -3536,13 +3536,13 @@
   "requires_original_dynamic_obstacle": true,
   "requires_bidirectional_layer_switches": true,
   "mission46_required_source_files": [
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_profile.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_contract.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_runtime_evidence.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/mission46_obstacle_runtime.py",
-    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v27_steady/path_admission.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46_profile.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46_contract.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46_runtime_evidence.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/mission46_obstacle_runtime.py",
+    "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/path_admission_v28_capture/path_admission.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/scenario.json",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/simulation/obstacle_trigger.py",
     "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/mission/state_machine.py",
@@ -3573,7 +3573,7 @@
     "snapshot_request_period_s": 0.5
   },
   "path_admission_contract": {
-    "schema": "path_admission_v27_launch/v1",
+    "schema": "path_admission_v28_capture_launch/v1",
     "profile_name": "repair_original46.json",
     "simulation_only": true,
     "runtime_cutoff_sim_elapsed_s": 1500.0,
@@ -3582,7 +3582,7 @@
     "full46_verified": false,
     "actual_navigation_verified": false,
     "historical_pass_inherited": false,
-    "algorithm_change": "SCAN path admission only",
+    "algorithm_change": "Only capture/exhaustion handoff after original continuous proof and existing acceptance gates",
     "backend_connected": false,
     "original_46_region_definitions_and_arrival_gates_unchanged": true,
     "original_mission_global_cap_s": 1500.0
