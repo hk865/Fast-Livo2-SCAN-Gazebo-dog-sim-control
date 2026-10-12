@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scope": "Prospective user-requested step ascent and continued forward locomotion retest; historical42/body-height-ratio acceptance preserved separately",
+  "tests": ["step05_continue", "step10_continue"],
+  "repetitions": 3,
+  "checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "physics_dt_s": 0.005,
+  "policy_hz": 50,
+  "fixture": {"front_x_m":7, "back_x_m":13, "center_y_m":-0.7, "width_m":1.4, "height_m":[0.05,0.1], "change_from_original":"Tread length2m→6m; same front edge, height and width; no robot/body assistance"},
+  "timing": {"bootstrap_pd_s":0.1, "command_start_s":3, "forward_command_end_s":22, "end_s":30, "stand_stop_start_s":26},
+  "command": {"body_vx_mps":0.3, "body_vy_mps":0, "yaw_radps":0, "slew_acceleration":[0.6,0.6,0.8]},
+  "ascent": {"four_named_feet_required":true, "actual_top_contact_xyz_required":true, "contact_xy_margin_m":0.005, "top_contact_z_tolerance_m":0.015, "minimum_abs_normal_z":0.8, "each_foot_continuous_top_support_s":0.1, "max_native_sample_gap_s":0.005001, "must_occur_during_active_command":true},
+  "continuation": {"base_start_after_front_m":0.5, "min_forward_progress_m":1.0, "command_must_remain_active":true, "min_duration_s":3.0, "rolling_window_s":0.5, "minimum_world_forward_mean_mps":0.05, "minimum_positive_window_fraction":0.9, "must_remain_inside_tread":true, "maximum_unsupported_s":0.3},
+  "safety": {"max_abs_roll_pitch_rad":0.65, "minimum_body_above_support_m":0.18, "body_contact_allowed":false, "latched_fault_allowed":false},
+  "stand_stop": {"translation_drift_m":0.15,"yaw_drift_rad":0.2,"linear_rms_mps":0.08,"yaw_rate_rms_radps":0.1,"continuous_teacher_required":true,"final_top_support_required":true,"simultaneous_four_foot_top_support_s":0.1},
+  "world_base_height_gain": {"role":"diagnostic_only","used_as_pass_gate":false,"reason":"World base height combines ground rise and posture change; step capability is measured with feet support and sustained actual progress"},
+  "observation_source": "Gazebo privileged physics and same archived187 static SDF rays; no SLAM/navigation claim",
+  "camera": {"actual_gazebo_overview_hz":10,"archive_stride":1,"synthetic_frames":false}
+}

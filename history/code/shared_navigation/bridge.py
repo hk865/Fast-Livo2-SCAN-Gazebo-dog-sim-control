@@ -45,8 +45,16 @@ def check_acceptance(path):
     levels = data.get('levels') if isinstance(data, dict) else None
     if not isinstance(levels, dict) or not all(passed(levels.get(k)) for k in ('motion', 'sim2sim')):
         raise RuntimeError('Navigation refused: runs/acceptance.json must explicitly pass both levels.motion and levels.sim2sim')
+    if data.get('publication') != 'final':
+        raise RuntimeError('Navigation refused: acceptance must be a final reviewed receipt')
+    scene = data.get('additional_scene_gate', {})
+    if scene.get('status') != 'passed':
+        raise RuntimeError('Navigation refused: original scene gate is not passed')
+    navigation = data.get('navigation', {})
+    if navigation.get('allowed') is not True or navigation.get('truth_navigation_used') is not False:
+        raise RuntimeError('Navigation refused: aggregate does not permit a SLAM-only navigation run')
     model_hash = data.get('checkpoint_sha256')
-    if model_hash is not None and model_hash != FROZEN_SHA:
+    if model_hash != FROZEN_SHA:
         raise RuntimeError('Navigation refused: acceptance refers to another checkpoint')
     return {'path': str(path.resolve()), 'sha256': hashlib.sha256(raw).hexdigest(),
             'levels': {key: levels[key] for key in ('motion', 'sim2sim')},

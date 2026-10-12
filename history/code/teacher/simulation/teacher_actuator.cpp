@@ -57,6 +57,9 @@ static void Array(std::ostream &out, const std::array<T, N> &a) {
 static void Vector(std::ostream &out, const gz::math::Vector3d &v) {
   out << '[' << v.X() << ',' << v.Y() << ',' << v.Z() << ']';
 }
+static void MessageVector(std::ostream &out, const gz::msgs::Vector3d &v) {
+  out << '[' << v.x() << ',' << v.y() << ',' << v.z() << ']';
+}
 
 class TeacherActuator final : public gz::sim::System,
     public gz::sim::ISystemConfigure, public gz::sim::ISystemPreUpdate {
@@ -261,7 +264,39 @@ class TeacherActuator final : public gz::sim::System,
         for (double depth : contact.depth()) maxDepth = std::max(maxDepth, depth);
         log << "{\"group\":" << group << ",\"a\":" << Quote(contact.collision1().name())
             << ",\"b\":" << Quote(contact.collision2().name()) << ",\"points\":" << contact.position_size()
-            << ",\"max_depth_m\":" << maxDepth << '}';
+            << ",\"max_depth_m\":" << maxDepth
+            << ",\"geometry_source\":\"actual gz.msgs.Contact fields; absent fields remain empty\""
+            << ",\"positions_world\":[";
+        for (int i=0; i<contact.position_size(); ++i) {
+          if (i) log << ',';
+          MessageVector(log, contact.position(i));
+        }
+        log << "],\"normals_world\":[";
+        for (int i=0; i<contact.normal_size(); ++i) {
+          if (i) log << ',';
+          MessageVector(log, contact.normal(i));
+        }
+        log << "],\"depths_m\":[";
+        for (int i=0; i<contact.depth_size(); ++i) { if (i) log << ','; log << contact.depth(i); }
+        log << "],\"wrenches_raw\":[";
+        for (int i=0; i<contact.wrench_size(); ++i) {
+          if (i) log << ',';
+          const auto &w=contact.wrench(i);
+          log << "{\"body_1_name\":" << Quote(w.body_1_name()) << ",\"body_2_name\":" << Quote(w.body_2_name());
+          auto rawWrench=[&](const auto &value) {
+            log << "{\"force\":";
+            if (value.has_force()) MessageVector(log,value.force()); else log << "null";
+            log << ",\"torque\":";
+            if (value.has_torque()) MessageVector(log,value.torque()); else log << "null";
+            log << '}';
+          };
+          log << ",\"body_1_wrench\":";
+          if (w.has_body_1_wrench()) rawWrench(w.body_1_wrench()); else log << "null";
+          log << ",\"body_2_wrench\":";
+          if (w.has_body_2_wrench()) rawWrench(w.body_2_wrench()); else log << "null";
+          log << '}';
+        }
+        log << "],\"wrench_frame_scope\":\"raw message body wrench fields; no inferred vertical load measurement\"}";
       }
     }
     log << "]}\n";

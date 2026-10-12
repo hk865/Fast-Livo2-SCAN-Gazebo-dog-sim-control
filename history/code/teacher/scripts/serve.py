@@ -234,6 +234,13 @@ class Dashboard:
         return {'available': True, 'run_id': directory.name, 'selected': run,
                 'state': read_json(state_path), 'state_age_s': state_age,
                 'summary': read_json(directory / 'summary.json'),
+                'step_functional': read_json(directory / 'summary_functional.json'),
+                'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
+                           'mp4': (directory / 'frame_replay.mp4').is_file(),
+                           'gif': (directory / 'frame_replay.gif').is_file(),
+                           'manifest': read_json(directory / 'step_retest_evidence_manifest.json'),
+                           'scope': 'Archived actual Gazebo RGB in sensor timestamp order; no interpolated or synthesized frames'},
+                'step_plot': (directory / 'step_functional.png').is_file(),
                 'acceptance': read_json(self.runs / 'acceptance.json'),
                 'telemetry': self.telemetry.read(directory / 'telemetry.jsonl'),
                 'frame': {'available': frame is not None,
@@ -250,12 +257,14 @@ def handler_for(dashboard):
             if len(args) < 2 or str(args[1]) not in {'200', '304'}:
                 super().log_message(format, *args)
 
-        def send(self, data, content_type='application/json; charset=utf-8', status=200):
+        def send(self, data, content_type='application/json; charset=utf-8', status=200, headers=None):
             self.send_response(status)
             self.send_header('Content-Type', content_type)
             self.send_header('Content-Length', str(len(data)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
+            for key, value in (headers or {}).items():
+                self.send_header(key, value)
             self.end_headers()
             try:
                 self.wfile.write(data)
@@ -265,6 +274,37 @@ def handler_for(dashboard):
         def json(self, value, status=200):
             data = json.dumps(safe_json(value), ensure_ascii=False, allow_nan=False, default=str).encode('utf-8')
             self.send(data, status=status)
+
+        def media(self, path, content_type):
+            if path is None or dashboard.inside(path) is None or not path.is_file():
+                self.json({'error': 'No recorded media'}, 404)
+                return
+            try:
+                size = path.stat().st_size
+                start, end, status = 0, size - 1, 200
+                headers = {'Accept-Ranges': 'bytes'}
+                value = self.headers.get('Range')
+                if value:
+                    # One byte range is enough for read-only HTML video seeking.
+                    import re
+                    match = re.fullmatch(r'bytes=(\d*)-(\d*)', value.strip())
+                    if not match or not any(match.groups()):
+                        self.send(b'', content_type, 416, {'Content-Range': f'bytes */{size}'})
+                        return
+                    first, last = match.groups()
+                    if first:
+                        start = int(first); end = min(size - 1, int(last)) if last else size - 1
+                    else:
+                        start = max(0, size - int(last))
+                    if start > end or start >= size:
+                        self.send(b'', content_type, 416, {'Content-Range': f'bytes */{size}'})
+                        return
+                    status = 206; headers['Content-Range'] = f'bytes {start}-{end}/{size}'
+                with path.open('rb') as stream:
+                    stream.seek(start); payload = stream.read(end - start + 1)
+                self.send(payload, content_type, status, headers)
+            except OSError:
+                self.json({'error': 'Recorded media changed while reading'}, 404)
 
         def do_GET(self):
             parsed = urlsplit(self.path)
@@ -290,6 +330,16 @@ def handler_for(dashboard):
                     self.send(frame.read_bytes(), 'image/png' if frame.suffix == '.png' else 'image/jpeg')
                 except OSError:
                     self.json({'error': 'Frame changed while reading'}, 404)
+            elif parsed.path == '/api/replay':
+                directory = dashboard.resolve(run)
+                kind = parse_qs(parsed.query).get('kind', ['mp4'])[0]
+                if kind not in {'mp4', 'gif'}:
+                    self.json({'error': 'Unsupported recorded media type'}, 400)
+                    return
+                self.media(directory / ('frame_replay.' + kind) if directory else None, 'video/mp4' if kind == 'mp4' else 'image/gif')
+            elif parsed.path == '/api/step_plot':
+                directory = dashboard.resolve(run)
+                self.media(directory / 'step_functional.png' if directory else None, 'image/png')
             else:
                 self.json({'error': 'Not found'}, 404)
 

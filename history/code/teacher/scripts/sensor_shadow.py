@@ -193,6 +193,8 @@ def make_node(rclpy, args, run, output, contract):
             self.reference_offset=0
             self.records = (output / 'shadow.jsonl').open('w', buffering=1)
             self.sensor_records = (output / 'sensor_samples.jsonl').open('w', buffering=1)
+            self.graph_records=(output/'publisher_graph.jsonl').open('w',buffering=1)
+            self.last_graph_wall=-math.inf;self.last_valid_graph=None
             self.subscribers = [self.create_subscription(Imu, TOPICS['imu'], self.imu, qos_profile_sensor_data),
                 self.create_subscription(Odometry, TOPICS['slam'], self.slam, qos_profile_sensor_data),
                 self.create_subscription(JointState, TOPICS['joints'], self.joints, qos_profile_sensor_data),
@@ -210,6 +212,17 @@ def make_node(rclpy, args, run, output, contract):
 
         def application_publishers(self):
             return [p.topic_name for p in self.publishers if p.topic_name not in ['/rosout','/parameter_events']]
+
+        def snapshot_graph(self,source):
+            before=time.monotonic();wall_ns=time.time_ns();graph={}
+            for key,topic in TOPICS.items():
+                try:graph[key]=[{'node_name':p.node_name,'node_namespace':p.node_namespace,'type':p.topic_type}for p in self.get_publishers_info_by_topic(topic)]
+                except Exception as error:graph[key]={'unavailable':str(error)}
+            snapshot={'source':source,'capture_started_monotonic_wall':before,'capture_finished_monotonic_wall':time.monotonic(),
+                      'capture_wall_unix_ns':wall_ns,'last_reference_world_sim_time':self.last_reference if math.isfinite(self.last_reference)else None,
+                      'publishers':graph,'valid':all(isinstance(v,list)for v in graph.values())}
+            self.graph_records.write(json.dumps(snapshot,allow_nan=False)+'\n');self.last_graph_wall=before
+            if snapshot['valid']:self.last_valid_graph=snapshot
 
         def add(self, key, message, **values):
             self.add_sample(key,message.header.stamp.sec*1000000000+message.header.stamp.nanosec,message.header.frame_id,**values)
@@ -446,6 +459,7 @@ def make_node(rclpy, args, run, output, contract):
         def tick(self):
             self.read_reference()
             now = time.monotonic()
+            if now-self.last_graph_wall>=1:self.snapshot_graph('normal_spin_tick')
             while self.pending and (now - self.pending[0][0] >= .1 or now - self.started >= args.duration):
                 _, reference = self.pending.popleft()
                 self.compare(reference)
@@ -468,15 +482,15 @@ def make_node(rclpy, args, run, output, contract):
                               'scaled_error_abs_max': np.max(np.abs(values), axis=0).tolist(),
                               'raw_rmse':np.sqrt(np.mean(np.asarray(self.raw_errors[name])**2,axis=0)).tolist(),
                               'raw_error_abs_max':np.max(np.abs(self.raw_errors[name]),axis=0).tolist()} for name, values in self.errors.items() if values}
-            graph={}
-            for key,topic in TOPICS.items():
-                try:graph[key]=[{'node_name':p.node_name,'node_namespace':p.node_namespace,'type':p.topic_type}for p in self.get_publishers_info_by_topic(topic)]
-                except Exception as error:graph[key]={'unavailable':str(error)}
+            self.snapshot_graph('finish_while_context_available')
+            graph=self.last_valid_graph['publishers']if self.last_valid_graph else {'status':'unverified_no_valid_graph_snapshot'}
             summary = {'status': 'shadow_unverified', 'policy_changed': False, 'navigation_validation': 'unverified',
                 'real_robot': 'unverified', 'ros_domain': args.ros_domain, 'reference_run': str(run),
                 'duration_wall_s': time.monotonic() - self.started, 'reference_rows': self.references,
                 'reference_parse_failures': self.reference_failures, 'sources': sources, 'metrics': metrics,
                 'ros_publisher_graph_at_finish':graph,'readonly_node_application_publishers':self.application_publishers(),
+                'publisher_graph_snapshot':None if self.last_valid_graph is None else {k:v for k,v in self.last_valid_graph.items()if k!='publishers'},
+                'publisher_graph_snapshot_age_wall_s':None if self.last_valid_graph is None else time.monotonic()-self.last_valid_graph['capture_finished_monotonic_wall'],
                 'timestamp_matching':'causal world_sim_time to exact ROS header nanoseconds; delayed audit wall age logged separately, never replaces simulation stamp',
                 'imu_orientation_reference':config,'imu_contract_source':'generated run/sensor_contract.json'if sensor_contract else 'legacy scenario fallback',
                 'sensor_contract_sha256':digest(run/'sensor_contract.json'),
@@ -490,6 +504,7 @@ def make_node(rclpy, args, run, output, contract):
             (output / 'summary.json').write_text(json.dumps(clean(summary), ensure_ascii=False, indent=2, allow_nan=False) + '\n')
             self.records.close()
             self.sensor_records.close()
+            self.graph_records.close()
             print(json.dumps(clean(summary), ensure_ascii=False, indent=2, allow_nan=False), flush=True)
     return Shadow()
 

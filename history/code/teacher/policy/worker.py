@@ -13,6 +13,7 @@ QDEFAULT=np.array([-.1,.8,-1.5,.1,.8,-1.5,-.1,1.,-1.5,.1,1.,-1.5])
 COMMANDS={'stand':[0,0,0],'forward':[.3,0,0],'backward':[-.3,0,0],
           'left':[0,.2,0],'right':[0,-.2,0],'turn_positive':[0,0,.3],'turn_negative':[0,0,-.3],
           'ramp_up':[.3,0,0],'ramp_down':[.3,0,0],'step05':[.3,0,0],'step10':[.3,0,0],
+          'step05_continue':[.3,0,0],'step10_continue':[.3,0,0],
           'walk_stop':[.3,0,0],'command_timeout':[.3,0,0], 'switch':[.3,0,0],
           'invalid_output':[.3,0,0],'worker_disconnect':[.3,0,0],'navigation':[0,0,0]}
 
@@ -36,10 +37,10 @@ def requested(test,t):
         elif t<13:cmd=[0,.2,0]
         elif t<18:cmd=[0,0,-.3]
         else:cmd=[0,0,0]
-    else:cmd=COMMANDS[test]if t<(14 if test.startswith('step')else 11) else [0,0,0]
+    else:cmd=COMMANDS[test]if t<(22 if test.endswith('_continue')else 14 if test.startswith('step')else 11) else [0,0,0]
     return np.array(cmd,dtype=float),'tracking' if any(cmd) else 'stop_transition'
 
-def duration(test):return 600. if test=='navigation' else 26. if test=='switch' else 25. if test.startswith('step') else 15. if test=='stand' else 18.
+def duration(test):return 600. if test=='navigation' else 30. if test.endswith('_continue') else 26. if test=='switch' else 25. if test.startswith('step') else 15. if test=='stand' else 18.
 
 def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
     """Read only SLAM/SCAN-gated command envelopes; stale input parks via policy."""
@@ -101,7 +102,10 @@ def main():
               'stop_strategy':'slew command to zero and continue Teacher closed loop; never freeze joint targets or replace action with zero',
               'bootstrap_PD_seconds':.1,'command_start_seconds':3.,'command_slew_acceleration':[.6,.6,.8],
               'physics_state_phase':'Gazebo PreUpdate reads previous Physics result; effective state time = world_sim_time - 0.005s',
-              'test_duration_s':duration(args.test),'command_end_s':14. if args.test.startswith('step')else 11.}
+              'test_duration_s':duration(args.test),'command_end_s':22. if args.test.endswith('_continue')else 14. if args.test.startswith('step')else 11.}
+    if args.test.endswith('_continue'):
+        metadata['functional_step_protocol']='tests/step_functional_protocol.json'
+        metadata['functional_step_scope']='Step ascent and continued forward walking; world base height gain is diagnostic only'
     if acceptance:metadata.update(command_source='SLAM/SCAN command file',acceptance=acceptance)
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)

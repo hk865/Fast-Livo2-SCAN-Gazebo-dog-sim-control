@@ -27,10 +27,14 @@ def resource():
 def main():
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
-    p.add_argument('--renderer',choices=['software','hardware'],default='software')
-    p.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre')
+    p.add_argument('--renderer',choices=['software','hardware'])
+    p.add_argument('--render-engine',choices=['ogre','ogre2'])
     args=p.parse_args();suite=[]
     if args.shadow and not args.sensors:p.error('--shadow requires --sensors; no unavailable input is fabricated')
+    # Sensor modes default to the actual verified graphics path. Bare physics
+    # keeps its prior environment and does not allocate a graphics context.
+    args.renderer=args.renderer or ('hardware'if args.sensors or args.camera_only else 'software')
+    args.render_engine=args.render_engine or ('ogre2'if args.renderer=='hardware'else 'ogre')
     for repeat in range(args.repeat):
         for test in args.tests:
             stamp=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')
@@ -38,7 +42,7 @@ def main():
             latest=ROOT/'runs/latest';tmp=ROOT/'runs/latest.tmp'
             if tmp.exists()or tmp.is_symlink():tmp.unlink()
             tmp.symlink_to(run.name);tmp.replace(latest)
-            terrain=test if test in ['ramp_up','ramp_down','step05','step10']else 'flat'
+            terrain=test if test in ['ramp_up','ramp_down','step05','step10','step05_continue','step10_continue']else 'flat'
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
             if args.sensors:prepare+=['--sensors']
@@ -68,7 +72,10 @@ def main():
                 env.pop('LIBGL_ALWAYS_SOFTWARE',None);env.pop('GALLIUM_DRIVER',None)
             renderer_env={key:env.get(key)for key in ['DISPLAY','WAYLAND_DISPLAY','LIBGL_ALWAYS_SOFTWARE','GALLIUM_DRIVER','__GLX_VENDOR_LIBRARY_NAME','__NV_PRIME_RENDER_OFFLOAD','CUDA_VISIBLE_DEVICES']}
             render_manifest={'mode':args.renderer,'engine':args.render_engine,'graphics_environment':renderer_env,
-                             'actor_device':'cpu','hardware_startup_ready_timeout_s':30 if args.renderer=='hardware'else None}
+                             'actor_device':'cpu','hardware_startup_ready_timeout_s':30 if args.renderer=='hardware'else None,
+                             'actual_ready_scope':'IMU/joints/clock/raw_lidar/vehicle_RGB/overview_RGB callbacks'if args.shadow else 'actual overview RGB; other sensor availability requires --shadow'}
+            if args.renderer=='software'and args.render_engine=='ogre'and(args.sensors or args.camera_only):
+                render_manifest['known_limitation']='Explicit diagnostic mode: historical software Ogre1 sensor runs SIGSEGV at natural Gazebo cleanup; not the default sensor path'
             (run/'rendering_manifest.json').write_text(json.dumps(render_manifest,indent=2)+'\n')
             worker_cmd=[str(PYTHON),str(ROOT/'policy/worker.py'),'--run',str(run),'--test',test,'--socket',env['TEACHER_SOCKET']]
             if args.noisy:worker_cmd+=['--noisy']
@@ -87,7 +94,7 @@ def main():
                     time.sleep(.05)
                 if args.sensors or args.camera_only:
                     bridge=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','--ros-args','-p','config_file:='+str(run/'sensor_bridge.yaml')],env=env,stdout=(run/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
-                    capture=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(run),'--topic','/demo/teacher/overview'],env=env,stdout=(run/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
+                    capture=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(run),'--topic','/demo/teacher/overview','--archive-stride','1'if test.endswith('_continue')else'5'],env=env,stdout=(run/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 if args.shadow:
                     shadow=subprocess.Popen([sys.executable,str(ROOT/'scripts/sensor_shadow.py'),'--run',str(run),'--output',str(run/'sensor_shadow'),'--duration','185','--ros-domain','79'],
                                             env=env,stdout=(run/'shadow.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
@@ -157,6 +164,10 @@ def main():
                           'training_process_untouched':True,'real_robot':False}
                 (run/'runtime_manifest.json').write_text(json.dumps(manifest,indent=2))
                 summary=evaluate(run);suite.append({'run':str(run),'summary':summary})
+                if test.endswith('_continue'):
+                    from evaluate_step_functional import evaluate as evaluate_functional
+                    functional=evaluate_functional(run)
+                    suite[-1]['functional_summary']=functional
                 print(json.dumps({'run':str(run),'test':test,'result':summary['tests'][0]},ensure_ascii=False),flush=True)
     (ROOT/'runs/suite_latest.json').write_text(json.dumps(suite,indent=2,ensure_ascii=False)+'\n')
 if __name__=='__main__':main()

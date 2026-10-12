@@ -385,6 +385,7 @@ def aggregate(runs, start=START, flat_reference=None, terrain_reference=None):
     history_failures = [entry for entry in entries if entry['failed']]
     failure_counts = Counter(category for entry in history_failures for category in entry['failure_categories'])
     overall = 'failed' if motion == 'failed' or interface == 'failed' or sim2sim == 'failed' or origin_status == 'failed' else 'incomplete'
+    may_launch_navigation = interface == motion == sim2sim == origin_status == 'passed'
     compact = lambda entry: {key: entry[key] for key in ('run_id', 'test', 'complete', 'interface', 'motion', 'formal',
         'excluded_from_formal', 'original_origin', 'reason', 'failure_categories', 'independent_process_ids', 'input_sha256', 'metrics', 'capture')}
     return {'schema_version': 2, 'status': overall, 'passed': False, 'checkpoint_sha256': SHA,
@@ -411,6 +412,9 @@ def aggregate(runs, start=START, flat_reference=None, terrain_reference=None):
         'sensor_shadow_diagnostics': [{'run_id': entry['run_id'], 'interface': entry['interface'], 'motion': entry['motion'],
             'summary': read(Path(entry['path']) / 'sensor_shadow/summary.json'),
             'summary_sha256': digest(Path(entry['path']) / 'sensor_shadow/summary.json'),
+            'phase_diagnostic': read(Path(entry['path']) / 'sensor_phase_diagnostic/summary.json'),
+            'phase_diagnostic_sha256': digest(Path(entry['path']) / 'sensor_phase_diagnostic/summary.json'),
+            'rendering_manifest': read(Path(entry['path']) / 'rendering_manifest.json'),
             'scope': 'Read-only real sensor shadow; raw LiDAR is not a registered SLAM cloud; no policy observation switch'}
             for entry in entries if (Path(entry['path']) / 'sensor_shadow/summary.json').exists()],
         'history': {'runs_total': len(entries), 'failed_runs_total': len(history_failures), 'formal_excluded_runs': sum(not entry['formal'] for entry in entries),
@@ -418,7 +422,8 @@ def aggregate(runs, start=START, flat_reference=None, terrain_reference=None):
             'failure_categories_overlap': dict(failure_counts), 'failure_runs': [compact(entry) for entry in history_failures],
             'all_runs': [compact(entry) for entry in entries]},
         'navigation': {'status': 'unverified', 'executed': False, 'truth_navigation_used': False,
-            'allowed': False, 'reason': 'Motion and complete Sim2Sim gates are not passed; no navigation integration executed',
+            'allowed': may_launch_navigation,
+            'reason': 'Motion and complete Sim2Sim/scene gates passed; SLAM navigation execution remains unverified' if may_launch_navigation else 'Motion, complete Sim2Sim or scene gate not passed; no navigation integration executed',
             'blocked_scenarios': ['original_origin'] if origin_status != 'passed' else [], 'required_regions': 46},
         'scope': 'Simulation only; privileged locomotion inputs. Ramp and low-step tests are not true stair traversal. No real-robot verification.',
         'aggregate_script_sha256': digest(Path(__file__)), 'source_protocol_sha256': digest(ROOT / 'tests/protocol.json')}
@@ -466,6 +471,8 @@ def markdown(report):
         '全部源文件SHA按轮次分组存入JSON。较晚worker版本只增强未执行的导航命令校验，传感器/渲染分支影响诊断轮；基准运动协议、物理、247构造与actor没有变化，此解释来自root协调记录，版本哈希不隐藏。',
         '分类是收据文本标签且可重叠。进程signal -11本身归为未知进程信号，不能独自推断渲染根因；未记录图像为unverified_missing。历史辅助停车、初始化和时间不足失败继续保留，后续通过不抹去旧失败。']
     lines += ['', '导航未执行、未验证；必须使用SLAM位置和实测点云，保持原46区域门槛。真机部署未验证，本任务不操作实体机器狗。坡道和低台阶结果不能写成真实楼梯通过。', '',
+        '部署射线XY边界1e-9扩张已修正；42轮40692实际记录状态的247构造回放差0，旧构造与旧记录也差0，回归收据保存在ray_boundary_correction。修正后原起点实际复测仍失稳，不能放行导航。', '',
+        '真实IMU/关节/LiDAR/RGB旁路在sensor_shadow_diagnostics记录，SLAM与注册点云缺失不补真值。软件Ogre1退出崩溃历史保留；最后NVIDIA/Ogre2真实带传感器前进停车运行全部退出0，Actor继续CPU，图形显存增量约156MiB。只证明该传感器运行，不证明策略观测替换或导航。', '',
         '完整逐轮哈希、对照窗口与数据差异见同目录验收JSON。此报告如标preview仅用于审阅，不能被启动器当正式放行收据。', '']
     return '\n'.join(lines)
 

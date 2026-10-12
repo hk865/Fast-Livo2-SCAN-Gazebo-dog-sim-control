@@ -14,9 +14,9 @@ def xml(p, e):
     E.indent(e); p.write_text(E.tostring(e, encoding='unicode')+'\n')
 def main():
     a=argparse.ArgumentParser(); a.add_argument('--output',type=Path,default=ROOT/'simulation/generated')
-    a.add_argument('--terrain',choices=['flat','ramp_up','ramp_down','step05','step10'],default='flat')
+    a.add_argument('--terrain',choices=['flat','ramp_up','ramp_down','step05','step10','step05_continue','step10_continue'],default='flat')
     a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true')
-    a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre');args=a.parse_args()
+    a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre2');args=a.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
     model=copy.deepcopy(E.parse(source).getroot().find('model'))
@@ -73,8 +73,8 @@ def main():
     w=world.find('world');w.set('name','teacher_demo')
     w.find('physics/max_step_size').text='.005'
     if args.sensors or args.camera_only:
-        # Ogre1 uses GLX llvmpipe. Ogre2 EGL device selection crashes Mesa
-        # against this NVIDIA device when software rendering is requested.
+        # Hardware Ogre2 completed actual full sensors and natural shutdown.
+        # Software Ogre1 is retained only as an explicit failed diagnostic.
         for engine in w.findall('plugin/render_engine'):engine.text=args.render_engine
     if not args.sensors and not args.camera_only:
         for wp in list(w.findall('plugin')):
@@ -82,21 +82,25 @@ def main():
     if args.sensors or args.camera_only:
         # A separate static, collision-free observer shows actual leg motion.
         # It is never part of the robot or the policy observation geometry.
-        overview_pose=[5,-3.2,1.7,0,.4,.95]
-        overview=E.fromstring(f'<model name="teacher_overview_camera"><static>true</static><pose>{" ".join(map(str,overview_pose))}</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>2</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>1.4</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
+        overview_pose=[8.5,-3.,1.4,0,.3,math.pi/2]if args.terrain.endswith('_continue')else [5,-3.2,1.7,0,.4,.95]
+        overview_rate=10 if args.terrain.endswith('_continue')else 2
+        overview_fov=1.8 if args.terrain.endswith('_continue')else 1.4
+        overview=E.fromstring(f'<model name="teacher_overview_camera"><static>true</static><pose>{" ".join(map(str,overview_pose))}</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>{overview_rate}</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>{overview_fov}</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
         w.append(overview)
     if args.terrain.startswith('step'):
-        height=.05 if args.terrain=='step05' else .1
-        step=E.fromstring(f'<model name="teacher_low_step"><static>true</static><pose>8 -.7 {height/2} 0 0 0</pose><link name="link"><collision name="collision"><geometry><box><size>2 1.4 {height}</size></box></geometry></collision><visual name="visual"><geometry><box><size>2 1.4 {height}</size></box></geometry><material><ambient>.8 .5 .2 1</ambient><diffuse>.8 .5 .2 1</diffuse></material></visual></link></model>')
+        height=.05 if args.terrain.startswith('step05') else .1
+        length=6 if args.terrain.endswith('_continue')else 2
+        center_x=7+length/2
+        step=E.fromstring(f'<model name="teacher_low_step"><static>true</static><pose>{center_x} -.7 {height/2} 0 0 0</pose><link name="link"><collision name="collision"><geometry><box><size>{length} 1.4 {height}</size></box></geometry></collision><visual name="visual"><geometry><box><size>{length} 1.4 {height}</size></box></geometry><material><ambient>.8 .5 .2 1</ambient><diffuse>.8 .5 .2 1</diffuse></material></visual></link></model>')
         w.append(step)
     w.append(model);xml(args.output/'world.sdf',world)
     sensor_contract={'schema_version':1,'renderer':args.render_engine if args.sensors or args.camera_only else None,
                      'scope':'read-only sensor diagnostics; privileged actor remains unchanged; no SLAM or navigation started',
                      'joint_states':{'gz_topic':'/demo/teacher/physical_joint_states','ros_topic':'/demo/control/measured_joint_states',
-                         'publisher':'gz::sim::systems::JointStatePublisher','reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
+                         'publisher':'gz::sim::systems::JointStatePublisher','enabled':args.sensors,'reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
     if args.sensors or args.camera_only:
         sensor_contract['overview']={'gz_topic':'/demo/teacher/overview','ros_topic':'/demo/teacher/overview','frame':'teacher_overview_frame',
-                                     'world_pose':overview_pose,'rate_hz':2,'width':640,'height':480,'horizontal_fov':1.4,'collision_geometry':False}
+                                     'world_pose':overview_pose,'rate_hz':overview_rate,'width':640,'height':480,'horizontal_fov':overview_fov,'collision_geometry':False}
     for link in model.findall('link'):
         for sensor in link.findall('sensor'):
             kind=sensor.get('type')
@@ -151,6 +155,9 @@ def main():
           'world_sha256':sha(args.output/'world.sdf'),'true_stairs':False}
     meta['sensor_contract_sha256']=sha(args.output/'sensor_contract.json')
     meta['sensor_bridge_sha256']=sha(args.output/'sensor_bridge.yaml')
+    if args.terrain.endswith('_continue'):
+        meta['step_fixture']={'front_x':7,'back_x':13,'center_y':-.7,'width_m':1.4,'height_m':height,
+                              'scope':'Same front edge/height/width as original, tread extended from2m to6m for continuous walking retest'}
     (args.output/'asset_manifest.json').write_text(json.dumps(meta,indent=2)+'\n')
     print(json.dumps(meta))
 if __name__=='__main__':main()
