@@ -62,6 +62,10 @@ def main():
     world=E.parse(DEMO/'simulation/generated/three_floors.sdf').getroot()
     w=world.find('world');w.set('name','teacher_demo')
     w.find('physics/max_step_size').text='.005'
+    if args.camera_only:
+        # Ogre1 uses GLX llvmpipe. Ogre2 EGL device selection crashes Mesa
+        # against this NVIDIA device when software rendering is requested.
+        for engine in w.findall('plugin/render_engine'):engine.text='ogre'
     if not args.sensors and not args.camera_only:
         for wp in list(w.findall('plugin')):
             if any(n in wp.get('name','') for n in ['Sensors','Imu']):w.remove(wp)
