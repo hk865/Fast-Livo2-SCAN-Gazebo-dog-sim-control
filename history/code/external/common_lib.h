@@ -76,6 +76,8 @@ struct MeasureGroup
   };
 };
 
+
+#include "point_identity.h"
 struct LidarMeasureGroup
 {
   double lidar_frame_beg_time;
@@ -84,6 +86,7 @@ struct LidarMeasureGroup
   PointCloudXYZI::Ptr lidar;
   PointCloudXYZI::Ptr pcl_proc_cur;
   PointCloudXYZI::Ptr pcl_proc_next;
+  std::vector<fastlivo_identity::Ref> identity_cur, identity_next;
   deque<struct MeasureGroup> measures;
   EKF_STATE lio_vio_flg;
   int lidar_scan_index_now;

@@ -5,6 +5,7 @@ import json,time
 from collections import OrderedDict
 from std_msgs.msg import String
 from known_scene_adapter import stamp_ns
+from point_provenance import verify_corrected
 
 class KnownSceneInputMixin:
     def __init__(self,*args,**kwargs):
@@ -41,6 +42,13 @@ class KnownSceneInputMixin:
         slot[role]=value
         while len(self.known_scene_pending)>24:self.known_scene_pending.popitem(last=False)
         if all(k in slot for k in ('body','cloud','metadata')):
+            try:token=verify_corrected(slot['body'],slot['cloud'],slot['metadata'])
+            except (ValueError,KeyError,TypeError):
+                del self.known_scene_pending[ns];return
+            previous=getattr(self,'known_scene_commit_token',None)
+            if previous is not None and (token[0]!=previous[0] or token[1]<=previous[1]):
+                del self.known_scene_pending[ns];return
+            self.known_scene_commit_token=token
             self.known_scene_inputs={**slot['metadata'],'received_monotonic_wall':time.monotonic()}
             # Single executor callback: no control timer between the two inputs.
             self.known_scene_callbacks['body'](slot['body'])
@@ -92,6 +100,7 @@ class KnownSceneInputMixin:
             and all(0<=now-v['received_monotonic_wall']<KNOWN_BUNDLE_FRESHNESS_S for v in (d,s,e))
             and d.get('control_allowed') and not s.get('correction_transition') and s.get('initialized')
             and e.get('ready') and d['generation']==s['generation']==e['generation']
+            and d.get('source_commit',{}).get('explicit_message_commit_token')is True
             and self.pose_stamp==self.cloud_stamp==d['source_ns'])
 
     def _control_candidate(self,now):

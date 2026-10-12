@@ -27,6 +27,7 @@ from mission46_runtime_evidence import (FileTail, native_ns, checked_json, seal,
     native_projection, status_projection)
 from request import SceneAxisRegistration, StartupDeadline
 from known_scene_route_registration import KnownSceneAxisRegistration,ROUTE_REFERENCE
+from known_scene_hold_guard import dynamic_payload_ready
 from runtime_io import EvidenceWriter, latest_sensor_qos
 from compact_archives import make_evidence_writer
 
@@ -400,6 +401,7 @@ def build_node(run, scope, profile):
                         if (stage=='navigating' and self.mission.dynamic_receipt is None
                                 and self.obstacle.get('visible_phase')=='clear'
                                 and self.nav.get('aligned_obstacle_resumes',0)>0
+                                and dynamic_payload_ready(run)
                                 and ns/1e9-self.dynamic_try_sim>=1.):
                             self.dynamic_try_sim=ns/1e9
                             rid=self.mission.original.current_request

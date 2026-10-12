@@ -122,16 +122,25 @@ class GuardReplayBuffer:
         if len(self.rows)>=512:raise ValueError('Complete native replay binding window exceeds allowance')
         binding=_binding(row);key=_array_key(binding);arrays=self.retained()
         source=np.asarray(self.node.guard_cloud)
-        if source.dtype!=np.dtype('<f8') or not source.flags.c_contiguous or source.ndim!=2 or source.shape[1]!=3:
-            raise ValueError('Actual native replay expects the original contiguous float64 XYZ layout')
-        required=source.nbytes
-        if required>BUFFER_LIMIT_B or sum(x.nbytes for x in arrays.values())+(0 if key in arrays else required)>BUFFER_LIMIT_B:
+        if source.dtype not in (np.dtype('<f4'),np.dtype('<f8')) or source.ndim!=2 or source.shape[1]!=3:
+            raise ValueError('Actual native replay requires original float32/float64 XYZ values')
+        # Native collision evaluation has already consumed this exact source.
+        # Only the evidence copy follows the receipt's existing LE float64,
+        # C-order hash format; never replace the live cloud or its input receipt.
+        required=source.size*8
+        normalize=source.dtype!=np.dtype('<f8') or not source.flags.c_contiguous
+        allocation=required if normalize or key not in arrays else 0
+        if required>BUFFER_LIMIT_B or sum(x.nbytes for x in arrays.values())+allocation>BUFFER_LIMIT_B:
             raise ValueError('Complete native replay array window exceeds allowance; no truncation')
+        if not np.isfinite(source).all():
+            raise ValueError('Actual native replay requires finite XYZ values')
+        canonical=np.array(source,dtype='<f8',order='C',copy=True) if normalize else source
+        if hashlib.sha256(memoryview(canonical.reshape(-1)).cast('B')).hexdigest()!=row['filtered_xyz_float64_sha256']:
+            raise ValueError('Actual native replay cloud/hash differs')
         cloud=arrays.get(key)
         if cloud is None:
-            cloud=np.array(source,dtype='<f8',copy=True)
-        if hashlib.sha256(memoryview(source.reshape(-1)).cast('B')).hexdigest()!=row['filtered_xyz_float64_sha256']:
-            raise ValueError('Actual native replay cloud/hash differs')
+            cloud=canonical if normalize else np.array(source,dtype='<f8',order='C',copy=True)
+            cloud.setflags(write=False)
         item=(binding,cloud);self.rows.append(item)
         if self.first is None and row['union_result']['blocked'] and not row['obstacle_hold_before']:
             self.first=item
@@ -166,7 +175,11 @@ class GuardReplayBuffer:
             actual_allocated=directory.stat().st_blocks*512+sum(x.stat().st_blocks*512 for x in directory.iterdir())+((len(data.encode())+block-1)//block)*block
             if max(actual_logical,actual_allocated)>ARRAY_LIMIT_B:
                 raise ValueError('Actual complete replay payload allocation exceeds allowance')
-            p.write_text(data)
+            pending=p.with_name(p.name+'.pending')
+            with pending.open('x') as stream:
+                stream.write(data);stream.flush();os.fsync(stream.fileno())
+            if p.exists():raise ValueError('Native replay manifest would overwrite evidence')
+            pending.replace(p)
         node.evidence.enqueue(archive)
 
 
@@ -295,3 +308,8 @@ def replay_payload(run,row):
     if not p.is_relative_to(run.resolve()) or _file_sha(p)!=item['array_sha256']:
         raise ValueError('Native replay payload path/hash differs')
     return item['array_file']
+
+
+def dynamic_payload_ready(run):
+    """Publication readiness only; the original verifier owns all acceptance."""
+    return (Path(run)/'r57_dynamic_guard_payloads.json').is_file()
