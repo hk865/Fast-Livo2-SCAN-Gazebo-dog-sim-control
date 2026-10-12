@@ -227,6 +227,17 @@ def prepare(run,args):
           'runtime_commands':{'worker':[str(args.cpu_python.resolve()),'-B',str(HERE/'worker.py'),'--run',str(run)],
                               'navigation_stack':['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)]},
           'limitations':'Plan is launch provenance only, never a route/SLAM/Sim2Sim pass'}
+    contract_path=getattr(args,'shadow_sample_contract',None)
+    if contract_path is not None:
+        contract_path=Path(contract_path).resolve()
+        if contract_path.stat().st_size>65536:raise ValueError('Oversized bounded sampling contract')
+        c=json.loads(contract_path.read_text())
+        if c.get('schema')!='go2_R6_bounded_eight_observation_contract/v1' or c['disk_contract']['total_allocated_and_logical_cap_bytes']!=24*1024**2:
+            raise ValueError('Exact user-approved24MiB shadow contract required')
+        if c.get('control_allowed')is not False:raise ValueError('Shadow must not control')
+        plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
+            'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
+        plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
     write_new(run/'runtime_plan.json',plan)
     return plan
 
@@ -352,10 +363,14 @@ def stop_owned(proc,saved,parent_first=False):
     if proc is None:return {'started':False}
     if saved is None:return {'started':True,'identity_unavailable':True,'sent_signals':[],'returncode':proc.poll()}
     sent=[];parent=identity(proc.pid)
+    if saved.get('ownership_token'):
+        from owned_guardian import validated_members
+        validated_members(saved)
     if parent and parent['start_ticks']!=saved['start_ticks']:
         return {'identity_mismatch':True,'sent_signals':[],'returncode':proc.poll()}
     for sig,timeout in ((signal.SIGINT,15 if parent_first else 5),(signal.SIGTERM,5),(signal.SIGKILL,3)):
         if not group_members(saved['pgid']):break
+        if saved.get('ownership_token'):validated_members(saved)
         try:
             if parent_first and sig==signal.SIGINT and proc.poll()is None:os.kill(proc.pid,sig)
             else:os.killpg(saved['pgid'],sig)
@@ -434,19 +449,21 @@ def execute(run,plan):
     write_new(run/'effective_environment.json',{k:env.get(k)for k in selected_keys})
     from storage_guard import observe as storage_observe, Watchdog
     before=resource();before['storage']=storage_observe(run,plan['profile'],starting=True,count_files=True);write_new(run/'resources_before.json',before)
-    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False;loaded_slam=None;loaded_scan=None
+    children={};identities={};handles=[];cleanup={};error=None;sensors_ready=False;natural_timeout=False;loaded_slam=None;loaded_scan=None;guardian=None;sample_complete=False
     stream=(run/'owned_resources.jsonl').open('x',buffering=1)
     def start(role,command,child_env=None):
         log=(run/(role+'.log')).open('x');handles.append(log)
-        child=subprocess.Popen(command,env=env if child_env is None else child_env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
-        children[role]=child;identities[role]=identity(child.pid)
+        child,saved=guardian.start_role(role,command,env if child_env is None else child_env,log)
+        children[role]=child;identities[role]=saved
         if identities[role]is None:raise RuntimeError('Could not bind owned process identity '+role)
         return child
     def interrupted(sig,frame):raise InterruptedError('Runner interrupted; cleanup is restricted to saved owned process groups')
-    old_handlers={s:signal.signal(s,interrupted)for s in (signal.SIGINT,signal.SIGTERM)}
+    old_handlers={s:signal.signal(s,interrupted)for s in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP)}
     watchdog=None
     try:
         watchdog=Watchdog(run,plan['profile'],lambda:os.kill(os.getpid(),signal.SIGTERM)).start()
+        from owned_guardian import Guardian
+        guardian=Guardian(run,plan)
         resource_guard(before)
         require_private_domain(plan['ros_domain'])
         scope=module(HERE/'pid_scope.py','closed_loop_execute_'+uuid.uuid4().hex)
@@ -466,6 +483,11 @@ def execute(run,plan):
         write_new(run/'navigation_stack_effective_environment.json',{
             k:navigation_env.get(k)for k in (*selected_keys,'DEMO_RUN_DIR',*plan['navigation_stack_diagnostic_environment'])})
         start('navigation_stack',['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)],navigation_env)
+        if plan.get('bounded_shadow_sampling'):
+            capture=plan['bounded_shadow_sampling']
+            if sha(capture['contract_path'])!=capture['contract_sha256']or sha(HERE/'bounded_shadow_capture.py')!=capture['collector_source_sha256']:
+                raise RuntimeError('Bounded sampling input changed')
+            start('shadow_sampler',[str(SYSTEM_PYTHON),'-B',str(HERE/'bounded_shadow_capture.py'),'--run',str(run),'--contract',capture['contract_path']],navigation_env)
         time.sleep(.5)
         if any(p.poll()is not None for p in children.values()):raise RuntimeError('Owned dependency exited before physics started')
         loaded_slam=verify_loaded_slam(run,plan,identities['navigation_stack'])
@@ -477,7 +499,15 @@ def execute(run,plan):
         while worker.poll()is None:
             now=time.monotonic()
             for role,child in children.items():
-                if role not in ('worker','gazebo')and child.poll()is not None:raise RuntimeError(role+' exited while Actor remained active')
+                if role=='shadow_sampler':
+                    rc=child.poll()
+                    if rc==0:
+                        result=json.loads((run/'bounded_shadow_samples/RESULT.json').read_text())
+                        if result.get('complete')is not True:raise RuntimeError('Sampler exit without complete receipt')
+                        sample_complete=True
+                    elif rc is not None:raise RuntimeError('Bounded shadow sampler incomplete; inspect its receipt')
+                elif role not in ('worker','gazebo')and child.poll()is not None:raise RuntimeError(role+' exited while Actor remained active')
+            if sample_complete:break
             sensors_ready=(run/'frame_source.json').exists()
             if now>camera_deadline and not sensors_ready:raise TimeoutError('Actual overview camera failed to publish in30wall seconds')
             if now-last_resource>=2:
@@ -490,27 +520,32 @@ def execute(run,plan):
                 worker.wait(timeout=10);break
             if now>wall_deadline:raise TimeoutError('Owned closed-loop run exceeded frozen wall budget')
             time.sleep(.2)
-        if worker.returncode!=0:raise RuntimeError('CPU Teacher worker returned nonzero')
-        result=json.loads((run/'worker_result.json').read_text())
-        if result.get('fault')is not None:error='Actor/native physical fault: '+str(result['fault'])
-        try:gazebo.wait(timeout=8)
-        except subprocess.TimeoutExpired:natural_timeout=True;error=error or 'Gazebo failed natural exit after done/damping'
+        if sample_complete:
+            error='Bounded shadow data collected; navigation horizon intentionally interrupted, no navigation PASS'
+        else:
+            if worker.returncode!=0:raise RuntimeError('CPU Teacher worker returned nonzero')
+            result=json.loads((run/'worker_result.json').read_text())
+            if result.get('fault')is not None:error='Actor/native physical fault: '+str(result['fault'])
+            try:gazebo.wait(timeout=8)
+            except subprocess.TimeoutExpired:natural_timeout=True;error=error or 'Gazebo failed natural exit after done/damping'
     except Exception as e:error=f'{type(e).__name__}: {e}'
     finally:
         for s in old_handlers:signal.signal(s,signal.SIG_IGN)
         from pipeline_lifecycle import request_normal_stop
         pipeline_stop=request_normal_stop(run,loaded_slam,identities.get('navigation_stack',{}),identity)
         if not pipeline_stop['normal_completed']:error=error or 'V19 normal pipeline drain failed: '+str(pipeline_stop['error'])
-        for role in ('navigation_stack','capture','bridge','gazebo','worker'):
+        for role in ('shadow_sampler','navigation_stack','capture','bridge','gazebo','worker'):
             cleanup[role]=stop_owned(children.get(role),identities.get(role),parent_first=role=='navigation_stack')
         Path(sock).unlink(missing_ok=True);stream.close()
         for f in handles:f.close()
+        guardian_receipt=guardian.close()if guardian else None
         actual=[{'role':role,**(identities[role]or{'pid':child.pid,'identity_unavailable':True}),'returncode':child.returncode}for role,child in children.items()]
         child_proof=launch_child_receipt(run/'navigation_stack.log',expected=plan['expected_launch_children'])
-        roles_complete=set(children)==set(REQUIRED_ROLES)
+        roles_complete=set(children)==set((*REQUIRED_ROLES,*(['shadow_sampler']if plan.get('bounded_shadow_sampling')else[])))
         clean=roles_complete and all(x['returncode']==0 for x in actual)and child_proof['all_expected_children_clean']and all(not x.get('remaining_owned_group_members')and not x.get('identity_mismatch')and not x.get('identity_unavailable')for x in cleanup.values())
         if not clean:error=error or 'Owned role/launch child cleanup incomplete or nonzero'
         manifest={**plan,'error':error,'owned_processes':actual,'cleanup':cleanup,
+             'independent_owned_guardian':guardian_receipt,'bounded_shadow_sampling_complete':sample_complete,
             'slam_loaded_binary_verified':bool(loaded_slam and loaded_slam.get('verified')),
             'slam_loaded_binary_receipt_sha256':sha(run/'slam_loaded_binary.json')if(run/'slam_loaded_binary.json').is_file()else None,
             'scan_loaded_binary_verified':bool(loaded_scan and loaded_scan.get('verified')),
@@ -552,6 +587,7 @@ def main():
     ap.add_argument('--real-time-factor',type=float,default=1.)
     ap.add_argument('--surface-validity',type=int,choices=(0,1),required=True,help='Prospective V32 switch: 0 frozen acceptance baseline, 1 support-consistency candidate; captured before physics')
     ap.add_argument('--run-storage-root',type=Path,default=None,help='Optional dedicated V19 root declared in run_storage.py; default project/runs')
+    ap.add_argument('--shadow-sample-contract',type=Path,default=None,help='User-approved whole-frame24MiB capture; groups7/8 only, no control adoption')
     ap.add_argument('--prepare-only','--no-launch',action='store_true');args=ap.parse_args();args.cpu_python=args.cpu_python.expanduser().resolve()
     label=''.join(c for c in args.label if c.isalnum()or c in '_-')or'candidate'
     stamp=dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime('%Y%m%d_%H%M%S')

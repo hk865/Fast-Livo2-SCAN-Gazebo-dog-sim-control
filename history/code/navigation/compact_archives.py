@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 import threading
+from owned_guardian import bounded_shutdown_signals
 
 FORMAT = 'v33_dictionary_jsonl/v1'
 STATIC_PATHS = {
@@ -163,7 +164,7 @@ def make_evidence_writer(run, profile):
     sources = context(run)
     class ArchiveWriter(EvidenceWriter):
         def __init__(self):
-            self.codecs = {}; self.archive_lock = threading.Lock(); super().__init__()
+            self.codecs = {}; self.archive_lock = threading.Lock(); self.archive_closed=False; self.close_error=None; super().__init__()
         def append(self, path, data):
             path = Path(path)
             if path.name not in STATIC_PATHS: return super().append(path, data)
@@ -178,13 +179,17 @@ def make_evidence_writer(run, profile):
                     with target.open('a') as stream: stream.write(line)
                 self.enqueue(write)
         def close(self):
-            super().close()  # Original overflow/error/drain semantics; never seal a failed queue.
-            try:
-                for path, codec in self.codecs.items():
-                    with compact_path(path).open('a') as stream: stream.write(codec.footer())
-            except Exception as error:
-                self.error = 'Compact archive footer failed: '+type(error).__name__+': '+str(error)
-                raise RuntimeError(self.error) from error
+            if self.archive_closed:return
+            if self.close_error:raise RuntimeError(self.close_error)
+            with bounded_shutdown_signals():
+                try:
+                    super().close()  # Same original drain deadline; failed queues never seal.
+                    for path, codec in self.codecs.items():
+                        with compact_path(path).open('a') as stream: stream.write(codec.footer())
+                    self.archive_closed=True
+                except Exception as error:
+                    self.error=self.close_error='Compact archive close failed: '+type(error).__name__+': '+str(error)
+                    raise RuntimeError(self.error) from error
     return ArchiveWriter()
 
 
@@ -218,10 +223,15 @@ def make_command_writer(writer, history, acceptance):
         # _run, submit, pending/zero replacement, actual write and timings are inherited verbatim.
         def __init__(self):
             super().__init__(writer, None); self.history = archive  # Before the first submit.
+            self.archive_closed=False;self.close_error=None
         def close(self, final_envelope=None):
-            super().close(final_envelope)
-            try: archive.finish()
-            except Exception as error:
-                self.error = 'Compact command archive footer failed: '+type(error).__name__+': '+str(error)
-                raise RuntimeError(self.error) from error
+            if self.archive_closed:return
+            if self.close_error:raise RuntimeError(self.close_error)
+            with bounded_shutdown_signals():
+                try:
+                    super().close(final_envelope)
+                    archive.finish();self.archive_closed=True
+                except Exception as error:
+                    self.error=self.close_error='Compact command archive close failed: '+type(error).__name__+': '+str(error)
+                    raise RuntimeError(self.error) from error
     return ArchiveCommandWriter()

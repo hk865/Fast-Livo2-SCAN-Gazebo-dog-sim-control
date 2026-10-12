@@ -503,6 +503,8 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 self.publish(status);self.last_status_wall=now;self.last_published_state=published
 
         def shutdown_stop(self):
+            if getattr(self,'shutdown_started',False):return
+            self.shutdown_started=True
             self.gate.failed = 'Navigation command bridge stopped'
             status = self.envelope(time.monotonic())
             try:
@@ -553,12 +555,15 @@ def main():
         except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
             pass
         finally:
-            node.shutdown_stop()
-            node.destroy_node()
-            if rclpy.ok():
-                rclpy.shutdown()
+            from owned_guardian import bounded_shutdown_signals
+            with bounded_shutdown_signals():
+                node.shutdown_stop()
+                node.destroy_node()
+                if rclpy.ok():
+                    rclpy.shutdown()
     finally:
-        writer.close()
+        from owned_guardian import bounded_shutdown_signals
+        with bounded_shutdown_signals():writer.close()
     return 0
 
 

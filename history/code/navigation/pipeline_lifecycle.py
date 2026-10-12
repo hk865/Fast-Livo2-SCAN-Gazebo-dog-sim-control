@@ -30,8 +30,11 @@ def check_summary(summary):
     return errors
 
 
-def request_normal_stop(run, witness, navigation_identity, identity_fn, timeout_s=15.):
+def request_normal_stop(run, witness, navigation_identity, identity_fn, timeout_s=15.,
+                        receipt_name='pipeline_normal_stop.json'):
     """No process name search, no process-group signal, no PID reuse acceptance."""
+    if receipt_name not in ('pipeline_normal_stop.json','pipeline_guardian_stop.json'):
+        raise ValueError('Unexpected lifecycle receipt path')
     run=Path(run).resolve()
     target=run/'fastlivo_debug/pipeline_v19_summary.json'
     receipt={'schema':'teacher_pipeline_v19_stop_request/v1','run':str(run),
@@ -71,6 +74,6 @@ def request_normal_stop(run, witness, navigation_identity, identity_fn, timeout_
     except Exception as error:
         receipt['error']=type(error).__name__+': '+str(error)
     receipt['ended_monotonic_wall']=time.monotonic()
-    with(run/'pipeline_normal_stop.json').open('x')as stream:
+    with(run/receipt_name).open('x')as stream:
         json.dump(receipt,stream,indent=2);stream.write('\n')
     return receipt
