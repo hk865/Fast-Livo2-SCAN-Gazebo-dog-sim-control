@@ -324,7 +324,7 @@ class MatcherWorker:
             try:
                 if 'join_request' in job:
                     join = job['join_request']
-                    join.diagnostic_pin_enabled = bool(self.diagnostic_capture is not None and getattr(self.diagnostic_capture, 'capture_needed', False))
+                    join.diagnostic_pin_enabled = bool(self.diagnostic_capture is not None and (getattr(self.diagnostic_capture, 'capture_needed', False) or getattr(self.diagnostic_capture, 'first_collision_evidence_needed', False)))
                     job = join.pop_latest(job['clock_ns'])
                 if job is None:
                     with self.condition:

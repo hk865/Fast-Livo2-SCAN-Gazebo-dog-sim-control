@@ -28,9 +28,9 @@ def validate_launch_records(d,entry,argv,env,prepared,latch,plan,plan_digest,me,
       plan.get('run')==run and plan.get('profile_path')==str(here/'profiles/engineering_nav46.json'),
       plan.get('simulation_only')is True and plan.get('real_robot')is False and plan.get('navigation_ground_truth_used')is False,
       plan.get('ros_domain')==90 and plan.get('wall_budget_s')==180.,
-      plan.get('R54_shutdown_probe',{}).get('source_dir')==str(stage),
-      plan.get('R54_shutdown_probe',{}).get('max_native_s')==45 and plan.get('R54_shutdown_probe',{}).get('max_acquisition_wall_s')==120,
-      plan.get('R54_shutdown_probe',{}).get('output_hard_B')==2147483648 and plan.get('R54_shutdown_probe',{}).get('strict_original_gates')is True,
+      plan.get('R55_shutdown_probe',{}).get('source_dir')==str(stage),
+      plan.get('R55_shutdown_probe',{}).get('max_native_s')==45 and plan.get('R55_shutdown_probe',{}).get('max_acquisition_wall_s')==120,
+      plan.get('R55_shutdown_probe',{}).get('output_hard_B')==2147483648 and plan.get('R55_shutdown_probe',{}).get('strict_original_gates')is True,
       same(me,saved)and me.get('state')!='Z' and me.get('pid')==me.get('pgid')==me.get('session'),
       saved.get('owned_run')==run and saved.get('role')=='navigation_stack',
       saved.get('ownership_token')==owner.get('token')==permit.get('token') and permit.get('identity')==saved,
@@ -77,6 +77,16 @@ def verify_source_equivalence(here):
         raise RuntimeError('C51 integration has unlisted files')
     for name,digest in d['admission_source_sha256'].items():
         if sha(here/name)!=digest:raise RuntimeError('C51 admission source changed: '+name)
+    restored_runtime=(here/'known_scene_runtime.py').read_text().replace(
+        'from collision_minimal_capture import CollisionObservedP95SourceFrames as P95SourceFrames',
+        'from p95_capture import P95SourceFrames')
+    if restored_runtime!=(sealed/'known_scene_runtime.py').read_text():
+        raise RuntimeError('C51 diagnostic observer changed runtime beyond its import alias')
+    restored_adapter=(here/'known_scene_adapter.py').read_text().replace(
+        "(getattr(self.diagnostic_capture, 'capture_needed', False) or getattr(self.diagnostic_capture, 'first_collision_evidence_needed', False))",
+        "getattr(self.diagnostic_capture, 'capture_needed', False)")
+    if restored_adapter!=(sealed/'known_scene_adapter.py').read_text():
+        raise RuntimeError('C51 diagnostic evidence request changed adapter beyond its pin flag')
     expected_policy=json.loads((sealed/'POLICY_SELECTION_CONTRACT.json').read_text())
     expected_policy['candidate_origin']=str(here/'policy_candidate/worker.py')
     if json.loads((here/'POLICY_SELECTION_CONTRACT.json').read_text())!=expected_policy:
