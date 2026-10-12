@@ -101,6 +101,8 @@ def stopped_rebind(self,handoff,proof):
         authorizes_commit_only=True,Teacher_transition_bypassed=False)
 
 def early_request(self,reference):
+    from pending_path_commit import waiting
+    if waiting(self):return None
     if (self.heading_gate.phase!='drive' or self.cascade.capture_stamp is not None
         or not context(self)['allowed']):return None
     remaining=float(reference['remaining_m']);arc=float(self.cascade.spatial_config['arc_length_m'])

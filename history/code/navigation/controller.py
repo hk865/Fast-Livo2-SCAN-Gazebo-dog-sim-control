@@ -36,6 +36,8 @@ from continuous_route import (configuration as continuous_configuration, RoutePr
 
 
 from path_commit import staged_cascade_binding
+from pending_path_commit import (defer_future as defer_future_path,
+    commit_ready as commit_pending_path, waiting as pending_path_waiting)
 
 class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
@@ -59,6 +61,7 @@ class PIDNavigation(TeacherNavigation):
             raise ValueError('Unsupported registered_cloud_archive mode; bounded_event is not yet implemented')
         self.reference_replan_pending=False
         self.path_handoff_early_requested_for=None;self.path_handoff_last_check=None
+        self.pending_path_commit=None
         self.path_admission_fence=KnownSceneFrozenFence(self.run,self.profile)
         self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
         self.path_admission_sequence=0;self.path_admission_last_decision=None
@@ -97,6 +100,7 @@ class PIDNavigation(TeacherNavigation):
             self.cascade=None;self.cascade_key=None;self.cascade_last_row=None
             self.cascade_path_id=None;self.path_receipt=None;self.final_bundle=None
             self.reference_replan_pending=False
+            self.pending_path_commit=None
             self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
             self.pid_row=None;self.pid_prepared_output=None
             self.reference_consistency_hold=False;self.reference_consistency_check=None
@@ -375,6 +379,9 @@ class PIDNavigation(TeacherNavigation):
         self.evidence.enqueue(archive)
         self.evidence.append(self.run/'path_admission_decisions.jsonl',dict(document['decision'],candidate_file=str(relative)))
     def accept_spline(self,msg,metadata):
+        self.pending_path_commit=None
+        return self._admit_matched_spline(msg,metadata)
+    def _admit_matched_spline(self,msg,metadata,received_wall_ns=None):
         # Admission is a transaction BEFORE base acceptance, publication, PI
         # path replacement and the accepted trajectory archive. Association's
         # payload high-water is deliberately not rolled back on a rejection.
@@ -477,6 +484,7 @@ class PIDNavigation(TeacherNavigation):
                 proof=proof,handoff=handoff,anchor_binding=binding,old_path_retention=retain,capture_replacement=recovery,
                 exact_zero_requested=not retain['allowed']),started)
             return
+        if defer_future_path(self,msg,metadata,started=started):return
         previous_execution=(dict(samples=self.samples,active_trajectory_id=self.active_trajectory_id,
             active_reference_stamp=self.active_reference_stamp,planning_start_state=copy.deepcopy(self.planning_start_state),
             execution_path_exhaustion=copy.deepcopy(getattr(self,'execution_path_exhaustion',None)))
@@ -488,7 +496,9 @@ class PIDNavigation(TeacherNavigation):
             execution_path_exhaustion=copy.deepcopy(getattr(self,'execution_path_exhaustion',None)),
             trajectory_archive_reference=getattr(self,'trajectory_archive_reference',None))
         binding_generation=self.known_scene_inputs['generation']
-        before=self.replans;wall=time.monotonic_ns();super().accept_spline(msg,metadata)
+        before=self.replans
+        wall=time.monotonic_ns() if received_wall_ns is None else received_wall_ns
+        super().accept_spline(msg,metadata)
         if self.replans>before and self.samples is not None:
             indices=[0]
             for i in range(1,len(self.samples)):
@@ -632,6 +642,7 @@ class PIDNavigation(TeacherNavigation):
         return (self.waypoints[ledger.next_index] if ledger is not None and ledger.points is not None
             else super().planner_goal())
     def request_plan(self):
+        if pending_path_waiting(self):return
         ledger=self.continuous_route
         index=None if ledger is None else ledger.next_index
         before=self.reference_requests
@@ -780,6 +791,7 @@ class PIDNavigation(TeacherNavigation):
         # a new actual geometry check is mandatory before any nonzero command.
         if self.control_clock_hold.before_control(self,self.get_clock().now().nanoseconds,round(now*1e9)):
             return
+        commit_pending_path(self)
         self.request_admission_replan_if_due(now)
         if self.path_admission_hold:
             return self.control_admission_hold(now)
@@ -805,6 +817,7 @@ class PIDNavigation(TeacherNavigation):
                 path_receipt=copy.deepcopy(self.path_receipt),reference_stamp=tuple(self.active_reference_stamp))
         return super().control(now)
     def request_admission_replan_if_due(self,now):
+        if pending_path_waiting(self):return
         pending=(self.reference_replan_pending or self.path_admission_replan_pending or self.path_admission_hold)
         # A previous goal's pending replan must wait for inherited control to
         # activate the next segment from a fresh, unprotected actual SLAM pose.

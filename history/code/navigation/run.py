@@ -307,11 +307,11 @@ def prepare(run,args):
     plan['R33_original_profile_source_path_metadata_relocation']=relocation
     baseline_profile=json.loads((Path(startup['base_R36_source_root'])/'profiles/engineering_nav46.json').read_text())
     budget_expected=json.loads(json.dumps(baseline_profile))
-    budget_expected['raw_storage_budget']['max_run_bytes']=120_000_000_000
-    budget_expected['raw_budget_bytes']=120_000_000_000
-    if p!=budget_expected:raise RuntimeError('R59 permits only authorized120GB cumulative profile delta; original mission and safety fields must remain')
+    budget_expected['raw_storage_budget']['max_run_bytes']=130_000_000_000
+    budget_expected['raw_budget_bytes']=130_000_000_000
+    if p!=budget_expected:raise RuntimeError('R59 permits only authorized130GB cumulative profile delta; original mission and safety fields must remain')
     plan['R33_original_profile_bytes_retained']=False
-    plan['R59_original_profile_budget_only_delta']={'raw_budget_bytes':[50_000_000_000,120_000_000_000],'raw_storage_budget.max_run_bytes':[50_000_000_000,120_000_000_000]}
+    plan['R59_original_profile_budget_only_delta']={'raw_budget_bytes':[50_000_000_000,130_000_000_000],'raw_storage_budget.max_run_bytes':[50_000_000_000,130_000_000_000]}
     plan['R37_original_mission_behavior_and_safety_fields_preserved']=True
     write_new(run/'runtime_plan.json',plan)
     return plan
