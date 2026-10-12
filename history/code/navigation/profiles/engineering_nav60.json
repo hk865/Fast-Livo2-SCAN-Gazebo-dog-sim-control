@@ -187,7 +187,7 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, 300ms fresh inputs,200ms IPC and original safety/collision gates retained.",
+  "prospective_change": "V34 actual simulation implementation: fixed phase route with ordered ordinary-region passage, original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, 300ms fresh inputs,200ms IPC and original safety/collision gates retained. R20 selects the existing serial/0 ingress mode to commit each admitted callback before mapping; 64MiB/512 bounds and original message contents/headers are unchanged. Upstream ROS stall is unresolved.",
   "route_prior_source": "Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation",
   "slam_imu_online_estimation": {
     "gravity_est_en": true,
@@ -264,7 +264,7 @@
   },
   "pipeline": {
     "schema": "pipeline_v19_contract/v1",
-    "mode": "staged",
+    "mode": "serial",
     "image_copy_opt": 0,
     "max_items": 512,
     "reserved_bytes": 67108864

@@ -16,7 +16,9 @@ CHANGE=('V34 actual simulation implementation: fixed phase route with ordered or
         'original connector and terminal dwell/terrain acknowledgments; known-scene43-box map-assisted '
         'navigation after independent-frame/first-hit/timing/stage checks. No truth pose navigation; '
         'no independent sensor-map or old all-region dwell PASS claim. Native physics, Actor checkpoint, '
-        '300ms fresh inputs,200ms IPC and original safety/collision gates retained.')
+        '300ms fresh inputs,200ms IPC and original safety/collision gates retained. '
+         'R20 selects the existing serial/0 ingress mode to commit each admitted callback before mapping; '
+         '64MiB/512 bounds and original message contents/headers are unchanged. Upstream ROS stall is unresolved.')
 def baseline_profile_path(here,name=PROFILE_NAME):
     if name not in PROFILE_NAMES:raise ValueError('Unknown V34 profile')
     return Path(here).resolve().parent/'engineering_v33/profiles'/name
@@ -27,6 +29,7 @@ def profile_name(profile):
 def expected_profile(here,name=PROFILE_NAME):
     from mission46_profile import required_source_files
     result=json.loads(baseline_profile_path(here,name).read_text())
+    result['pipeline']['mode']='serial'
     result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
         mission46_required_source_files=[str(p.resolve()) for p in required_source_files()],
         route_prior_source='Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation')
@@ -78,7 +81,7 @@ def normal_form(profile,here):
     result=copy.deepcopy(profile)
     for key in ('controller_selector','profile_version','prospective_change',
                 'mission46_required_source_files','engineering_contract','diagnostic_scope',
-                'global_route_reference_contract','route_prior_source'):
+                'global_route_reference_contract','route_prior_source','pipeline'):
         result[key]=copy.deepcopy(base[key])
     result.pop('continuous_route_contract',None);result.pop('known_scene_localization_contract',None)
     return result
