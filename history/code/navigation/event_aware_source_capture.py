@@ -27,6 +27,9 @@ GATES = dict(native_response_ns=200_000_000, source_and_SCAN_freshness_ns=300_00
              stage_geometry_RMS_m=.006, stage_geometry_maximum_m=.030,
              stage_nearest_index_bijection=True, require_complete_imu=False)
 TOPICS = dict(imu_source='/livox/imu', imu_relay='/demo/teacher/slam/imu', clock='/clock')
+PHASES = dict(exploring='exploration', returning='return_origin', navigating='navigation_f1_f3')
+TRIGGER = dict(original_reason='no_quality_candidate', distinct_rejections=2,
+               anchor_age_lead_ns=2_500_000_000, complete_ring_groups=4)
 
 
 def sha(data):
@@ -80,11 +83,11 @@ class BoundedSourceFrames:
             if self.contract_path.stat().st_size > 64*1024:
                 raise ValueError('bounded capture contract too large')
             contract = json.loads(self.contract_path.read_text())
-        if (contract.get('schema') != 'go2_event_source_capture_contract/v1'
+        if (contract.get('schema') != 'go2_event_source_capture_contract/v2'
                 or contract.get('run_id') != self.run.name
                 or contract.get('caps') != CAPS or contract.get('unchanged_gates') != GATES
-                or contract.get('actual_mission_stage') != 'navigating'
-                or contract.get('request_component') != 'navigation_f1_f3'
+                or contract.get('actual_mission_phases') != PHASES
+                or contract.get('diagnostic_trigger') != TRIGGER
                 or contract.get('topics') != TOPICS
                 or contract.get('diagnostic_only') is not True):
             raise ValueError('exact event-aware diagnostic contract required')
@@ -112,6 +115,10 @@ class BoundedSourceFrames:
         self.witness_status = None
         self.source_checker = None
         self.mission = None
+        self.last_valid_request = None
+        self.request_epoch = 0
+        self.request_start_ns = None
+        self.inflight_binding = None
         self.arm = None
         self.expired = False
         self.terminal = None
@@ -119,7 +126,8 @@ class BoundedSourceFrames:
         self.last_metadata = None
         self.qualified = OrderedDict()  # <=4 original accepted matcher jobs
         self.anchors = deque(maxlen=2)  # actual metadata-anchored jobs
-        self.complete = OrderedDict()  # <=2 complete five-role groups, no poses looked up
+        self.complete = OrderedDict()  # <=4 complete five-role groups, no poses looked up
+        self.inflight_source = None  # one original verified matcher job, before slow fitting
         self.last_complete_seen = -1
         self.watermark = -1
         self.aux = {k: deque(maxlen=1200 if k != 'clock' else 256) for k in TOPICS}
@@ -130,6 +138,7 @@ class BoundedSourceFrames:
         self.rejected = deque(maxlen=32)
         self.events = deque(maxlen=64)
         self.b_event = None
+        self.pending_rejection = None  # one first rejected complete matcher job
         self.c_event = None
         self.c_first_after = None
         self.clear_event = None
@@ -175,10 +184,44 @@ class BoundedSourceFrames:
                 self.expired = True
                 self._event('event_window_expired', runtime_clock_ns=int(ns))
 
-    def _active(self):
-        return bool(self.arm and not self.expired and not self.terminal and not self.closed
-                    and self.mission and self.mission['request_id'] == self.arm['request_id']
+    def _observing(self):
+        return bool(not self.expired and not self.terminal and not self.closed
+                    and self.mission
                     and 0 <= self.wall_ns()-self.mission['observed_wall_ns'] < 300_000_000)
+
+    def _active(self):
+        return bool(self.arm and self._observing() and self.mission['request_id'] == self.arm['request_id'])
+
+    def _arm_pending(self):
+        """Observe persistence or impending ORIGINAL expiry; no control decision."""
+        pending = self.pending_rejection
+        if self.arm or not pending or not self._observing():
+            return False
+        a1 = pending['anchors'][-1]
+        metadata = self.last_metadata
+        lead = bool(metadata and metadata.get('generation') == pending['generation']
+                    and metadata.get('match_source_ns') == a1['source_ns']
+                    and metadata['source_ns']-a1['source_ns'] >= TRIGGER['anchor_age_lead_ns'])
+        if len(pending['rejection_sources']) < TRIGGER['distinct_rejections'] and not lead:
+            return False
+        self.arm = dict(self.mission, runtime_clock_ns=self.last_clock,
+                        trigger='sustained_original_quality_rejection_or_anchor_expiry_lead',
+                        trigger_source_ns=pending['snapshot']['source_ns'],
+                        persistence_sources_ns=list(pending['rejection_sources']),
+                        original_anchor_ns=a1['source_ns'], anchor_expiry_lead_observed=lead)
+        self._event('actual_phase_rejection_event_armed', **self.arm)
+        self.b_event = dict(pending['event'])
+        self._select('A1', a1, dict(kind='last_actual_anchor_before_B', B_source_ns=self.b_event['source_ns']))
+        if len(pending['anchors']) == 2 and independent(pending['anchors'][0], a1):
+            self._select('A0', pending['anchors'][0], dict(kind='previous_independent_actual_anchor',
+                                                        B_source_ns=self.b_event['source_ns']))
+        else:
+            self.missing['A0'] = 'independent previous actual anchor unavailable before actual rejection'
+        self._select('B', pending['snapshot'], self.b_event)
+        self._event('B_selected', **self.b_event)
+        self.pending_rejection = None
+        self._select_c()
+        return True
 
     def observe_mission(self, text, runtime_clock_ns):
         """Actual mission topic, not a guessed XY/time cue; payload retained by SHA."""
@@ -186,7 +229,11 @@ class BoundedSourceFrames:
             if not isinstance(text, str) or len(text.encode()) > 128*1024:
                 return self.reject(None, 'bounded_mission_payload')
             d = json.loads(text)
-            if d.get('run_id') != self.run.name or d.get('navigation_ground_truth_used') is not False:
+            if (d.get('run_id') != self.run.name or d.get('navigation_ground_truth_used') is not False
+                    or d.get('schema') != 'teacher_original_mission46_state/v1'
+                    or d.get('source') != 'actual_SLAM_IMU_SCAN_Teacher46_coordinator'):
+                with self.lock:
+                    self.mission = None
                 return False
             with self.lock:
                 self._clock(runtime_clock_ns)
@@ -196,25 +243,31 @@ class BoundedSourceFrames:
                     return False
                 request = d.get('current_request')
                 valid = (d.get('schema') == 'teacher_original_mission46_state/v1'
-                    and d.get('stage') == 'navigating' and isinstance(request, str)
-                    and request.startswith(self.run.name+':navigation_f1_f3:')
+                    and d.get('stage') in PHASES and isinstance(request, str)
+                    and request.startswith(self.run.name+':'+PHASES[d['stage']]+':')
                     and bool(d.get('current_goals_sha256'))
                     and d.get('source') == 'actual_SLAM_IMU_SCAN_Teacher46_coordinator')
                 if not valid:
-                    if self.arm:
-                        self.mission = None
+                    self.mission = None
                     return False
                 row = dict(stage=d['stage'], request_id=request, sim_ns=d.get('sim_ns'),
                     sequence=d.get('sequence'), current_goals_sha256=d['current_goals_sha256'],
                     payload_sha256=sha(text.encode()), observed_wall_ns=self.wall_ns())
-                if self.arm is None:
-                    self.arm = dict(row, runtime_clock_ns=int(runtime_clock_ns))
-                    self._event('real_navigation_phase_armed', **row, runtime_clock_ns=int(runtime_clock_ns))
-                elif request != self.arm['request_id']:
+                if self.arm and request != self.arm['request_id']:
                     self.terminal = dict(stage='request_changed', request_id=request, observed_wall_ns=self.wall_ns())
                     self._event('request_changed_stop_selection', request_id=request)
+                elif not self.arm and request != self.last_valid_request:
+                    self.pending_rejection = None
+                    self.anchors.clear(); self.qualified.clear(); self.complete.clear()
+                    self.inflight_source = None
+                    self.inflight_binding = None
+                    self.last_metadata = None; self.c_first_after = None
+                    self.request_epoch += 1
+                    self.request_start_ns = d.get('sim_ns')
+                    self._event('pretrigger_actual_request_changed', request_id=request)
+                self.last_valid_request = request
                 self.mission = row
-                return self._active()
+                return self._observing()
         except Exception as error:
             return self.reject(None, 'mission_observation:'+type(error).__name__+':'+str(error))
 
@@ -246,7 +299,7 @@ class BoundedSourceFrames:
         try:
             with self.lock:
                 self._clock(runtime_clock_ns)
-                if not self._active():
+                if not self._observing():
                     return False
             with join.lock:
                 slot = join.slots.get(source_ns)
@@ -264,11 +317,11 @@ class BoundedSourceFrames:
                 source_checker=join._check, source_slot=pairs, result=None, input_C_world_odom=None,
                 parent_generation=None, provenance=None, T_odom_body=None)
             with self.lock:
-                if not self._active() or source_ns in self.complete:
+                if not self._observing() or source_ns in self.complete:
                     return False
                 self.complete[source_ns] = snap
                 snap['aux_at_source_observation'] = self._aux_snapshot(source_ns)
-                while len(self.complete) > 2:
+                while len(self.complete) > TRIGGER['complete_ring_groups']:
                     self.complete.popitem(last=False)
                 self.last_complete_seen = source_ns
                 self.watermark = max(self.watermark, watermark)
@@ -296,18 +349,52 @@ class BoundedSourceFrames:
             provenance=dict(prov), T_odom_body=as_list(job['T_odom_body']),
             aux_at_source_observation=self._aux_snapshot(ns))
 
+    def observe_job(self, job, current_c, parent_generation):
+        """Pin one ORIGINAL verified in-flight job before fit; no IO or recheck."""
+        try:
+            with self.lock:
+                if not self._observing():
+                    return False
+                ns = job['source_ns']; messages = job['source_messages']; prov = job['provenance']
+                if type(self.request_start_ns) is not int or ns < self.request_start_ns:
+                    return self.reject(ns, 'inflight_source_precedes_actual_request')
+                if (set(messages) != set(ROLES) or any(msg_stamp(msg) != ns for msg in messages.values())
+                        or not prov.get('integer_stamp_join') or not prov.get('source_membership_verified')
+                        or prov.get('stage') != 'frozen_post_LIO_single_owner_publication'):
+                    return self.reject(ns, 'inflight_original_source_provenance')
+                if any(len(messages[k].data) > CAPS[k+'_bytes'] for k in ('raw','adapted','registered')):
+                    return self.reject(ns, 'inflight_whole_payload_bound')
+                self.inflight_source = dict(source_ns=ns, source_messages=dict(messages),
+                    original_received_wall_ns=dict(job['original_received_wall_ns']),
+                    observed_complete_wall_ns=self.wall_ns(), runtime_clock_ns=self.last_clock,
+                    result=None, input_C_world_odom=as_list(current_c), parent_generation=parent_generation,
+                    provenance=dict(prov), T_odom_body=as_list(job['T_odom_body']),
+                    aux_at_source_observation=self._aux_snapshot(ns))
+                self.inflight_binding = dict(job_identity=id(job), source_ns=ns,
+                    request_epoch=self.request_epoch, request_id=self.mission['request_id'])
+                self._select_c()
+                return True
+        except Exception as error:
+            return self.reject(job.get('source_ns'), 'inflight_observation:'+type(error).__name__+':'+str(error))
+
     def consider(self, job, result, current_c, parent_generation):
         try:
             with self.lock:
-                if not self._active():
+                if not self._observing():
                     return False
                 ns = job['source_ns']
-                if ns < self.arm['sim_ns'] or ns > self.arm['runtime_clock_ns']+CAPS['event_window_ns']:
+                binding = self.inflight_binding
+                if (not binding or binding['job_identity'] != id(job) or binding['source_ns'] != ns
+                        or binding['request_epoch'] != self.request_epoch
+                        or binding['request_id'] != self.mission['request_id']):
+                    return self.reject(ns, 'completed_job_diagnostic_request_epoch_changed')
+                if self.arm and ns > self.arm['runtime_clock_ns']+CAPS['event_window_ns']:
                     return False
                 top = (result.get('candidates') or [None])[0]
                 qualified = (result.get('accepted') is True and result.get('evidence_verified') is True
                              and top and top.get('quality_passed') is True)
-                quality_rejected = bool(top and top.get('quality_passed') is False and top.get('rejections'))
+                quality_rejected = bool(result.get('reason') == TRIGGER['original_reason']
+                                        and top and top.get('quality_passed') is False and top.get('rejections'))
                 if qualified:
                     snap = self._snapshot(job, result, current_c, parent_generation)
                     self.qualified[ns] = snap
@@ -317,23 +404,24 @@ class BoundedSourceFrames:
                         self._select('D', snap, dict(kind='first_original_quality_recovery',
                             source_ns=ns, parent_generation=parent_generation,
                             original_reason=result.get('reason'), original_quality_passed=True))
-                if self.b_event is None and quality_rejected and self.anchors:
+                if self.arm is None and quality_rejected and self.anchors:
                     a1 = self.anchors[-1]
                     if ns <= a1['source_ns'] or parent_generation != a1['parent_generation']:
                         return False
-                    snap = self._snapshot(job, result, current_c, parent_generation)
-                    self.b_event = dict(kind='first_original_quality_rejection_after_anchor', source_ns=ns,
-                        parent_generation=parent_generation, anchor_ns=a1['source_ns'],
-                        observed_wall_ns=self.wall_ns(), original_reason=result.get('reason'),
-                        original_rejections=list(top['rejections']), request_id=self.arm['request_id'])
-                    self._select('A1', a1, dict(kind='last_actual_anchor_before_B', B_source_ns=ns))
-                    if len(self.anchors) == 2 and independent(self.anchors[0], a1):
-                        self._select('A0', self.anchors[0], dict(kind='previous_independent_actual_anchor', B_source_ns=ns))
-                    else:
-                        self.missing['A0'] = 'independent previous actual anchor unavailable in real NAV window'
-                    self._select('B', snap, self.b_event)
-                    self._event('B_selected', **self.b_event)
-                    self._select_c()
+                    if (not self.pending_rejection or self.pending_rejection['generation'] != parent_generation
+                            or self.pending_rejection['anchors'][-1]['source_ns'] != a1['source_ns']):
+                        snap = self._snapshot(job, result, current_c, parent_generation)
+                        event = dict(kind='first_original_quality_rejection_of_sustained_episode', source_ns=ns,
+                            parent_generation=parent_generation, anchor_ns=a1['source_ns'],
+                            observed_wall_ns=self.wall_ns(), original_reason=result.get('reason'),
+                            original_rejections=list(top['rejections']), request_id=self.mission['request_id'],
+                            actual_stage=self.mission['stage'])
+                        self.pending_rejection = dict(snapshot=snap, anchors=list(self.anchors),
+                                                      generation=parent_generation, event=event, rejection_sources=[ns])
+                    elif ns not in self.pending_rejection['rejection_sources']:
+                        self.pending_rejection['rejection_sources'].append(ns)
+                        self.pending_rejection['rejection_sources'] = self.pending_rejection['rejection_sources'][-2:]
+                    self._arm_pending()
                 elif (self.b_event and self.clear_event and quality_rejected and 'D' not in self.selected
                       and ns >= self.clear_event['sim_ns'] and ns > self.b_event['source_ns']):
                     self._select('D', self._snapshot(job, result, current_c, parent_generation),
@@ -349,7 +437,7 @@ class BoundedSourceFrames:
         try:
             with self.lock:
                 self._clock(runtime_clock_ns)
-                if not self._active() or metadata.get('run_id') != self.run.name:
+                if not self._observing() or metadata.get('run_id') != self.run.name:
                     return False
                 row = dict(metadata, runtime_clock_ns=int(runtime_clock_ns), observed_wall_ns=self.wall_ns())
                 old = self.last_metadata
@@ -361,6 +449,11 @@ class BoundedSourceFrames:
                             and (not self.anchors or self.anchors[-1]['source_ns'] != anchor)):
                         snap = dict(snap, actual_anchor_metadata=row)
                         self.anchors.append(snap)
+                if self.pending_rejection and (metadata.get('generation') != self.pending_rejection['generation']
+                        or (not metadata.get('correction_stale') and anchor != self.pending_rejection['anchors'][-1]['source_ns'])):
+                    self._event('transient_rejection_pending_cleared_by_actual_anchor', match_source_ns=anchor)
+                    self.pending_rejection = None
+                self._arm_pending()
                 if (self.b_event and self.c_event is None and old
                         and old.get('correction_stale') is False and metadata.get('correction_stale') is True
                         and metadata.get('generation') == self.b_event['parent_generation']
@@ -379,12 +472,15 @@ class BoundedSourceFrames:
         if self.c_event is None or 'C' in self.selected:
             return
         ns = self.c_event['event_source_ns']
-        if ns in self.complete:
-            snap = self.complete[ns]
+        complete = dict(self.complete)
+        if self.inflight_source:
+            complete.setdefault(self.inflight_source['source_ns'], self.inflight_source)
+        if ns in complete:
+            snap = complete[ns]
             self._select('C', snap, dict(self.c_event, association='exact_same_integer_stamp',
                 captured_group_source_ns=ns, nearest_pose_used=False))
             return
-        later = [v for k,v in self.complete.items() if k > ns
+        later = [v for k,v in complete.items() if k > ns
                  and v['observed_complete_wall_ns'] >= self.c_event['observed_wall_ns']]
         if later and self.c_first_after is None:
             self.c_first_after = min(later, key=lambda v:v['observed_complete_wall_ns'])
@@ -406,7 +502,7 @@ class BoundedSourceFrames:
             with self.lock:
                 self._clock(runtime_clock_ns)
                 if (not self._active() or d.get('run_id') != self.run.name
-                        or d.get('request_id') != self.arm['request_id']
+                        or d.get('request_id') != self.mission['request_id']
                         or d.get('navigation_ground_truth_used') is not False
                         or d.get('robot_pose_service_called') is not False):
                     return False
@@ -701,7 +797,9 @@ def diagnostic_stop_hint(run, clock_ns):
         arm = d.get('arm')
         if arm is None:
             return None
-        if (arm.get('stage') != 'navigating' or not arm.get('request_id', '').startswith(run.name+':navigation_f1_f3:')
+        if (arm.get('stage') not in PHASES
+                or not arm.get('request_id', '').startswith(run.name+':'+PHASES[arm['stage']]+':')
+                or arm.get('trigger') != 'sustained_original_quality_rejection_or_anchor_expiry_lead'
                 or type(arm.get('runtime_clock_ns')) is not int
                 or not 0 < arm['runtime_clock_ns'] <= clock_ns):
             raise ValueError('actual phase arm binding')
@@ -730,7 +828,7 @@ def diagnostic_stop_hint(run, clock_ns):
                 navigation_PASS=False, full46_or_parking_verified=False,
                 original_mission_completion_claimed=False, source_contract_missing=d.get('missing'))
         if clock_ns-arm['runtime_clock_ns'] >= CAPS['event_window_ns']:
-            return dict(stop=True, reason='actual_NAV_event_window90s_cutoff_diagnostic_only',
+            return dict(stop=True, reason='actual_phase_rejection_event_window90s_cutoff_diagnostic_only',
                 event_capture_receipt=str(path), event_capture_receipt_sha256=sha(raw),
                 navigation_PASS=False, full46_or_parking_verified=False,
                 original_mission_completion_claimed=False, source_contract_missing=d.get('missing'))

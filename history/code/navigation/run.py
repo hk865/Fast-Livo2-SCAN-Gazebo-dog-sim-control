@@ -747,7 +747,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r37_rows_event';tmp=ROOT/'runs'/('latest_engineering_v34_r37_rows_event.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r38_event_any_phase';tmp=ROOT/'runs'/('latest_engineering_v34_r38_event_any_phase.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

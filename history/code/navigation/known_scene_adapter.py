@@ -316,14 +316,20 @@ class MatcherWorker:
                     if 'join_rejection_detail' in job:
                         result['join_rejection_detail'] = job['join_rejection_detail']
                 else:
+                    if self.diagnostic_capture is not None:
+                        try:self.diagnostic_capture.observe_job(job,c,parent_generation)
+                        except Exception as error:
+                            try:self.diagnostic_capture.reject(job['source_ns'],'capture_pin_exception:'+str(error))
+                            except Exception:pass
                     result = self.matcher.match(job['source_ns'], job['body_points'], job['T_odom_body'],
                                                 current_c=c, provenance=job['provenance'])
                     result['T_odom_body']=checked_transform(job['T_odom_body']).tolist()
                     result['T_odom_body_source_ns']=job['source_ns']
                     if self.diagnostic_capture is not None:
                         try:self.diagnostic_capture.consider(job,result,c,parent_generation)
-                        except (OSError,ValueError,KeyError,TypeError) as error:
-                            self.diagnostic_capture.reject(job['source_ns'],'capture_exception:'+str(error))
+                        except Exception as error:
+                            try:self.diagnostic_capture.reject(job['source_ns'],'capture_exception:'+str(error))
+                            except Exception:pass
             except Exception as error:
                 result = dict(source_ns=None if job is None else job.get('source_ns'),
                               accepted=False, control_allowed=False,

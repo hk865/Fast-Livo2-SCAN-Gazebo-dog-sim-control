@@ -1,0 +1,41 @@
+"""Unique owner's current evidence freeze; no runtime start."""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import sys
+N=Path(__file__).resolve().parent
+C=Path('/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase')
+P=N.parent/'R37_ROWS_EVENT_STAGE'
+sys.path.insert(0,str(C))
+import corridor_preflight as cp
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+finite=[N/'FINITE_SOURCE_MASTER_RECEIPT.json',N/'ACTUAL_METADATA_SELECTION_CPU_RECEIPT.json',N/'OLD_COMPLETE_PAYLOAD_CPU_RECEIPT.json']
+review=N/'INDEPENDENT_REVIEW_ADMISSION.json'
+root=N/'ROOT_RELEASE_RECONCILIATION.json'
+assert not (N/'ONE_SIMULATION_LATCH.json').exists()
+for p in [review,root]:
+ d=json.loads(p.read_text());assert d['review_passed'] and not d['blocking_findings']
+assert json.loads(finite[0].read_text())['current_unittest_cases']==37
+gate=cp.freeze_source_review(C,[str(p) for p in finite],[str(review),str(root)],root_review_complete=True)
+extra=[N/'AUTHORITY.json',N/'AUTHORITY_RECONNECT_HANDOFF.json',N/'SOURCE_CHANGE_RECEIPT.json',N/'CANDIDATE_DIFF.patch',
+ N/'independent_review/FINAL_INDEPENDENT_REVIEW.json',
+ N/'R37_VERIFIED_FAILURE_HANDOFF.json',N/'reviewer/R37_EVENT_SEQUENCE_RECEIPT.json',
+ P/'GC_FINAL_CONTROLLED_RESULT.json',P/'gc_cpu/CPU_EXECUTION_LEDGER.json',
+ P/'COLD_PROBE_ATTEMPT2_SCOPE_ADDENDUM.json',P/'GC_SAVED_ARRAY_PREFIX_COMPARISON.json',Path(__file__)]
+for proof in [finite[0],P/'GC_FINAL_CONTROLLED_RESULT.json']:
+ d=json.loads(proof.read_text())
+ for key in ['children_sha256','evidence_sha256']:
+  for name,digest in d.get(key,{}).items():assert sha(name)==digest;extra.append(Path(name))
+gate['verified_inputs_sha256'].update({str(p):sha(p) for p in extra})
+gate['diagnostic_scope']='One authorized any-actual-phase event capture; original route/control/quality unchanged; formal late Actor/full46 UNVERIFIED'
+(C/cp.GATE_NAME).write_text(json.dumps(gate,indent=2)+'\n')
+for p in (C/'profiles').glob('engineering_*.json'):cp.verify_preflight(C,json.loads(p.read_text()))
+receipt=dict(schema='R38_frozen_source_receipt/v1',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ candidate=str(C),gate_sha256=sha(C/cp.GATE_NAME),bindings=len(gate['verified_inputs_sha256']),
+ finite_unittest_cases=37,old_payload_fixture_groups=2,actual_metadata_selection_verified=True,
+ actual_R37_complete_source_captured=False,independent_review_sha256=sha(review),
+ source_changes_stopped=True,new_runtime_started=False,maximum_attempts=1,
+ formal_late_Actor_IPC_PASS=False,navigation_PASS=False)
+with (N/'SOURCE_FREEZE.json').open('x') as f:f.write(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt))
