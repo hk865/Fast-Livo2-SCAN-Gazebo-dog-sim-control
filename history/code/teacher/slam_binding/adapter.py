@@ -534,7 +534,7 @@ def main():
             self.create_timer(.5, self.graph, clock=Clock(clock_type=ClockType.STEADY_TIME))
         def on_clock(self, msg):
             self.binding.clock(int(msg.clock.sec)*1000000000+int(msg.clock.nanosec), time.monotonic())
-        def context(self, msg):
+        def source_context(self, msg):
             if self.binding.clock_ns is None:
                 raise ValueError('No actual clock yet')
             return {'stamp_ns': int(msg.header.stamp.sec)*1000000000+int(msg.header.stamp.nanosec),
@@ -543,7 +543,7 @@ def main():
         def on_odom(self, msg):
             try:
                 p, q, v = msg.pose.pose.position, msg.pose.pose.orientation, msg.twist.twist.linear
-                row = {**self.context(msg), 'child_frame_id': msg.child_frame_id,
+                row = {**self.source_context(msg), 'child_frame_id': msg.child_frame_id,
                        'position': [p.x, p.y, p.z], 'quaternion_xyzw': [q.x, q.y, q.z, q.w],
                        'origin_linear_velocity_body': [v.x, v.y, v.z],
                        'twist_covariance_diagonal': [msg.twist.covariance[7*i] for i in range(6)]}
@@ -555,7 +555,7 @@ def main():
         def on_imu(self, msg):
             try:
                 q, w = msg.orientation, msg.angular_velocity
-                row = {**self.context(msg), 'quaternion_xyzw': [q.x, q.y, q.z, q.w],
+                row = {**self.source_context(msg), 'quaternion_xyzw': [q.x, q.y, q.z, q.w],
                        'angular_velocity_sensor': [w.x, w.y, w.z],
                        'orientation_available': msg.orientation_covariance[0] >= 0}
                 row['accepted'] = self.binding.imu(row)
