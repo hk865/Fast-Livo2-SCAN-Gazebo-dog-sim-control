@@ -235,6 +235,133 @@ class RequestWindowTests(unittest.TestCase):
         self.assertIs(raised.exception, error)
 
 
+class StartupIntegrationTests(unittest.TestCase):
+    fixture = RequestWindowTests.fixture
+
+    def test_main_partition_surrounds_original_launcher_and_binds_helper_source(self):
+        import ipc_request_window as module
+        from gc_startup_partition_tests import FakeGC
+        from gc_startup_partition import StartupPartition
+        w, P, R, events = self.fixture()
+        fake = FakeGC(events)
+        partition = StartupPartition({"enabled": True, "reason": "finite_fake"}, owned_cli=True, gc_module=fake,
+            importer=lambda name: events.append(("import", name)),
+            getpid=lambda: 321, get_ident=lambda: 654, rss=lambda: 100)
+        token = object()
+        originals = (w.Path, w.json, w.canonical, ipc_evidence.FrameTiming)
+        argv = ["test", "--run", "PLACEHOLDER", "--socket", "original-socket"]
+        def original():
+            events.append("original_launcher")
+            self.assertEqual(fake.count, 42)
+            self.assertEqual(__import__("sys").argv, argv)
+            self.assertIsNot(w.Path, originals[0])
+            self.assertIsNot(ipc_evidence.FrameTiming, originals[3])
+            ipc_evidence.FrameTiming(types.SimpleNamespace(write=lambda row: None))
+            return token
+        with tempfile.TemporaryDirectory() as td:
+            argv[2] = td
+            with patch.dict("sys.modules", {"worker": w,
+                    "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
+                    "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
+                    patch.object(module.StartupPartition, "for_run", return_value=partition) as selected, \
+                    patch.object(ipc_fault_window, "main", original), patch("sys.argv", argv), \
+                    patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"):
+                self.assertIs(module.main(owned_cli=True), token)
+                selected.assert_called_once_with(Path(td), owned_cli=True)
+            rows = [json.loads(x) for x in (Path(td) / "ipc_request_substages.jsonl").read_text().splitlines()]
+            self.assertEqual(rows[0]["timers_created"], 1)
+            self.assertTrue(rows[0]["startup_heap_partition"]["applied"])
+            self.assertFalse(rows[-1]["startup_heap_partition_final"]["restored"])
+            self.assertTrue(rows[-1]["startup_heap_partition_final"]["retained_until_process_exit"])
+            helper = str(Path(module.__file__).resolve().parent / "gc_startup_partition.py")
+            self.assertEqual(rows[0]["source_sha256"][helper], hashlib.sha256(b"finite source bytes").hexdigest())
+        self.assertLess(events.index(("import", "torch")), events.index("original_launcher"))
+        self.assertNotIn("unfreeze", events)
+        self.assertEqual((w.Path, w.json, w.canonical, ipc_evidence.FrameTiming), originals)
+
+    def test_main_final_diagnostic_and_sidecar_failures_keep_original_worker_exception(self):
+        import ipc_request_window as module
+        from gc_startup_partition_tests import FakeGC
+        from gc_startup_partition import StartupPartition
+        w, P, R, _ = self.fixture()
+        fake = FakeGC(); fake.unfreeze_error = RuntimeError("must never unfreeze")
+        partition = StartupPartition({"enabled": True}, owned_cli=True, gc_module=fake, importer=lambda _: None,
+            getpid=lambda: 321, get_ident=lambda: 654, rss=lambda: 100)
+        def bad_final():
+            raise RuntimeError("final diagnostic error")
+        partition._finish = bad_final
+        error = RuntimeError("original worker exception identity")
+        def original():
+            raise error
+        class BadStderr:
+            def write(self, *_):
+                raise RuntimeError("stderr error")
+        with tempfile.TemporaryDirectory() as td, patch.dict("sys.modules", {"worker": w,
+                "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
+                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
+                patch.object(module.StartupPartition, "for_run", return_value=partition), \
+                patch.object(ipc_fault_window, "main", original), patch("sys.argv", ["test", "--run", td]), \
+                patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"), \
+                patch.object(RequestWindow, "save", side_effect=OSError("optional evidence failure")), \
+                patch("sys.stderr", BadStderr()):
+            with self.assertRaises(RuntimeError) as raised:
+                module.main(owned_cli=True)
+        self.assertIs(raised.exception, error)
+        self.assertFalse(partition.footer["restored"])
+        self.assertIn("final_diagnostic_error", partition.footer)
+        self.assertNotIn("unfreeze", fake.events)
+
+    def test_v3_policy_capability_and_actual_OFF_receipt_with_existing_file_cap(self):
+        from gc_startup_partition_tests import FakeGC
+        from gc_startup_partition import MAX_STARTUP_METADATA_BYTES, StartupPartition
+        fake = FakeGC()
+        partition = StartupPartition({"enabled": False, "reason": "profile_off"}, gc_module=fake,
+            importer=lambda _: self.fail("OFF cannot import mandatory dependency"))
+        partition.run(lambda: None)
+        c = RequestWindow(); c.startup_partition = partition
+        for seq in range(1, 301):
+            c.begin(seq)
+            for group in range(CONTRACT["maximum_operation_groups"]):
+                c.call(str(group), "bounded", lambda: None)
+            c.finish("response_sent", True)
+        with tempfile.TemporaryDirectory() as td:
+            f = c.save(td, {})
+            raw = f.read_bytes(); lines = raw.splitlines(keepends=True)
+            head, foot = json.loads(lines[0]), json.loads(lines[-1])
+            self.assertEqual(CONTRACT["schema"], "teacher_original_request_substages/v3")
+            self.assertTrue(CONTRACT["GC_schedule_threshold_or_enabled_modified"])
+            self.assertTrue(CONTRACT["GC_heap_partition_strategy_modified"])
+            self.assertFalse(CONTRACT["GC_threshold_or_enabled_modified"])
+            self.assertFalse(CONTRACT["GC_observer_modifies_GC"])
+            self.assertFalse(head["startup_heap_partition"]["applied"])
+            self.assertEqual(fake.events, [])
+            self.assertLessEqual(len(json.dumps({"startup_heap_partition": head["startup_heap_partition"],
+                "startup_heap_partition_final": foot["startup_heap_partition_final"]},
+                separators=(",", ":")).encode()), MAX_STARTUP_METADATA_BYTES)
+            self.assertLessEqual(len(raw), 512 * 1024)
+            self.assertLessEqual(f.stat().st_blocks * 512, 512 * 1024)
+            self.assertEqual(hashlib.sha256(b"".join(lines[1:-1])).hexdigest(), foot["original_scalar_rows_sha256"])
+            self.assertEqual((CONTRACT["native_watchdog_ms"], CONTRACT["source_deadline_ms"]), (200, 300))
+        # Imported launcher defaults OFF even with an enabled profile selection.
+        import ipc_request_window as module
+        w, P, R, _ = self.fixture()
+        token = object()
+        fake = FakeGC()
+        def select(run, *, owned_cli):
+            return StartupPartition({"enabled": True}, owned_cli=owned_cli, gc_module=fake,
+                importer=lambda _: self.fail("imported main cannot import dependency"))
+        with tempfile.TemporaryDirectory() as td, patch.dict("sys.modules", {"worker": w,
+                "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
+                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
+                patch.object(module.StartupPartition, "for_run", side_effect=select) as selected, \
+                patch.object(ipc_fault_window, "main", return_value=token), \
+                patch("sys.argv", ["test", "--run", td]), \
+                patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"):
+            self.assertIs(module.main(), token)
+            selected.assert_called_once_with(Path(td), owned_cli=False)
+        self.assertEqual(fake.events, [])
+
+
 class DefaultGCObserverTests(unittest.TestCase):
     fixture = RequestWindowTests.fixture
 

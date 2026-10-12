@@ -11,9 +11,10 @@ from pathlib import Path
 import sys
 import threading
 import time
+from gc_startup_partition import MAX_STARTUP_METADATA_BYTES, STARTUP_CONTRACT, StartupPartition
 
 CONTRACT = {
-    "schema": "teacher_original_request_substages/v2",
+    "schema": "teacher_original_request_substages/v3",
     "maximum_file_bytes": 512 * 1024,
     "maximum_recent_bytes": 256 * 1024,
     "maximum_recent_records": 128,
@@ -31,7 +32,12 @@ CONTRACT = {
     "performance_non_regression_verified": False,
     "json_call_ordinal_and_input_length_recorded": True,
     "GC_observer_same_thread_active_frame_only": True,
-    "GC_schedule_threshold_or_enabled_modified": False,
+    "GC_schedule_threshold_or_enabled_modified": True,
+    "GC_heap_partition_strategy_modified": True,
+    "GC_threshold_or_enabled_modified": False,
+    "GC_observer_modifies_GC": False,
+    "startup_heap_partition_capability": STARTUP_CONTRACT,
+    "maximum_startup_metadata_bytes": MAX_STARTUP_METADATA_BYTES,
     "maximum_GC_generation_groups": 3,
 }
 
@@ -50,6 +56,7 @@ class RequestWindow:
         self.owner_thread_id = threading.get_ident()
         self.pending_gc = {}
         self.ignored_foreign_gc = 0
+        self.startup_partition = None
 
     def begin(self, sequence):
         self.active = False
@@ -190,6 +197,10 @@ class RequestWindow:
             actual_thresholds=list(gc.get_threshold()), actual_enabled=gc.isenabled(),
             schedule_modified_by_observer=False, foreign_threads_ignored=True)
         footer['ignored_foreign_thread_GC_callbacks'] = self.ignored_foreign_gc
+        if self.startup_partition is not None:
+            startup, final = self.startup_partition.receipt_parts()
+            header['startup_heap_partition'] = startup
+            footer['startup_heap_partition_final'] = final
         encode = lambda x: (json.dumps(x, separators=(",", ":"), allow_nan=False) + "\n").encode()
         payload = encode(header) + b"".join(rows) + encode(footer)
         if len(payload) > CONTRACT["maximum_file_bytes"]:
@@ -334,7 +345,7 @@ def instrument(worker, timing_module, provider_class, recording_class, capture):
                 delattr(obj, name)
 
 
-def main():
+def main(*, owned_cli=False):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--run", type=Path, required=True)
     args, _ = parser.parse_known_args()
@@ -345,14 +356,16 @@ def main():
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from evidence_runtime_v32.worker_logging import RecordingContext
     capture = RequestWindow()
+    partition = StartupPartition.for_run(args.run, owned_cli=owned_cli)
+    capture.startup_partition = partition
     try:
         with observe_default_gc(capture), instrument(worker, ipc_evidence, MissionTerrainProvider, RecordingContext, capture):
-            return ipc_fault_window.main()
+            return partition.run(ipc_fault_window.main)
     finally:
         try:
             here = Path(__file__).resolve().parent
             names = ("worker.py", "ipc_evidence.py", "ipc_fault_window.py", "ipc_request_window.py",
-                     "mission46_terrain.py", "terrain_provider.py")
+                     "mission46_terrain.py", "terrain_provider.py", "gc_startup_partition.py")
             sources = {str(here / n): hashlib.sha256((here / n).read_bytes()).hexdigest() for n in names}
             other = here.parent / "evidence_runtime_v32/worker_logging.py"
             sources[str(other)] = hashlib.sha256(other.read_bytes()).hexdigest()
@@ -365,4 +378,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(owned_cli=True)
