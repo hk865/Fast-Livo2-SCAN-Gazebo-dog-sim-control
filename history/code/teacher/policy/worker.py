@@ -41,21 +41,32 @@ def requested(test,t):
 
 def duration(test):return 600. if test=='navigation' else 26. if test=='switch' else 25. if test.startswith('step') else 15. if test=='stand' else 18.
 
-def navigation_command(path,world_time,acceptance_sha):
+def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
     """Read only SLAM/SCAN-gated command envelopes; stale input parks via policy."""
     try:
         data=json.loads(path.read_text())
+        if data.get('schema_version')!=1:raise ValueError('Unsupported command schema')
         if data.get('source')!='scan_slam' or data.get('mode')!='scan_slam':raise ValueError('Unexpected command source')
         if data.get('acceptance',{}).get('sha256')!=acceptance_sha:raise ValueError('Acceptance mismatch')
+        sequence=data.get('sequence')
+        if isinstance(sequence,bool) or not isinstance(sequence,int) or sequence<1:raise ValueError('Invalid command sequence')
+        envelope_hash=hashlib.sha256(json.dumps(data,sort_keys=True,allow_nan=False).encode()).hexdigest()
+        if sequence_state is not None:
+            previous=sequence_state.get('sequence',0)
+            if sequence<previous or (sequence==previous and envelope_hash!=sequence_state.get('hash')):
+                raise ValueError('Command sequence moved backward or changed')
         wall_age=time.monotonic()-float(data['monotonic_wall']);sim_age=world_time-float(data['sim_time'])
         values=np.asarray(data['command'],dtype=float)
         if values.shape!=(3,)or not np.isfinite(values).all():raise ValueError('Invalid command values')
+        if not isinstance(data.get('stop_requested'),bool):raise ValueError('Missing stop state')
+        if sequence_state is not None:sequence_state.update(sequence=sequence,hash=envelope_hash)
         if data.get('healthy')is not True or not (-.05<=wall_age<=.3 and -.05<=sim_age<=.3):
             return np.zeros(3),True,'SLAM/SCAN input stale or unhealthy'
         if (abs(values)>np.array([.3,.2,.3])+1e-8).any():raise ValueError('Command exceeds reviewed bounds')
+        if data['stop_requested']:return np.zeros(3),False,'SLAM/SCAN requested controlled stop'
         return values,False,'Fresh SLAM/SCAN command'
     except FileNotFoundError:return np.zeros(3),True,'Waiting for SLAM/SCAN command file'
-    except (ValueError,KeyError,TypeError):return np.zeros(3),True,'Rejected malformed SLAM/SCAN command'
+    except (OSError,ValueError,KeyError,TypeError,OverflowError):return np.zeros(3),True,'Rejected malformed SLAM/SCAN command'
 def recv_exact(conn,n):
     buf=b''
     while len(buf)<n:
@@ -82,7 +93,7 @@ def main():
         acceptance=check_acceptance(args.acceptance)
     terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf');rng=np.random.default_rng(args.seed)
     last_action=np.zeros(12);cmd=np.zeros(3);fault=None;first_t=None;settled_frames=0
-    last_command_t=0.;last_request=np.zeros(3)
+    last_command_t=0.;last_request=np.zeros(3);navigation_sequence={}
     metadata={'checkpoint':str(CHECKPOINT),'checkpoint_sha256':SHA,'inference_device':'cpu','torch_threads':1,
               'observation_noise':'teacher_noisy matched uniform' if args.noisy else 'clean teacher_full evaluation',
               'observation_source':'Gazebo privileged COM twist, quaternion, joint physics, applied DCMotor torque, static SDF terrain raycast',
@@ -105,7 +116,9 @@ def main():
                 # Model a command producer that dies at t=7s. Its last command
                 # really expires after .30s, then follows the same stop path.
                 if args.test=='navigation':
-                    request,command_expired,command_reason=navigation_command(args.command_file,s[0],acceptance['sha256'])
+                    current_acceptance=check_acceptance(args.acceptance)
+                    if current_acceptance['sha256']!=acceptance['sha256']:raise RuntimeError('Acceptance changed during navigation')
+                    request,command_expired,command_reason=navigation_command(args.command_file,s[0],acceptance['sha256'],navigation_sequence)
                     phase='tracking'if any(request)else 'stop_transition'
                     last_command_t=t if not command_expired else last_command_t
                 elif args.test!='command_timeout' or t<7:

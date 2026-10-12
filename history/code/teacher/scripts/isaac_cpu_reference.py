@@ -31,6 +31,7 @@ parser.add_argument('--duration', type=float, default=10.)
 parser.add_argument('--only-stand', action='store_true')
 parser.add_argument('--schedule', type=Path, help='JSON cases with duration, segments[start,end,command,mode], optional command_slew xyz per second')
 parser.add_argument('--terrain-sdf', type=Path, help='Exact Gazebo static box/plane collisions imported as real PhysX triangle mesh, including overhead decks')
+parser.add_argument('--physical-clearance',action='store_true',help='Overhead diagnostic only: disable training scan-based height termination and measure true support below base; policy scan remains unchanged')
 add_launcher_args(parser)
 args, hydra_args = setup_preset_cli(parser)
 if args.device != 'cpu':
@@ -126,6 +127,9 @@ config.commands.base_velocity.heading_command = False
 config.commands.base_velocity.rel_heading_envs = 0.
 config.commands.base_velocity.rel_standing_envs = 0.
 config.commands.base_velocity.resampling_time_range = (1000., 1000.)
+if args.physical_clearance:
+    if terrain_manifest is None:raise ValueError('--physical-clearance requires real SDF geometry')
+    config.terminations.base_height=None
 actor = torch.nn.Sequential(torch.nn.Linear(247,512),torch.nn.ELU(),torch.nn.Linear(512,256),torch.nn.ELU(),torch.nn.Linear(256,128),torch.nn.ELU(),torch.nn.Linear(128,12))
 checkpoint = torch.load(args.checkpoint, map_location='cpu', weights_only=False)
 actor.load_state_dict({k.removeprefix('mlp.'):v for k,v in checkpoint['actor_state_dict'].items() if k.startswith('mlp.')}, strict=True)
@@ -139,6 +143,8 @@ protocol = {'checkpoint':str(args.checkpoint), 'checkpoint_sha256':sha,
             'physics_dt':config.sim.dt, 'decimation':config.decimation,
             'schedule':schedule, 'schedule_sha256':hashlib.sha256(args.schedule.read_bytes()).hexdigest() if args.schedule else None,
             'terrain_fixture':terrain_manifest,
+            'physical_clearance_diagnostic':args.physical_clearance,
+            'height_termination_override':'Scan-based native base_height disabled solely for overhead diagnostic; actual support below base ray used for fall clearance. Actor scan retains unchanged20m start, including overhead hits.' if args.physical_clearance else None,
             'no_training':True, 'started_at':time.time()}
 (args.output/'protocol.json').write_text(json.dumps(protocol,indent=2)+'\n')
 cases=[{'name':name,'command':command,'duration':args.duration} for name,command in [('stand',[0.,0.,0.]),('forward',[.3,0.,0.]),('backward',[-.3,0.,0.]),('left',[0.,.2,0.]),('right',[0.,-.2,0.]),('yaw_positive',[0.,0.,.3]),('yaw_negative',[0.,0.,-.3]),('switch',None)]]
@@ -213,6 +219,9 @@ try:
                 torque=robot.data.applied_torque.torch[0,ids].numpy().copy()
                 ray=base.scene.sensors['height_scanner'].data.ray_hits_w.torch[0,:,2].numpy().copy()
                 clearance=float(pos[2]-np.median(ray[np.isfinite(ray)])) if np.isfinite(ray).any() else None
+                if args.physical_clearance:
+                    support_z,_=sdf_geometry.raycast(pos[None,:]+[0,0,1e-5])
+                    clearance=float(pos[2]-support_z[0]) if np.isfinite(support_z[0]) else None
                 cf=contact.data.net_forces_w.torch[0].numpy().copy()
                 trace.append({'t':t,'command':target.tolist(),'requested_command':requested_target.tolist(),'controller_mode':control_mode,'position':pos.tolist(),'quaternion_xyzw':quat.tolist(),
                     'linear_velocity_body_com':vx.tolist(),'angular_velocity_body':wz.tolist(),
