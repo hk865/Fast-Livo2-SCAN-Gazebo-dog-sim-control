@@ -251,9 +251,19 @@ class CommandGate:
                 a=self.anchor;dx=self.position[0]-a['origin'][0];dy=self.position[1]-a['origin'][1]
                 c,s=math.cos(a['yaw']),math.sin(a['yaw']);along=c*dx+s*dy;lateral=-s*dx+c*dy
                 fence=self.profile['fence']
-                if (not fence['along_min_m']<=along<=fence['along_max_m']
+                if self.profile.get('registered_route_fence'):
+                    from route_fence import tube_evidence
+                    config=self.profile['registered_route_fence']
+                    try:
+                        self.registered_fence=tube_evidence(self.position,a['registered_route_camera_init_xyz'],
+                            config['horizontal_radius_m'],config['height_error_m'])
+                        outside=not self.registered_fence['inside']
+                    except (KeyError,ValueError,TypeError):outside=True
+                else:
+                    outside=(not fence['along_min_m']<=along<=fence['along_max_m']
                     or abs(lateral)>fence['lateral_abs_m']
-                    or abs(self.position[2]-a['origin'][2])>fence['height_abs_m']):
+                    or abs(self.position[2]-a['origin'][2])>fence['height_abs_m'])
+                if outside:
                     self.failed='Measured SLAM body pose left finite route fence; restart after review'
                     reasons.append(self.failed)
         if self.graph_wall is None or now - self.graph_wall >= TIMEOUT:
@@ -286,6 +296,7 @@ class CommandGate:
                 'slam_stamp_ns': self.pose_stamp_ns, 'publisher_graph': self.graph,
                 'controller_source': self.controller_source,
                 'controller_source_receipt': self.controller_source_receipt,
+                'registered_route_fence': getattr(self,'registered_fence',None),
                 'controller_source_error': self.controller_source_error}
 
 

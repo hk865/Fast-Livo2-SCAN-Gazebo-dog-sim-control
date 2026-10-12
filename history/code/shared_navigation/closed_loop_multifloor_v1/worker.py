@@ -30,6 +30,36 @@ def main():
     sys.path.insert(0,str(run/'sources/policy'))
     spec=importlib.util.spec_from_file_location('frozen_cpu_closed_loop_teacher',run/'sources/policy/worker.py')
     legacy=importlib.util.module_from_spec(spec);spec.loader.exec_module(legacy)
+    provider=None
+    if p.get('terrain_layer_switch') is not None:
+        from terrain_provider import SwitchingTerrainProvider
+        original_map=legacy.TerrainHeightMap
+        observation=sys.modules[legacy.build_observation.__module__]
+        try:provider=SwitchingTerrainProvider(run,scope,original_map,observation)
+        except Exception as error:
+            with (run/'terrain_provider_initialization_failure.json').open('x') as out:
+                out.write(canonical({'schema':'teacher_actor_terrain_switch/v1','status':'failed',
+                    'stage':'initialization','error':type(error).__name__+': '+str(error),
+                    'navigation_ground_truth_used':False})+'\n')
+            raise
+        class ActorTerrainFactory:
+            @staticmethod
+            def from_sdf(path,include_models=None,excluded_models=('go2','teacher_go2','moving_obstacle')):
+                if include_models is None:
+                    # Native clearance/contact safety is independent of Actor
+                    # terrain selection and retains all static collisions.
+                    return original_map.from_sdf(path,excluded_models=excluded_models)
+                if (Path(path).resolve()!=provider.world or list(include_models)!=provider.initial_models or
+                    tuple(excluded_models)!=('go2','teacher_go2','moving_obstacle')):
+                    raise ValueError('Unexpected Actor terrain constructor; no geometry fallback allowed')
+                return provider
+        legacy.TerrainHeightMap=ActorTerrainFactory
+        original_build=legacy.build_observation
+        def build_observation(*args,**kwargs):
+            obs,extra=original_build(*args,**kwargs)
+            extra.update(actor_terrain_provider=provider.evidence())
+            return obs,extra
+        legacy.build_observation=build_observation
     original_recv,original_atomic=legacy.recv_exact,legacy.atomic_json
     latest={'clock_ns':None,'pending_ack':None,'metadata':None,'evidence':None,'completion_elapsed_s':None}
     acks=collections.deque(maxlen=32);last_seq=0;last_hash=None;ack_seq=0
@@ -40,7 +70,9 @@ def main():
         nonlocal ack_seq
         data=original_recv(conn,n)
         if n==512:
-            clock=round(float(np.frombuffer(data,dtype='<f8')[0])*1e9)
+            native_state=np.frombuffer(data,dtype='<f8')
+            if provider is not None:provider.observe_state(native_state)
+            clock=round(float(native_state[0])*1e9)
             latest['clock_ns']=clock;pending=latest['pending_ack']
             if pending is not None and clock>pending['stamp_ns']:
                 # Receiving the next actuator request proves the preceding
@@ -97,15 +129,22 @@ def main():
             except OSError:changed.append(name)
         if changed:cmd,rejected,attempt=np.zeros(3),True,{'status':'rejected','reason':'Frozen source changed','paths':changed}
         else:cmd,rejected,attempt=read_command()
+        if provider is not None and not changed:
+            if provider.check_switch():
+                cmd=np.zeros(3);rejected=True
+                attempt.update(execution_override='actor_terrain_switch_protection',
+                    reason='Actor terrain switch refused: '+provider.failure if provider.failure else 'Waiting for causal original connector arrival clock')
         evidence={'sim_time':float(t),'physics_clock_ns':latest['clock_ns'],'command':cmd.tolist(),
             'rejected':rejected,'reason':attempt['reason'],'actual_read_attempt':attempt,
             'actual_original_envelope':attempt.get('decoded_envelope'),'navigation_ground_truth_used':False}
+        if provider is not None:evidence['actor_terrain_provider']=provider.evidence()
         latest['evidence']=evidence;log.write(canonical(evidence)+'\n')
         # Completion/hold is declared by actual SLAM/IMU source, never native
         # position. First declaration is immutable and cannot shift later.
         try:
             status=json.loads((run/'navigation_status.json').read_text());park=status.get('cascade_parking') or {}
-            if status.get('state')=='succeeded' and park.get('mode')=='active_hold' and latest['completion_elapsed_s'] is None:
+            terrain_ready=provider is None or (provider.switched and provider.failure is None)
+            if terrain_ready and status.get('state')=='succeeded' and park.get('mode')=='active_hold' and latest['completion_elapsed_s'] is None:
                 latest['completion_elapsed_s']=float(t)
             if latest['completion_elapsed_s'] is not None and latest['metadata'] is not None:
                 latest['metadata']['test_duration_s']=min(float(p['duration_s']),latest['completion_elapsed_s']+7.)
@@ -120,6 +159,7 @@ def main():
                 obj.update(command_expired=e.get('rejected',True),command_reason=e.get('reason','no input'),
                     command_source='actual SLAM/IMU cascade with original SCAN path',closed_loop_read_evidence=e,
                     outer_navigation_ground_truth_used=False,privileged_actor_observations=True)
+                if provider is not None:obj['actor_terrain_provider']=provider.evidence()
                 latest['pending_ack']={'stamp_ns':round(obj['world_sim_time']*1e9),
                     'applied_command_body':obj['command'],'requested_command_body':obj['requested']}
             return json.dumps(obj,**kwargs)
@@ -132,8 +172,11 @@ def main():
                 source_timeout_s=.3,source_scope_sha256=scope_sha,legacy_motion_evaluation_applicable=False,
                 command_start_seconds=None,command_end_s=None,acceptance_is_global=False)
             latest['metadata']=obj
+            if provider is not None:obj['actor_terrain_layer_switch']=provider.contract()
         if path.name=='worker_result.json':obj.update(controller_hold_observed_worker_elapsed_s=latest['completion_elapsed_s'],
             navigation_ground_truth_used=False,actor_observations_remain_privileged=True,last_closed_loop_read=latest['evidence'])
+        if path.name=='worker_result.json' and provider is not None:
+            obj.update(actor_terrain_provider=provider.evidence(),actor_terrain_switch_failed=provider.failure is not None)
         original_atomic(path,obj)
 
     legacy.recv_exact=receive;legacy.requested=request;legacy.atomic_json=metadata;legacy.json=IsolatedJSON()
@@ -141,6 +184,8 @@ def main():
     sys.argv=[str(run/'sources/policy/worker.py'),'--run',str(run),'--test','forward','--socket',a.socket,
         '--terrain-target-manifest',str(run/'terrain_target_manifest.json')]
     try:legacy.main()
-    finally:log.close();ack_log.close()
+    finally:
+        log.close();ack_log.close()
+        if provider is not None:provider.close()
 
 if __name__=='__main__':main()

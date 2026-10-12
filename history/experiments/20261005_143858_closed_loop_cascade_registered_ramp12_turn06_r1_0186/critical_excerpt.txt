@@ -1,0 +1,22 @@
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+Traceback (most recent call last):
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v1/worker.py", line 191, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/closed_loop_multifloor_v1/worker.py", line 186, in main
+    try:legacy.main()
+        ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/sources/policy/worker.py", line 218, in main
+    conn,_=sock.accept();conn.settimeout(10)
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/socket.py", line 295, in accept
+    fd, addr = self._accept()
+               ^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/world.sdf:L1795]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="demo_rgb"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/world.sdf:L2035]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/world.sdf:L2089]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/lidar/frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/world.sdf:L2119]: XML Element[frame_id], child of element[lidar], not defined in SDF. Copying[frame_id] as children of [lidar].
+[1;33mWarning [Utils.cc:132][0m [/sdf/world[@name="teacher_demo"]/model[@name="go2"]/link[@name="base_link"]/sensor[@name="velodyne-VLP16"]/gz_frame_id:/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_143858_closed_loop_cascade_registered_ramp12_turn06_r1_0186/world.sdf:L2124]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].

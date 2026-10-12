@@ -139,6 +139,13 @@ def prepare(run,args):
                  '--run',str(run),'--profile','shm_64m'],run/'cloud_transport_prepare.log')
     scope=module(HERE/'pid_scope.py','closed_loop_prepare_'+uuid.uuid4().hex)
     receipt=scope.prepare(run,p)
+    ramp_contract=None
+    if p.get('ramp_segments'):
+        script=ROOT/'test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py'
+        segments=','.join(f"{s['model']}:{s['direction']}:{s['destination_goal_index']}"for s in p['ramp_segments'])
+        run_command([str(SYSTEM_PYTHON),'-B',str(script),'--run',str(run),'--prepare-contract',
+            '--segments',segments],run/'ramp_contract_prepare.log')
+        ramp_contract=sha(run/'ramp_acceptance_contract.json')
     scope_runtime=json.loads((run/'navigation_scope.json').read_text()).get('runtime',{})
     if scope_runtime.get('required_owned_roles')!=list(REQUIRED_ROLES)or scope_runtime.get('expected_launch_children')!=EXPECTED_CHILDREN:
         raise RuntimeError('New scope and runner process contracts disagree')
@@ -147,6 +154,7 @@ def prepare(run,args):
           'profile_path':str(selected),'profile_sha256':sha(selected),'profile':p,
           'required_owned_roles':list(REQUIRED_ROLES),'expected_launch_children':EXPECTED_CHILDREN,'scope_runtime':scope_runtime,
           'duration_s':duration,'real_time_factor':args.real_time_factor,'wall_budget_s':duration/args.real_time_factor*3+90,
+          'ramp_contract_sha256':ramp_contract,
           'ros_domain':args.domain,'actor_python':str(args.cpu_python.resolve()),'system_python':str(SYSTEM_PYTHON),
           'actor_device':'cpu','actor_threads':1,'physics_step_s':.005,'Actor_hz':50,'native_PD_hz':200,
           'exclusive_writer':'teacher_sim::TeacherActuator','checkpoint_path':str(CHECKPOINT),'model_sha256':MODEL_SHA,

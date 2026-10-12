@@ -25,7 +25,7 @@ base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
 from pid_scope import verify_scope
 from control_core import rotation_xyzw,body_tilt
 from runtime_io import EvidenceWriter,latest_sensor_qos
-from teacher_transition import TeacherHeadingGate
+from transition_gate import TeacherHeadingGate
 from guard_audit import NativeGuardAudit,result_json
 from std_msgs.msg import String
 

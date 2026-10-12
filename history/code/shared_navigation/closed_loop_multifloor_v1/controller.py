@@ -268,6 +268,7 @@ class PIDNavigation(TeacherNavigation):
                 source_pose_received_monotonic_wall=None if f is None else f['received_wall_ns']/1e9,
                 paired_imu_received_monotonic_wall=None if i is None else i['received_wall_ns']/1e9,
                 request_id=row['request_id'],trajectory_id=row['trajectory_id'],
+                waypoint_index=row['waypoint_index'],
                 goal_sha256=row['cascade']['fixed_goal_sha256'],path_sha256=row['cascade']['path_sha256'],
                 cascade_mode=row['cascade']['mode'],
                 parking_hold_declared_pose_stamp_ns=row['cascade']['parking_hold_declared_pose_stamp_ns'])

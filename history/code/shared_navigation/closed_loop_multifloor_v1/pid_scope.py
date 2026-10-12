@@ -22,14 +22,16 @@ def runtime_files():
     return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+[
         NAV/n for n in ('runtime_io.py','teacher_transition.py','guard_audit.py','slam.launch.py','sensor_relay.py')]+[
         DEMO/'navigation'/n for n in ('control_core.py','trajectory_contract.py','goal_regions.py','event_archive.py')]+[
-        DEMO/'slam'/n for n in ('odom_adapter.py','self_echo_filter.py','geometry.py','map_archive.py')]+[
+        DEMO/'slam'/n for n in ('odom_adapter.py','self_echo_filter.py','geometry.py','map_archive.py','heading_alignment.py')]+[
         DEMO/'camera_mode/slam/fastlivo.yaml',DEMO/'camera_mode/slam/camera.yaml',
         DEMO/'slam/ros2_ws/install/fast_livo2_core/lib/libfast_livo2_core.so',
         DEMO/'slam/ros2_ws/install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',
         DEMO/'navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node',
         ROOT/'policy/worker.py',ROOT/'policy/observation.py',ROOT/'policy/contract.json',
         ROOT/'simulation/prepare.py',ROOT/'simulation/teacher_actuator.cpp',ROOT/'simulation/build/libteacher_actuator.so',
-        ROOT/'scripts/capture.py',ROOT/'runs/acceptance.json']
+        ROOT/'scripts/capture.py',ROOT/'runs/acceptance.json',
+        ROOT/'test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_ramp.py',
+        ROOT/'test_results/closed_loop_navigation_20261005/acceptance_audit/evaluate_closed_loop.py']
 
 def verify_scope(path,raw=None):
     path=Path(path).resolve();raw=path.read_bytes() if raw is None else raw;d=json.loads(raw);digest=hashlib.sha256(raw).hexdigest()
@@ -82,7 +84,14 @@ def prepare(run,profile):
     write(run/'navigation_fastlivo.yaml',cfg);write(run/'navigation_camera.yaml',yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text()))
     write(run/'navigation_profile.json',profile);write(run/'navigation_scenario.json',{'mode':'teacher','sensors':s})
     terrain=ROOT/profile['terrain_target_manifest'];write(run/'terrain_target_manifest.json',json.loads(terrain.read_text()))
-    files=runtime_files()+[terrain]+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
+    layer_files=[]
+    if profile.get('terrain_layer_switch'):
+        layers=profile['terrain_layer_switch']
+        first=ROOT/layers['initial_manifest'];alternate=ROOT/layers['alternate_manifest']
+        if first.resolve()!=terrain.resolve():raise RuntimeError('Initial privileged layer differs from frozen policy source')
+        write(run/'alternate_terrain_target_manifest.json',json.loads(alternate.read_text()))
+        layer_files=[first,alternate,run/'alternate_terrain_target_manifest.json']
+    files=runtime_files()+[terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
         'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json')]
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
