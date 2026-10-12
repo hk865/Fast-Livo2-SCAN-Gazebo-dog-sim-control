@@ -51,7 +51,7 @@ def run(profile,camera=False):
     (directory/'truth_profile.json').write_text(json.dumps(profile,indent=2)+'\n')
     refs={}
     sources=[(ROOT/'policy'/name,Path('policy')/name)for name in ('worker.py','observation.py','contract.json')]
-    sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json')if (HERE/name).exists()]
+    sources += [(HERE/name,Path('truth')/name)for name in ('core.py','worker.py','run.py','evaluate.py','protocol.json','terrain_receipt.py')if (HERE/name).exists()]
     sources += [(ROOT/'simulation/teacher_actuator.cpp',Path('native/teacher_actuator.cpp'))]
     for source,relative in sources:
         dest=directory/'sources'/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,dest);refs[str(relative)]=sha(dest)
@@ -114,6 +114,9 @@ def run(profile,camera=False):
     if (directory/'sources/truth/evaluate.py').exists():
         subprocess.run([sys.executable,str(directory/'sources/truth/evaluate.py'),'--run',str(directory)],check=True,
                        stdout=(directory/'evaluation.log').open('w'),stderr=subprocess.STDOUT)
+    if profile['terrain']!='flat' and (directory/'sources/truth/terrain_receipt.py').exists():
+        subprocess.run([sys.executable,str(directory/'sources/truth/terrain_receipt.py'),'--run',str(directory)],check=True,
+                       stdout=(directory/'terrain_evaluation.log').open('w'),stderr=subprocess.STDOUT)
     print(json.dumps({'run':str(directory),'runtime_error':error}),flush=True)
     return directory
 
