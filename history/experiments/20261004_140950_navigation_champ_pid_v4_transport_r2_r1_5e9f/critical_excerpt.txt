@@ -1,0 +1,14 @@
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+[WARN] [1791094191.855235198] [rcl]: ROS_LOCALHOST_ONLY is deprecated but still honored if it is enabled. Use ROS_AUTOMATIC_DISCOVERY_RANGE and ROS_STATIC_PEERS instead.
+[WARN] [1791094191.855263926] [rcl]: 'localhost_only' is disabled, 'automatic_discovery_range' and 'static_peers' will be used.
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+ command: [Joint: 'rf_lower_leg_joint', effort: 24.508094], limited: [Joint: 'rf_lower_leg_joint', effort: 23.500000]) with desired period : 0.004000 sec.
+[ERROR] [1791094236.966177790] [controller_manager]: Command of at least one joint is out of limits (throttled log). Joint: 'lh_lower_leg_joint', (actual: [Joint: 'lh_lower_leg_joint', position: -1.704065, velocity: 1.141647], command: [Joint: 'lh_lower_leg_joint', effort: 24.505480], limited: [Joint: 'lh_lower_leg_joint', effort: 23.500000]) with desired period : 0.004000 sec.
+[ERROR] [1791094239.663088595] [controller_manager]: Command of at least one joint is out of limits (throttled log). Joint: 'lf_lower_leg_joint', (actual: [Joint: 'lf_lower_leg_joint', position: -1.546779, velocity: 17.237334], command: [Joint: 'lf_lower_leg_joint', effort: -24.116552], limited: [Joint: 'lf_lower_leg_joint', effort: -23.500000]) with desired period : 0.004000 sec.
+[ERROR] [1791094240.662046263] [controller_manager]: Command of at least one joint is out of limits (throttled log). Joint: 'rf_lower_leg_joint', (actual: [Joint: 'rf_lower_leg_joint', position: -1.654817, velocity: 0.975157], command: [Joint: 'rf_lower_leg_joint', effort: 23.953249], limited: [Joint: 'rf_lower_leg_joint', effort: 23.500000]) with desired period : 0.004000 sec.
+[ERROR] [1791094241.676723849] [controller_manager]: Command of at least one joint is out of limits (throttled log). Joint: 'lh_lower_leg_joint', (actual: [Joint: 'lh_lower_leg_joint', position: -1.664371, velocity: -14.246306], command: [Joint: 'lh_lower_leg_joint', effort: 25.797460], limited: [Joint: 'lh_lower_leg_joint', effort: 23.500000]) with desired period : 0.004000 sec.
+[INFO] [1791094385.282477903] [controller_manager.pal_statistics]: Async messages lost 0
+[INFO] [1791094385.282538967] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[INFO] [1791094385.284851453] [controller_manager.pal_statistics]: Async messages lost 0
+[INFO] [1791094385.284880326] [controller_manager.pal_statistics]: publish_async_failures_ 0
