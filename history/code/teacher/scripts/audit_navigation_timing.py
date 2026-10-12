@@ -49,9 +49,11 @@ def spans(history, predicate, maximum_sample_gap_wall_s=.35):
     return sorted(result, key=lambda item: item['duration_sim_s'], reverse=True)
 
 
-def evaluate(run):
+def evaluate(run, write=True):
     run = run.resolve()
     policy = rows(run/'telemetry.jsonl')
+    manifest = json.loads((run/'policy_manifest.json').read_text())
+    slew = np.asarray(manifest.get('command_slew_acceleration', [.6, .6, .8]), float)*.02
     health = rows(run/'navigation_sensor_gate_history.jsonl')
     commands = rows(run/'navigation_command_history.jsonl')
     status = rows(run/'navigation_status.jsonl')
@@ -60,6 +62,7 @@ def evaluate(run):
                     for seq, row in command_index.items()}
     lineage_errors = []
     ttl_errors = []
+    command_slew_errors = []
     read_counts = collections.Counter()
     accepted_age = []
     matched_envelope_frames = 0
@@ -77,6 +80,11 @@ def evaluate(run):
             observations.append((world, read_wall))
         request = np.asarray(row.get('requested', [0, 0, 0]), float)
         command = np.asarray(row.get('command', [0, 0, 0]), float)
+        if index:
+            previous = np.asarray(policy[index-1]['command'], float)
+            expected_slew = previous+np.clip(request-previous, -slew, slew)
+            if np.max(abs(command-expected_slew)) > 1e-9:
+                command_slew_errors.append({'frame': index, 'reason': 'Actor command differs from frozen requested-command slew'})
         if row.get('command_expired') is True and np.max(abs(request)) > 1e-9:
             ttl_errors.append({'frame': index, 'reason': 'Expired input emitted nonzero requested velocity'})
         if outcome in ('accepted', 'valid_but_unhealthy_or_stale'):
@@ -132,7 +140,9 @@ def evaluate(run):
                                                     'matched_envelope_frames': matched_envelope_frames, 'errors': lineage_errors},
                   'observed_command_TTL_boundary': {'status': 'passed' if not ttl_errors and policy else 'failed', 'errors': ttl_errors,
                                                    'limit_s': .3, 'moving_to_stale_physical_stop': 'unverified' if not moving_stale else 'requires native stop interval audit',
-                                                   'limit': 'Zero standing/rejected input holding alone does not verify stopping from motion'}},
+                                                   'limit': 'Zero standing/rejected input holding alone does not verify stopping from motion'},
+                  'actual_teacher_command_slew': {'status': 'passed' if policy and not command_slew_errors else 'failed',
+                                                   'maximum_per_policy_step_delta': slew.tolist(), 'errors': command_slew_errors}},
               'metrics': {'real_time_factor_observed': rtf,
                           'sensor_ready_snapshot_spans': spans(health, lambda row: row.get('ready') is True),
                           'bridge_healthy_snapshot_spans': spans(commands, lambda row: row.get('healthy') is True),
@@ -146,12 +156,13 @@ def evaluate(run):
                           'alignment_phase_snapshot_counts': dict(collections.Counter(row.get('alignment_phase') for row in status)),
                           'maximum_controller_tilt_stop_counter': max((row.get('tilt_stops',0) for row in status), default=0),
                           'maximum_raw_imu_tilt_rad': max((row.get('raw_imu_max_tilt_rad') or 0 for row in status), default=None),
-                          'heading_gate_required_pre_and_post_stop_sim_s': [1., 1.],
+                          'heading_gate_runtime_source': 'Read this run archived controller/shared source; newer Teacher wrappers may override the old CHAMP gate',
                           'snapshot_span_limit': 'Observed adjacent ready snapshots only; the command envelope chain and actual policy commands remain primary evidence'},
               'analyzer_sha256': sha(Path(__file__)), 'source_hashes': {name: sha(run/name) for name in
-                  ('telemetry.jsonl','navigation_status.jsonl','navigation_sensor_gate_history.jsonl','navigation_command_history.jsonl')},
+                  ('telemetry.jsonl','navigation_status.jsonl','navigation_sensor_gate_history.jsonl','navigation_command_history.jsonl','policy_manifest.json')},
               'global_navigation_pass_claimed': False, 'original_evidence_overwritten': False}
-    (run/'navigation_timing_audit.json').write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
+    if write:
+        (run/'navigation_timing_audit.json').write_text(json.dumps(result, indent=2, allow_nan=False)+'\n')
     return result
 
 

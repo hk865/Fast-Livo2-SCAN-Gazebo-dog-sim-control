@@ -88,7 +88,13 @@ def sensor_terms(run,state,obs,broker_sha):
         eligible=[v for v in data['histories'][key]if 0<=stamp_ns-int(v['stamp_ns'])<=25000000 and 0<=now-float(v['received_monotonic_wall'])<=.3]
         if not eligible:
             history=data['histories'][key];latest_stamp=int(history[-1]['stamp_ns'])if history else None
-            raise ValueError('No causal fresh actual '+key+' sample; reference_ns='+str(stamp_ns)+' latest_ns='+str(latest_stamp)+' age_sim_s='+str((stamp_ns-latest_stamp)*1e-9 if latest_stamp is not None else None)+' broker_sequence='+str(data['broker_sequence']))
+            latest_wall_age=now-float(history[-1]['received_monotonic_wall'])if history else None
+            atomic_json(run/'sensor_feedback_rejection.json',{'schema_version':1,'reference_ns':stamp_ns,
+                'read_monotonic_wall':now,'rejected_source':key,'broker_payload':data,
+                'candidate_ages':[{'stamp_ns':int(v['stamp_ns']),'age_sim_s':(stamp_ns-int(v['stamp_ns']))*1e-9,
+                    'age_wall_s':now-float(v['received_monotonic_wall'])}for v in history],
+                'maximum_sim_age_s':.025,'maximum_wall_age_s':.3,'truth_fallback':False})
+            raise ValueError('No causal fresh actual '+key+' sample; reference_ns='+str(stamp_ns)+' latest_ns='+str(latest_stamp)+' age_sim_s='+str((stamp_ns-latest_stamp)*1e-9 if latest_stamp is not None else None)+' age_wall_s='+str(latest_wall_age)+' broker_sequence='+str(data['broker_sequence']))
         selected[key]=max(eligible,key=lambda v:int(v['stamp_ns']))
     imu,joints=selected['imu'],selected['joints'];gyro=np.asarray(imu['gyro_body']);gravity=np.asarray(imu['gravity_body']);q=np.asarray(joints['q']);qd=np.asarray(joints['qd'])
     if gyro.shape!=(3,)or gravity.shape!=(3,)or q.shape!=(12,)or qd.shape!=(12,)or not all(np.isfinite(v).all()for v in (gyro,gravity,q,qd)):

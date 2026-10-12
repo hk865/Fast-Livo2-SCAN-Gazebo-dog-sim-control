@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -56,6 +57,8 @@ def normalize(row):
     if not isinstance(row, dict):
         return None
     stamp = finite_number(first(row, ('sim_time', 'sim', 't', 'time', 'stamp', 'clock')))
+    if stamp is None and finite_number(row.get('stamp_ns')) is not None:
+        stamp = float(row['stamp_ns']) / 1e9
     if stamp is None:
         return None
     command = vector(first(row, ('command', 'cmd', 'cmd_vel', 'requested', 'requested_command')))
@@ -173,6 +176,43 @@ class Dashboard:
     def __init__(self, runs):
         self.runs = runs.resolve()
         self.telemetry = Telemetry()
+        self.plan_cache = {}
+
+    def navigation_view(self, directory):
+        """Only measured SLAM and an archived actual SCAN payload are drawn."""
+        poses = self.telemetry.read(directory / 'navigation_slam_poses.jsonl')
+        request = read_json(directory / 'navigation_request.json')
+        result = {'poses': poses, 'request': request,
+                  'state': read_json(directory / 'navigation_status.json'),
+                  'scan': {}, 'source': 'Actual sensor SLAM in camera_init; no Gazebo truth input'}
+        files = sorted((directory / 'navigation_trajectories').glob('*_trajectory_*.json'))
+        if not files:
+            return result
+        record = files[-1]
+        try:
+            key = (str(record), record.stat().st_mtime_ns)
+            if key not in self.plan_cache:
+                import numpy as np
+                data = read_json(record)
+                archive = self.inside(record.parent / data['array_file'])
+                if archive is None or hashlib.sha256(archive.read_bytes()).hexdigest() != data['array_sha256']:
+                    raise ValueError('Actual SCAN array hash mismatch')
+                with np.load(archive, allow_pickle=False) as saved:
+                    samples = saved['samples']
+                    if samples.ndim != 2 or samples.shape[1] != 3 or not np.isfinite(samples).all():
+                        raise ValueError('Actual SCAN samples malformed')
+                    stride = max(1, math.ceil(len(samples) / 2000))
+                    points = samples[::stride].tolist()
+                self.plan_cache[key] = {'trajectory_id': data['trajectory_id'],
+                    'waypoint_index': data['waypoint_index'], 'points': points,
+                    'array_sha256': data['array_sha256'], 'source': data['source'],
+                    'file': record.name, 'hash_verified': True}
+                while len(self.plan_cache) > 6:
+                    self.plan_cache.pop(next(iter(self.plan_cache)))
+            result['scan'] = self.plan_cache[key]
+        except (OSError, ValueError, KeyError, ImportError):
+            result['scan'] = {'error': 'Actual SCAN payload not available or hash not verified'}
+        return result
 
     def inside(self, path):
         try:
@@ -248,6 +288,8 @@ class Dashboard:
                 'step_functional_source': 'summary_functional.reproduced.json' if corrected else 'summary_functional.json',
                 'step_safety': read_json(directory / 'supplemental_native_safety.json'),
                 'full_ramp': read_json(directory / 'summary_full_ramp.json'),
+                'navigation_summary': read_json(directory / 'summary_navigation_independent.json'),
+                'navigation': self.navigation_view(directory),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),
                            'gif': (directory / 'frame_replay.gif').is_file(),
