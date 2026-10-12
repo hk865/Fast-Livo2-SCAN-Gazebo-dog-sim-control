@@ -129,6 +129,7 @@ def make_node(rclpy, args, run, output, contract):
             super().__init__('teacher_sensor_shadow_audit')
             self.histories = {key: deque(maxlen=1200 if key != 'cloud' else 24) for key in TOPICS}
             self.counts, self.invalid = Counter(), Counter()
+            self.periods = {key: {'sim': [], 'wall': []} for key in TOPICS}
             self.errors, self.gaps = {}, {key: [] for key in TOPICS}
             self.matched = Counter()
             self.references = self.reference_failures = 0
@@ -158,8 +159,16 @@ def make_node(rclpy, args, run, output, contract):
             if not math.isfinite(stamp) or stamp < 0:
                 self.invalid[key] += 1
                 return
+            now = time.monotonic()
+            if self.histories[key]:
+                previous = self.histories[key][-1]
+                if stamp <= previous['t']:
+                    self.invalid[key] += 1
+                    return
+                self.periods[key]['sim'].append(stamp - previous['t'])
+                self.periods[key]['wall'].append(now - previous['received_monotonic_wall'])
             self.counts[key] += 1
-            self.histories[key].append({'t': stamp, 'received_monotonic_wall': time.monotonic(),
+            self.histories[key].append({'t': stamp, 'received_monotonic_wall': now,
                                         'frame': message.header.frame_id, **values})
 
         def imu(self, message):
@@ -298,7 +307,9 @@ def make_node(rclpy, args, run, output, contract):
                 result['terms']['projected_gravity_slam'] = self.metric('projected_gravity_slam', slam['rotation'].T @ np.asarray([0., 0., -1.]) if slam else None, baseline_gravity)
             except (TypeError, IndexError, ValueError):
                 result['terms']['projected_gravity_imu'] = result['terms']['projected_gravity_slam'] = None
-            result['terms']['joint_pos_rel'] = self.metric('joint_pos_rel', joints['q'] if joints else None, reference.get('q'))
+            default_q = np.asarray(contract['default_joint_positions'])
+            reference_q = np.asarray(reference['q']) - default_q if isinstance(reference.get('q'), list) and len(reference['q']) == 12 else None
+            result['terms']['joint_pos_rel'] = self.metric('joint_pos_rel', joints['q'] - default_q if joints else None, reference_q)
             result['terms']['joint_vel_rel'] = self.metric('joint_vel_rel', joints['qd'] if joints else None, reference.get('qd'), .05)
             result['terms']['joint_effort'] = {'status': 'unverified', 'source': 'No physical torque measurement established; native applied_torque is a force command'}
             result['terms']['velocity_commands'] = {'status': 'internal_nonprivileged', 'recorded_value': reference.get('command')}
@@ -347,6 +358,8 @@ def make_node(rclpy, args, run, output, contract):
                 gaps = self.gaps[key]
                 sources[key] = {'topic': TOPICS[key], 'received': self.counts[key], 'invalid': self.invalid[key],
                     'causal_matched_rows': self.matched[key], 'status': 'shadow_data_available_unverified' if self.matched[key] else 'unverified_missing',
+                    'received_period_s': {clock: {'p50': float(np.median(values)), 'p95': float(np.percentile(values, 95)), 'max': max(values)} if values else None
+                                          for clock, values in self.periods[key].items()},
                     'pair_age_sim_s': {'p50': float(np.median(gaps)), 'p95': float(np.percentile(gaps, 95)), 'max': max(gaps)} if gaps else None}
             metrics = {name: {'samples': len(values), 'scaled_rmse': np.sqrt(np.mean(np.asarray(values)**2, axis=0)).tolist(),
                               'scaled_error_abs_max': np.max(np.abs(values), axis=0).tolist()} for name, values in self.errors.items() if values}
