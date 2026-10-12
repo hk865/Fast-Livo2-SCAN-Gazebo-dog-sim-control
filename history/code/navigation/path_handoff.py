@@ -121,3 +121,25 @@ def early_request(self,reference):
     self.path_handoff_last_check=receipt
     self.evidence.append(self.run/'path_handoff_early_requests.jsonl',receipt)
     return receipt
+
+def retention_reference_eligibility(self):
+    """Original drive curvature gate must also hold for geometric retention.
+    Preview clones the original controller: no progress, integral or command
+    mutation. It grants no replacement, heading or stopping authority.
+    """
+    required=(self.heading_gate.phase=='drive' and self.cascade is not None
+        and self.cascade.capture_stamp is None
+        and self.cascade.spatial_config['curvature_speed_limit_enabled'])
+    if not required:
+        return dict(allowed=True,required=False,reason='original_drive_curvature_gate_not_required')
+    try:
+        reference=self.cascade.preview_reference(self.pose)
+        allowed=(reference['curvature_valid'] is True or reference['heading_source']=='fixed_goal_tail')
+    except (ValueError,TypeError,KeyError,IndexError,FloatingPointError) as error:
+        return dict(allowed=False,required=True,reason='old_reference_preview_failed',
+            error=type(error).__name__+': '+str(error),preview_only=True)
+    return dict(allowed=allowed,required=True,
+        reason='original_current_reference_curvature_available' if allowed else 'old_reference_curvature_unavailable_requires_stop_or_new_path',
+        reference=reference,source_pose_stamp_ns=int(self.pose_stamp),
+        old_path_id=self.cascade.path_id,preview_only=True,
+        original_curvature_or_heading_limits_changed=False)

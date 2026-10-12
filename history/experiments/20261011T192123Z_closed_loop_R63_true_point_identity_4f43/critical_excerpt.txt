@@ -1,0 +1,31 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+[INFO] [launch]: All log files can be found below /__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261011T192123Z_closed_loop_R63_true_point_identity_4f43/ros_logs/2026-10-12-03-22-00-032434-hyh001-System-Product-Name-187932
+[INFO] [launch]: Default logging verbosity is set to INFO
+[ERROR] [launch]: Caught exception in launch (see debug for traceback): C51 bounded launch identity/context differs: [16]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+e/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/ipc_request_window.py", line 363, in main
+    return partition.run(ipc_fault_window.main)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/gc_startup_partition.py", line 203, in run
+    return original(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/ipc_fault_window.py", line 144, in main
+    return run_original_worker(worker.main, ipc_evidence, capture)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/ipc_fault_window.py", line 131, in run_original_worker
+    return worker_main()
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/worker.py", line 252, in main
+    try:legacy.main()
+        ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261011T192123Z_closed_loop_R63_true_point_identity_4f43/sources/policy/worker.py", line 218, in main
+    conn,_=sock.accept();conn.settimeout(10)
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v43_r63_reference_retention_candidate/ipc_evidence.py", line 243, in accept
+    conn,address=server.accept();return TimedConnection(conn,timer),address
+                 ^^^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/isaacsim/kit/python/lib/python3.12/socket.py", line 295, in accept
+    fd, addr = self._accept()
+               ^^^^^^^^^^^^^^
+KeyboardInterrupt

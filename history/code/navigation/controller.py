@@ -3,7 +3,7 @@
 import argparse,copy,hashlib,json,math,os,time
 from collections import deque
 from pathlib import Path
-from path_handoff import stopped_rebind as stopped_path_rebind
+from path_handoff import stopped_rebind as stopped_path_rebind, retention_reference_eligibility
 import numpy as np
 from teacher_wrapper import TeacherNavigation
 from pid_core import slew
@@ -288,8 +288,14 @@ class PIDNavigation(TeacherNavigation):
         eligibility=self.path_execution_eligibility()
         if not all(eligibility['conditions'].values()):
             return dict(allowed=False,reason='old_path_not_eligible_stopped',**eligibility)
+        reference_execution=retention_reference_eligibility(self)
+        if not reference_execution['allowed']:
+            return dict(allowed=False,reason=reference_execution['reason'],
+                reference_execution=reference_execution,eligibility=eligibility,
+                conditions=eligibility['conditions'],samples_present=True)
         proof=remaining_certificate(self.path_admission_active,self.samples,self.pose,points,config)
         return dict(proof,eligibility=eligibility,conditions=eligibility['conditions'],samples_present=True,
+            reference_execution=reference_execution,
             retention_action='kept_checked_old_path' if proof['allowed'] else 'stopped_old_path_not_certified')
     def capture_replacement_eligibility(self,retention):
         """Recover only the recorded exhaustion of this immutable same-goal path.
