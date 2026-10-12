@@ -8,7 +8,7 @@ import hashlib,json,math
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent;NAV=HERE.parent;ROOT=NAV.parent;DEMO=ROOT.parent
-SLAM_WS=HERE/'slam_ws'
+SLAM_WS=NAV/'closed_loop_multifloor_v7/slam_ws'
 SCHEMA='teacher_closed_loop_navigation_scope/v1'
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 CACHE={}
@@ -60,7 +60,7 @@ def verify_scope(path,raw=None):
     if CACHE.get(str(path))!=(digest,fp):
         mandatory=runtime_files()+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
             'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json',
-            'navigation_slam_contract.json','terrain_target_manifest.json','cloud_transport_manifest.json','cloud_transport.xml',
+            'navigation_slam_contract.json','sensor_sampling_contract.json','terrain_target_manifest.json','cloud_transport_manifest.json','cloud_transport.xml',
             'source_manifest.json','navigation_source_snapshots.json')]
         if any(str(x.resolve()) not in refs for x in mandatory):raise RuntimeError('Missing frozen source or configuration')
         for source,expected in refs.items():
@@ -86,6 +86,7 @@ def prepare(run,profile):
     from scipy.spatial.transform import Rotation
     run=Path(run).resolve();s=json.loads((run/'sensor_contract.json').read_text())
     cfg=yaml.safe_load((DEMO/'camera_mode/slam/fastlivo.yaml').read_text());params=cfg['/**']['ros__parameters']
+    params['preprocess']['scan_line']=s['lidar']['samples']['vertical']
     params['common'].update(img_topic='/demo/teacher/slam/image',lid_topic='/demo/slam/lidar_filtered',imu_topic='/demo/teacher/slam/imu')
     ri,rl,rc=[Rotation.from_euler('xyz',s[k]['body_rpy']).as_matrix() for k in ('imu','lidar','camera')]
     pi,pl,pc=[np.asarray(s[k]['body_xyz']) for k in ('imu','lidar','camera')];optical=np.array([[0,-1,0],[0,0,-1],[1,0,0]])
@@ -114,7 +115,7 @@ def prepare(run,profile):
         write(run/'alternate_terrain_target_manifest.json',json.loads(alternate.read_text()))
         layer_files=[first,alternate,run/'alternate_terrain_target_manifest.json']
     files=runtime_files()+[terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
-        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json')]
+        'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json')]
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
     write(run/'navigation_slam_contract.json',{'schema':1,'status':'prepared_unverified','ground_truth_used':False,

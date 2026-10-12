@@ -50,7 +50,9 @@ class SceneAxisRegistration:
         mount=self.module.Rotation.from_euler('xyz',self.imu_config['body_rpy']).as_matrix()
         if not np.allclose(self.mount_rotation,mount,atol=1e-10,rtol=0):
             raise ValueError('Actual sensor mount quaternion and body_rpy disagree')
-        self.imu_rows=deque(maxlen=512);self.pairs=deque(maxlen=10);self.all_pairs=[]
+        self.imu_rows=deque(maxlen=512)
+        camera_hz=float(json.loads(path.read_text())['camera']['rate_hz'])
+        self.pairs=deque(maxlen=max(10,math.ceil(camera_hz*.8)+2));self.all_pairs=[]
         self.last_imu_stamp=None;self.last_pair_stamp=None;self.reset_count=0
         self.wait_reason='waiting_stationary_actual_sensor_pairs';self.receipt=None
 

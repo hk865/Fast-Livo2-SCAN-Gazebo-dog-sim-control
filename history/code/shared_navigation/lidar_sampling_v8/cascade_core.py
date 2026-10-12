@@ -464,7 +464,7 @@ class Controller:
         self.command=requested
         self.row=dict(kind='controller_update',feedback_pose_stamp_ns=stamp,
             feedback_received_wall_ns=receipt,imu_stamp_ns=gyro_stamp,
-            ack_stamp_ns=ack_stamp,header_dt_s=dt,source_expected_hz=10,
+            ack_stamp_ns=ack_stamp,header_dt_s=dt,source_expected_hz=self.config.get('feedback_expected_hz',10),
             integral_dt_s=integral_dt, segment=segment,nearest_projection_xyz=point.tolist(),
             nearest_projection_progress_m=nearest_s,path_length_m=float(self.cumulative[-1]),
             remaining_horizontal_arc_m=remaining,local_horizontal_tangent=tangent.tolist(),

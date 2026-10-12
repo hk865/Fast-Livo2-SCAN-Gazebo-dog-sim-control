@@ -37,7 +37,7 @@ SYSTEM_PYTHON=Path('/usr/bin/python3')
 DEFAULT_CPU_PYTHON=Path('/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/bin/python3')
 ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
 SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
-SLAM_WORKSPACE=HERE/'slam_ws'
+SLAM_WORKSPACE=HERE.parent/'closed_loop_multifloor_v7/slam_ws'
 SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
 SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
@@ -90,8 +90,8 @@ def validate_profile(p):
     overview=p.get('overview_pose',[8,3,3,0,.65,-math.pi/2])
     if len(overview)!=6 or not all(math.isfinite(float(v))for v in overview):raise ValueError('Invalid observation camera pose')
     if cascade.get('navigation_ground_truth_used') is not False:raise ValueError('Truth controller prohibited')
-    if cascade.get('feedback_expected_hz')!=10 or cascade.get('feedback_ttl_sim_and_wall_s')!=.3:
-        raise ValueError('Explicit actual mapped-SLAM 10Hz/300ms source contract required')
+    if cascade.get('feedback_expected_hz')!=p['sensor_sampling']['camera_hz'] or cascade.get('feedback_ttl_sim_and_wall_s')!=.3:
+        raise ValueError('Explicit camera-driven nominal source rate and unchanged300ms required')
     return duration,overview
 
 
@@ -126,8 +126,11 @@ def prepare(run,args):
     robot.find('pose').text=f'{x} {y} {z} 0 0 {yaw}'
     if structural(robot,True)!=before:raise RuntimeError('Unexpected robot mutation')
     ET.indent(tree);tree.write(run/'world.sdf',encoding='unicode')
+    from sampling import override_sensors
+    sampling_receipt=override_sensors(run,p)
     asset=json.loads((run/'asset_manifest.json').read_text())
-    asset.update(spawn=p['spawn'],spawn_override=True,scenario_label=args.label,world_sha256=sha(run/'world.sdf'))
+    asset.update(spawn=p['spawn'],spawn_override=True,scenario_label=args.label,world_sha256=sha(run/'world.sdf'),
+                 sensor_contract_sha256=sha(run/'sensor_contract.json'),sensor_sampling_override=sampling_receipt)
     # The only rewritten input is this fresh, unlaunched generated asset receipt.
     (run/'asset_manifest.json').write_text(json.dumps(asset,indent=2)+'\n')
     names=[c.get('name','')for c in robot.findall('plugin')]
@@ -421,7 +424,7 @@ def execute(run,plan):
             'runtime_started':bool(children),'runtime_status':'failed'if error else'completed_requires_independent_navigation_evaluation',
             'training_processes_signaled':False,'actor_started':'worker'in children,'navigation_controller_kind':'teacher',
             'high_level_source':'Actual SLAM body pose and causal IMU gyro, actual registered cloud and SCAN checked path',
-            'truth_navigation_used':False,'actual_feedback_hz':'New mapped SLAM headers about10Hz; heartbeats are not new feedback'}
+            'truth_navigation_used':False,'actual_feedback_hz':'Measured from unique source headers; nominal camera-driven source '+str(plan['profile']['sensor_sampling']['camera_hz'])+'Hz; unchanged20Hz wall ticker is not new feedback'}
         write_new(run/'runtime_manifest.json',manifest)
         write_new(run/'resources_after.json',resource())
         write_new(run/'summary_closed_loop_navigation.json',{'schema':'teacher_closed_loop_runtime_summary/v1',

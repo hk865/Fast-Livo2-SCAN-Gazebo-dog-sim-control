@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "experiment": "teacher_real_SLAM_SCAN_ramp12_registered_turn06_v2",
+  "experiment": "teacher_actual_SLAM_SCAN_lidar_sampling_l64_r30_c30_v8",
   "scope": "Prospective bounded actual SLAM/IMU cascade with actual SCAN checked path; simulation only",
   "distance_m": 13.6,
   "max_speed_mps": 0.2,
@@ -90,8 +90,8 @@
     "position_derivative_source": "actual SLAM body-origin twist transformed by the actual SLAM rotation",
     "yaw_derivative_source": "actual body-transformed IMU gyro; no IMU yaw localization"
   },
-  "selector": "ramp12_registered_turn06",
-  "route_height_delta_m": 1.2,
+  "selector": "multifloor12_23_segmented_turn06",
+  "route_height_delta_m": 2.4,
   "return_to_origin": false,
   "expected_asset": {
     "terrain": "ramp_up",
@@ -109,7 +109,7 @@
     0.4,
     0
   ],
-  "duration_s": 260,
+  "duration_s": 210,
   "overview_pose": [
     8,
     -1,
@@ -122,8 +122,8 @@
   "controller_kind": "teacher",
   "protocol_case_id": "ramp12_up_full",
   "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
-  "controller_selector": "closed_loop_multifloor_v6",
-  "cascade_runtime_revision": "v3_single_nearest_SCAN_projection_heading",
+  "controller_selector": "lidar_sampling_v8",
+  "cascade_runtime_revision": "same_gains_20hz_wall_tick_actual_header_dt_sensor_sampling_v8",
   "cascade": {
     "desired_speed": 0.2,
     "command_limits": [
@@ -156,7 +156,7 @@
       0.6,
       0.8
     ],
-    "feedback_expected_hz": 10,
+    "feedback_expected_hz": 30,
     "feedback_ttl_sim_and_wall_s": 0.3,
     "navigation_ground_truth_used": false,
     "controller_source_file": "cascade_command_source.json",
@@ -187,31 +187,263 @@
   },
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
-  "prospective_change": "Same directed nearest SCAN projection yaw supplies parent stop/align gate and cascade drive/turn; original lookahead retained for checked-target obstacle guard. Core gains/PI/TTL/native safety unchanged.",
+  "prospective_change": "LiDAR sampling64x480 at30Hz, vehicle camera30Hz; independent source-rate metadata/initial stationary pair capacity adapted; estimator geometry/weights/control laws and all gates unchanged; CPU Teacher",
   "route_prior_source": "Known original SLAM5 scene geometry and initial spawn prior; actual paired SLAM/IMU axis registration. Not automatic pointcloud global map registration.",
   "route_world_points": [
     {
-      "goal_id": "lower_entry",
+      "goal_id": "lower_x02",
       "xyz": [
-        2.0,
-        2.0,
+        2,
+        2,
         0.0
       ]
     },
     {
-      "goal_id": "lower_top",
+      "goal_id": "lower_x03",
       "xyz": [
-        14.0,
-        2.0,
-        1.2
+        3,
+        2,
+        0.1
+      ]
+    },
+    {
+      "goal_id": "lower_x04",
+      "xyz": [
+        4,
+        2,
+        0.2
+      ]
+    },
+    {
+      "goal_id": "lower_x05",
+      "xyz": [
+        5,
+        2,
+        0.30000000000000004
+      ]
+    },
+    {
+      "goal_id": "lower_x06",
+      "xyz": [
+        6,
+        2,
+        0.4
+      ]
+    },
+    {
+      "goal_id": "lower_x07",
+      "xyz": [
+        7,
+        2,
+        0.5
+      ]
+    },
+    {
+      "goal_id": "lower_x08",
+      "xyz": [
+        8,
+        2,
+        0.6000000000000001
+      ]
+    },
+    {
+      "goal_id": "lower_x09",
+      "xyz": [
+        9,
+        2,
+        0.7000000000000001
+      ]
+    },
+    {
+      "goal_id": "lower_x10",
+      "xyz": [
+        10,
+        2,
+        0.8
+      ]
+    },
+    {
+      "goal_id": "lower_x11",
+      "xyz": [
+        11,
+        2,
+        0.9
+      ]
+    },
+    {
+      "goal_id": "lower_x12",
+      "xyz": [
+        12,
+        2,
+        1.0
+      ]
+    },
+    {
+      "goal_id": "lower_x13",
+      "xyz": [
+        13,
+        2,
+        1.1
+      ]
+    },
+    {
+      "goal_id": "lower_x14",
+      "xyz": [
+        14,
+        2,
+        1.2000000000000002
       ]
     },
     {
       "goal_id": "lower_exit",
       "xyz": [
         14.8,
-        2.0,
+        2,
         1.2
+      ]
+    },
+    {
+      "goal_id": "connector_x",
+      "xyz": [
+        16,
+        2,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "connector_mid",
+      "xyz": [
+        16,
+        4.5,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "connector_y",
+      "xyz": [
+        16,
+        7,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_entry",
+      "xyz": [
+        14.8,
+        7,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_x14",
+      "xyz": [
+        14,
+        7,
+        1.2
+      ]
+    },
+    {
+      "goal_id": "upper_x13",
+      "xyz": [
+        13,
+        7,
+        1.3
+      ]
+    },
+    {
+      "goal_id": "upper_x12",
+      "xyz": [
+        12,
+        7,
+        1.4
+      ]
+    },
+    {
+      "goal_id": "upper_x11",
+      "xyz": [
+        11,
+        7,
+        1.5
+      ]
+    },
+    {
+      "goal_id": "upper_x10",
+      "xyz": [
+        10,
+        7,
+        1.6
+      ]
+    },
+    {
+      "goal_id": "upper_x09",
+      "xyz": [
+        9,
+        7,
+        1.7
+      ]
+    },
+    {
+      "goal_id": "upper_x08",
+      "xyz": [
+        8,
+        7,
+        1.8
+      ]
+    },
+    {
+      "goal_id": "upper_x07",
+      "xyz": [
+        7,
+        7,
+        1.9
+      ]
+    },
+    {
+      "goal_id": "upper_x06",
+      "xyz": [
+        6,
+        7,
+        2.0
+      ]
+    },
+    {
+      "goal_id": "upper_x05",
+      "xyz": [
+        5,
+        7,
+        2.1
+      ]
+    },
+    {
+      "goal_id": "upper_x04",
+      "xyz": [
+        4,
+        7,
+        2.2
+      ]
+    },
+    {
+      "goal_id": "upper_x03",
+      "xyz": [
+        3,
+        7,
+        2.3
+      ]
+    },
+    {
+      "goal_id": "upper_x02",
+      "xyz": [
+        2,
+        7,
+        2.4000000000000004
+      ]
+    },
+    {
+      "goal_id": "floor3_stop",
+      "xyz": [
+        1.2,
+        7,
+        2.4
       ]
     }
   ],
@@ -219,7 +451,49 @@
     {
       "model": "ramp_12",
       "direction": "up",
-      "destination_goal_index": 2
+      "destination_goal_index": 13
+    },
+    {
+      "model": "ramp_23",
+      "direction": "up",
+      "destination_goal_index": 31
     }
-  ]
+  ],
+  "terrain_layer_switch": {
+    "initial_manifest": "tests/terrain_targets/lower12.json",
+    "alternate_manifest": "tests/terrain_targets/upper23.json",
+    "completed_goal_id": "connector_mid",
+    "alternate_include_models": [
+      "floor_2",
+      "ramp_23",
+      "floor_3"
+    ],
+    "source": "Actual SLAM region arrival only; native 187-ray equality is an Actor-only safety check",
+    "ray_equality_tolerance_m": 1e-09
+  },
+  "slam_imu_online_estimation": {
+    "gravity_est_en": true,
+    "ba_bg_est_en": true
+  },
+  "slam_visual_measurement_covariance": 1000,
+  "diagnostic_scope": {
+    "baseline_version": "closed_loop_multifloor_v7",
+    "route_controller_gates_unchanged": true,
+    "finite_horizon_s": 210,
+    "detail_window_sim_s": [
+      115,
+      165
+    ],
+    "navigation_outcome_is_not_full_route_pass": true,
+    "purpose": "sensor density/rate actual trial, no plane algorithm correction"
+  },
+  "sensor_sampling": {
+    "vertical_lines": 64,
+    "horizontal_samples": 480,
+    "lidar_hz": 30,
+    "camera_hz": 30,
+    "scope": "sensor-only prospective change; geometric map algorithm and gains unchanged",
+    "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
+    "control_wall_tick_s": 0.05
+  }
 }
