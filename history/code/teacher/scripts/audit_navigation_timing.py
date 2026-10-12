@@ -62,6 +62,7 @@ def evaluate(run):
     ttl_errors = []
     read_counts = collections.Counter()
     accepted_age = []
+    matched_envelope_frames = 0
     accepted_nonzero = []
     observations = []
     moving_stale = []
@@ -84,6 +85,7 @@ def evaluate(run):
             if original is None or command_hash.get(seq) != envelope.get('hash'):
                 lineage_errors.append({'frame': index, 'sequence': seq, 'reason': 'Missing or mismatched original envelope'})
                 continue
+            matched_envelope_frames += 1
             if seq < previous_seq:
                 lineage_errors.append({'frame': index, 'sequence': seq, 'reason': 'Accepted envelope sequence moved backwards'})
             previous_seq = seq
@@ -126,8 +128,8 @@ def evaluate(run):
     ages = np.asarray(accepted_age) if accepted_age else np.empty((0, 2))
     result = {'schema_version': 1, 'scope': 'Independent post-run causal timing audit; no ROS or control writes',
               'run': str(run), 'checks': {
-                  'worker_read_envelope_lineage': {'status': 'passed' if not lineage_errors and len(accepted_age) else 'failed' if lineage_errors else 'unverified',
-                                                    'errors': lineage_errors},
+                  'worker_read_envelope_lineage': {'status': 'passed' if not lineage_errors and matched_envelope_frames else 'failed' if lineage_errors else 'unverified',
+                                                    'matched_envelope_frames': matched_envelope_frames, 'errors': lineage_errors},
                   'observed_command_TTL_boundary': {'status': 'passed' if not ttl_errors and policy else 'failed', 'errors': ttl_errors,
                                                    'limit_s': .3, 'moving_to_stale_physical_stop': 'unverified' if not moving_stale else 'requires native stop interval audit',
                                                    'limit': 'Zero standing/rejected input holding alone does not verify stopping from motion'}},
