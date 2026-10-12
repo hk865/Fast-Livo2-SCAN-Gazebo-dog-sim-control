@@ -1,0 +1,319 @@
+{
+  "RGB_verified": null,
+  "actor_archive_verified": null,
+  "actor_fault": null,
+  "actor_samples": 1501,
+  "all_owned_and_children_clean": null,
+  "cleanup_errors": null,
+  "dynamic_verified": null,
+  "experiment_time_evidence": {
+    "archive_commit_time": "current archival time, not experimental time",
+    "directory_label": "20261003_232434_step05_continue_functional_retest_r2_d03c",
+    "timezone_of_unzoned_label": "not verified; no timezone invented"
+  },
+  "final_phase_arrival_count": null,
+  "functional_sequence_completed": null,
+  "hard_regions": null,
+  "initialization_verified": null,
+  "last_sim_time_s": 30.0,
+  "levels": {
+    "interface": "passed",
+    "motion": "failed",
+    "navigation": "unverified",
+    "real_robot": "unverified",
+    "sim2sim": "unverified"
+  },
+  "limits": [
+    "Missing/null is unverified, never inferred PASS.",
+    "Metadata claims retain original scope; component motion is not full navigation.",
+    "Diffs compare preserved selected snapshots; an absent file may reflect capture/selection/availability, not a proved original source deletion.",
+    "Raw sensor streams, videos, binary outputs, weights and full traces are not published; old complete replay cannot be reconstructed from this record.",
+    "Code is reconstructed from declared/hash-checked saved text snapshots with personal paths/session IDs redacted.",
+    "Source author/experimental Git ancestry is not fabricated."
+  ],
+  "mission_completed_phase_region_count": null,
+  "mission_message": null,
+  "mission_stage": null,
+  "navigation_ground_truth_used": false,
+  "ordinary_regions": null,
+  "original_criteria": null,
+  "parking_verified": null,
+  "pipeline_normal_completed": null,
+  "policy_checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "policy_device": "cpu",
+  "run_label": "20261003_232434_step05_continue_functional_retest_r2_d03c",
+  "runtime_error": null,
+  "schema": "go2_archived_experiment/v1",
+  "source": {
+    "code_from_snapshot": true,
+    "coverage": "HASH_VERIFIED_SELECTED_TEXT",
+    "declared_selected_text_files": 30,
+    "full_SHA_verified_selected_files": 30,
+    "manifest_sha256": "c1630c507201c1ca20f2b1b00f6aed5eec95c1871f7fe29255f65bc26af73600",
+    "missing_or_mismatched_selected_files": [],
+    "original_code_sha_map": {
+      "shared_navigation/bridge.py": {
+        "archived_sha256": "f3ca3714c77a8d73122f27a8d63ff5c685a9e5d059f632c2e96b1218acc1f514",
+        "original_sha256": "f3ca3714c77a8d73122f27a8d63ff5c685a9e5d059f632c2e96b1218acc1f514",
+        "original_source": "navigation/bridge.py"
+      },
+      "teacher/policy/contract.json": {
+        "archived_sha256": "005016442abc4bb48ffae29102e109dbf03678bc56b5f97263ab44a6ecb987ab",
+        "original_sha256": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+        "original_source": "policy/contract.json"
+      },
+      "teacher/policy/observation.py": {
+        "archived_sha256": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+        "original_sha256": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+        "original_source": "policy/observation.py"
+      },
+      "teacher/policy/worker.py": {
+        "archived_sha256": "69f4842940786a8096e4e5e16ed310bd445133affdf51d55f369055221d21d3d",
+        "original_sha256": "fe1aaa5fa2fec3c045ce3e7f4486aa4a7f80161a4dfdf4658db9fff0ffff7894",
+        "original_source": "policy/worker.py"
+      },
+      "teacher/scripts/aggregate.py": {
+        "archived_sha256": "326367149fcef2686e3c61b3c06a06d89759b6538012feedd187b3fb1c35cfdc",
+        "original_sha256": "326367149fcef2686e3c61b3c06a06d89759b6538012feedd187b3fb1c35cfdc",
+        "original_source": "scripts/aggregate.py"
+      },
+      "teacher/scripts/analyze_isaac_matched_reference.py": {
+        "archived_sha256": "b963230866f2dfe21154b8a9bd20d0070cdb65089e3a3daee7ade29e63e771be",
+        "original_sha256": "b963230866f2dfe21154b8a9bd20d0070cdb65089e3a3daee7ade29e63e771be",
+        "original_source": "scripts/analyze_isaac_matched_reference.py"
+      },
+      "teacher/scripts/analyze_isaac_original_origin.py": {
+        "archived_sha256": "1518844755678314b9e12ed832b4c89820de37e4796e51174a5ec19a88395080",
+        "original_sha256": "d3aa5815d764515ec4eaeadc0da1649eaa5a680e18e5c9f296230abca91862cf",
+        "original_source": "scripts/analyze_isaac_original_origin.py"
+      },
+      "teacher/scripts/analyze_isaac_terrain_reference.py": {
+        "archived_sha256": "c246aebec51a0048a2b784e0f79dbba2469699a421ce3435f2eefe990e627f85",
+        "original_sha256": "c246aebec51a0048a2b784e0f79dbba2469699a421ce3435f2eefe990e627f85",
+        "original_source": "scripts/analyze_isaac_terrain_reference.py"
+      },
+      "teacher/scripts/audit_isaac_cpu_observation_parity.py": {
+        "archived_sha256": "062fa629e26fca724f4da8f4888dbe22fae1c9409909f2b632c1338f37051df0",
+        "original_sha256": "062fa629e26fca724f4da8f4888dbe22fae1c9409909f2b632c1338f37051df0",
+        "original_source": "scripts/audit_isaac_cpu_observation_parity.py"
+      },
+      "teacher/scripts/capture.py": {
+        "archived_sha256": "8b118078eafba256f26432142190a6263389c19d4427d6ab92a2eabc059e5520",
+        "original_sha256": "8b118078eafba256f26432142190a6263389c19d4427d6ab92a2eabc059e5520",
+        "original_source": "scripts/capture.py"
+      },
+      "teacher/scripts/diagnose_isaac_ray_boundary.py": {
+        "archived_sha256": "2dc7bf9a0312ebc5ae2c58b45a49b3e3937ea3a41272100c0da4c57b5cfc8715",
+        "original_sha256": "2dc7bf9a0312ebc5ae2c58b45a49b3e3937ea3a41272100c0da4c57b5cfc8715",
+        "original_source": "scripts/diagnose_isaac_ray_boundary.py"
+      },
+      "teacher/scripts/diagnose_isaac_recorded_timing.py": {
+        "archived_sha256": "1c772805aa97f7580a7e1c84c9f948a88b5ae1995aa8582b4e8c7a44c0d87168",
+        "original_sha256": "4859efc39c336aab5d6bfc4ebf96599b7bea9b93651f179202c3a9c55455c637",
+        "original_source": "scripts/diagnose_isaac_recorded_timing.py"
+      },
+      "teacher/scripts/evaluate.py": {
+        "archived_sha256": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d",
+        "original_sha256": "7bb766169817686ef5a81cccafaf50c67745a5338ecd4d9d2d68ce23f9000b1d",
+        "original_source": "scripts/evaluate.py"
+      },
+      "teacher/scripts/evaluate_step_functional.py": {
+        "archived_sha256": "da61b8bba7296b049f33d38a5c6a64df2d0a0ea11083899ac165235c2bb9629a",
+        "original_sha256": "da61b8bba7296b049f33d38a5c6a64df2d0a0ea11083899ac165235c2bb9629a",
+        "original_source": "scripts/evaluate_step_functional.py"
+      },
+      "teacher/scripts/isaac_cpu_reference.py": {
+        "archived_sha256": "babe0691f5f9d09ad630d86a3b53b4c3355ab6ee8b085e03e4999f0e0f534e09",
+        "original_sha256": "854504f6aeacb681e6c1edbb352a52f462f614eaacfe31e02c62c8f93521eea6",
+        "original_source": "scripts/isaac_cpu_reference.py"
+      },
+      "teacher/scripts/isaac_terrain_fixtures_20261003/ramps.sdf": {
+        "archived_sha256": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161",
+        "original_sha256": "1f781af572ba8ce70ff926e9789cc1a9db326e61822660fcb66a623eb3765161",
+        "original_source": "scripts/isaac_terrain_fixtures_20261003/ramps.sdf"
+      },
+      "teacher/scripts/isaac_terrain_fixtures_20261003/step05.sdf": {
+        "archived_sha256": "246c40b124768d87998f90d90c19a6d032ca4935fb3f2019faeafb397e3244bd",
+        "original_sha256": "246c40b124768d87998f90d90c19a6d032ca4935fb3f2019faeafb397e3244bd",
+        "original_source": "scripts/isaac_terrain_fixtures_20261003/step05.sdf"
+      },
+      "teacher/scripts/isaac_terrain_fixtures_20261003/step10.sdf": {
+        "archived_sha256": "2594c87366fcab69c47a781b5240393de0de1c9ba4d9a25a9b53519c5cc36255",
+        "original_sha256": "2594c87366fcab69c47a781b5240393de0de1c9ba4d9a25a9b53519c5cc36255",
+        "original_source": "scripts/isaac_terrain_fixtures_20261003/step10.sdf"
+      },
+      "teacher/scripts/plots.py": {
+        "archived_sha256": "d2b90cfc5c07cac7f206ba9ccb2ab18883be1acef9485b4de21fc408782d3abc",
+        "original_sha256": "d2b90cfc5c07cac7f206ba9ccb2ab18883be1acef9485b4de21fc408782d3abc",
+        "original_source": "scripts/plots.py"
+      },
+      "teacher/scripts/run.sh": {
+        "archived_sha256": "c264d86f2c618af7bc489601b390be19c8c40ec9fa23c0f6628f4287d4fc3058",
+        "original_sha256": "c264d86f2c618af7bc489601b390be19c8c40ec9fa23c0f6628f4287d4fc3058",
+        "original_source": "scripts/run.sh"
+      },
+      "teacher/scripts/run_test.py": {
+        "archived_sha256": "c656666560a2c4359dcd44a7c69eae7f891b5367d6456825b1b26198059ee747",
+        "original_sha256": "cec2e4481afc6ead400020c3ac27ee640be0606666bd7c5cbd70af6b4295a5fd",
+        "original_source": "scripts/run_test.py"
+      },
+      "teacher/scripts/sensor_shadow.py": {
+        "archived_sha256": "e319855dd17cf5f4686e22b7494f185c90250a40356d3ffacfc8d317a42d4a8a",
+        "original_sha256": "e319855dd17cf5f4686e22b7494f185c90250a40356d3ffacfc8d317a42d4a8a",
+        "original_source": "scripts/sensor_shadow.py"
+      },
+      "teacher/scripts/serve.py": {
+        "archived_sha256": "458b9b98f21dc9457b9d7c5434205dca38c59c8524c21e57f0387bfa7018a690",
+        "original_sha256": "458b9b98f21dc9457b9d7c5434205dca38c59c8524c21e57f0387bfa7018a690",
+        "original_source": "scripts/serve.py"
+      },
+      "teacher/scripts/step_retest_report.py": {
+        "archived_sha256": "2a21ab4ba7d5e9973f49493fab3d870493ebb0691486fbf81640fcdcbeb91881",
+        "original_sha256": "2a21ab4ba7d5e9973f49493fab3d870493ebb0691486fbf81640fcdcbeb91881",
+        "original_source": "scripts/step_retest_report.py"
+      },
+      "teacher/simulation/CMakeLists.txt": {
+        "archived_sha256": "ec30d4b1a0e7cca816e8460762d27470b7c561eec606cad1f5c7eb65f27f5cd5",
+        "original_sha256": "ec30d4b1a0e7cca816e8460762d27470b7c561eec606cad1f5c7eb65f27f5cd5",
+        "original_source": "simulation/CMakeLists.txt"
+      },
+      "teacher/simulation/prepare.py": {
+        "archived_sha256": "6c433127b53d6ec627ff2cdd783b130100f270ca32d1bcfeb96ca3449d899458",
+        "original_sha256": "6c433127b53d6ec627ff2cdd783b130100f270ca32d1bcfeb96ca3449d899458",
+        "original_source": "simulation/prepare.py"
+      },
+      "teacher/simulation/teacher_actuator.cpp": {
+        "archived_sha256": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+        "original_sha256": "5602c2051ee7e9f416e0cb0c94bd3efd404bdd7dea1281c891fcc38c936327ba",
+        "original_source": "simulation/teacher_actuator.cpp"
+      },
+      "teacher/tests/audit_raycast_boundary.py": {
+        "archived_sha256": "1dfdf1f2814c6f6dc3eedb2e86b13ac6a9d922d364935284abb3edf4578fe823",
+        "original_sha256": "1dfdf1f2814c6f6dc3eedb2e86b13ac6a9d922d364935284abb3edf4578fe823",
+        "original_source": "tests/audit_raycast_boundary.py"
+      },
+      "teacher/tests/protocol.json": {
+        "archived_sha256": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "original_sha256": "313533b329e87d4ce17d12b3b419d8f7d80b53f707f4deb102ed226b1af30c75",
+        "original_source": "tests/protocol.json"
+      },
+      "teacher/tests/step_functional_protocol.json": {
+        "archived_sha256": "8b7a43c74b21c063f5b56984e2b63256ee9bb0db88fda5c2f59944bb8b70f431",
+        "original_sha256": "8b7a43c74b21c063f5b56984e2b63256ee9bb0db88fda5c2f59944bb8b70f431",
+        "original_source": "tests/step_functional_protocol.json"
+      }
+    },
+    "primary_candidate": null,
+    "redacted_selected_files": 6,
+    "source_copy_author": "not inferred"
+  },
+  "strict_full_navigation_PASS": null,
+  "terrain_switches": null,
+  "tests": [
+    {
+      "metrics": {
+        "assisted_phase_counts": {
+          "support_capture": 0,
+          "support_hold": 0
+        },
+        "body_contact_samples": 0,
+        "duration_s": 30.0,
+        "max_abs_roll_pitch_rad": 0.039924376876884285,
+        "max_applied_torque_Nm": 15.560171297267097,
+        "min_body_clearance_m": 0.2664275660576187,
+        "position_delta_m": [
+          4.434752001298786,
+          0.5224141317262949,
+          -0.06101994310748343
+        ],
+        "samples": 1501,
+        "stop": {
+          "samples": 601,
+          "translation_drift_m": 0.9157221750002436,
+          "velocity_rms": [
+            0.13284170352079835,
+            0.03111444570329373,
+            0.020549059081416316
+          ],
+          "window_s": [
+            18.0,
+            30.0
+          ],
+          "yaw_drift_rad": 0.057663338266871755
+        },
+        "stop_assisted": {
+          "samples": 0
+        },
+        "stop_teacher": {
+          "samples": 601,
+          "translation_drift_m": 0.9157221750002436,
+          "velocity_rms": [
+            0.13284170352079835,
+            0.03111444570329373,
+            0.020549059081416316
+          ],
+          "window_s": [
+            18.0,
+            30.0
+          ],
+          "yaw_drift_rad": 0.057663338266871755
+        },
+        "terrain": {
+          "description": "Low-step ascent onto box tread; not complete obstacle traversal",
+          "end_inside_tread": true,
+          "end_median_position_m": [
+            10.434649953994573,
+            -0.17761997385525144,
+            0.33876157997109835
+          ],
+          "height_gain_m": 0.023346318529604337,
+          "minimum_height_gain_m": 0.06,
+          "native_end_all_four_support_samples": 201,
+          "native_end_samples": 201,
+          "native_end_support_foot_groups": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "start_median_position_m": [
+            6.001747980796979,
+            -0.6969356765924537,
+            0.315415261441494
+          ],
+          "step_height_m": 0.1
+        },
+        "total_yaw_delta_rad": 0.28072649777593733,
+        "tracking": [
+          {
+            "command_mean": [
+              0.2999999999999986,
+              0.0,
+              0.0
+            ],
+            "measured_mean": [
+              0.24261920471407955,
+              0.0024459310863514014,
+              0.012240824085237856
+            ],
+            "rmse": [
+              0.0708432601809192,
+              0.04822173660672922,
+              0.05448839916815815
+            ],
+            "window_s": [
+              5,
+              10
+            ]
+          }
+        ],
+        "unknown_contact_samples": 0
+      },
+      "name": "step05_continue",
+      "reason": "Teacher stand/stop translation drift; Teacher stand/stop residual velocity; Stand/stop window contains nonzero velocity command; Low step tread was not reached with settled measured height gain",
+      "status": "failed"
+    }
+  ],
+  "typed_capture_close": null,
+  "verified_region_count": null
+}

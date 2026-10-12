@@ -129,6 +129,9 @@ def evaluate(run):
             max_native_gap_s=a['max_native_sample_gap_s'],contact_xy_margin_m=a['contact_xy_margin_m'],continuation_min_duration_s=co['min_duration_s'],rolling_window_s=co['rolling_window_s'],maximum_unsupported_s=co['maximum_unsupported_s'])
         command_start=protocol['command_start_s'];command_end=protocol['command_end_s'];stop_start,stop_end=protocol['stop_window_s'];native_gap=protocol['max_native_gap_s']
         legacy=read(run/'summary.json')if(run/'summary.json').exists()else {}
+        checks['frozen_native_interface']=check(legacy.get('levels',{}).get('interface')=='passed',
+            interface_status=legacy.get('levels',{}).get('interface'),legacy_motion_not_used_as_functional_gate=True,
+            interface_failed_checks=[k for k,v in legacy.get('iface_checks',{}).items()if not v.get('passed')])
         meta=read(run/'policy_manifest.json');name=meta['test'];runtime=read(run/'runtime_manifest.json');result=read(run/'worker_result.json')
         native=lines(run/'actuator.jsonl');steps=[r for r in native if r.get('kind')=='physics_step'];rows=lines(run/'telemetry.jsonl')
         contracts=[r for r in native if r.get('kind')=='actuator_contract'];contract=contracts[0]
@@ -197,7 +200,8 @@ def evaluate(run):
             checks[f'{leg}_contact_geometry_complete']=check(missing_positions==0 and missing_normals==0,missing_positions=missing_positions,missing_normals=missing_normals,raw_wrench_not_used_as_inferred_load=True)
         all_support=np.all(np.column_stack([support[k]for k in LEGS]),axis=1)
         simultaneous_span,simultaneous_interval=longest_span(all_support&(nt>=stop_start)&(nt<=stop_end+1e-8),nt,native_gap)
-        checks['four_feet_simultaneous_top_stop_support']=check(simultaneous_span>=protocol['minimum_continuous_foot_tread_support_s']-1e-8 and bool(all_support[-1]),continuous_span_s=simultaneous_span,interval_s=simultaneous_interval,final_sample_all_four_on_top=bool(all_support[-1]))
+        simultaneous_required=ss.get('simultaneous_four_foot_top_support_s',protocol['minimum_continuous_foot_tread_support_s'])
+        checks['four_feet_simultaneous_top_stop_support']=check(simultaneous_span>=simultaneous_required-1e-8 and bool(all_support[-1]),continuous_span_s=simultaneous_span,required_span_s=simultaneous_required,interval_s=simultaneous_interval,final_sample_all_four_on_top=bool(all_support[-1]))
         # At most a 1-step cached-state phase difference; all positions are native measured states.
         drive=(nt>=command_start)&(nt<command_end);all_confirmed=max(entry.values())if all(v is not None for v in entry.values())else None
         past=np.flatnonzero(drive&(pos[:,0]>=front+protocol['body_entry_past_front_m'])&(pos[:,1]>=ymin)&(pos[:,1]<=ymax)&(nt>=all_confirmed))if all_confirmed is not None else []
@@ -214,6 +218,7 @@ def evaluate(run):
         metrics['continued_motion']={'edge_plus_half_m_first_time_s':float(nt[past[0]])if len(past)else None,'all_four_feet_active_ascent_confirmed_time_s':all_confirmed,'continued_x_progress_m':progress,'late_interval_s':[late_start,command_end],
              'late_forward_velocity_mean_mps':late_v,'late_positive_velocity_fraction':fraction,'on_platform_body_samples_fraction':platform_ratio,
              'continued_duration_s':continued_duration,'rolling_velocity_windows':rolling_count,'rolling_window_s':protocol['rolling_window_s'],'maximum_no_foot_top_support_s':unsupported_duration,
+             'positive_fraction_definition':'fraction of all 0.5 s rolling world-frame COM vx means above protocol minimum; mean of entire continuation is diagnostic',
              'measured_position_source':'native Gazebo state, diagnostic simulation evaluation only'}
         checks['continued_teacher_forward_on_tread']=check(progress is not None and progress>=protocol['minimum_continued_progress_m']and continued_duration>=protocol['continuation_min_duration_s']and fraction is not None and fraction>=protocol['minimum_late_positive_velocity_fraction']and platform_ratio==1. and unsupported_duration<=protocol['maximum_unsupported_s'],**metrics['continued_motion'])
         # Recompute base clearance from actual supporting collision surface below it,
@@ -221,10 +226,13 @@ def evaluate(run):
         sys.path.insert(0,str(run/'sources/policy')if(run/'sources/policy/observation.py').exists()else str(ROOT/'policy'))
         from observation import TerrainHeightMap
         terrain=TerrainHeightMap.from_sdf(run/'world.sdf');ground=terrain.height(pos[:,:2],ray_start_z=pos[:,2]);clear=pos[:,2]-ground
-        safety_mask=nt>=1.5;contacts=np.asarray([r.get('contacts')for r in steps],dtype=float)
-        stable=t>=1.5;max_attitude=float(abs(rpy[stable,:2]).max());minimum_clear=float(clear[safety_mask].min())
+        safety_start=ti['bootstrap_pd_s'];safety_mask=nt>=safety_start;contacts=np.asarray([r.get('contacts')for r in steps],dtype=float)
+        w,x,y,z=array(steps,'quaternion_wxyz',4).T
+        native_attitude=np.column_stack([np.arctan2(2*(w*x+y*z),1-2*(x*x+y*y)),np.arcsin(np.clip(2*(w*y-z*x),-1,1))])
+        max_attitude=float(abs(native_attitude[safety_mask]).max());minimum_clear=float(clear[safety_mask].min())
         metrics['safety']={'max_abs_roll_pitch_rad':max_attitude,'min_support_clearance_m':minimum_clear,'body_contact_samples':int((contacts[safety_mask,0]>0).sum()),
-            'unknown_contact_samples':int((contacts[safety_mask]<0).sum()),'clearance_definition':'base-link origin world z minus actual collision surface directly below base; safety only'}
+            'unknown_contact_samples':int((contacts[safety_mask]<0).sum()),'safety_start_s':safety_start,'attitude_source':'200 Hz native quaternion',
+            'clearance_definition':'base-link origin world z minus actual collision surface directly below base; safety only'}
         checks['safety']=check(max_attitude<=protocol['max_abs_roll_pitch_rad']and minimum_clear>=protocol['min_support_clearance_m']and not(contacts[safety_mask,0]>0).any()and not(contacts[safety_mask]<0).any(),**metrics['safety'])
         tp=array(rows,'position',3);yaw=np.unwrap(rpy[:,2]);stop_pos=tp[stop];stop_yaw=yaw[stop]
         drift=float(np.linalg.norm(stop_pos[:,:2]-stop_pos[0,:2],axis=1).max())if len(stop_pos)else None;yaw_drift=float(abs(stop_yaw-stop_yaw[0]).max())if len(stop_yaw)else None
