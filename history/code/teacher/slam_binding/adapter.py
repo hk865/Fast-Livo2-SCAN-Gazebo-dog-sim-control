@@ -35,7 +35,11 @@ def sha(path):
 
 
 def canonical(obj):
-    return json.dumps(obj, sort_keys=True, separators=(',', ':'), allow_nan=False)
+    def numeric(value):
+        if isinstance(value, np.generic):
+            return value.item()
+        raise TypeError('Unsupported evidence value: '+type(value).__name__)
+    return json.dumps(obj, sort_keys=True, separators=(',', ':'), allow_nan=False, default=numeric)
 
 
 def rotation_xyzw(q):
@@ -562,7 +566,7 @@ def main():
                 q, w = msg.orientation, msg.angular_velocity
                 row = {**self.source_context(msg), 'quaternion_xyzw': [q.x, q.y, q.z, q.w],
                        'angular_velocity_sensor': [w.x, w.y, w.z],
-                       'orientation_available': msg.orientation_covariance[0] >= 0,
+                       'orientation_available': bool(msg.orientation_covariance[0] >= 0),
                        'orientation_covariance': list(msg.orientation_covariance),
                        'angular_velocity_covariance': list(msg.angular_velocity_covariance)}
                 row['accepted'] = self.binding.imu(row)
