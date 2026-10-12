@@ -79,7 +79,8 @@ def evaluate(run,write=True):
         rp=reference_path(run,p)
         if not rp.is_file()or sha(rp)!=h:ref_errors.append(p)
     exclusions={'original_origin','overhead_decks','ramps','low_steps','full_46_region_mission','real_robot','unbounded_dynamic_obstacle_mission'}
-    scope_ok=exact_protocol and scope.get('schema')=='teacher_dynamic_scope/v1'and scope.get('experiment')==EXPERIMENT and scope.get('status')=='experimental_unverified'and scope.get('allowed')is True and scope.get('navigation_ground_truth_used')is False and scope.get('run_dir')==str(run)and parent.get('schema')=='teacher_navigation_scope/v1'and parent.get('experiment')==EXPERIMENT and parent.get('allowed')is True and parent.get('status')=='experimental_unverified'and parent.get('navigation_is_verified')is False and parent.get('navigation_ground_truth_used')is False and parent.get('review_basis')=='explicit_user_continuation_and_root_scope_authorization'and exclusions<=set(profile.get('excluded',[]))and'dynamic_obstacle_success_claim'not in parent.get('excluded_scenarios',[])and not basis_errors and not ref_errors
+    mandatory={str((run/n).resolve())for n in ['world.sdf','asset_manifest.json','navigation_scope.json','dynamic_protocol.json']}
+    scope_ok=exact_protocol and scope.get('schema')=='teacher_dynamic_scope/v1'and scope.get('experiment')==EXPERIMENT and scope.get('status')=='experimental_unverified'and scope.get('allowed')is True and scope.get('navigation_ground_truth_used')is False and scope.get('run_dir')==str(run)and parent.get('schema')=='teacher_navigation_scope/v1'and parent.get('experiment')==EXPERIMENT and parent.get('allowed')is True and parent.get('run_dir')==str(run)and parent.get('profile')==profile and parent.get('checkpoint_sha256')=='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'and parent.get('status')=='experimental_unverified'and parent.get('navigation_is_verified')is False and parent.get('navigation_ground_truth_used')is False and parent.get('review_basis')=='explicit_user_continuation_and_root_scope_authorization'and exclusions<=set(profile.get('excluded',[]))and'dynamic_obstacle_success_claim'not in parent.get('excluded_scenarios',[])and mandatory<=set(refs)and not basis_errors and not ref_errors
     levels=scope.get('global_levels_preserved',{});scope_ok&=levels==parent.get('global_levels_preserved')and levels.get('sim2sim')=='failed'and levels.get('navigation')=='unverified'and levels.get('real_robot')=='unverified'
     checks['strict_explicit_new_scope_and_preserved_basis']=check(scope_ok,protocol_sha256=sha(run/'dynamic_protocol.json'),expected_frozen_protocol_sha256=frozen['protocol_sha256'],protocol_and_profile_exactly_frozen=exact_protocol,reference_hash_errors=ref_errors,basis_errors=basis_errors,global_levels_preserved=levels,excluded_scenarios=profile.get('excluded'),old_scope_not_generalized=True)
     old=ET.parse(run/'dynamic_original_world.sdf').getroot();new=ET.parse(run/'world.sdf').getroot();models=new.findall("world/model[@name='moving_obstacle']");unique=len(models)==1
@@ -105,7 +106,7 @@ def evaluate(run,write=True):
     bm=(ot>=blocking['sim_time']-1e-9)&(ot<leaving['sim_time']+1e-9)if blocking and leaving else np.zeros(len(ot),bool)
     block_seconds=leaving['sim_time']-blocking['sim_time']if blocking and leaving else None
     actualok=len(observed)>1 and len(actualids)==1 and np.all(np.diff(ot)>0)and np.max(np.diff(ot))<=.300000001 and not othercommands and not failures and all(r.get('navigation_input')is False for r in observed)
-    actualok&=blocking is not None and leaving is not None and clear is not None and block_seconds>=protocol['blocking_duration_sim_s']-1e-8 and bm.any()and np.max(np.linalg.norm(op[bm]-np.asarray(protocol['blocked_position_world']),axis=1))<=tolerance
+    actualok&=blocking is not None and leaving is not None and clear is not None and block_seconds>=protocol['blocking_duration_sim_s']-1e-8 and bm.any()and np.max(np.linalg.norm(op[bm]-np.asarray(protocol['blocked_position_world']),axis=1))<=tolerance and math.dist(clear.get('actual_model_pose',{}).get('position',[math.inf]*3),protocol['initial_position_world'])<=tolerance
     checks['actual_box_entry_block_and_withdrawal']=check(actualok,actual_model_ids=list(actualids),actual_pose_samples=len(observed),phase_times_s={k:r['sim_time']for k,r in byphase.items()},actual_observed_block_duration_s=block_seconds,requested_service_only_for_allowed_box=not othercommands,fixture_failures=failures,actual_model_pose_navigation_input=False)
     telemetry=rows(run/'telemetry.jsonl');native=[p for p in rows(run/'actuator.jsonl')if p.get('kind')=='physics_step'];slam=rows(run/'navigation_slam_poses.jsonl');status=rows(run/'navigation_status.jsonl');cloudhistory=rows(run/'navigation_cloud_history.jsonl');anchor=read(run/'navigation_anchor.json')
     st=np.asarray([p['stamp_ns']for p in slam],dtype=np.int64);sp=np.asarray([p['position']for p in slam]);rule=protocol['trigger']
@@ -116,7 +117,7 @@ def evaluate(run,write=True):
     corepath=ROOT.parent/'navigation/control_core.py';expected=parent.get('references',{}).get(str(corepath.resolve()))
     if expected!=sha(corepath):raise ValueError('Native obstacle geometry code hash not verified by run scope')
     core=load(corepath,'dynamic_core_');cloudidx={p['stamp_ns']:p for p in cloudhistory};poseidx={p['stamp_ns']:p for p in slam}
-    event_results=[];native_event_errors=[];guard_times=[]
+    event_results=[];native_event_errors=[];guard_times=[];native_route=None
     alignment=common['metrics'].get('independent_truth_error',{});a=np.asarray(alignment.get('alignment_world_to_slam_rotation'));at=np.asarray(alignment.get('alignment_translation'))
     for path in sorted((run/'navigation_events').glob('*.json')):
         document=read(path);npz=path.parent/document['cloud_file'];record={'file':str(path.relative_to(run)),'guard_compute_world_s':document.get('guard_compute_stamp'),'zero_command_stamp':document.get('zero_command_stamp')}
@@ -130,7 +131,7 @@ def evaluate(run,write=True):
             world=(data['cloud']-at)@a;box=observed[ei];qxyzw=box['quaternion_xyzw'];br=quat_rotation(np.asarray([qxyzw[3],*qxyzw[:3]]));local=(world-np.asarray(box['position']))@br;half=np.asarray(protocol['box_size_m'])/2
             inside=np.all(abs(local)<=half+.07,axis=1);side=np.min(abs(abs(local[:,:2])-half[:2]),axis=1)<=.07;above=(world[:,2]>.15)&(world[:,2]<1.05);boxpoints=int(np.sum(inside&side&above))
         good=result[0]is True and equal and samebuffer and boxpoints is not None and boxpoints>=3 and document.get('protect_result')is False and np.max(abs(np.asarray(document.get('zero_command',[1,1,1]))))<1e-8
-        if good:guard_times.append(float(document['obstacle_edge_stamp']))
+        if good:guard_times.append(float(document['obstacle_edge_stamp']));native_route=data['route'].copy()
         record.update(replayed_result=result,recorded_result=declared,exact_filtered_cloud_sha_verified=samebuffer,replay_matches=equal,actual_observed_box_surface_returns=boxpoints,matching_tolerance_m=.07,passed=good)
         event_results.append(record)
     checks['real_cloud_native_guard_detected_actual_box_and_zeroed']=check(bool(guard_times)and not native_event_errors,events=event_results,event_errors=native_event_errors,native_guard_minimum_points=3,box_geometry_match='Post-run fixed alignment; actual Pose_V sampled causally at cloud stamp. ≥3 vertical-side returns within7cm; never injected into navigation.')
@@ -150,10 +151,10 @@ def evaluate(run,write=True):
     sensor=rows(run/'dynamic_sensor_evidence/sensor_inputs.jsonl');inventory_path=run/'dynamic_sensor_evidence_manifest.json';inventory=read(inventory_path)if inventory_path.exists()else{};sensorfiles=inventory.get('files',{});sensor_errors=[]
     # Inventory schema is validated without treating absent/failed recorder evidence as success.
     for name,h in sensorfiles.items():
-        p=run/'dynamic_sensor_evidence'/name
+        p=run/name
         if not p.is_file()or sha(p)!=h:sensor_errors.append(name)
-    cloud_replays=[];clearpoints=[]
-    goal=np.asarray(read(run/'navigation_request.json')['goals'][0]['center']);route=np.asarray([anchor['origin'],goal])
+    cloud_replays=[];clear_times=[];clear_good=[]
+    goal=np.asarray(read(run/'navigation_request.json')['goals'][0]['center']);route=native_route if native_route is not None else np.asarray([anchor['origin'],goal])
     for sr in sensor:
         if sr.get('source')!='cloud'or not sr.get('xyz_file'):continue
         p=run/'dynamic_sensor_evidence'/sr['xyz_file'];cs=sr['stamp_ns'];ch=cloudidx.get(cs)
@@ -163,12 +164,24 @@ def evaluate(run,write=True):
         with np.load(p)as data:xyz=data['xyz']
         filtered,count=core.remove_go2_self_returns(xyz,np.asarray(ps['position']),core.rotation_xyzw(ps['quaternion']));h=hashlib.sha256(np.asarray(filtered,dtype='<f8').tobytes()).hexdigest();exact=h==ch['filtered_xyz_float64_sha256']
         result=core.obstacle_ahead(filtered,np.asarray(ps['position']),goal,route)
-        cr={'stamp_ns':cs,'phase':sr.get('fixture_phase'),'source':sr['xyz_file'],'actual_consumer_filtered_buffer_exact':exact,'replayed_corridor':result}
+        # Corroborate against the actual recorded steering corridor, not only a
+        # hypothetical straight vector toward the goal. Control pose is selected
+        # by steering's original odom stamp; never the simulator robot pose.
+        snapshots=[r for r in status if r.get('actual_cloud_message_stamp_ns')==cs and r.get('waypoint_index')==0 and r.get('steering')and r.get('ros_sim_time',0)>=cs/1e9 and r.get('ros_sim_time',0)-cs/1e9<.3]
+        actual_result=None;used_status=None
+        if snapshots:
+            used_status=min(snapshots,key=lambda r:r['ros_sim_time']);steer=used_status['steering'];cp=poseidx.get(int(round(steer['odom_stamp']*1e9)))
+            if cp is not None:actual_result=core.steering_obstacle_ahead(filtered,np.asarray(cp['position']),np.asarray(steer['target']),np.asarray(steer['direction']),route)
+        cr={'stamp_ns':cs,'phase':sr.get('fixture_phase'),'source':sr['xyz_file'],'actual_consumer_filtered_buffer_exact':exact,'replayed_goal_corridor':result,'replayed_recorded_steering_corridor':actual_result,'recorded_status_world_s':used_status.get('ros_sim_time')if used_status else None}
         cloud_replays.append(cr)
-        if clear and cs/1e9>=clear['sim_time']and exact and not result[0]:clearpoints.append(cs/1e9)
-    ct=np.asarray(clearpoints);clear_span=first_span(np.ones(len(ct),bool),ct,protocol['clear_corridor_sim_s'],gap=.300000001)if len(ct)else None
+        # Sensor corridor clearance may start during leaving. Model returning to
+        # its initial pose is a separate required final fixture condition above.
+        if leaving and cs/1e9>=leaving['sim_time']and actual_result is not None:
+            clear_times.append(cs/1e9);clear_good.append(exact and not result[0]and not actual_result[0])
+    ct=np.asarray(clear_times);clear_span=first_span(np.asarray(clear_good,bool),ct,protocol['clear_corridor_sim_s'],gap=.300000001)if len(ct)else None
     clear_verified=clear_span is not None;clear_complete=float(ct[clear_span[1]])if clear_span else None
-    checks['actual_registered_cloud_corridor_clear_after_withdrawal']=check(clear_verified if clear else None,clear_phase_world_s=clear['sim_time']if clear else None,first_continuous_clear_confirmation_world_s=clear_complete,required_clear_sim_s=protocol['clear_corridor_sim_s'],exact_consumer_buffer_replays=cloud_replays,raw_xyz_inventory_errors=sensor_errors,source='Actual registered PointCloud2 XYZ decoded by passive observer and independently self-filtered; exact consumer buffer hash required')
+    runtime_resumed=any(r.get('obstacle_resumes',0)>0 for r in status)
+    checks['actual_registered_cloud_corridor_clear_after_withdrawal']=check(clear_verified and runtime_resumed if leaving else None,actual_model_withdrawal_complete_world_s=clear['sim_time']if clear else None,sensor_clear_can_start_during_leaving=True,first_continuous_clear_confirmation_world_s=clear_complete,required_clear_sim_s=protocol['clear_corridor_sim_s'],runtime_obstacle_resume_recorded=runtime_resumed,exact_consumer_buffer_replays=cloud_replays,raw_xyz_inventory_errors=sensor_errors,source='Actual registered PointCloud2 XYZ decoded by passive observer and independently self-filtered; exact consumer buffer hash and actual recorded steering corridor required',model_pose_or_mover_phase_not_used_by_navigation=True,limitations='Only recorded control/status snapshots can be replayed; unobserved guard ticks are not fabricated. A blocked recorded sample resets continuity.')
     trajectories=[read(p)for p in sorted((run/'navigation_trajectories').glob('*.json'))];newplans=[p for p in trajectories if clear_complete is not None and p.get('waypoint_index')==0 and p.get('reference_stamp')is not None and(p['reference_stamp'][0]+p['reference_stamp'][1]/1e9)>=clear_complete]
     checks['new_checked_scan_after_actual_clear']=check(bool(newplans)if clear_complete is not None else None,clear_confirmation_world_s=clear_complete,new_trajectory_ids=[p['trajectory_id']for p in newplans],required_by_frozen_protocol=protocol['requires_new_scan_after_clear'])
     recovery=None

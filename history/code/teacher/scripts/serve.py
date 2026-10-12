@@ -308,6 +308,7 @@ class Dashboard:
                            'scope': 'Archived actual Gazebo RGB in sensor timestamp order; no interpolated or synthesized frames'},
                 'step_plot': (directory / 'step_functional.png').is_file(),
                 'acceptance': read_json(self.runs / 'acceptance.json'),
+                'current_validation': read_json(self.runs.parent / 'current_status.json'),
                 'telemetry': self.telemetry.read(directory / 'telemetry.jsonl'),
                 'frame': {'available': frame is not None,
                           'age_s': max(0., time.time() - frame.stat().st_mtime) if frame else None,
