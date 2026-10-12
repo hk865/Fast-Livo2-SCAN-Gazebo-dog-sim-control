@@ -47,20 +47,37 @@ def main():
     p.add_argument('--navigation-stack',action='store_true',help='Finite scoped experiment with actual SLAM/SCAN inputs')
     p.add_argument('--navigation-pid',choices=['flat_short','flat_straight','flat_long','flat_roundtrip','ramp12_up','ramp12_down','ramp23_up','ramp23_down'],help='Independent actual SLAM/SCAN PID route profile; historical navigation scopes remain unchanged')
     p.add_argument('--navigation-champ',action='store_true',help='Explicit CHAMP executor baseline with the selected independent PID route')
+    p.add_argument('--pid-heading-reference',choices=['route_leg'],help='Prospective Teacher-only frozen route-leg heading; requires an explicit flat PID profile')
     p.add_argument('--cloud-transport-profile',choices=['shm_512k','shm_64m'],help='Independent frozen loopback-only DDS capacity diagnostic; only new PID or SLAM-only stand')
     p.add_argument('--navigation-dynamic',action='store_true',help='Finite flat experiment with one real Gazebo moving obstacle; implies navigation stack')
     p.add_argument('--navigation-dynamic-turn20',action='store_true',help='Explicit calibrated dynamic-only 0.2 rad/s alignment profile; implies dynamic mode')
     p.add_argument('--navigation-dynamic-dwell',action='store_true',help='Independent dynamic profile that stops on confirmed original measured region dwell; implies turn20 dynamic mode')
     p.add_argument('--slam-only-stack',action='store_true',help='Actual stationary SLAM sensor validation without navigation commands')
+    p.add_argument('--slam-registration-only',action='store_true',help='Explicit ramp12 zero90 actual SLAM/cloud capture; no navigation eligibility')
     p.add_argument('--navigation-duration',type=float,default=None)
     p.add_argument('--sensor-feedback',action='store_true')
     args=p.parse_args();suite=[];pid_profile=None;pid_selector=None
+    if args.slam_registration_only:
+        if (args.tests!=['stand'] or args.navigation_pid or args.navigation_champ or args.navigation_stack
+            or args.navigation_dynamic or args.navigation_dynamic_turn20 or args.navigation_dynamic_dwell or args.sensor_feedback):
+            p.error('Ramp registration requires stand only, without navigation or policy sensor replacement')
+        if args.spawn!=[3.2,2.,.52,0.] or args.cloud_transport_profile!='shm_64m':
+            p.error('Ramp registration requires its explicit initialized [3.2,2,.52,0] spawn and reviewed shm_64m transport')
+        if args.schedule is None or args.schedule.resolve()!=(ROOT/'tests/ramp_registration_zero90.json').resolve():
+            p.error('Ramp registration requires the independent zero90 schedule')
+        if args.terrain_target_manifest is None or args.terrain_target_manifest.resolve()!=(ROOT/'tests/terrain_targets/lower12.json').resolve():
+            p.error('Ramp registration requires its explicitly disclosed lower12 privileged Actor terrain provider')
+        args.slam_only_stack=True
+        if args.camera_rate is None:args.camera_rate=10.
+    if args.pid_heading_reference and (not args.navigation_pid or args.navigation_champ or args.navigation_pid not in ('flat_short','flat_straight','flat_long','flat_roundtrip')):
+        p.error('Route-leg heading requires an explicit Teacher flat PID case')
     if args.navigation_champ and not args.navigation_pid:p.error('CHAMP comparison requires an explicit --navigation-pid profile')
     if args.navigation_pid:
         if args.navigation_dynamic or args.navigation_dynamic_turn20 or args.navigation_dynamic_dwell or args.slam_only_stack or args.sensor_feedback or args.spawn:
             p.error('PID profiles require their frozen spawn, separate navigation scope and privileged CPU actor')
         pid_selector='flat_long'if args.navigation_pid=='flat_straight'else args.navigation_pid
-        pid_profile_path=ROOT/'navigation/pid_mode/profiles'/f'{pid_selector}.json'
+        pid_profiles='profiles_heading_v5'if args.pid_heading_reference else'profiles'
+        pid_profile_path=ROOT/'navigation/pid_mode'/pid_profiles/f'{pid_selector}.json'
         pid_profile=json.loads(pid_profile_path.read_text())
         default_pid_duration={'flat_short':180.,'flat_long':180.,'flat_roundtrip':300.}.get(pid_selector,190.)
         pid_duration=float(pid_profile.get('duration_s',default_pid_duration))
@@ -129,10 +146,12 @@ def main():
                     stdout=(run/'cloud_transport_prepare.log').open('w'),stderr=subprocess.STDOUT)
             if args.navigation_stack or args.slam_only_stack:
                 config_path=ROOT/'navigation/pid_mode/scoped_profile.py'if pid_profile else ROOT/'navigation/scoped_profile.py'
+                if args.slam_registration_only:config_path=ROOT/'navigation/ramp_registration/producer_profile.py'
                 config_cmd=[sys.executable,str(config_path),'--run',str(run)]
                 if pid_profile:config_cmd+=['--profile',pid_selector]
+                if args.pid_heading_reference:config_cmd+=['--heading-reference',args.pid_heading_reference]
                 if args.navigation_champ:config_cmd+=['--controller-kind','champ']
-                if args.slam_only_stack:config_cmd+=['--slam-only']
+                if args.slam_only_stack and not args.slam_registration_only:config_cmd+=['--slam-only']
                 if args.navigation_dynamic:config_cmd+=['--dynamic']
                 if args.navigation_dynamic_turn20:config_cmd+=['--dynamic-turn20']
                 if args.navigation_dynamic_dwell:config_cmd+=['--dynamic-dwell']
@@ -311,6 +330,13 @@ def main():
                           'navigation_pid_profile':pid_selector,'navigation_controller_kind':'champ'if args.navigation_champ else'teacher',
                           'actor_started':not args.navigation_champ,'navigation_duration_s':args.navigation_duration if args.navigation_stack else None,
                           'training_process_untouched':True,'real_robot':False}
+                if args.pid_heading_reference is not None:
+                    manifest['pid_heading_reference']=args.pid_heading_reference
+                if args.slam_registration_only:
+                    manifest['slam_registration_only']={'producer_profile':str(config_path),
+                        'producer_profile_sha256':sha(config_path),'navigation_started':False,
+                        'schedule_sha256':sha(run/'independent_protocol.json'),
+                        'privileged_terrain_provider_sha256':sha(run/'terrain_target_manifest.json')}
                 if transport_manifest is not None:
                     manifest['cloud_transport']={'profile':args.cloud_transport_profile,
                         'manifest_sha256':sha(run/'cloud_transport_manifest.json'),

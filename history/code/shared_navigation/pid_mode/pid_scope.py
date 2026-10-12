@@ -6,6 +6,7 @@ HERE=Path(__file__).resolve().parent;NAV=HERE.parent;ROOT=NAV.parent;DEMO=ROOT.p
 SCHEMA='teacher_pid_navigation_scope/v1'
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 PROFILES={p.stem:p for p in(HERE/'profiles').glob('*.json')};CACHE={}
+HEADING_V5_PROFILES={p.stem:p for p in(HERE/'profiles_heading_v5').glob('*.json')}
 
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -14,7 +15,7 @@ def write(path,data):
     if path.exists()and path.read_text()!=content:raise RuntimeError('Refusing to replace prepared PID evidence: '+str(path))
     if not path.exists():path.write_text(content)
 def runtime_files():
-    return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+sorted(NAV.glob('*.py'))+[
+    return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+sorted((HERE/'profiles_heading_v5').glob('*.json'))+sorted(NAV.glob('*.py'))+[
         DEMO/'navigation'/n for n in('controller.py','control_core.py','trajectory_contract.py','goal_regions.py','event_archive.py')]+[
         DEMO/'slam'/n for n in('odom_adapter.py','self_echo_filter.py','geometry.py','map_archive.py')]+[
         DEMO/'camera_mode/slam/fastlivo.yaml',DEMO/'camera_mode/slam/camera.yaml',
@@ -25,8 +26,15 @@ def runtime_files():
         ROOT/'simulation/teacher_actuator.cpp',ROOT/'simulation/build/libteacher_actuator.so',
         ROOT/'simulation/prepare.py',ROOT/'scripts/run_test.py',ROOT/'runs/acceptance.json',
         ROOT/'tests/pid_navigation/protocol.json',ROOT/'tests/pid_navigation/cases.json']
-def profile_for(selector,kind='teacher'):
+def profile_for(selector,kind='teacher',heading_reference=None):
     selector='flat_long'if selector=='flat_straight'else selector
+    if heading_reference is not None:
+        if heading_reference!='route_leg'or kind!='teacher'or selector not in ('flat_short','flat_long','flat_roundtrip'):
+            raise RuntimeError('Route-leg yaw is an explicit Teacher-only three-flat-case V5 experiment')
+        profile=json.loads(HEADING_V5_PROFILES[selector].read_text())
+        if profile.get('heading_reference')!='route_leg'or profile.get('controller_kind')!='teacher':
+            raise RuntimeError('Invalid explicit V5 route-leg heading profile')
+        return profile
     if selector not in PROFILES:raise RuntimeError('Unknown explicit PID profile')
     profile=json.loads(PROFILES[selector].read_text())
     if kind not in ('teacher','champ'):raise RuntimeError('Unknown explicit PID executor')
@@ -67,7 +75,7 @@ def verify_scope(path,raw=None):
        or d.get('navigation_is_verified')is not False or d.get('navigation_ground_truth_used')is not False
        or d.get('checkpoint_sha256')!=FROZEN_SHA or d.get('review_basis')!='explicit_user_pid_speed_command_teacher_route_and_multifloor_simulation'):
         raise RuntimeError('Unknown/unreviewed PID experiment')
-    run=Path(d['run_dir']).resolve();profile=profile_for(d['profile']['selector'],d['controller_kind'])
+    run=Path(d['run_dir']).resolve();profile=profile_for(d['profile']['selector'],d['controller_kind'],d['profile'].get('heading_reference'))
     if run.parent!=(ROOT/'runs').resolve()or path.parent!=run or d['experiment']!=profile['experiment']or d['profile']!=profile:
         raise RuntimeError('PID scope/profile/run mismatch')
     refs=d.get('references',{});fingerprints={str(p):(Path(p).stat().st_size,Path(p).stat().st_mtime_ns)for p in refs}
@@ -130,10 +138,10 @@ def verify_scope(path,raw=None):
     return dict(path=str(path),sha256=digest,checkpoint_sha256=FROZEN_SHA,levels=d['global_levels_preserved'],
         navigation_is_verified=False,experimental=True,experiment=d['experiment'],run_dir=str(run),profile=profile,
         controller_kind=d['controller_kind'],scope=profile['scope'])
-def prepare(run,selector='flat_short',controller_kind='teacher'):
+def prepare(run,selector='flat_short',controller_kind='teacher',heading_reference=None):
     import numpy as np,yaml
     from scipy.spatial.transform import Rotation
-    run=Path(run).resolve();profile=profile_for(selector,controller_kind)
+    run=Path(run).resolve();profile=profile_for(selector,controller_kind,heading_reference)
     if run.parent!=(ROOT/'runs').resolve():raise RuntimeError('Use a unique teacher_mode/runs directory')
     asset=json.loads((run/'asset_manifest.json').read_text());sensors=json.loads((run/'sensor_contract.json').read_text())
     if asset.get('terrain')!=profile['expected_asset']['terrain']or asset.get('spawn')!=profile['expected_asset']['spawn']or not asset.get('sensors'):
@@ -195,6 +203,6 @@ def prepare(run,selector='flat_short',controller_kind='teacher'):
     if transport is not None:receipt['cloud_transport_experiment']=transport
     write(run/'navigation_scope.json',receipt);return verify_scope(run/'navigation_scope.json')
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--profile',default='flat_short');p.add_argument('--controller-kind',default='teacher');p.add_argument('--check-only',action='store_true')
-    a=p.parse_args();print(json.dumps(verify_scope(a.run/'navigation_scope.json')if a.check_only else prepare(a.run,a.profile,a.controller_kind),indent=2,ensure_ascii=False))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--profile',default='flat_short');p.add_argument('--controller-kind',default='teacher');p.add_argument('--heading-reference',choices=['route_leg']);p.add_argument('--check-only',action='store_true')
+    a=p.parse_args();print(json.dumps(verify_scope(a.run/'navigation_scope.json')if a.check_only else prepare(a.run,a.profile,a.controller_kind,a.heading_reference),indent=2,ensure_ascii=False))
 if __name__=='__main__':main()

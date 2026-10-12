@@ -84,6 +84,7 @@ class GravityCalibration:
         if (imu.get('frame_id')!='imu_link' or imu_pose.get('frame_id')!='camera_init'
                 or imu_pose.get('child_frame_id')!='aft_mapped' or body_pose.get('frame_id')!='camera_init'
                 or body_pose.get('child_frame_id')!='demo_slam_body'
+                or imu_pose['original_stamp_ns']>stamp or body_pose['original_stamp_ns']>stamp
                 or abs(stamp-imu_pose['original_stamp_ns']) > 150_000_000
                 or abs(stamp-body_pose['original_stamp_ns']) > 150_000_000
                 or not 0<=imu['received_monotonic_wall']-imu_pose['received_monotonic_wall']<.3

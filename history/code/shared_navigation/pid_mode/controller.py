@@ -6,6 +6,7 @@ import numpy as np
 from teacher_wrapper import TeacherNavigation,base
 from pid_core import HeaderPID,slew
 from control_core import follow_trajectory
+from route_leg_heading import RouteLegLedger,RouteLegError,apply_route_leg
 
 
 class PIDNavigation(TeacherNavigation):
@@ -14,6 +15,7 @@ class PIDNavigation(TeacherNavigation):
         self.execution_health=None;self.execution_health_wall=None
         self.cloud_callback_records=0;self.pending_cloud_callback_row=None
         self.pid_pose_stamp=None;self.pid_row=None;self.pid_records=0;self.pid_guard_needs_evaluation=False;self.pid_prepared_output=None
+        if self.profile.get('heading_reference')=='route_leg':self.route_leg_ledger=RouteLegLedger()
         if self.profile['controller_kind']=='champ':
             from std_msgs.msg import String
             self.create_subscription(String,'/demo/champ/execution_health',self.on_execution_health,1)
@@ -56,7 +58,34 @@ class PIDNavigation(TeacherNavigation):
         # The PID uses raw measured SLAM XY. Neither its arrival nor feedback
         # is the predictive tracking pose used by the historical CHAMP follower.
         kwargs['tracking_pose']=self.pose
-        return follow_trajectory(*args,**kwargs)
+        result=follow_trajectory(*args,**kwargs)
+        if self.profile.get('heading_reference')!='route_leg':return result
+        reference=self.route_leg_ledger.get(self.request_id,self.waypoint_index,
+            self.segment_start,self.waypoints[self.waypoint_index])
+        velocity,yaw_rate,target,steering=result
+        yaw=math.atan2(self.rotation[1,0],self.rotation[0,0])
+        return velocity,yaw_rate,target,apply_route_leg(reference,steering,yaw)
+    def measured_region_arrival(self):
+        if self.profile.get('heading_reference')=='route_leg':
+            # Shared control has just activated segment_start from this exact
+            # accepted raw SLAM pose, before planning or testing region dwell.
+            reference,created=self.route_leg_ledger.freeze(self.request_id,self.waypoint_index,
+                self.segment_start,self.waypoints[self.waypoint_index],int(self.pose_stamp),
+                int(self.get_clock().now().nanoseconds),self.pose_quaternion)
+            if created:self.evidence.append(self.run/'navigation_route_leg_references.jsonl',reference.evidence())
+        return super().measured_region_arrival()
+    def control(self,now):
+        if self.profile.get('heading_reference')!='route_leg':return super().control(now)
+        try:return super().control(now)
+        except RouteLegError as error:
+            self.state='failed';self.message='实际SLAM航段航向参考拒绝，停车: '+str(error)
+            self.reset_region_arrival('failed');self.pid.reset('invalid_route_leg_reference')
+            self.evidence.append(self.run/'navigation_route_leg_rejections.jsonl',{
+                'schema':'actual_slam_route_leg_rejection/v1','reason':str(error),
+                'request_id':self.request_id,'waypoint_index':self.waypoint_index,
+                'control_pose_stamp_ns':int(self.pose_stamp),'ros_clock_ns':int(self.get_clock().now().nanoseconds),
+                'navigation_ground_truth_used':False,'action':'failed and exact zero velocity command'})
+            self.publish_command()
     def select_pid_velocity(self,velocity,yaw_rate,target,allow_translation):
         ns=self.get_clock().now().nanoseconds;now=time.monotonic()
         mode=('hold'if self.obstacle_hold or self.heading_gate.phase in ('pre_turn','settle')else
@@ -94,6 +123,9 @@ class PIDNavigation(TeacherNavigation):
             'request_id':self.request_id,'waypoint_index':self.waypoint_index,'trajectory_id':self.active_trajectory_id,
             'trajectory_archive_file':self.trajectory_archive_reference,'mode':mode,'pid':diagnostic,
             'desired_body_command':desired.tolist(),'prepared_after_slew_command':cmd.tolist(),'navigation_ground_truth_used':False}
+        if self.profile.get('heading_reference')=='route_leg':
+            self.pid_row.update(heading_reference=self.steering['heading_reference'],
+                scan_heading_rad=self.steering['scan_heading_rad'],scan_heading_error_rad=self.steering['scan_heading_error_rad'])
         return cmd[:2],float(cmd[2])
     def evaluate_motion_guard(self,*args):
         result=self.record_native_guard(*args)

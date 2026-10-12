@@ -24,6 +24,10 @@ def analyze_capture(directory, output):
     if manifest.get('schema')!='actual_ramp_cloud_capture/v1':raise ValueError('actual full-cloud capture manifest required')
     for name,expected in manifest['source_freeze']['source_hashes'].items():
         if digest(directory/'sources'/name)!=expected:raise ValueError('archived capture source changed: '+name)
+    for name,ref in manifest['source_freeze'].get('source_contract_refs',{}).items():
+        if digest(directory/'sources/dependencies'/name)!=ref['sha256']:raise ValueError('archived source/API contract changed: '+name)
+    for path,expected in manifest.get('producer_configuration',{}).get('source_hashes',{}).items():
+        if digest(directory/'producer_configuration'/Path(path).name)!=expected:raise ValueError('archived producer configuration changed: '+path)
     if manifest.get('errors') or not manifest.get('writer_drained') or manifest['submitted']!=manifest['processed']:
         raise ValueError('capture errors or undrained evidence: refusing registration')
     arrays=[];source_files={str(manifest_path):digest(manifest_path)};accepted=[]
@@ -47,11 +51,14 @@ def analyze_capture(directory, output):
     xyz=np.concatenate(arrays)
     # Deterministic observed 4cm voxels, retaining a real observation per voxel.
     # Quantization is only an offline workload bound, never a sensor producer.
-    key=np.floor(xyz/.04).astype(np.int64);_,indices=np.unique(key,axis=0,return_index=True);xyz=xyz[np.sort(indices)]
+    anchor=manifest['body_anchor'];scaled=((xyz-np.asarray(anchor['position']))@rotation(anchor['quaternion']))/.04
+    nearest=np.rint(scaled);eps=16*np.finfo(float).eps*np.maximum(1.,np.abs(scaled))
+    scaled=np.where(np.abs(scaled-nearest)<=eps,nearest,scaled)
+    key=np.floor(scaled).astype(np.int64);_,indices=np.unique(key,axis=0,return_index=True);xyz=xyz[np.sort(indices)]
     result=register(xyz,manifest['gravity']['up_camera_init'],manifest['body_anchor']['position'],
         complete_archive=manifest['status']=='observation_complete')
     result.update(capture_manifest_sha256=digest(manifest_path),input_source_hashes=source_files,
-        analyzed_clouds=accepted,observed_downsample_m=.04,retained_observed_points=len(xyz),
+        analyzed_clouds=accepted,observed_downsample_m=.04,observed_downsample_frame='initial actual SLAM body pose',retained_observed_points=len(xyz),
         analysis_source_hashes={str(HERE/n):digest(HERE/n)for n in ('analyze.py','geometry.py','cloud.py','capture.py')},
         registration_control_enabled=False,navigation_request_emitted=False,
         limitations=['Plane/edge candidates need independent review; geometry does not establish motor/solver/SLAM accuracy.',
@@ -59,6 +66,9 @@ def analyze_capture(directory, output):
                     'Recorded actual accelerometer calibration is stationary; no simulator or absolute IMU yaw input.',
                     'No unobserved opposite edge, floor, endpoint or route segment is filled.'])
     output.mkdir();np.savez(output/'observed_xyz.npz',xyz=xyz)
+    (output/'sources').mkdir()
+    for name in ('analyze.py','geometry.py','cloud.py','capture.py'):
+        (output/'sources'/name).write_bytes((HERE/name).read_bytes())
     result['observed_xyz_artifact']={'path':str(output/'observed_xyz.npz'),'sha256':digest(output/'observed_xyz.npz')}
     canonical=json.dumps(result,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
     result['registration_content_sha256']=hashlib.sha256(canonical).hexdigest()

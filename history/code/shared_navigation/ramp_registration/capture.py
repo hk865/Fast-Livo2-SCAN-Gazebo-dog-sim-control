@@ -33,9 +33,9 @@ def temporal_admission(row, pose):
 
 
 class CaptureWriter:
-    def __init__(self, output, *, capacity=512, max_queue_bytes=64*1024**2, max_archive_bytes=2*1024**3,
+    def __init__(self, output, *, capacity=512, max_queue_bytes=64*1024**2, max_archive_bytes=8*1024**3,
                  max_frame_bytes=32*1024**2):
-        self.output=Path(output); self.output.mkdir(exist_ok=False); (self.output/'clouds').mkdir()
+        self.output=Path(output); self.output.mkdir(exist_ok=False,parents=True); (self.output/'clouds').mkdir()
         self.queue=queue.Queue(capacity); self.max_queue_bytes=max_queue_bytes
         self.max_archive_bytes=max_archive_bytes; self.max_frame_bytes=max_frame_bytes
         self.lock=threading.Lock(); self.queue_bytes=0; self.peak_queue_bytes=0
@@ -68,6 +68,10 @@ class CaptureWriter:
         history=self.histories[name]
         return min(history,key=lambda r:abs(r['original_stamp_ns']-stamp)) if history else None
 
+    def latest_source_past(self,name,stamp):
+        valid=[r for r in self.histories[name]if r['original_stamp_ns']<=stamp]
+        return max(valid,key=lambda r:r['original_stamp_ns'])if valid else None
+
     def _line(self, name, row):
         if name not in self.streams: self.streams[name]=(self.output/(name+'.jsonl')).open('x')
         self.streams[name].write(json.dumps(row,allow_nan=False,separators=(',',':'))+'\n')
@@ -87,7 +91,7 @@ class CaptureWriter:
             if accepted:history.append(row)
             else:row['pose_rejection_reason']='invalid_frame_values_quaternion_or_nonincreasing_stamp'
         elif stream=='imu':
-            ip=self.nearest('imu_slam_odom',row['original_stamp_ns']); bp=self.nearest('body_odom',row['original_stamp_ns'])
+            ip=self.latest_source_past('imu_slam_odom',row['original_stamp_ns']); bp=self.latest_source_past('body_odom',row['original_stamp_ns'])
             clock=row.get('received_ros_clock_ns');ca=row.get('received_clock_wall_age_s')
             fresh=(clock is not None and -50_000_000<=clock-row['original_stamp_ns']<300_000_000
                 and ca is not None and 0<=ca<.3)

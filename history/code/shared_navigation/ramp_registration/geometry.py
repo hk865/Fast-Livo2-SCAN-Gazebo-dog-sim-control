@@ -75,6 +75,25 @@ def _public_plane(plane, cfg):
                 points=len(plane['indices']), plane_residual_rms_m=plane['rms_m'])
 
 
+def _side_face_evidence(u,v,h,mask,depth,cfg):
+    """Fit actual side returns in the ramp basis; raw normal fields are ignored.
+
+    A horizontal floor has a vertical normal even when its ramp-relative depth
+    varies along u. It therefore cannot satisfy this side-face check.
+    """
+    points=np.column_stack([u[mask],v[mask],h[mask]])
+    out={'points':len(points),'actual_vertical_span_m':0.,'depth_span_m':0.,
+         'normal_in_ramp_basis':None,'rms_m':None,'verified_near_vertical_face':False}
+    if len(points)<6:return out
+    center=points.mean(axis=0);_,s,vh=np.linalg.svd(points-center,full_matrices=False);normal=vh[-1]
+    height=float(np.ptp(points[:,2]));span=float(np.ptp(depth[mask]))
+    rms=float(np.sqrt(np.mean(((points-center)@normal)**2)))
+    out.update(actual_vertical_span_m=height,depth_span_m=span,normal_in_ramp_basis=normal.tolist(),rms_m=rms,
+        verified_near_vertical_face=bool(s[1]>.015 and s[2]/s[1]<.25 and abs(normal[2])<.25
+            and height>=cfg['side_face_min_vertical_span_m'] and span>=cfg['side_face_min_vertical_span_m']))
+    return out
+
+
 def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_cloud', complete_archive=True):
     cfg = dict(DEFAULTS, **(cfg or {})); up = unit(up); xyz = np.asarray(xyz, dtype=np.float64)
     anchor = np.asarray(body_anchor, dtype=float)
@@ -90,15 +109,17 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
     planes = extract_planes(xyz, up, cfg); base['support_planes'] = [_public_plane(p, cfg) for p in planes]
     horizontals = [p for p in planes if np.rad2deg(p['tilt_rad']) <= cfg['horizontal_max_deg']]
     current = []
-    for p in horizontals:
+    for p in planes:
         pts = xyz[p['indices']]; delta = pts-anchor
         horizontal_dist = np.linalg.norm(delta-(delta @ up)[:, None]*up, axis=1)
-        gap = float((anchor-p['center']) @ up)
+        gap = float((anchor-p['center'])@p['normal']/(p['normal']@up))
         if .15 <= gap <= .65 and np.any(horizontal_dist < .45): current.append((gap, p))
     current.sort(key=lambda x: x[0]); current_id = current[0][1]['plane_id'] if current else None
-    base['current_support_platform_id'] = current_id
+    base['current_support_plane_id'] = current_id
+    base['current_support_platform_id'] = current_id if current_id in {p['plane_id']for p in horizontals}else None
+    base['current_support_selection']='Observed support plane below actual SLAM body, local points within .45m, plausible clearance .15.. .65m; no foot-contact claim'
     if len(current) > 1 and abs(current[0][0]-current[1][0]) < .06:
-        current_id = None; base['current_support_platform_id'] = None
+        current_id = None; base['current_support_platform_id'] = None;base['current_support_plane_id']=None
         base['rejection_reasons'].append('ambiguous_current_support_layer')
     if current_id is None: base['rejection_reasons'].append('current_support_layer_not_observed')
     for p in planes:
@@ -149,19 +170,18 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
                 # the surface and lower side, rather than certifying a hull.
                 depth = slope*u-h
                 near_surface_side = common & (depth >= .01) & (depth <= .22)
-                left_face = depth[near_surface_side & (np.abs(v-left) <= .05)]
-                right_face = depth[near_surface_side & (np.abs(v-right) <= .05)]
-                face_spans = [float(np.ptp(a)) if len(a)>=3 else 0. for a in (left_face,right_face)]
+                faces=[_side_face_evidence(u,v,h,near_surface_side&(np.abs(v-edge)<=.05),depth,cfg)for edge in (left,right)]
                 cells = max(1, int(np.ceil(width/cfg['support_cell_width_m'])))
                 occupied_cells = len(np.unique(np.clip(((vs-left)/max(width,1e-9)*cells).astype(int),0,cells-1)))
                 interior = occupied_cells/cells
                 row.update(left_edge_m=float(left), right_edge_m=float(right), observed_width_m=width,
                            left_external_drop_points=int(left_mask.sum()), right_external_drop_points=int(right_mask.sum()),
-                           left_actual_side_face_vertical_span_m=face_spans[0],right_actual_side_face_vertical_span_m=face_spans[1],
+                           left_actual_side_face_vertical_span_m=faces[0]['actual_vertical_span_m'],right_actual_side_face_vertical_span_m=faces[1]['actual_vertical_span_m'],
+                           left_actual_side_face_fit=faces[0],right_actual_side_face_fit=faces[1],
                            interior_observed_support_fraction=interior,
                            bilateral_observed=bool(width >= cfg['minimum_supported_width_m']
                                and left_mask.sum() >= 2 and right_mask.sum() >= 2
-                               and min(face_spans)>=cfg['side_face_min_vertical_span_m']
+                               and all(f['verified_near_vertical_face']for f in faces)
                                and interior>=cfg['minimum_interior_coverage_fraction']))
             candidate['bins'].append(row)
         good = [r for r in candidate['bins'] if r['bilateral_observed']]
@@ -190,7 +210,7 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
         exit_ = [r for r in candidate['connections'] if r['end']=='exit_high']
         if len(entry)!=1 or len(exit_)!=1: candidate['rejection_reasons'].append('both_adjoining_platform_seams_not_observed_or_ambiguous')
         if len(good) != len(candidate['bins']): candidate['rejection_reasons'].append('partial_double_boundary_coverage')
-        if current_id not in {r['platform_id'] for r in candidate['connections']}:
+        if current_id!=p['plane_id'] and current_id not in {r['platform_id'] for r in candidate['connections']}:
             candidate['rejection_reasons'].append('ramp_not_connected_to_current_observed_support_layer')
         if source_kind != 'full_registered_cloud': candidate['rejection_reasons'].append('exploratory_color_cloud_cannot_certify_full_coverage')
         if not complete_archive: candidate['rejection_reasons'].append('input_archive_incomplete')
@@ -202,6 +222,8 @@ def register(xyz, up, body_anchor, *, cfg=None, source_kind='full_registered_clo
                 'surface_centerline_camera_init': [q.tolist() for q in seam_points],
                 'body_centerline_camera_init': [(q+up*clearance).tolist() for q in seam_points],
                 'measured_initial_body_surface_clearance_m': clearance,
+                'current_support_plane_id':current_id,'body_anchor_u_m':float((anchor-center)@heading),
+                'whole_ramp_traversal_claimed':False,
                 'platform_ids': [r[0]['platform_id'] for r in (entry, exit_)],
                 'scope': 'observed ramp between actual platform seams; not a collision or locomotion acceptance',
                 'navigation_ground_truth_used': False}

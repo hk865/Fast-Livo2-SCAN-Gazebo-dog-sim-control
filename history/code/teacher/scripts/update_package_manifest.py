@@ -21,7 +21,8 @@ ROOT=Path(__file__).resolve().parents[1]
 FROZEN_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 SKIP_DIRS={'__pycache__','build','.git','.pytest_cache','.mypy_cache','.ruff_cache'}
 HISTORY=Path('test_results/package_manifest_history')
-COMPILED=('simulation/build/libteacher_actuator.so','navigation/dynamic/build/obstacle_pose_observer')
+COMPILED=('simulation/build/libteacher_actuator.so','navigation/dynamic/build/obstacle_pose_observer',
+          'pid_comparison/champ_mode/native/build/libchamp_native_observer.so')
 
 
 def fingerprint(path):
