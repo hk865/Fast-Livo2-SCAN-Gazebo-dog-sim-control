@@ -1,0 +1,63 @@
+--- navigation_stack.log: trailing <=2048 bytes only; not first failure proof ---
+14]
+[INFO] [parameter_bridge-13]: sending signal 'SIGINT' to process[parameter_bridge-13]
+[INFO] [python3-12]: sending signal 'SIGINT' to process[python3-12]
+[INFO] [python3-11]: sending signal 'SIGINT' to process[python3-11]
+[INFO] [python3-10]: sending signal 'SIGINT' to process[python3-10]
+[INFO] [python3-9]: sending signal 'SIGINT' to process[python3-9]
+[INFO] [python3-8]: sending signal 'SIGINT' to process[python3-8]
+[INFO] [python3-7]: sending signal 'SIGINT' to process[python3-7]
+[INFO] [python3-6]: sending signal 'SIGINT' to process[python3-6]
+[INFO] [python3-5]: sending signal 'SIGINT' to process[python3-5]
+[INFO] [parameter_blackboard-3]: sending signal 'SIGINT' to process[parameter_blackboard-3]
+[INFO] [python3-2]: sending signal 'SIGINT' to process[python3-2]
+[INFO] [python3-1]: sending signal 'SIGINT' to process[python3-1]
+[parameter_bridge-13] [INFO] [1791704650.913498284] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] [INFO] [1791704650.916469797] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[parameter_blackboard-3] [INFO] [1791704650.917451537] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[python3-7] des manager
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [parameter_bridge-13]: process has finished cleanly [pid 1153076]
+[INFO] [parameter_blackboard-3]: process has finished cleanly [pid 1153056]
+[INFO] [python3-9]: process has finished cleanly [pid 1153072]
+[INFO] [python3-1]: process has finished cleanly [pid 1153054]
+[INFO] [python3-11]: process has finished cleanly [pid 1153074]
+[INFO] [python3-2]: process has finished cleanly [pid 1153055]
+[INFO] [python3-14]: process has finished cleanly [pid 1153077]
+[INFO] [python3-5]: process has finished cleanly [pid 1153058]
+[INFO] [python3-10]: process has finished cleanly [pid 1153073]
+[INFO] [python3-12]: process has finished cleanly [pid 1153075]
+[INFO] [python3-8]: process has finished cleanly [pid 1153071]
+[INFO] [python3-6]: process has finished cleanly [pid 1153059]
+[INFO] [python3-7]: process has finished cleanly [pid 1153060]
+
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+
+--- gazebo.log: trailing <=2048 bytes only; not first failure proof ---
+d of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+pci id for fd 64: 10de:2c05, driver (null)
+pci id for fd 65: 10de:2c05, driver (null)
+libEGL warning: egl: failed to create dri2 screen
+libEGL warning: pci id for fd 63: 10de:2c05, driver (null)
+
+GO2_R47_ORIGINAL_PLUGIN_UNVERIFIED _ZN2gz9rendering2v810Ogre2Scene9PreRenderEv
+Stack trace (most recent call last) in thread 1153499:
+#10   Object "[0xffffffffffffffff]", at 0xffffffffffffffff, in 
+#9    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x719561529ecb, in 
+#8    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x71956149cb83, in 
+#7    Object "/lib/x86_64-linux-gnu/libstdc++.so.6", at 0x71955d6ecdb3, in 
+#6    Object "/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/libgz-sim-sensors-system.so", at 0x719550041cff, in gz::sim::v8::systems::SensorsPrivate::RenderThread()
+#5    Object "/opt/ros/jazzy/opt/gz_sim_vendor/lib/gz-sim-8/plugins/libgz-sim-sensors-system.so", at 0x719550040b36, in gz::sim::v8::systems::SensorsPrivate::RunOnce()
+#4    Object "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R47_ACTUAL_RAY_GEOMETRY_STAGE/libgo2_ray_observer.so", at 0x719561c07df1, in gz::rendering::v8::Ogre2Scene::PreRender()
+#3    Object "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R47_ACTUAL_RAY_GEOMETRY_STAGE/libgo2_ray_observer.so", at 0x719561c0c8e2, in void (*diag::plugin_next<void (*)(gz::rendering::v8::Ogre2Scene*)>(char const*))(gz::rendering::v8::Ogre2Scene*)
+#2    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x7195614288fe, in abort
+#1    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x71956144527d, in gsignal
+#0    Object "/lib/x86_64-linux-gnu/libc.so.6", at 0x71956149ec0c, in pthread_kill
+Aborted (Signal sent by tkill() 1153392 1000)
