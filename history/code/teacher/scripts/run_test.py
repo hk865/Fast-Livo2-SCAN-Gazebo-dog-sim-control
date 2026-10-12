@@ -33,6 +33,7 @@ def main():
     p.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'))
     p.add_argument('--overview-fov',type=float,default=None)
     p.add_argument('--camera-rate',type=float,default=None)
+    p.add_argument('--real-time-factor',type=float,default=1.)
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     p.add_argument('--schedule',type=Path,help='Independent frozen command protocol; never used for navigation')
@@ -68,6 +69,7 @@ def main():
             if args.terrain_target_manifest:shutil.copy2(args.terrain_target_manifest,run/'terrain_target_manifest.json')
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
+            prepare+=['--real-time-factor',str(args.real_time_factor)]
             if args.camera_rate is not None or args.navigation_stack:prepare+=['--camera-rate',str(args.camera_rate if args.camera_rate is not None else 10.)]
             if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
             if args.overview_fov is not None:prepare+=['--overview-fov',str(args.overview_fov)]
@@ -131,7 +133,8 @@ def main():
                     bridge=subprocess.Popen(['ros2','run','ros_gz_bridge','parameter_bridge','--ros-args','-p','config_file:='+str(run/'sensor_bridge.yaml')],env=env,stdout=(run/'bridge.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                     capture=subprocess.Popen([sys.executable,str(ROOT/'scripts/capture.py'),'--run',str(run),'--topic','/demo/teacher/overview','--archive-stride','1'if test.endswith('_continue')else'5'],env=env,stdout=(run/'capture.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                 if args.shadow:
-                    shadow=subprocess.Popen([sys.executable,str(ROOT/'scripts/sensor_shadow.py'),'--run',str(run),'--output',str(run/'sensor_shadow'),'--duration','185','--ros-domain','79'],
+                    shadow_duration=max(185,args.navigation_duration/args.real_time_factor+60 if args.navigation_stack else float(schedule['duration_s'])/args.real_time_factor+60 if schedule else 185)
+                    shadow=subprocess.Popen([sys.executable,str(ROOT/'scripts/sensor_shadow.py'),'--run',str(run),'--output',str(run/'sensor_shadow'),'--duration',str(shadow_duration),'--ros-domain','79'],
                                             env=env,stdout=(run/'shadow.log').open('w'),stderr=subprocess.STDOUT,start_new_session=True)
                     deadline=time.monotonic()+20
                     while not (run/'sensor_shadow/ready').exists():

@@ -23,7 +23,8 @@ import numpy as np
 sys.dont_write_bytecode = True
 TOPICS = {"imu": "/livox/imu", "joints": "/demo/control/measured_joint_states"}
 HISTORY_SIZE = 80
-WRITE_PERIOD_S = .02
+EXPORTED_HISTORY_SIZE = 16
+WRITE_PERIOD_S = .005
 WALL_MAX_AGE_S = .3
 
 
@@ -245,7 +246,10 @@ def make_node(rclpy, contract):
                 "schema_version": 1, "run": str(contract.run), "broker_pid": os.getpid(), "broker_alive": self.alive,
                 "broker_sequence": self.sequence, "broker_monotonic_wall": now, "broker_elapsed_wall_s": now-self.started,
                 "topics": TOPICS, "history_maxlen": HISTORY_SIZE, "source_status": statuses,
-                "histories": {key: list(history) for key, history in self.histories.items()},
+                "exported_history_maxlen": EXPORTED_HISTORY_SIZE, "write_period_s": WRITE_PERIOD_S,
+                "exported_history_counts": {key: min(len(history), EXPORTED_HISTORY_SIZE) for key, history in self.histories.items()},
+                "histories": {key: list(history)[-EXPORTED_HISTORY_SIZE:] for key, history in self.histories.items()},
+                "raw_history_scope": "Internal buffers retain80 per stream; complete accepted messages remain in sensor_feedback_samples.jsonl. Only atomic live payload is bounded to the latest16.",
                 "invalid_reason_counts": dict(self.invalid_reasons), "contract": contract.description,
                 "publisher_graph": self.last_graph, "publisher_graph_monotonic_wall": self.last_contract_check,
                 "application_publishers": self.application_publishers(), "script_sha256": self.script_sha256,

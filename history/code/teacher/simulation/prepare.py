@@ -19,9 +19,11 @@ def main():
     a.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'),help='Override only the collision-free overview camera world pose')
     a.add_argument('--overview-fov',type=float,default=None,help='Optional diagnostic camera horizontal field of view in radians; no image warp')
     a.add_argument('--camera-rate',type=float,default=2.,help='Actual vehicle RGB rate; observer camera remains 2 Hz')
+    a.add_argument('--real-time-factor',type=float,default=1.,help='Wall-time simulation speed; physics step and policy decimation stay fixed')
     a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre2');args=a.parse_args()
     if args.overview_fov is not None and not 0<args.overview_fov<math.pi:a.error('--overview-fov must be between 0 and pi radians')
     if not math.isfinite(args.camera_rate)or not 1<=args.camera_rate<=20:a.error('--camera-rate must be within 1..20 Hz')
+    if not math.isfinite(args.real_time_factor)or not .1<=args.real_time_factor<=1:a.error('--real-time-factor must be within .1..1')
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
     model=copy.deepcopy(E.parse(source).getroot().find('model'))
@@ -77,6 +79,9 @@ def main():
     world=E.parse(DEMO/'simulation/generated/three_floors.sdf').getroot()
     w=world.find('world');w.set('name','teacher_demo')
     w.find('physics/max_step_size').text='.005'
+    factor=w.find('physics/real_time_factor')
+    if factor is None:factor=E.SubElement(w.find('physics'),'real_time_factor')
+    factor.text=str(args.real_time_factor)
     if args.sensors or args.camera_only:
         # Hardware Ogre2 completed actual full sensors and natural shutdown.
         # Software Ogre1 is retained only as an explicit failed diagnostic.
@@ -161,7 +166,7 @@ def main():
         for e in list(urdf.findall(tag)):urdf.remove(e)
     xml(args.output/'frames.urdf',urdf)
     meta={'terrain':args.terrain,'sensors':args.sensors,'camera_only':args.camera_only,'render_engine':args.render_engine if args.sensors or args.camera_only else None,'spawn':[x,y,z,yaw],
-          'physics_step_s':.005,'decimation':4,'policy_hz':50,'exclusive_writer':'teacher_sim::TeacherActuator',
+          'physics_step_s':.005,'decimation':4,'policy_hz':50,'real_time_factor':args.real_time_factor,'exclusive_writer':'teacher_sim::TeacherActuator',
           'disabled':['CHAMP','body_stabilizer','ros2_control','JointTrajectoryController'],
           'joint_mapping':dict(zip(['FR','FL','RR','RL'],['rf','lf','rh','lh'])),
           'joint_names':mapping,'default_q':qdefault,'hard_lower':lower,'hard_upper':upper,'friction_baseline':.7,
