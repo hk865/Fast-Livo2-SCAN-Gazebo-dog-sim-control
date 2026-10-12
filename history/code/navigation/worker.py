@@ -27,7 +27,7 @@ def main():
     # Optional payload budget: raw command8MiB + height8MiB + histories20MiB.
     # Live telemetry/state/ACK are separate, mandatory consumers and stay sync.
     recording=RecordingContext(run,maximum_command_bytes=8*1024*1024,maximum_height_bytes=8*1024*1024)
-    timing_writer=BoundedHistory(run/'ipc_frame_timing.jsonl',maximum_file_bytes=8*1024*1024)
+    timing_writer=BoundedHistory(run/'ipc_frame_timing.jsonl',maximum_file_bytes=40*1024*1024)
     command_writer=BoundedHistory(run/'closed_loop_execution_commands.jsonl',maximum_file_bytes=8*1024*1024)
     ack_writer=BoundedHistory(run/'closed_loop_executor_ack.jsonl',maximum_file_bytes=4*1024*1024)
     timer=FrameTiming(timing_writer)
@@ -258,7 +258,7 @@ def main():
             actor_or_navigation_algorithm_changed=False,
             synchronous_native_telemetry_and_state_preserved=True,
             synchronous_causal_ack_snapshot_preserved=True,
-            optional_history_only=True,optional_total_file_byte_limit=36*1024*1024,
+            optional_history_only=True,optional_total_file_byte_limit=68*1024*1024,
             native_telemetry_file_byte_limit=None,
             complete_original_command_audit=recording_result['original_commands']['capture_complete'],
             timing=timing_writer.close(),command_history=command_writer.close(),ack_history=ack_writer.close(),

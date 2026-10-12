@@ -72,7 +72,7 @@ def expected_profile(here,name=PROFILE_NAME):
         compact_histories=dict(enabled=True,codec='v33_dictionary_jsonl/v1',
             streams=['navigation_command_history.jsonl','navigation_status.jsonl','mission46_status_history.jsonl'],
             original_JSON_values_preserved=True,live_inputs_unchanged=True),
-        optional_IPC_payload_max_bytes=36*1024**2,live_SLAM_inputs_unchanged=True,
+        optional_IPC_payload_max_bytes=68*1024**2,live_SLAM_inputs_unchanged=True,
         current_run_RGB_map_save_required=True,whole_session_budget_bytes=HARD_BYTES)
     return result
 

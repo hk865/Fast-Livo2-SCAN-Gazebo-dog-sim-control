@@ -146,7 +146,7 @@ class FrameTiming:
             receive_start_wall_ns=now,stages_ns={},stage_calls={},stage_errors={},
             stages_overlap=True,intervals=[],native_deadline_ms=200,source_deadline_ms=300,
             after_previous_send_to_receive_start_ns=None if self.last_send_end is None else now-self.last_send_end,
-            native_parking_verified=False)
+            native_parking_verified=False,recv_calls=0,recv_total_bytes=0,recv_events=[],recv_events_omitted=0,recv_event_limit=8)
 
     @contextmanager
     def measure(self,name):
@@ -161,6 +161,20 @@ class FrameTiming:
             frame['stage_calls'][name]=frame['stage_calls'].get(name,0)+1
             if error:frame['stage_errors'][name]=frame['stage_errors'].get(name,0)+1
             frame['intervals'].append((start,end))
+
+    def receive_event(self, requested, start, end, returned=None, error=None):
+        frame=self.frame
+        if frame is None:return
+        frame['recv_calls']+=1
+        if returned is not None:frame['recv_total_bytes']+=returned
+        duration=end-start
+        frame['stages_ns']['state_recv_wait']=frame['stages_ns'].get('state_recv_wait',0)+duration
+        frame['stage_calls']['state_recv_wait']=frame['stage_calls'].get('state_recv_wait',0)+1
+        if error is not None:frame['stage_errors']['state_recv_wait']=frame['stage_errors'].get('state_recv_wait',0)+1
+        if len(frame['recv_events'])<frame['recv_event_limit']:
+            frame['recv_events'].append(dict(requested_bytes=requested,returned_bytes=returned,
+                start_wall_ns=start,end_wall_ns=end,error=None if error is None else type(error).__name__))
+        else:frame['recv_events_omitted']+=1
 
     def received(self, clock_ns):
         now=time.monotonic_ns();self.frame['state_read_end_wall_ns']=now
@@ -197,6 +211,15 @@ class FrameTiming:
 
 class TimedConnection:
     def __init__(self, conn, timer):self.conn=conn;self.timer=timer
+    def recv(self, size, *args, **kwargs):
+        start=time.monotonic_ns()
+        try:data=self.conn.recv(size,*args,**kwargs)
+        except BaseException as error:
+            self.timer.receive_event(size,start,time.monotonic_ns(),error=error)
+            raise
+        self.timer.receive_event(size,start,time.monotonic_ns(),returned=len(data))
+        return data
+
     def sendall(self, data, *args, **kwargs):
         try:
             with self.timer.measure('response_send'):result=self.conn.sendall(data,*args,**kwargs)
