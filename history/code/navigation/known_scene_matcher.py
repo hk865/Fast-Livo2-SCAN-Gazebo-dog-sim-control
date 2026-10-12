@@ -6,6 +6,7 @@ independently built sensor submap. Numerical gates are engineering limits, not
 a calibrated posterior probability. A failed gate produces no correction.
 """
 from __future__ import annotations
+from integration_limits import MATCH_CORRECTION_MAX_AGE_NS, RAY_ABS_P95_LIMIT_M, LIDAR_BODY_TRANSLATION_M
 
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -50,7 +51,7 @@ class MatchPolicy:
     ray_hit_fraction_min: float = .90
     ray_behind_max_fraction: float = .12
     ray_abs_median_max_m: float = .045
-    ray_abs_p95_max_m: float = .35
+    ray_abs_p95_max_m: float = RAY_ABS_P95_LIMIT_M
     geometry_ratio_min: float = 1e-5
     max_initial_correction_m: float = .65
     max_initial_rotation_rad: float = .20
@@ -300,7 +301,7 @@ class KnownSceneMatcher:
         return result
 
     def match(self, source_ns, body_points, T_odom_body, current_c=None,
-              mount=(.2, 0., .1177), provenance=None):
+              mount=LIDAR_BODY_TRANSLATION_M, provenance=None):
         if type(source_ns) is not int or source_ns < 0:
             raise ValueError('source_ns must be an integer')
         odom = checked_transform(T_odom_body)
@@ -416,7 +417,7 @@ class CorrectionState:
     are deliberately absent. Expired corrections are flagged, never snapped off.
     """
     def __init__(self, translation_rate_mps=.04, rotation_rate_radps=.02,
-                 max_match_age_ns=3_000_000_000, initial_c=None):
+                 max_match_age_ns=MATCH_CORRECTION_MAX_AGE_NS, initial_c=None):
         self.applied = checked_transform(np.eye(4) if initial_c is None else initial_c)
         self.target = self.applied.copy()
         self.generation = 0

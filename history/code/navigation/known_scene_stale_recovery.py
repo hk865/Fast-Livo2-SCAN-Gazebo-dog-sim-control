@@ -4,6 +4,7 @@ This function does not mutate correction state, change its target, or authorize
 motion. The sole runtime owner logs ABORTED and starts a distinct frozen attempt
 while transition remains true. Original continuation/release gates still apply.
 """
+from integration_limits import MATCH_CORRECTION_MAX_AGE_NS
 import copy
 import math
 import numpy as np
@@ -13,7 +14,7 @@ CONTRACT = dict(schema='known_scene_expired_transaction_recovery/v1',
     activation='expired_pending_AND_original_epoch_consistency_rejected',
     original_consistent_fresh_continuation_preserved=True,
     maximum_replacements_per_unreleased_transaction=2,
-    original_match_age_ns=3_000_000_000,
+    original_match_age_ns=MATCH_CORRECTION_MAX_AGE_NS,
     current_bundle_max_age_ns=300_000_000,
     physical_zero_stop_ns=100_000_000,
     original_origin_continuation_m=.08,original_continuation_angle_rad=.05,
@@ -35,7 +36,7 @@ def recovery_proposal(result, correction, pending_target, pending_body,
             return None
         last=correction.last_match_ns;tick=correction.last_tick_ns
         if (type(last) is not int or type(tick) is not int
-            or tick-last <= 3_000_000_000 or not 0 <= clock_ns-tick < 300_000_000):
+            or tick-last <= MATCH_CORRECTION_MAX_AGE_NS or not 0 <= clock_ns-tick < 300_000_000):
             return None
         if (scan_status.get('schema')!='known_scene_SCAN_epoch_ready/v1'
             or scan_status.get('run_id')!=run_id or scan_status.get('ready') is not False
@@ -45,7 +46,7 @@ def recovery_proposal(result, correction, pending_target, pending_body,
             return None
         ns=result.get('source_ns')
         if (type(ns) is not int or not ns > last or not ns > pending_source_ns
-            or not 0 <= clock_ns-ns <= 3_000_000_000
+            or not 0 <= clock_ns-ns <= MATCH_CORRECTION_MAX_AGE_NS
             or result.get('accepted') is not True or result.get('evidence_verified') is not True
             or result.get('reason')!='confirmed_shadow_match'
             or result.get('parent_generation')!=correction.generation

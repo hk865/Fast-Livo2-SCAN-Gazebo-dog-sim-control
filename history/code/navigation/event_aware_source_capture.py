@@ -5,6 +5,7 @@ The original evaluated NN arrays are retained, not substituted by writer replays
 Importing creates no thread, ROS node, runtime or file.
 """
 from __future__ import annotations
+from integration_limits import MATCH_CORRECTION_MAX_AGE_NS, RAY_ABS_P95_LIMIT_M
 import hashlib,io,json,math,os,queue,threading,time
 from pathlib import Path
 from collections import OrderedDict,deque
@@ -16,7 +17,7 @@ CAPS=dict(groups=3,group_bytes=5*MIB,raw_bytes=MIB,adapted_bytes=MIB,
           shared_bytes=MIB,total_bytes=16*MIB,event_window_ns=15_000_000_000,
           maximum_query_points=480*64)
 GATES=dict(native_response_ns=200_000_000,source_and_SCAN_freshness_ns=300_000_000,
-           correction_age_ns=3_000_000_000,allray_abs_p95_m=.35,foreground_fraction=.05,
+           correction_age_ns=MATCH_CORRECTION_MAX_AGE_NS,allray_abs_p95_m=RAY_ABS_P95_LIMIT_M,foreground_fraction=.05,
            surface_p95_m=.12,stage_geometry_RMS_m=.006,stage_geometry_maximum_m=.030,
            stage_nearest_index_bijection=True,require_complete_imu=False)
 TOPICS=dict(imu_source='/livox/imu',imu_relay='/demo/teacher/slam/imu',clock='/clock')

@@ -2,6 +2,7 @@
 """Navigation-only map correction transactions; original FAST-LIVO stays untouched.
 No truth subscriptions, commands, TF, map deletion, or frontend state resets.
 """
+from integration_limits import KNOWN_BUNDLE_FRESHNESS_NS, KNOWN_BUNDLE_FRESHNESS_S
 import argparse,copy,hashlib,json,sys,time
 from collections import OrderedDict,deque
 from pathlib import Path
@@ -197,10 +198,10 @@ def main():
                 diagnostic_role_wall_age_after_gate_s={role:measured_after_gate-pair[1] for role,pair in slot.items()},
                 age_metrics_sampled_after_unchanged_original_gate=True)
         def publish_bundle(self,ns,slot,clock):
-            if not self.initialized or not -50_000_000<=clock-ns<300_000_000:
+            if not self.initialized or not -50_000_000<=clock-ns<KNOWN_BUNDLE_FRESHNESS_NS:
                 self.trace_bundle(ns,slot,clock,'original_initialized_or_header_veto')
                 return
-            if any(time.monotonic()-x[1]>=.3 for x in slot.values()):
+            if any(time.monotonic()-x[1]>=KNOWN_BUNDLE_FRESHNESS_S for x in slot.values()):
                 self.trace_bundle(ns,slot,clock,'original_wall_age_veto')
                 return
             self.trace_bundle(ns,slot,clock,'original_header_and_wall_gates_passed')

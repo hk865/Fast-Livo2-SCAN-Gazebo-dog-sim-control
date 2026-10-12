@@ -19,6 +19,8 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from runtime_io import BackgroundCheck,LatestCommandWriter,latest_sensor_qos
 from compact_archives import make_command_writer
+from gate_reasons import GateReasons
+from integration_limits import COMMAND_SOURCE_FRESHNESS_NS, COMMAND_SOURCE_FRESHNESS_S
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,7 +28,7 @@ SLAM_TOPIC = '/demo/slam/body_odom'
 COMMAND_TOPIC = '/demo/cmd_vel'
 STATUS_TOPIC = '/demo/teacher/navigation_bridge/status'
 STOP_TOPIC = '/demo/teacher/navigation_bridge/stop'
-TIMEOUT = .300
+TIMEOUT = COMMAND_SOURCE_FRESHNESS_S
 LIMITS = (.3, .2, .3)
 FROZEN_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 
@@ -98,10 +100,10 @@ def validate_controller_source(data, requested, clock_ns, wall_ns):
     if type(clock_ns) is not int or type(wall_ns) is not int:
         raise ValueError('Source clock unavailable')
     pose, gyro, control = (data[key] for key in keys[:3])
-    if not (0 <= clock_ns-pose <= 300_000_000 and 0 <= pose-gyro <= 20_000_000
+    if not (0 <= clock_ns-pose <= COMMAND_SOURCE_FRESHNESS_NS and 0 <= pose-gyro <= 20_000_000
             and pose <= control <= clock_ns+50_000_000):
         raise ValueError('Original cascade source age or causality rejected')
-    if not all(0 <= wall_ns-data[key] <= 300_000_000 for key in keys[3:5]):
+    if not all(0 <= wall_ns-data[key] <= COMMAND_SOURCE_FRESHNESS_NS for key in keys[3:5]):
         raise ValueError('Original SLAM/IMU cascade wall source expired')
     # Preserve optional seconds aliases exactly, while refusing inconsistent
     # representations if the executor's reader uses those aliases.
@@ -220,9 +222,9 @@ class CommandGate:
                 'command_wall_s': None if self.command_wall is None else now - self.command_wall,
                 'pose_sim_s': None if self.clock_ns is None or self.pose_stamp_ns is None else (self.clock_ns - self.pose_stamp_ns) / 1e9,
                 'command_sim_s': None if self.clock_ns is None or self.command_sim_ns is None else (self.clock_ns - self.command_sim_ns) / 1e9}
-        reasons = []
+        reasons = GateReasons()
         if self.failed:
-            reasons.append(self.failed)
+            reasons.reject('latched_failure', self.failed)
         if self.profile is not None:
             if self.profile.get('cascade') is not None and any(self.requested):
                 try:
@@ -232,22 +234,22 @@ class CommandGate:
                         raise ValueError(self.controller_source_error)
                     validate_controller_source(self.controller_source,self.requested,self.clock_ns,round(now*1e9))
                 except (ValueError, TypeError, KeyError) as error:
-                    reasons.append('Cascade provenance rejected: '+str(error))
+                    reasons.reject('cascade_provenance', 'Cascade provenance rejected: '+str(error))
             if self.profile['controller_kind']=='champ':
                 h=self.execution_health
                 ready=(h is not None and self.execution_health_wall is not None
                     and now-self.execution_health_wall<TIMEOUT and -.05<=now-float(h['monotonic_wall'])<TIMEOUT
-                    and self.clock_ns is not None and -50_000_000<=self.clock_ns-int(h['ros_sim_time_ns'])<300_000_000
+                    and self.clock_ns is not None and -50_000_000<=self.clock_ns-int(h['ros_sim_time_ns'])<COMMAND_SOURCE_FRESHNESS_NS
                     and h.get('state')=='ready'and h.get('ready')is True)
-                if not ready:reasons.append('Actual CHAMP executor calibration/controller feedback is not healthy and fresh')
-                if h is not None and h.get('state')=='failed':self.failed='CHAMP executor failed';reasons.append(self.failed)
+                if not ready:reasons.reject('champ_feedback_freshness', 'Actual CHAMP executor calibration/controller feedback is not healthy and fresh')
+                if h is not None and h.get('state')=='failed':self.failed='CHAMP executor failed';reasons.reject('champ_failed', self.failed)
             if not self.scope_graph_ok:
-                reasons.append('Finite experiment sensor gate / SLAM anchor publisher chain is not unique')
+                reasons.reject('sensor_anchor_publisher_chain', 'Finite experiment sensor gate / SLAM anchor publisher chain is not unique')
             if (self.sensor_health is None or self.sensor_health_wall is None
                     or now-self.sensor_health_wall >= TIMEOUT or self.sensor_health.get('ready') is not True):
-                reasons.append('Actual vehicle sensor SLAM has not completed healthy warmup')
+                reasons.reject('sensor_warmup', 'Actual vehicle sensor SLAM has not completed healthy warmup')
             if self.anchor is None:
-                reasons.append('Waiting for immutable SLAM-derived route anchor')
+                reasons.reject('immutable_slam_anchor', 'Waiting for immutable SLAM-derived route anchor')
             elif self.position is not None:
                 a=self.anchor;dx=self.position[0]-a['origin'][0];dy=self.position[1]-a['origin'][1]
                 c,s=math.cos(a['yaw']),math.sin(a['yaw']);along=c*dx+s*dy;lateral=-s*dx+c*dy
@@ -266,22 +268,22 @@ class CommandGate:
                     or abs(self.position[2]-a['origin'][2])>fence['height_abs_m'])
                 if outside:
                     self.failed='Measured SLAM body pose left finite route fence; restart after review'
-                    reasons.append(self.failed)
+                    reasons.reject('route_fence', self.failed)
         if self.graph_wall is None or now - self.graph_wall >= TIMEOUT:
-            reasons.append('ROS publisher graph check is stale')
+            reasons.reject('publisher_graph_freshness', 'ROS publisher graph check is stale')
         if not self.graph['slam']:
-            reasons.append('SLAM source must have exactly one demo_slam_odom_adapter publisher')
+            reasons.reject('slam_publisher_identity', 'SLAM source must have exactly one demo_slam_odom_adapter publisher')
         if not self.graph['command']:
-            reasons.append('Command source must have exactly one demo_navigation publisher')
+            reasons.reject('command_publisher_identity', 'Command source must have exactly one demo_navigation publisher')
         if self.pose_error:
-            reasons.append(self.pose_error)
+            reasons.reject('slam_pose_validity', self.pose_error)
         if self.pose_valid_samples < 2:
-            reasons.append('Waiting for two consecutive valid SLAM poses')
+            reasons.reject('two_valid_slam_poses', 'Waiting for two consecutive valid SLAM poses')
         if self.command_error:
-            reasons.append(self.command_error)
+            reasons.reject('command_validity', self.command_error)
         for name, age in ages.items():
             if age is None or age >= TIMEOUT or age < -.05:
-                reasons.append(f'{name} is missing, stale, or inconsistent')
+                reasons.reject('dual_source_age', f'{name} is missing, stale, or inconsistent')
         healthy = not reasons
         command = [max(-limit, min(limit, value)) for value, limit in zip(self.requested, self.limits)] if healthy else [0., 0., 0.]
         if self.profile is not None and self.profile.get('cascade') is None:
@@ -298,7 +300,8 @@ class CommandGate:
                 'controller_source': self.controller_source,
                 'controller_source_receipt': self.controller_source_receipt,
                 'registered_route_fence': getattr(self,'registered_fence',None),
-                'controller_source_error': self.controller_source_error}
+                'controller_source_error': self.controller_source_error,
+                'gate_events': reasons.events}
 
 
 class CommandFile:
@@ -414,7 +417,7 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 if(d.get('schema')!=1 or d.get('mode')!='champ'or d.get('source')!='scan_slam'
                     or d.get('ground_truth_navigation_used')is not False or d.get('actor_started')is not False
                     or d.get('state')not in ('hold','ready','failed')or not -.05<=now-float(d['monotonic_wall'])<TIMEOUT
-                    or self.gate.clock_ns is None or not -50_000_000<=self.gate.clock_ns-int(d['ros_sim_time_ns'])<300_000_000):return
+                    or self.gate.clock_ns is None or not -50_000_000<=self.gate.clock_ns-int(d['ros_sim_time_ns'])<COMMAND_SOURCE_FRESHNESS_NS):return
                 self.gate.execution_health=d;self.gate.execution_health_wall=now
                 if d['state']!='ready'and any(self.gate.requested):self.tick()
             except (ValueError,TypeError,KeyError):return

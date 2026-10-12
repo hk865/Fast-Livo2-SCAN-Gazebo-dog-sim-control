@@ -4,6 +4,7 @@ Raw IMU rates/acceleration only attest stationary sensor initialization. World
 axes come from the given map and the canonical adapter's frozen T_nav_world.
 This remains known-scene assisted local matching, not global uniqueness proof.
 """
+from integration_limits import MATCH_CORRECTION_MAX_AGE_NS
 import copy,hashlib,json,math,time
 from collections import deque
 from pathlib import Path
@@ -136,7 +137,7 @@ class KnownSceneAxisRegistration:
                 or status.get('generation')!=1 or status.get('correction_transition')is not False
                 or not 0<=wall_ns/1e9-float(status.get('monotonic_wall',0))<.3
                 or type(status.get('last_match_source_ns'))is not int
-                or not 0<=clock_ns-status['last_match_source_ns']<=3_000_000_000):return None
+                or not 0<=clock_ns-status['last_match_source_ns']<=MATCH_CORRECTION_MAX_AGE_NS):return None
         heading=dict(source=SOURCE,yaw_camera_init_from_world=0.,rotation_camera_init_from_world=np.eye(3).tolist(),
             ground_truth_used=False,IMU_world_orientation_used=False,
             purpose='provided-map axes of actual matched canonical navigation frame; raw IMU rates only for stop/init')

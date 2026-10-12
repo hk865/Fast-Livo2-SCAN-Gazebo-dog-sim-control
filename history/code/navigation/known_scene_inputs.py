@@ -1,4 +1,5 @@
 """Atomic pose/cloud/metadata ingestion and controlled map-frame handoff."""
+from integration_limits import KNOWN_BUNDLE_FRESHNESS_S
 import json,time
 from collections import OrderedDict
 from std_msgs.msg import String
@@ -15,12 +16,15 @@ class KnownSceneInputMixin:
         self.create_subscription(String,'/demo/navigation/localization_status',self.on_localization_status,10)
         self.create_subscription(String,'/demo/navigation/scan_epoch_ready',self.on_scan_epoch_ready,10)
 
-    def create_subscription(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
-        role={'/demo/slam/body_odom':'body','/cloud_registered_full':'cloud'}.get(topic)
-        if role is not None:
-            self.known_scene_callbacks[role]=callback
-            callback=lambda msg,k=role:self._known_receive(k,stamp_ns(msg),msg)
-        return super().create_subscription(msg_type,topic,callback,qos_profile,*args,**kwargs)
+    def subscribe_slam_body(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
+        self.known_scene_callbacks['body']=callback
+        wrapped=lambda msg:self._known_receive('body',stamp_ns(msg),msg)
+        return super().subscribe_slam_body(msg_type,topic,wrapped,qos_profile,*args,**kwargs)
+
+    def subscribe_registered_cloud(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
+        self.known_scene_callbacks['cloud']=callback
+        wrapped=lambda msg:self._known_receive('cloud',stamp_ns(msg),msg)
+        return super().subscribe_registered_cloud(msg_type,topic,wrapped,qos_profile,*args,**kwargs)
 
     def on_localization_bundle(self,msg):
         try:d=json.loads(msg.data)
@@ -84,7 +88,7 @@ class KnownSceneInputMixin:
     def _known_generation_ready(self):
         d=self.known_scene_inputs;s=self.known_scene_status;e=self.known_scene_scan_epoch;now=time.monotonic()
         return bool(d is not None and s is not None and e is not None
-            and all(0<=now-v['received_monotonic_wall']<.3 for v in (d,s,e))
+            and all(0<=now-v['received_monotonic_wall']<KNOWN_BUNDLE_FRESHNESS_S for v in (d,s,e))
             and d.get('control_allowed') and not s.get('correction_transition') and s.get('initialized')
             and e.get('ready') and d['generation']==s['generation']==e['generation']
             and self.pose_stamp==self.cloud_stamp==d['source_ns'])

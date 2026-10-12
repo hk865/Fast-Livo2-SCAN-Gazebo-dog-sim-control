@@ -42,6 +42,14 @@ from replan_policy import low_command_is_exhausted_path
 
 
 class Navigation(Node):
+    def subscribe_slam_body(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
+        """Explicit body-input port; default subscription semantics are unchanged."""
+        return self.create_subscription(msg_type,topic,callback,qos_profile,*args,**kwargs)
+
+    def subscribe_registered_cloud(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
+        """Explicit registered-cloud port; preserves QoS and callback ownership."""
+        return self.create_subscription(msg_type,topic,callback,qos_profile,*args,**kwargs)
+
     def __init__(self):
         super().__init__('demo_navigation', parameter_overrides=[])
         self.set_parameters([rclpy.parameter.Parameter('use_sim_time', value=True)])
@@ -132,12 +140,12 @@ class Navigation(Node):
         self.scan_cloud_pub = self.create_publisher(PointCloud2, '/demo/navigation/cloud', qos_profile_sensor_data)
         self.create_subscription(String, '/demo/navigation/request', self.on_request, 10)
         self.create_subscription(Bool, '/demo/navigation/stop', self.on_stop, 10)
-        self.create_subscription(Odometry, '/demo/slam/body_odom', self.on_odom, qos_profile_sensor_data)
+        self.subscribe_slam_body(Odometry, '/demo/slam/body_odom', self.on_odom, qos_profile_sensor_data)
         # Process only the newest raw sample; SLAM/SCAN remains the route feedback.
         imu_qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.BEST_EFFORT)
         self.create_subscription(Imu, '/livox/imu', self.on_imu, imu_qos)
         self.create_subscription(String, '/demo/control/safety', self.on_bridge_safety, 10)
-        self.create_subscription(PointCloud2, '/cloud_registered_full', self.on_cloud, qos_profile_sensor_data)
+        self.subscribe_registered_cloud(PointCloud2, '/cloud_registered_full', self.on_cloud, qos_profile_sensor_data)
         self.create_subscription(Bspline, '/demo/navigation/bspline', self.on_spline, 10)
         self.create_subscription(String, '/demo/navigation/trajectory_metadata', self.on_trajectory_metadata, 10)
         self.create_timer(0.05, self.tick, clock=Clock(clock_type=ClockType.STEADY_TIME))

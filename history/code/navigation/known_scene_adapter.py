@@ -5,6 +5,7 @@ The integration owner supplies the runtime witness and starts/polls the worker.
 No transform is automatically published or adopted by navigation.
 """
 from __future__ import annotations
+from integration_limits import SOURCE_JOIN_SLOT_MAX_AGE_NS, LIDAR_BODY_TRANSLATION_M
 
 from collections import OrderedDict
 from pathlib import Path
@@ -117,8 +118,8 @@ class SourceGeometryMismatch(ValueError):
 class ExactSourceJoin:
     ROLES = ('raw', 'adapted', 'registered', 'body', 'mapper')
 
-    def __init__(self, witness_status, maximum_stamps=12, maximum_source_age_ns=3_000_000_000,
-                 interval_ns=1_000_000_000, mount=(.2, 0., .1177)):
+    def __init__(self, witness_status, maximum_stamps=12, maximum_source_age_ns=SOURCE_JOIN_SLOT_MAX_AGE_NS,
+                 interval_ns=1_000_000_000, mount=LIDAR_BODY_TRANSLATION_M):
         self.witness = dict(witness_status)
         self.maximum_stamps = maximum_stamps
         self.maximum_age = maximum_source_age_ns

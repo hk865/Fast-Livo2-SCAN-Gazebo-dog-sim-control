@@ -84,6 +84,8 @@ def declared_R37_loading_budget_bindings(here):
 
 def unchanged_navigation_bindings(here):
     here=Path(here).resolve();base=here.parent/'engineering_v33';rows=declared_R37_loading_budget_bindings(here)
+    from refactor_preflight import verify_source_equivalence
+    rows.update(verify_source_equivalence(here))
     for p in sorted(base.glob('*.py')):
         if p.name in CHANGED_ADAPTERS or p.name in rows:continue
         q=here/p.name
@@ -165,6 +167,8 @@ def validate_review_evidence(here,tests,reviews):
 
 def verify_preflight(here,profile):
     here=Path(here).resolve()
+    from refactor_preflight import require_bounded_entry
+    require_bounded_entry(here)
     from full46_launch_contract import validate_full46,PROFILE_NAMES,profile_name
     validate_full46(profile,here);verify_original_v32(here)
     nav=unchanged_navigation_bindings(here)
