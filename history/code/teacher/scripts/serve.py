@@ -302,7 +302,7 @@ class Dashboard:
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),
                            'gif': (directory / 'frame_replay.gif').is_file(),
-                           'manifest': read_json(directory / 'step_retest_evidence_manifest.json'),
+                           'manifest': read_json(directory / 'frame_replay_manifest.json') or read_json(directory / 'step_retest_evidence_manifest.json'),
                            'scope': 'Archived actual Gazebo RGB in sensor timestamp order; no interpolated or synthesized frames'},
                 'step_plot': (directory / 'step_functional.png').is_file(),
                 'acceptance': read_json(self.runs / 'acceptance.json'),
