@@ -26,7 +26,7 @@ SPAWN = [0., 0., .3, 0.]
 SIMULATION_MAX_S = 1500.
 DIAGNOSTIC_DURATION_S = 270.
 ALLOWED_DURATION_S = (30., 60., DIAGNOSTIC_DURATION_S, SIMULATION_MAX_S)
-RAW_BUDGET_BYTES = 80_000_000_000  # User-approved decimal cumulative budget
+RAW_BUDGET_BYTES = 50_000_000_000  # User-approved decimal cumulative budget
 MIN_FREE_BYTES = 100 * 1024**3
 
 

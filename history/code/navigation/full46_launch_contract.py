@@ -29,15 +29,9 @@ def profile_name(profile):
 def expected_profile(here,name=PROFILE_NAME):
     from mission46_profile import required_source_files
     result=json.loads(baseline_profile_path(here,name).read_text())
-    # Exact user-authorized shared cumulative budget; all behavioral fields preserved.
-    result['raw_budget_bytes']=80_000_000_000
-    result['raw_storage_budget']['max_run_bytes']=80_000_000_000
     result['pipeline']['mode']='serial'
     result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
-        # Preserve the original profile bytes, including its historical source
-        # path metadata. The new candidate's actual sources are independently
-        # archived/hashed by pid_scope.runtime_files and explicit runtime plan.
-        mission46_required_source_files=[str((Path(here).resolve().with_name('engineering_v34_continuous_known_map')/p.relative_to(Path(here).resolve())).resolve()) if p.is_relative_to(Path(here).resolve()) else str(p.resolve()) for p in required_source_files()],
+        mission46_required_source_files=[str(p.resolve()) for p in required_source_files()],
         route_prior_source='Given original scene43box geometry; axes of actual matched canonical map/world→navigation frame, measured initial SLAM origin; no IMU world orientation')
     result['engineering_contract'].update(schema='go2_engineering_v34_launch/v1',
         backend_control_adoption=True,backend_control_scope='navigation frame only; frontend state never reset',
@@ -90,8 +84,6 @@ def normal_form(profile,here):
                 'global_route_reference_contract','route_prior_source','pipeline'):
         result[key]=copy.deepcopy(base[key])
     result.pop('continuous_route_contract',None);result.pop('known_scene_localization_contract',None)
-    result['raw_budget_bytes']=base['raw_budget_bytes']
-    result['raw_storage_budget']['max_run_bytes']=base['raw_storage_budget']['max_run_bytes']
     return result
 def validate_full46(profile,here):
     from mission46_profile import validate_profile

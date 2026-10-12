@@ -13,7 +13,7 @@ import time
 
 GIB = 1024**3
 SESSION = Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/STORAGE_SESSION.json')
-HARD_BYTES = 80_000_000_000  # User-approved decimal80GB; authority AUTHORITY.json,2026-10-09
+HARD_BYTES = 50_000_000_000  # User-approved decimal50GB,2026-10-07T12:03:15Z
 SOFT_BYTES = HARD_BYTES - 512 * 1024**2
 HOME_RESERVE = 100 * GIB
 ROOT_RESERVE = 80 * GIB
@@ -28,14 +28,12 @@ def capacity(path):
                 available_bytes=s.f_bavail*s.f_frsize)
 
 
-def usage(paths, *, allowed_missing=()):
+def usage(paths):
     roots = sorted(set(Path(x).resolve() for x in paths), key=lambda p: len(p.parts))
     roots = [p for p in roots if not any(p != q and p.is_relative_to(q) for q in roots)]
     seen = set(); logical = 0; allocated = 0; count = 0
     for root in roots:
         if not root.is_dir():
-            if str(root) in allowed_missing and not root.exists() and not root.is_symlink():
-                continue  # Explicit recovery contract; prior bytes remain charged.
             raise RuntimeError('Storage output root absent: '+str(root))
         for base, dirs, names in os.walk(root, followlinks=False):
             dirs[:] = [d for d in dirs if not Path(base,d).is_symlink()]
@@ -116,8 +114,7 @@ def observe(run,profile,starting=False,count_files=True,previous=None):
         raise RuntimeError('Explicit V33 session storage contract differs')
     if str(Path(run).resolve()) not in d['roots']:
         raise RuntimeError('Run not registered in the shared storage session')
-    from storage_recovery import observe_recovery
-    current,filesystems,recovery=observe_recovery(Path(__file__).resolve().parent,d,usage,capacity,conservative_growth)
+    current=usage(d['roots']); filesystems=[capacity('/home'),capacity('/tmp')]
     fs_by_device={x['device']:x for x in d['initial_filesystems']}
     deltas={x['device']:max(0,fs_by_device[x['device']]['available_bytes']-x['available_bytes']) for x in filesystems}
     # These are exclusively newly-created V33 roots; count the initial code/test
@@ -130,9 +127,6 @@ def observe(run,profile,starting=False,count_files=True,previous=None):
         hard_bytes=HARD_BYTES,soft_stop_bytes=SOFT_BYTES,cleanup_reserve_bytes=HARD_BYTES-SOFT_BYTES,
         size_check_interval_wall_s=1.,includes_all_declared_runs_agents_clouds_and_unattributed_fs_writes=True,
         no_deletion=True)
-    if recovery is not None:
-        result['conservative_session_growth_bytes']=max(result['conservative_session_growth_bytes'],recovery['charged_bytes'])
-        result['reboot_recovery']=recovery
     result=check(result,previous)
     if result['stop_reasons']:
         raise StorageStop(result)

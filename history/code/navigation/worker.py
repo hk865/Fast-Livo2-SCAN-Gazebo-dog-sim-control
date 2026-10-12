@@ -40,8 +40,6 @@ def main():
     sys.path.insert(0,str(run/'sources/policy'))
     spec=importlib.util.spec_from_file_location('frozen_cpu_closed_loop_teacher',run/'sources/policy/worker.py')
     legacy=importlib.util.module_from_spec(spec);spec.loader.exec_module(legacy)
-    from policy_selection import record_actual_loaded
-    record_actual_loaded(run,legacy)
     provider=None
     if p.get('terrain_layer_switch') is not None or p.get('mission46_required'):
         if p.get('mission46_required'):

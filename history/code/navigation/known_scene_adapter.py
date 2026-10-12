@@ -106,14 +106,6 @@ def validate_runtime_witness(witness, run_id):
                                                        separators=(',', ':')).encode()).hexdigest())
 
 
-class SourceGeometryMismatch(ValueError):
-    """Preserve the original veto while identifying the predicate it failed."""
-    def __init__(self, detail, evidence=None):
-        super().__init__('registered/source stage geometry inconsistent')
-        self.detail = dict(detail)
-        self.evidence = evidence  # diagnostic arrays, never a replacement veto
-
-
 class ExactSourceJoin:
     ROLES = ('raw', 'adapted', 'registered', 'body', 'mapper')
 
@@ -173,26 +165,9 @@ class ExactSourceJoin:
         try:
             return self._check(ns, slot)
         except (ValueError, KeyError, TypeError, AssertionError) as error:
-            # Keep the legacy reason stable; a stage-labelled error alone does
-            # not distinguish nearest-neighbour collisions from residuals.
-            name = 'ValueError' if isinstance(error, SourceGeometryMismatch) else type(error).__name__
-            result = dict(source_ns=ns, rejected=name + ':' + str(error))
-            if isinstance(error, SourceGeometryMismatch):
-                result['join_rejection_detail'] = dict(error.detail,
-                    role_source_ns={role:stamp_ns(pair[0]) for role,pair in slot.items()},
-                    original_received_wall_ns={role:pair[1] for role,pair in slot.items()},
-                    guard_clock_ns=clock_ns, guard_wall_ns=wall_ns,
-                    explicit_message_commit_token=False)
-            if isinstance(error, SourceGeometryMismatch) and error.evidence is not None:
-                result['_diagnostic_failed_source'] = dict(source_ns=ns,
-                    source_messages={role:pair[0] for role,pair in slot.items()},
-                    original_received_wall_ns={role:pair[1] for role,pair in slot.items()},
-                    T_odom_body=error.evidence['T_odom_body'],
-                    _diagnostic_evidence=error.evidence)
-            return result
+            return dict(source_ns=ns, rejected=type(error).__name__ + ':' + str(error))
 
     def _check(self, ns, slot):
-        check_started_wall_ns = time.monotonic_ns()
         raw, adapted, registered, body, mapper = (slot[role][0] for role in self.ROLES)
         if raw.header.frame_id != 'velodyne' or adapted.header.frame_id != 'velodyne':
             raise ValueError('unexpected source lidar frame')
@@ -223,29 +198,9 @@ class ExactSourceJoin:
         distance, index = cKDTree(local).query(reconstructed, workers=1)
         # Actual frozen Generic deskew is retained. These bounds allow its
         # measured millimetre same-time discrepancy, not a different pose epoch.
-        unique_count = len(np.unique(index))
-        rms_m = float(np.sqrt(np.mean(distance ** 2)))
-        maximum_m = float(np.max(distance))
-        evidence = None
-        if getattr(self, 'diagnostic_pin_enabled', False):
-            evidence = dict(index=index, distance=distance, eligible=eligible,
-                local=local, full=full, reconstructed=reconstructed, T_odom_body=t,
-                check_started_wall_ns=check_started_wall_ns,
-                nearest_completed_wall_ns=time.monotonic_ns())
-        if (unique_count != len(index) or rms_m > .006 or maximum_m > .030):
-            raise SourceGeometryMismatch(dict(
-                schema='exact_source_join_original_geometry_veto/v1',
-                source_points=len(local), registered_points=len(full),
-                unique_nearest_source_indices=unique_count,
-                nearest_source_collision_count=len(index)-unique_count,
-                nearest_index_bijection_failed=unique_count != len(index),
-                registered_source_rms_m=rms_m if np.isfinite(rms_m) else None,
-                rms_nonfinite=not bool(np.isfinite(rms_m)), rms_limit_m=.006,
-                rms_failed=rms_m > .006,
-                registered_source_max_m=maximum_m if np.isfinite(maximum_m) else None,
-                maximum_nonfinite=not bool(np.isfinite(maximum_m)), maximum_limit_m=.030,
-                maximum_failed=maximum_m > .030,
-                guard_predicates_changed=False), evidence=evidence)
+        if (len(np.unique(index)) != len(index) or np.sqrt(np.mean(distance ** 2)) > .006
+                or np.max(distance) > .030):
+            raise ValueError('registered/source stage geometry inconsistent')
         verified = self.witness.get('valid') is True
         provenance = dict(point_time_verified=verified,
                           post_lio_association_verified=verified,
@@ -257,14 +212,11 @@ class ExactSourceJoin:
                           registered_source_rms_m=float(np.sqrt(np.mean(distance ** 2))),
                           registered_source_max_m=float(np.max(distance)),
                           source_membership_verified=True)
-        checked_job = dict(source_ns=ns, body_points=local, T_odom_body=t,
+        return dict(source_ns=ns, body_points=local, T_odom_body=t,
                     registered_odom_xyz=full, provenance=provenance,
                     witness_status=self.witness,
                     original_received_wall_ns={role: slot[role][1] for role in self.ROLES},
                     source_messages={role:slot[role][0] for role in self.ROLES})
-        if evidence is not None:
-            checked_job['_diagnostic_evidence'] = evidence
-        return checked_job
 
 
 class MatcherWorker:
@@ -322,9 +274,7 @@ class MatcherWorker:
             parent_generation = job.get('parent_generation')
             try:
                 if 'join_request' in job:
-                    join = job['join_request']
-                    join.diagnostic_pin_enabled = bool(self.diagnostic_capture is not None and getattr(self.diagnostic_capture, 'capture_needed', False))
-                    job = join.pop_latest(job['clock_ns'])
+                    job = job['join_request'].pop_latest(job['clock_ns'])
                 if job is None:
                     with self.condition:
                         self.in_flight = False
@@ -332,28 +282,15 @@ class MatcherWorker:
                 if job.get('rejected'):
                     result = dict(source_ns=job['source_ns'], accepted=False, control_allowed=False,
                                   reason='exact_join:' + job['rejected'])
-                    if 'join_rejection_detail' in job:
-                        result['join_rejection_detail'] = job['join_rejection_detail']
-                    if self.diagnostic_capture is not None:
-                        try:self.diagnostic_capture.consider_rejection(job,result,c,parent_generation)
-                        except Exception as error:
-                            try:self.diagnostic_capture.reject(job['source_ns'],'P1_rejection_capture:'+str(error))
-                            except Exception:pass
                 else:
-                    if self.diagnostic_capture is not None:
-                        try:self.diagnostic_capture.observe_job(job,c,parent_generation)
-                        except Exception as error:
-                            try:self.diagnostic_capture.reject(job['source_ns'],'capture_pin_exception:'+str(error))
-                            except Exception:pass
                     result = self.matcher.match(job['source_ns'], job['body_points'], job['T_odom_body'],
                                                 current_c=c, provenance=job['provenance'])
                     result['T_odom_body']=checked_transform(job['T_odom_body']).tolist()
                     result['T_odom_body_source_ns']=job['source_ns']
                     if self.diagnostic_capture is not None:
                         try:self.diagnostic_capture.consider(job,result,c,parent_generation)
-                        except Exception as error:
-                            try:self.diagnostic_capture.reject(job['source_ns'],'capture_exception:'+str(error))
-                            except Exception:pass
+                        except (OSError,ValueError,KeyError,TypeError) as error:
+                            self.diagnostic_capture.reject(job['source_ns'],'capture_exception:'+str(error))
             except Exception as error:
                 result = dict(source_ns=None if job is None else job.get('source_ns'),
                               accepted=False, control_allowed=False,

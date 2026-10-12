@@ -54,17 +54,13 @@ def validated_members(saved):
     for row in rows:
         if row['session']!=saved['session'] or row['start_ticks']<saved['start_ticks']:
             raise RuntimeError('Foreign process-group member')
-        # start_new_session makes this recorded bootstrap the unique session
-        # leader. A process from another session cannot join this process group.
-        # Recheck the run-owned registration and causal launch identity instead
-        # of reading any process environment, including an owned environment.
-        owner=json.loads((Path(saved['owned_run'])/'guardian_owner.json').read_text())
-        role=saved['role']
-        if (role not in owner['allowed_roles'] or saved['ownership_token']!=owner['token']
-                or saved['boot_id']!=BOOT or saved['pid']!=saved['pgid']
-                or saved['session']!=saved['pid'] or saved['ppid']!=owner['parent']['pid']
-                or json.loads((Path(saved['owned_run'])/'owned_roles'/(role+'.identity.json')).read_text())!=saved):
-            raise RuntimeError('Owned bootstrap/session registration differs; no group signal')
+        try: env=Path(f"/proc/{row['pid']}/environ").read_bytes().split(b'\0')
+        except (FileNotFoundError,PermissionError):
+            current=ident(row['pid'])
+            if current is None or current['state']=='Z':continue
+            raise
+        expected=(MARKER+'='+saved['ownership_token']).encode()
+        if expected not in env: raise RuntimeError('Owned marker missing; no group signal')
         valid.append(row)
     return valid
 

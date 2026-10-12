@@ -100,9 +100,6 @@ def build_node(run, scope, profile):
             self.guard_records=deque(maxlen=2000);self.obstacle_records=[]
             self.telemetry=FileTail(run/'telemetry.jsonl',project=native_projection);self.guard_tail=FileTail(run/'navigation_guard_history.jsonl')
             self.obstacle_calls=FileTail(run/'mission46_obstacle_calls.jsonl')
-            from startup_trace import InitializationTrace,CallbackTrace
-            self.initialization_trace=InitializationTrace(run);self.initialization_sequence=0
-            self.callback_trace=CallbackTrace(run,'mission',self.writer)
             self.init_try_sim=-math.inf;self.dynamic_try_sim=-math.inf;self.parking_origin=None
             self.anchor=None;self.request=None;self.request_ready=False;self.last_emit=-math.inf
             self.save_future=None;self.save_requested_epoch=None;self.save_request_id=None
@@ -188,17 +185,9 @@ def build_node(run, scope, profile):
             now_ns=self.clock_ns();wall_ns=time.monotonic_ns();stamp=msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec
             p=msg.pose.pose.position;q=msg.pose.pose.orientation;v=msg.twist.twist.linear;w=msg.twist.twist.angular
             values=[p.x,p.y,p.z,q.x,q.y,q.z,q.w,v.x,v.y,v.z,w.x,w.y,w.z]
-            predicates=dict(frame=msg.header.frame_id=='camera_init' and msg.child_frame_id=='demo_slam_body',
-                original_300ms_source_age=0<=now_ns-stamp<=300_000_000,
-                strictly_new_header=self.last_pose_stamp is None or stamp>self.last_pose_stamp,
-                finite_values=all(math.isfinite(x) for x in values),
-                original_quaternion_norm=.98<=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w<=1.02)
-            accepted=all(predicates.values())
-            self.callback_trace.record('actual_body_odom_callback',now_ns,producer_stamp_ns=int(stamp),
-                original_received_wall_ns=wall_ns,actual_header_age_ns=int(now_ns-stamp),accepted=accepted,
-                original_predicates=predicates,frame=msg.header.frame_id,child_frame=msg.child_frame_id,
-                original_previous_header_ns=self.last_pose_stamp)
-            if not accepted:return
+            if (msg.header.frame_id!='camera_init' or msg.child_frame_id!='demo_slam_body'
+                    or not 0<=now_ns-stamp<=300_000_000 or self.last_pose_stamp is not None and stamp<=self.last_pose_stamp
+                    or not all(math.isfinite(x) for x in values) or not .98<=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w<=1.02):return
             imu=next((r for r in reversed(self.imu_rows) if 0<=stamp-r['stamp_ns']<=20_000_000),None)
             row=dict(stamp_ns=int(stamp),callback_ros_clock_ns=now_ns,received_wall_ns=wall_ns,
                 source_received_wall_ns=wall_ns,received_sim_ns=now_ns,
@@ -250,9 +239,7 @@ def build_node(run, scope, profile):
             imus=tuple(r for r in self.imu_rows if r['stamp_ns']>=cutoff)
             native=tuple(r for r in self.native_records if native_ns(r['data'])>=cutoff)
             health=copy.deepcopy(self.health);reg=copy.deepcopy(registration)
-            self.initialization_sequence+=1;token=run.name+':init:'+str(self.initialization_sequence)
-            submitted_wall=time.monotonic_ns()
-            self.submit('initialization',lambda:self.initialization_trace.verify(scope,poses,imus,native,reg,health,token,ns,submitted_wall))
+            self.submit('initialization',lambda:verify_initialization(run,scope,poses,imus,native,reg,health))
         def freeze_anchor(self):
             if self.anchor is not None:return
             origin=list(self.mission.original.origin);heading=self.mission.original.heading_alignment
