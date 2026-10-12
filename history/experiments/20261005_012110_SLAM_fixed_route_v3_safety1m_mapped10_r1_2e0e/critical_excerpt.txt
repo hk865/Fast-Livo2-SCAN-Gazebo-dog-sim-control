@@ -1,0 +1,13 @@
+--- worker.log: trailing <=2048 bytes only; not first failure proof ---
+Traceback (most recent call last):
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_012110_SLAM_fixed_route_v3_safety1m_mapped10_r1_2e0e/sources/slam_binding/worker.py", line 161, in <module>
+    main()
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_012110_SLAM_fixed_route_v3_safety1m_mapped10_r1_2e0e/sources/slam_binding/worker.py", line 155, in main
+    legacy.main()
+  File "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261005_012110_SLAM_fixed_route_v3_safety1m_mapped10_r1_2e0e/sources/policy/worker.py", line 218, in main
+    conn,_=sock.accept();conn.settimeout(10)
+           ^^^^^^^^^^^^^
+  File "/__LOCAL_HOME__/IsaacLab/_isaac_sim/kit/python/lib/python3.12/socket.py", line 295, in accept
+    fd, addr = self._accept()
+               ^^^^^^^^^^^^^^
+KeyboardInterrupt
