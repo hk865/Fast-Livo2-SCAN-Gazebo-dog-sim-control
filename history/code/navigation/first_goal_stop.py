@@ -116,6 +116,107 @@ def observe_native_tail(tail, previous_ns, maximum_chunks=4):
     return dict(native_ns=latest, fault_record=fault, caught_up=caught_up,
         chunks=chunks, complete_source_bytes_checked=tail.offset)
 
+def initialization_rejection_diagnostic(run, result):
+    """Only a proven short pose history may wait; never grants admission."""
+    run = Path(run)
+    metrics = result.get('predicates')
+    if not isinstance(metrics, dict):
+        return dict(state='REJECTED', recoverable_wait=False, marker='INIT_REJECT_INVALID_DIAGNOSTIC', navigation_PASS=False)
+    checks = metrics.get('predicates')
+    if not isinstance(checks, dict):
+        return dict(state='REJECTED', recoverable_wait=False, marker='INIT_REJECT_INVALID_DIAGNOSTIC', navigation_PASS=False)
+    failed = sorted(k for k, value in checks.items() if value is not True)
+    diagnostic = dict(state='REJECTED', recoverable_wait=False, marker='INIT_REJECT_NONRECOVERABLE',
+        failed_predicates=failed, original_exception=result.get('original_exception'),
+        job_token=result.get('job_token'), actual_submit_clock_ns=result.get('actual_submit_clock_ns'),
+        actual_values={k: metrics.get(k) for k in ('counts', 'imu', 'pose', 'native')},
+        original_thresholds=metrics.get('original_thresholds'), snapshot=result.get('snapshot'),
+        navigation_PASS=False, admission_by_diagnostic=False)
+    expected = {'imu_count', 'pose_count', 'native_count', 'stationary_estimator_gate_enabled',
+        'imu_span', 'imu_strictly_ordered', 'imu_max_gap', 'gyro_finite', 'acceleration_finite',
+        'gyro_norm', 'acceleration_norm', 'acceleration_axis_std', 'pose_span', 'pose_max_gap',
+        'pose_speed', 'pose_displacement', 'native_span', 'native_max_gap', 'native_original_safe',
+        'sensor_health_ready', 'sensor_health_no_truth', 'registration_no_truth', 'registration_frozen'}
+    try:
+        if (result.get('schema') != 'R33_actual_initialization_result/v1'
+            or set(checks) != expected or any(type(value) is not bool for value in checks.values())
+            or failed != ['pose_span'] or metrics.get('diagnostic_only') is not True
+            or metrics.get('thresholds_modified') is not False
+            or result.get('original_exception') != 'ValueError:Actual SLAM body did not remain stably stopped'
+            or result.get('snapshot_complete') is not True or result.get('snapshot_error') is not None
+            or result.get('original_tuple_reconstructed_or_changed') is not False
+            or result.get('admission_by_diagnostic') is not False):
+            return diagnostic
+        token = result['job_token']; suffix = token.removeprefix(run.name + ':init:')
+        if token == suffix or not suffix.isdigit() or int(suffix) < 1: return diagnostic
+        source = result['snapshot']; path = run/'R33_INITIALIZATION_JOBS.jsonl'
+        offset, size = source['offset'], source['bytes']
+        if (source['file'] != str(path) or type(offset) is not int or offset < 0
+            or type(size) is not int or not 0 < size <= 1_572_864): return diagnostic
+        with path.open('rb') as stream:
+            stream.seek(offset); raw = stream.read(size)
+        if len(raw) != size or hashlib.sha256(raw).hexdigest() != source['sha256']: return diagnostic
+        job = json.loads(raw)
+        if (job.get('schema') != 'R33_actual_initialization_submit_snapshot/v1'
+            or job.get('job_token') != token or job.get('predicates') != metrics
+            or job.get('actual_submit_clock_ns') != result.get('actual_submit_clock_ns')
+            or job.get('original_tuple_reconstructed_or_changed') is not False
+            or job.get('admission_by_diagnostic') is not False): return diagnostic
+        scope_path = run/'navigation_scope.json'; config_path = run/'navigation_fastlivo.yaml'
+        scope_raw = scope_path.read_bytes(); config_sha = hashlib.sha256(config_path.read_bytes()).hexdigest()
+        if (hashlib.sha256(scope_raw).hexdigest() != job.get('scope_file_sha256')
+            or config_sha != job.get('config_file_sha256')
+            or json.loads(scope_raw)['references'].get(str(config_path)) != config_sha): return diagnostic
+        pose = metrics['pose']; threshold = metrics['original_thresholds']
+        if (threshold.get('pose_span_ns') != 2_900_000_000
+            or threshold.get('pose_gap_limit_ns') != 200_000_000
+            or threshold.get('pose_speed_limit') != .03
+            or threshold.get('pose_displacement_limit') != .08): return diagnostic
+        poses = job['actual_pose_tuple']; stamps = [row['stamp_ns'] for row in poses]
+        if (len(poses) != metrics['counts']['pose'] or len(poses) < 10
+            or len(job['actual_IMU_tuple']) < int(job['actual_config']['/**']['ros__parameters']['imu']['imu_int_frame'])
+            or len(job['actual_native_tuple_exact_source_references']) < 150
+            or len(job['actual_IMU_tuple']) != metrics['counts']['imu']
+            or len(job['actual_native_tuple_exact_source_references']) != metrics['counts']['native']
+            or any(type(stamp) is not int or stamp < 0 for stamp in stamps)
+            or any(a >= b for a, b in zip(stamps, stamps[1:]))
+            or type(result['actual_submit_clock_ns']) is not int
+            or not result['actual_submit_clock_ns'] - 3_200_000_000 <= stamps[0] <= stamps[-1] <= result['actual_submit_clock_ns']
+            or stamps[0] != pose['first_ns'] or stamps[-1] != pose['last_ns']
+            or type(pose['span_ns']) is not int or pose['span_ns'] != stamps[-1] - stamps[0]
+            or not 0 <= pose['span_ns'] < 2_900_000_000
+            or pose['max_gap_ns'] != max(b-a for a, b in zip(stamps, stamps[1:]))
+            or pose['max_gap_ns'] > 200_000_000): return diagnostic
+        positions = np.asarray([row['position'] for row in poses], dtype=float)
+        speeds = np.asarray([row['body_velocity'] for row in poses], dtype=float)
+        if (positions.shape != (len(poses), 3) or speeds.shape != positions.shape
+            or not np.isfinite(positions).all() or not np.isfinite(speeds).all()
+            or float(max(np.linalg.norm(speeds, axis=1))) != pose['max_speed']
+            or float(max(np.linalg.norm(positions-positions[0], axis=1))) != pose['max_displacement']
+            or pose['max_speed'] > .03 or pose['max_displacement'] > .08): return diagnostic
+        diagnostic.update(state='WAIT_INITIALIZATION', marker='INIT_WAIT_POSE_SPAN',
+            recoverable_wait=True, actual_pose_span_ns=pose['span_ns'],
+            minimum_pose_span_ns=2_900_000_000, shortfall_ns=2_900_000_000-pose['span_ns'])
+    except (OSError, ValueError, TypeError, KeyError, IndexError, OverflowError):
+        diagnostic['diagnostic_validation_failed'] = True
+    return diagnostic
+
+
+def record_initialization_wait(run, diagnostic):
+    """Small append-only diagnostic record once per exact rejected job."""
+    path = Path(run)/'R35_INITIALIZATION_WAIT.jsonl'
+    raw = path.read_bytes() if path.exists() else b''
+    if len(raw) > 65_536: raise ValueError('Initialization wait diagnostic cap reached')
+    for line in raw.splitlines():
+        old = json.loads(line)
+        if old.get('job_token') == diagnostic['job_token']:
+            if old != diagnostic: raise ValueError('Rejected initialization diagnostic changed')
+            return
+    row = (json.dumps(diagnostic, sort_keys=True, separators=(',', ':'))+'\n').encode()
+    if len(raw)+len(row) > 65_536: raise ValueError('Initialization wait diagnostic cap reached')
+    with path.open('ab') as stream: stream.write(row)
+
+
 def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
     from startup_trace import read_live_json
     run = Path(run)
@@ -123,10 +224,23 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
     if run_output_bytes >= 2_000_000_000:
         return dict(stop=True, reason='new_output_cap', navigation_PASS=False)
     result = read_live_json(run/'R33_INITIALIZATION_RESULT.json')
+    waiting = None
     if isinstance(result, dict) and result.get('original_verifier_passed') is False:
-        return dict(stop=True, reason='actual_initialization_first_rejection', job_result=result, navigation_PASS=False)
+        waiting = initialization_rejection_diagnostic(run, result)
+        if not waiting['recoverable_wait']:
+            return dict(stop=True, reason='actual_initialization_nonrecoverable_rejection',
+                initialization_diagnostic=waiting, job_result=result, navigation_PASS=False)
+        try:
+            record_initialization_wait(run, waiting)
+        except (OSError, ValueError) as error:
+            return dict(stop=True, reason='initialization_diagnostic_record_failed',
+                diagnostic_error=type(error).__name__+':'+str(error), navigation_PASS=False)
     status = read_live_json(run/'navigation_status.json')
     actual = read_live_json(run/'navigation_request.json')
+    mission = read_live_json(run/'mission46_status.json')
+    if (isinstance(mission, dict) and mission.get('run_id') == run.name
+        and mission.get('stage') in ('failed', 'aborted')):
+        return dict(stop=True, reason='actual_original_mission_failed', actual_mission_status=mission, navigation_PASS=False)
     if isinstance(status, dict) and status.get('state') in ('failed', 'aborted'):
         return dict(stop=True, reason='actual_original_navigation_failed', actual_status=status, navigation_PASS=False)
     if clock_ns >= 60_000_000_000:
@@ -150,7 +264,7 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
             proof = verified_first_goal(run, status, actual, requests)
             if proof is not None and proof['actual_first_goal_receipt']['stamp_ns'] <= clock_ns:
                 return dict(stop=True, reason='real_first_goal_original_ordered_pass', **proof)
-    return dict(stop=False, navigation_PASS=False)
+    return dict(stop=False, navigation_PASS=False, initialization_wait=waiting)
 
 
 def first_goal_runtime_decision(run, observed_native, wall_elapsed, output_bytes):

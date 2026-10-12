@@ -1,8 +1,8 @@
 {
-  "schema": "R34_R33_candidate_first_goal_contract/v1",
+  "schema": "R35_diagnostic_pose_window_wait_first_goal_contract/v1",
   "parent_authorization_thread": "<PRIVATE_SESSION_ID>",
-  "candidate_root": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r33_first_goal",
-  "source_stage": "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R34_FIRST_GOAL_STAGE",
+  "candidate_root": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r35_first_goal_wait",
+  "source_stage": "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R35_FIRST_GOAL_WAIT_STAGE",
   "workspace": "/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R33_ORIGINAL_STARTUP_SHORT_STAGE/slam_ws",
   "frozen_profile": "engineering_nav46.json",
   "maximum_simulator_attempts": 1,
@@ -11,7 +11,7 @@
   "new_output_cap_bytes": 2000000000,
   "candidate_build_cap_bytes": 1073741824,
   "shared_hard_bytes": 50000000000,
-  "preserved_shared_high_water_floor_bytes": 41250545664,
+  "preserved_shared_high_water_floor_bytes": 41367003136,
   "GT_carrier_allowed": false,
   "original_route_profile_and_safety_gates_changed": false,
   "physical_PD_or_Actor_sources_changed": false,
@@ -32,9 +32,9 @@
   "original_goal_timeout_s": 90,
   "base_R33_source_root": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_startup_r33",
   "base_R33_source_gate_sha256": "fa4a3d9e430ee943245a133324befa01fc42e35360bff9800e71e06ae1142d90",
-  "authorization_quote": "\u7ee7\u7eed",
-  "authorization_user_message": "Sentinel_e1b417557c748191a539a2f9ba5f189d",
-  "authorization_assistant_message": "Sentinel_8c7b07d5fa708191b58aa4790d058007",
+  "authorization_quote": "可以啊，只修诊断停止条件。",
+  "authorization_user_message": "Sentinel_43faafb13ee48191b9ae9593dc4cff70",
+  "authorization_assistant_message": "Sentinel_b8d0780389f4819184be9f60038172cc",
   "acceptance": {
     "schema": "original_region_ordered_pass/v1",
     "goal_id": "exploration:0",
@@ -52,5 +52,11 @@
     "full_navigation_PASS": false
   },
   "runtime_algorithm_changes": false,
-  "SLAM_build_reused_exact_R33": true
+  "SLAM_build_reused_exact_R33": true,
+  "base_R34_source_root": "/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/navigation/engineering_v34_r33_first_goal",
+  "base_R34_source_gate_sha256": "5ad177bfa9c7e726356861bcd65f796ab1826638f6d5643ba54b468ff4cf16fe",
+  "diagnostic_wait_allowlist": [
+    "pose_span"
+  ],
+  "original_caller_verifier_changed": false
 }
