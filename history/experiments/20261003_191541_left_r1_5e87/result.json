@@ -1,0 +1,134 @@
+{
+  "RGB_verified": null,
+  "actor_archive_verified": null,
+  "actor_fault": null,
+  "actor_samples": 901,
+  "all_owned_and_children_clean": null,
+  "cleanup_errors": null,
+  "dynamic_verified": null,
+  "experiment_time_evidence": {
+    "archive_commit_time": "current archival time, not experimental time",
+    "directory_label": "20261003_191541_left_r1_5e87",
+    "timezone_of_unzoned_label": "not verified; no timezone invented"
+  },
+  "final_phase_arrival_count": null,
+  "functional_sequence_completed": null,
+  "hard_regions": null,
+  "initialization_verified": null,
+  "last_sim_time_s": 18.0,
+  "levels": {
+    "interface": "passed",
+    "motion": "passed",
+    "navigation": "unverified",
+    "real_robot": "unverified",
+    "sim2sim": "unverified"
+  },
+  "limits": [
+    "Missing/null is unverified, never inferred PASS.",
+    "Metadata claims retain original scope; component motion is not full navigation.",
+    "Diffs compare preserved selected snapshots; an absent file may reflect capture/selection/availability, not a proved original source deletion.",
+    "Raw sensor streams, videos, binary outputs, weights and full traces are not published; old complete replay cannot be reconstructed from this record.",
+    "Code is reconstructed from declared/hash-checked saved text snapshots with personal paths/session IDs redacted.",
+    "Source author/experimental Git ancestry is not fabricated."
+  ],
+  "mission_completed_phase_region_count": null,
+  "mission_message": null,
+  "mission_stage": null,
+  "navigation_ground_truth_used": false,
+  "ordinary_regions": null,
+  "original_criteria": null,
+  "parking_verified": null,
+  "pipeline_normal_completed": null,
+  "policy_checkpoint_sha256": "bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34",
+  "policy_device": "cpu",
+  "run_label": "20261003_191541_left_r1_5e87",
+  "runtime_error": null,
+  "schema": "go2_archived_experiment/v1",
+  "source": {
+    "code_from_snapshot": false,
+    "code_tree_in_this_commit_is_previous_verified_snapshot_not_this_trial": true,
+    "coverage": "PARTIAL_OR_NO_VERIFIED_TEXT",
+    "declared_selected_text_files": 14,
+    "full_SHA_verified_selected_files": 0,
+    "manifest_sha256": "179ef29b17cf2977e74ccf6fe1ac37d38aee3bb471120e94df8d9feb906dafd8",
+    "missing_or_mismatched_selected_files": [
+      "policy/contract.json",
+      "policy/observation.py",
+      "policy/worker.py",
+      "scripts/capture.py",
+      "scripts/evaluate.py",
+      "scripts/isaac_cpu_reference.py",
+      "scripts/run.sh",
+      "scripts/run_test.py",
+      "scripts/serve.py",
+      "simulation/CMakeLists.txt",
+      "simulation/prepare.py",
+      "simulation/teacher_actuator.cpp",
+      "test_results/native_actuator_audit/audit_fixture.py",
+      "tests/protocol.json"
+    ],
+    "original_code_sha_map": {},
+    "primary_candidate": null,
+    "redacted_selected_files": 0,
+    "source_copy_author": "not inferred"
+  },
+  "strict_full_navigation_PASS": null,
+  "terrain_switches": null,
+  "tests": [
+    {
+      "metrics": {
+        "body_contact_samples": 0,
+        "duration_s": 18.0,
+        "max_abs_roll_pitch_rad": 0.03706092598804517,
+        "max_applied_torque_Nm": 20.92183692259688,
+        "min_body_clearance_m": 0.30166128101259726,
+        "position_delta_m": [
+          -0.0005171868758351295,
+          1.1873750779689594,
+          -0.09734212736559372
+        ],
+        "samples": 901,
+        "stop": {
+          "samples": 151,
+          "translation_drift_m": 0.011189801864990355,
+          "velocity_rms": [
+            0.001702309485392242,
+            0.005342098938093207,
+            0.008463354799863031
+          ],
+          "yaw_drift_rad": 0.01470662671504714
+        },
+        "total_yaw_delta_rad": 0.026002761411632866,
+        "tracking": [
+          {
+            "command_mean": [
+              0.0,
+              0.20000000000000068,
+              0.0
+            ],
+            "measured_mean": [
+              0.006233749611349955,
+              0.15892163737989956,
+              0.006253006871906805
+            ],
+            "rmse": [
+              0.010268879964488014,
+              0.04418259382055667,
+              0.035393625587947175
+            ],
+            "window_s": [
+              5,
+              10
+            ]
+          }
+        ],
+        "unknown_contact_samples": 0
+      },
+      "name": "left",
+      "reason": "",
+      "status": "passed"
+    }
+  ],
+  "typed_capture_close": null,
+  "verified_region_count": null
+}
