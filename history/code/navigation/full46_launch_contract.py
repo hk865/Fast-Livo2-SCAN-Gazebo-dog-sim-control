@@ -40,7 +40,8 @@ def expected_profile(here,name=PROFILE_NAME):
         ordered_original_regions=46,ordinary_semantics='pass_original_control_region',
         hard_stops=['exploration:11','exploration:17','return_origin:5','return_origin:13',
                     'navigation_f1_f3:7','navigation_f1_f3:13'],
-        region_progress_deadline_s=90.,original_dwell_acceptance_claimed=False)
+        region_progress_deadline_s=90.,original_dwell_acceptance_claimed=False,
+        local_planning_horizon_m=.65,local_horizon_reason='native Euclidean horizon must not span initial1m loop')
     result['known_scene_localization_contract']=dict(enabled=True,
         schema='known_scene_map_assisted_navigation/v1',reference_kind='provided_simulation_scene43box_geometry',
         independent_sensor_map=False,robot_truth_pose_used=False,IMU_world_orientation_used=False,

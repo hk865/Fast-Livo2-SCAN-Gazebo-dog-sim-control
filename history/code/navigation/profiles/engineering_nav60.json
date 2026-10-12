@@ -724,7 +724,7 @@
     ],
     "waypoint_reference": "relative_world_axes",
     "simulation": {
-      "description": "Gazebo Go2 四足物理 · 三层平台/10%缓坡（非楼梯）",
+      "description": "Gazebo Go2 \u56db\u8db3\u7269\u7406 \u00b7 \u4e09\u5c42\u5e73\u53f0/10%\u7f13\u5761\uff08\u975e\u697c\u68af\uff09",
       "kind": "gazebo_physics",
       "terrain": "ramps"
     },
@@ -3691,7 +3691,9 @@
       "navigation_f1_f3:13"
     ],
     "region_progress_deadline_s": 90.0,
-    "original_dwell_acceptance_claimed": false
+    "original_dwell_acceptance_claimed": false,
+    "local_planning_horizon_m": 0.65,
+    "local_horizon_reason": "native Euclidean horizon must not span initial1m loop"
   },
   "known_scene_localization_contract": {
     "enabled": true,
