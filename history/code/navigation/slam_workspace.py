@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json
 HERE=Path(__file__).resolve().parent
-SLAM_WORKSPACE=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R72_IDENTITY_TIMING_STAGE/native_ws')
+SLAM_WORKSPACE=Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/R73_SERIALIZATION_DYNAMIC_READY_STAGE/native_ws')
 CONTRACT=HERE/'R33_SLAM_WORKSPACE_CONTRACT.json'
 CORE_RECEIPT=SLAM_WORKSPACE.parent/'FULL_FASTLIVO_BUILD_RECEIPT.json'
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -11,7 +11,7 @@ def required_workspace_files():
     return sources+[SLAM_WORKSPACE/'build'/pkg/n for pkg in ('fast_livo2_core','fast_livo2_ros')for n in ('compile_commands.json','CMakeCache.txt')]+[SLAM_WORKSPACE/'install/setup.bash',SLAM_WORKSPACE/'install/local_setup.bash',SLAM_WORKSPACE/'install/fast_livo2_core/lib/libfast_livo2_core.so',SLAM_WORKSPACE/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping']
 def verify_slam_workspace():
     d=json.loads(CONTRACT.read_text());stage=SLAM_WORKSPACE.parent
-    if (d.get('schema')!='R72_explicit_point_identity_workspace/v1' or d.get('workspace')!=str(SLAM_WORKSPACE)
+    if (d.get('schema')!='R73_explicit_point_identity_workspace/v1' or d.get('workspace')!=str(SLAM_WORKSPACE)
         or d.get('build_copied')is not False or d.get('full_source_build_complete')is not True
         or d.get('runtime_acceptance_inherited')is not False or d.get('actual_navigation_verified')is not False
         or d.get('actual_loaded_binary_witness_required')is not True

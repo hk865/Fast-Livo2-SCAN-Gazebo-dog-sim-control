@@ -9,6 +9,7 @@
 #include <array>
 #include <random>
 #include <cstring>
+#include <nlohmann/json.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 namespace fastlivo_identity {
@@ -49,6 +50,32 @@ inline std::string base64(const std::string&data) {
   std::string out(4*((data.size()+2)/3)+1,'\0');
   int n=EVP_EncodeBlock(reinterpret_cast<unsigned char*>(&out[0]),
       reinterpret_cast<const unsigned char*>(data.data()),int(data.size()));out.resize(n);return out;
+}
+// This type can only be produced by the original EVP encoder. Its text is
+// ASCII base64, so injecting it between existing JSON quotes needs no escaping.
+class EncodedPointRefs {
+ public:
+  const std::string& text() const noexcept {return text_;}
+ private:
+  explicit EncodedPointRefs(std::string text):text_(std::move(text)){}
+  std::string text_;
+  friend EncodedPointRefs encode_point_refs(const std::string&);
+};
+inline EncodedPointRefs encode_point_refs(const std::string& bytes) {
+  return EncodedPointRefs(base64(bytes));
+}
+inline std::string dump_point_commit(const nlohmann::json& metadata,const EncodedPointRefs& encoded) {
+  const auto it=metadata.find("point_refs_base64");
+  if(!metadata.is_object() || it==metadata.end() || !it->is_string() || !it->get_ref<const std::string&>().empty())
+    throw std::logic_error("point commit requires empty root refs placeholder");
+  // Same original default strict dump happens before the final message cap.
+  auto out=metadata.dump();
+  const std::string marker="\"point_refs_base64\":\"\"";
+  const auto pos=out.find(marker);
+  if(pos==std::string::npos || out.find(marker,pos+marker.size())!=std::string::npos)
+    throw std::logic_error("point commit requires unique structural refs marker");
+  out.insert(pos+marker.size()-1,encoded.text());
+  return out;
 }
 inline std::string epoch(){std::random_device rd;std::ostringstream out;
   for(unsigned i=0;i<4;++i)out<<std::hex<<std::setw(8)<<std::setfill('0')<<uint32_t(rd());return out.str();}

@@ -29,7 +29,7 @@ struct ScalarWriter {
     try {
       if(fd<0)return;
       std::ostringstream text;
-      text<<"{\"schema\":\"R72_native_boundary_timing/v1\",\"tid\":"<<::syscall(SYS_gettid)<<",\"values\":[";
+      text<<"{\"schema\":\"R73_native_boundary_timing/v1\",\"tid\":"<<::syscall(SYS_gettid)<<",\"values\":[";
       for(size_t i=0;i<values.size();++i) {if(i)text<<',';text<<std::setprecision(17)<<values[i];}
       text<<"]}\n";
       emit_raw(text.str());
@@ -119,7 +119,7 @@ inline void emit_frame(const nlohmann::json& identity) noexcept {
     if(frame_from_ns()==UINT64_MAX || source<frame_from_ns())return;
     const auto& times=frame_wall();
     for(size_t i=0;i<times.size();++i)if(!times[i] || (i && times[i]<times[i-1]))return;
-    nlohmann::json row={{"schema","R72_native_source_frame_timing/v1"},
+    nlohmann::json row={{"schema","R73_native_source_frame_timing/v1"},
       {"tid",::syscall(SYS_gettid)},{"producer_epoch",identity.at("producer_epoch")},
       {"run_id",identity.at("run_id")},{"stage",identity.at("stage")},
       {"post_lio_header_ns",source},{"commit",identity.at("commit")},

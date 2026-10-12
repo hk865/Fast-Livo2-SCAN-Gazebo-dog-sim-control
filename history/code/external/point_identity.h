@@ -31,9 +31,13 @@ inline void append_ref(std::vector<Ref>&cur,std::vector<Ref>&next,const Ref&ref,
 }
 inline void carry(std::vector<Ref>&cur,std::vector<Ref>&next) {cur=std::move(next);next.clear();}
 inline std::string binary(const std::vector<Ref>&refs) {
-  std::string out;out.reserve(refs.size()*12);
-  for(const auto&r:refs){for(unsigned j=0;j<8;++j)out.push_back(char((r.source->packet>>(8*j))&255));
-    for(unsigned j=0;j<4;++j)out.push_back(char((r.input_ordinal>>(8*j))&255));}
+  // Same explicit LE bytes, with one bounded allocation and indexed stores.
+  if(refs.size()>std::numeric_limits<size_t>::max()/12)throw std::length_error("point identity binary size");
+  std::string out(refs.size()*12,'\0');char* dest=out.data();
+  for(const auto&r:refs){const auto packet=r.source->packet;const auto ordinal=r.input_ordinal;
+    for(unsigned j=0;j<8;++j)dest[j]=char((packet>>(8*j))&255);
+    for(unsigned j=0;j<4;++j)dest[8+j]=char((ordinal>>(8*j))&255);
+    dest+=12;}
   return out;
 }
 }

@@ -29,6 +29,7 @@ from request import SceneAxisRegistration, StartupDeadline
 from known_scene_route_registration import KnownSceneAxisRegistration,ROUTE_REFERENCE
 from known_scene_hold_guard import dynamic_payload_ready
 from initialization_ready import initialization_history_ready
+from dynamic_history_ready import dynamic_history_ready
 from runtime_io import EvidenceWriter, latest_sensor_qos
 from compact_archives import make_evidence_writer
 
@@ -403,16 +404,17 @@ def build_node(run, scope, profile):
                         if (stage=='navigating' and self.mission.dynamic_receipt is None
                                 and self.obstacle.get('visible_phase')=='clear'
                                 and self.nav.get('aligned_obstacle_resumes',0)>0
-                                and dynamic_payload_ready(run)
+                                and dynamic_payload_ready(run) and 'dynamic' not in self.jobs
                                 and ns/1e9-self.dynamic_try_sim>=1.):
-                            self.dynamic_try_sim=ns/1e9
                             rid=self.mission.original.current_request
                             sr=tuple(r for r in self.status_rows if r['data'].get('request_id')==rid)
                             first=min((r['received_sim_ns'] for r in sr),default=ns)
                             pr=tuple(r for r in self.pose_rows if r['stamp_ns']>=first-350_000_000)
                             gr=tuple(r for r in self.guard_records if r['data'].get('request_id')==rid)
                             ob=tuple(r for r in self.obstacle_records if r['data'].get('request_id')==rid)
-                            self.submit('dynamic',lambda:verify_dynamic(run,rid,sr,pr,gr,ob))
+                            if dynamic_history_ready(run.name,rid,ns,sr,pr):
+                                self.dynamic_try_sim=ns/1e9
+                                self.submit('dynamic',lambda:verify_dynamic(run,rid,sr,pr,gr,ob))
                         if self.nav.get('state')=='succeeded' and stage=='navigating' and self.mission.dynamic_receipt is None:
                             # A verifier still pending is not a pass; wait until
                             # it finishes, then fail below if the real proof is absent.

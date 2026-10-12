@@ -1,3 +1,4 @@
+#include <optional>
 /* 
 This file is part of FAST-LIVO2: Fast, Direct LiDAR-Inertial-Visual Odometry.
 
@@ -729,7 +730,24 @@ void LIVMapper::handleLIO()
       return a ^ (b + size_t(0x9e3779b9U) + (a<<6) + (a>>2));
     }
   };
-  std::unordered_set<std::pair<uint64_t,uint32_t>,IdentityPairHash> identity_unique;
+  // Local open-addressed membership only. No iteration enters any output.
+  // Packet0 is excluded by original whole-vector validate before allocation.
+  struct IdentityMembership {
+    std::vector<std::pair<uint64_t,uint32_t>> slots;
+    size_t mask=0;
+    void reserve(size_t n) {
+      size_t count=1;while(count<2*n)count<<=1;
+      slots.assign(count,{0,0});mask=count-1;
+    }
+    std::pair<size_t,bool> insert(const std::pair<uint64_t,uint32_t>& key) {
+      size_t pos=IdentityPairHash{}(key)&mask;
+      for(size_t visited=0;visited<slots.size();++visited,pos=(pos+1)&mask){
+        if(slots[pos].first==0){slots[pos]=key;return {pos,true};}
+        if(slots[pos]==key)return {pos,false};
+      }
+      throw std::logic_error("identity membership internal full table");
+    }
+  } identity_unique;
   identity_unique.reserve(feats_identity.size());
   std::map<uint64_t,std::shared_ptr<const fastlivo_identity::Source>> identity_sources;
   for(const auto&r:feats_identity){
@@ -746,17 +764,18 @@ void LIVMapper::handleLIO()
     sources.push_back({{"packet",s.packet},{"stamp_ns",s.stamp_ns},
         {"adapted_message_sha256",s.adapted_message_sha256},{"input_count",s.input_count}});}
   const auto identity_binary=fastlivo_identity::binary(feats_identity);
+  std::optional<fastlivo_identity::EncodedPointRefs> encoded_point_refs;
   nlohmann::json identity_message={{"schema","post_lio_source_point_commit/v1"},{"fingerprint_model","go2_ros_semantic/v1"},
       {"producer_epoch",identity_epoch},{"producer_pid",getpid()},
       {"run_id",std::filesystem::path(std::getenv("DEMO_RUN_DIR")?std::getenv("DEMO_RUN_DIR"):"").filename().string()},
       {"commit",identity_stage_commit},{"stage","post_lio_dense"},
       {"stamp_ns",diag_stamp(navigation_cloud.header.stamp)},{"sources",sources},
       {"point_count",feats_identity.size()},{"point_ref_layout","LE:u64packet,u32input_ordinal"},
-      {"point_refs_base64",fastlivo_identity::base64(identity_binary)},
+      {"point_refs_base64",([&](){encoded_point_refs.emplace(fastlivo_identity::encode_point_refs(identity_binary));return std::string();})()},
       {"point_refs_sha256",fastlivo_identity::hash(reinterpret_cast<const unsigned char*>(identity_binary.data()),identity_binary.size())},
       {"registered_message_sha256",fastlivo_identity::message_sha(navigation_cloud)},
       {"mapper_message_sha256",identity_mapper_sha},{"navigation_ground_truth_used",false}};
-  std_msgs::msg::String identity_out;identity_out.data=identity_message.dump();
+  std_msgs::msg::String identity_out;identity_out.data=fastlivo_identity::dump_point_commit(identity_message,*encoded_point_refs);
   if(identity_out.data.size()>2*1024*1024)throw std::runtime_error("R60 identity message exceeds bound");
   fastlivo_timing::frame_mark(8);
   pubNavigationCloud->publish(navigation_cloud);
