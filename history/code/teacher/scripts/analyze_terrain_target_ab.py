@@ -111,7 +111,9 @@ def load_run(run, model):
         name_errors += int(extra["height_scan_hit_models"] != scan["height_scan_hit_models"])
         raw = np.asarray([float(v) if v is not None else -np.inf for v in scan["height_scan_raw"]])
         height_clip_errors.append(float(np.max(abs(np.clip(raw, -1, 1) - actual[60:]))))
-        last_action = np.asarray(row["action"])
+        # The worker computes/logs an actor diagnostic even while initialization
+        # executes default PD; its actual action-history state remains zero.
+        last_action = np.zeros(12) if row["state"] == "initializing" else np.asarray(row["action"])
     t = np.asarray([row["sim_time"] for row in rows])
     live = np.asarray([row["sim_time"] >= meta["bootstrap_PD_seconds"] - 1e-9 and not row.get("fault") for row in rows])
     with torch.inference_mode():

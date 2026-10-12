@@ -7,6 +7,7 @@ requires measured stopping before obstacle recovery. It owns no joint actuator.
 """
 import argparse
 import copy
+import hashlib
 import importlib.util
 import json
 import math
@@ -77,6 +78,26 @@ class TeacherNavigation(base.Navigation):
         stamp=self.stamp(msg);ns=self.get_clock().now().nanoseconds
         if stamp<=self.cloud_stamp or not -.05e9<=ns-stamp<self.cloud_timeout*1e9:return
         super().on_cloud(msg)
+        if self.cloud_stamp==stamp and self.cloud_input_context is not None:
+            c=self.cloud_input_context
+            row={'stamp_ns':stamp,'frame_id':msg.header.frame_id,'input_points':int(msg.width*msg.height),
+                'filtered_points':c['filtered_points'],'self_filtered_points':c['self_filtered_points'],
+                'nearest_slam_pose_stamp_ns':c['filtering_body_stamp_ns'],
+                'filtered_xyz_float64_sha256':hashlib.sha256(np.asarray(self.cloud,dtype='<f8').tobytes()).hexdigest()}
+            with(self.run/'navigation_cloud_history.jsonl').open('a')as stream:stream.write(json.dumps(row)+'\n')
+    def accept_spline(self,msg,metadata):
+        before=self.replans;super().accept_spline(msg,metadata)
+        if self.replans==before or self.samples is None:return
+        directory=self.run/'navigation_trajectories';directory.mkdir(exist_ok=True)
+        array_path=directory/f'{self.replans:06d}_trajectory_{self.active_trajectory_id}.npz'
+        np.savez_compressed(array_path,coefficients=np.array([[p.x,p.y,p.z]for p in msg.pos_pts]),
+            knots=np.array(msg.knots),samples=self.samples)
+        document={'trajectory_id':self.active_trajectory_id,'order':int(msg.order),'metadata':metadata,
+            'reference_stamp':self.trajectory_association.reference_stamp,'request_id':self.request_id,
+            'waypoint_index':self.waypoint_index,'accepted_slam_stamp_ns':self.pose_stamp,
+            'array_sha256':hashlib.sha256(array_path.read_bytes()).hexdigest(),'array_file':array_path.name,
+            'source':'actual SCAN committed B-spline and associated metadata; sensor SLAM feedback'}
+        array_path.with_suffix('.json').write_text(json.dumps(document,allow_nan=False,ensure_ascii=False)+'\n')
     def on_request(self,msg):
         try:
             requested=json.loads(msg.data);frozen=json.loads((self.run/'navigation_request.json').read_text())

@@ -76,12 +76,22 @@ def verify_scope(path, raw=None):
         fingerprints[name] = (st.st_size, st.st_mtime_ns)
     old = _cache.get(str(path))
     if old is None or old[0] != digest or old[1] != fingerprints:
+        mandatory=[PROFILE,ROOT/'runs/acceptance.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
+            ROOT/'policy/contract.json',ROOT/'simulation/build/libteacher_actuator.so']
+        mandatory+=list(Path(__file__).parent.glob('*.py'))
+        mandatory+=[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
+            'navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','navigation_profile.json')]
+        if any(str(p.resolve())not in refs for p in mandatory):
+            raise RuntimeError('Experimental receipt omits required live source/configuration hashes')
         for name, expected in refs.items():
             if sha(name) != expected:
                 raise RuntimeError('Scoped source/evidence hash changed: '+name)
         profile = json.loads((run/'navigation_profile.json').read_text())
         if profile != json.loads(PROFILE.read_text()):
             raise RuntimeError('Scoped profile differs from reviewed finite experiment')
+        actual_global=json.loads((ROOT/'runs/acceptance.json').read_text())
+        if data.get('global_levels_preserved')!=actual_global['levels']:
+            raise RuntimeError('Experimental receipt must preserve the actual overall acceptance levels')
         asset = json.loads((run/'asset_manifest.json').read_text())
         if asset.get('terrain') != 'flat' or asset.get('spawn') != [6, -.7, .4, 0]:
             raise RuntimeError('Only the previously tested open flat spawn is eligible')
@@ -89,11 +99,16 @@ def verify_scope(path, raw=None):
             raise RuntimeError('Full actual sensors and sole native Teacher actuator are required')
         if sha(run/'world.sdf') != asset.get('world_sha256'):
             raise RuntimeError('World differs from generated asset receipt')
+        sensor_contract=json.loads((run/'sensor_contract.json').read_text())
+        if sensor_contract['camera']['rate_hz']<10:
+            raise RuntimeError('Finite navigation requires actual vehicle RGB rate >=10Hz; 2Hz was stationary diagnostics only')
         counts = data.get('flat_motion_evidence', {})
         if set(counts) != set(FLAT) or any(len(counts[k]) != 3 for k in FLAT):
             raise RuntimeError('Three actual baseline runs per required flat capability are required')
         for items in counts.values():
             for item in items:
+                if str(Path(item['summary']).resolve())not in refs:
+                    raise RuntimeError('Experimental receipt omits original flat evidence hash')
                 s = json.loads(Path(item['summary']).read_text())
                 if any(s.get('levels', {}).get(k) != 'passed' for k in ('interface', 'motion')):
                     raise RuntimeError('A referenced flat capability did not pass')
@@ -171,7 +186,9 @@ def prepare(run, slam_only=False):
                 'outputs':['/demo/slam/body_odom','/cloud_registered_full'],
                 'navigation_started':False}
     acceptance = json.loads((ROOT/'runs/acceptance.json').read_text())
-    candidates = acceptance.get('all_runs', {}).get('runs', [])
+    if camera['rate_hz']<10:
+        raise RuntimeError('Generate this navigation run with --camera-rate 10; 2Hz cannot meet 300ms SLAM gate')
+    candidates = acceptance.get('history', {}).get('all_runs', [])
     # Existing aggregate has run rows inside historical_runs; avoid selecting a
     # lucky subset by falling back to the exact preregistered formal campaign.
     if not candidates:

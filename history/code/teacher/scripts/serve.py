@@ -227,6 +227,7 @@ class Dashboard:
                     'acceptance': read_json(self.runs / 'acceptance.json')}
         state_path = directory / 'state.json'
         frame = self.frame(directory)
+        vehicle_frame = self.frame(directory / 'vehicle_rgb')
         try:
             state_age = max(0., time.time() - state_path.stat().st_mtime)
         except OSError:
@@ -246,6 +247,7 @@ class Dashboard:
                 'step_provenance': correction,
                 'step_functional_source': 'summary_functional.reproduced.json' if corrected else 'summary_functional.json',
                 'step_safety': read_json(directory / 'supplemental_native_safety.json'),
+                'full_ramp': read_json(directory / 'summary_full_ramp.json'),
                 'replay': {'available': (directory / 'frame_replay.mp4').is_file() or (directory / 'frame_replay.gif').is_file(),
                            'mp4': (directory / 'frame_replay.mp4').is_file(),
                            'gif': (directory / 'frame_replay.gif').is_file(),
@@ -258,7 +260,9 @@ class Dashboard:
                           'age_s': max(0., time.time() - frame.stat().st_mtime) if frame else None,
                           'filename': frame.name if frame else None},
                 'camera_info': {kind: read_json(directory / 'camera_info' / (kind + '.json')) for kind in ('overview','vehicle')},
-                'vehicle_frame': {'available': (directory / 'vehicle_rgb/frame.jpg').is_file()},
+                'vehicle_frame': {'available': vehicle_frame is not None,
+                                  'age_s': max(0., time.time() - vehicle_frame.stat().st_mtime) if vehicle_frame else None,
+                                  'filename': vehicle_frame.name if vehicle_frame else None},
                 'diagnostic_source': 'Gazebo simulation truth for motion diagnostics; not a navigation input',
                 'read_only': True}
 

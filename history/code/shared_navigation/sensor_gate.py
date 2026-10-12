@@ -29,6 +29,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',type=Path,required=True)
     args,ros=parser.parse_known_args();run=args.run.resolve()
     profile=json.loads((run/'navigation_profile.json').read_text())
+    actual_camera_rate=json.loads((run/'sensor_contract.json').read_text())['camera']['rate_hz']
     calib=yaml.safe_load((run/'navigation_camera.yaml').read_text())['/**']['ros__parameters']
     rclpy.init(args=ros)
     class Gate(Node):
@@ -73,7 +74,9 @@ def main():
                 expected=[calib['cam_fx'],0.,calib['cam_cx'],0.,calib['cam_fy'],calib['cam_cy'],0.,0.,1.]
                 if (msg.header.frame_id!='demo_camera_optical_frame' or msg.width!=640 or msg.height!=480
                     or msg.distortion_model!='plumb_bob' or len(msg.d)<4 or any(abs(v)>1e-12 for v in msg.d)
-                    or not np.allclose(msg.k,expected,rtol=0,atol=1e-5)):
+                    # Actual Gazebo float32 K quantization is 1.065e-5 px;
+                    # this 2e-5 px tolerance does not change geometry bounds.
+                    or not np.allclose(msg.k,expected,rtol=0,atol=2e-5)):
                     error='Actual vehicle CameraInfo does not match pinhole K/zero D'
                 else:self.info=(stamp,msg.header.frame_id,msg.width,msg.height)
             elif name=='raw_lidar':
@@ -105,7 +108,7 @@ def main():
                 sim_age=None if ns is None or name not in self.stamps else (ns-self.stamps[name])/1e9
                 ages[name]={'wall_s':wall_age,'sim_s':sim_age,'stamp_ns':self.stamps.get(name)}
                 # 2 Hz RGB cannot use the 300ms motion feedback watchdog.
-                wall_limit,sim_limit=(2.,.75)if name in ('image','camera_info')else(.3,.3)
+                wall_limit,sim_limit=((2.,.75)if actual_camera_rate<10 else(.3,.3))if name in ('image','camera_info')else(.3,.3)
                 if wall_age is None or sim_age is None or not 0<=wall_age<wall_limit or not -.05<=sim_age<sim_limit:
                     reasons.append(name+' missing/stale')
                 if name in self.errors:reasons.append(self.errors[name])
@@ -124,6 +127,8 @@ def main():
                 'counts':self.counts,'publisher_graph':graph,'ground_truth_navigation_used':False,
                 'overview_used_for_vio':False,'camera_intrinsics_scale':'Original640x480 K; FAST-LIVO2 internally applies scale=0.5'}
             atomic(run/'navigation_sensor_gate.json',status)
+            with(run/'navigation_sensor_gate_history.jsonl').open('a')as stream:
+                stream.write(json.dumps(status,allow_nan=False,ensure_ascii=False)+'\n')
             self.pub.publish(String(data=json.dumps(status,allow_nan=False)));self.last_report=status
     node=Gate()
     try:rclpy.spin(node)

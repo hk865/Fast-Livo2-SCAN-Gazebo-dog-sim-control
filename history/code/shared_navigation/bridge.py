@@ -43,6 +43,9 @@ def check_acceptance(path):
     except (OSError, ValueError) as error:
         raise RuntimeError(f'Navigation refused: acceptance unavailable: {error}') from error
     levels = data.get('levels') if isinstance(data, dict) else None
+    if isinstance(data, dict) and data.get('schema') == 'teacher_navigation_scope/v1':
+        from scoped_profile import verify_scope
+        return verify_scope(path, raw)
     if not isinstance(levels, dict) or not all(passed(levels.get(k)) for k in ('motion', 'sim2sim')):
         raise RuntimeError('Navigation refused: runs/acceptance.json must explicitly pass both levels.motion and levels.sim2sim')
     if data.get('publication') != 'final':
@@ -69,7 +72,13 @@ def finite_values(values, length):
 
 class CommandGate:
     """Wall time remains authoritative during paused or missing ROS clocks."""
-    def __init__(self):
+    def __init__(self, profile=None):
+        self.profile = profile
+        self.position = None
+        self.sensor_health = None
+        self.sensor_health_wall = None
+        self.anchor = None
+        self.scope_graph_ok = False
         self.clock_ns = None
         self.clock_wall = None
         self.pose_stamp_ns = None
@@ -113,6 +122,7 @@ class CommandGate:
         if self.pose_stamp_ns is not None and stamp_ns - self.pose_stamp_ns >= int(TIMEOUT * 1e9):
             self.pose_valid_samples = 0
         self.pose_stamp_ns, self.pose_wall = stamp_ns, now
+        self.position = list(position)
         self.pose_valid_samples += 1
         self.pose_error = None
 
@@ -138,6 +148,23 @@ class CommandGate:
         reasons = []
         if self.failed:
             reasons.append(self.failed)
+        if self.profile is not None:
+            if not self.scope_graph_ok:
+                reasons.append('Finite experiment sensor gate / SLAM anchor publisher chain is not unique')
+            if (self.sensor_health is None or self.sensor_health_wall is None
+                    or now-self.sensor_health_wall >= TIMEOUT or self.sensor_health.get('ready') is not True):
+                reasons.append('Actual vehicle sensor SLAM has not completed healthy warmup')
+            if self.anchor is None:
+                reasons.append('Waiting for immutable SLAM-derived route anchor')
+            elif self.position is not None:
+                a=self.anchor;dx=self.position[0]-a['origin'][0];dy=self.position[1]-a['origin'][1]
+                c,s=math.cos(a['yaw']),math.sin(a['yaw']);along=c*dx+s*dy;lateral=-s*dx+c*dy
+                fence=self.profile['fence']
+                if (not fence['along_min_m']<=along<=fence['along_max_m']
+                    or abs(lateral)>fence['lateral_abs_m']
+                    or abs(self.position[2]-a['origin'][2])>fence['height_abs_m']):
+                    self.failed='Measured SLAM body pose left finite route fence; restart after review'
+                    reasons.append(self.failed)
         if self.graph_wall is None or now - self.graph_wall >= TIMEOUT:
             reasons.append('ROS publisher graph check is stale')
         if not self.graph['slam']:
@@ -155,6 +182,9 @@ class CommandGate:
                 reasons.append(f'{name} is missing, stale, or inconsistent')
         healthy = not reasons
         command = [max(-limit, min(limit, value)) for value, limit in zip(self.requested, LIMITS)] if healthy else [0., 0., 0.]
+        if self.profile is not None:
+            scoped_limits=[self.profile['max_speed_mps'],self.profile['max_speed_mps'],self.profile['max_yaw_rate_radps']]
+            command=[max(-limit,min(limit,value))for value,limit in zip(command,scoped_limits)]
         return {'state': 'failed' if self.failed else 'ready' if healthy else 'hold',
                 'healthy': healthy, 'stop_requested': not healthy or not any(command),
                 'reason': '; '.join(dict.fromkeys(reasons)) if reasons else 'Fresh SLAM/SCAN inputs',
@@ -198,7 +228,7 @@ class CommandFile:
 def make_node(rclpy, writer, acceptance_path, acceptance):
     from rclpy.node import Node
     from rclpy.clock import Clock, ClockType
-    from rclpy.qos import qos_profile_sensor_data
+    from rclpy.qos import qos_profile_sensor_data, QoSProfile, DurabilityPolicy
     from geometry_msgs.msg import Twist
     from nav_msgs.msg import Odometry
     from rosgraph_msgs.msg import Clock as ClockMessage
@@ -208,11 +238,16 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
         def __init__(self):
             super().__init__('teacher_scan_slam_bridge')
             self.set_parameters([rclpy.parameter.Parameter('use_sim_time', value=True)])
-            self.gate = CommandGate()
+            self.gate = CommandGate(acceptance.get('profile') if acceptance.get('experimental') else None)
             self.sequence = 0
             self.acceptance_checked_wall = None
             self.status_pub = self.create_publisher(String, STATUS_TOPIC, 10)
             self.stop_pub = self.create_publisher(Bool, STOP_TOPIC, 10)
+            self.safety_pub = self.create_publisher(String, '/demo/control/safety', 10)
+            if acceptance.get('experimental'):
+                self.create_subscription(String, '/demo/teacher/navigation/sensor_health', self.sensor_health, 10)
+                latched=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
+                self.create_subscription(String, '/demo/teacher/navigation/anchor', self.anchor, latched)
             self.pose_sub = self.create_subscription(Odometry, SLAM_TOPIC, self.pose, qos_profile_sensor_data)
             self.command_sub = self.create_subscription(Twist, COMMAND_TOPIC, self.command, 1)
             self.clock_sub = self.create_subscription(ClockMessage, '/clock', self.clock, qos_profile_sensor_data)
@@ -239,6 +274,31 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                               [message.linear.z, message.angular.x, message.angular.y], time.monotonic())
             self.tick()
 
+        def sensor_health(self, message):
+            try:
+                data=json.loads(message.data)
+                now=time.monotonic()
+                if (data.get('mode')!='teacher' or data.get('ground_truth_navigation_used')is not False
+                    or not -.05<=now-float(data['monotonic_wall'])<TIMEOUT):return
+                self.gate.sensor_health=data;self.gate.sensor_health_wall=now
+            except (ValueError,TypeError,KeyError):return
+
+        def anchor(self, message):
+            try:
+                data=json.loads(message.data)
+                if (data.get('schema')!=1 or data.get('frame_id')!='camera_init'
+                    or data.get('source')!=SLAM_TOPIC or data.get('ground_truth_navigation_used')is not False
+                    or data.get('run_dir')!=acceptance['run_dir'] or data.get('frozen_once')is not True
+                    or not finite_values(data.get('origin'),3)
+                    or not finite_values([data.get('yaw')],1)):return
+                frozen=json.loads((Path(acceptance['run_dir'])/'navigation_anchor.json').read_text())
+                if data!=frozen:raise ValueError('Anchor differs from frozen actual SLAM receipt')
+                if self.gate.anchor is not None and self.gate.anchor!=data:
+                    self.gate.failed='Attempt to change finite route SLAM anchor'
+                    return
+                self.gate.anchor=data
+            except (OSError,ValueError,TypeError,KeyError):return
+
         def publishers(self, topic, allowed):
             infos = self.get_publishers_info_by_topic(topic)
             names = [item.node_namespace.rstrip('/') + '/' + item.node_name for item in infos]
@@ -263,6 +323,7 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             if rclpy.ok():
                 self.status_pub.publish(String(data=json.dumps(status, ensure_ascii=False, allow_nan=False)))
                 self.stop_pub.publish(Bool(data=status['stop_requested']))
+                self.safety_pub.publish(String(data=json.dumps({**status,'mode':'teacher','source':'scan_slam'},allow_nan=False)))
 
         def tick(self):
             now = time.monotonic()
@@ -272,6 +333,10 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 self.gate.graph = {'slam': slam_ok, 'command': command_ok,
                                    'details': {'slam_publishers': slam_nodes, 'command_publishers': command_nodes}}
                 self.gate.graph_wall = now
+                if acceptance.get('experimental'):
+                    health_ok,_=self.publishers('/demo/teacher/navigation/sensor_health','teacher_navigation_sensor_gate')
+                    anchor_ok,_=self.publishers('/demo/teacher/navigation/anchor','teacher_navigation_request')
+                    self.gate.scope_graph_ok=health_ok and anchor_ok
             if self.acceptance_checked_wall is None or now - self.acceptance_checked_wall >= .1:
                 self.acceptance_checked_wall = now
                 try:
@@ -283,6 +348,9 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             status = self.envelope(now)
             try:
                 writer.write(status)
+                if acceptance.get('experimental'):
+                    with(Path(acceptance['run_dir'])/'navigation_command_history.jsonl').open('a')as stream:
+                        stream.write(json.dumps(status,ensure_ascii=False,allow_nan=False)+'\n')
             except OSError as error:
                 self.gate.failed = f'Command file write failed: {error}'
                 status = self.envelope(now)
@@ -304,7 +372,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--acceptance', type=Path, default=ROOT / 'runs/acceptance.json')
     parser.add_argument('--command-file', type=Path,
-                        default=Path(os.environ.get('TEACHER_COMMAND_FILE', str(ROOT / 'runs/nav_command.json'))))
+                        default=None)
     parser.add_argument('--prepare', action='store_true', help='Review the gate and print an UNVERIFIED receipt; start no ROS nodes')
     args, ros_args = parser.parse_known_args()
     try:
@@ -312,6 +380,10 @@ def main():
         refusal = None
     except RuntimeError as error:
         acceptance, refusal = None, str(error)
+    if args.command_file is None:
+        args.command_file=Path(acceptance['run_dir'])/'navigation_command.json'if acceptance and acceptance.get('experimental')else Path(os.environ.get('TEACHER_COMMAND_FILE',str(ROOT/'runs/nav_command.json')))
+    if acceptance and acceptance.get('experimental') and args.command_file.resolve()!=Path(acceptance['run_dir'])/'navigation_command.json':
+        refusal='Finite navigation command output must belong to this run: navigation_command.json'
     if args.prepare:
         print(json.dumps({'status': 'prepared_unverified', 'navigation': 'unverified', 'starts_ros': False,
                           'writes_commands': False, 'runtime_eligible': acceptance is not None, 'refusal': refusal,

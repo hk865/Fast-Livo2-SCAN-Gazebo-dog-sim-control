@@ -76,6 +76,7 @@ def scheduled_request(schedule,t):
 
 def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
     """Read only SLAM/SCAN-gated command envelopes; stale input parks via policy."""
+    if sequence_state is not None:sequence_state.update(read_monotonic_wall=time.monotonic(),read_status='rejected_or_missing')
     try:
         data=json.loads(path.read_text())
         if data.get('schema_version')!=1:raise ValueError('Unsupported command schema')
@@ -92,10 +93,12 @@ def navigation_command(path,world_time,acceptance_sha,sequence_state=None):
         values=np.asarray(data['command'],dtype=float)
         if values.shape!=(3,)or not np.isfinite(values).all():raise ValueError('Invalid command values')
         if not isinstance(data.get('stop_requested'),bool):raise ValueError('Missing stop state')
-        if sequence_state is not None:sequence_state.update(sequence=sequence,hash=envelope_hash)
+        if sequence_state is not None:sequence_state.update(sequence=sequence,hash=envelope_hash,source=data['source'],envelope_sim_time=float(data['sim_time']),
+            envelope_monotonic_wall=float(data['monotonic_wall']),wall_age_s=wall_age,sim_age_s=sim_age,healthy=data.get('healthy'),stop_requested=data['stop_requested'],read_status='valid_but_unhealthy_or_stale')
         if data.get('healthy')is not True or not (-.05<=wall_age<=.3 and -.05<=sim_age<=.3):
             return np.zeros(3),True,'SLAM/SCAN input stale or unhealthy'
         if (abs(values)>np.array([.3,.2,.3])+1e-8).any():raise ValueError('Command exceeds reviewed bounds')
+        if sequence_state is not None:sequence_state['read_status']='accepted'
         if data['stop_requested']:return np.zeros(3),False,'SLAM/SCAN requested controlled stop'
         return values,False,'Fresh SLAM/SCAN command'
     except FileNotFoundError:return np.zeros(3),True,'Waiting for SLAM/SCAN command file'
@@ -234,6 +237,7 @@ def main():
                      'command_expired':command_expired,'command_age_sim_s':t-last_command_t,
                      'command_source':metadata.get('command_source','scripted simulation test'),'command_reason':command_reason,
                      'physical_test_completion_time_s':completion_time,
+                     'navigation_envelope':navigation_sequence.copy()if args.test=='navigation'else None,
                      'observation_source':metadata['observation_source']}
                 rows.append(row);stream.write(json.dumps(row,allow_nan=False)+'\n')
                 if len(rows)%10==0 or done:atomic_json(args.run/'state.json',row)
