@@ -17,7 +17,9 @@ def main():
     a.add_argument('--terrain',choices=['flat','ramp_up','ramp_down','step05','step10','step05_continue','step10_continue'],default='flat')
     a.add_argument('--sensors',action='store_true'); a.add_argument('--camera-only',action='store_true')
     a.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'),help='Override only the collision-free overview camera world pose')
+    a.add_argument('--overview-fov',type=float,default=None,help='Optional diagnostic camera horizontal field of view in radians; no image warp')
     a.add_argument('--render-engine',choices=['ogre','ogre2'],default='ogre2');args=a.parse_args()
+    if args.overview_fov is not None and not 0<args.overview_fov<math.pi:a.error('--overview-fov must be between 0 and pi radians')
     args.output.mkdir(parents=True,exist_ok=True)
     source=DEMO/'simulation/generated/go2_converted.sdf'
     model=copy.deepcopy(E.parse(source).getroot().find('model'))
@@ -87,6 +89,7 @@ def main():
         if args.overview_pose is not None:overview_pose=args.overview_pose
         overview_rate=10 if args.terrain.endswith('_continue')else 2
         overview_fov=1.8 if args.terrain.endswith('_continue')else 1.4
+        if args.overview_fov is not None:overview_fov=args.overview_fov
         overview=E.fromstring(f'<model name="teacher_overview_camera"><static>true</static><pose>{" ".join(map(str,overview_pose))}</pose><link name="camera_link"><sensor name="overview" type="camera"><topic>/demo/teacher/overview</topic><always_on>true</always_on><update_rate>{overview_rate}</update_rate><gz_frame_id>teacher_overview_frame</gz_frame_id><camera><horizontal_fov>{overview_fov}</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>.1</near><far>100</far></clip><camera_info_topic>/demo/teacher/overview_info</camera_info_topic></camera></sensor></link></model>')
         w.append(overview)
     if args.terrain.startswith('step'):
@@ -102,7 +105,10 @@ def main():
                          'publisher':'gz::sim::systems::JointStatePublisher','enabled':args.sensors,'reads':'native physics joint position/velocity','rate_hz':200,'actuation':False}}
     if args.sensors or args.camera_only:
         sensor_contract['overview']={'gz_topic':'/demo/teacher/overview','ros_topic':'/demo/teacher/overview','frame':'teacher_overview_frame',
-                                     'world_pose':overview_pose,'rate_hz':overview_rate,'width':640,'height':480,'horizontal_fov':overview_fov,'collision_geometry':False}
+                                     'world_pose':overview_pose,'rate_hz':overview_rate,'width':640,'height':480,'horizontal_fov':overview_fov,'collision_geometry':False,
+                                     'gz_camera_info_topic':'/demo/teacher/overview_info','ros_camera_info_topic':'/demo/teacher/overview_info',
+                                     'camera_model':'default pinhole; no SDF distortion configured; confirm with actual CameraInfo',
+                                     'purpose':'observer only; never pair this image with vehicle SLAM camera intrinsics'}
     for link in model.findall('link'):
         for sensor in link.findall('sensor'):
             kind=sensor.get('type')
@@ -124,7 +130,11 @@ def main():
                 entry['gz_points_topic']=entry['gz_topic']+'/points';entry['ros_topic']='/demo/teacher/raw_lidar'
                 entry['cloud_registered_full']=False
                 entry['samples']={'horizontal':int(sensor.findtext('lidar/scan/horizontal/samples','0')),'vertical':int(sensor.findtext('lidar/scan/vertical/samples','0'))}
-            else:entry['ros_topic']='/demo/camera'
+            else:
+                entry['ros_topic']='/demo/camera';entry['gz_camera_info_topic']=sensor.findtext('camera/camera_info_topic')
+                entry['ros_camera_info_topic']='/demo/camera_info';entry['camera_model']='default pinhole; no SDF distortion configured; confirm with actual CameraInfo'
+                entry['horizontal_fov']=float(sensor.findtext('camera/horizontal_fov'))
+                entry['width']=int(sensor.findtext('camera/image/width'));entry['height']=int(sensor.findtext('camera/image/height'))
             sensor_contract[key]=entry
     (args.output/'sensor_contract.json').write_text(json.dumps(sensor_contract,indent=2)+'\n')
     bridge=[]
@@ -134,6 +144,8 @@ def main():
     if args.sensors or args.camera_only:
         bridged('/demo/camera','/demo/camera','gz.msgs.Image','sensor_msgs/msg/Image')
         bridged('/demo/teacher/overview','/demo/teacher/overview','gz.msgs.Image','sensor_msgs/msg/Image')
+        bridged('/demo/camera_info','/demo/camera_info','gz.msgs.CameraInfo','sensor_msgs/msg/CameraInfo')
+        bridged('/demo/teacher/overview_info','/demo/teacher/overview_info','gz.msgs.CameraInfo','sensor_msgs/msg/CameraInfo')
         bridged('/clock','/clock','gz.msgs.Clock','rosgraph_msgs/msg/Clock')
     if args.sensors:
         bridged('/imu/data','/livox/imu','gz.msgs.IMU','sensor_msgs/msg/Imu')

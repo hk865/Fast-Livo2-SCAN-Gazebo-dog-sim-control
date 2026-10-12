@@ -4,12 +4,25 @@ import argparse, io, json
 from pathlib import Path
 import rclpy
 from rclpy.qos import qos_profile_sensor_data
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CameraInfo
 from PIL import Image as PIL
 def main():
     p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--topic',default='/demo/camera');p.add_argument('--archive-stride',type=int,default=5);a=p.parse_args()
     if a.archive_stride<1:p.error('--archive-stride must be positive')
     rclpy.init();node=rclpy.create_node('teacher_real_rgb_archive');count=0
+    info_counts={}
+    def camera_info(msg,kind,topic):
+        directory=a.run/'camera_info';directory.mkdir(exist_ok=True)
+        info_counts[kind]=info_counts.get(kind,0)+1
+        record={'source':'actual Gazebo CameraInfo via ros_gz_bridge','topic':topic,'camera':kind,
+                'stamp_sec':msg.header.stamp.sec,'stamp_nsec':msg.header.stamp.nanosec,'frame':msg.header.frame_id,
+                'width':msg.width,'height':msg.height,'distortion_model':msg.distortion_model,
+                'd':list(msg.d),'k':list(msg.k),'r':list(msg.r),'p':list(msg.p),
+                'binning_x':msg.binning_x,'binning_y':msg.binning_y,'count':info_counts[kind]}
+        with (directory/(kind+'.jsonl')).open('a')as stream:stream.write(json.dumps(record)+'\n')
+        temp=directory/(kind+'.tmp');temp.write_text(json.dumps(record,indent=2)+'\n');temp.replace(directory/(kind+'.json'))
+    for kind,topic in [('vehicle','/demo/camera_info'),('overview','/demo/teacher/overview_info')]:
+        node.create_subscription(CameraInfo,topic,lambda msg,kind=kind,topic=topic:camera_info(msg,kind,topic),qos_profile_sensor_data)
     def callback(msg):
         nonlocal count
         if msg.encoding not in ('rgb8','bgr8','rgba8'):return

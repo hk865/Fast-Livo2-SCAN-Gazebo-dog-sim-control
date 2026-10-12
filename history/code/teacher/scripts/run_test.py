@@ -29,6 +29,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('tests',nargs='*',default=['stand']);p.add_argument('--sensors',action='store_true');p.add_argument('--camera-only',action='store_true');p.add_argument('--shadow',action='store_true');p.add_argument('--noisy',action='store_true');p.add_argument('--repeat',type=int,default=1)
     p.add_argument('--spawn',type=float,nargs=4,metavar=('X','Y','Z','YAW'));p.add_argument('--label',default='')
     p.add_argument('--overview-pose',type=float,nargs=6,default=None,metavar=('X','Y','Z','ROLL','PITCH','YAW'))
+    p.add_argument('--overview-fov',type=float,default=None)
     p.add_argument('--renderer',choices=['software','hardware'])
     p.add_argument('--render-engine',choices=['ogre','ogre2'])
     args=p.parse_args();suite=[]
@@ -48,6 +49,7 @@ def main():
             prepare=[sys.executable,str(ROOT/'simulation/prepare.py'),'--output',str(run),'--terrain',terrain]
             prepare+=['--render-engine',args.render_engine]
             if args.overview_pose is not None:prepare+=['--overview-pose',*[str(v)for v in args.overview_pose]]
+            if args.overview_fov is not None:prepare+=['--overview-fov',str(args.overview_fov)]
             if args.sensors:prepare+=['--sensors']
             if args.camera_only:prepare+=['--camera-only']
             subprocess.run(prepare,check=True,stdout=(run/'prepare.log').open('w'))

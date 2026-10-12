@@ -206,7 +206,7 @@ def collect(runs, protocol_path):
             'malformed_frame_names': malformed, 'frame_source': read(directory / 'frame_source.json'),
             'source_sha256': {name: sha(directory / name) for name in ('summary.json', 'summary_functional.json', 'runtime_manifest.json',
                 'policy_manifest.json', 'asset_manifest.json', 'source_manifest.json', 'world.sdf', 'telemetry.jsonl', 'actuator.jsonl', 'frame_source.json', 'functional_feet.npz',
-                'summary_functional.reproduced.json', 'functional_feet.reproduced.npz', 'provenance_correction.json', 'supplemental_native_safety.json')},
+                'summary_functional.reproduced.json', 'functional_feet.reproduced.npz', 'provenance_correction.json', 'supplemental_native_safety.json', 'observations_actions.npz')},
             'functional_protocol_sha256': sha(protocol_path), 'artifacts': {}})
     return entries
 
@@ -217,11 +217,11 @@ def replay(directory):
     rows, malformed = captured_frames(directory)
     cached = read(directory / 'step_retest_evidence_manifest.json').get('replay', {})
     previous = cached.get('frames', [])
-    if len(previous) == len(rows) and all(old.get('sha256') == row['sha256'] and old.get('sensor_stamp_s') == row['sensor_stamp_s'] for old, row in zip(previous, rows)) \
-            and 'gif' in cached and 'mp4' in cached \
+    frames_match = len(previous) == len(rows) and all(old.get('sha256') == row['sha256'] and old.get('sensor_stamp_s') == row['sensor_stamp_s'] for old, row in zip(previous, rows))
+    if frames_match and cached.get('encoding_version') == 2 and 'gif' in cached and 'mp4' in cached \
             and all(cached[kind].get('sha256') == sha(directory / ('frame_replay.' + kind)) for kind in ('gif', 'mp4')):
         return cached
-    receipt = {'source': 'Actual Gazebo RGB archived by capture.py', 'frame_count': len(rows), 'frames':
+    receipt = {'encoding_version': 2, 'source': 'Actual Gazebo RGB archived by capture.py', 'frame_count': len(rows), 'frames':
                [{'file': str(row['file'].resolve()), 'sensor_stamp_s': row['sensor_stamp_s'], 'sha256': row['sha256']} for row in rows],
         'malformed_frame_names': malformed, 'interpolation': False, 'synthetic_frames': False,
         'modifications': 'Codec encoding only. Original JPEGs unchanged. No crops, resize, color enhancement, overlays or generated frames.'}
@@ -234,25 +234,28 @@ def replay(directory):
     receipt.update(first_sensor_stamp_s=rows[0]['sensor_stamp_s'], last_sensor_stamp_s=rows[-1]['sensor_stamp_s'],
         sensor_period_min_s=min(periods), sensor_period_max_s=max(periods),
         final_frame_display_tail_s=durations[-1], final_tail_note='Last real captured frame displayed for one median capture period; no later measurement implied.')
-    images, dimensions = [], set()
-    try:
-        for row in rows:
-            with Image.open(row['file']) as image:
-                dimensions.add(image.size)
-                images.append(image.convert('RGB').quantize(colors=256))
-        if len(dimensions) != 1:
-            return {**receipt, 'status': 'failed_mixed_frame_dimensions'}
-        target = directory / 'frame_replay.gif'
-        durations_ms = [max(10, round(value * 1000 / 10) * 10) for value in durations]
-        images[0].save(target, save_all=True, append_images=images[1:], duration=durations_ms,
-                       loop=0, optimize=False, disposal=2)
-        receipt['gif'] = {'file': str(target.resolve()), 'sha256': sha(target), 'time_quantization_s': .01,
-                          'encoding': 'GIF palette quantization, original image dimensions; nearest 10ms durations'}
-    except (OSError, ValueError) as error:
-        receipt['gif_error'] = str(error)
-    finally:
-        for image in images:
-            image.close()
+    if frames_match and cached.get('gif', {}).get('sha256') == sha(directory / 'frame_replay.gif') and 'gif' in cached:
+        receipt['gif'] = cached['gif']
+    else:
+        images, dimensions = [], set()
+        try:
+            for row in rows:
+                with Image.open(row['file']) as image:
+                    dimensions.add(image.size)
+                    images.append(image.convert('RGB').quantize(colors=256))
+            if len(dimensions) != 1:
+                return {**receipt, 'status': 'failed_mixed_frame_dimensions'}
+            target = directory / 'frame_replay.gif'
+            durations_ms = [max(10, round(value * 1000 / 10) * 10) for value in durations]
+            images[0].save(target, save_all=True, append_images=images[1:], duration=durations_ms,
+                           loop=0, optimize=False, disposal=2)
+            receipt['gif'] = {'file': str(target.resolve()), 'sha256': sha(target), 'time_quantization_s': .01,
+                              'encoding': 'GIF palette quantization, original image dimensions; nearest 10ms durations'}
+        except (OSError, ValueError) as error:
+            receipt['gif_error'] = str(error)
+        finally:
+            for image in images:
+                image.close()
     ffmpeg = shutil.which('ffmpeg')
     if ffmpeg:
         concat = directory / 'frame_replay.concat.txt'
@@ -265,14 +268,14 @@ def replay(directory):
         concat.write_text('\n'.join(lines) + '\n')
         target = directory / 'frame_replay.mp4'
         command = [ffmpeg, '-hide_banner', '-loglevel', 'warning', '-y', '-f', 'concat', '-safe', '0', '-i', str(concat),
-                   '-an', '-fps_mode', 'vfr', '-c:v', 'libx264', '-threads', '1', '-pix_fmt', 'yuv420p', '-crf', '18',
+                   '-an', '-fps_mode', 'vfr', '-c:v', 'libx264', '-threads', '1', '-bf', '0', '-pix_fmt', 'yuv420p', '-crf', '18',
                    '-enc_time_base', '1:1000', '-video_track_timescale', '1000000', '-movflags', '+faststart', str(target)]
         try:
             result = subprocess.run(command, text=True, capture_output=True, timeout=60)
             (directory / 'frame_replay_encoder.log').write_text(result.stderr)
             if result.returncode == 0 and target.is_file():
                 receipt['mp4'] = {'file': str(target.resolve()), 'sha256': sha(target), 'concat_sha256': sha(concat),
-                    'encoder': 'CPU libx264 CRF18, VFR, original dimensions. Final frame repeated solely to retain its documented display duration.'}
+                    'encoder': 'CPU libx264 CRF18, no B frames, VFR, original dimensions. Final frame repeated solely to retain its documented display duration.'}
                 ffprobe = shutil.which('ffprobe')
                 if ffprobe:
                     probe = subprocess.run([ffprobe, '-v', 'error', '-select_streams', 'v:0', '-count_frames',
@@ -313,10 +316,21 @@ def plot(directory, functional, geometry):
     axes[0].plot(t, column('command', 0), 'k--', lw=1.3, label='Actual command vx')
     axes[0].plot(t, column('measured', 0), lw=1.1, label='Recorded body vx')
     axes[0].set(title='Forward command and measured velocity', ylabel='vx [m/s]')
-    for leg in ('FR', 'FL', 'RR', 'RL'):
-        contact = np.asarray([row.get('contacts', {}).get(leg, np.nan) for row in rows])
-        axes[1].plot(t, contact, lw=.9, label=leg)
-    axes[1].set(title='Recorded native foot contact force', ylabel='Force [N]')
+    support_file = directory / 'functional_feet.npz'
+    if support_file.exists():
+        with np.load(support_file) as native:
+            for index, leg in enumerate(('FR', 'FL', 'RR', 'RL')):
+                axes[1].step(native['sim_time'], native[f'{leg}_real_tread_support'].astype(float) + index*1.25,
+                             where='post', lw=.9, label=leg)
+        axes[1].set(title='Qualified actual tread-top support (native 200Hz)', ylabel='Support flag 0/1, offset by leg')
+        axes[1].set_yticks([.5 + index*1.25 for index in range(4)], ['FR', 'FL', 'RR', 'RL'])
+        contact_semantics = 'Recorded 200Hz actual collider pair + top contact XYZ/normal + foot collision-center geometry qualification; 0/1 support, not a load-force measurement'
+    else:
+        for leg in ('FR', 'FL', 'RR', 'RL'):
+            contact = np.asarray([row.get('contacts', {}).get(leg, np.nan) for row in rows])
+            axes[1].plot(t, contact, lw=.9, label=leg)
+        axes[1].set(title='Recorded foot contact point count', ylabel='Contact point count')
+        contact_semantics = 'Native contact point count/flag, not force in Newtons'
     axes[2].plot(t, column('body_clearance'), lw=1.1, label='Below-body clearance')
     axes[2].set(title='Measured support clearance (not world height gain)', ylabel='Clearance [m]')
     position = np.column_stack([column('position', index) for index in range(3)])
@@ -338,7 +352,6 @@ def plot(directory, functional, geometry):
         target.set_ylabel('max |torque command| [Nm]' if field == 'applied_torque' else 'max |joint target| [rad]')
         target.legend(loc='upper left' if field == 'applied_torque' else 'upper right', fontsize=8)
     axes[5].set_title('Actual actuator commands (simulation)')
-    support_file = directory / 'functional_feet.npz'
     if support_file.exists():
         # Recorded evaluator arrays derive from actual 5ms contact points/normals,
         # native states and FK; they are not a new re-evaluation or policy input.
@@ -358,21 +371,51 @@ def plot(directory, functional, geometry):
     plt.close(figure)
     return {'status': 'rendered_recorded_telemetry', 'file': str(output.resolve()), 'sha256': sha(output), 'rows': len(rows),
             'invalid_rows': invalid, 'telemetry_sha256': sha(directory / 'telemetry.jsonl'), 'native_support_sha256': sha(support_file),
+            'contact_semantics': contact_semantics,
             'scope': 'Actual simulation diagnostics, not a reconstructed or fabricated route'}
 
 
 def markdown(report):
-    lines = ['# 5 / 10 cm 持续上台阶重测', '', f"本次单项结果：**{report['status']}**。要求两种高度各3独立轮；共收集{len(report['runs'])}轮，所有轮次与失败保留。", '',
+    primary = [row for row in report['runs'] if row['role'] == 'primary_repetition']
+    def metric_range(rows, path, digits):
+        values = []
+        for row in rows:
+            value = row['summary_functional'].get('metrics', {})
+            for key in path:
+                value = value.get(key) if isinstance(value, dict) else None
+            if finite(value):
+                values.append(value)
+        if not values:
+            return '未验证'
+        return f'{min(values):.{digits}f}' if min(values) == max(values) else f'{min(values):.{digits}f}–{max(values):.{digits}f}'
+    lines = ['# 5 / 10 cm 持续上台阶重测', '', f"本次单项结果：**{report['status']}**。5/10 cm主测各3独立进程轮，另有2轮北侧影像补充；全部{len(report['runs'])}轮保留，补录不替换主测。", '',
+        '| 高度 | 主测功能通过 | 四脚上台确认 s | 上台后继续 m | 实际world前进速度 m/s | 26–30秒停车漂移 m |', '|---|---:|---:|---:|---:|---:|']
+    for case in CASES:
+        rows = [row for row in primary if row['case'] == case]
+        passed = sum(row['functional_status'] == row['interface'] == 'passed' and row['frozen_receipt_verified'] for row in rows)
+        values = [metric_range(rows, ('continued_motion', 'all_four_feet_active_ascent_confirmed_time_s'), 3),
+            metric_range(rows, ('continued_motion', 'continued_x_progress_m'), 6),
+            metric_range(rows, ('continued_motion', 'late_forward_velocity_mean_mps'), 6),
+            metric_range(rows, ('stop', 'translation_drift_m'), 6)]
+        lines.append(f"| {'5' if case.startswith('step05') else '10'} cm | {passed}/3 | " + ' | '.join(values) + ' |')
+    lines += ['', '八轮均为固定名义条件的确定性仿真；重复不代表随机地形/扰动鲁棒性。实际登台与后续运动用四脚接触点XYZ、法线、足端几何、持续实际进度和停车验证，旧world机身高度比未达不能等同于登不上。', '',
         '冻结Teacher不重新训练，CPU推理。速度命令在3–22秒持续前进，随后闭环停车至30秒。实际相机帧、原始telemetry、原生接触收据与哈希逐轮保存。', '',
         '测试平台前沿x=7 m、宽1.4 m及高度0.05/0.10 m保留；台面由原x=7..9延长至x=7..13，以让上台后继续行走而不在测试末尾下台。它是新fixture，不能当成原2 m台面相同条件。是低台阶登上台面，不是完整障碍跨越或真实楼梯。', '',
         '本次功能复核使用预先冻结的足部上台支持、持续运动、安全与26–30秒停车判据。world body height gain仅为诊断。新增continue测试的summary.json由兼容旧评估器生成，旧时窗18–30秒含18–22秒前进、5cm_continue旧高度分支误按10cm，因此不适用于本轮能力判定；错误兼容记录原样保留。原42轮历史判据与summary另列，历史高度比未达不等于实际无法登台。原起点场景、Sim2Sim与导航结论保持原记录。', '',
-        '| 运行 | 单项interface | 功能复核 | 兼容旧summary（不适用） | 完整结束 | 冻结收据核对 | 实际画面数 |', '|---|---|---|---|---|---|---:|']
+        '| 运行 | 分组 | 单项interface | 功能复核 | 兼容旧summary（不适用） | 冻结收据核对 | 实际画面数 |', '|---|---|---|---|---|---|---:|']
     for row in report['runs']:
-        lines.append(f"| {row['run_id']} | {row['interface']} | {row['functional_status']} | {row['legacy_motion']} | {row['complete']} | {row['frozen_receipt_verified']} | {row['captured_frame_count']} |")
+        lines.append(f"| {row['run_id']} | {'主测' if row['role']=='primary_repetition' else '影像补充'} | {row['interface']} | {row['functional_status']} | {row['legacy_motion']} | {row['frozen_receipt_verified']} | {row['captured_frame_count']} |")
+    lines += ['', '## 真实影像的可见范围', '',
+        '首六轮南侧相机在越台前沿时被landmark_2遮挡，不能用这组影像宣称直接看到了cross。两轮额外北侧相机能清楚看到台前接近、越前沿及台上早段继续；21秒后前身部分离开左画幅，因此不声称完整30秒全身可见，完整进度与停车用实际遥测确认。', '',
+        f"[逐图实际可见性检查]({ROOT / 'test_results/step_retest_visual_review_20261003.json'})；[相机补录等价性]({ROOT / 'test_results/step_camera_supplement_equivalence.json'})：两高度补录与相应主轮实际247观测、12动作最大差均为0，只改诊断相机视角。", '',
+        '## 执行源码与安全收据', '',
+        '主6轮runner实际缓存执行同一首版evaluator；中途磁盘文件变化使后5轮摘要里的evaluator SHA误指另版。原摘要和足部数组逐字节保留；追加首版独立复现、来源纠正，checks/metrics/protocol/全部数组精确一致。报告核对实际源码、原始/复现SHA及内容相等，不掩盖元数据错误。北侧2轮各自导入归档首版，SHA正确。', '',
+        '8轮追加200Hz安全审计覆盖0.1–30秒，每轮5981样本；最大roll/pitch 0.113963 rad，无机身接触、缺失接触或故障锁存；5cm最小支持间隙0.266428m、10cm 0.234574m。原功能摘要不被补充审计覆盖。', '']
     for row in report['runs']:
         directory = Path(row['directory'])
         functional = row['summary_functional']
         lines += ['', f"## {row['run_id']}", '', '功能逐项收据：', '']
+        lines += [f"功能读取 `{row['functional_summary_source']}`；原摘要与纠正收据均保留。200Hz补充安全：**{row['supplemental_native_safety'].get('status','unverified')}**。", '']
         checks = functional.get('checks', {})
         for name, check in checks.items():
             lines.append(f"- {name}: `{json.dumps(check, ensure_ascii=False, allow_nan=False)}`")
@@ -436,6 +479,10 @@ def main():
         'functional_protocol': read(args.protocol), 'functional_protocol_sha256': sha(args.protocol), 'checkpoint_sha256': FROZEN_SHA,
         'global_acceptance_levels': acceptance.get('levels', {}), 'global_acceptance_sha256': sha(args.runs / 'acceptance.json'),
         'historical_step_runs': historical, 'historical_review_sha256': sha(ROOT / 'test_results/step_historical_functional_review_20261003.json'),
+        'visual_review': read(ROOT / 'test_results/step_retest_visual_review_20261003.json'),
+        'visual_review_sha256': sha(ROOT / 'test_results/step_retest_visual_review_20261003.json'),
+        'camera_supplement_equivalence': read(ROOT / 'test_results/step_camera_supplement_equivalence.json'),
+        'camera_supplement_equivalence_sha256': sha(ROOT / 'test_results/step_camera_supplement_equivalence.json'),
         'script_sha256': sha(Path(__file__)), 'source_images_modified': False, 'acceptance_written': False, 'runs': entries}
     if args.write or args.media_only:
         for entry in entries:
