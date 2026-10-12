@@ -29,6 +29,9 @@ def profile_name(profile):
 def expected_profile(here,name=PROFILE_NAME):
     from mission46_profile import required_source_files
     result=json.loads(baseline_profile_path(here,name).read_text())
+    # Exact user-authorized shared cumulative budget; all behavioral fields preserved.
+    result['raw_budget_bytes']=80_000_000_000
+    result['raw_storage_budget']['max_run_bytes']=80_000_000_000
     result['pipeline']['mode']='serial'
     result.update(controller_selector=VERSION,profile_version=VERSION,prospective_change=CHANGE,
         # Preserve the original profile bytes, including its historical source
@@ -87,6 +90,8 @@ def normal_form(profile,here):
                 'global_route_reference_contract','route_prior_source','pipeline'):
         result[key]=copy.deepcopy(base[key])
     result.pop('continuous_route_contract',None);result.pop('known_scene_localization_contract',None)
+    result['raw_budget_bytes']=base['raw_budget_bytes']
+    result['raw_storage_budget']['max_run_bytes']=base['raw_storage_budget']['max_run_bytes']
     return result
 def validate_full46(profile,here):
     from mission46_profile import validate_profile

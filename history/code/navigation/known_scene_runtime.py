@@ -91,9 +91,10 @@ def main():
     from rclpy.node import Node
     from rclpy.clock import Clock,ClockType
     from rclpy.qos import qos_profile_sensor_data
-    from sensor_msgs.msg import PointCloud2
+    from sensor_msgs.msg import PointCloud2, Imu
     from nav_msgs.msg import Odometry
     from std_msgs.msg import String
+    from rosgraph_msgs.msg import Clock as ClockMessage
     ap=argparse.ArgumentParser();ap.add_argument('--run',type=Path,required=True)
     args,ros=ap.parse_known_args();run=args.run.resolve();here=Path(__file__).resolve().parent
     sys.path.append(str(here.parent))
@@ -112,7 +113,7 @@ def main():
             reference_path=run/'known_scene_reference.json'
             reference=SceneReference.load(reference_path,sha(reference_path),sha(run/'world.sdf'))
             self.matcher=KnownSceneMatcher(reference)
-            from known_scene_diagnostic_capture import BoundedSourceFrames
+            from event_aware_source_capture import BoundedSourceFrames
             self.diagnostic_capture=BoundedSourceFrames(run)
             self.worker=MatcherWorker(self.matcher,self.diagnostic_capture)
             self.join=None;self.slots=OrderedDict();self.last_published=-1;self.last_submit=-1
@@ -135,6 +136,15 @@ def main():
                 ('body',Odometry,'/demo/slam/raw_body_odom'),('lidar',Odometry,'/demo/slam/raw_lidar_odom'),
                 ('mapper',Odometry,'/aft_mapped_to_init')]:
                 self.create_subscription(typ,topic,lambda m,k=role:self.receive(k,m),qos_profile_sensor_data)
+            # Data-only event observer; original matcher and publishers unchanged.
+            self.create_subscription(String,'/demo/teacher/mission46/state',
+                lambda m:self.diagnostic_capture.observe_mission(m.data,int(self.get_clock().now().nanoseconds)),10)
+            self.create_subscription(String,'/demo/obstacle/state',
+                lambda m:self.diagnostic_capture.observe_obstacle(m.data,int(self.get_clock().now().nanoseconds)),10)
+            for role,typ,topic in [('imu_source',Imu,'/livox/imu'),
+                    ('imu_relay',Imu,'/demo/teacher/slam/imu'),('clock',ClockMessage,'/clock')]:
+                self.create_subscription(typ,topic,lambda m,k=role:self.diagnostic_capture.observe_aux(
+                    k,m,int(self.get_clock().now().nanoseconds)),qos_profile_sensor_data)
             self.create_timer(.05,self.tick,clock=Clock(clock_type=ClockType.STEADY_TIME))
         def load_witness(self):
             p=run/'known_scene_runtime_witness.json'
@@ -143,6 +153,7 @@ def main():
             atomic(run/'known_scene_witness_validation.json',status)
             if not status['valid']:raise RuntimeError('Loaded producer/stage witness rejected: '+str(status['reasons']))
             self.join=ExactSourceJoin(status);self.loaded_witness=True
+            self.diagnostic_capture.configure_witness(status,self.join._check)
         def idle_or_stopped(self,body,initial=False):
             p=run/'navigation_status.json'
             try:status=json.loads(p.read_text())
@@ -169,7 +180,9 @@ def main():
             return ns-self.stop_since_ns>=100_000_000
         def receive(self,role,msg):
             ns=stamp_ns(msg);clock=self.get_clock().now().nanoseconds
-            if self.join is not None and role in self.join.ROLES:self.join.put(role,msg)
+            if self.join is not None and role in self.join.ROLES:
+                accepted=self.join.put(role,msg)
+                if accepted:self.diagnostic_capture.observe_source(self.join,ns,int(clock))
             if role not in ('body','lidar','registered') or ns<=self.last_published:return
             slot=self.slots.setdefault(ns,{});slot[role]=(msg,time.monotonic())
             while len(self.slots)>12:self.slots.popitem(last=False)
@@ -224,6 +237,7 @@ def main():
             # One small exact published-body witness; no retained cloud payload.
             self.last_complete_body=(slot['body'][0],time.monotonic(),ns)
             self.bundle_history.write(json.dumps(metadata,allow_nan=False)+'\n')
+            self.diagnostic_capture.observe_metadata(metadata,int(clock))
             for key in list(self.slots):
                 if key<=ns:del self.slots[key]
         def tick(self):
@@ -305,10 +319,7 @@ def main():
             atomic(run/'known_scene_status.json',status)
         def close(self):
             clean=self.worker.close()
-            if clean:self.diagnostic_capture.close()
-            else:atomic(run/'known_scene_diagnostic_capture_receipt.json',dict(schema='known_scene_diagnostic8MiB_receipt/v1',
-                status='NONFINAL_WORKER_NOT_DRAINED',final=False,worker_drained=False,
-                maximum_groups=2,maximum_bytes=8*1024*1024,navigation_verified=False))
+            self.diagnostic_capture.close(worker_drained=clean)
             self.callback_writer.close()
             self.history.close();self.bundle_history.close();self.decision_history.close();self.release_history.close()
             atomic(run/'known_scene_exit.json',dict(worker_drained=clean,bundles=self.bundle_count,

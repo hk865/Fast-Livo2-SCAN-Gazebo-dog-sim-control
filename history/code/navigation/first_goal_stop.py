@@ -221,7 +221,7 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
     from startup_trace import read_live_json
     run = Path(run)
     # Caps and original failures precede a success observation.
-    if run_output_bytes >= 5_000_000_000:
+    if run_output_bytes >= 6_000_000_000:
         return dict(stop=True, reason='new_output_cap', navigation_PASS=False)
     result = read_live_json(run/'R33_INITIALIZATION_RESULT.json')
     waiting = None
@@ -243,12 +243,16 @@ def first_goal_stop_decision(run, clock_ns, wall_elapsed, run_output_bytes):
         return dict(stop=True, reason='actual_original_mission_failed', actual_mission_status=mission, navigation_PASS=False)
     if isinstance(status, dict) and status.get('state') in ('failed', 'aborted'):
         return dict(stop=True, reason='actual_original_navigation_failed', actual_status=status, navigation_PASS=False)
-    if clock_ns >= 1_500_000_000_000:
-        return dict(stop=True, reason='native1500s_original_route_cutoff', navigation_PASS=False)
-    if wall_elapsed >= 9090:
-        return dict(stop=True, reason='wall9090s_original_route_cutoff', navigation_PASS=False)
-    # Original coordinator and worker own full-route completion and final hold.
-    # Ordinary region passage is progress; it never terminates this expanded run.
+    if clock_ns >= 900_000_000_000:
+        return dict(stop=True, reason='native900s_diagnostic_total_cutoff', navigation_PASS=False)
+    if wall_elapsed >= 5490:
+        return dict(stop=True, reason='wall5490s_diagnostic_total_cutoff', navigation_PASS=False)
+    # Only after all original native/mission/navigation failures and caps.
+    # The separate event window begins at the actual navigation_f1_f3 mission.
+    from event_aware_source_capture import diagnostic_stop_hint
+    hint=diagnostic_stop_hint(run,clock_ns)
+    if hint is not None:return hint
+    # Original coordinator and worker retain all route and completion semantics.
     return dict(stop=False, navigation_PASS=False, initialization_wait=waiting)
 
 

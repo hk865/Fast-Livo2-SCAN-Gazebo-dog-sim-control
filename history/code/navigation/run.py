@@ -196,6 +196,17 @@ def prepare(run,args):
     write_new(run/'known_scene_reference.json',build_known_scene_reference(run/'world.sdf'))
     from scan_runtime_parameters import parameters as scan_parameters
     write_new(run/'v34_scan_overrides.yaml',{'scan_planner_node':{'ros__parameters':scan_parameters(p)}})
+    # Bind event capture before the one-time source archive/scope freeze.
+    capture=json.loads((HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json').read_text())
+    capture['run_id']=run.name
+    capture['authorization']['delegation']='root authorized original autonomous route event capture'
+    capture['authorization']['runtime_started_by_reviewer']=False
+    for item in capture['source_bindings']:
+        if sha(item['path'])!=item['sha256']:raise RuntimeError('Frozen event source binding changed: '+item['role'])
+    for role,path in [('diagnostic_stop_owner',HERE/'first_goal_stop.py'),
+                      ('sensor_contract',run/'sensor_contract.json')]:
+        capture['source_bindings'].append(dict(role=role,path=str(path.resolve()),sha256=sha(path)))
+    write_new(run/'known_scene_event_capture_contract.json',capture)
     scope=module(HERE/'pid_scope.py','closed_loop_prepare_'+uuid.uuid4().hex)
     receipt=scope.prepare(run,p)
     ramp_contract=None
@@ -279,8 +290,10 @@ def prepare(run,args):
         plan['bounded_shadow_sampling']={'contract_path':str(contract_path),'contract_sha256':sha(contract_path),'groups':[7,8],
             'maximum_total_bytes':24*1024**2,'collector_source_sha256':sha(HERE/'bounded_shadow_capture.py'),'control_allowed':False}
         plan['wall_budget_s']=min(plan['wall_budget_s'],480.)
-    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=1500,max_wall_seconds=9090,new_output_cap_bytes=5000000000,original_profile_duration_preserved=duration,no_GT_carrier=True)
-    plan['wall_budget_s']=9090.
+    plan['event_aware_source_capture']=dict(contract_path=str(run/'known_scene_event_capture_contract.json'),contract_sha256=sha(run/'known_scene_event_capture_contract.json'),window_native_seconds=90,groups=5,total_logical_and_allocated_cap_bytes=24*1024**2,diagnostic_only=True,profile_diagnostic_metadata='historical2groups8MiB retained; effective event contract overrides capture diagnostics only',file_sha256_kind='exact_indented_file_bytes',group_contract_sha256_kind='canonical_sorted_compact_JSON_with_newline')
+    plan['selected_policy_binding']=json.loads((run/'selected_policy_binding.json').read_text())
+    plan['R33_original_startup']=dict(contract_path=str(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),contract_sha256=sha(HERE/'R33_SHORT_STARTUP_CONTRACT.json'),max_native_seconds=startup['max_native_seconds'],max_wall_seconds=startup['max_wall_seconds'],new_output_cap_bytes=startup['new_output_cap_bytes'],original_profile_duration_preserved=duration,no_GT_carrier=True)
+    plan['wall_budget_s']=float(startup['max_wall_seconds'])
     from mission46_profile import required_source_files as actual_mission_sources
     actual_sources=actual_mission_sources()
     declared_sources=p['mission46_required_source_files']
@@ -292,7 +305,14 @@ def prepare(run,args):
         relocation.append(dict(original_profile_declared_path=declared,actual_executed_source_path=str(actual.resolve()),
             actual_source_sha256=sha(actual),original_declared_source_sha256=sha(declared)))
     plan['R33_original_profile_source_path_metadata_relocation']=relocation
-    plan['R33_original_profile_bytes_retained']=True
+    baseline_profile=json.loads((Path(startup['base_R36_source_root'])/'profiles/engineering_nav46.json').read_text())
+    budget_expected=json.loads(json.dumps(baseline_profile))
+    budget_expected['raw_storage_budget']['max_run_bytes']=80_000_000_000
+    budget_expected['raw_budget_bytes']=80_000_000_000
+    if p!=budget_expected:raise RuntimeError('R37 permits only80GB budget profile delta; original mission and safety fields must remain')
+    plan['R33_original_profile_bytes_retained']=False
+    plan['R37_original_profile_budget_only_delta']={'raw_budget_bytes':[50_000_000_000,80_000_000_000],'raw_storage_budget.max_run_bytes':[50_000_000_000,80_000_000_000]}
+    plan['R37_original_mission_behavior_and_safety_fields_preserved']=True
     write_new(run/'runtime_plan.json',plan)
     return plan
 
@@ -727,7 +747,7 @@ def main():
                 'owned_processes':[],'runner_sha256':sha(__file__),'source_manifest_present':(run/'source_manifest.json').exists()}
             write_new(run/'prepare_failure.json',failure);write_new(run/'run_result.json',failure)
             print(json.dumps(failure,ensure_ascii=False),flush=True);raise SystemExit(1)
-    latest=ROOT/'runs/latest_engineering_v34_r36_full_route_acceptance';tmp=ROOT/'runs'/('latest_engineering_v34_r36_full_route_acceptance.'+uuid.uuid4().hex[:8]+'.tmp')
+    latest=ROOT/'runs/latest_engineering_v34_r37_rows_event';tmp=ROOT/'runs'/('latest_engineering_v34_r37_rows_event.'+uuid.uuid4().hex[:8]+'.tmp')
     tmp.symlink_to(run.name);tmp.replace(latest)
     if args.prepare_only:
         outcome={'run':str(run),'status':'prepared_unverified','ROS_started':False,'Gazebo_started':False,

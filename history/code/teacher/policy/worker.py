@@ -213,7 +213,7 @@ def main():
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
     (args.run/'worker_ready').write_text(str(os.getpid()))
-    stream=(args.run/'telemetry.jsonl').open('w',buffering=1);scan_stream=(args.run/'height_scan_sources.jsonl').open('w',buffering=1)if terrain_manifest else None;observations=[];actions=[];latencies=[];rows=[]
+    stream=(args.run/'telemetry.jsonl').open('w',buffering=1);scan_stream=(args.run/'height_scan_sources.jsonl').open('w',buffering=1)if terrain_manifest else None;observations=[];actions=[];latencies=[];sample_count=0;last_row=None
     try:
         conn,_=sock.accept();conn.settimeout(10)
         with conn,torch.inference_mode():
@@ -288,8 +288,8 @@ def main():
                      'navigation_envelope':navigation_sequence.copy()if args.test=='navigation'else None,
                      'sensor_feedback_used':sensor_evidence,'actor_inferred_this_frame':bool(np.isfinite(obs).all()),
                      'observation_source':metadata['observation_source']}
-                rows.append(row);stream.write(json.dumps(row,allow_nan=False)+'\n')
-                if len(rows)%10==0 or done:atomic_json(args.run/'state.json',row)
+                sample_count+=1;last_row=row;stream.write(json.dumps(row,allow_nan=False)+'\n')
+                if sample_count%10==0 or done:atomic_json(args.run/'state.json',row)
                 observations.append(obs);actions.append(action)
                 conn.sendall(response.tobytes())
                 if args.test=='worker_disconnect' and t>=7:break
@@ -302,7 +302,7 @@ def main():
         try:Path(args.socket).unlink()
         except FileNotFoundError:pass
         np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
-        atomic_json(args.run/'worker_result.json',{'completed':bool(rows),'fault':fault,'samples':len(rows),
+        atomic_json(args.run/'worker_result.json',{'completed':bool(sample_count),'fault':fault,'samples':sample_count,
             'physical_test_completion_time_s':completion_time,
-            'last_sim_time':rows[-1]['sim_time']if rows else None,'cpu_forward_ms':{'p50':float(np.median(latencies)),'p95':float(np.percentile(latencies,95)),'max':float(max(latencies))}if latencies else {}})
+            'last_sim_time':last_row['sim_time']if sample_count else None,'cpu_forward_ms':{'p50':float(np.median(latencies)),'p95':float(np.percentile(latencies,95)),'max':float(max(latencies))}if latencies else {}})
 if __name__=='__main__':main()

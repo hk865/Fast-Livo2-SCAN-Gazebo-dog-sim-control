@@ -20,6 +20,7 @@ def write(p,x):
     if not p.exists():p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
 
 def runtime_files(profile=None):
+    from policy_selection import source_files
     # Hash the actual independent core source, build settings and installed
     # artifacts, rather than claiming the protected camera core was executed.
     core_sources=sorted(p for p in (SLAM_WS/'src').rglob('*') if p.is_file() and
@@ -28,7 +29,7 @@ def runtime_files(profile=None):
                  for name in ('compile_commands.json','CMakeCache.txt')]
     schemas=sorted(HERE.glob('*diagnostic_schema.json'))
     preflight=[HERE/'PROSPECTIVE_CLOCK_HOLD_CRITERIA.json',HERE/'COMBINED_COMPUTE_CONTRACT.json',HERE/'PIPELINE_V19_CONTRACT.json',HERE/'R33_STARTUP_PREFLIGHT.json']
-    preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json']
+    preflight+=[HERE/'LOGGING_ACCELERATION_CONTRACT.json',HERE/'EVENT_CAPTURE_CONTRACT_TEMPLATE.json']
     preflight+=[HERE/'PUBLICATION_LEDGER_CONTRACT.json',HERE.parent/'corridor_tracking_v21_curvature/PUBLICATION_LEDGER_PREFLIGHT.json',HERE/'PROSPECTIVE_PUBLICATION_LEDGER_CRITERIA.json']
     preflight+=[HERE/'LOCKFREE_RESIDUAL_CONTRACT.json',HERE/'BOUNDARY_TIMING_CONTRACT.json']
     from corridor_preflight import evidence_files
@@ -39,7 +40,7 @@ def runtime_files(profile=None):
     preflight+=scan_evidence_files(profile)
     preflight+=sorted((HERE.parent/'evidence_runtime_v32').glob('*.py'))
     preflight+=sorted((HERE.parent/'evidence_runtime_v32').glob('*.json'))
-    return sorted(HERE.glob('*.py'))+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
+    return sorted(HERE.glob('*.py'))+source_files()+sorted((HERE/'profiles').glob('*.json'))+schemas+preflight+core_sources+build_files+[
         HERE/'diagnostic_baseline.json',
         SLAM_WS/'install/setup.bash',SLAM_WS/'install/local_setup.bash']+[
         NAV/n for n in ('runtime_io.py','teacher_transition.py','guard_audit.py','sensor_relay.py')]+[
@@ -76,7 +77,7 @@ def verify_scope(path,raw=None):
         mandatory=runtime_files(p)+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
             'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json',
             'navigation_slam_contract.json','sensor_sampling_contract.json','terrain_target_manifest.json','known_scene_reference.json','v34_scan_overrides.yaml','cloud_transport_manifest.json','cloud_transport.xml',
-            'source_manifest.json','navigation_source_snapshots.json','run_storage_contract.json')]
+            'source_manifest.json','navigation_source_snapshots.json','run_storage_contract.json','selected_policy_binding.json','known_scene_event_capture_contract.json')]
         if any(str(x.resolve()) not in refs for x in mandatory):raise RuntimeError('Missing frozen source or configuration')
         for source,expected in refs.items():
             if sha(source)!=expected:raise RuntimeError('Frozen closed-loop input changed '+source)
@@ -88,6 +89,8 @@ def verify_scope(path,raw=None):
         from geometry_archive import verify_geometry_archive
         source_manifest=json.loads((run/'source_manifest.json').read_text())
         verify_geometry_archive(run,refs,snapshots,source_manifest,HERE)
+        from policy_selection import verify_binding
+        verify_binding(run,refs,snapshots,source_manifest)
         a=json.loads((run/'asset_manifest.json').read_text())
         if (a['spawn']!=p['spawn'] or a['terrain']!=p['expected_asset']['terrain'] or a['sensors'] is not True
             or a['exclusive_writer']!='teacher_sim::TeacherActuator' or a['physics_step_s']!=.005 or a['decimation']!=4
@@ -155,7 +158,14 @@ def prepare(run,profile):
         if first.resolve()!=terrain.resolve():raise RuntimeError('Initial privileged layer differs from frozen policy source')
         write(run/'alternate_terrain_target_manifest.json',json.loads(alternate.read_text()))
         layer_files=[first,alternate,run/'alternate_terrain_target_manifest.json']
-    files=runtime_files(profile)+[terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
+    capture_path=run/'known_scene_event_capture_contract.json'
+    capture=json.loads(capture_path.read_text())
+    capture['source_bindings'].append(dict(role='frontend_configuration',path=str((run/'navigation_fastlivo.yaml').resolve()),sha256=sha(run/'navigation_fastlivo.yaml')))
+    capture_path.write_text(json.dumps(capture,indent=2,ensure_ascii=False,allow_nan=False)+'\n')
+    from policy_selection import selection, binding, archive_relative
+    selected_policy=selection()
+    write(run/'selected_policy_binding.json',binding(run))
+    files=runtime_files(profile)+[run/'selected_policy_binding.json',run/'known_scene_event_capture_contract.json',terrain]+layer_files+[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json','sensor_bridge.yaml',
         'navigation_profile.json','navigation_fastlivo.yaml','navigation_camera.yaml','navigation_scenario.json','terrain_target_manifest.json','sensor_sampling_contract.json','known_scene_reference.json','v34_scan_overrides.yaml','run_storage_contract.json')]
     transport=json.loads((run/'cloud_transport_manifest.json').read_text());files += [run/'cloud_transport_manifest.json',run/'cloud_transport.xml']+[Path(x) for x in transport['source_hashes']]
     slamrefs={str(x.resolve()):sha(x) for x in files if 'slam' in str(x) or 'sensor' in str(x) or x.name in ('world.sdf','asset_manifest.json')}
@@ -170,7 +180,7 @@ def prepare(run,profile):
     for source,h in list(refs.items()):
         original=Path(source)
         if original.is_relative_to(run):continue
-        rel=original.relative_to(ROOT) if original.is_relative_to(ROOT) else Path('external')/(h[:16]+'_'+original.name)
+        rel=archive_relative(original,ROOT,selected_policy)
         dest=run/'sources'/rel;dest.parent.mkdir(parents=True,exist_ok=True)
         dest.write_bytes(original.read_bytes());snapshots[source]={'snapshot':str(dest),'sha256':h}
         refs[str(dest)]=h;source_manifest[str(dest.relative_to(run/'sources'))]=h

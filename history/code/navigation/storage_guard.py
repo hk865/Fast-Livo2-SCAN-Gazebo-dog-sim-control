@@ -13,7 +13,7 @@ import time
 
 GIB = 1024**3
 SESSION = Path('/__LOCAL_HOME__/Documents/Codex/2026-10-07/task/go2_engineering_v33/STORAGE_SESSION.json')
-HARD_BYTES = 50_000_000_000  # User-approved decimal50GB,2026-10-07T12:03:15Z
+HARD_BYTES = 80_000_000_000  # User-approved decimal80GB; authority AUTHORITY.json,2026-10-09
 SOFT_BYTES = HARD_BYTES - 512 * 1024**2
 HOME_RESERVE = 100 * GIB
 ROOT_RESERVE = 80 * GIB
