@@ -122,16 +122,25 @@ class GuardReplayBuffer:
         if len(self.rows)>=512:raise ValueError('Complete native replay binding window exceeds allowance')
         binding=_binding(row);key=_array_key(binding);arrays=self.retained()
         source=np.asarray(self.node.guard_cloud)
-        if source.dtype!=np.dtype('<f8') or not source.flags.c_contiguous or source.ndim!=2 or source.shape[1]!=3:
-            raise ValueError('Actual native replay expects the original contiguous float64 XYZ layout')
-        required=source.nbytes
-        if required>BUFFER_LIMIT_B or sum(x.nbytes for x in arrays.values())+(0 if key in arrays else required)>BUFFER_LIMIT_B:
+        if source.dtype not in (np.dtype('<f4'),np.dtype('<f8')) or source.ndim!=2 or source.shape[1]!=3:
+            raise ValueError('Actual native replay requires original float32/float64 XYZ values')
+        # Native collision evaluation has already consumed this exact source.
+        # Only the evidence copy follows the receipt's existing LE float64,
+        # C-order hash format; never replace the live cloud or its input receipt.
+        required=source.size*8
+        normalize=source.dtype!=np.dtype('<f8') or not source.flags.c_contiguous
+        allocation=required if normalize or key not in arrays else 0
+        if required>BUFFER_LIMIT_B or sum(x.nbytes for x in arrays.values())+allocation>BUFFER_LIMIT_B:
             raise ValueError('Complete native replay array window exceeds allowance; no truncation')
+        if not np.isfinite(source).all():
+            raise ValueError('Actual native replay requires finite XYZ values')
+        canonical=np.array(source,dtype='<f8',order='C',copy=True) if normalize else source
+        if hashlib.sha256(memoryview(canonical.reshape(-1)).cast('B')).hexdigest()!=row['filtered_xyz_float64_sha256']:
+            raise ValueError('Actual native replay cloud/hash differs')
         cloud=arrays.get(key)
         if cloud is None:
-            cloud=np.array(source,dtype='<f8',copy=True)
-        if hashlib.sha256(memoryview(source.reshape(-1)).cast('B')).hexdigest()!=row['filtered_xyz_float64_sha256']:
-            raise ValueError('Actual native replay cloud/hash differs')
+            cloud=canonical if normalize else np.array(source,dtype='<f8',order='C',copy=True)
+            cloud.setflags(write=False)
         item=(binding,cloud);self.rows.append(item)
         if self.first is None and row['union_result']['blocked'] and not row['obstacle_hold_before']:
             self.first=item
