@@ -363,9 +363,20 @@ class PIDNavigation(TeacherNavigation):
             if len(msg.pos_pts)>512 or len(msg.knots)>516:raise ValueError('candidate_input_count_budget')
             value=payload(msg)
             value=candidate(msg,metadata,self.trajectory_association.reference_stamp,
-                self.waypoints[self.waypoint_index])
+                self.waypoints[self.waypoint_index] if self.continuous_route is None else self.trajectory_association.goal)
+            if (self.continuous_route is not None and
+                    self.scan_reference_coverage_index != self.continuous_route.next_index):
+                raise ValueError('candidate_ordered_coverage_epoch_mismatch')
             points,config,binding=self.path_admission_fence.load()
             proof=certify_curve(value,points,config)
+            if proof['allowed'] and self.continuous_route is not None:
+                index=self.scan_reference_coverage_index
+                prefix=self.continuous_route.points[index:index+2]
+                ordered_proof=certify_curve(value,prefix,config)
+                proof=dict(proof,ordered_current_leg=ordered_proof,
+                    ordered_coverage_index=index,local_body_goal=list(self.trajectory_association.goal))
+                if not ordered_proof['allowed']:
+                    proof=dict(proof,allowed=False,reason='outside_ordered_current_leg')
             if proof['allowed']:
                 begin,end=value['knots'][3],value['knots'][-4]
                 check=BSpline(value['knots'],value['pos_pts'],3)(np.linspace(begin,end,min(2000,max(2,int((end-begin)/.08)+1))))
@@ -498,6 +509,8 @@ class PIDNavigation(TeacherNavigation):
         if receipt is not None:
             self.region_arrivals.append(copy.deepcopy(receipt))
             self.evidence.append(self.run/"navigation_region_passes.jsonl",receipt)
+            self.path_admission_replan_pending=True
+            self.last_reference=-math.inf
         if ledger.missed_pass_requires_replan() and self.coverage_replan_index!=ledger.next_index:
             self.coverage_replan_index=ledger.next_index
             self.evidence.append(self.run/"navigation_coverage_replans.jsonl",dict(
@@ -531,11 +544,21 @@ class PIDNavigation(TeacherNavigation):
         delta=self.waypoints[index][:2]-start[:2]
         if np.linalg.norm(delta)<1e-6:raise ValueError("Frozen goal heading requires nondegenerate actual SLAM segment")
         return math.atan2(delta[1],delta[0])
+    def planner_goal(self):
+        ledger=self.continuous_route
+        return (self.waypoints[ledger.next_index] if ledger is not None and ledger.points is not None
+            else super().planner_goal())
+    def request_plan(self):
+        ledger=self.continuous_route
+        self.scan_reference_coverage_index=None if ledger is None else ledger.next_index
+        return super().request_plan()
     def planner_reference_points(self,goal):
         if self.continuous_route is not None:
-            points=self.continuous_route.reference_points()
+            points=self.continuous_route.reference_points(end_index=self.continuous_route.next_index)
             self.evidence.append(self.run/"navigation_global_reference_requests.jsonl",dict(
                 self.continuous_route.status(),guide_points_xyz=copy.deepcopy(points),guide_count=len(points),
+                local_body_goal=list(map(float,goal)),local_endpoint_coverage_index=self.scan_reference_coverage_index,
+                fixed_hard_target_index=self.waypoint_index,
                 frame_id="camera_init",guide_only_not_arrival=True,collision_or_support_certified=False,
                 source_pose_stamp_ns=int(self.pose_stamp),control_stamp_ns=self.get_clock().now().nanoseconds))
             return points

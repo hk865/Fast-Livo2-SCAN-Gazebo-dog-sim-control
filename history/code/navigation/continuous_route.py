@@ -182,10 +182,13 @@ class RouteProgress:
         d = self.points[index+1, :2]-self.points[index, :2]
         return math.atan2(d[1], d[0])
 
-    def reference_points(self):
+    def reference_points(self, end_index=None):
         """Original centers and fixed-leg helpers to next mandatory hard stop."""
+        end = self.target_index if end_index is None else int(end_index)
+        if not self.next_index <= end <= self.target_index:
+            raise ValueError('local guide endpoint outside ordered current span')
         points = []
-        for i in range(self.next_index, self.target_index+1):
+        for i in range(self.next_index, end+1):
             a, b = self.points[i], self.points[i+1]
             length = self.arc[i+1]-self.arc[i]
             offsets = np.arange(1., length-.5+1e-8, 1.)

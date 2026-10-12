@@ -524,11 +524,14 @@ class Navigation(Node):
         # an associated checked SCAN curve ending at this original goal.
         return [goal]
 
+    def planner_goal(self):
+        return self.waypoints[self.waypoint_index]
+
     def request_plan(self):
         if self.reference_pub.get_subscription_count() == 0:
             self.message = '等待 SCAN 规划器订阅就绪'
             return
-        goal = self.waypoints[self.waypoint_index]
+        goal = self.planner_goal()
         # SCAN REFERENCE_PATH adds grid_map.body_height to every input z. Public
         # mission waypoints are already body centers, so cancel that internal
         # convention at this boundary (without altering requested coordinates).
