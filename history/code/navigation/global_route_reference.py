@@ -53,7 +53,7 @@ class SegmentGuides:
             self.identity=identity;self.start=start.copy();self.goal=goal.copy();self.progress=0.
         elif not np.array_equal(start,self.start) or not np.array_equal(goal,self.goal):
             raise ValueError('Frozen mission leg changed under same reference identity')
-        delta=self.goal-self.start;length=float(np.linalg.norm(delta[:2]))
+        delta=self.goal-self.start;length=float(np.linalg.norm(delta[:2]));terminal_coalesced=0
         if length<=1e-6:
             points=[self.goal.tolist()];projection=0.
         else:
@@ -62,13 +62,21 @@ class SegmentGuides:
             spacing=float(settings['guide_spacing_m'])
             first=(math.floor((self.progress+settings['guide_start_ahead_m'])/spacing)+1)*spacing
             arcs=np.arange(first,length-1e-8,spacing)
-            if len(arcs)+1>settings['max_guide_points']:
+            guides=[self.start+delta*(float(s)/length) for s in arcs]
+            # A helper very near the mandatory original goal creates a short
+            # minSnap time-allocation segment. Remove only planning helpers;
+            # keep every remaining grid location and the exact original goal.
+            while guides and float(np.linalg.norm(guides[-1]-self.goal))<.5*spacing:
+                guides.pop();terminal_coalesced+=1
+            if len(guides)+1>settings['max_guide_points']:
                 raise ValueError('Planning guide count exceeds bounded contract')
-            points=[(self.start+delta*(float(s)/length)).tolist() for s in arcs]+[self.goal.tolist()]
+            points=[point.tolist() for point in guides]+[self.goal.tolist()]
         return points,dict(schema='mission_segment_planning_guides/v1',identity=list(identity),
             frame_id='camera_init',start_xyz=self.start.tolist(),original_goal_xyz=self.goal.tolist(),
             measured_projection_m=projection,planning_progress_m=self.progress,guide_count=len(points),
             guide_points_xyz=copy.deepcopy(points),guide_spacing_m=settings['guide_spacing_m'],
+            terminal_helper_min_distance_m=.5*settings['guide_spacing_m'],
+            terminal_helpers_coalesced=terminal_coalesced,
             guide_source='fixed original goal and measured SLAM segment activation',
             guide_only_not_arrival=True,collision_or_support_certified=False,
             navigation_ground_truth_used=False)

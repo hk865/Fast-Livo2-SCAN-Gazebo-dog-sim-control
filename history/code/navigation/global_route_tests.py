@@ -60,6 +60,42 @@ class GlobalReferenceChecks(unittest.TestCase):
         self.assertEqual(goal,[5.,0.,.82]);self.assertTrue(receipt['guide_only_not_arrival'])
         self.assertFalse(receipt['collision_or_support_certified'])
 
+    def test_actual_on60_near_terminal_helper_keeps_only_exact_original_goal(self):
+        # First ON60 request had length 1.00865m: its 1m helper was only
+        # 8.64mm from the mandatory goal. Regress actual camera_init geometry.
+        start=[0.002241295914149961,0.021215919002596867,0.0053291244935592934]
+        goal=[-0.007955120008738954,-0.9873690270198282,0.003191722996237475]
+        frozen_goal=goal.copy();delta=np.array(goal)-start;length=np.linalg.norm(delta[:2])
+        self.assertGreater(length,1.);self.assertLess(length,1.01)
+        helper=np.array(start)+delta/length
+        self.assertLess(np.linalg.norm(helper-goal),.009)
+        points,receipt=SegmentGuides().remaining(('actual_ON60',0),start,goal,start,SETTINGS)
+        self.assertEqual(points,[frozen_goal]);self.assertEqual(goal,frozen_goal)
+        self.assertEqual(receipt['terminal_helpers_coalesced'],1)
+        self.assertEqual(receipt['terminal_helper_min_distance_m'],.5)
+        self.assertTrue(receipt['guide_only_not_arrival'])
+        self.assertFalse(receipt['collision_or_support_certified'])
+
+    def test_long_segment_terminal_coalesce_keeps_fixed_grid_and_progress(self):
+        start=[0.,0.,.32];goal=[5.2,0.,.84];ledger=SegmentGuides()
+        first,receipt=ledger.remaining(('long',0),start,goal,start,SETTINGS)
+        expected=[[1.,0.,.42],[2.,0.,.52],[3.,0.,.62],[4.,0.,.72],goal]
+        np.testing.assert_allclose(first,expected,rtol=0,atol=1e-15)
+        self.assertEqual(first[-1],goal);self.assertEqual(receipt['terminal_helpers_coalesced'],1)
+        later,_=ledger.remaining(('long',0),start,goal,[2.2,0.,.54],SETTINGS)
+        np.testing.assert_allclose(later,expected[2:],rtol=0,atol=1e-15)
+        self.assertEqual(later[-1],goal)
+        backward,receipt=ledger.remaining(('long',0),start,goal,[1.8,0.,.5],SETTINGS)
+        self.assertEqual(backward,later);self.assertEqual(receipt['planning_progress_m'],2.2)
+
+    def test_terminal_coalesce_threshold_is_strict_and_goal_stays_exact(self):
+        for length,expected,removed in [(1.49,[1.49],1),(1.5,[1.,1.5],0),
+                                        (1.51,[1.,1.51],0),(2.01,[1.,2.01],1)]:
+            goal=[length,0.,0.]
+            points,receipt=SegmentGuides().remaining(('threshold',0),[0.,0.,0.],goal,[0.,0.,0.],SETTINGS)
+            self.assertEqual([p[0] for p in points],expected)
+            self.assertEqual(points[-1],goal);self.assertEqual(receipt['terminal_helpers_coalesced'],removed)
+
     def test_guide_progress_never_regresses_and_goal_identity_resets(self):
         ledger=SegmentGuides()
         _,first=ledger.remaining(('r',0),[0,0,0],[5,0,.5],[2.2,.1,.22],SETTINGS)

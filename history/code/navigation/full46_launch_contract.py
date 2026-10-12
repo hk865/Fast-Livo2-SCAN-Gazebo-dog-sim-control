@@ -3,9 +3,9 @@ from pathlib import Path
 import copy
 import json
 
-PROFILE_NAMES=('engineering_ipc60.json','engineering_nav60.json','engineering_nav270.json','engineering_nav46.json')
+PROFILE_NAMES=('engineering_ipc60.json','engineering_nav30.json','engineering_nav60.json','engineering_nav270.json','engineering_nav46.json')
 PROFILE_NAME=PROFILE_NAMES[0]
-DURATIONS=dict(zip(PROFILE_NAMES,(60.,60.,270.,1500.)))
+DURATIONS=dict(zip(PROFILE_NAMES,(60.,30.,60.,270.,1500.)))
 SURFACE_PARAMETERS=dict(minimum_support_points=6,minimum_mid_max_ratio=.05,
     maximum_normalized_rss_per_dof=4.,normal_variance_floor_m2=1e-8,
     original_min_eigenvalue_threshold_m2=.005)
