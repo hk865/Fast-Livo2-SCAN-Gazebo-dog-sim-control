@@ -15,7 +15,7 @@ def generate_launch_description():
     import sys
     here=Path(__file__).resolve().parent;teacher=here.parent;demo=teacher.parent
     sys.path.insert(0,str(here))
-    from scoped_profile import verify_scope
+    from scoped_profile import verify_scope,DYNAMIC_EXPERIMENTS
     run_dir=LaunchConfiguration('run_dir')
     def start(context):
         run=Path(run_dir.perform(context)).resolve();receipt=verify_scope(run/'navigation_scope.json')
@@ -47,7 +47,7 @@ def generate_launch_description():
             ExecuteProcess(cmd=['python3',str(here/'bridge.py'),'--acceptance',str(run/'navigation_scope.json'),
                                 '--command-file',str(run/'navigation_command.json'),*ros],output='screen'),
             ExecuteProcess(cmd=['python3',str(here/'request.py'),'--run',str(run),*ros],output='screen')]
-        if receipt['experiment']=='finite_flat_dynamic_stop_resume_v1':
+        if receipt['experiment'] in DYNAMIC_EXPERIMENTS:
             from dynamic.dynamic_obstacle import verify_scope as verify_dynamic_scope
             verify_dynamic_scope(run,run/'dynamic_protocol.json')
             dynamic=here/'dynamic'

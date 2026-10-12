@@ -20,7 +20,10 @@ FROZEN_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 SCHEMA = 'teacher_navigation_scope/v1'
 PROFILE = Path(__file__).with_name('flat_relative_roundtrip.json')
 DYNAMIC_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile.json'
-EXPERIMENTS = {'flat_relative_roundtrip_v1': PROFILE, 'finite_flat_dynamic_stop_resume_v1': DYNAMIC_PROFILE}
+DYNAMIC_TURN20_PROFILE = Path(__file__).parent/'dynamic/flat_dynamic_profile_turn20.json'
+DYNAMIC_EXPERIMENTS = {'finite_flat_dynamic_stop_resume_v1', 'finite_flat_dynamic_stop_resume_turn20_v1'}
+EXPERIMENTS = {'flat_relative_roundtrip_v1': PROFILE, 'finite_flat_dynamic_stop_resume_v1': DYNAMIC_PROFILE,
+              'finite_flat_dynamic_stop_resume_turn20_v1': DYNAMIC_TURN20_PROFILE}
 FLAT = ('stand', 'forward', 'backward', 'left', 'right', 'turn_positive',
         'turn_negative', 'walk_stop', 'command_timeout', 'switch')
 _cache = {}
@@ -82,7 +85,7 @@ def verify_scope(path, raw=None):
         mandatory=[reviewed_profile,ROOT/'runs/acceptance.json',ROOT/'policy/worker.py',ROOT/'policy/observation.py',
             ROOT/'policy/contract.json',ROOT/'simulation/build/libteacher_actuator.so']
         mandatory+=list(Path(__file__).parent.glob('*.py'))
-        if data['experiment']=='finite_flat_dynamic_stop_resume_v1':
+        if data['experiment']in DYNAMIC_EXPERIMENTS:
             from dynamic.prepare import runtime_files
             mandatory+=runtime_files()+[run/'dynamic_protocol.json',run/'dynamic_original_world.sdf',run/'dynamic_original_asset_manifest.json']
         mandatory+=[run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
@@ -105,7 +108,7 @@ def verify_scope(path, raw=None):
             raise RuntimeError('Full actual sensors and sole native Teacher actuator are required')
         if data['experiment']=='flat_relative_roundtrip_v1'and asset.get('dynamic_fixture'):
             raise RuntimeError('Old finite flat scope cannot authorize a changed dynamic fixture')
-        if data['experiment']=='finite_flat_dynamic_stop_resume_v1':
+        if data['experiment']in DYNAMIC_EXPERIMENTS:
             from dynamic.prepare import validate_asset
             validate_asset(run)
         if sha(run/'world.sdf') != asset.get('world_sha256'):
@@ -130,7 +133,8 @@ def verify_scope(path, raw=None):
                 profile=data['profile'], scope='Finite flat SLAM/SCAN integration experiment only')
 
 
-def prepare(run, slam_only=False, dynamic=False):
+def prepare(run, slam_only=False, dynamic=False, dynamic_turn20=False):
+    if dynamic_turn20 and not dynamic:raise RuntimeError('Turn20 is an explicit dynamic experiment only')
     import numpy as np
     import yaml
     from scipy.spatial.transform import Rotation
@@ -178,7 +182,7 @@ def prepare(run, slam_only=False, dynamic=False):
     camera_cfg = yaml.safe_load((DEMO/'camera_mode/slam/camera.yaml').read_text())
     write(run/'navigation_camera.yaml', camera_cfg)
     write(run/'navigation_scenario.json', {'mode':'teacher', 'sensors':sensors})
-    profile_path=DYNAMIC_PROFILE if dynamic else PROFILE
+    profile_path=DYNAMIC_TURN20_PROFILE if dynamic_turn20 else DYNAMIC_PROFILE if dynamic else PROFILE
     profile = json.loads(profile_path.read_text())
     write(run/'navigation_profile.json', profile)
     slam_files = [run/n for n in ('world.sdf','asset_manifest.json','sensor_contract.json',
@@ -271,9 +275,11 @@ def main():
     parser.add_argument('--check-only', action='store_true')
     parser.add_argument('--slam-only', action='store_true', help='Prepare only actual sensor SLAM configuration; no navigation command eligibility')
     parser.add_argument('--dynamic', action='store_true', help='Explicit bounded physical moving-obstacle experiment; requires asset-stage preparation and three actual finite-navigation passes')
+    parser.add_argument('--dynamic-turn20', action='store_true', help='Prospective dynamic-only0.2rad/s heading alignment profile; keeps0.12flat and90s goal deadline')
     args = parser.parse_args()
+    if args.dynamic_turn20 and not args.dynamic:parser.error('--dynamic-turn20 requires --dynamic')
     if args.dynamic and args.slam_only:parser.error('--dynamic requires actual navigation')
-    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only,args.dynamic)
+    result = verify_scope(args.run/'navigation_scope.json') if args.check_only else prepare(args.run,args.slam_only,args.dynamic,args.dynamic_turn20)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

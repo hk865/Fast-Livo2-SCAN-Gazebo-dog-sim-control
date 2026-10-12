@@ -25,7 +25,10 @@ from scoped_profile import verify_scope
 from control_core import rotation_xyzw,body_tilt
 from runtime_io import EvidenceWriter,latest_sensor_qos
 from teacher_transition import TeacherHeadingGate
+from guard_audit import NativeGuardAudit,result_json
 from std_msgs.msg import String
+
+NATIVE_STEERING_GUARD=base.steering_obstacle_ahead
 
 
 class RecordedPublisher:
@@ -50,6 +53,13 @@ class TeacherNavigation(base.Navigation):
         self.heading_gate=TeacherHeadingGate(self.profile)
         self.status_pub=RecordedPublisher(self.status_pub,run,self)
         self.bridge_updated=-math.inf
+        self.guard_cloud=None;self.guard_cloud_receipt=None;self.pose_quaternion=None
+        self.guard_sequence=0;self.pending_guard_row=None;self.trajectory_archive_reference=None
+        self.native_guard_audit=NativeGuardAudit(NATIVE_STEERING_GUARD)
+        # This module instance belongs only to the independent Teacher process.
+        # The shared camera-mode files and native geometry remain unchanged.
+        base.steering_obstacle_ahead=(self.record_native_guard if self.profile.get('dynamic_fixture')
+                                     else NATIVE_STEERING_GUARD)
     def create_subscription(self,msg_type,topic,callback,qos_profile,*args,**kwargs):
         if topic in ('/demo/slam/body_odom','/cloud_registered_full','/livox/imu'):
             qos_profile=latest_sensor_qos()
@@ -130,6 +140,7 @@ class TeacherNavigation(base.Navigation):
             or not .98<=q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w<=1.02
             or not all(math.isfinite(x)for x in (p.x,p.y,p.z,v.x,v.y,v.z,w.x,w.y,w.z))):return
         super().on_odom(msg)
+        if self.pose_stamp==stamp:self.pose_quaternion=[q.x,q.y,q.z,q.w]
         if self.gyro_body is not None and received-self.gyro_wall<.3:
             self.heading_gate.observe(stamp/1e9,received,[v.x,v.y,v.z],w.z,self.gyro_body,self.gyro_stamp,not any(self.command))
         row={'stamp_ns':stamp,'frame_id':msg.header.frame_id,'child_frame_id':msg.child_frame_id,
@@ -140,7 +151,7 @@ class TeacherNavigation(base.Navigation):
             'measured_stop_evidence':self.heading_gate.evidence(ns/1e9,received)}
         self.evidence.append(self.run/'navigation_slam_poses.jsonl',row)
     def on_cloud(self,msg):
-        stamp=self.stamp(msg);ns=self.get_clock().now().nanoseconds
+        stamp=self.stamp(msg);ns=self.get_clock().now().nanoseconds;received=time.monotonic()
         if stamp<=self.cloud_stamp or not -.05e9<=ns-stamp<self.cloud_timeout*1e9:return
         super().on_cloud(msg)
         if self.cloud_stamp==stamp and self.cloud_input_context is not None:
@@ -148,8 +159,12 @@ class TeacherNavigation(base.Navigation):
             row={'stamp_ns':stamp,'frame_id':msg.header.frame_id,'input_points':int(msg.width*msg.height),
                 'filtered_points':c['filtered_points'],'self_filtered_points':c['self_filtered_points'],
                 'nearest_slam_pose_stamp_ns':c['filtering_body_stamp_ns'],
-                'received_monotonic_wall':time.monotonic(),'callback_ros_clock_ns':ns,'sim_age_at_callback_s':(ns-stamp)/1e9,
+                'received_monotonic_wall':received,'decoded_monotonic_wall':time.monotonic(),
+                'callback_ros_clock_ns':ns,'sim_age_at_callback_s':(ns-stamp)/1e9,
                 'filtered_xyz_float64_sha256':hashlib.sha256(np.asarray(self.cloud,dtype='<f8').tobytes()).hexdigest()}
+            self.guard_cloud=self.cloud
+            self.guard_cloud_receipt={**row,'filtering_body_pose':c['filtering_body_pose'].tolist(),
+                'filtering_body_rotation':c['filtering_body_rotation'].tolist()}
             self.evidence.append(self.run/'navigation_cloud_history.jsonl',row)
     def accept_spline(self,msg,metadata):
         before=self.replans;super().accept_spline(msg,metadata)
@@ -162,6 +177,7 @@ class TeacherNavigation(base.Navigation):
             'waypoint_index':self.waypoint_index,'accepted_slam_stamp_ns':self.pose_stamp,
             'array_file':array_path.name,
             'source':'actual SCAN committed B-spline and associated metadata; sensor SLAM feedback'}
+        self.trajectory_archive_reference=str(array_path.relative_to(self.run))
         def archive():
             directory.mkdir(exist_ok=True);np.savez_compressed(array_path,coefficients=coefficients,knots=knots,samples=samples)
             document['array_sha256']=hashlib.sha256(array_path.read_bytes()).hexdigest()
@@ -181,9 +197,55 @@ class TeacherNavigation(base.Navigation):
             self.state='failed';self.message=self.evidence.error;self.publish_command();return
         if self.obstacle_hold and not self.heading_gate.stopped(self.get_clock().now().nanoseconds/1e9,now):
             self.obstacle_clear_since=None
-        super().control(now)
+        self.pending_guard_row=None
+        try:super().control(now)
+        finally:
+            if self.pending_guard_row is not None:
+                row=self.pending_guard_row;after_ns=self.get_clock().now().nanoseconds
+                row.update(obstacle_hold_after=bool(self.obstacle_hold),clear_start_after_s=self.obstacle_clear_since,
+                    clear_elapsed_after_s=None if self.obstacle_clear_since is None else after_ns/1e9-self.obstacle_clear_since,
+                    after_control_ros_clock_ns=after_ns,command_after_control=list(self.command),
+                    zero_requested_after_control=not any(self.command),command_ros_sim_time_s=self.last_command_time,
+                    state_after_control=self.state,obstacle_resumes_after=self.obstacle_resumes,
+                    command_source='actual sensor SLAM/SCAN controller; no mover or simulator pose navigation input',
+                    evidence_queue_error=self.evidence.error)
+                self.evidence.append(self.run/'navigation_guard_history.jsonl',row)
+                self.pending_guard_row=None
         if self.heading_gate.phase in ('pre_turn','settle'):
             self.message='Teacher 等待实际SLAM机身速度和IMU角速确认停车，保持零速度'
+
+    def record_native_guard(self,cloud,pose,checked_target,steering_direction,route):
+        ns=self.get_clock().now().nanoseconds;received=time.monotonic()
+        if (cloud is not self.guard_cloud or self.guard_cloud_receipt is None
+                or self.guard_cloud_receipt['stamp_ns']!=self.cloud_stamp or self.pose_quaternion is None):
+            raise RuntimeError('Actual native guard lacks an exact accepted cloud/SLAM input receipt')
+        result=self.native_guard_audit(cloud,pose,checked_target,steering_direction,route)
+        self.guard_sequence+=1;c=self.guard_cloud_receipt
+        self.pending_guard_row={'schema':'teacher_native_steering_guard/v1','sequence':self.guard_sequence,
+            'compute_ros_clock_ns':ns,'compute_sim_time_s':ns/1e9,'compute_monotonic_wall':received,
+            'request_id':self.request_id,'waypoint_index':self.waypoint_index,
+            'trajectory_id':self.active_trajectory_id,'reference_stamp':self.trajectory_association.reference_stamp,
+            'trajectory_archive_file':self.trajectory_archive_reference,
+            'control_pose_stamp_ns':int(self.pose_stamp),'control_pose':np.asarray(pose).tolist(),
+            'control_quaternion':list(self.pose_quaternion),'control_rotation':self.rotation.tolist(),
+            'tracking_pose':self.tracking_pose.tolist(),'control_pose_received_monotonic_wall':self.pose_updated,
+            'cloud_header_stamp_ns':int(c['stamp_ns']),'cloud_frame_id':c['frame_id'],
+            'cloud_received_monotonic_wall':c['received_monotonic_wall'],
+            'cloud_callback_ros_clock_ns':c['callback_ros_clock_ns'],
+            'cloud_filtering_body_stamp_ns':c['nearest_slam_pose_stamp_ns'],
+            'cloud_filtering_body_pose':c['filtering_body_pose'],'cloud_filtering_body_rotation':c['filtering_body_rotation'],
+            'filtered_xyz_float64_sha256':c['filtered_xyz_float64_sha256'],
+            'filtered_points':c['filtered_points'],'self_filtered_points':c['self_filtered_points'],
+            'checked_target':np.asarray(checked_target).tolist(),'steering_direction':np.asarray(steering_direction).tolist(),
+            'route':np.asarray(route).tolist(),'route_float64_sha256':hashlib.sha256(np.asarray(route,dtype='<f8').tobytes()).hexdigest(),
+            'goal':self.waypoints[self.waypoint_index].tolist(),
+            'goal_corridor_result':result_json(self.native_guard_audit.calls[0][1]),
+            'motion_corridor_result':result_json(self.native_guard_audit.calls[1][1]),
+            'motion_corridor_target':self.native_guard_audit.calls[1][0].tolist(),
+            'union_result':result_json(result),'obstacle_hold_before':bool(self.obstacle_hold),
+            'clear_start_before_s':self.obstacle_clear_since,'clear_elapsed_before_s':None if self.obstacle_clear_since is None else ns/1e9-self.obstacle_clear_since,
+            'native_geometry_source':'unchanged control_core.steering_obstacle_ahead code object and original two obstacle_ahead evaluations'}
+        return result
 
 
 def main():
@@ -195,7 +257,17 @@ def main():
     except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):pass
     finally:
         if rclpy.ok():node.publish_command()
-        node.event_archive.close();node.evidence.close();node.destroy_node();rclpy.try_shutdown()
+        node.event_archive.close()
+        try:node.evidence.close()
+        finally:
+            if node.profile.get('dynamic_fixture'):
+                (run/'navigation_guard_writer_receipt.json').write_text(json.dumps({
+                    'schema':'teacher_native_steering_guard_writer/v1','expected_records':node.guard_sequence,
+                    'status':'failed'if node.evidence.error else 'drained',
+                    'queue_error':node.evidence.error,'silent_record_loss_permitted':False,
+                    'source':'actual dynamic controller shutdown after bounded evidence queue drain',
+                    'navigation_verified':False},allow_nan=False,ensure_ascii=False)+'\n')
+            node.destroy_node();rclpy.try_shutdown()
 
 
 if __name__=='__main__':main()

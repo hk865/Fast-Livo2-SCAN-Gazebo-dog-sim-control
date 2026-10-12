@@ -118,7 +118,9 @@ def verify_scope(run,protocol_path):
         or scope.get('experiment')!='finite_flat_dynamic_stop_resume_v1'or scope.get('run_dir')!=str(run)):
         raise RuntimeError('Missing explicit new dynamic experiment scope; old excluded profile is insufficient')
     from scoped_profile import verify_scope as verify_navigation_scope
-    verify_navigation_scope(run/'navigation_scope.json')
+    navreceipt=verify_navigation_scope(run/'navigation_scope.json')
+    if scope.get('navigation_experiment')!=navreceipt['experiment']or scope.get('navigation_max_yaw_rate_radps')!=navreceipt['profile']['max_yaw_rate_radps']:
+        raise RuntimeError('Explicit dynamic navigation variant does not match parent scope')
     parent=json.loads((run/'navigation_scope.json').read_text())
     if 'dynamic_obstacle_success_claim'in parent.get('excluded_scenarios',[]):
         raise RuntimeError('Parent navigation scope still excludes dynamic obstacle validation')

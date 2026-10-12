@@ -123,14 +123,14 @@ def basis():
 
 
 def runtime_files():
-    return [HERE/n for n in ('dynamic_obstacle.py','prepare.py','protocol.json','flat_dynamic_profile.json',
-             'obstacle_pose_observer.cpp','CMakeLists.txt','build/obstacle_pose_observer')]
+    return [HERE/n for n in ('dynamic_obstacle.py','prepare.py','protocol.json','flat_dynamic_profile.json','flat_dynamic_profile_turn20.json',
+             'guard_trace_schema.json','obstacle_pose_observer.cpp','CMakeLists.txt','build/obstacle_pose_observer')]+[NAV/'guard_audit.py']
 
 
 def prepare_scope(run):
-    from scoped_profile import verify_scope
+    from scoped_profile import verify_scope,DYNAMIC_EXPERIMENTS
     run=eligible(run,'scope');parent=verify_scope(run/'navigation_scope.json')
-    if parent['experiment']!='finite_flat_dynamic_stop_resume_v1':raise RuntimeError('Old finite flat permission excludes dynamic tests')
+    if parent['experiment']not in DYNAMIC_EXPERIMENTS:raise RuntimeError('Old finite flat permission excludes dynamic tests')
     data=json.loads((run/'navigation_scope.json').read_text())
     if 'dynamic_obstacle_success_claim'in data.get('excluded_scenarios',[]):raise RuntimeError('Dynamic experiment must be explicitly permitted')
     records,campaign=basis();protocol=run/'dynamic_protocol.json'
@@ -141,6 +141,7 @@ def prepare_scope(run):
         campaign,ROOT/'runs/acceptance.json']+[Path(row['path'])for row in records]
     scope={'schema':'teacher_dynamic_scope/v1','experiment':'finite_flat_dynamic_stop_resume_v1',
         'status':'experimental_unverified','allowed':True,'run_dir':str(run),'navigation_ground_truth_used':False,
+        'navigation_experiment':parent['experiment'],'navigation_max_yaw_rate_radps':parent['profile']['max_yaw_rate_radps'],
         'global_levels_preserved':json.loads((ROOT/'runs/acceptance.json').read_text())['levels'],
         'protocol_sha256':sha(protocol),'finite_navigation_basis':records,
         'references':{str(p.resolve()):sha(p)for p in paths},

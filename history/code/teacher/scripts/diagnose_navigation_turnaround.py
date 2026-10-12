@@ -59,6 +59,9 @@ def evaluate(runs, output):
         sm = (st >= start) & (st <= end)
         assert pm.any() and nm.any() and sm.any()
         sampled = [r for r, flag in zip(telemetry, pm) if flag]
+        history = {r['sequence']: r for r in rows(run / 'navigation_command_history.jsonl')}
+        rejected_sources = [history.get(r['navigation_envelope'].get('sequence')) for r in sampled if r.get('command_expired') is True]
+        rejected_sources = [r for r in rejected_sources if r is not None]
         invalid = [not(-.05 <= r['navigation_envelope']['wall_age_s'] <= .3 and
                         -.05 <= r['navigation_envelope']['sim_age_s'] <= .3) for r in sampled]
         flag_count = sum(r.get('command_expired') is True for r in sampled)
@@ -99,6 +102,9 @@ def evaluate(runs, output):
             'policy_samples': len(sampled), 'expired_or_unhealthy_flag_samples': flag_count,
             'expired_or_unhealthy_fraction': flag_count/len(sampled), 'strict_source_age_invalid_samples': sum(invalid),
             'command_reason_counts': dict(Counter(r['command_reason'] for r in sampled)),
+            'rejected_worker_frames_actual_bridge_reason_counts': dict(Counter(r.get('reason') for r in rejected_sources)),
+            'rejected_worker_frames_actual_bridge_state_counts': dict(Counter(r.get('state') for r in rejected_sources)),
+            'rejected_worker_frames_history_match_count': len(rejected_sources),
             'actual_actor_pure_turn_seconds': float(((abs(cmd[pm, 2])>.015)&(np.linalg.norm(cmd[pm, :2], axis=1)<.015)).sum()*.02),
             'actual_actor_drive_seconds': float((abs(cmd[pm, 0])>.015).sum()*.02),
             'actual_actor_signed_wz_integral_rad': float(cmd[pm, 2].sum()*.02),
@@ -108,7 +114,7 @@ def evaluate(runs, output):
             'first_drive_to_original_goal_deadline_remaining_s': end-first_drive['ros_sim_time'] if first_drive else None,
             'align': align_metric, 'last_raw_slam_return_center_error_xy_m': float(np.linalg.norm(last_pose[:2]-goal[:2])),
             'input_sha256': {n: sha(run / n) for n in ['telemetry.jsonl', 'actuator.jsonl', 'navigation_slam_poses.jsonl',
-                'navigation_status.jsonl', 'navigation_request.json', 'navigation_profile.json', 'summary_dynamic_obstacle_independent.json']},
+                'navigation_status.jsonl', 'navigation_request.json', 'navigation_profile.json', 'navigation_command_history.jsonl', 'summary_dynamic_obstacle_independent.json']},
             'interpretation': 'All command integration is actual CPU actor input after consumer health/TTL/slew, not requested time. '
                 'Physical heading is native quaternion diagnostic only; navigation heading is original SLAM. '
                 'No performance for a proposed faster yaw limit is predicted or claimed.',

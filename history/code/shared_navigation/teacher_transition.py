@@ -8,6 +8,8 @@ import math
 
 class TeacherHeadingGate:
     def __init__(self,profile):
+        self.max_turn_rate=profile['max_yaw_rate_radps']
+        if not math.isfinite(self.max_turn_rate)or not 0<self.max_turn_rate<=.3:raise ValueError('Reviewed turn limit must be within the validated0.3rad/s command range')
         self.config=profile['teacher_transition'];self.history=deque(maxlen=64)
         self.last_stamp=None;self.reset()
     @staticmethod
@@ -54,7 +56,7 @@ class TeacherHeadingGate:
         error=self.error(self.heading,yaw)
         if self.phase=='align':
             if abs(error)>c['turn_complete_rad']:
-                return False,max(-.12,min(.12,1.3*error))
+                return False,max(-self.max_turn_rate,min(self.max_turn_rate,1.3*error))
             self.phase='settle'
         if self.phase=='settle':
             if abs(current_error)>c['drive_heading_max_rad']:
