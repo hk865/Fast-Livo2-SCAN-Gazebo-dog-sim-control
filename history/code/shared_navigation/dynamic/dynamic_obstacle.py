@@ -18,6 +18,7 @@ import xml.etree.ElementTree as ET
 ROOT=Path('/__LOCAL_HOME__/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode')
 sys.path.insert(0,str(ROOT/'navigation'))
 from runtime_io import EvidenceWriter,latest_sensor_qos
+from dynamic.observer_preroll import ActualCloudPreRoll,finish_observer_evidence
 
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -180,6 +181,7 @@ def main():
             self.counts={};self.last_phase=None
             if args.role=='mover':self.client=self.create_client(SetEntityPose,protocol['service'])
             else:
+                self.pre_roll=ActualCloudPreRoll();self.pre_roll_flushed=False;self.saved_xyz={};self.observer_error=None
                 for name,typ,topic in [('raw_lidar',PointCloud2,'/demo/teacher/raw_lidar'),('cloud',PointCloud2,'/cloud_registered_full'),
                     ('vehicle',Image,'/demo/camera'),('overview',Image,'/demo/teacher/overview'),
                     ('vehicle_info',CameraInfo,'/demo/camera_info'),('overview_info',CameraInfo,'/demo/teacher/overview_info')]:
@@ -202,11 +204,17 @@ def main():
                     state=json.loads(state_path.read_text())if state_path.exists()else{}
                     row.update(fixture_phase=state.get('phase'),fixture_state_sim_time=state.get('sim_time'),
                         fixture_state_monotonic_wall=state.get('monotonic_wall'))
-                    if state.get('phase')in ('entering','blocking','leaving')or (state.get('phase')=='clear'and
-                            state.get('clear_start_sim_s')is not None and stamp/1e9-state['clear_start_sim_s']<=5.):
+                    active=state.get('phase')in ('entering','blocking','leaving')or (state.get('phase')=='clear'and
+                            state.get('clear_start_sim_s')is not None and stamp/1e9-state['clear_start_sim_s']<=5.)
+                    if name=='cloud'and not self.pre_roll_flushed:
                         xyz=point_cloud2.read_points_numpy(msg,field_names=('x','y','z'),skip_nans=True).copy()
-                        target=self.directory/f'{name}_{stamp}.npz';row.update(xyz_file=target.name,decoded_points=len(xyz),skip_nans=True)
-                        self.evidence.enqueue(lambda t=target,x=xyz:np.savez_compressed(t,xyz=x))
+                        self.pre_roll.add(row,xyz)
+                        row['pre_roll_cached']=True
+                        self.flush_pre_roll(state)
+                        if active and self.pre_roll_flushed:self.archive_xyz(row,xyz,'active')
+                    elif active:
+                        xyz=point_cloud2.read_points_numpy(msg,field_names=('x','y','z'),skip_nans=True).copy()
+                        self.archive_xyz(row,xyz,'active')
                 elif stamp-self.last_rgb.get(name,-10**18)>=1_000_000_000:
                     if msg.encoding not in ('rgb8','bgr8'):raise RuntimeError('Unsupported actual RGB encoding')
                     image=np.frombuffer(raw,dtype=np.uint8).reshape(msg.height,msg.step)[:,:msg.width*3].reshape(msg.height,msg.width,3)
@@ -215,10 +223,38 @@ def main():
                     self.evidence.enqueue(lambda t=target,x=image:PILImage.fromarray(x).save(t,quality=92))
                     self.last_rgb[name]=stamp
             self.evidence.append(self.directory/'sensor_inputs.jsonl',row)
+        def archive_xyz(self,row,xyz,kind,flush_state=None):
+            key=(row['source'],row['stamp_ns']);digest=row['data_sha256']
+            target=self.directory/f'{key[0]}_{key[1]}.npz'
+            row.update(xyz_file=target.name,decoded_points=len(xyz),skip_nans=True,archive_kind=kind,
+                decoded_xyz_dtype=str(xyz.dtype),decoded_xyz_shape=list(xyz.shape),
+                decoded_xyz_sha256=hashlib.sha256(xyz.tobytes(order='C')).hexdigest())
+            if key in self.saved_xyz:
+                if self.saved_xyz[key]!=digest:
+                    self.observer_error='Same archived cloud stamp has different actual raw payload'
+                    raise RuntimeError(self.observer_error)
+                row.update(xyz_file=target.name,archive_duplicate=True);return
+            self.saved_xyz[key]=digest
+            if flush_state is not None:
+                row.update(pre_roll_flush_fixture_phase=flush_state.get('phase'),
+                    pre_roll_flush_fixture_sim_time=flush_state.get('sim_time'),
+                    pre_roll_flush_monotonic_wall=time.monotonic(),original_source_stamps_preserved=True)
+            self.evidence.enqueue(lambda t=target,x=xyz:np.savez_compressed(t,xyz=x))
+        def flush_pre_roll(self,state=None):
+            if self.pre_roll_flushed:return
+            if state is None:
+                state_path=run/'dynamic_obstacle_state.json'
+                state=json.loads(state_path.read_text())if state_path.exists()else{}
+            if state.get('phase')not in ('entering','blocking','leaving','clear'):return
+            for original,xyz in self.pre_roll.drain():
+                self.archive_xyz(original,xyz,'pre_roll',state)
+                self.evidence.append(self.directory/'sensor_inputs.jsonl',original)
+            self.pre_roll_flushed=True
         def tick(self):
             sim=self.get_clock().now().nanoseconds/1e9;wall=time.monotonic()
             if args.role=='sensor_observer':
                 if self.evidence.error:raise RuntimeError(self.evidence.error)
+                self.flush_pre_roll()
                 return
             if self.evidence.error:self.program.failure=self.evidence.error
             actual=self.actual.poll();pose=self.poses.poll();telemetry=self.telemetry.poll();nav=self.nav.poll()
@@ -262,18 +298,15 @@ def main():
     finally:
         # Freeze the box at its last physical location. Never sweep it through a
         # parked robot, never send robot commands during fixture cleanup.
-        node.evidence.append(run/'obstacle_motion_history.jsonl',{'kind':'fixture_end','role':args.role,'phase':node.program.phase,
-            'failure':node.program.failure,'counts':node.counts,'navigation_validation':'unverified'})
-        try:
-            node.evidence.close()
-            if args.role=='sensor_observer':
-                evidence_files=sorted(node.directory.glob('*.npz'))+sorted(node.directory.glob('*.jpg'))
-                (run/'dynamic_sensor_evidence_manifest.json').write_text(json.dumps({'schema':1,
-                    'status':'recorded_unverified','queue_error':node.evidence.error,'counts':node.counts,
-                    'source':'Actual ROS XYZ and actual RGB only; not generated geometry/images',
-                    'navigation_input':False,'files':{str(f.relative_to(run)):sha(f)for f in evidence_files}},
-                    indent=2,ensure_ascii=False)+'\n')
-        finally:node.destroy_node();rclpy.try_shutdown()
+        end_record={'kind':'fixture_end','role':args.role,'phase':node.program.phase,
+            'failure':node.program.failure,'counts':node.counts,'navigation_validation':'unverified'}
+        if args.role=='sensor_observer':
+            try:finish_observer_evidence(node,run,end_record)
+            finally:node.destroy_node();rclpy.try_shutdown()
+        else:
+            node.evidence.append(run/'obstacle_motion_history.jsonl',end_record)
+            try:node.evidence.close()
+            finally:node.destroy_node();rclpy.try_shutdown()
 
 
 if __name__=='__main__':main()

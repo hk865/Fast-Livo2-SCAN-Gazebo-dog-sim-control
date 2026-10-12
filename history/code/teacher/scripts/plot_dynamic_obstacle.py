@@ -17,6 +17,19 @@ def rows(path):
         return [json.loads(line) for line in stream if line.strip()]
 
 
+def compact_native(path):
+    # Plot only the four actual fields needed; avoid holding large contact/joint
+    # records in memory alongside the ROS and actor logs.
+    result = []
+    with Path(path).open() as stream:
+        for line in stream:
+            record = json.loads(line)
+            if record.get('kind') == 'physics_step':
+                result.append([record['t']-.005, record['body_lin_vel_com'][0], record['body_ang_vel'][2],
+                    float(np.linalg.norm(record['body_lin_vel_com'][:2]))])
+    return np.asarray(result)
+
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -33,19 +46,19 @@ def plot(run):
     original = receipt.read_bytes()
     summary = json.loads(original)
     telemetry = rows(run / 'telemetry.jsonl')
-    native = [r for r in rows(run / 'actuator.jsonl') if r.get('kind') == 'physics_step']
+    native = compact_native(run / 'actuator.jsonl')
     slam = rows(run / 'navigation_slam_poses.jsonl')
     box = [r for r in rows(run / 'obstacle_actual_pose.jsonl') if r.get('status') == 'actual_observed']
     requested = np.asarray([r['requested'] for r in telemetry])
     commands = np.asarray([r['command'] for r in telemetry])
     pt = np.asarray([r['world_sim_time'] for r in telemetry])
-    nt = np.asarray([r['t'] for r in native]) - .005
-    bodyvx = np.asarray([r['body_lin_vel_com'][0] for r in native])
-    wz = np.asarray([r['body_ang_vel'][2] for r in native])
+    nt, bodyvx, wz, planar = native.T
     bt = np.asarray([r['stamp_ns'] * 1e-9 for r in box])
     by = np.asarray([r['position'][1] for r in box])
     phases = summary['checks']['actual_box_entry_block_and_withdrawal']['phase_times_s']
     park = summary['checks']['actual_continuous_teacher_parking_while_box_blocked'].get('world_window_s')
+    park_status = summary['checks']['actual_continuous_teacher_parking_while_box_blocked']['status']
+    park_color = 'green' if park_status == 'passed' else '#dc2626' if park_status == 'failed' else 'gray'
     clear = summary['checks']['actual_registered_cloud_corridor_clear_after_withdrawal'].get('first_continuous_clear_confirmation_world_s')
     recovery = summary['checks']['teacher_actual_motion_resumed_on_new_scan'].get('first_accepted_motion_world_s')
     fig, axes = plt.subplots(3, 2, figsize=(14, 9), sharex='col', constrained_layout=True)
@@ -55,6 +68,8 @@ def plot(run):
         av.plot(pt, commands[:, 0], color='#2563eb', linewidth=1.1, label='Actual CPU actor vx input (50Hz)')
         av.plot(nt, bodyvx, color='#dc2626', alpha=.22, linewidth=.5, label='Actual body COM vx raw (200Hz)')
         av.plot(nt, smooth(bodyvx), color='#b91c1c', linewidth=1., label='100ms trailing visual mean')
+        av.plot(nt, planar, color='#7c3aed', alpha=.45, linewidth=.55, label='Actual raw planar speed (200Hz)')
+        av.axhline(.03, color='#7c3aed', linestyle=':', linewidth=.7, label='Fixed parking planar limit0.03m/s')
         av.set_ylabel('Body forward velocity (m/s)')
         aw.plot(pt, commands[:, 2], color='#2563eb', linewidth=1., label='Actor yaw-rate input (50Hz)')
         aw.plot(nt, wz, color='#dc2626', alpha=.25, linewidth=.5, label='Actual body yaw rate raw (200Hz)')
@@ -71,7 +86,7 @@ def plot(run):
             if 'blocking' in phases and 'leaving' in phases:
                 axis.axvspan(phases['blocking'], phases['leaving'], color='orange', alpha=.12)
             if park:
-                axis.axvspan(*park, color='green', alpha=.15)
+                axis.axvspan(*park, color=park_color, alpha=.15)
             if clear is not None:
                 axis.axvline(clear, color='#059669', linestyle='--', linewidth=.8)
             if recovery is not None:
@@ -80,7 +95,7 @@ def plot(run):
         axis.legend(fontsize=7, loc='upper right')
     axes[0, 0].set_title('Complete actual run')
     axes[0, 1].set_title('Actual entry / measured parking / clear / recovery')
-    fig.suptitle(run.name + '\nOrange: actual box blocking; green: fixed 5s measured parking; '
+    fig.suptitle(run.name + '\nOrange: actual box blocking; fixed 5s parking band: ' + park_status + '; '
                  'green dashed: observed cloud-clear confirmation; blue dashed: accepted motion recovery', fontsize=10)
     figure = run / 'dynamic_obstacle_actual_stop_restore.png'
     fig.savefig(figure, dpi=160)
@@ -115,7 +130,7 @@ def plot(run):
     plt.close(fig)
     archive = run / 'dynamic_obstacle_plot_arrays.npz'
     np.savez_compressed(archive, policy_world_time=pt, native_physics_world_time=nt,
-        requested=requested, actor_command=commands, body_com_vx=bodyvx, body_wz=wz,
+        requested=requested, actor_command=commands, body_com_vx=bodyvx, body_wz=wz, body_com_planar_speed=planar,
         actual_box_world_time=bt, actual_box_y=by, original_slam_stamp_ns=stamp, original_slam_xy=xy)
     (run / 'dynamic_obstacle_plot_manifest.json').write_text(json.dumps({
         'schema': 1, 'input_sha256': {name: sha(run / name) for name in [

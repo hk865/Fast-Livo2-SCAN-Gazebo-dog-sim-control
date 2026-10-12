@@ -1,0 +1,28 @@
+{
+  "schema": "teacher_actual_cloud_preroll/v1",
+  "scope": "Passive registered-cloud recorder only; no navigation or physical-control change",
+  "actual_source": "/cloud_registered_full original ROS PointCloud2 x/y/z fields, skip_nans=true",
+  "waiting_cache": {
+    "source_span_sim_s": 1.0,
+    "maximum_frames": 32,
+    "maximum_decoded_bytes": 16777216,
+    "payload": "Actual decoded XYZ array, original dtype/shape and immutable copied original header/frame/received-monotonic-wall/raw-payload-SHA metadata",
+    "eviction": "Only source-stamp age>1s is normally evicted; frame/byte overflow inside the retained span fails explicitly",
+    "duplicates": "Same stamp with same raw SHA is deduplicated; same stamp different raw SHA or backwards source stamp fails explicitly"
+  },
+  "flush": "At the first passive observer tick or registered-cloud callback seeing actual mover state entering/blocking/leaving/clear, archive the cached actual arrays in source order using cloud_ORIGINAL_INTEGER_STAMP.npz and append pre_roll sensor-input rows. Original source stamp and received wall are never changed; flush-state/time are separate fields.",
+  "phase_behavior": "Original active entering/blocking/leaving and clear+5sim-second evidence conditions remain; no old run receives reconstructed or new data",
+  "metadata": {
+    "archive_kind": "pre_roll or active; archive_duplicate marks a same-original-payload reference",
+    "decoded_xyz_dtype": "Actual decoded array dtype",
+    "decoded_xyz_shape": "Actual decoded array shape",
+    "decoded_xyz_sha256": "SHA256 of original decoded array C-order bytes; distinct from raw PointCloud2 data SHA and native filtered-float64 SHA",
+    "pre_roll_flush_fixture_phase": "Actual observed mover phase at passive flush",
+    "pre_roll_flush_fixture_sim_time": "Observed phase-source time, not original acquisition stamp",
+    "pre_roll_flush_monotonic_wall": "Actual flush callback clock, not original receive clock",
+    "original_source_stamps_preserved": true
+  },
+  "final_manifest": "dynamic_sensor_evidence_manifest.json schema2 records pre-roll limits/counters/error, unique archived XYZ count, drained writer error and actual NPZ/JPG SHA list. Overflow, conflict, backward stamps or queue errors must remain failed evidence.",
+  "forbidden": ["fake XYZ", "refreshed source stamps", "navigation cmd_vel", "joint or robot pose commands", "simulator robot pose navigation input", "retroactive data fill for1536"],
+  "unchanged": "V44 controller/profile/heading/guard/TTL/arrival/parking/fixture/physics/model unchanged; candidate5 requires original strict complete actual coverage"
+}
