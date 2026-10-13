@@ -1,0 +1,241 @@
+{
+  "schema": "R83_independent_final_owner_resource_archive_freeze_review/v1",
+  "UTC": "2026-10-13T19:29:24.627511+00:00",
+  "run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+  "review_passed": true,
+  "blocking_findings": [],
+  "source_sha256": {
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/runtime_manifest.json": "25b895bb4c198d15f25db334d1a83935ddf9639aa045524a12fedf9e100a2497",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/pipeline_normal_stop.json": "52b6ba93de24b127cf40d29cb13c3b5de51301d03dae4e41cdf7e0adf0fccc3d",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/capture_normal_stop.json": "8c8ee40642d383c17bbb354b23857c2ae19ef3b3da3fd1d9b33eaa6773170407",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/CAPTURE_OWNER_STOP.json": "8c8ee40642d383c17bbb354b23857c2ae19ef3b3da3fd1d9b33eaa6773170407",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/worker_archive_close.json": "7c02e864cf2616e9183f2878915450c699cf951b475625af39f0dc41e3883d7b",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/worker_archive_integrity.json": "9efcfe698c59ab5b4d5d9f8ed31ca1a045d951f928d0fcc4f3cd75e1f9cdce6a",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/worker_result.json": "2295057fc67eeae89ca841a36105000402a6e7c135dc9a5bff1fe706d5fca26a",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/guardian_owner.json": "d58f745019ab2cd5863dd076f6da009e6edbf74464a064e9e4a410636937b8a9",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/guardian_result.json": "6d733e14c8aea0f2a12934d222662595a23ca451b241280c618fe5e6a242bdd9",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/guardian_release.json": "e53460d7ebe7ca30babe2a60b9141836f4e95d4a624ed240f3e824661e78af7d",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/owned_processes_started.json": "d3dc94953cd8fecff371b4ad0971b8a1bb619f375e4f032af636d630dd947c02",
+    "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/R77_SIGNAL_EVENTS.jsonl": "b7fe44e24772ddff75eb60cfba65f7a7b12a95ad140cdc3164d30bf9d6e05219",
+    "./validation/r83_harness/SOURCE_FREEZE.json": "8d22e44b177f2ab97be1f75fa590b01be1cb4867a5e58c5c8a23865f773df827",
+    "./validation/r83_harness/PREPARED_RUN.json": "d85c0ba465a4c8cdb6b8c70921fb675d5f4b735ec160e5b5baa1e9c4928f3908",
+    "./validation/r83_harness/RUN_OUTCOME.json": "9f0d353404c44f802c4d3e5247005526af619ee967aa51b69590bd01362a3186",
+    "./validation/r83_harness/POSTROUND_BUDGET.json": "8462fe110258704db14de265d26666928bd241b2b31edd37d65e1837967620f1",
+    "./validation/r83_harness/PRE_COPY_RETAINED_BASELINE.json": "336e0dca8e08b557d7e0af13bd3b1c99cc7b2c64adea706ef6dd2876d32a24c9",
+    "./validation/r83_harness/BUDGET_BINDING.json": "0c3529220f12d49cfbf7e7e86f80ccd2f2ff65a8fd98e8f9c9cdcefa83b34dd5",
+    "./validation/r83_harness/ACTUAL_RUNNING_RECEIPT.json": "40efcbf4e884d6f7e00518a3020236e1808ab2b43851ba9bed23fd6f7076f001",
+    "./validation/r83_harness/ONE_SIMULATION_LATCH.json": "89596817341e3b0df3c470aded1cfde4e63a472ac2b3e09e89a2edae76d603da",
+    "/tmp/go2_r83_final_owner_review_20261013/HOST_CLOSURE.json": "af40af9aa5a1c0de359045d37a74b9eabf938c4f08e4c865e735ecd5e341e5da"
+  },
+  "resource_close_verified": true,
+  "formal_navigation_PASS_decided": false,
+  "pipeline": {
+    "accepted": 469690,
+    "delivered": 469690,
+    "committed": 469690,
+    "pending": 0,
+    "inflight": 0,
+    "ready": 0,
+    "canceled": 0,
+    "SIGUSR1_monotonic": 272245.400080443,
+    "normal_complete_receipt_monotonic": 272245.918409469,
+    "later_sent_signals": [
+      {
+        "event": "sent",
+        "kind": "pid",
+        "target": 4115032,
+        "signal": 2,
+        "monotonic_wall": 272245.947293396
+      },
+      {
+        "event": "sent",
+        "kind": "pgid",
+        "target": 4115011,
+        "signal": 2,
+        "monotonic_wall": 272246.78526481
+      }
+    ],
+    "all_only_SIGINT": true
+  },
+  "archive": {
+    "samples": 45112,
+    "completed": true,
+    "worker_fault": null,
+    "natural_worker_exit": true,
+    "archive_wait_s": 0.017871721007395536,
+    "arrays": {
+      "observations.npy": {
+        "shape": [
+          45112,
+          247
+        ],
+        "dtype": "<f4",
+        "payload_bytes": 44570656,
+        "CRC32": 2001672034,
+        "independently_stream_verified": true
+      },
+      "actions.npy": {
+        "shape": [
+          45112,
+          12
+        ],
+        "dtype": "<f4",
+        "payload_bytes": 2165376,
+        "CRC32": 3259315711,
+        "independently_stream_verified": true
+      }
+    },
+    "files": {
+      "worker_result.json": {
+        "bytes": 221842,
+        "sha256": "2295057fc67eeae89ca841a36105000402a6e7c135dc9a5bff1fe706d5fca26a"
+      },
+      "observations_actions.npz": {
+        "bytes": 26679902,
+        "sha256": "0b6deaa99f9e8aca480ae5c5990b245f2996cb872d42f1b6e05ddf7a721996d9"
+      }
+    },
+    "EOF_interpretation": "R83 worker completed=True and fault=None; no EOF failure present. Natural exit and archive verification establish closure; they do not certify navigation efficacy."
+  },
+  "roles": {
+    "main_roles": 5,
+    "launch_children": 14,
+    "all_returncode_zero": true,
+    "guardian_returncode": 0,
+    "worker_capture_gazebo_sent_signals": [],
+    "navigation_and_bridge_received_SIGINT_only": true,
+    "host": {
+      "schema": "R83_independent_host_process_closure/v1",
+      "UTC": "2026-10-13T19:27:40.625787+00:00",
+      "actual_host_proc": true,
+      "proc_namespace_inode": 4026531836,
+      "process_count": 511,
+      "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+      "audited_owned_identities": [
+        {
+          "pid": 4114768,
+          "state": "R",
+          "ppid": 4114764,
+          "pgid": 4114768,
+          "session": 4114768,
+          "start_ticks": 27090157,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b"
+        },
+        {
+          "role": "worker",
+          "pid": 4115003,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4115003,
+          "session": 4115003,
+          "start_ticks": 27090732,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+          "ownership_token": "6c5d9554ff014c288230f4255b87e4dd",
+          "owned_run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+          "returncode": 0
+        },
+        {
+          "role": "bridge",
+          "pid": 4115011,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4115011,
+          "session": 4115011,
+          "start_ticks": 27090860,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+          "ownership_token": "6c5d9554ff014c288230f4255b87e4dd",
+          "owned_run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+          "returncode": 0
+        },
+        {
+          "role": "capture",
+          "pid": 4115012,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4115012,
+          "session": 4115012,
+          "start_ticks": 27090868,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+          "ownership_token": "6c5d9554ff014c288230f4255b87e4dd",
+          "owned_run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+          "returncode": 0
+        },
+        {
+          "role": "navigation_stack",
+          "pid": 4115032,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4115032,
+          "session": 4115032,
+          "start_ticks": 27090879,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+          "ownership_token": "6c5d9554ff014c288230f4255b87e4dd",
+          "owned_run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+          "returncode": 0
+        },
+        {
+          "role": "gazebo",
+          "pid": 4115297,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4115297,
+          "session": 4115297,
+          "start_ticks": 27091048,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b",
+          "ownership_token": "6c5d9554ff014c288230f4255b87e4dd",
+          "owned_run": "./multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+          "returncode": 0
+        },
+        {
+          "pid": 4114954,
+          "state": "R",
+          "ppid": 4114768,
+          "pgid": 4114954,
+          "session": 4114954,
+          "start_ticks": 27090575,
+          "boot_id": "7977edba-efe9-4c64-ace5-70b3219b237b"
+        }
+      ],
+      "remaining_owned_identity_or_groups": [],
+      "other_simulation_roles": [],
+      "all_owned_and_guardian_groups_absent": true,
+      "all_simulation_roles_absent": true,
+      "no_signals_sent": true
+    }
+  },
+  "actual_start_checkpoint": {
+    "UTC": "2026-10-13T19:00:20.655772+00:00",
+    "actual_host_proc": true,
+    "current_physics_s": 45.864999999999995,
+    "Actor_inferred": true,
+    "owner_pid": 4114768,
+    "five_role_identity_chains_verified": true,
+    "checkpoint_is_not_exact_physics_start_timestamp": true,
+    "execute_latch_UTC": "2026-10-13T18:59:04.839085+00:00"
+  },
+  "freeze": {
+    "inputs": 880,
+    "total_source_bytes": 72095452,
+    "mismatches": [],
+    "source_freeze_SHA256": "8d22e44b177f2ab97be1f75fa590b01be1cb4867a5e58c5c8a23865f773df827"
+  },
+  "budget": {
+    "current_retained_B": 95559610368,
+    "remaining_shared_B": 34440389632,
+    "round_charge_B": 4268154880,
+    "original_round_baseline_B": 91430580224,
+    "current_retention_metric": true,
+    "historical_floor": false,
+    "new_independent_round": true,
+    "seed_absent": true,
+    "stop_reasons": [],
+    "no_deletion_reported": true,
+    "observer_highwater_preserved": true
+  },
+  "no_signals_or_model_or_simulation_started_by_review": true,
+  "limitations": [
+    "Resource/archive/source review is independent of final navigation and parking acceptance.",
+    "No deletion is reported by bound owner/budget records; this is not a filesystem-wide proof of every historical operation.",
+    "POSTROUND figures are exact at its recorded observation; newly written small reviews/reports require final budget observation by root."
+  ]
+}

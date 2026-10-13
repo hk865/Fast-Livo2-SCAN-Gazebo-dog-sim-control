@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Public learning snapshot 2026-10-10: privacy/path metadata or documentation links adjusted; control algorithms and numeric gates unchanged.
 """Accumulate only this run's observed camera-coloured SLAM points.
 
 The binary browser format is XYZ little-endian float32, R/G/B uint8, one pad
@@ -208,7 +207,7 @@ class MapArchive(Node):
             self.snapshot()
             return response
         health = self.metadata()
-        if not health['slam_healthy'] or not health['camera_healthy']\
+        if not health['slam_healthy'] or not health['camera_healthy'] \
                 or health['message_age'] is None or health['message_age'] >= 2 or health['error']:
             response.success = False
             response.message = 'SLAM, sensor or colored-cloud evidence is stale/invalid; refusing map save'

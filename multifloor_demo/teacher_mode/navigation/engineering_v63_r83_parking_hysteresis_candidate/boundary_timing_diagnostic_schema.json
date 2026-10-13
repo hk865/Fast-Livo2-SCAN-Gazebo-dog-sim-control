@@ -1,0 +1,44 @@
+{
+  "schema": "fastlivo_boundary_timing/v1",
+  "kind": 300,
+  "enabled_by": "FASTLIVO_BOUNDARY_TIMING=1 and normal diagnostic logger enabled",
+  "default": "off",
+  "rate": "At most one row per >=1 monotonic wall second per instrumented thread, emitted when a scope completes; final partial period is not emitted",
+  "header": "raw record, sequence=0, source stamp is latest logger context (not independent callback timestamp); source not used by estimator",
+  "values_prefix": [
+    "schema_version=1",
+    "window_sequence",
+    "window_begin_monotonic_ns",
+    "window_end_monotonic_ns",
+    "boundary_count=17"
+  ],
+  "values_per_boundary": [
+    "completed_calls",
+    "summed_wall_ns",
+    "summed_thread_CPU_ns",
+    "summed_process_CPU_ns",
+    "clock_invalid_calls"
+  ],
+  "boundary_labels": {
+    "0": "Process2 whole",
+    "1": "UndistortPcl whole (includes IMU propagation and backward deskew)",
+    "2": "backward point deskew only",
+    "3": "LIO residual matching query (all iterations)",
+    "4": "LIO StateEstimation whole (includes residual query and algebra)",
+    "5": "UpdateVoxelMap",
+    "6": "VIO processFrame",
+    "7": "publication conversion/enqueue calls including navigation cloud",
+    "8": "spin_some (includes callbacks)",
+    "9": "lidar callbacks (include preprocessing)",
+    "10": "IMU callback",
+    "11": "image callback",
+    "12": "lidar preprocess only",
+    "13": "sync_packages",
+    "14": "handleLIO whole",
+    "15": "handleVIO whole",
+    "16": "BuildVoxelMap initial"
+  },
+  "inclusions": "Nested intervals overlap; cannot add boundaries as exclusive total. CPU process includes OpenMP workers, DDS and writer threads; per-boundary process CPU is concurrent process activity, not exclusive function work. Thread CPU counts only current caller. Completion-window totals may include outer scopes whose start preceded window begin. Spin_some includes callback work and serialization/queueing; DDS work after return is outside synchronous publish wall. Logger enqueue/time itself not part of finished scope. No individual point payload allocation, no estimator state copy. Timer-disabled Scope only checks bool, performs no clock_gettime or row copy.",
+  "acceptance_unchanged": true,
+  "arithmetic_or_timestamp_change": false
+}

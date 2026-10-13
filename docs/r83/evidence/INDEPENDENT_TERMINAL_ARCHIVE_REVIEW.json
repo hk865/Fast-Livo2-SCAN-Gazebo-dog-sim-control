@@ -1,0 +1,233 @@
+{
+  "run": "20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+  "created_utc": "2026-10-13T19:34:09.523145+00:00",
+  "review_passed": true,
+  "blocking_findings": [],
+  "formal_new_contract_passed": true,
+  "T0_ns": 889370000000,
+  "fixed_first5_end_ns": 894370000000,
+  "coordinator_first_observation_ns": 889590000000,
+  "fixed_window_not_reset": true,
+  "source_identity": {
+    "created_cascade_sequence": 22929,
+    "event_id": "79f368bdbb33abd7ef0d3d7da4111adde7078bd11dd4c21fa6f1d91ccd5924da",
+    "event_sequence": 22929,
+    "goal_sha256": "26ca25b141e2cbfee84f00fc996e60726958c06aab479222e48ef5d53325686f",
+    "handoff_clock_ns": 889295000000,
+    "path_sha256": "98664645ba465b212cd653930e675b7edaed376d3ef403ed9abe15244b223272",
+    "ready_pose_stamp_ns": 889255000000,
+    "request_id": "20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7:navigation_f1_f3:3",
+    "run_id": "20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+    "schema": "ordinary_terminal_zero_event/v1"
+  },
+  "first_consumed_zero_input_ns": 889310000000,
+  "actual_next_native_ACK_ns": 889330000000,
+  "strict_original_600ms_capture_verified": {
+    "dwell_start_ns": 888625000000,
+    "ready_pose_ns": 889255000000,
+    "actual_span_s": 0.63,
+    "actual_math_samples": 18,
+    "cascade_core_identical_R82": true
+  },
+  "each_native_input": {
+    "world_clock_inclusive_window_frames": 251,
+    "world_first_last_s": [
+      889.37,
+      894.37
+    ],
+    "physical_source_window_frames": 250,
+    "physics_first_last_s": [
+      889.385,
+      894.365
+    ],
+    "archived250_source_records_all_original_line_hash_verified": true,
+    "all251_world_frames_typed_zero_current_identity_fresh_accepted": true,
+    "native_gap_s": 0.02
+  },
+  "NPZ_selected_array_checks": {
+    "context_rows": 599,
+    "world_window_obs_rows": 251,
+    "command_slots9_12_exact_zero": true,
+    "command_vs_telemetry_max_error": 0.0,
+    "action_vs_telemetry_max_error": 0.0,
+    "last_action_slots48_60_vs_previous_archived_action_max_error": 0.0,
+    "last_action_nonzero_window_rows": 251,
+    "current_action_nonzero_window_rows": 251,
+    "external_previous_action_zero_reset_seen": false,
+    "new_window_frame_serial_equals_npz_index_plus1": true
+  },
+  "formal_metrics_independently_equal_receipt": {
+    "native_planar_speed_max_mps": 0.033753297820518335,
+    "native_wz_max_radps": 0.008228094757494097,
+    "native_yaw_dot_max_radps": 0.007957444576252602,
+    "slam_xy_drift_max_m": 0.020240290445794215,
+    "slam_yaw_drift_max_rad": 0.01608465876798748
+  },
+  "additional_actual_motion_metrics": {
+    "native_position_peak_to_peak_m": [
+      0.016966910339111775,
+      0.004246683153867004,
+      0.0009453422441945136
+    ],
+    "native_net_position_m": [
+      0.016966910339111775,
+      0.0040921440583510105,
+      0.00040274154538133544
+    ],
+    "native_planar_drift_from_first_frame_max_m": 0.01745341483635095,
+    "native_angle_peak_to_peak_rad": [
+      0.007432998450537459,
+      0.010527253118979667,
+      0.01634672767992784
+    ],
+    "native_net_angle_rad": [
+      0.007415487097648929,
+      0.009580657842109853,
+      0.01634672767992784
+    ],
+    "native_gyro_converted_instant_Euler_yawdot_max_radps": 0.008055298443923607,
+    "formal_yawdot_definition": "maximum adjacent unwrapped native yaw finite difference over physical source time",
+    "slam_planar_speed_max_mps": 0.03725135280895039,
+    "pose_count": 152,
+    "pose_max_gap_s": 0.035
+  },
+  "legacy_arrival_first5_diagnostic": {
+    "native_max_planar_mps": 0.18272408458630948,
+    "native_max_abs_wz_radps": 0.12659470605494255,
+    "actual_actor_nonzero_commands": 250,
+    "passed_under_saved_old_diagnostic": false,
+    "formal_for_new_contract": false,
+    "interval_ns": [
+      882540000000,
+      887540000000
+    ]
+  },
+  "archive_integrity": {
+    "observations.npy": {
+      "shape": [
+        45112,
+        247
+      ],
+      "dtype": "float32",
+      "payload_bytes": 44570656,
+      "payload_only_crc32_independently_calculated": 2543422295,
+      "ZIPmember_crc32_including_NPY_header": 2001672034,
+      "ZIPmember_crc_matches_record": true,
+      "ZIPmember_crc_verified_on_EOF": true,
+      "resident_selected_rows": [
+        44121,
+        44720
+      ]
+    },
+    "actions.npy": {
+      "shape": [
+        45112,
+        12
+      ],
+      "dtype": "float32",
+      "payload_bytes": 2165376,
+      "payload_only_crc32_independently_calculated": 854768715,
+      "ZIPmember_crc32_including_NPY_header": 3259315711,
+      "ZIPmember_crc_matches_record": true,
+      "ZIPmember_crc_verified_on_EOF": true,
+      "resident_selected_rows": [
+        44121,
+        44720
+      ]
+    }
+  },
+  "archive_full_file_SHA256": "0b6deaa99f9e8aca480ae5c5990b245f2996cb872d42f1b6e05ddf7a721996d9",
+  "worker_result_SHA256": "2295057fc67eeae89ca841a36105000402a6e7c135dc9a5bff1fe706d5fca26a",
+  "worker_close": {
+    "schema": "go2_worker_archive_close/v1",
+    "maximum_grace_s": 30.0,
+    "wait_started_monotonic": 272247.110634998,
+    "waited_wall_s": 0.017871721007395536,
+    "sent_signals": [],
+    "natural_worker_exit": true,
+    "reason": "natural_worker_exit_observed",
+    "worker_returncode": 0
+  },
+  "source_sha256": {
+    "observation": "b0c8c6b6ef8cd51f9b150c6a387631dc20cc1cc214706e2d70fb2683cfba810b",
+    "observation_contract": "57fe7a0799fdb23e47dcb4bbf3d95e5e5a9bb90a21e9dab6b8611b7989cb85d4",
+    "worker": "70b9a7564c58be23ca070c6e8da8fbfedfa3cadd5eb7696aa1441f46206a83a5",
+    "cascade_core": "41fef5ba4598e0f193f3f4bd73beffe154541fb08bc48496e3a8aa178662c544",
+    "ordinary_parking": "7c8d21b3a1dec6dbe9546c3e3762efa14a6f61c42119081d8a1ccaf911e1b1a8"
+  },
+  "input_receipts": {
+    "mission46_final_parking_evidence.json": {
+      "bytes": 1220572,
+      "sha256": "0d3939b7d72da3f51c81da1e33a8e26232c54f0f9052696b2423492b574f661b"
+    },
+    "mission46_final_parking_receipt.json": {
+      "bytes": 1233,
+      "sha256": "986059208c6baf040ecb868693f21a617d93eca32c79b0fefaddefad9bf69365"
+    },
+    "mission46_parking_T0_anchor.json": {
+      "bytes": 4561,
+      "sha256": "07f2a182bda46caecc4655f7afa8fcf362c0280fd12f5f8c13288ce822ab5208"
+    },
+    "mission46_first_zero_qualification_sources.json": {
+      "bytes": 14823,
+      "sha256": "6df5889a626756f0642d03a49b69336c3f167fbd7ab746a09cdb97302d5cbfed"
+    },
+    "mission46_legacy_arrival_window_diagnostic.json": {
+      "bytes": 1222,
+      "sha256": "d12b0f475512d1a94acb1efff76f59e7d2617eeaccb30f3ea718d352ce80d750"
+    },
+    "worker_archive_integrity.json": {
+      "bytes": 880,
+      "sha256": "9efcfe698c59ab5b4d5d9f8ed31ca1a045d951f928d0fcc4f3cd75e1f9cdce6a"
+    },
+    "worker_archive_close.json": {
+      "bytes": 283,
+      "sha256": "7c02e864cf2616e9183f2878915450c699cf951b475625af39f0dc41e3883d7b"
+    },
+    "selected_policy_loaded.json": {
+      "bytes": 2458,
+      "sha256": "001106d5df76f86c412146ed193e1d56890fa40b1dad8079408de7b75c227962"
+    },
+    "telemetry.jsonl": {
+      "source_interval": [
+        882.45,
+        894.41
+      ],
+      "key": "world_sim_time",
+      "source_start_byte": 395887111,
+      "source_end_byte_exclusive": 402222428,
+      "range_bytes": 6335317,
+      "sha256": "84383b23c894971423e5f78ccc630b6a561ea13929997efe8c847a8b26098c12",
+      "rows": 599,
+      "cap_bytes": 12582912
+    },
+    "navigation_slam_poses.jsonl": {
+      "source_interval": [
+        882450000000,
+        894410000000
+      ],
+      "key": "stamp_ns",
+      "source_start_byte": 51365941,
+      "source_end_byte_exclusive": 52002731,
+      "range_bytes": 636790,
+      "sha256": "4f664d5725cded76754a3801434aae0e8af63858d8c34cfc5a64938c758dd88c",
+      "rows": 363,
+      "cap_bytes": 3145728
+    },
+    "navigation_pid_history.jsonl": {
+      "source_interval": [
+        888000000000,
+        889600000000
+      ],
+      "key": "control_stamp_ns",
+      "source_start_byte": 406500983,
+      "source_end_byte_exclusive": 407188921,
+      "range_bytes": 687938,
+      "sha256": "fc53e25b1ee99671ad75aca2293eb8f6046cf1b36785c72b6eba05a3bf3a64dd",
+      "rows": 48,
+      "cap_bytes": 3145728
+    }
+  },
+  "ordinary_statistics_improvement_claimed": false,
+  "boundary": "Independent terminal/Actor/source/archive review only. No new model orphysics experiment. NewcontractPASS does not reclassify oldarrival5sFAIL; this review does not independently assert wholemission/navigation/sourcefreeze PASS."
+}

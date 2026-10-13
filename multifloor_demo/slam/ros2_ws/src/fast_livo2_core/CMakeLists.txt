@@ -46,6 +46,9 @@ set_source_files_properties(src/vio.cpp PROPERTIES
 # Dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
@@ -115,6 +118,7 @@ target_include_directories(fast_livo2_core PRIVATE
 )
 
 set(deps
+  std_msgs
   rclcpp
   geometry_msgs
   nav_msgs
@@ -131,6 +135,7 @@ set(deps
 ament_target_dependencies(fast_livo2_core ${deps})
 
 target_link_libraries(fast_livo2_core
+  OpenSSL::Crypto nlohmann_json::nlohmann_json
   ${PCL_LIBRARIES}
   ${OpenCV_LIBRARIES}
   ${Sophus_LIBRARIES}
@@ -142,6 +147,10 @@ target_link_libraries(fast_livo2_core
 if(OpenMP_CXX_FOUND)
   target_link_libraries(fast_livo2_core OpenMP::OpenMP_CXX)
 endif()
+
+add_executable(point_identity_cpu src/identity_cpu_check.cpp)
+target_link_libraries(point_identity_cpu fast_livo2_core)
+ament_target_dependencies(point_identity_cpu rclcpp sensor_msgs nav_msgs pcl_conversions livox_ros_driver2)
 
 # Install
 install(TARGETS fast_livo2_core
@@ -155,5 +164,5 @@ install(DIRECTORY include/
 )
 
 ament_export_targets(fast_livo2_core HAS_LIBRARY_TARGET)
-ament_export_dependencies(${deps})
+ament_export_dependencies(${deps} OpenSSL nlohmann_json)
 ament_package()
