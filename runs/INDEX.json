@@ -1,0 +1,1433 @@
+{
+  "schema": "public_experiment_archive/v1",
+  "batch": "legacy_r07_r44",
+  "suggested_branch": "archive/r07-r44-20261007-20261010",
+  "actual_run_count": 21,
+  "actual_runs": [
+    {
+      "run_id": "20261008_181234_closed_loop_cascade_clock_hold_R22_V34_serial0_fault_window_full46_7a11",
+      "terminal_utc": "2026-10-08T10:28:19.796624+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "fbec1f75a7b9d5545628277ddd54cd60f4766e8b38f33b16aad443d8c010e5d2",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "2e0f4fbc41fb80b4e43db11ad913959ca6ddc942062171300036edaf2001adc1",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "2529c557715ddd1909d1dfee9a4e0fffde933efdeef6fa9efd00725fdc25bbfe",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "21c0fd037dd4268ec4b472608729fc43fb11c2b3b1dcfe883b0dea37075ecb25",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_181234_closed_loop_cascade_clock_hold_R22_V34_serial0_fault_window_full46_7a11",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "2759d911350c754856d8be0df97c934e98bb190d093f97ede58d467147046e93",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "a49e07fe569993cc862e1ca49ccaa10d284152aa7a632eafd3e789d243b5f34d",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_181234_closed_loop_cascade_clock_hold_R22_V34_serial0_fault_window_full46_7a11",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "e6ceda2e9fd7d7abab54f98d7f15033176aa2552738d3a81320c207b32a14e83",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_181234_closed_loop_cascade_clock_hold_R22_V34_serial0_fault_window_full46_7a11"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T123135Z_closed_loop_cascade_clock_hold_R34_first_goal_7dd2",
+      "terminal_utc": "2026-10-09T12:39:02.965032+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "5de2dd4870de22cba07b6637a401ff358453077030b78b034cd81479098bd8d0",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r33_first_goal/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "f399c7234f4077b6096310fd59d3b5d95272eaa71ab1e515b5a398327ca93558",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r33_first_goal/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "8fea031c8b759b9ecb2c388e6c2f8f9ca89ad54191ba10457adc0668610b6e3b",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "c024ba0b32a848e28b3679abd976fd17437530b2c81c916909f41fee73417f91",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T123135Z_closed_loop_cascade_clock_hold_R34_first_goal_7dd2",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_initialization_first_rejection; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "ddcc14af8a4ae76b1f44168c9c14b058fbb1a65dd3e72886bea8eb835fed293e",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "bf7e5c0144bfa2e4b678836a57ab60462891716231d2fe506783fa9549c937c6",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T123135Z_closed_loop_cascade_clock_hold_R34_first_goal_7dd2",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_initialization_first_rejection; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "52d052f92838c2d704d8f432c5560394c2d9cd43521cb7f7e62ed9b9f24d5103",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T123135Z_closed_loop_cascade_clock_hold_R34_first_goal_7dd2"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T112303Z_closed_loop_cascade_clock_hold_R33_original_startup_12c1",
+      "terminal_utc": "2026-10-09T11:30:37.193539+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "d7dc5527deb84c62af890731fcc99baa4e882479e3a5a7c1d98b17f3a8140def",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_startup_r33/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "969372a26b13838d1bf50e3b21765b319ce2065ddd6b46900f9e3277244a95a1",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_startup_r33/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "bf739527867fa982910ec7ec68b75c94754fe7932e1ce0aa875593111d429f2f",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "869711f300f0b4c1f073eb810ec0042041fcc87e7a68c79483b375b2634381bf",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T112303Z_closed_loop_cascade_clock_hold_R33_original_startup_12c1",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: real_initialization_anchor_request_SCAN_response_associated; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "090f303b55e03fa3254adf6b1ced24a47ee0023529516f67424a684ecd77de84",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "1030b51c6a74192017bfb9cdd561e952e03ae9503f34f2238b75adaaa575575d",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T112303Z_closed_loop_cascade_clock_hold_R33_original_startup_12c1",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: real_initialization_anchor_request_SCAN_response_associated; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "d57b633b9f21c48375eeb5c8a15910aa14cf0a4d29091fe41cbdb457bb7def68",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T112303Z_closed_loop_cascade_clock_hold_R33_original_startup_12c1"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_142958_closed_loop_cascade_clock_hold_R16_V34_full46_signed_ray_diagnostic_d99c",
+      "terminal_utc": "2026-10-08T06:45:17.749778+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "0efe523bc58a032329d08200ca008c46f5e4767ac96fa7e9a1412aebcbb14639",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "5b6b17a124b799ef09bb941ed8b072d3a476bc8489659c9168eaad25c3ca9d47",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1f4723e095a5dc92b82e8f9649a34940f29e73a47f6403017313d749988ed29e",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "2360f188637e1ba0231561381d1a1d9b7fe81eaaba1c9d1c514b9d8dc1ec4b5d",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "f4bf44683b7c5ea0c236be468e62b4062561c9db0f714e6a3d95efb37815f88b",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_142958_closed_loop_cascade_clock_hold_R16_V34_full46_signed_ray_diagnostic_d99c",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: ConnectionResetError: [Errno 104] Connection reset by peer"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "acec637b0df47d7750cce32409d37aa6aaa4450ad36af28dc7b6b5c871a09a46",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4141c7a6534f3ea7163224d46f4e994cb63782285a0ff4440467dd149be73831",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_142958_closed_loop_cascade_clock_hold_R16_V34_full46_signed_ray_diagnostic_d99c",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: ConnectionResetError: [Errno 104] Connection reset by peer"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "83e9ce81ade0f72d7da0a7c9eb862ac6ddf96adacbb7a5e9488eb5cb9cbb3d00",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_142958_closed_loop_cascade_clock_hold_R16_V34_full46_signed_ray_diagnostic_d99c"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261007_231900_closed_loop_cascade_clock_hold_R7_F2_two_groups_24MiB_cbfc",
+      "terminal_utc": "2026-10-07T15:24:13.466552+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "ffa7e43c3a9ff3468d109a47fd95f1c445f2fbb75b47d3deff871352408a7216",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v33/profiles/engineering_nav270.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "04d9a5371ea8205f8113001a89bbe24de632132f99617824fd1cd3444a176939",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v33/profiles/engineering_nav270.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "aa6f0041eca0d61bbc8bd81dd59a88441a3b7d1cd982e76c68857617ca0bb7b9",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "43cccdef9ff55112be400877af3c332517b294ddcbdac3d1a5b5ccb85d126d20",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "72daade4f898c0af8b054350e49589dbe8b7548d74290a813b2de898ff51fe69",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261007_231900_closed_loop_cascade_clock_hold_R7_F2_two_groups_24MiB_cbfc",
+            "status": "failed",
+            "runtime_error": "Bounded shadow data collected; navigation horizon intentionally interrupted, no navigation PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "b0cf87d804b08c173f0c97ebf23e1d739e733982a4ff627450a892f750c88465",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "b511bece8033dde6f795d372a35fdecb9d835419012f3c7312c2d168c40e02b3",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261007_231900_closed_loop_cascade_clock_hold_R7_F2_two_groups_24MiB_cbfc",
+            "status": "failed",
+            "runtime_error": "Bounded shadow data collected; navigation horizon intentionally interrupted, no navigation PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "215de8ac45dd5cfb517845fab50271cef4f56550ecc40f597cbbeb98cdb0f286",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261007_231900_closed_loop_cascade_clock_hold_R7_F2_two_groups_24MiB_cbfc"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_200205_closed_loop_cascade_clock_hold_R24_V34_serial0_static_receipt_gc_observer_full46_956f",
+      "terminal_utc": "2026-10-08T12:17:33.717973+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "7836404e62fd6592ee0d064c16d16d2197e43dd3e40c5e2e3c0190b6c34214ed",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "ad8cd8f6c1d74e57e518220fee6a8fd6d63e5c53f4b8855db6caca3b2c0d479f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "5658f18378a9cdc7fb0b271376c551088a9c7c480c1af6ab8b6cff44d88d0a35",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "555ce5ff4273a8d0d8f865417d11c40eaa5c0dc461279e512c26b2c2648d903b",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_200205_closed_loop_cascade_clock_hold_R24_V34_serial0_static_receipt_gc_observer_full46_956f",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "4fef6392b544c1036ff95994a3d548b5df7ba52d1b79dfcbb63f1575e997b67b",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "0ebb498494d750da9dccea07af5f0bb54b93c3051ce872a3e08fedb3fd47630d",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_200205_closed_loop_cascade_clock_hold_R24_V34_serial0_static_receipt_gc_observer_full46_956f",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "37f245195f455fa787533e9a482b8a5ef632bcf4e952f43a278991692ad965f5",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_200205_closed_loop_cascade_clock_hold_R24_V34_serial0_static_receipt_gc_observer_full46_956f"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009_123127_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_R30_retry1_39d301b8_d75e",
+      "terminal_utc": "2026-10-09T04:33:42.016706+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "c2433632459d2a2ac5bad79e65eb53af5d234a86ec514149540001d1571ddca1",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "06b55aa8288daa4cb349ea0ef990b436702bbe87ddd55640e582672e911fdd2f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "1aea8f06339cc225d81bf2c8b9c89635892f73e36aa591f501c2633f6f92c1ef",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "b079e25a35fc65100573831f10cff9b61d36a553089bdea5eb84de589d1a5d36",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009_123127_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_R30_retry1_39d301b8_d75e",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "133f246241755690cc6fb874c20ea012f2f84a1729ec85bf84a1e74083e4ec11",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4ce31887176eb8a859849309f2ba4ea9ecb1f93e978a16f4d38a6c264ce66097",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009_123127_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_R30_retry1_39d301b8_d75e",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "76adb008f0f7a04126964166fc66301cdedf327b4213b972f64d26e1e2bdbbb4",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009_123127_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_R30_retry1_39d301b8_d75e"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_171255_closed_loop_cascade_clock_hold_R21_V34_serial0_full46_70df",
+      "terminal_utc": "2026-10-08T09:27:45.852162+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "6dd8de904e6f1e1fdfe8efda38e6128918f7983159ffe60a9b60e3402d9424b0",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "f9a5f09ddcb7efe7e3ab730215e25ff076279f77438a165addb4da510d6af1d4",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "7f06d8973f6f080e8484afb8ffa06fa1b0e1f427ca2a203c20f9a3c1757e0e91",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "4b7a5ff7525d651d19b81ba3b395ba6e0ed6995a0b5c3569d67e57d6a9ec900a",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_171255_closed_loop_cascade_clock_hold_R21_V34_serial0_full46_70df",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "226de57cff36495e590d146b2ca8f817f383c75b54678e0a6ef4a6fc2ee5fb41",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "1aa4a4abe4377a3f96864be7a02eff45cda4dea7185ed357678efba8819e5501",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_171255_closed_loop_cascade_clock_hold_R21_V34_serial0_full46_70df",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "4ec60955d6b5474cb2d7ce673c59f556ae86e720f1c88bfb9d5cdeae99f33b9b",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_171255_closed_loop_cascade_clock_hold_R21_V34_serial0_full46_70df"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T213427Z_closed_loop_cascade_clock_hold_R38_any_phase_event_diagnostic_b26a",
+      "terminal_utc": "2026-10-09T21:41:16.602277+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "e14fc8d4071a8481ee0835ec4e1bb1dc258e600c9f0f9d84676fdf4c6d2a8336",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "9cacd028c759f4b2075f42d65b9a6a43a7b66a822058612f38ddf6b3250d796c",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r38_event_any_phase/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "d2ef05fe7183e7b0c23ca7d5a185cc663f38284a4530324a7e1a8125ec65ad0d",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "bece1d239eb71ccf50e989d7e17d6ae9b8858c6cbdf698ed27cebedf34f70a8d",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T213427Z_closed_loop_cascade_clock_hold_R38_any_phase_event_diagnostic_b26a",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: five_event_groups_saved_diagnostic_only; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "212053febe4b789e393e77c3acdbbbf1ff6ce83f220f138ef39f184321a617cb",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "fe1bd68acd2cafd28f199fda28775d097fcd71e7d1ab21664fa84ea587888db9",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T213427Z_closed_loop_cascade_clock_hold_R38_any_phase_event_diagnostic_b26a",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: five_event_groups_saved_diagnostic_only; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "b210d256579b07e34752e9f0555bfda8e14932de1996b05d816a0920e5df434e",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T213427Z_closed_loop_cascade_clock_hold_R38_any_phase_event_diagnostic_b26a"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T163101Z_closed_loop_cascade_clock_hold_R36_full_route_acceptance_32c0",
+      "terminal_utc": "2026-10-09T17:01:16.239420+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "393bbdb775b2942201b5c28c030d9380093776e1b6eee72f7b0dd44209fa6450",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r36_full_route_acceptance/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "2fe4ada1f1edd0e4424aaa635d748e88303018f53c7812337b9f58f4ccd65703",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r36_full_route_acceptance/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "a4c3cd68cdb033dcd053acc6f17c77bea61a8077c7f0e00bd42c21d4aa4f845a",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "9449c797b71a6486519638ccdb08b5970a5dbc67a848594dc3c6257b5139299b",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T163101Z_closed_loop_cascade_clock_hold_R36_full_route_acceptance_32c0",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "12de48578a8e9d9989fbe58fefce457cbba19c84acfc48394e58e568efdd4791",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "640d85f8e4c245ee09fae7276bccd17ed80dbde2f658debb6bb61a1e8e4b28b0",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T163101Z_closed_loop_cascade_clock_hold_R36_full_route_acceptance_32c0",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "af7f414c7f7d8c0d632cf90c8028fd7658da8564bb8a6a602e735f2316cd0e88",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T163101Z_closed_loop_cascade_clock_hold_R36_full_route_acceptance_32c0"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T132801Z_closed_loop_cascade_clock_hold_R35_first_goal_wait_521b",
+      "terminal_utc": "2026-10-09T13:36:58.902435+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "22ca931fb1d74cb2e68559250d34c13e8f3559c705be553df22597282c7cccbe",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r35_first_goal_wait/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "22d1a683a16b8f9c07148f1338253daceb4e05e41022fba2fcf78723155829d5",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r35_first_goal_wait/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "98040adb76f3f27cb30f9bbbf5d90c16449105654061bb4d8d562bd19d6bc4c1",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "9ceaae911bafe0d4a5cf636df19f1fad7d646367f7659ad9f036dcc7f73ddb4d",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T132801Z_closed_loop_cascade_clock_hold_R35_first_goal_wait_521b",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: real_first_goal_original_ordered_pass; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "931bb2d0d61edb42b580ed50d5fed72ee394b2e8c0cd43b1f3c07ebd2ee93be3",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "1395185572732778551ea70f281caa312f215b5284780f4ea48c0d9e3de9a778",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T132801Z_closed_loop_cascade_clock_hold_R35_first_goal_wait_521b",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: real_first_goal_original_ordered_pass; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "2ca3600733392454f07561b9ac70f90f1220d5c89527757b33998a0172c4e7aa",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T132801Z_closed_loop_cascade_clock_hold_R35_first_goal_wait_521b"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9",
+      "terminal_utc": "2026-10-08T04:56:15.896703+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "eca1d5f916ca98003a866a2f8393629ba4b83cd0a9df0ed82cc529db8e283c2b",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav30.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "e01ba1c33e1d5bff8012d9de0dcd8e14138b46c93b008540ef611d75f36f5fb8",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav30.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "a0678e43b6574995d09921b50a4a309b9cf905095ef350c3ddc919ccbf8a948f",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "627700254b6087ec815ae49dbe7938c206bcad67781f2f0cddda0eda79444aa5",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "e5b4b900f17a2bbe137ddcc9d7fbbf346675ee9c92caf7e05ce772ae47541c8f",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9",
+            "status": "failed",
+            "runtime_error": "RuntimeError: navigation_stack exited while Actor remained active"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "5aabdd4527fd15d6a4b9267e0230af3fa2b941e5baaf1effe172e28927e147e9",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "041c946b121f380f102cd6e11e251f14f64a73b9dfc5a30b88ce62c80aaa224d",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_125600_closed_loop_cascade_clock_hold_R8_V34_startup30_68d9",
+            "status": "failed",
+            "runtime_error": "RuntimeError: navigation_stack exited while Actor remained active"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T225944Z_closed_loop_cascade_clock_hold_R39_P1_association_diagnostic_e790",
+      "terminal_utc": "2026-10-10T07:12:03.179004+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "a72a6bca988c3a82be1ea174bf0b232285df35ab7bfe4d28c5e3580490182be0",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "7459786e4c92578368fc251c3b04765f8d2ce1cd3323ce0b7a1a5ace198819c9",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r39_p1_association/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "1399cf3a7fc082059031f2f7b5a2e07ceb1057a946dd703321b6cd1c52143c81",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "2182591f1d3fa5cc5d1f36aa0f5b96b94762816ce50f896c3858d2f57db1e534",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T225944Z_closed_loop_cascade_clock_hold_R39_P1_association_diagnostic_e790",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: P1_original_failure_and_control_groups_saved_diagnostic_only; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "06d965fe595f395dac3ea97564d54fccea817ed54a44e6c843f1f798b396f657",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "b0674e0986d8034b576a5b6f1be2879646268678818422165ce587d1e925a214",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T225944Z_closed_loop_cascade_clock_hold_R39_P1_association_diagnostic_e790",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: P1_original_failure_and_control_groups_saved_diagnostic_only; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "6803b7eb917208b50f9d701b7fe0e72f9bbf776dee8ac285d3ffbe6d27d788e7",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T225944Z_closed_loop_cascade_clock_hold_R39_P1_association_diagnostic_e790"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c",
+      "terminal_utc": "2026-10-10T08:04:58.794370+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "6d0431d284b0f107a489fe29cffcd6d6b87def6b010523ec5023dd790cad39e2",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "1c411915447657d277b21472f75890009f443156d3c9263c0a60fb5f42808f4d",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "14b91097fa8642b7aa4d9200860867aa73064edc907fe9f822a3555f956d532b",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "51c56eee844152edce98d8766088329b9b8ab5d1698bdab1325e5754b2328195",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_mission_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "1db30f15fdfa523b01e65f0c578e5d71d6767d0dd7f7e58370c872ee5824756e",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "b11df2af4f268cab81983295a99103da2cd6efd98d59eb22edb2c230ced166c8",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_mission_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "310a9d39398b9bc5f466dac911c6d92e2ea80042a244b66822f43dd045a9e913",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261010T073945Z_closed_loop_cascade_clock_hold_R40_continue_original_route_6b9c"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261010T112055Z_closed_loop_cascade_clock_hold_R43_lifecycle_P95_10GB_c779",
+      "terminal_utc": "2026-10-10T11:24:59.217866+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "17d4b47d02fa76705f0bc02cfe733469e72eb626bcbab4ae6c3b997cfc5fc9f3",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r43_lifecycle_recovery_candidate/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "c70d42b1d532f34def34b09d6b6ee8b06452b943a2bdcb3e7c08b9e4e8ec235a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r43_lifecycle_recovery_candidate/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "95b6f2e71799ff5ba599a1a3695308df55a35e7da88a7ca4965cacbe1c902f2e",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "a85db69d09a04dfc78a0e0a9c3de42636364a1b96afa4bd3c77866afd3d92340",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T112055Z_closed_loop_cascade_clock_hold_R43_lifecycle_P95_10GB_c779",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_navigation_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "a7ae11131ca5f9ca6a9eb7d57182b574757f9413ce0cee1bced7bc0af526851b",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4d910aba7e12ac61f72dfa74d8a572ef4b28a383730b577d8be06b983224b517",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T112055Z_closed_loop_cascade_clock_hold_R43_lifecycle_P95_10GB_c779",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_navigation_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "584d5eba6917ae959f4343596b446d6dabbd5c50e1456eb3dc44f5fd62603d00",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261010T112055Z_closed_loop_cascade_clock_hold_R43_lifecycle_P95_10GB_c779"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_152207_closed_loop_cascade_clock_hold_R17_V34_full46_canonical_axes_body_release_4aef",
+      "terminal_utc": "2026-10-08T07:22:24.903964+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "93ea9405afa312f905d60a06ae615a0daeae56da7da9b596b6cae6f6a513532f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "d91e73ba87fdaa6c60794f5818a375a3e2974c717bc48e39ccfb9189828cb0bc",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "00b316e53c582a8b93ae105738dae6912a6133ad8f7ff14bc664459400cebc84",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "c8bc50904d7117b028861b73c736760ddb06c20969ab8a8b3864c6055e44f45a",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "5471015851b344ff81b4611d00ecee5cec7b6c6d325db65310d53ccb3b920b95",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_152207_closed_loop_cascade_clock_hold_R17_V34_full46_canonical_axes_body_release_4aef",
+            "status": "failed",
+            "runtime_error": "PermissionError: [Errno 13] Permission denied: '/proc/1121090/environ'"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "888e3f80ceb9a5aca0ed0cccec479a8af2a6e050cf3dad4b9844c7734425ecb1",
+          "facts": {
+            "status": "recovered_failed",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "unknown"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "2a858903881d42f2092bbbd4be0cc4a697a0e5c4b5c442011687fe945d7c28ad",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_152207_closed_loop_cascade_clock_hold_R17_V34_full46_canonical_axes_body_release_4aef"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009_121332_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_1943bf2e_37f6",
+      "terminal_utc": "2026-10-09T04:13:43.379605+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "b251e021bd170845f362972ab497fb448ed9c808a3de89304d42fbdec1d736a7",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "8e12acc0cfce702c31fd9a9277c707c3b38fedb4708b9947be89758912e06f94",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "03b3058eb2d6cdb1c56117e8e986b80eaef6bce3c6521fbb5b22b8df40318328",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "7197bf39b050b2c13ef785c2fd0c68ff8e6323944e2b241abf6098e1f0f533a4",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009_121332_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_1943bf2e_37f6",
+            "status": "failed",
+            "runtime_error": "PermissionError: [Errno 13] Permission denied: '/proc/2271890/environ'"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "a2ef0092130fe0f68f3fbb4eaa5fc979905993d6b3829d0398dff79d233b22ce",
+          "facts": {
+            "status": "recovered_failed",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "unknown"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "c9ba42bb7de0b7d7161581ba7ccad871279a519d2fd4c96d3b44d707042881a8",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009_121332_closed_loop_cascade_clock_hold_R29_V34_baseline_temporal_1943bf2e_37f6"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_190114_closed_loop_cascade_clock_hold_R23_V34_serial0_request_substages_full46_8fc7",
+      "terminal_utc": "2026-10-08T11:17:18.565255+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "10b66dceaa0919e85bd510862edb973a40d55fcf7ae324cfa607ab40f9369615",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "3c2154447ca0e3378af4e1406f49ef7ae6a9e907a69c0566d96997a4246d2a3f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "736cb804f99ec10238a643757fe1473b74699e0526f37a3e387f50080c37b26b",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "378b78c72270b65d57243cd6c39a4fcedc6dc976eda27fc6a7f863550128b8b8",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "86327a515dcee731e2e1176fe82dfc9100b9a3028908c56b0be702517d6e8ac4",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_190114_closed_loop_cascade_clock_hold_R23_V34_serial0_request_substages_full46_8fc7",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "746c6ba1806dd0f493d9c87eb452d83b5ecce1785d5202a3e2203f4ba82b7bcf",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "8019556a198797f3c0be7bd85fa351c9994e94de95cfd418f6e42287637e63dd",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_190114_closed_loop_cascade_clock_hold_R23_V34_serial0_request_substages_full46_8fc7",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: BrokenPipeError: [Errno 32] Broken pipe"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "d19b1a44bd53a7e41319df9c3636c062e85028e844f50c347d796964e55fdff3",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_190114_closed_loop_cascade_clock_hold_R23_V34_serial0_request_substages_full46_8fc7"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261008_160050_closed_loop_cascade_clock_hold_R19_V34_full46_causal_ack_parking_evidence_9bf8",
+      "terminal_utc": "2026-10-08T08:06:36.304769+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "116365c8da6cdb597fd5adc93b9d4a95e1cdd9d26faf41c9a0b9073b24d096af",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "58eedbd9978bc04745a49b9604914c3e3e415a1fee0e7f80c4b21498b7f5f619",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "00b316e53c582a8b93ae105738dae6912a6133ad8f7ff14bc664459400cebc84",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "d9cc055b0e442186f862595b2a97dd7d3ba917d6505f5baa4c9a07578023290f",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "98c98c494b0dd53769ab21aa5025652fcf3f7f84dfc37fc397cb578f48d9db7c",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_160050_closed_loop_cascade_clock_hold_R19_V34_full46_causal_ack_parking_evidence_9bf8",
+            "status": "failed",
+            "runtime_error": "RuntimeError: navigation_stack exited while Actor remained active"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "468ebe772742cd574a4e00346be3b7bc9beb82fda85e4bd53cf77e6035b2a39b",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "480e814eebe9e6d603e11bcaf033be22fb741bab0f2a760877b3122b85a8c36c",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261008_160050_closed_loop_cascade_clock_hold_R19_V34_full46_causal_ack_parking_evidence_9bf8",
+            "status": "failed",
+            "runtime_error": "RuntimeError: navigation_stack exited while Actor remained active"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "4777fb5bd82a86d8bd9a3a95a50025ec17cecd6f55275a4d51e418ffd6367de6",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261008_160050_closed_loop_cascade_clock_hold_R19_V34_full46_causal_ack_parking_evidence_9bf8"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261010T125846Z_closed_loop_cascade_clock_hold_R44_active_P95_10GB_9486",
+      "terminal_utc": "2026-10-10T13:02:48.573887+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "177fa82fc98817f9ff46998e27651c927f45e04f755b9773d33eef78127a4fdd",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "fa03a438c72c957cb1efabb2b63555ed1f8b0c9aa54c529681172feb50a63f3b",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r44_active_p95_capture_candidate/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "90cc9e84fbf9fd230db3cc082c36fdf1d161a2f0e1b82efefd60c86eee65dea1",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "2a9c61600bf0c8b2b185363a23c782c72c733a5ac85d3dbe56300b334bc46c11",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T125846Z_closed_loop_cascade_clock_hold_R44_active_P95_10GB_9486",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_navigation_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "e4421c4ddf41cd576ccc5cfac90d96e29820f5eb1e4832028c3fb84cb95b5d71",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "053c2125904b24f85a6e6a4a7be8e7bb8f17e093089aee64fc0d18c9bc9e7116",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261010T125846Z_closed_loop_cascade_clock_hold_R44_active_P95_10GB_9486",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_navigation_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "19f3fdb2b3387a93b7adedbebaf1c77970ac3e0e0a1a213caeedb8015698c353",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261010T125846Z_closed_loop_cascade_clock_hold_R44_active_P95_10GB_9486"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261009T202617Z_closed_loop_cascade_clock_hold_R37_rows_event_diagnostic_d973",
+      "terminal_utc": "2026-10-09T20:37:26.161139+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "7a23beaf539b708843e53ba8f30c77fbf1a1c3e8b754f7efdced064f2819ba62",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r37_rows_event/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "ab08a46307af6f5656ac79bd36eb1eed92505701d6821051ab879bac28af92b0",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r37_rows_event/profiles/engineering_nav46.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2a3db4764eeb60276ed9e190aa6d1dbf46cdabf39ff38abdd6a6d3685f5806a7",
+          "experiment": "teacher_original46_actual_SLAM_SCAN_corridor_tracking_v20",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "614c7b4687586e3e321e90f10f1fd8a15bd18e6340aa48a03a052a9a31b2880b",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "6678a9dbb3f213c8209c7c5bc688ec5692d59ec1cc9fc79555c29698c1a91783",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T202617Z_closed_loop_cascade_clock_hold_R37_rows_event_diagnostic_d973",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_mission_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "d353829abbbf54bb1df39facdd886b9c05f97fad350f8742527f0d61851430e1",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "a5f5cf686ff4987bfeb12bb483dd1839a9058081daa92aa1f027d36854e473e4",
+          "facts": {
+            "schema": "teacher_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261009T202617Z_closed_loop_cascade_clock_hold_R37_rows_event_diagnostic_d973",
+            "status": "failed",
+            "runtime_error": "R33 intentional diagnostic stop: actual_original_mission_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "mission46_status.json",
+          "original_sha256": "10bfd6fe3f07f9b5c22eccb4851fe99bcae7aa220d6f04cd11ac1c2ca48ef241",
+          "facts": {
+            "schema": "teacher_original_mission46_state/v1",
+            "run_id": "20261009T202617Z_closed_loop_cascade_clock_hold_R37_rows_event_diagnostic_d973"
+          }
+        }
+      ]
+    }
+  ],
+  "scope_has_gaps": true,
+  "private_host_paths_normalized": true,
+  "original_local_files_retained": true,
+  "excluded_private_documents": []
+}

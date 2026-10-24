@@ -1,0 +1,238 @@
+"""One R30 retry of R29 baseline capture; same localization, owned cleanup only."""
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+import uuid
+
+T = Path('/opt/experiment/history/2026-10-07/task/go2_engineering_v33')
+S = T / 'R30_BASELINE_TEMPORAL_CAPTURE_STAGE'
+V = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_continuous_known_map')
+RUNS = V.parents[1] / 'runs'
+sys.path.insert(0, str(V))
+from storage_guard import usage as existing_usage
+
+
+def read(path):
+    try:
+        return json.loads(Path(path).read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def write(path, value):
+    path = Path(path)
+    temp = path.with_suffix(path.suffix + '.tmp')
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    os.replace(temp, path)
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def identity(pid):
+    return (Path('/proc') / str(pid) / 'stat').read_text().rsplit(')', 1)[1].split()[19]
+
+
+def usage(root):
+    # Existing shared-budget implementation catches only vanished files; other
+    # failures remain errors. Include directory allocation in this run's cap.
+    result = existing_usage([root])
+    directories = 0
+    for base, dirs, _ in os.walk(root, followlinks=False):
+        dirs[:] = [name for name in dirs if not Path(base, name).is_symlink()]
+        try:
+            directories += Path(base).lstat().st_blocks * 512
+        except FileNotFoundError:
+            continue
+    return max(result['allocated_bytes'] + directories, result['logical_bytes'])
+
+
+def groups_remaining(run, runner_pid=None):
+    owned = read(Path(run) / 'owned_processes_started.json') or {}
+    ready = read(Path(run) / 'guardian_ready.json') or {}
+    ids = {item['pgid'] for item in owned.values()}
+    if ready.get('identity'):
+        ids.add(ready['identity']['pgid'])
+    if runner_pid:
+        ids.add(runner_pid)
+    remaining = []
+    for path in Path('/proc').iterdir():
+        if not path.name.isdigit():
+            continue
+        try:
+            fields = (path / 'stat').read_text().rsplit(')', 1)[1].split()
+            if int(fields[2]) in ids:
+                remaining.append(dict(pid=int(path.name), state=fields[0], pgid=int(fields[2]), start_ticks=fields[19]))
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+    return remaining
+
+
+def supervise(proc, saved_identity, poll_stop, result_dir, run_path, observation_cap_s, cleanup_reserve_s=122):
+    """Always seal an outcome, including monitor exceptions; use owned runner only."""
+    result_dir = Path(result_dir)
+    start = time.monotonic()
+    stop = error = cleanup_error = None
+    try:
+        if saved_identity is None:
+            saved_identity = identity(proc.pid)
+        proc.go2_owned_start_ticks = saved_identity
+        while proc.poll() is None:
+            stop = poll_stop()
+            if stop is None and time.monotonic() - start >= observation_cap_s:
+                stop = dict(reason='observation_wall_cap_with_original_cleanup_reserve')
+            if stop is not None:
+                break
+            time.sleep(.2)
+    except Exception as exc:
+        error = dict(type=type(exc).__name__, message=str(exc), phase='monitor',
+                     no_retry=True, utc=datetime.now(timezone.utc).isoformat())
+        stop = dict(reason='monitor_exception_no_retry', error=error)
+        write(result_dir / 'MONITOR_ERROR.json', error)
+    finally:
+        try:
+            if proc.poll() is None:
+                if saved_identity is None or identity(proc.pid) != saved_identity:
+                    raise RuntimeError('Owned runner identity changed; refusing signal')
+                stop = stop or dict(reason='supervisor_exit')
+                stop.update(utc=datetime.now(timezone.utc).isoformat(), runner_pid=proc.pid,
+                            runner_start_ticks=saved_identity, signal='SIGINT_TO_OWNED_RUNNER_ONLY',
+                            original_runner_owns_all_child_cleanup=True)
+                write(result_dir / 'STOP_INTENT.json', stop)
+                os.kill(proc.pid, signal.SIGINT)
+        except Exception as exc:
+            cleanup_error = dict(type=type(exc).__name__, message=str(exc), phase='owned_runner_cleanup')
+            write(result_dir / 'OWNED_CLEANUP_ERROR.json', cleanup_error)
+        # Even if identity is inaccessible, keep observing the original runner
+        # and its existing independent guardian. Never substitute a new identity
+        # or bypass proc access to send a signal.
+        cleanup_start = time.monotonic()
+        while proc.poll() is None:
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                if time.monotonic() - cleanup_start >= cleanup_reserve_s:
+                    write(result_dir / 'CLEANUP_OVERTIME.json', dict(
+                        status='ORIGINAL_CLEANUP_OVERTIME', runner_pid=proc.pid,
+                        action='Continue observing original guardian; no other signals or retry',
+                        total_physical_stop_hard_bound_claimed=False))
+        run = run_path()
+        allocated = None
+        if run is not None:
+            try:
+                allocated = usage(run)
+            except Exception as exc:
+                cleanup_error = cleanup_error or dict(type=type(exc).__name__, message=str(exc), phase='final_budget')
+        remaining = None
+        if run is not None:
+            try:
+                remaining = groups_remaining(run, proc.pid)
+            except Exception as exc:
+                cleanup_error = cleanup_error or dict(type=type(exc).__name__, message=str(exc), phase='proc_group_verification')
+        outcome = dict(utc=datetime.now(timezone.utc).isoformat(), attempt='R30',
+                       previous_attempt='R29_preserved', run=None if run is None else str(run),
+                       returncode=proc.poll(), monitor_error=error, cleanup_error=cleanup_error,
+                       observer_stop=stop, wall_elapsed_s=time.monotonic()-start,
+                       single_retry_attempt=True, new_localization_candidate_installed=False,
+                       baseline_localization_behavior_unchanged=True, new_run_allocated_bytes=allocated,
+                       original_run_result=None if run is None else read(run / 'run_result.json'),
+                       capture_receipt=None if run is None else read(run / 'known_scene_temporal_progress.json'),
+                       remaining_saved_groups=remaining,
+                       actual_navigation_verified=False)
+        write(result_dir / 'BASELINE_CAPTURE_RUN_OUTCOME.json', outcome)
+    return outcome
+
+
+def main():
+    previous = read(T / 'R29_BASELINE_TEMPORAL_CAPTURE_STAGE/ACTUAL_RUN_PATH.json')
+    previous_owner = read(T / 'R29_BASELINE_TEMPORAL_CAPTURE_STAGE/RUNNER_START.json')
+    assert previous and previous_owner and not groups_remaining(previous['run'], previous_owner['pid']), 'Previous R29 still has owned processes'
+    with (S / 'ONE_RUN_LATCH.json').open('x') as stream:
+        json.dump(dict(utc=datetime.now(timezone.utc).isoformat(), pid=os.getpid(), attempt='R30',
+                       previous_failure_preserved=True, single_retry_attempt=True), stream)
+    contract = read(V / 'KNOWN_SCENE_TEMPORAL_CAPTURE_CONTRACT.json')
+    assert sha(V / 'known_scene_matcher.py') == contract['original_matcher_sha256']
+    freeze = read(T / 'R30_SOURCE_FREEZE_RECEIPT.json')
+    assert freeze and sha(V / 'ENGINEERING_V34_PREFLIGHT.json') == freeze['gate_sha256']
+    assert sha(Path(__file__)) == freeze['monitor_sha256']
+    assert freeze['independent_review_passed'] and freeze['baseline_sources_unchanged']
+    # Keep the frozen observer's required label; the explicit R30 suffix gives
+    # this retry a distinct actual run identity without changing its contract.
+    label = 'R29_V34_baseline_temporal_R30_retry1_' + uuid.uuid4().hex[:8]
+    command = ['/usr/bin/python3', '-B', str(V / 'run.py'), '--profile', 'engineering_nav46',
+               '--label', label, '--domain', '99', '--cpu-python',
+               '/opt/experiment/user/isaacsim/kit/python/bin/python3', '--surface-validity', '0']
+    env = os.environ.copy()
+    env.update(GO2_BASELINE_TEMPORAL_CAPTURE='R29_bounded_baseline', PYTHONDONTWRITEBYTECODE='1',
+               OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1', CUDA_VISIBLE_DEVICES='')
+    current_run = [None]
+    def poll_stop():
+        matches = list(RUNS.glob('*' + label + '*'))
+        if len(matches) > 1:
+            return dict(reason='ambiguous_fresh_run_identity')
+        if not matches:
+            return None
+        run = current_run[0] = matches[0].resolve()
+        if not (S / 'ACTUAL_RUN_PATH.json').exists():
+            write(S / 'ACTUAL_RUN_PATH.json', dict(run=str(run), label=label, attempt='R30', simulation_only=True))
+        state = read(run / 'state.json') or {}
+        known = read(run / 'known_scene_status.json') or {}
+        progress = read(run / 'known_scene_temporal_progress.json') or {}
+        mission = read(run / 'mission46_status.json') or {}
+        sim_ns = max(int(float(state.get('sim_time', 0))*1e9), int(known.get('ros_clock_ns', 0)))
+        first = progress.get('first_rejection_source_ns')
+        observer_error = read(run / 'known_scene_temporal_observer_error.json')
+        allocated = usage(run)
+        if observer_error or progress.get('errors'):
+            return dict(reason='observer_failure_no_retry', error=observer_error or progress['errors'])
+        if first is not None and sim_ns-first >= contract['post_first_rejection_window_ns']:
+            return dict(reason='first_original_rejection_short_window_complete',
+                        first_rejection_source_ns=first, current_native_or_ROS_clock_ns=sim_ns,
+                        saved_sources=[x['source_ns'] for x in progress.get('saved', [])])
+        if sim_ns >= contract['stop_request_sim_cap_s']*1e9:
+            return dict(reason='120_sim_s_stop_request_no_extension', sim_ns=sim_ns)
+        if mission.get('stage') == 'failed' or state.get('fault'):
+            return dict(reason='original_mission_or_physical_failure', mission=mission.get('message'), fault=state.get('fault'))
+        if allocated >= contract['maximum_new_run_allocated_bytes']:
+            return dict(reason='new_run1GiB_bound', allocated_bytes=allocated)
+        return None
+    with (S / 'ORIGINAL_RUNNER_STDOUT.log').open('x') as output:
+        proc = subprocess.Popen(command, cwd=V, env=env, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
+        started = [False]
+        def initialized_poll():
+            if not started[0]:
+                write(S / 'RUNNER_START.json', dict(pid=proc.pid, start_ticks=proc.go2_owned_start_ticks, command=command, label=label,
+                      attempt='R30', contract_sha256=sha(V / 'KNOWN_SCENE_TEMPORAL_CAPTURE_CONTRACT.json'),
+                      observation_wall_cap_s=contract['stop_request_wall_cap_s'], original_cleanup_reserve_s=122,
+                      maximum_new_run_allocated_bytes=contract['maximum_new_run_allocated_bytes'],
+                      target_all_recording_bytes=contract['recording_budget_target_bytes']))
+                started[0] = True
+            return poll_stop()
+        outcome = supervise(proc, None, initialized_poll, S, lambda: current_run[0], contract['stop_request_wall_cap_s'])
+    print(json.dumps({k:outcome[k] for k in ['run','returncode','wall_elapsed_s','monitor_error','cleanup_error','new_run_allocated_bytes','observer_stop']},ensure_ascii=False),flush=True)
+
+
+def entrypoint():
+    try:
+        main()
+    except Exception as exc:
+        error = dict(type=type(exc).__name__, message=str(exc), phase='entrypoint',
+                     attempt='R30', utc=datetime.now(timezone.utc).isoformat(), no_retry=True)
+        write(S / 'ENTRYPOINT_ERROR.json', error)
+        # Preserve a more detailed outcome already produced by supervise.
+        if not (S / 'BASELINE_CAPTURE_RUN_OUTCOME.json').exists():
+            write(S / 'BASELINE_CAPTURE_RUN_OUTCOME.json', dict(attempt='R30',
+                  entrypoint_error=error, actual_navigation_verified=False,
+                  action='Inspect owned runner/guardian receipts; no further launch or permission bypass'))
+        raise
+
+
+if __name__ == '__main__':
+    entrypoint()

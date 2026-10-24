@@ -1,0 +1,37 @@
+"""Owner freezes exact changed sources after finite and independent review."""
+from pathlib import Path
+import datetime as dt
+import hashlib
+import json
+import sys
+S=Path(__file__).resolve().parent
+N=S.parent/'R39_P1_ASSOCIATION_STAGE'
+C=Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v34_r40_continue_original_route')
+B=C.with_name('engineering_v34_r39_p1_association')
+sys.path.insert(0,str(C))
+import corridor_preflight as cp
+import storage_guard
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+assert not (S/'ONE_SIMULATION_LATCH.json').exists()
+report=S/'independent_review/FINAL_REVIEW.json'
+review=json.loads(report.read_text())
+assert review['review_passed'] is True and review['blocking_findings']==[]
+assert all(x['passed'] is True for x in review['checks'])
+for p,h in review['source_sha256'].items():assert sha(p)==h,p
+old=json.loads((B/cp.GATE_NAME).read_text())
+assert sha(B/cp.GATE_NAME)==json.loads((N/'FINAL_DELIVERY_VERIFICATION.json').read_text())['source_gate_sha256']
+for p,h in old['verified_inputs_sha256'].items():assert sha(p)==h,p
+gate=cp.freeze_source_review(C,
+ [str(S/'FINITE_CPU_RECEIPT.json'),str(N/'FINITE_CPU_RECEIPT.json'),str(N/'reboot_recovery/RECOVERY_FINITE_TEST_RECEIPT.json')],
+ [str(report),str(N/'INDEPENDENT_REVIEW_ADMISSION.json'),str(N/'ROOT_RELEASE_RECONCILIATION.json')],root_review_complete=True)
+gate['verified_inputs_sha256'].update(old['verified_inputs_sha256'])
+extra=[S/x for x in ['AUTHORITY.json','PATH_DECISION.json','CANDIDATE_DIFF.patch','create_candidate.py','ISOLATED_CANDIDATE_COPY.json','finite_stop_tests.py','FINITE_CPU_OUTPUT.txt']]
+extra += [Path(__file__).resolve(),N/'FINAL_DELIVERY_VERIFICATION.json',N/'ACTUAL_RUN_DELIVERY.json',N/'reboot_review/ACTUAL_RUNTIME_INDEPENDENT_REVIEW.json',N/'reboot_review/ACTUAL_NATIVE_PHYSICS_INDEPENDENT_ADDENDUM.json']
+gate['verified_inputs_sha256'].update({str(p):sha(p) for p in extra})
+gate['diagnostic_scope']='One autonomous original46 continuation,1500native s/9090wall s/5GB; sampling completion/expiry does not stop; all admission,hard safety and80GB historical budget retained; no GT carrier'
+(C/cp.GATE_NAME).write_text(json.dumps(gate,indent=2)+'\n')
+for p in (C/'profiles').glob('engineering_*.json'):cp.verify_preflight(C,json.loads(p.read_text()))
+storage_guard.register(C)
+out=dict(schema='R40_fresh_source_freeze/v1',utc=dt.datetime.now(dt.timezone.utc).isoformat(),candidate=str(C),gate_sha256=sha(C/cp.GATE_NAME),bindings=len(gate['verified_inputs_sha256']),tests=10,independent_review_sha256=sha(report),R39_gate_sha256=sha(B/cp.GATE_NAME),old_R39_unchanged=True,maximum_attempts=1,new_runtime_started=False,source_changes_stopped=True,navigation_PASS=False)
+with (S/'SOURCE_FREEZE.json').open('x') as f:f.write(json.dumps(out,indent=2)+'\n')
+print(json.dumps(out))
