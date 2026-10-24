@@ -1,0 +1,65 @@
+"""Ordinary terminal ownership after original SLAM/IMU/ACK gates, never T0.
+
+The owner uses only fresh measured navigation pose/motion. It neither changes
+route success nor starts the formal parking window, and never retries a failed
+zero hold. Native physical motion remains independently checked by acceptance.
+"""
+import math
+import numpy as np
+
+class OrdinaryParking:
+    def __init__(self):
+        self.enabled=False;self.stage=None;self.dwell=None;self.failure=None
+        self.start_clock=None;self.deadline=None;self.ready_stamp=None;self.ready_clock=None
+        self.handoff_clock=None;self.origin=None;self.origin_yaw=None
+        self.first_zero_publication_clock=None;self.first_actor_zero_ack=None
+
+    def begin(self,clock,timeout_ns):
+        if self.enabled:return False
+        if type(clock)is not int or type(timeout_ns)is not int or timeout_ns<=0:
+            raise ValueError('Original integer parking clock/deadline required')
+        self.enabled=True;self.stage='capture';self.start_clock=clock;self.deadline=clock+timeout_ns
+        return True
+
+    def guard(self,reason):
+        if not self.enabled:return
+        if self.ready_stamp is not None:
+            self.failure=self.failure or 'ordinary_zero_hold_interrupted: '+str(reason)
+            self.stage='failed'
+        else:
+            self.stage='capture';self.dwell=None
+
+    def update(self,stamp,clock,position,yaw,velocity,yawdot,body_wz,goal_distance,yaw_error):
+        if not self.enabled:return None
+        if self.failure:return 'failed'
+        if self.ready_stamp is not None:
+            if clock>self.deadline and self.first_actor_zero_ack is None:
+                self.failure='ordinary_actual_zero_ACK_timeout';self.stage='failed';return self.stage
+            xy=float(np.linalg.norm(np.asarray(position)[:2]-self.origin[:2]))
+            dyaw=abs(math.atan2(math.sin(yaw-self.origin_yaw),math.cos(yaw-self.origin_yaw)))
+            if (xy>.05 or dyaw>.1 or np.linalg.norm(np.asarray(velocity)[:2])>.08 or
+                    abs(yawdot)>.1 or abs(body_wz)>.1):
+                self.failure='ordinary_zero_hold_actual_motion_or_drift_exceeded'
+                self.stage='failed'
+            else:self.stage='zero_hold'
+            return self.stage
+        if clock>self.deadline:
+            self.failure='ordinary_precise_capture_deceleration_timeout';self.stage='failed';return self.stage
+        close=goal_distance<=.025 and abs(yaw_error)<=.035
+        low=np.linalg.norm(np.asarray(velocity)[:2])<.03 and abs(yawdot)<.06
+        self.stage='controlled_deceleration' if close else 'capture'
+        self.dwell=(stamp if self.dwell is None else self.dwell) if close and low else None
+        if self.dwell is not None and stamp-self.dwell>=600_000_000:
+            self.ready_stamp=stamp;self.ready_clock=clock;self.handoff_clock=clock
+            self.origin=np.asarray(position,float).copy();self.origin_yaw=float(yaw)
+            self.stage='handoff_zero'
+        return self.stage
+
+    def evidence(self):
+        return dict(schema='ordinary_terminal_parking_stages/v1',enabled=self.enabled,stage=self.stage,
+            capture_begin_clock_ns=self.start_clock,capture_deadline_clock_ns=self.deadline,
+            precise_dwell_start_pose_stamp_ns=self.dwell,ready_pose_stamp_ns=self.ready_stamp,
+            ready_clock_ns=self.ready_clock,handoff_clock_ns=self.handoff_clock,
+            first_zero_publication_clock_ns=self.first_zero_publication_clock,
+            first_actor_zero_ack=self.first_actor_zero_ack,failure=self.failure,
+            formal_T0_set_here=False,navigation_ground_truth_used=False)
