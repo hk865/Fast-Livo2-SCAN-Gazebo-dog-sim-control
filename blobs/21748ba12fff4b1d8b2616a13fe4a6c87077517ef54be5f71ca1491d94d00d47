@@ -1,0 +1,948 @@
+"""Select a frozen SCAN workspace, with a separate fresh R85 mode3 contract."""
+from pathlib import Path
+import copy
+import hashlib
+import json
+import re
+import shlex
+
+HERE = Path(__file__).resolve().parent
+SLOTS = {
+    'protected_baseline': (HERE.parents[2]/'navigation/ros2_ws', 'SCAN_BASELINE_WORKSPACE_CONTRACT.json'),
+    'bounded_snapshot_exporter_v20': (HERE.parent/'corridor_tracking_v20/scan_ws', 'SCAN_CANDIDATE_WORKSPACE_CONTRACT.json'),
+}
+R85_RELEASE_ROOT = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_direction_boundary_release_20261014')
+R85_BUNDLE = R85_RELEASE_ROOT/'candidate_bundle'
+R85_WORKSPACE = R85_BUNDLE/'scan_ws'
+R85_TRAJ_WORKSPACE = R85_BUNDLE/'traj_utils_ws'
+R85_TRAJ_ARCHIVE = R85_TRAJ_WORKSPACE/'install/traj_utils/lib/libtraj_utils.a'
+R85_PROJECT_ROOT = Path('/opt/experiment/workspace')
+R85_BASELINE_CONTRACT = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_direction_boundary_release_20261014/contract_stage/BASELINE_R85_SCAN_WORKSPACE_CONTRACT.json')
+R85_BASELINE_CONTRACT_SHA256 = '45a59a5945e876f56bc064cb5f220930c974eb9b5deeaad71e40414c0da93ae5'
+R85_CANDIDATE_ROOT = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate')
+R85_CONTRACT_SCHEMA = 'r85_SCAN_workspace/v1'
+R85_SELECTOR = 'r85_mode3_session_v3'
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _r85_enabled(profile):
+    session = (profile or {}).get('r85_session', {})
+    if not isinstance(session, dict) or not isinstance(session.get('enabled', False), bool):
+        raise RuntimeError('r85_session.enabled must be an explicit boolean')
+    return session if session.get('enabled', False) else None
+
+
+def _bindings(data, required, control_overrides=None):
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or not bindings:
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path in required:
+        if str(path.resolve()) not in bindings:
+            raise RuntimeError('Mandatory SCAN binding is missing: ' + str(path))
+    effective=dict(bindings)
+    if control_overrides is not None:
+        allowed={str(R85_CANDIDATE_ROOT/name) for name in ('controller.py','shared_controller.py','scan_workspace.py')}
+        if set(control_overrides)!=allowed:
+            raise RuntimeError('Control adapter must replace exactly three reviewed runtime bindings')
+        for name,row in control_overrides.items():
+            if bindings.get(name)!=row['before_sha256']:
+                raise RuntimeError('Control adapter old binding differs: '+name)
+            effective[name]=row['after_sha256']
+    for name, digest in effective.items():
+        if (not isinstance(name, str) or not Path(name).is_absolute()
+                or str(Path(name).resolve()) != name or not isinstance(digest, str)
+                or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+                or not Path(name).is_file() or sha(name) != digest):
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + str(name))
+    return effective
+
+
+def _r85_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('R85 SCAN selector is scoped to the independent C66 candidate')
+    name = session.get('scan_workspace_contract')
+    digest = session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None):
+        raise RuntimeError('R85 requires an absolute fresh SCAN contract and its SHA256')
+    contract = Path(name).resolve()
+    if (contract != HERE/'R85_SCAN_WORKSPACE_CONTRACT.json' or not contract.is_file()
+            or sha(contract) != digest):
+        raise RuntimeError('R85 fresh SCAN contract path or SHA256 differs')
+    data = json.loads(contract.read_text())
+    workspace = R85_WORKSPACE.resolve()
+    if (data.get('schema') != R85_CONTRACT_SCHEMA or data.get('candidate') != R85_SELECTOR
+            or data.get('candidate_root') != str(HERE)
+            or data.get('workspace') != str(workspace)
+            or data.get('protocol_version') != 3
+            or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('R85 requires its own compile-only mode3 source/build contract')
+    executable = workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config = workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    receipt = workspace.parent/'MODE3_COMPONENT_BUILD_RECEIPT_V3.json'
+    source_paths = [workspace/'src/plan_manage'/relative for relative in (
+        'package.xml', 'CMakeLists.txt', 'src/scan_replan_fsm.cpp',
+        'src/scan_planner_node.cpp', 'src/planner_manager.cpp',
+        'include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h',
+        'include/plan_manage/measured_start_state.h',
+        'include/plan_manage/plan_container.hpp')]
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        executable, config, receipt, workspace/'build/scan_planner/CMakeCache.txt',
+        workspace/'build/scan_planner/compile_commands.json',
+        workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt',
+        *source_paths]
+    link_command = (workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    project_root = Path('/opt/experiment/workspace')
+    link_inputs = sorted({Path(token).resolve() for token in shlex.split(link_command)
+        if Path(token).is_file() and (token.startswith(str(project_root) + '/')
+            or Path(token).resolve() == R85_TRAJ_ARCHIVE.resolve())})
+    if not link_inputs:
+        raise RuntimeError('R85 project-specific SCAN link inputs are missing')
+    required.extend(link_inputs)
+    if (data.get('executable') != str(executable.resolve())
+            or data.get('config') != str(config.resolve())
+            or data.get('build_receipt') != str(receipt.resolve())):
+        raise RuntimeError('R85 executable, configuration or v3 build receipt differs')
+    required.extend(_release_required_paths())
+    bindings = _bindings(data, required)
+    _release_evidence(data, bindings, link_inputs)
+    sources = data.get('source_bindings_sha256')
+    if not isinstance(sources, dict) or any(
+            sources.get(str(path.resolve())) != bindings[str(path.resolve())]
+            for path in source_paths):
+        raise RuntimeError('R85 source identities are missing from its fresh contract')
+    linked = data.get('project_link_input_bindings_sha256')
+    if not isinstance(linked, dict) or any(
+            linked.get(str(path)) != bindings[str(path)] for path in link_inputs):
+        raise RuntimeError('R85 project-specific SCAN link identities differ')
+    build = json.loads(receipt.read_text())
+    if (build.get('schema') != 'mode3-component-build-receipt/v3'
+            or build.get('success') is not True or build.get('compile_only') is not True
+            or build.get('build_exit_code') != 0 or not isinstance(build.get('bindings'), list)):
+        raise RuntimeError('R85 selected SCAN has no successful compile-only v3 receipt')
+    build_bindings = {}
+    for item in build['bindings']:
+        if not isinstance(item, dict) or not isinstance(item.get('path'), str):
+            raise RuntimeError('Malformed v3 build binding')
+        path = str(Path(item['path']).resolve())
+        if bindings.get(path) != item.get('sha256'):
+            raise RuntimeError('R85 source/build receipt binding differs: ' + path)
+        build_bindings[path] = item['sha256']
+    if any(str(path.resolve()) not in build_bindings for path in (
+            executable, workspace/'src/plan_manage/src/scan_replan_fsm.cpp',
+            workspace/'src/plan_manage/include/plan_manage/scan_replan_fsm.h')):
+        raise RuntimeError('R85 v3 receipt does not bind the selected ELF and FSM source')
+    return workspace, contract, data
+
+
+def _release_required_paths():
+    paths = [R85_BASELINE_CONTRACT, R85_RELEASE_ROOT/'COLCON_INSTALL_RESULT.json',
+        R85_RELEASE_ROOT/'RELEASE_BUILD_COMMANDS.json',
+        R85_RELEASE_ROOT/'RELEASE_CANDIDATE_BUILD_RECEIPT.json',
+        R85_BUNDLE/'traj_utils_SOURCE_COPY_SHA256.json',
+        R85_BUNDLE/'plan_manage_SOURCE_COPY_SHA256.json',
+        R85_TRAJ_ARCHIVE, R85_RELEASE_ROOT/'SOURCE_AND_SCOPE.json',
+        R85_RELEASE_ROOT/'STOPPED_TARGET_BOUNDARY.diff',
+        R85_RELEASE_ROOT/'SINGLE_BRANCH_SOURCE_CHECK.json',
+        R85_RELEASE_ROOT/'BOUNDARY_BUILD_IDENTITY.json',
+        R85_RELEASE_ROOT/'BOUNDARY_SOURCE_REVIEW.json',
+        R85_RELEASE_ROOT/'FRESH_ARCHIVE_BENCHMARK.json',
+        R85_RELEASE_ROOT/'LD_BINDING_RESULT.json',
+        R85_RELEASE_ROOT/'INSTALL_ELF_TRANSFORMATION.json']
+    for workspace, package in ((R85_WORKSPACE, 'scan_planner'),
+                               (R85_TRAJ_WORKSPACE, 'traj_utils')):
+        for tree in (workspace/'src', workspace/'install'):
+            paths.extend(path.resolve() for path in tree.rglob('*')
+                if path.is_file() and '__pycache__' not in path.parts
+                and path.suffix != '.pyc')
+        build = workspace/'build'/package
+        paths.extend(build/name for name in ('CMakeCache.txt',
+            'compile_commands.json', 'cmake_install.cmake', 'install_manifest.txt'))
+        paths.extend(path.resolve() for path in (build/'CMakeFiles').rglob('*')
+            if path.is_file() and (path.name in ('link.txt', 'flags.make')
+                or path.name.endswith('.o.d')))
+    paths.append(R85_WORKSPACE/'build/scan_planner/scan_planner_node')
+    paths.append(R85_TRAJ_WORKSPACE/'build/traj_utils/libtraj_utils.a')
+    return sorted(set(path.resolve() for path in paths))
+
+
+def _release_evidence(data, bindings, link_inputs):
+    if sha(R85_BASELINE_CONTRACT) != R85_BASELINE_CONTRACT_SHA256:
+        raise RuntimeError('Preserved complete R85 baseline contract changed')
+    baseline = json.loads(R85_BASELINE_CONTRACT.read_text())
+    if (len(baseline.get('bindings_sha256', {})) != 378
+            or len(baseline.get('source_bindings_sha256', {})) != 87
+            or len(baseline.get('project_link_input_bindings_sha256', {})) != 12):
+        raise RuntimeError('Preserved complete R85 baseline closure differs')
+    if any(bindings.get(name) != digest
+            for name, digest in baseline['bindings_sha256'].items()):
+        raise RuntimeError('Release contract dropped a frozen baseline binding')
+    source_bindings = data.get('source_bindings_sha256', {})
+    if any(source_bindings.get(name) != digest
+            for name, digest in baseline['source_bindings_sha256'].items()):
+        raise RuntimeError('Release contract dropped a frozen baseline source')
+    expected_links = set(baseline['project_link_input_bindings_sha256'])
+    expected_links.remove('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_fit_release_20261014/candidate_bundle/traj_utils_ws/install/traj_utils/lib/libtraj_utils.a')
+    expected_links.add(str(R85_TRAJ_ARCHIVE.resolve()))
+    if ({str(path) for path in link_inputs} != expected_links
+            or set(data.get('project_link_input_bindings_sha256', {})) != expected_links):
+        raise RuntimeError('Release link inputs differ from the exact reviewed archive replacement')
+    command = (R85_WORKSPACE/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    for token in shlex.split(command):
+        path = Path(token)
+        if (path.is_absolute() and path.is_file()
+                and str(path.resolve()) not in expected_links
+                and not any(path.resolve().is_relative_to(root)
+                    for root in (Path('/usr'), Path('/lib'), Path('/opt/ros/jazzy')))):
+            raise RuntimeError('Unfrozen extra external Release link input: '+token)
+    evidence = data.get('release_dependency')
+    if (not isinstance(evidence, dict)
+            or evidence.get('schema') != 'r85_stopped_reference_boundary_release/v1'
+            or evidence.get('source_algorithm_changed') is not True
+            or evidence.get('optimization_algorithm_changed') is not False
+            or evidence.get('original_gate_conditions_changed') is not False
+            or evidence.get('input_points_changed') is not False
+            or evidence.get('archive') != str(R85_TRAJ_ARCHIVE.resolve())
+            or evidence.get('archive_sha256') != bindings[str(R85_TRAJ_ARCHIVE.resolve())]
+            or evidence.get('actual_install_ELF_sha256') != bindings[str((R85_WORKSPACE/'install/scan_planner/lib/scan_planner/scan_planner_node').resolve())]
+            or evidence.get('runtime_acceptance_established') is not False):
+        raise RuntimeError('Release dependency evidence identity differs')
+    for manifest_name in ('traj_utils_SOURCE_COPY_SHA256.json', 'plan_manage_SOURCE_COPY_SHA256.json'):
+        rows = json.loads((R85_BUNDLE/manifest_name).read_text())
+        if not isinstance(rows, list) or not rows:
+            raise RuntimeError('Release copied-source manifest is missing')
+        for row in rows:
+            if not isinstance(row, list) or len(row) != 3:
+                raise RuntimeError('Malformed Release source parity row')
+            original, copied, digest = row
+            if (sha(original) != digest or sha(copied) != digest
+                    or bindings.get(str(Path(original).resolve())) != digest
+                    or bindings.get(str(Path(copied).resolve())) != digest):
+                raise RuntimeError('Release source differs from the frozen same-source copy')
+            if '__pycache__' not in Path(copied).parts and Path(copied).suffix != '.pyc':
+                if any(source_bindings.get(str(Path(name).resolve())) != digest
+                        for name in (original, copied)):
+                    raise RuntimeError('Release contract dropped a fresh copied source binding')
+    forbidden_flags = ('-Ofast', '-ffast-math', '-funsafe-math-optimizations',
+        '-ffinite-math-only', '-fassociative-math', '-freciprocal-math',
+        '-fno-signed-zeros', '-fno-trapping-math', '-ffp-contract=fast')
+    for workspace, package in ((R85_WORKSPACE, 'scan_planner'),
+                               (R85_TRAJ_WORKSPACE, 'traj_utils')):
+        build = workspace/'build'/package
+        cache = (build/'CMakeCache.txt').read_text().splitlines()
+        if 'CMAKE_BUILD_TYPE:STRING=Release' not in cache:
+            raise RuntimeError('Release dependency build type differs')
+        commands = json.loads((build/'compile_commands.json').read_text())
+        if not commands:
+            raise RuntimeError('Release compile commands are missing')
+        for row in commands:
+            tokens = shlex.split(row['command'])
+            optimization = [token for token in tokens if re.fullmatch(r'-O(?:[0-3sgz]|fast)', token)]
+            if (optimization != ['-O3'] or '-DNDEBUG' not in tokens
+                    or any(token in tokens for token in forbidden_flags)
+                    or not Path(row['file']).resolve().is_relative_to(workspace/'src')):
+                raise RuntimeError('Release compile flags/source scope differ')
+    install = json.loads((R85_RELEASE_ROOT/'COLCON_INSTALL_RESULT.json').read_text())
+    if (install.get('returncode') != 0 or install.get('ROS_started') is not False
+            or install.get('physics_started') is not False):
+        raise RuntimeError('Release candidate lacks a successful compile-only install')
+
+
+
+
+
+# A new optional selector; the complete original R85 release stays frozen.
+R85_CHILD_ACK_STAGE = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/scan_child_consumption_stage')
+R85_CHILD_ACK_WORKSPACE = R85_CHILD_ACK_STAGE/'candidate_bundle/scan_ws'
+R85_CHILD_ACK_RECEIPT = R85_CHILD_ACK_STAGE/'build_contract/CHILD_ACK_COMPONENT_BUILD_RECEIPT.json'
+R85_CHILD_ACK_CONTRACT = R85_CANDIDATE_ROOT/'R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json'
+R85_CHILD_ACK_PREDECESSOR_SHA256 = '65eff98c486305979571d0a6139cf9caeafeced59a3203025b57fb451a4420b2'
+
+
+def _child_ack_requested(profile):
+    config=(profile or {}).get('r85_auto_reference_contract', {})
+    if not isinstance(config, dict):
+        raise RuntimeError('r85_auto_reference_contract must be an object')
+    value=config.get('require_child_odometry_consumption_ack', False)
+    if type(value) is not bool:
+        raise RuntimeError('require_child_odometry_consumption_ack must be an explicit boolean')
+    if value:
+        diagnostic=(profile or {}).get('diagnostic_observe_only')
+        if (not isinstance(diagnostic, dict) or type(diagnostic.get('enabled')) is not bool
+                or diagnostic['enabled'] is not True):
+            raise RuntimeError('Child odometry ACK selector requires strict diagnostic scope')
+    return value
+
+
+def _child_ack_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('Child odometry ACK selector is scoped to independent C66')
+    name=session.get('scan_workspace_contract')
+    digest=session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or Path(name).resolve()!=R85_CHILD_ACK_CONTRACT
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+            or not R85_CHILD_ACK_CONTRACT.is_file() or sha(R85_CHILD_ACK_CONTRACT)!=digest):
+        raise RuntimeError('Fresh child ACK contract exact path/SHA256 differs')
+    # Validate the original selector with its original file and every original
+    # source/build binding. A new contract never replaces the old contract.
+    old_contract=HERE/'R85_SCAN_WORKSPACE_CONTRACT.json'
+    if sha(old_contract)!=R85_CHILD_ACK_PREDECESSOR_SHA256:
+        raise RuntimeError('Child ACK predecessor contract changed')
+    old_session=dict(session,scan_workspace_contract=str(old_contract),
+                     scan_workspace_contract_sha256=R85_CHILD_ACK_PREDECESSOR_SHA256)
+    old_workspace, _, old = _r85_contract(old_session)
+    if (len(old['bindings_sha256']),len(old['source_bindings_sha256']),
+            len(old['project_link_input_bindings_sha256']))!=(552,124,12):
+        raise RuntimeError('Child ACK complete552/124/12 predecessor closure differs')
+    data=json.loads(R85_CHILD_ACK_CONTRACT.read_text())
+    workspace=R85_CHILD_ACK_WORKSPACE.resolve()
+    executable=workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config=workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    if (data.get('schema')!='r85_scan_child_odometry_ack_workspace/v1'
+            or data.get('candidate')!='r85_scoped_child_odometry_consumption_ack_v1'
+            or data.get('candidate_root')!=str(HERE) or data.get('workspace')!=str(workspace)
+            or data.get('protocol_version')!=1 or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True
+            or data.get('source_algorithm_changed') is not False
+            or data.get('optimization_algorithm_changed') is not False
+            or data.get('original_gate_conditions_changed') is not False
+            or data.get('executable')!=str(executable)
+            or data.get('config')!=str(config)
+            or data.get('build_receipt')!=str(R85_CHILD_ACK_RECEIPT.resolve())):
+        raise RuntimeError('Fresh child ACK contract scope differs')
+    predecessor=data.get('predecessor_contract', {})
+    if (predecessor.get('path')!=str(old_contract)
+            or predecessor.get('sha256')!=R85_CHILD_ACK_PREDECESSOR_SHA256
+            or predecessor.get('snapshot_sha256')!=R85_CHILD_ACK_PREDECESSOR_SHA256
+            or predecessor.get('binding_count')!=552 or predecessor.get('source_count')!=124
+            or predecessor.get('link_count')!=12):
+        raise RuntimeError('Fresh child ACK predecessor metadata differs')
+    snapshot=Path(predecessor.get('snapshot',''))
+    if (snapshot!=R85_CHILD_ACK_STAGE/'build_contract/PRESERVED_PRE_ACK_R85_SCAN_WORKSPACE_CONTRACT.json'
+            or not snapshot.is_file() or sha(snapshot)!=R85_CHILD_ACK_PREDECESSOR_SHA256):
+        raise RuntimeError('Fresh child ACK preserved predecessor snapshot differs')
+    source_root=workspace/'src/plan_manage'
+    source_paths=[source_root/relative for relative in (
+        'package.xml','CMakeLists.txt','src/scan_replan_fsm.cpp','src/scan_planner_node.cpp',
+        'src/planner_manager.cpp','include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h','include/plan_manage/plan_container.hpp',
+        'include/plan_manage/measured_start_state.h','include/plan_manage/fresh_child_odometry_ack.h')]
+    build=workspace/'build/scan_planner'
+    required=[old_contract,snapshot,executable,config,R85_CHILD_ACK_RECEIPT,
+        workspace/'install/setup.bash',workspace/'install/local_setup.bash',
+        build/'CMakeCache.txt',build/'compile_commands.json',
+        build/'CMakeFiles/scan_planner_node.dir/link.txt',*source_paths]
+    copy_manifest=R85_CHILD_ACK_STAGE/'build_contract/ACK_SOURCE_COPY_SHA256.json'
+    if data.get('source_copy_manifest')!=str(copy_manifest):
+        raise RuntimeError('Fresh child ACK copied-source manifest path differs')
+    required.append(copy_manifest)
+    sdk=Path('/opt/ros/jazzy/include/rmw/rmw/types.h')
+    sdk_bindings=data.get('runtime_sdk_bindings_sha256', {})
+    if (not isinstance(sdk_bindings, dict) or set(sdk_bindings)!={str(sdk)}
+            or data.get('rmw_gid_storage_size')!=16):
+        raise RuntimeError('Fresh child ACK actual SDK/GID protocol binding differs')
+    required.append(sdk)
+    bindings=_bindings(data,required)
+    if sdk_bindings[str(sdk)]!=bindings[str(sdk)]:
+        raise RuntimeError('Fresh child ACK actual rmw SDK identity differs')
+    if any(bindings.get(name)!=value for name,value in old['bindings_sha256'].items()):
+        raise RuntimeError('Child ACK dropped an original552 binding')
+    sources=data.get('source_bindings_sha256', {})
+    if (not isinstance(sources,dict)
+            or any(sources.get(name)!=value for name,value in old['source_bindings_sha256'].items())
+            or any(sources.get(str(p.resolve()))!=bindings[str(p.resolve())]for p in source_paths)):
+        raise RuntimeError('Child ACK dropped an original124/fresh source binding')
+    runtime=data.get('required_runtime_sources', {})
+    runtime_names={str(HERE/name) for name in ('scan_child_consumption.py','scan_epoch_supervisor.py','scan_workspace.py')}
+    if (not isinstance(runtime,dict) or set(runtime)!=runtime_names
+            or any(not isinstance(value,str) or re.fullmatch(r'[0-9a-f]{64}',value)is None
+                   or sha(path)!=value for path,value in runtime.items())):
+        raise RuntimeError('Fresh child ACK installed runtime source identities differ')
+    if (sha(executable)==sha(old_workspace/'install/scan_planner/lib/scan_planner/scan_planner_node')
+            or config.read_bytes()!=(old_workspace/'install/scan_planner/share/scan_planner/config/planner.yaml').read_bytes()):
+        raise RuntimeError('Fresh ACK executable missing or original planner config changed')
+    for row in json.loads(copy_manifest.read_text()):
+        if not isinstance(row,list) or len(row)!=3:
+            raise RuntimeError('Malformed child ACK source-copy row')
+        original,copied,value=row
+        if (sha(original)!=value or sha(copied)!=value
+                or any(bindings.get(str(Path(p).resolve()))!=value for p in [original,copied])
+                or any(sources.get(str(Path(p).resolve()))!=value for p in [original,copied])):
+            raise RuntimeError('Fresh child ACK copied source identity differs')
+    command=(build/'CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    actual_links={str(Path(token).resolve())for token in shlex.split(command)
+        if Path(token).is_file()and(token.startswith(str(R85_PROJECT_ROOT)+'/')
+             or Path(token).resolve()==R85_TRAJ_ARCHIVE.resolve())}
+    expected=old['project_link_input_bindings_sha256']
+    if (actual_links!=set(expected) or data.get('project_link_input_bindings_sha256')!=expected
+            or any(bindings.get(name)!=value for name,value in expected.items())):
+        raise RuntimeError('Fresh child ACK changed exact12 project link inputs')
+    for token in shlex.split(command):
+        p=Path(token)
+        if (p.is_absolute() and p.is_file() and str(p.resolve())not in actual_links
+                and not any(p.resolve().is_relative_to(root)for root in [Path('/usr'),Path('/lib'),Path('/opt/ros/jazzy')])):
+            raise RuntimeError('Unexpected child ACK external link dependency')
+    receipt=json.loads(R85_CHILD_ACK_RECEIPT.read_text())
+    if (receipt.get('schema')!='r85_scan_child_ack_component_build/v1'
+            or receipt.get('success') is not True or receipt.get('compile_only') is not True
+            or receipt.get('build_exit_code')!=0 or receipt.get('ROS_started') is not False
+            or receipt.get('physics_started') is not False
+            or receipt.get('new_helper_in_actual_compiler_dependencies') is not True
+            or receipt.get('executable',{}).get('sha256')!=sha(executable)):
+        raise RuntimeError('Fresh child ACK successful build receipt missing')
+    built_bindings={}
+    for row in receipt.get('bindings',[]):
+        path=str(Path(row['path']).resolve())
+        if bindings.get(path)!=row.get('sha256'):
+            raise RuntimeError('Fresh child ACK build receipt binding differs')
+        built_bindings[path]=row['sha256']
+    if any(str(p.resolve())not in built_bindings for p in [executable,*source_paths]):
+        raise RuntimeError('Fresh child ACK build receipt omits selected source/ELF')
+    helper=source_root/'include/plan_manage/fresh_child_odometry_ack.h'
+    deps=list((build/'CMakeFiles/scan_planner_node.dir').rglob('*.o.d'))
+    if not any(str(helper)in p.read_text()for p in deps):
+        raise RuntimeError('Fresh child ACK helper was not a real compiler input')
+    if 'CMAKE_BUILD_TYPE:STRING=Release'not in (build/'CMakeCache.txt').read_text().splitlines():
+        raise RuntimeError('Fresh child ACK build type differs')
+    for row in json.loads((build/'compile_commands.json').read_text()):
+        tokens=shlex.split(row['command'])
+        if ([v for v in tokens if re.fullmatch(r'-O(?:[0-3sgz]|fast)',v)]!=['-O3']
+                or '-DNDEBUG'not in tokens or any(v in tokens for v in ['-Ofast','-ffast-math',
+                    '-funsafe-math-optimizations','-ffinite-math-only','-fassociative-math',
+                    '-freciprocal-math','-fno-signed-zeros','-fno-trapping-math','-ffp-contract=fast'])
+                or not Path(row['file']).resolve().is_relative_to(source_root)):
+            raise RuntimeError('Fresh child ACK Release flags/source scope differs')
+    return workspace,R85_CHILD_ACK_CONTRACT,data
+
+
+# Separate optional reference-commit ACK workspace; old contracts stay frozen.
+R85_REFERENCE_PROTOCOL_STAGE = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/scan_reference_protocol_v2_stage')
+R85_REFERENCE_PROTOCOL_WORKSPACE = R85_REFERENCE_PROTOCOL_STAGE/'candidate_bundle_r02/scan_ws'
+R85_REFERENCE_PROTOCOL_RECEIPT = R85_REFERENCE_PROTOCOL_STAGE/'build_contract_r02/REFERENCE_PROTOCOL_COMPONENT_BUILD_RECEIPT.json'
+R85_REFERENCE_PROTOCOL_CONTRACT = R85_CANDIDATE_ROOT/'R85_SCAN_REFERENCE_PROTOCOL_WORKSPACE_CONTRACT.json'
+R85_REFERENCE_PROTOCOL_PREDECESSOR_SHA256 = '77831a996eccf1ee681445de1a870c16e732962df98bdbbf6213aa09523a02d2'
+
+
+# Optional navigation-control adapter. It never rewrites SCAN build contracts.
+R85_REFERENCE_PROTOCOL_CONTRACT_SHA256 = '6a028cb1dc37dfab63840172b9e0ba35fec3e0b3d09aa0926e91747f229e5a67'
+R85_A1_STAGE = R85_REFERENCE_PROTOCOL_STAGE.parent/'active_braking_stage_v1'
+R85_A1_INTEGRATION_STAGE = R85_A1_STAGE/'integration_revision'
+R85_A1_ADAPTER = R85_CANDIDATE_ROOT/'R85_A1_CONTROL_ADAPTER_CONTRACT.json'
+R85_A1_CONTROL_NAMES = ('transition_gate.py','cascade_core.py','controller.py',
+    'shared_controller.py','teacher_wrapper.py','r85_session_guard.py')
+R85_A1_PROOFS = {
+    'candidate_manifest': (R85_A1_STAGE/'FINAL_CANDIDATE_MANIFEST.json',
+        '1d7a3efe0d74b0c4f82f4c9f473def9c0ae7b7025ba6d2052669c4e1bf33c870'),
+    'review': (R85_A1_STAGE/'review/FINAL_INSTALLABLE_REVIEW.json',
+        'a902fcfc73bfd68d7fb14090538236eb5325e1eee933d6f070444721089b0617'),
+    'installation': (R85_A1_STAGE/'INSTALL_RECEIPT.json',
+        '18137709c04608361ffc02edd82a6abe0ecd61a38edee05ffaf8f7be32fe4060'),
+}
+R85_A1_COMMIT = '6733d1b2d9b065b8d294142353792dbb56328515'
+
+
+# Separate v2 control-source proof. None means deliberately not frozen yet.
+R85_IMU_STAGE = R85_REFERENCE_PROTOCOL_STAGE.parent/'imu_pairing_recovery_v1'
+R85_IMU_INTEGRATION_STAGE = R85_IMU_STAGE/'source_integration'
+R85_IMU_ADAPTER = R85_CANDIDATE_ROOT/'R85_IMU_PAIRING_CONTROL_ADAPTER_CONTRACT.json'
+R85_IMU_COMMIT = '06e5769099ee85a0a206d8936aa884f514a07bb4'
+R85_IMU_PROOFS = {
+    'candidate_manifest': (R85_IMU_STAGE/'CUMULATIVE_CONTROL_MANIFEST.json','3b358644e621d71ec4b1cb5681b7d7ecdc73969d61db5ce832a3d953bc257860'),
+    'review': (R85_IMU_STAGE/'CUMULATIVE_CONTROL_REVIEW.json','092b615b7fcc8a6eb1ef239c9543aec6ac74f19dab2dd4e5a24840cc80e433b3'),
+    'installation': (R85_IMU_STAGE/'VERIFIED_DEPLOYMENT_RECEIPT.json','8ea6529c9a2d9230154867fa20ce034aa628b4b830b720b01b54678b30d2cac5'),
+}
+R85_IMU_HELPER_SHA256 = '66bb3f9be5c590049bea2e44128763c3f249c40b7955f92f3d3be4c7626434ee'
+R85_IMU_SCANNER_PREDECESSOR_SHA256 = '96d068d735cbe9d7db7358cdd34822b8ffb4be9dede3ab4b8c25a134cc4b2534'
+
+
+def _imu_control_adapter(session,base):
+    if (not isinstance(R85_IMU_COMMIT,str) or re.fullmatch(r'[0-9a-f]{40}',R85_IMU_COMMIT)is None
+            or any(not isinstance(digest,str) or re.fullmatch(r'[0-9a-f]{64}',digest)is None
+                for path,digest in R85_IMU_PROOFS.values())):
+        raise RuntimeError('IMU recovery control-source proof has not been frozen')
+    name=session.get('scan_control_adapter_contract');digest=session.get('scan_control_adapter_contract_sha256')
+    if name!=str(R85_IMU_ADAPTER):raise RuntimeError('IMU adapter exact path differs')
+    contract=_adapter_file_ref(dict(path=name,sha256=digest),R85_IMU_ADAPTER)
+    data=json.loads(contract.read_text())
+    semantics='cumulative_from_cc9112e6_to_verified_C2'
+    if (data.get('schema')!='r85_imu_pairing_control_source_adapter/v1'
+            or data.get('candidate_root')!=str(R85_CANDIDATE_ROOT)
+            or data.get('adapter_kind')!='r85_imu_pairing_recovery_v1'
+            or data.get('candidate_commit')!=R85_IMU_COMMIT
+            or data.get('baseline_commit')!='cc9112e62a86210633d7447c2279afa924fc594a'
+            or data.get('changes_semantics')!=semantics or data.get('simulation_only')is not True
+            or any(data.get(k)is not False for k in ('scan_source_changed','scan_binary_changed',
+                'scan_contract_bytes_changed','runtime_acceptance_inherited','navigation_acceptance_established'))):
+        raise RuntimeError('IMU control adapter scope/authority differs')
+    base_ref=dict(path=str(R85_REFERENCE_PROTOCOL_CONTRACT),sha256=R85_REFERENCE_PROTOCOL_CONTRACT_SHA256)
+    if (data.get('base_contract')!=base_ref or session.get('scan_workspace_contract')!=base_ref['path']
+            or session.get('scan_workspace_contract_sha256')!=base_ref['sha256']):
+        raise RuntimeError('IMU adapter must retain the exact original SCAN base contract')
+    evidence=[contract,_adapter_file_ref(base_ref,R85_REFERENCE_PROTOCOL_CONTRACT)]
+    originals={}
+    for key,(path,expected_sha)in R85_A1_PROOFS.items():
+        evidence.append(_adapter_file_ref(dict(path=str(path),sha256=expected_sha),path))
+        originals[key]=json.loads(path.read_text())
+    proofs={}
+    for key,(path,expected_sha)in R85_IMU_PROOFS.items():
+        row=data.get(key)
+        if row!=dict(path=str(path),sha256=expected_sha):raise RuntimeError('IMU cumulative proof declaration differs: '+key)
+        evidence.append(_adapter_file_ref(row,path));proofs[key]=json.loads(path.read_text())
+    manifest,review,installation=(proofs[k]for k in ('candidate_manifest','review','installation'))
+    schemas=('r85_imu_pairing_cumulative_control_manifest/v1','r85_imu_pairing_cumulative_control_review/v1',
+        'r85_imu_pairing_verified_cumulative_deployment/v1')
+    for document,schema in zip((manifest,review,installation),schemas):
+        if (document.get('schema')!=schema or document.get('candidate_commit')!=R85_IMU_COMMIT
+                or document.get('baseline_commit')!='cc9112e62a86210633d7447c2279afa924fc594a'):
+            raise RuntimeError('IMU cumulative proof identity differs')
+    if (manifest.get('changes_semantics')!=semantics or installation.get('changes_semantics')!=semantics
+            or review.get('ready')is not True or review.get('ready_for_install')is not True
+            or installation.get('installed')is not True or installation.get('verified_source_count')!=242):
+        raise RuntimeError('IMU cumulative deployment is not a verified since-baseline proof')
+    original_review=dict(path=str(R85_A1_PROOFS['review'][0]),sha256=R85_A1_PROOFS['review'][1])
+    if review.get('original_a1_review')!=original_review:raise RuntimeError('IMU proof dropped the original A1 review')
+    evidence.append(_adapter_file_ref(review['original_a1_review']))
+    evidence.append(_adapter_file_ref(review['recovery_review']))
+    recovery_review=json.loads(Path(review['recovery_review']['path']).read_text())
+    if recovery_review.get('ready_for_install')is not True:
+        raise RuntimeError('IMU underlying recovery review is not installable')
+    receipts=installation.get('install_receipts',[])
+    if (not isinstance(receipts,list) or len(receipts)!=2
+            or receipts[0]!=dict(path=str(R85_A1_PROOFS['installation'][0]),sha256=R85_A1_PROOFS['installation'][1])):
+        raise RuntimeError('IMU cumulative deployment must reference both real installations')
+    for row in receipts:evidence.append(_adapter_file_ref(row))
+    recovery_install=json.loads(Path(receipts[1]['path']).read_text())
+    if (recovery_install.get('installed')is not True or recovery_install.get('candidate_commit')!=R85_IMU_COMMIT
+            or recovery_install.get('review_sha256')!=review['recovery_review']['sha256']):
+        raise RuntimeError('IMU recovery installation receipt differs')
+    evidence.append(_adapter_file_ref(installation['source_bindings']))
+    baseline={row['relative']:row for row in originals['candidate_manifest']['changes']}
+    changes={row['relative']:row for row in manifest['changes']}
+    installed={row['relative']:row for row in installation['changes']}
+    controls=data.get('controls');expected={str(R85_CANDIDATE_ROOT/name)for name in R85_A1_CONTROL_NAMES}
+    reviewed=review.get('control_files_sha256',{})
+    if (not isinstance(controls,dict) or set(controls)!=expected
+            or set(changes)!=set(R85_A1_CONTROL_NAMES) or set(installed)!=set(R85_A1_CONTROL_NAMES)
+            or set(reviewed)!=set(R85_A1_CONTROL_NAMES)|{'imu_causal_buffer.py'}):
+        raise RuntimeError('IMU adapter exact six-control-plus-helper closure differs')
+    actual={};overrides={}
+    for filename in R85_A1_CONTROL_NAMES:
+        path=R85_CANDIDATE_ROOT/filename;row=controls[str(path)];change=changes[filename]
+        if (set(row)!={'before_sha256','after_sha256','beforeimage'}
+                or change['active_target']!=str(path) or installed[filename]!=change
+                or row['before_sha256']!=baseline[filename]['before_sha256']
+                or row['before_sha256']!=change['before_sha256'] or row['after_sha256']!=change['after_sha256']
+                or reviewed[filename]!=row['after_sha256'] or sha(path)!=row['after_sha256']):
+            raise RuntimeError('IMU cumulative control source differs: '+filename)
+        before=R85_A1_STAGE/'installed_beforeimage'/filename
+        if row['beforeimage']!=dict(path=str(before),sha256=row['before_sha256']):
+            raise RuntimeError('IMU baseline beforeimage differs: '+filename)
+        evidence.extend([path,_adapter_file_ref(row['beforeimage'],before)])
+        actual[str(path)]=row['after_sha256']
+        if str(path)in base['bindings_sha256']:overrides[str(path)]=copy.deepcopy(row)
+    helper=data.get('extra_helper');path=R85_CANDIDATE_ROOT/'imu_causal_buffer.py'
+    if (not isinstance(helper,dict) or set(helper)!={'path','before_sha256','after_sha256'}
+            or helper['path']!=str(path) or helper['before_sha256']is not None
+            or helper['after_sha256']!=R85_IMU_HELPER_SHA256 or sha(path)!=R85_IMU_HELPER_SHA256
+            or reviewed['imu_causal_buffer.py']!=R85_IMU_HELPER_SHA256):
+        raise RuntimeError('IMU helper exact new source binding differs')
+    for document in (manifest,installation):
+        row=document.get('extra_helper',{})
+        if (row.get('relative')!='imu_causal_buffer.py' or row.get('active_target')!=str(path)
+                or row.get('before_sha256')is not None or row.get('after_sha256')!=R85_IMU_HELPER_SHA256):
+            raise RuntimeError('IMU helper cumulative deployment proof differs')
+    actual[str(path)]=R85_IMU_HELPER_SHA256;evidence.append(path)
+    real_changes={row['relative']:row for row in recovery_install.get('changes',[])}
+    if set(real_changes)!={'controller.py','teacher_wrapper.py','imu_causal_buffer.py'}:
+        raise RuntimeError('IMU real installation must contain exactly its three recovery files')
+    for filename,row in real_changes.items():
+        previous=None if filename=='imu_causal_buffer.py' else baseline[filename]['after_sha256']
+        if (row.get('active_target')!=str(R85_CANDIDATE_ROOT/filename)
+                or row.get('before_sha256')!=previous or row.get('after_sha256')!=reviewed[filename]):
+            raise RuntimeError('IMU real deployment chain differs: '+filename)
+    validator=data.get('validator');path=R85_CANDIDATE_ROOT/'scan_workspace.py'
+    original=R85_A1_INTEGRATION_STAGE/'beforeimage/scan_workspace.py'
+    before=R85_IMU_INTEGRATION_STAGE/'beforeimage/scan_workspace.py'
+    if (not isinstance(validator,dict)
+            or set(validator)!={'path','before_sha256','after_sha256','beforeimage','deployment_beforeimage'}
+            or validator['path']!=str(path) or validator['before_sha256']!=base['required_runtime_sources'][str(path)]
+            or validator['beforeimage']!=dict(path=str(original),sha256=validator['before_sha256'])
+            or validator['deployment_beforeimage']!=dict(path=str(before),sha256=R85_IMU_SCANNER_PREDECESSOR_SHA256)
+            or not isinstance(validator['after_sha256'],str) or re.fullmatch(r'[0-9a-f]{64}',validator['after_sha256'])is None
+            or sha(path)!=validator['after_sha256']):
+        raise RuntimeError('IMU control adapter validator/deployment lineage differs')
+    evidence.extend([path,_adapter_file_ref(validator['beforeimage'],original),
+        _adapter_file_ref(validator['deployment_beforeimage'],before)])
+    actual[str(path)]=validator['after_sha256'];overrides[str(path)]=copy.deepcopy(validator)
+    if set(overrides)!={str(R85_CANDIDATE_ROOT/name)for name in ('controller.py','shared_controller.py','scan_workspace.py')}:
+        raise RuntimeError('IMU adapter attempted an undeclared SCAN override')
+    return dict(path=contract,sha256=digest,data=data,actual=actual,overrides=overrides,evidence=sorted(set(evidence)))
+
+
+def _adapter_file_ref(row, expected=None):
+    if not isinstance(row,dict) or set(row)!={'path','sha256'}:
+        raise RuntimeError('Control adapter requires an exact file reference')
+    name,digest=row['path'],row['sha256']
+    if (not isinstance(name,str) or not Path(name).is_absolute()
+            or str(Path(name).resolve())!=name
+            or expected is not None and Path(name)!=expected
+            or not isinstance(digest,str) or re.fullmatch(r'[0-9a-f]{64}',digest)is None
+            or not Path(name).is_file() or sha(name)!=digest):
+        raise RuntimeError('Control adapter evidence path/SHA differs: '+str(name))
+    return Path(name)
+
+
+def _control_adapter(session,base):
+    if session.get('scan_control_adapter_contract')==str(R85_IMU_ADAPTER):
+        return _imu_control_adapter(session,base)
+    name=session.get('scan_control_adapter_contract')
+    digest=session.get('scan_control_adapter_contract_sha256')
+    if name is None and digest is None:return None
+    if (name!=str(R85_A1_ADAPTER) or not isinstance(digest,str)
+            or re.fullmatch(r'[0-9a-f]{64}',digest)is None):
+        raise RuntimeError('Control adapter exact path/SHA declaration differs')
+    contract=_adapter_file_ref(dict(path=name,sha256=digest),R85_A1_ADAPTER)
+    data=json.loads(contract.read_text())
+    if (data.get('schema')!='r85_a1_control_source_adapter/v1'
+            or data.get('candidate_root')!=str(R85_CANDIDATE_ROOT)
+            or data.get('adapter_kind')!='r85_active_turn_braking_v1'
+            or data.get('candidate_commit')!=R85_A1_COMMIT
+            or data.get('baseline_commit')!='cc9112e62a86210633d7447c2279afa924fc594a'
+            or data.get('simulation_only')is not True
+            or any(data.get(k)is not False for k in ('scan_source_changed','scan_binary_changed',
+                'scan_contract_bytes_changed','runtime_acceptance_inherited','navigation_acceptance_established'))):
+        raise RuntimeError('Control adapter scope/authority differs')
+    base_ref=data.get('base_contract')
+    if (base_ref!=dict(path=str(R85_REFERENCE_PROTOCOL_CONTRACT),sha256=R85_REFERENCE_PROTOCOL_CONTRACT_SHA256)
+            or session.get('scan_workspace_contract')!=base_ref['path']
+            or session.get('scan_workspace_contract_sha256')!=base_ref['sha256']):
+        raise RuntimeError('Control adapter must retain the exact original SCAN base contract')
+    evidence=[contract,_adapter_file_ref(base_ref,R85_REFERENCE_PROTOCOL_CONTRACT)]
+    proofs={}
+    for key,(path,expected_sha)in R85_A1_PROOFS.items():
+        row=data.get(key)
+        if row!=dict(path=str(path),sha256=expected_sha):
+            raise RuntimeError('Control adapter A1 proof declaration differs: '+key)
+        evidence.append(_adapter_file_ref(row,path));proofs[key]=json.loads(path.read_text())
+    manifest,review,installation=(proofs[k]for k in ('candidate_manifest','review','installation'))
+    if (manifest.get('schema')!='r85_a1_active_braking_candidate_manifest/v1'
+            or review.get('schema')!='r85_a1_independent_installable_review/v1'
+            or review.get('ready_for_install')is not True
+            or review.get('candidate_manifest_sha256')!=R85_A1_PROOFS['candidate_manifest'][1]
+            or installation.get('installed')is not True
+            or installation.get('candidate_commit')!=R85_A1_COMMIT
+            or installation.get('candidate_manifest_sha256')!=R85_A1_PROOFS['candidate_manifest'][1]
+            or installation.get('review_sha256')!=R85_A1_PROOFS['review'][1]):
+        raise RuntimeError('Control adapter A1 reviewed installation proof differs')
+    for row in review.get('evidence_files',[]):evidence.append(_adapter_file_ref(row))
+    changes={row['relative']:row for row in manifest['changes']}
+    installed={row['relative']:row for row in installation['changes']}
+    controls=data.get('controls')
+    expected_names={str(R85_CANDIDATE_ROOT/name)for name in R85_A1_CONTROL_NAMES}
+    if not isinstance(controls,dict) or set(controls)!=expected_names:
+        raise RuntimeError('Control adapter must bind exactly the six reviewed A1 controls')
+    actual={};overrides={}
+    for filename in R85_A1_CONTROL_NAMES:
+        path=R85_CANDIDATE_ROOT/filename;row=controls[str(path)]
+        change=changes[filename]
+        if (set(row)!={'before_sha256','after_sha256','beforeimage'}
+                or change['active_target']!=str(path)
+                or row['before_sha256']!=change['before_sha256']
+                or row['after_sha256']!=change['after_sha256']
+                or installed[filename]!=change
+                or review['source_hashes'].get(filename)!=row['after_sha256']
+                or sha(path)!=row['after_sha256']):
+            raise RuntimeError('Control adapter reviewed A1 identity differs: '+filename)
+        before=R85_A1_STAGE/'installed_beforeimage'/filename
+        if row['beforeimage']!=dict(path=str(before),sha256=row['before_sha256']):
+            raise RuntimeError('Control adapter A1 beforeimage differs: '+filename)
+        evidence.append(_adapter_file_ref(row['beforeimage'],before))
+        actual[str(path)]=row['after_sha256'];evidence.append(path)
+        if str(path)in base['bindings_sha256']:overrides[str(path)]=copy.deepcopy(row)
+    validator=data.get('validator')
+    path=R85_CANDIDATE_ROOT/'scan_workspace.py'
+    before=R85_A1_INTEGRATION_STAGE/'beforeimage/scan_workspace.py'
+    if (not isinstance(validator,dict)
+            or set(validator)!={'path','before_sha256','after_sha256','beforeimage'}
+            or validator['path']!=str(path)
+            or validator['before_sha256']!=base['required_runtime_sources'][str(path)]
+            or validator['beforeimage']!=dict(path=str(before),sha256=validator['before_sha256'])
+            or not isinstance(validator['after_sha256'],str)
+            or re.fullmatch(r'[0-9a-f]{64}',validator['after_sha256'])is None
+            or sha(path)!=validator['after_sha256']):
+        raise RuntimeError('Control adapter validator source/beforeimage differs')
+    evidence.extend([path,_adapter_file_ref(validator['beforeimage'],before)])
+    actual[str(path)]=validator['after_sha256'];overrides[str(path)]=copy.deepcopy(validator)
+    expected_overrides={str(R85_CANDIDATE_ROOT/name)for name in ('controller.py','shared_controller.py','scan_workspace.py')}
+    if set(overrides)!=expected_overrides:
+        raise RuntimeError('Control adapter attempted an undeclared SCAN contract override')
+    return dict(path=contract,sha256=digest,data=data,actual=actual,overrides=overrides,
+        evidence=sorted(set(evidence)))
+
+
+def _resolved_control_contract(base,bindings,adapter):
+    # This derived dictionary is explicitly not the original JSON file bytes.
+    resolved=copy.deepcopy(base)
+    resolved['bindings_sha256']=dict(bindings)
+    resolved['source_bindings_sha256']=dict(base['source_bindings_sha256'])
+    resolved['required_runtime_sources']=dict(base['required_runtime_sources'])
+    for name,digest in adapter['actual'].items():
+        resolved['bindings_sha256'][name]=digest
+        resolved['source_bindings_sha256'][name]=digest
+        if name in resolved['required_runtime_sources']:resolved['required_runtime_sources'][name]=digest
+    for path in adapter['evidence']:resolved['bindings_sha256'][str(path)]=sha(path)
+    resolved['resolved_adapter']=dict(schema='r85_a1_resolved_control_bindings/v1',
+        base_contract=dict(path=str(R85_REFERENCE_PROTOCOL_CONTRACT),sha256=R85_REFERENCE_PROTOCOL_CONTRACT_SHA256),
+        adapter_contract=dict(path=str(adapter['path']),sha256=adapter['sha256']),
+        original_base_schema=base['schema'],base_contract_bytes_unchanged=True,
+        overrides={name:dict(before_sha256=row['before_sha256'],after_sha256=row['after_sha256'])
+            for name,row in adapter['overrides'].items()},
+        actual_control_sources_sha256=dict(adapter['actual']),
+        evidence_files=[str(path)for path in adapter['evidence']],
+        runtime_acceptance_inherited=False,navigation_acceptance_established=False)
+    if adapter['data'].get('adapter_kind')=='r85_imu_pairing_recovery_v1':
+        resolved['resolved_adapter']['schema']='r85_imu_pairing_resolved_control_bindings/v1'
+        resolved['resolved_adapter']['extra_helper']=copy.deepcopy(adapter['data']['extra_helper'])
+    return resolved
+
+
+def _reference_protocol_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('Child odometry ACK selector is scoped to independent C66')
+    name=session.get('scan_workspace_contract')
+    digest=session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or Path(name).resolve()!=R85_REFERENCE_PROTOCOL_CONTRACT
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+            or not R85_REFERENCE_PROTOCOL_CONTRACT.is_file() or sha(R85_REFERENCE_PROTOCOL_CONTRACT)!=digest):
+        raise RuntimeError('Fresh child ACK contract exact path/SHA256 differs')
+    # The old677 contract is immutable lineage, including its frozen runtime
+    # snapshots. Its old actual-path runtime SHAs are not current deployment
+    # identities after this optional update. All current runtime files are
+    # validated separately against the new contract below, without aliases.
+    original_contract=HERE/'R85_SCAN_WORKSPACE_CONTRACT.json'
+    original_session=dict(session,scan_workspace_contract=str(original_contract),
+        scan_workspace_contract_sha256=R85_CHILD_ACK_PREDECESSOR_SHA256)
+    _r85_contract(original_session)  # Complete original552/124/12 still current.
+    old_contract=HERE/'R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json'
+    if sha(old_contract)!=R85_REFERENCE_PROTOCOL_PREDECESSOR_SHA256:
+        raise RuntimeError('Reference commit immutable old677 contract changed')
+    old=json.loads(old_contract.read_text())
+    if (len(old['bindings_sha256']),len(old['source_bindings_sha256']),
+            len(old['project_link_input_bindings_sha256']))!=(677,156,12):
+        raise RuntimeError('Reference commit complete677/156/12 lineage differs')
+    _bindings(old, [])
+    for name,value in old['source_bindings_sha256'].items():
+        if old['bindings_sha256'].get(name)!=value:
+            raise RuntimeError('Old677 lineage source binding differs')
+    old_workspace=R85_CHILD_ACK_WORKSPACE.resolve()
+    for name,value in old['required_runtime_sources'].items():
+        snapshot=R85_CHILD_ACK_STAGE/'staged'/Path(name).name
+        if sha(snapshot)!=value:
+            raise RuntimeError('Old677 immutable runtime snapshot differs')
+    data=json.loads(R85_REFERENCE_PROTOCOL_CONTRACT.read_text())
+    adapter=_control_adapter(session,data)
+    workspace=R85_REFERENCE_PROTOCOL_WORKSPACE.resolve()
+    executable=workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config=workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    if (data.get('schema')!='r85_scan_reference_protocol_ack_workspace/v2'
+            or data.get('candidate')!='r85_scoped_reference_protocol_ack_v2'
+            or data.get('candidate_root')!=str(HERE) or data.get('workspace')!=str(workspace)
+            or data.get('protocol_version')!=2 or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True
+            or data.get('source_algorithm_changed') is not False
+            or data.get('optimization_algorithm_changed') is not False
+            or data.get('original_gate_conditions_changed') is not False
+            or data.get('executable')!=str(executable)
+            or data.get('config')!=str(config)
+            or data.get('build_receipt')!=str(R85_REFERENCE_PROTOCOL_RECEIPT.resolve())):
+        raise RuntimeError('Fresh child ACK contract scope differs')
+    predecessor=data.get('predecessor_contract', {})
+    if (predecessor.get('path')!=str(old_contract)
+            or predecessor.get('sha256')!=R85_REFERENCE_PROTOCOL_PREDECESSOR_SHA256
+            or predecessor.get('snapshot_sha256')!=R85_REFERENCE_PROTOCOL_PREDECESSOR_SHA256
+            or predecessor.get('binding_count')!=677 or predecessor.get('source_count')!=156
+            or predecessor.get('link_count')!=12):
+        raise RuntimeError('Fresh child ACK predecessor metadata differs')
+    snapshot=Path(predecessor.get('snapshot',''))
+    if (snapshot!=R85_REFERENCE_PROTOCOL_STAGE/'build_contract_r02/PRESERVED_PRE_PROTOCOL_R85_SCAN_WORKSPACE_CONTRACT.json'
+            or not snapshot.is_file() or sha(snapshot)!=R85_REFERENCE_PROTOCOL_PREDECESSOR_SHA256):
+        raise RuntimeError('Fresh child ACK preserved predecessor snapshot differs')
+    source_root=workspace/'src/plan_manage'
+    source_paths=[source_root/relative for relative in (
+        'package.xml','CMakeLists.txt','src/scan_replan_fsm.cpp','src/scan_planner_node.cpp',
+        'src/planner_manager.cpp','include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h','include/plan_manage/plan_container.hpp',
+        'include/plan_manage/measured_start_state.h','include/plan_manage/fresh_child_odometry_ack.h',
+        'include/plan_manage/fresh_reference_protocol.h')]
+    build=workspace/'build/scan_planner'
+    required=[old_contract,snapshot,executable,config,R85_REFERENCE_PROTOCOL_RECEIPT,
+        workspace/'install/setup.bash',workspace/'install/local_setup.bash',
+        build/'CMakeCache.txt',build/'compile_commands.json',
+        build/'CMakeFiles/scan_planner_node.dir/link.txt',*source_paths]
+    copy_manifest=R85_REFERENCE_PROTOCOL_STAGE/'build_contract_r02/PROTOCOL_SOURCE_COPY_SHA256.json'
+    if data.get('source_copy_manifest')!=str(copy_manifest):
+        raise RuntimeError('Fresh child ACK copied-source manifest path differs')
+    required.append(copy_manifest)
+    sdk=Path('/opt/ros/jazzy/include/rmw/rmw/types.h')
+    sdk_bindings=data.get('runtime_sdk_bindings_sha256', {})
+    if (not isinstance(sdk_bindings, dict) or set(sdk_bindings)!={str(sdk)}
+            or data.get('rmw_gid_storage_size')!=16):
+        raise RuntimeError('Fresh child ACK actual SDK/GID protocol binding differs')
+    required.append(sdk)
+    bindings=_bindings(data,required,adapter['overrides'] if adapter is not None else None)
+    if sdk_bindings[str(sdk)]!=bindings[str(sdk)]:
+        raise RuntimeError('Fresh child ACK actual rmw SDK identity differs')
+    if any(bindings.get(name)!=value for name,value in old['bindings_sha256'].items()):
+        raise RuntimeError('Child ACK dropped an original552 binding')
+    sources=data.get('source_bindings_sha256', {})
+    if (not isinstance(sources,dict)
+            or any(sources.get(name)!=value for name,value in old['source_bindings_sha256'].items())
+            or any(sources.get(str(p.resolve()))!=bindings[str(p.resolve())]for p in source_paths)):
+        raise RuntimeError('Child ACK dropped an original124/fresh source binding')
+    runtime=data.get('required_runtime_sources', {})
+    runtime_names={str(HERE/name) for name in ('scan_child_consumption.py','scan_epoch_supervisor.py','scan_workspace.py',
+        'scan_reference_protocol.py','automatic_reference_runtime.py','terminal_heading_contract.py',
+        'controller.py','shared_controller.py','r85_protocol_liveness.py','r85_protocol_intake_trace.py')}
+    effective_runtime=dict(runtime) if isinstance(runtime,dict) else {}
+    if adapter is not None:
+        effective_runtime.update({name:row['after_sha256']for name,row in adapter['overrides'].items()})
+    if (not isinstance(runtime,dict) or set(runtime)!=runtime_names
+            or any(not isinstance(value,str) or re.fullmatch(r'[0-9a-f]{64}',value)is None
+                   or sha(path)!=value for path,value in effective_runtime.items())):
+        raise RuntimeError('Fresh child ACK installed runtime source identities differ')
+    lineage=data.get('lineage_runtime_snapshots', {})
+    if set(lineage)!=set(old['required_runtime_sources']):
+        raise RuntimeError('Reference commit lineage runtime snapshot set differs')
+    for name,value in old['required_runtime_sources'].items():
+        row=lineage[name]
+        expected_snapshot=R85_CHILD_ACK_STAGE/'staged'/Path(name).name
+        if (row.get('old_sha256')!=value or row.get('snapshot_file')!=str(expected_snapshot)
+                or row.get('snapshot_sha256')!=value or sha(expected_snapshot)!=value
+                or row.get('lineage_only') is not True):
+            raise RuntimeError('Reference commit lineage runtime snapshot differs')
+    superseded=data.get('reviewed_superseded_runtime', {})
+    expected_old={'scan_workspace.py':'97e3a82965db405dd32fc9a71998f9b039d5e1ed81a177e3810a4a22384f096d',
+        'scan_epoch_supervisor.py':'0ec124b9ad42a80069f72681ebce86d420e6ff7415ae45f5fafd60de7fafa465',
+        'automatic_reference_runtime.py':'46e04dfde66ed2f3dd647b384aac793f7105b771303f57e3dacb01fb3ca7914b'}
+    if set(superseded)!={str(HERE/name) for name in expected_old}:
+        raise RuntimeError('Reference commit superseded runtime set differs')
+    for name,value in expected_old.items():
+        actual=str(HERE/name);row=superseded[actual]
+        baseline=R85_REFERENCE_PROTOCOL_STAGE/'baseline'/name
+        if (row.get('old_sha256')!=value or row.get('new_sha256')!=runtime[actual]
+                or row.get('old_snapshot_file')!=str(baseline) or sha(baseline)!=value
+                or row.get('actual_source_path')!=actual):
+            raise RuntimeError('Reference commit superseded runtime identity differs')
+    if (sha(executable)==sha(old_workspace/'install/scan_planner/lib/scan_planner/scan_planner_node')
+            or config.read_bytes()!=(old_workspace/'install/scan_planner/share/scan_planner/config/planner.yaml').read_bytes()):
+        raise RuntimeError('Fresh ACK executable missing or original planner config changed')
+    for row in json.loads(copy_manifest.read_text()):
+        if not isinstance(row,list) or len(row)!=3:
+            raise RuntimeError('Malformed child ACK source-copy row')
+        original,copied,value=row
+        if (sha(original)!=value or sha(copied)!=value
+                or any(bindings.get(str(Path(p).resolve()))!=value for p in [original,copied])
+                or any(sources.get(str(Path(p).resolve()))!=value for p in [original,copied])):
+            raise RuntimeError('Fresh child ACK copied source identity differs')
+    command=(build/'CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    actual_links={str(Path(token).resolve())for token in shlex.split(command)
+        if Path(token).is_file()and(token.startswith(str(R85_PROJECT_ROOT)+'/')
+             or Path(token).resolve()==R85_TRAJ_ARCHIVE.resolve())}
+    expected=old['project_link_input_bindings_sha256']
+    if (actual_links!=set(expected) or data.get('project_link_input_bindings_sha256')!=expected
+            or any(bindings.get(name)!=value for name,value in expected.items())):
+        raise RuntimeError('Fresh child ACK changed exact12 project link inputs')
+    for token in shlex.split(command):
+        p=Path(token)
+        if (p.is_absolute() and p.is_file() and str(p.resolve())not in actual_links
+                and not any(p.resolve().is_relative_to(root)for root in [Path('/usr'),Path('/lib'),Path('/opt/ros/jazzy')])):
+            raise RuntimeError('Unexpected child ACK external link dependency')
+    receipt=json.loads(R85_REFERENCE_PROTOCOL_RECEIPT.read_text())
+    if (receipt.get('schema')!='r85_scan_reference_protocol_component_build/v1'
+            or receipt.get('success') is not True or receipt.get('compile_only') is not True
+            or receipt.get('build_exit_code')!=0 or receipt.get('ROS_started') is not False
+            or receipt.get('physics_started') is not False
+            or receipt.get('new_helper_in_actual_compiler_dependencies') is not True
+            or receipt.get('executable',{}).get('sha256')!=sha(executable)):
+        raise RuntimeError('Fresh child ACK successful build receipt missing')
+    built_bindings={}
+    for row in receipt.get('bindings',[]):
+        path=str(Path(row['path']).resolve())
+        if bindings.get(path)!=row.get('sha256'):
+            raise RuntimeError('Fresh child ACK build receipt binding differs')
+        built_bindings[path]=row['sha256']
+    if any(str(p.resolve())not in built_bindings for p in [executable,*source_paths]):
+        raise RuntimeError('Fresh child ACK build receipt omits selected source/ELF')
+    helper=source_root/'include/plan_manage/fresh_reference_protocol.h'
+    deps=list((build/'CMakeFiles/scan_planner_node.dir').rglob('*.o.d'))
+    if not any(str(helper)in p.read_text()for p in deps):
+        raise RuntimeError('Fresh child ACK helper was not a real compiler input')
+    if 'CMAKE_BUILD_TYPE:STRING=Release'not in (build/'CMakeCache.txt').read_text().splitlines():
+        raise RuntimeError('Fresh child ACK build type differs')
+    for row in json.loads((build/'compile_commands.json').read_text()):
+        tokens=shlex.split(row['command'])
+        if ([v for v in tokens if re.fullmatch(r'-O(?:[0-3sgz]|fast)',v)]!=['-O3']
+                or '-DNDEBUG'not in tokens or any(v in tokens for v in ['-Ofast','-ffast-math',
+                    '-funsafe-math-optimizations','-ffinite-math-only','-fassociative-math',
+                    '-freciprocal-math','-fno-signed-zeros','-fno-trapping-math','-ffp-contract=fast'])
+                or not Path(row['file']).resolve().is_relative_to(source_root)):
+            raise RuntimeError('Fresh child ACK Release flags/source scope differs')
+    if adapter is not None:return workspace,adapter['path'],_resolved_control_contract(data,bindings,adapter)
+    return workspace,R85_REFERENCE_PROTOCOL_CONTRACT,data
+
+
+def scan_contract(profile=None):
+    session = _r85_enabled(profile)
+    from scan_reference_protocol import enabled as reference_protocol_enabled
+    if reference_protocol_enabled(profile or {}):
+        if session is None:
+            raise RuntimeError('Reference commit ACK selector requires scoped R85 session')
+        return _reference_protocol_contract(session)
+    child_ack = _child_ack_requested(profile)
+    if child_ack:
+        if session is None:
+            raise RuntimeError('Child odometry ACK selector requires scoped R85 session')
+        return _child_ack_contract(session)
+    if session is not None:
+        return _r85_contract(session)
+    selector = (profile or {}).get('scan_workspace_selector', 'protected_baseline')
+    if selector not in SLOTS:
+        raise RuntimeError('An arbitrary or unreviewed SCAN workspace is prohibited')
+    workspace, name = SLOTS[selector]
+    contract = HERE/name
+    if not contract.is_file():
+        raise RuntimeError('Selected SCAN workspace has no frozen source/build contract')
+    data = json.loads(contract.read_text())
+    if (data.get('schema') != 'corridor_v20_SCAN_workspace/v1' or data.get('candidate') != selector
+            or data.get('workspace') != str(workspace.resolve()) or data.get('algorithm_math_changed') is not False
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('The selected SCAN contract identity differs')
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        workspace/'install/scan_planner/lib/scan_planner/scan_planner_node',
+        workspace/'install/scan_planner/share/scan_planner/config/planner.yaml']
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or any(str(path.resolve()) not in bindings for path in required):
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path, digest in bindings.items():
+        if not Path(path).is_absolute() or sha(path) != digest:
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + path)
+    return workspace.resolve(), contract, data
+
+
+def evidence_files(profile=None):
+    _, contract, data = scan_contract(profile)
+    return [contract, *[Path(name) for name in data['bindings_sha256']]]

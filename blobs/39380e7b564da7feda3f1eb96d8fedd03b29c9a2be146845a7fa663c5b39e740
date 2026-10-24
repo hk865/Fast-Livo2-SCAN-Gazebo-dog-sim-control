@@ -1,0 +1,408 @@
+#!/usr/bin/env python3
+"""Owned full-R85 obstacle choreography and raw evidence; never robot control.
+
+Only the moving_obstacle model SetEntityPose service is called. A separate
+read-only native Gazebo pose/info subscription observes that model, not robot
+GT. A service ACK is always labelled as an ACK, never as observed world pose.
+No ROS/Gazebo process is launched when this module is imported.
+"""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import queue
+import subprocess
+import sys
+import threading
+import time
+import numpy as np
+
+HERE=Path(__file__).resolve().parent
+if str(HERE.parent) not in sys.path:sys.path.append(str(HERE.parent))
+
+FIXED_T = [[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,-.3],[0.,0.,0.,1.]]
+PARK = [17.,5.7,1.8]
+BLOCK = [14.9,5.7,1.8]
+SIZE = [.5,.5,1.2]
+POSE_TOPIC = '/world/teacher_demo/pose/info'
+SERVICE = '/world/teacher_demo/set_pose'
+ENTITY = 'moving_obstacle'
+
+
+def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def frozen(scope, path):
+    path=Path(path).resolve(); actual=sha(path)
+    if scope['references'].get(str(path))!=actual:
+        raise ValueError('unfrozen_R85_dynamic_input:'+str(path))
+    return actual
+
+
+def target_at(elapsed_s):
+    if not math.isfinite(elapsed_s) or elapsed_s < 0: raise ValueError('obstacle_clock_reversed_or_nonfinite')
+    if elapsed_s < 8.4: return [17.-.25*elapsed_s,5.7,1.8], 'entering'
+    if elapsed_s < 28.4: return list(BLOCK), 'blocking'
+    if elapsed_s < 36.8: return [14.9+.25*(elapsed_s-28.4),5.7,1.8], 'leaving'
+    return list(PARK), 'clear'
+
+
+def progress(points, position):
+    points=np.asarray(points,float); p=np.asarray(position,float)
+    if points.ndim!=2 or points.shape[1]!=3 or p.shape!=(3,) or not np.isfinite(np.r_[points.ravel(),p]).all():
+        raise ValueError('nonfinite_route_progress_input')
+    delta=np.diff(points,axis=0); lengths=np.linalg.norm(delta,axis=1)
+    denominator=np.sum(delta*delta,axis=1)
+    alpha=np.divide(np.sum((p-points[:-1])*delta,axis=1),denominator,out=np.zeros(len(delta)),where=denominator>0)
+    alpha=np.clip(alpha,0,1); projected=points[:-1]+alpha[:,None]*delta
+    distances=np.linalg.norm(projected-p,axis=1); edge=int(np.argmin(distances))
+    return {'arc_m':float(np.sum(lengths[:edge])+alpha[edge]*lengths[edge]),
+        'distance_m':float(distances[edge]),'source_edge':edge,'source_alpha':float(alpha[edge]),
+        'projected_body_nav_xyz':projected[edge].tolist()}
+
+
+def _stamp(header):
+    stamp=header.get('stamp',{})
+    sec=stamp.get('sec',0); nsec=stamp.get('nsec',stamp.get('nanosec',0))
+    def integer(value):
+        if type(value)is int:return value
+        if isinstance(value,str) and value.isascii() and value.isdigit():return int(value)
+        raise ValueError('invalid_native_stamp')
+    sec,nsec=integer(sec),integer(nsec)
+    if sec<0 or not 0<=nsec<1_000_000_000:raise ValueError('invalid_native_stamp')
+    return sec*1_000_000_000+nsec
+
+
+def obstacle_observations(message):
+    """Parse only exact model names in native gz.msgs.Pose_V JSON."""
+    stamp=_stamp(message.get('header',{})); out=[]
+    for pose in message.get('pose',[]):
+        if pose.get('name')!=ENTITY: continue
+        p=pose.get('position',{}); xyz=[float(p.get(k,0.)) for k in ('x','y','z')]
+        if stamp<=0 or not all(math.isfinite(v) for v in xyz): raise ValueError('invalid_native_obstacle_pose')
+        orientation=pose.get('orientation',{})
+        q=[float(orientation.get(k,0.)) for k in ('x','y','z','w')]
+        if (not all(math.isfinite(v) for v in q) or np.linalg.norm(q[:3])>1e-6
+                or abs(abs(q[3])-1.)>1e-6):raise ValueError('native_obstacle_axis_alignment_changed')
+        out.append(dict(entity=ENTITY,entity_id=pose.get('id'),position_world_xyz=xyz,stamp_ns=stamp,
+            topic=POSE_TOPIC,native_gz_pose_info=True,source_message_type='gz.msgs.Pose_V',
+            raw_model_pose=pose,header=message.get('header',{})))
+    return out
+
+
+class NativeObstacleObserver:
+    """Owned read-only CLI child. It never publishes or reads a robot GT pose."""
+    def __init__(self):
+        self.error=None; self.queue=queue.Queue(512); self.stopping=False
+        self.process=subprocess.Popen(['gz','topic','-e','--json-output','-t',POSE_TOPIC],
+            stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,bufsize=1)
+        self.thread=threading.Thread(target=self._read,daemon=True,name='r85-obstacle-pose-info');self.thread.start()
+    def _read(self):
+        decoder=json.JSONDecoder(); buffer=''
+        try:
+            for line in self.process.stdout:
+                if self.stopping:return
+                buffer+=line
+                if len(buffer)>4_194_304:raise ValueError('native_pose_info_message_exceeds_4MiB')
+                while buffer.strip():
+                    buffer=buffer.lstrip()
+                    try: message,end=decoder.raw_decode(buffer)
+                    except json.JSONDecodeError:break
+                    buffer=buffer[end:]
+                    for value in obstacle_observations(message):
+                        self.queue.put_nowait((value,time.monotonic()))
+            if not self.stopping:self.error='native_pose_info_observer_exited:'+str(self.process.poll())
+        except Exception as error:self.error=type(error).__name__+':'+str(error)
+    def close(self):
+        self.stopping=True
+        if self.process.poll()is None:
+            self.process.terminate()
+            try:self.process.wait(timeout=2.)
+            except subprocess.TimeoutExpired:self.process.kill();self.process.wait(timeout=2.)
+        self.thread.join(timeout=2.)
+
+
+def build_node(run, scope, task_path, expected_partition):
+    import rclpy
+    from rclpy.node import Node
+    from rclpy.clock import Clock,ClockType
+    from rclpy.qos import QoSProfile,DurabilityPolicy
+    from std_msgs.msg import String
+    from nav_msgs.msg import Odometry
+    from sensor_msgs.msg import Imu
+    from ros_gz_interfaces.srv import SetEntityPose
+    from ros_gz_interfaces.msg import Entity
+    from runtime_io import EvidenceWriter,latest_sensor_qos
+
+    class Dynamic(Node):
+        def __init__(self):
+            super().__init__('teacher_r85_dynamic_obstacle')
+            self.set_parameters([rclpy.parameter.Parameter('use_sim_time',value=True)])
+            if not expected_partition or os.environ.get('GZ_PARTITION')!=expected_partition:
+                raise ValueError('explicit_owned_GZ_PARTITION_required')
+            maximum_speed=scope['profile'].get('max_speed_mps')
+            if type(maximum_speed)not in (int,float) or not 0<float(maximum_speed)<=.2:
+                raise ValueError('fixed_dynamic_lead_budget_requires_original_max_speed_at_most_point2')
+            self.task_path=task_path;self.task_sha=frozen(scope,task_path);self.source_sha=frozen(scope,Path(__file__))
+            self.task=json.loads(task_path.read_text())
+            if (self.task.get('schema')!='r85_pct_scan_student_task/v1' or self.task.get('run_id')!=run.name
+                    or self.task.get('kind')!='f1_to_f3' or self.task.get('dynamic_required')is not True):
+                raise ValueError('dynamic_runtime_requires_owned_full_F3_task')
+            self.typed_path=Path(self.task['source_typed_route_file']).resolve()
+            if frozen(scope,self.typed_path)!=self.task['source_typed_route_sha256']:raise ValueError('typed_source_changed')
+            self.typed=json.loads(self.typed_path.read_text());self.points=np.asarray(self.typed['body_points'],float)
+            if self.typed.get('T_navigation_world')!=FIXED_T or self.points.shape!=(337,3):raise ValueError('unexpected_frozen_R85_route_geometry')
+            self.crossing=self.points[180]+[0,0,.3]
+            if not np.allclose(self.crossing,[14.9,5.7,1.52],atol=1e-6,rtol=0):raise ValueError('frozen_floor2_encounter_point_changed')
+            self.encounter_arc=float(np.linalg.norm(np.diff(self.points[:181],axis=0),axis=1).sum())
+            if any((run/name).exists() for name in ('r85_dynamic_journal.jsonl','r85_dynamic_pretrigger_history.jsonl')):
+                raise ValueError('R85_dynamic_evidence_already_exists_no_duplicate_actor')
+            self.writer=EvidenceWriter();self.sequence=0;self.presequence=0;self.binding=None;self.reference=None;self.reference_sha=None
+            self.scope_selected_sim_ns=None;self.scope_start_sequence=None;self.pre_last={};self.reference_record=None
+            self.state={};self.state_wall=-math.inf;self.pose=None;self.pose_wall=-math.inf;self.imu=None
+            self.pending=None;self.sent=None;self.last_sim=None;self.last_send_sim=None;self.started=None;self.failure=None
+            self.park_ack=False;self.clear_ack=False;self.latest_observation=None;self.observation_wall=-math.inf
+            self.visible_phase='original_world_spawn_not_observed';self.ack_position=None;self.motion_elapsed=0.;self.last_motion_sim=None
+            self.client=self.create_client(SetEntityPose,SERVICE);self.observer=None;self.observer_attempted=False
+            qos=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
+            self.pub=self.create_publisher(String,'/demo/obstacle/state',qos)
+            self.create_subscription(String,'/demo/mission/state',self.mission,10)
+            self.create_subscription(String,'/demo/navigation/status',self.status,10)
+            self.create_subscription(Odometry,'/demo/slam/body_odom',self.odom,latest_sensor_qos())
+            self.create_subscription(Imu,'/livox/imu',self.on_imu,latest_sensor_qos())
+            self.create_timer(.1,self.tick,clock=Clock(clock_type=ClockType.STEADY_TIME))
+        def ns(self):return int(self.get_clock().now().nanoseconds)
+        def record(self,kind,data):
+            if self.binding is None:return
+            pretrigger=self.started is None
+            if pretrigger:self.presequence+=1;sequence=self.presequence
+            else:self.sequence+=1;sequence=self.sequence
+            try:
+                self.writer.append(run/('r85_dynamic_pretrigger_history.jsonl' if pretrigger else 'r85_dynamic_journal.jsonl'),
+                    dict(schema='r85_dynamic_pretrigger_record/v1' if pretrigger else 'r85_dynamic_obstacle_record/v1',kind=kind,
+                    sequence=sequence,binding=dict(self.binding),sim_ns=self.ns(),monotonic_wall=time.monotonic(),
+                    source='actual_R85_runtime_callback_or_owned_service',data=data))
+                if pretrigger:self.pre_last[kind]=sequence
+                return sequence
+            except Exception as error:
+                self.failure='dynamic_evidence_error:'+type(error).__name__+':'+str(error)
+        def freeze_contract(self):
+            p=run/'r85_global_reference.json';registration=run/'r85_reference_registration.json'
+            arming=dict(reference_binding=self.scope_start_sequence,actual_pose=self.pre_last['actual_pose'],
+                mission_state=self.pre_last['mission_state'],entity_observation=self.pre_last['entity_observation'],
+                park_service_ack=self.pre_last['service_ack'])
+            contract=dict(schema='r85_dynamic_task_contract/v1',binding=dict(self.binding),entity=ENTITY,service=SERVICE,
+                entity_pose_topic=POSE_TOPIC,obstacle_size_m=SIZE,T_navigation_world=FIXED_T,
+                phase_positions_world_xyz=dict(entering=PARK,blocking=BLOCK,leaving=PARK,clear=PARK),
+                protocol='r85_f1_f3_fixed_crossing/v1',
+                protocol_parameters=dict(speed_mps=.25,enter_s=8.4,blocking_s=20.,leave_s=8.4,retreat_same_side=True),
+                trigger=dict(reference_file=str(p),reference_sha256=self.reference_sha,encounter_source_point_index=180,
+                    encounter_body_world_xyz=self.crossing.tolist(),encounter_arc_m=self.encounter_arc,
+                    lead_window_m=[3.2,3.6],maximum_path_distance_m=.3,maximum_source_age_s=.3),
+                task_contract_file=str(task_path),task_contract_sha256=self.task_sha,typed_source_file=str(self.typed_path),
+                typed_source_sha256=self.task['source_typed_route_sha256'],runtime_source_file=str(Path(__file__).resolve()),
+                runtime_source_sha256=self.source_sha,reference_file=str(p),reference_sha256=self.reference_sha,
+                registration_file=str(registration),registration_sha256=self.registration_sha,
+                scope_locked_at_trigger=True,trigger_sim_ns=self.started,
+                pretrigger_history_file=str(run/'r85_dynamic_pretrigger_history.jsonl'),
+                arming_pretrigger_sequences=arming,generated_runtime_evidence_not_preexisting_approval=True,
+                privileged_actor_pose=True,navigation_ground_truth_used=False,robot_pose_service_called=False)
+            self.writer.atomic(run/'r85_dynamic_task_contract.json',contract)
+            self.record('reference_lock',dict(self.reference_record,scope_locked_at_trigger=True,
+                arming_pretrigger_sequences=arming,pretrigger_records_migrated=False))
+        def mission(self,msg):
+            try:
+                state=json.loads(msg.data);ref=state.get('r85_reference',{})
+                if state.get('run_id')!=run.name:return
+                if state.get('stage')!='navigating' or state.get('navigation_ground_truth_used')is not False:return
+                if ref.get('reference_scope')!='full_route':return
+                if (state.get('schema')!='r85_actual_single_task_mission_state/v1'
+                        or type(state.get('ros_sim_time_ns'))is not int
+                        or not 0<=self.ns()-state['ros_sim_time_ns']<=300_000_000
+                        or type(state.get('source_actual_pose_stamp_ns'))is not int
+                        or not 0<=self.ns()-state['source_actual_pose_stamp_ns']<=300_000_000):
+                    raise ValueError('actual_mission_source_clock_stale_or_malformed')
+                binding=dict(run_id=run.name,request_id=state['current_request'],reference_id=ref['reference_id'],
+                    reference_sha256=ref['global_reference_sha256'],epoch=ref['epoch'],localization_generation=ref['localization_generation'],
+                    source_route_sha256=ref['source_route_sha256'])
+                if (binding['request_id']!=run.name+':r85:f1_to_f3:1'
+                        or any(type(binding[key])is not int or binding[key]<1 for key in ('epoch','localization_generation'))):
+                    raise ValueError('foreign_request_or_invalid_actual_reference_identity_types')
+                changed=self.binding is not None and binding!=self.binding
+                if changed and self.started is not None:
+                    raise ValueError('actual_reference_scope_changed_during_dynamic_protocol')
+                if changed and (binding['epoch']<=self.binding['epoch']
+                        or binding['localization_generation']<self.binding['localization_generation']):
+                    raise ValueError('pretrigger_reference_scope_did_not_advance_actual_planner_epoch')
+                if self.binding is None or changed:
+                    p=Path(ref['global_reference_file']).resolve();raw=p.read_bytes();doc=json.loads(raw)
+                    if p!=run/'r85_global_reference.json' or hashlib.sha256(raw).hexdigest()!=binding['reference_sha256']:
+                        raise ValueError('actual_global_reference_file_binding_mismatch')
+                    if (doc.get('run_id')!=run.name or doc.get('reference_id')!=binding['reference_id']
+                            or doc.get('reference_scope')!='full_route' or doc.get('epoch')!=binding['epoch']
+                            or doc.get('localization_generation')!=binding['localization_generation']
+                            or doc.get('source_route_sha256')!=self.task['source_typed_route_sha256']
+                            or binding['source_route_sha256']!=self.task['source_typed_route_sha256']
+                            or doc.get('T_navigation_world')!=FIXED_T
+                            or not np.array_equal(np.asarray(doc['body_points'],float),self.points)):
+                        raise ValueError('actual_full_reference_does_not_match_bound_typed_source')
+                    registration=run/'r85_reference_registration.json'
+                    registered=json.loads(registration.read_text())
+                    if (registered.get('schema')!='r85_reference_source_registration/v1'
+                            or registered.get('run_id')!=run.name or registered.get('reference_file_sha256')!=binding['reference_sha256']
+                            or registered.get('reference_id')!=binding['reference_id']
+                            or registered.get('source_route_sha256')!=binding['source_route_sha256']
+                            or registered.get('localization_generation')!=binding['localization_generation']
+                            or registered.get('navigation_ground_truth_used')is not False
+                            or registered.get('producer')!='root_authorized_PCT_route_owner'
+                            or Path(registered.get('task_source_file','')).resolve()!=task_path
+                            or registered.get('task_source_sha256')!=self.task_sha
+                            or frozen(scope,registered['owner_source_file'])!=registered.get('owner_source_sha256')):
+                        raise ValueError('actual_reference_source_registration_mismatch')
+                    # Drain an already sent old-scope park request first. Its
+                    # outcome belongs to the old monitoring history, never to
+                    # the new scope's arming evidence.
+                    if changed and self.pending is not None:return
+                    self.binding=binding;self.reference=doc;self.reference_sha=binding['reference_sha256']
+                    self.registration_sha=sha(registration)
+                    self.scope_selected_sim_ns=self.ns();self.park_ack=False;self.pre_last={}
+                    self.latest_observation=None;self.observation_wall=-math.inf;self.pose=None;self.pose_wall=-math.inf
+                    self.reference_record=dict(reference_file=str(p),reference_sha256=self.reference_sha,
+                        document=doc,registration_file=str(registration),registration_sha256=self.registration_sha,
+                        registration_document=registered,task_file=str(task_path),task_sha256=self.task_sha,
+                        typed_source_file=str(self.typed_path),typed_source_sha256=self.task['source_typed_route_sha256'],
+                        reference_raw_utf8=raw.decode('utf-8'),registration_raw_utf8=registration.read_text())
+                    self.scope_start_sequence=self.record('reference_binding',self.reference_record)
+                self.state=state;self.state_wall=time.monotonic();self.record('mission_state',state)
+            except Exception as error:self.failure=type(error).__name__+':'+str(error)
+        def status(self,msg):
+            try:
+                data=json.loads(msg.data)
+                if self.binding and data.get('request_id')==self.binding['request_id']:self.record('status',data)
+            except Exception as error:self.failure=type(error).__name__+':'+str(error)
+        def on_imu(self,msg):
+            stamp=msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec
+            self.imu=dict(stamp_ns=int(stamp),gyro=[msg.angular_velocity.x,msg.angular_velocity.y,msg.angular_velocity.z])
+        def odom(self,msg):
+            ns=self.ns();stamp=msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec;p=msg.pose.pose.position
+            v=msg.twist.twist.linear;w=msg.twist.twist.angular
+            if (msg.header.frame_id!='camera_init' or msg.child_frame_id!='demo_slam_body' or not 0<=ns-stamp<=300_000_000
+                    or not all(math.isfinite(x) for x in (p.x,p.y,p.z,v.x,v.y,v.z,w.x,w.y,w.z))):return
+            self.pose=dict(position=[p.x,p.y,p.z],stamp_ns=int(stamp),frame_id=msg.header.frame_id,child_frame_id=msg.child_frame_id,
+                source_topic='/demo/slam/body_odom',body_velocity=[v.x,v.y,v.z],body_angular_velocity=[w.x,w.y,w.z],
+                body_gyro=None if self.imu is None else self.imu['gyro'],imu_stamp_ns=None if self.imu is None else self.imu['stamp_ns'],
+                navigation_ground_truth_used=False)
+            self.pose_wall=time.monotonic();self.record('actual_pose',self.pose)
+        def tick(self):
+            ns=self.ns();now=time.monotonic()
+            if self.writer.error:self.failure=self.writer.error
+            # The navigation stack is launched before Gazebo and its clock.
+            # Do not run gz topic against a world that has not started yet.
+            if (not self.observer_attempted and self.failure is None and ns>0
+                    and self.client.service_is_ready()):
+                self.observer_attempted=True
+                try:self.observer=NativeObstacleObserver()
+                except Exception as error:self.failure='native_observer_start_failed:'+type(error).__name__+':'+str(error)
+            if self.observer is not None and self.observer.error:self.failure=self.observer.error
+            if self.last_sim is not None and ns<self.last_sim:self.failure='actual_dynamic_sim_clock_moved_backward'
+            self.last_sim=ns
+            while self.observer is not None:
+                try: observation,received_wall=self.observer.queue.get_nowait()
+                except queue.Empty:break
+                self.latest_observation=observation;self.observation_wall=received_wall;self.record('entity_observation',observation)
+            if self.pending is not None and self.pending.done():
+                try:
+                    success=bool(self.pending.result().success)
+                    if success:
+                        self.ack_position=self.sent['position_world_xyz'];self.visible_phase=self.sent['phase']
+                        if self.visible_phase=='parked':self.park_ack=True
+                        if self.visible_phase=='clear':self.clear_ack=True
+                    else:self.failure='actual_SetEntityPose_service_rejected_moving_obstacle'
+                    self.record('service_ack',dict(**self.sent,success=success,response_sim_ns=ns))
+                except Exception as error:
+                    self.failure=type(error).__name__+':'+str(error);self.record('service_ack',dict(**self.sent,success=False,error=self.failure,response_sim_ns=ns))
+                self.pending=None;self.sent=None
+            elif self.pending is not None and (now-self.sent['request_monotonic_wall']>2.
+                    or ns-self.sent['request_sim_ns']>2_000_000_000):
+                # A ROS timeout cannot prove that the Gazebo mutation did not
+                # execute. Freeze further calls and preserve the uncertain target.
+                if self.failure is None:
+                    self.failure='SetEntityPose_response_timeout_outcome_uncertain_no_retry'
+                    self.record('service_outcome_uncertain',dict(**self.sent,reason=self.failure))
+            fresh=(self.binding is not None and self.pose is not None and 0<=now-self.pose_wall<.3
+                and 0<=ns-self.pose['stamp_ns']<=300_000_000 and 0<=now-self.state_wall<.3
+                and self.pose['stamp_ns']>=self.scope_selected_sim_ns
+                and self.state.get('source_actual_pose_stamp_ns',-1)>=self.scope_selected_sim_ns
+                and self.state.get('task_navigation_state')=='running')
+            observed=(self.binding is not None and self.latest_observation is not None and 0<=now-self.observation_wall<.3
+                and 0<=ns-self.latest_observation['stamp_ns']<=300_000_000
+                and self.latest_observation['stamp_ns']>=self.scope_selected_sim_ns)
+            parked=(observed and np.linalg.norm(np.asarray(self.latest_observation['position_world_xyz'])-PARK)<=.03)
+            if self.binding and self.failure is None and (sha(task_path)!=self.task_sha or sha(self.typed_path)!=self.task['source_typed_route_sha256']):
+                self.failure='frozen_task_or_typed_route_changed'
+            reference_current=(self.binding is not None and sha(run/'r85_global_reference.json')==self.reference_sha
+                and sha(run/'r85_reference_registration.json')==self.registration_sha)
+            if self.started is not None and not reference_current and self.failure is None:
+                self.failure='locked_actual_reference_or_registration_changed'
+            fresh=fresh and reference_current
+            if fresh and self.park_ack and parked and self.pending is None and self.started is None and self.failure is None:
+                projected=progress(self.points,self.pose['position']);remaining=self.encounter_arc-projected['arc_m']
+                if 3.2<=remaining<=3.6 and projected['distance_m']<=.3:
+                    self.started=ns;self.last_motion_sim=ns
+                    self.freeze_contract()
+                    self.record('trigger',dict(start_sim_ns=ns,actual_pose=dict(self.pose),actual_mission_state=self.state,
+                        actual_park_observation=self.latest_observation,progress=projected,remaining_arclength_to_obstacle_m=remaining,path_distance_m=projected['distance_m'],
+                        encounter_arc_m=self.encounter_arc,actor_chases_robot=False,one_shot=True))
+                elif remaining<3.2:self.failure='encounter_trigger_window_missed_no_chase_or_late_forced_crossing'
+            if self.started is not None:
+                if fresh and observed and self.failure is None and self.last_motion_sim is not None:
+                    self.motion_elapsed+=max(0.,(ns-self.last_motion_sim)/1e9)
+                self.last_motion_sim=ns
+            if fresh and (self.started is None or observed) and self.failure is None and self.pending is None and self.client.service_is_ready() and self.last_send_sim!=ns:
+                # Repeat the fixed park setpoint while waiting; require an actual
+                # fresh pose/info observation to arm, never substitute these ACKs.
+                if self.started is None:target,phase=list(PARK),'parked'
+                elif self.started is not None and not self.clear_ack:target,phase=target_at(self.motion_elapsed)
+                else:target=phase=None
+                if target is not None:
+                    req=SetEntityPose.Request();req.entity.name=ENTITY;req.entity.type=Entity.MODEL
+                    req.pose.position.x,req.pose.position.y,req.pose.position.z=target;req.pose.orientation.w=1.
+                    self.sent=dict(entity=ENTITY,service=SERVICE,position_world_xyz=target,phase=phase,request_sim_ns=ns,
+                        request_monotonic_wall=now,protocol_elapsed_s=self.motion_elapsed)
+                    self.record('service_request',self.sent);self.pending=self.client.call_async(req);self.last_send_sim=ns
+            state=dict(schema='r85_dynamic_obstacle_state/v1',run_id=run.name,binding=self.binding,sim_ns=ns,monotonic_wall=now,
+                started_sim_ns=self.started,visible_phase=self.visible_phase,position=self.ack_position,size=SIZE,
+                reported_position_semantics='last_successful_SetEntityPose_ACK_target_not_observed_pose',
+                actual_pose_info=self.latest_observation,actual_pose_info_fresh=observed,source_fresh=fresh,failure=self.failure,
+                motion_elapsed_s=self.motion_elapsed,privileged_actor_pose=True,known_map_assistance=True,
+                native_observer_start_attempted=self.observer_attempted,native_observer_started=self.observer is not None,
+                navigation_ground_truth_used=False,robot_pose_service_called=False,short_prefix_dynamic_PASS=False)
+            self.writer.atomic(run/'r85_dynamic_obstacle_state.json',state)
+            self.pub.publish(String(data=json.dumps(state,allow_nan=False)))
+        def close(self):
+            if self.observer is not None:self.observer.close()
+            self.writer.close()
+    return Dynamic()
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',required=True,type=Path)
+    parser.add_argument('--task-contract',type=Path);parser.add_argument('--expected-partition',required=True)
+    args,ros=parser.parse_known_args();run=args.run.resolve();task=(args.task_contract or run/'r85_task_contract.json').resolve()
+    from pid_scope import verify_scope
+    receipt=verify_scope(run/'navigation_scope.json')
+    scope=json.loads((run/'navigation_scope.json').read_text())
+    if scope.get('profile')!=receipt['profile']:raise ValueError('verified_scope_profile_changed_before_dynamic_start')
+    import rclpy
+    rclpy.init(args=ros);node=build_node(run,scope,task,args.expected_partition)
+    try:rclpy.spin(node)
+    except (KeyboardInterrupt,rclpy.executors.ExternalShutdownException):pass
+    finally:
+        try:node.close()
+        finally:node.destroy_node();rclpy.try_shutdown()
+
+
+if __name__=='__main__':main()

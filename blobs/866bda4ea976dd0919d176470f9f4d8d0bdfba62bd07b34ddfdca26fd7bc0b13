@@ -1,0 +1,454 @@
+"""Select a frozen SCAN workspace, with a separate fresh R85 mode3 contract."""
+from pathlib import Path
+import hashlib
+import json
+import re
+import shlex
+
+HERE = Path(__file__).resolve().parent
+SLOTS = {
+    'protected_baseline': (HERE.parents[2]/'navigation/ros2_ws', 'SCAN_BASELINE_WORKSPACE_CONTRACT.json'),
+    'bounded_snapshot_exporter_v20': (HERE.parent/'corridor_tracking_v20/scan_ws', 'SCAN_CANDIDATE_WORKSPACE_CONTRACT.json'),
+}
+R85_RELEASE_ROOT = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_direction_boundary_release_20261014')
+R85_BUNDLE = R85_RELEASE_ROOT/'candidate_bundle'
+R85_WORKSPACE = R85_BUNDLE/'scan_ws'
+R85_TRAJ_WORKSPACE = R85_BUNDLE/'traj_utils_ws'
+R85_TRAJ_ARCHIVE = R85_TRAJ_WORKSPACE/'install/traj_utils/lib/libtraj_utils.a'
+R85_PROJECT_ROOT = Path('/opt/experiment/workspace')
+R85_BASELINE_CONTRACT = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_direction_boundary_release_20261014/contract_stage/BASELINE_R85_SCAN_WORKSPACE_CONTRACT.json')
+R85_BASELINE_CONTRACT_SHA256 = '45a59a5945e876f56bc064cb5f220930c974eb9b5deeaad71e40414c0da93ae5'
+R85_CANDIDATE_ROOT = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate')
+R85_CONTRACT_SCHEMA = 'r85_SCAN_workspace/v1'
+R85_SELECTOR = 'r85_mode3_session_v3'
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _r85_enabled(profile):
+    session = (profile or {}).get('r85_session', {})
+    if not isinstance(session, dict) or not isinstance(session.get('enabled', False), bool):
+        raise RuntimeError('r85_session.enabled must be an explicit boolean')
+    return session if session.get('enabled', False) else None
+
+
+def _bindings(data, required):
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or not bindings:
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path in required:
+        if str(path.resolve()) not in bindings:
+            raise RuntimeError('Mandatory SCAN binding is missing: ' + str(path))
+    for name, digest in bindings.items():
+        if (not isinstance(name, str) or not Path(name).is_absolute()
+                or str(Path(name).resolve()) != name or not isinstance(digest, str)
+                or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+                or not Path(name).is_file() or sha(name) != digest):
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + str(name))
+    return bindings
+
+
+def _r85_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('R85 SCAN selector is scoped to the independent C66 candidate')
+    name = session.get('scan_workspace_contract')
+    digest = session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None):
+        raise RuntimeError('R85 requires an absolute fresh SCAN contract and its SHA256')
+    contract = Path(name).resolve()
+    if (contract != HERE/'R85_SCAN_WORKSPACE_CONTRACT.json' or not contract.is_file()
+            or sha(contract) != digest):
+        raise RuntimeError('R85 fresh SCAN contract path or SHA256 differs')
+    data = json.loads(contract.read_text())
+    workspace = R85_WORKSPACE.resolve()
+    if (data.get('schema') != R85_CONTRACT_SCHEMA or data.get('candidate') != R85_SELECTOR
+            or data.get('candidate_root') != str(HERE)
+            or data.get('workspace') != str(workspace)
+            or data.get('protocol_version') != 3
+            or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('R85 requires its own compile-only mode3 source/build contract')
+    executable = workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config = workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    receipt = workspace.parent/'MODE3_COMPONENT_BUILD_RECEIPT_V3.json'
+    source_paths = [workspace/'src/plan_manage'/relative for relative in (
+        'package.xml', 'CMakeLists.txt', 'src/scan_replan_fsm.cpp',
+        'src/scan_planner_node.cpp', 'src/planner_manager.cpp',
+        'include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h',
+        'include/plan_manage/measured_start_state.h',
+        'include/plan_manage/plan_container.hpp')]
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        executable, config, receipt, workspace/'build/scan_planner/CMakeCache.txt',
+        workspace/'build/scan_planner/compile_commands.json',
+        workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt',
+        *source_paths]
+    link_command = (workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    project_root = Path('/opt/experiment/workspace')
+    link_inputs = sorted({Path(token).resolve() for token in shlex.split(link_command)
+        if Path(token).is_file() and (token.startswith(str(project_root) + '/')
+            or Path(token).resolve() == R85_TRAJ_ARCHIVE.resolve())})
+    if not link_inputs:
+        raise RuntimeError('R85 project-specific SCAN link inputs are missing')
+    required.extend(link_inputs)
+    if (data.get('executable') != str(executable.resolve())
+            or data.get('config') != str(config.resolve())
+            or data.get('build_receipt') != str(receipt.resolve())):
+        raise RuntimeError('R85 executable, configuration or v3 build receipt differs')
+    required.extend(_release_required_paths())
+    bindings = _bindings(data, required)
+    _release_evidence(data, bindings, link_inputs)
+    sources = data.get('source_bindings_sha256')
+    if not isinstance(sources, dict) or any(
+            sources.get(str(path.resolve())) != bindings[str(path.resolve())]
+            for path in source_paths):
+        raise RuntimeError('R85 source identities are missing from its fresh contract')
+    linked = data.get('project_link_input_bindings_sha256')
+    if not isinstance(linked, dict) or any(
+            linked.get(str(path)) != bindings[str(path)] for path in link_inputs):
+        raise RuntimeError('R85 project-specific SCAN link identities differ')
+    build = json.loads(receipt.read_text())
+    if (build.get('schema') != 'mode3-component-build-receipt/v3'
+            or build.get('success') is not True or build.get('compile_only') is not True
+            or build.get('build_exit_code') != 0 or not isinstance(build.get('bindings'), list)):
+        raise RuntimeError('R85 selected SCAN has no successful compile-only v3 receipt')
+    build_bindings = {}
+    for item in build['bindings']:
+        if not isinstance(item, dict) or not isinstance(item.get('path'), str):
+            raise RuntimeError('Malformed v3 build binding')
+        path = str(Path(item['path']).resolve())
+        if bindings.get(path) != item.get('sha256'):
+            raise RuntimeError('R85 source/build receipt binding differs: ' + path)
+        build_bindings[path] = item['sha256']
+    if any(str(path.resolve()) not in build_bindings for path in (
+            executable, workspace/'src/plan_manage/src/scan_replan_fsm.cpp',
+            workspace/'src/plan_manage/include/plan_manage/scan_replan_fsm.h')):
+        raise RuntimeError('R85 v3 receipt does not bind the selected ELF and FSM source')
+    return workspace, contract, data
+
+
+def _release_required_paths():
+    paths = [R85_BASELINE_CONTRACT, R85_RELEASE_ROOT/'COLCON_INSTALL_RESULT.json',
+        R85_RELEASE_ROOT/'RELEASE_BUILD_COMMANDS.json',
+        R85_RELEASE_ROOT/'RELEASE_CANDIDATE_BUILD_RECEIPT.json',
+        R85_BUNDLE/'traj_utils_SOURCE_COPY_SHA256.json',
+        R85_BUNDLE/'plan_manage_SOURCE_COPY_SHA256.json',
+        R85_TRAJ_ARCHIVE, R85_RELEASE_ROOT/'SOURCE_AND_SCOPE.json',
+        R85_RELEASE_ROOT/'STOPPED_TARGET_BOUNDARY.diff',
+        R85_RELEASE_ROOT/'SINGLE_BRANCH_SOURCE_CHECK.json',
+        R85_RELEASE_ROOT/'BOUNDARY_BUILD_IDENTITY.json',
+        R85_RELEASE_ROOT/'BOUNDARY_SOURCE_REVIEW.json',
+        R85_RELEASE_ROOT/'FRESH_ARCHIVE_BENCHMARK.json',
+        R85_RELEASE_ROOT/'LD_BINDING_RESULT.json',
+        R85_RELEASE_ROOT/'INSTALL_ELF_TRANSFORMATION.json']
+    for workspace, package in ((R85_WORKSPACE, 'scan_planner'),
+                               (R85_TRAJ_WORKSPACE, 'traj_utils')):
+        for tree in (workspace/'src', workspace/'install'):
+            paths.extend(path.resolve() for path in tree.rglob('*')
+                if path.is_file() and '__pycache__' not in path.parts
+                and path.suffix != '.pyc')
+        build = workspace/'build'/package
+        paths.extend(build/name for name in ('CMakeCache.txt',
+            'compile_commands.json', 'cmake_install.cmake', 'install_manifest.txt'))
+        paths.extend(path.resolve() for path in (build/'CMakeFiles').rglob('*')
+            if path.is_file() and (path.name in ('link.txt', 'flags.make')
+                or path.name.endswith('.o.d')))
+    paths.append(R85_WORKSPACE/'build/scan_planner/scan_planner_node')
+    paths.append(R85_TRAJ_WORKSPACE/'build/traj_utils/libtraj_utils.a')
+    return sorted(set(path.resolve() for path in paths))
+
+
+def _release_evidence(data, bindings, link_inputs):
+    if sha(R85_BASELINE_CONTRACT) != R85_BASELINE_CONTRACT_SHA256:
+        raise RuntimeError('Preserved complete R85 baseline contract changed')
+    baseline = json.loads(R85_BASELINE_CONTRACT.read_text())
+    if (len(baseline.get('bindings_sha256', {})) != 378
+            or len(baseline.get('source_bindings_sha256', {})) != 87
+            or len(baseline.get('project_link_input_bindings_sha256', {})) != 12):
+        raise RuntimeError('Preserved complete R85 baseline closure differs')
+    if any(bindings.get(name) != digest
+            for name, digest in baseline['bindings_sha256'].items()):
+        raise RuntimeError('Release contract dropped a frozen baseline binding')
+    source_bindings = data.get('source_bindings_sha256', {})
+    if any(source_bindings.get(name) != digest
+            for name, digest in baseline['source_bindings_sha256'].items()):
+        raise RuntimeError('Release contract dropped a frozen baseline source')
+    expected_links = set(baseline['project_link_input_bindings_sha256'])
+    expected_links.remove('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/r85_fit_release_20261014/candidate_bundle/traj_utils_ws/install/traj_utils/lib/libtraj_utils.a')
+    expected_links.add(str(R85_TRAJ_ARCHIVE.resolve()))
+    if ({str(path) for path in link_inputs} != expected_links
+            or set(data.get('project_link_input_bindings_sha256', {})) != expected_links):
+        raise RuntimeError('Release link inputs differ from the exact reviewed archive replacement')
+    command = (R85_WORKSPACE/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    for token in shlex.split(command):
+        path = Path(token)
+        if (path.is_absolute() and path.is_file()
+                and str(path.resolve()) not in expected_links
+                and not any(path.resolve().is_relative_to(root)
+                    for root in (Path('/usr'), Path('/lib'), Path('/opt/ros/jazzy')))):
+            raise RuntimeError('Unfrozen extra external Release link input: '+token)
+    evidence = data.get('release_dependency')
+    if (not isinstance(evidence, dict)
+            or evidence.get('schema') != 'r85_stopped_reference_boundary_release/v1'
+            or evidence.get('source_algorithm_changed') is not True
+            or evidence.get('optimization_algorithm_changed') is not False
+            or evidence.get('original_gate_conditions_changed') is not False
+            or evidence.get('input_points_changed') is not False
+            or evidence.get('archive') != str(R85_TRAJ_ARCHIVE.resolve())
+            or evidence.get('archive_sha256') != bindings[str(R85_TRAJ_ARCHIVE.resolve())]
+            or evidence.get('actual_install_ELF_sha256') != bindings[str((R85_WORKSPACE/'install/scan_planner/lib/scan_planner/scan_planner_node').resolve())]
+            or evidence.get('runtime_acceptance_established') is not False):
+        raise RuntimeError('Release dependency evidence identity differs')
+    for manifest_name in ('traj_utils_SOURCE_COPY_SHA256.json', 'plan_manage_SOURCE_COPY_SHA256.json'):
+        rows = json.loads((R85_BUNDLE/manifest_name).read_text())
+        if not isinstance(rows, list) or not rows:
+            raise RuntimeError('Release copied-source manifest is missing')
+        for row in rows:
+            if not isinstance(row, list) or len(row) != 3:
+                raise RuntimeError('Malformed Release source parity row')
+            original, copied, digest = row
+            if (sha(original) != digest or sha(copied) != digest
+                    or bindings.get(str(Path(original).resolve())) != digest
+                    or bindings.get(str(Path(copied).resolve())) != digest):
+                raise RuntimeError('Release source differs from the frozen same-source copy')
+            if '__pycache__' not in Path(copied).parts and Path(copied).suffix != '.pyc':
+                if any(source_bindings.get(str(Path(name).resolve())) != digest
+                        for name in (original, copied)):
+                    raise RuntimeError('Release contract dropped a fresh copied source binding')
+    forbidden_flags = ('-Ofast', '-ffast-math', '-funsafe-math-optimizations',
+        '-ffinite-math-only', '-fassociative-math', '-freciprocal-math',
+        '-fno-signed-zeros', '-fno-trapping-math', '-ffp-contract=fast')
+    for workspace, package in ((R85_WORKSPACE, 'scan_planner'),
+                               (R85_TRAJ_WORKSPACE, 'traj_utils')):
+        build = workspace/'build'/package
+        cache = (build/'CMakeCache.txt').read_text().splitlines()
+        if 'CMAKE_BUILD_TYPE:STRING=Release' not in cache:
+            raise RuntimeError('Release dependency build type differs')
+        commands = json.loads((build/'compile_commands.json').read_text())
+        if not commands:
+            raise RuntimeError('Release compile commands are missing')
+        for row in commands:
+            tokens = shlex.split(row['command'])
+            optimization = [token for token in tokens if re.fullmatch(r'-O(?:[0-3sgz]|fast)', token)]
+            if (optimization != ['-O3'] or '-DNDEBUG' not in tokens
+                    or any(token in tokens for token in forbidden_flags)
+                    or not Path(row['file']).resolve().is_relative_to(workspace/'src')):
+                raise RuntimeError('Release compile flags/source scope differ')
+    install = json.loads((R85_RELEASE_ROOT/'COLCON_INSTALL_RESULT.json').read_text())
+    if (install.get('returncode') != 0 or install.get('ROS_started') is not False
+            or install.get('physics_started') is not False):
+        raise RuntimeError('Release candidate lacks a successful compile-only install')
+
+
+
+
+
+# A new optional selector; the complete original R85 release stays frozen.
+R85_CHILD_ACK_STAGE = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/scan_child_consumption_stage')
+R85_CHILD_ACK_WORKSPACE = R85_CHILD_ACK_STAGE/'candidate_bundle/scan_ws'
+R85_CHILD_ACK_RECEIPT = R85_CHILD_ACK_STAGE/'build_contract/CHILD_ACK_COMPONENT_BUILD_RECEIPT.json'
+R85_CHILD_ACK_CONTRACT = R85_CANDIDATE_ROOT/'R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json'
+R85_CHILD_ACK_PREDECESSOR_SHA256 = '65eff98c486305979571d0a6139cf9caeafeced59a3203025b57fb451a4420b2'
+
+
+def _child_ack_requested(profile):
+    config=(profile or {}).get('r85_auto_reference_contract', {})
+    if not isinstance(config, dict):
+        raise RuntimeError('r85_auto_reference_contract must be an object')
+    value=config.get('require_child_odometry_consumption_ack', False)
+    if type(value) is not bool:
+        raise RuntimeError('require_child_odometry_consumption_ack must be an explicit boolean')
+    if value:
+        diagnostic=(profile or {}).get('diagnostic_observe_only')
+        if (not isinstance(diagnostic, dict) or type(diagnostic.get('enabled')) is not bool
+                or diagnostic['enabled'] is not True):
+            raise RuntimeError('Child odometry ACK selector requires strict diagnostic scope')
+    return value
+
+
+def _child_ack_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('Child odometry ACK selector is scoped to independent C66')
+    name=session.get('scan_workspace_contract')
+    digest=session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or Path(name).resolve()!=R85_CHILD_ACK_CONTRACT
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+            or not R85_CHILD_ACK_CONTRACT.is_file() or sha(R85_CHILD_ACK_CONTRACT)!=digest):
+        raise RuntimeError('Fresh child ACK contract exact path/SHA256 differs')
+    # Validate the original selector with its original file and every original
+    # source/build binding. A new contract never replaces the old contract.
+    old_contract=HERE/'R85_SCAN_WORKSPACE_CONTRACT.json'
+    if sha(old_contract)!=R85_CHILD_ACK_PREDECESSOR_SHA256:
+        raise RuntimeError('Child ACK predecessor contract changed')
+    old_session=dict(session,scan_workspace_contract=str(old_contract),
+                     scan_workspace_contract_sha256=R85_CHILD_ACK_PREDECESSOR_SHA256)
+    old_workspace, _, old = _r85_contract(old_session)
+    if (len(old['bindings_sha256']),len(old['source_bindings_sha256']),
+            len(old['project_link_input_bindings_sha256']))!=(552,124,12):
+        raise RuntimeError('Child ACK complete552/124/12 predecessor closure differs')
+    data=json.loads(R85_CHILD_ACK_CONTRACT.read_text())
+    workspace=R85_CHILD_ACK_WORKSPACE.resolve()
+    executable=workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config=workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    if (data.get('schema')!='r85_scan_child_odometry_ack_workspace/v1'
+            or data.get('candidate')!='r85_scoped_child_odometry_consumption_ack_v1'
+            or data.get('candidate_root')!=str(HERE) or data.get('workspace')!=str(workspace)
+            or data.get('protocol_version')!=1 or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True
+            or data.get('source_algorithm_changed') is not False
+            or data.get('optimization_algorithm_changed') is not False
+            or data.get('original_gate_conditions_changed') is not False
+            or data.get('executable')!=str(executable)
+            or data.get('config')!=str(config)
+            or data.get('build_receipt')!=str(R85_CHILD_ACK_RECEIPT.resolve())):
+        raise RuntimeError('Fresh child ACK contract scope differs')
+    predecessor=data.get('predecessor_contract', {})
+    if (predecessor.get('path')!=str(old_contract)
+            or predecessor.get('sha256')!=R85_CHILD_ACK_PREDECESSOR_SHA256
+            or predecessor.get('snapshot_sha256')!=R85_CHILD_ACK_PREDECESSOR_SHA256
+            or predecessor.get('binding_count')!=552 or predecessor.get('source_count')!=124
+            or predecessor.get('link_count')!=12):
+        raise RuntimeError('Fresh child ACK predecessor metadata differs')
+    snapshot=Path(predecessor.get('snapshot',''))
+    if (snapshot!=R85_CHILD_ACK_STAGE/'build_contract/PRESERVED_PRE_ACK_R85_SCAN_WORKSPACE_CONTRACT.json'
+            or not snapshot.is_file() or sha(snapshot)!=R85_CHILD_ACK_PREDECESSOR_SHA256):
+        raise RuntimeError('Fresh child ACK preserved predecessor snapshot differs')
+    source_root=workspace/'src/plan_manage'
+    source_paths=[source_root/relative for relative in (
+        'package.xml','CMakeLists.txt','src/scan_replan_fsm.cpp','src/scan_planner_node.cpp',
+        'src/planner_manager.cpp','include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h','include/plan_manage/plan_container.hpp',
+        'include/plan_manage/measured_start_state.h','include/plan_manage/fresh_child_odometry_ack.h')]
+    build=workspace/'build/scan_planner'
+    required=[old_contract,snapshot,executable,config,R85_CHILD_ACK_RECEIPT,
+        workspace/'install/setup.bash',workspace/'install/local_setup.bash',
+        build/'CMakeCache.txt',build/'compile_commands.json',
+        build/'CMakeFiles/scan_planner_node.dir/link.txt',*source_paths]
+    copy_manifest=R85_CHILD_ACK_STAGE/'build_contract/ACK_SOURCE_COPY_SHA256.json'
+    if data.get('source_copy_manifest')!=str(copy_manifest):
+        raise RuntimeError('Fresh child ACK copied-source manifest path differs')
+    required.append(copy_manifest)
+    sdk=Path('/opt/ros/jazzy/include/rmw/rmw/types.h')
+    sdk_bindings=data.get('runtime_sdk_bindings_sha256', {})
+    if (not isinstance(sdk_bindings, dict) or set(sdk_bindings)!={str(sdk)}
+            or data.get('rmw_gid_storage_size')!=16):
+        raise RuntimeError('Fresh child ACK actual SDK/GID protocol binding differs')
+    required.append(sdk)
+    bindings=_bindings(data,required)
+    if sdk_bindings[str(sdk)]!=bindings[str(sdk)]:
+        raise RuntimeError('Fresh child ACK actual rmw SDK identity differs')
+    if any(bindings.get(name)!=value for name,value in old['bindings_sha256'].items()):
+        raise RuntimeError('Child ACK dropped an original552 binding')
+    sources=data.get('source_bindings_sha256', {})
+    if (not isinstance(sources,dict)
+            or any(sources.get(name)!=value for name,value in old['source_bindings_sha256'].items())
+            or any(sources.get(str(p.resolve()))!=bindings[str(p.resolve())]for p in source_paths)):
+        raise RuntimeError('Child ACK dropped an original124/fresh source binding')
+    runtime=data.get('required_runtime_sources', {})
+    runtime_names={str(HERE/name) for name in ('scan_child_consumption.py','scan_epoch_supervisor.py','scan_workspace.py')}
+    if (not isinstance(runtime,dict) or set(runtime)!=runtime_names
+            or any(not isinstance(value,str) or re.fullmatch(r'[0-9a-f]{64}',value)is None
+                   or sha(path)!=value for path,value in runtime.items())):
+        raise RuntimeError('Fresh child ACK installed runtime source identities differ')
+    if (sha(executable)==sha(old_workspace/'install/scan_planner/lib/scan_planner/scan_planner_node')
+            or config.read_bytes()!=(old_workspace/'install/scan_planner/share/scan_planner/config/planner.yaml').read_bytes()):
+        raise RuntimeError('Fresh ACK executable missing or original planner config changed')
+    for row in json.loads(copy_manifest.read_text()):
+        if not isinstance(row,list) or len(row)!=3:
+            raise RuntimeError('Malformed child ACK source-copy row')
+        original,copied,value=row
+        if (sha(original)!=value or sha(copied)!=value
+                or any(bindings.get(str(Path(p).resolve()))!=value for p in [original,copied])
+                or any(sources.get(str(Path(p).resolve()))!=value for p in [original,copied])):
+            raise RuntimeError('Fresh child ACK copied source identity differs')
+    command=(build/'CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    actual_links={str(Path(token).resolve())for token in shlex.split(command)
+        if Path(token).is_file()and(token.startswith(str(R85_PROJECT_ROOT)+'/')
+             or Path(token).resolve()==R85_TRAJ_ARCHIVE.resolve())}
+    expected=old['project_link_input_bindings_sha256']
+    if (actual_links!=set(expected) or data.get('project_link_input_bindings_sha256')!=expected
+            or any(bindings.get(name)!=value for name,value in expected.items())):
+        raise RuntimeError('Fresh child ACK changed exact12 project link inputs')
+    for token in shlex.split(command):
+        p=Path(token)
+        if (p.is_absolute() and p.is_file() and str(p.resolve())not in actual_links
+                and not any(p.resolve().is_relative_to(root)for root in [Path('/usr'),Path('/lib'),Path('/opt/ros/jazzy')])):
+            raise RuntimeError('Unexpected child ACK external link dependency')
+    receipt=json.loads(R85_CHILD_ACK_RECEIPT.read_text())
+    if (receipt.get('schema')!='r85_scan_child_ack_component_build/v1'
+            or receipt.get('success') is not True or receipt.get('compile_only') is not True
+            or receipt.get('build_exit_code')!=0 or receipt.get('ROS_started') is not False
+            or receipt.get('physics_started') is not False
+            or receipt.get('new_helper_in_actual_compiler_dependencies') is not True
+            or receipt.get('executable',{}).get('sha256')!=sha(executable)):
+        raise RuntimeError('Fresh child ACK successful build receipt missing')
+    built_bindings={}
+    for row in receipt.get('bindings',[]):
+        path=str(Path(row['path']).resolve())
+        if bindings.get(path)!=row.get('sha256'):
+            raise RuntimeError('Fresh child ACK build receipt binding differs')
+        built_bindings[path]=row['sha256']
+    if any(str(p.resolve())not in built_bindings for p in [executable,*source_paths]):
+        raise RuntimeError('Fresh child ACK build receipt omits selected source/ELF')
+    helper=source_root/'include/plan_manage/fresh_child_odometry_ack.h'
+    deps=list((build/'CMakeFiles/scan_planner_node.dir').rglob('*.o.d'))
+    if not any(str(helper)in p.read_text()for p in deps):
+        raise RuntimeError('Fresh child ACK helper was not a real compiler input')
+    if 'CMAKE_BUILD_TYPE:STRING=Release'not in (build/'CMakeCache.txt').read_text().splitlines():
+        raise RuntimeError('Fresh child ACK build type differs')
+    for row in json.loads((build/'compile_commands.json').read_text()):
+        tokens=shlex.split(row['command'])
+        if ([v for v in tokens if re.fullmatch(r'-O(?:[0-3sgz]|fast)',v)]!=['-O3']
+                or '-DNDEBUG'not in tokens or any(v in tokens for v in ['-Ofast','-ffast-math',
+                    '-funsafe-math-optimizations','-ffinite-math-only','-fassociative-math',
+                    '-freciprocal-math','-fno-signed-zeros','-fno-trapping-math','-ffp-contract=fast'])
+                or not Path(row['file']).resolve().is_relative_to(source_root)):
+            raise RuntimeError('Fresh child ACK Release flags/source scope differs')
+    return workspace,R85_CHILD_ACK_CONTRACT,data
+
+
+def scan_contract(profile=None):
+    session = _r85_enabled(profile)
+    child_ack = _child_ack_requested(profile)
+    if child_ack:
+        if session is None:
+            raise RuntimeError('Child odometry ACK selector requires scoped R85 session')
+        return _child_ack_contract(session)
+    if session is not None:
+        return _r85_contract(session)
+    selector = (profile or {}).get('scan_workspace_selector', 'protected_baseline')
+    if selector not in SLOTS:
+        raise RuntimeError('An arbitrary or unreviewed SCAN workspace is prohibited')
+    workspace, name = SLOTS[selector]
+    contract = HERE/name
+    if not contract.is_file():
+        raise RuntimeError('Selected SCAN workspace has no frozen source/build contract')
+    data = json.loads(contract.read_text())
+    if (data.get('schema') != 'corridor_v20_SCAN_workspace/v1' or data.get('candidate') != selector
+            or data.get('workspace') != str(workspace.resolve()) or data.get('algorithm_math_changed') is not False
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('The selected SCAN contract identity differs')
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        workspace/'install/scan_planner/lib/scan_planner/scan_planner_node',
+        workspace/'install/scan_planner/share/scan_planner/config/planner.yaml']
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or any(str(path.resolve()) not in bindings for path in required):
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path, digest in bindings.items():
+        if not Path(path).is_absolute() or sha(path) != digest:
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + path)
+    return workspace.resolve(), contract, data
+
+
+def evidence_files(profile=None):
+    _, contract, data = scan_contract(profile)
+    return [contract, *[Path(name) for name in data['bindings_sha256']]]

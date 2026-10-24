@@ -1,0 +1,390 @@
+"""Teacher stop/heading transitions proven from fresh SLAM and raw body gyro.
+
+No truth, timer-only standstill, CHAMP phase reset or IMU yaw localization.
+
+Independent simulation experiment: allow profile turn caps up to 0.6 rad/s.
+The NAV 0.6 cap has no physical validation yet. At cap 0.3 all transition
+mathematics, measured-stop conditions and 300 ms freshness are unchanged.
+"""
+from collections import deque
+import copy
+import math
+from navigation_stop_window import NavigationStopWindow, SPEC
+
+
+class TeacherHeadingGate:
+    def __init__(self,profile):
+        self.max_turn_rate=profile['max_yaw_rate_radps']
+        if not math.isfinite(self.max_turn_rate)or not 0<self.max_turn_rate<=.6:raise ValueError('Simulation experimental turn limit must be finite and within (0,0.6]rad/s; NAV0.6 is not physically validated')
+        self.config=profile['teacher_transition'];self.history=deque(maxlen=64)
+        braking=profile.get('r85_active_turn_braking',{'enabled':False})
+        if (not isinstance(braking,dict) or set(braking)!={'enabled'}
+                or type(braking.get('enabled')) is not bool):
+            raise ValueError('r85_active_turn_braking requires only explicit boolean enabled')
+        self.active_braking_enabled=braking['enabled']
+        self.active_braking_lower_ack_config=None;self.active_braking_command_limits=None
+        if self.active_braking_enabled:
+            from student_lower_loop_ack import configuration as lower_ack_configuration
+            cascade=profile.get('cascade')
+            if not isinstance(cascade,dict):
+                raise ValueError('Active braking requires the original cascade ACK configuration')
+            self.active_braking_lower_ack_config=lower_ack_configuration(cascade.get('r85_student_lower_loop_ack'))
+            limits=cascade.get('command_limits',[.8,.35,.8])
+            if (self.active_braking_lower_ack_config is None or not isinstance(limits,(list,tuple))
+                    or len(limits)!=3 or any(type(v)not in (int,float) or not math.isfinite(v) or v<=0 for v in limits)):
+                raise ValueError('Active braking requires frozen Student lower ACK and command limits')
+            self.active_braking_command_limits=copy.deepcopy(limits)
+        self.brake_history=deque(maxlen=64);self.brake_last_stamp=None
+        self.handoff_failure=None;self.handoff_event=None;self.handoff_deadline_s=None
+        self.handoff_deadline_candidate=None;self.handoff_deadline_binding=None
+        self.zero_ack_candidate=None;self.zero_ack_error=None;self.zero_ack_highwater=None
+        self.last_brake_qualification=None;self.final_zero_ack=None
+        diagnostic=profile.get('diagnostic_observe_only',{})
+        self.diagnostic_profile=dict(diagnostic_observe_only=dict(enabled=bool(
+            isinstance(diagnostic,dict) and type(diagnostic.get('enabled'))is bool and diagnostic['enabled'])))
+        self.diagnostic_run=None;self.diagnostic_zero_ack_ready=False
+        self.stop_window=NavigationStopWindow(profile.get('navigation_settle_statistics_contract'),self.config)
+        self.transition_purpose='unknown';self.transition_context={};self.last_release=None
+        self.last_stamp=None;self.latest_motion=None;self.zero_handoff_count=0;self.reset()
+    @staticmethod
+    def error(target,yaw):return math.atan2(math.sin(target-yaw),math.cos(target-yaw))
+    def reset(self):
+        if self.handoff_active:
+            self.fail_handoff('active_handoff_reset')
+        if self.handoff_failure:
+            self.phase='failed';return
+        self.handoff_event=None;self.handoff_deadline_s=None
+        self.brake_history.clear();self.brake_last_stamp=None;self.final_zero_ack=None
+        self.phase='pre_turn';self.heading=None;self.settle_until=None;self.outside_since=None
+        self.stop_window.clear();self.last_release=None
+        self.settle_control_stage=None;self.last_zero_handoff=None
+        # Goal/replan resets heading, not the real observed standstill history.
+    def set_transition_context(self,purpose,context):
+        changed=context!=self.transition_context
+        old_identity=(self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))
+        new_identity=(context.get('request_id'),context.get('waypoint_index'))
+        was_active=self.handoff_active
+        if was_active and (changed or purpose!=self.transition_purpose):
+            self.fail_handoff('active_handoff_binding_changed')
+        elif old_identity!=new_identity:
+            self.handoff_failure=None;self.handoff_event=None;self.handoff_deadline_s=None
+            self.handoff_deadline_candidate=None;self.handoff_deadline_binding=None
+            self.zero_ack_candidate=None;self.zero_ack_highwater=None;self.final_zero_ack=None
+            self.brake_history.clear();self.brake_last_stamp=None
+            if self.phase=='failed':self.phase='pre_turn';self.heading=None;self.settle_control_stage=None
+        if purpose!=self.transition_purpose or changed:self.stop_window.clear()
+        self.transition_purpose=purpose;self.transition_context=dict(context)
+    @property
+    def controlled_braking(self):
+        return self.phase=='settle' and self.settle_control_stage=='controlled_braking'
+    @property
+    def handoff_active(self):
+        return bool(self.active_braking_enabled and self.handoff_event is not None
+            and self.handoff_event.get('status')=='pending')
+    def fail_handoff(self,reason,sim_time=None):
+        if not self.handoff_active:return False
+        self.handoff_failure=self.handoff_failure or str(reason)
+        self.handoff_event.update(status='failed',failure=self.handoff_failure,failure_control_s=sim_time)
+        self.phase='failed';self.settle_control_stage=None
+        self.history.clear();self.stop_window.clear();self.brake_history.clear()
+        return True
+    def bind_handoff_deadline(self,deadline_s,binding):
+        if not self.active_braking_enabled:return
+        if (isinstance(deadline_s,bool) or not isinstance(deadline_s,(int,float))
+                or not math.isfinite(deadline_s) or deadline_s<0 or not isinstance(binding,dict)):
+            raise ValueError('Original finite absolute handoff deadline and binding required')
+        bound=copy.deepcopy(binding)
+        identity=(bound.get('request_id'),bound.get('waypoint_index'))
+        expected=(self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))
+        if identity!=expected:
+            if self.handoff_active:self.fail_handoff('active_handoff_binding_changed')
+            self.handoff_deadline_candidate=None;return
+        if self.handoff_active:
+            if bound!=self.handoff_event['deadline_binding']:
+                self.fail_handoff('active_handoff_binding_changed');return
+            # Rebinding may tighten the frozen original deadline, never extend it.
+            self.handoff_deadline_s=min(self.handoff_deadline_s,float(deadline_s))
+            self.handoff_event['deadline_s']=self.handoff_deadline_s
+        self.handoff_deadline_candidate=float(deadline_s);self.handoff_deadline_binding=bound
+    def bind_zero_ack(self,ack,expected_scope,request_id,waypoint_index,control_clock_ns,wall_ns):
+        self.zero_ack_candidate=None;self.zero_ack_error=None
+        try:
+            from student_lower_loop_ack import input_binding
+            receipt,stamp,frame,inference,applied,scope=input_binding(ack)
+            if self.active_braking_enabled:
+                from student_lower_loop_ack import residual as lower_ack_residual
+                # Final exact-zero uses core hold, whose protective early return
+                # precedes its normal ACK checks. Reuse that same v1 validator.
+                lower_ack_residual(ack,self.active_braking_lower_ack_config,self.active_braking_command_limits)
+            if (type(control_clock_ns)is not int or type(wall_ns)is not int
+                    or type(ack['sequence'])is not int or ack['sequence']<=0
+                    or type(ack['received_wall_ns'])is not int
+                    or type(ack['ack_native_clock_ns'])is not int):
+                raise ValueError('Original ACK/control integer clocks and sequence required')
+            context=(request_id,waypoint_index)
+            expected=(self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))
+            if context!=expected or scope!=expected_scope:raise ValueError('ACK current context or frozen source scope differs')
+            if (not 0<=control_clock_ns-stamp<300_000_000
+                    or not 0<=wall_ns-ack['received_wall_ns']<300_000_000
+                    or ack['ack_native_clock_ns']>control_clock_ns
+                    or ack['ack_native_clock_ns']-stamp!=20_000_000):
+                raise ValueError('ACK stale, future, or causal native interval differs')
+            request=list(ack['requested_command_body'])
+            if len(request)!=3 or any(type(v)not in (int,float) or not math.isfinite(v) for v in request):
+                raise ValueError('Finite truthful ACK request required')
+            watermark=dict(sequence=ack['sequence'],input_clock_ns=stamp,
+                input_frame_serial=frame,inference_sequence=inference)
+            old=self.zero_ack_highwater
+            if old is not None:
+                keys=('sequence','input_clock_ns','input_frame_serial','inference_sequence')
+                if any(watermark[k]<old[k] for k in keys):raise ValueError('Actual ACK watermark went backwards')
+                if watermark['sequence']>old['sequence'] and any(watermark[k]<=old[k] for k in keys[1:]):
+                    raise ValueError('New ACK reused an old actual inference frame')
+                if watermark['sequence']==old['sequence'] and watermark!=old:
+                    raise ValueError('Repeated ACK sequence changed its actual frame')
+            self.zero_ack_highwater=copy.deepcopy(watermark)
+            self.zero_ack_candidate=dict(**watermark,source_scope_sha256=scope,
+                request_id=request_id,waypoint_index=waypoint_index,
+                received_wall_ns=ack['received_wall_ns'],ack_native_clock_ns=ack['ack_native_clock_ns'],
+                requested_command_body=request,applied_command_body=list(applied),
+                exact_zero=not any(request) and not any(applied))
+            return True
+        except (ValueError,TypeError,KeyError,AttributeError)as error:
+            self.zero_ack_error=str(error);return False
+    def note_zero_publication(self,clock_ns):
+        if (not self.handoff_active or self.settle_control_stage!='authoritative_zero'
+                or self.last_zero_handoff is None):return False
+        if type(clock_ns)is not int or clock_ns<round(self.last_zero_handoff['actual_control_s']*1e9):
+            raise ValueError('Final zero publication precedes its control edge')
+        if self.last_zero_handoff.get('zero_publication_clock_ns') is None:
+            self.last_zero_handoff['zero_publication_clock_ns']=clock_ns
+            self.handoff_event['zero_publication_clock_ns']=clock_ns
+        return True
+    def _post_handoff_zero_ack(self,stamp_s,wall_s):
+        edge=self.last_zero_handoff;ack=self.zero_ack_candidate
+        if not self.handoff_active or edge is None or ack is None or not ack['exact_zero']:return False
+        publication=edge.get('zero_publication_clock_ns')
+        old=edge.get('ack_watermark');context=edge['context']
+        if (publication is None or old is None or ack['input_clock_ns']<=publication
+                or ack['input_clock_ns']>round(stamp_s*1e9)
+                or not 0<=wall_s-ack['received_wall_ns']/1e9<.3
+                or ack['source_scope_sha256']!=edge.get('source_scope_sha256')
+                or ack['request_id']!=context.get('request_id')
+                or ack['waypoint_index']!=context.get('waypoint_index')
+                or any(ack[k]<=old[k] for k in ('sequence','input_clock_ns','input_frame_serial','inference_sequence'))):return False
+        if self.final_zero_ack is None:self.final_zero_ack=copy.deepcopy(ack)
+        return True
+    def _begin_braking(self,sim_time):
+        binding=self.handoff_deadline_binding
+        if (self.handoff_deadline_candidate is None or binding is None
+                or (binding.get('request_id'),binding.get('waypoint_index'))!=
+                (self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))):
+            self.handoff_event=dict(status='pending')
+            self.fail_handoff('active_handoff_deadline_missing',sim_time);return False
+        self.handoff_deadline_s=self.handoff_deadline_candidate
+        self.handoff_event=dict(status='pending',brake_entry_control_s=sim_time,
+            deadline_s=self.handoff_deadline_s,deadline_binding=copy.deepcopy(binding),
+            context=copy.deepcopy(self.transition_context),purpose=self.transition_purpose)
+        self.brake_history.clear();self.brake_last_stamp=self.last_stamp
+        self.history.clear();self.stop_window.clear();self.last_release=None
+        self.settle_control_stage='controlled_braking'
+        if sim_time>self.handoff_deadline_s:
+            self.fail_handoff('active_handoff_deadline_exceeded',sim_time);return False
+        return True
+    def _braking_qualified(self,sim_time,wall_time,error,center_band):
+        m=self.latest_motion;c=self.config
+        valid=abs(error)<=center_band and self._motion_ready_for_zero(sim_time,wall_time)
+        if not valid:self.brake_history.clear();return False
+        return bool(len(self.brake_history)>=c['stop_min_pose_samples']
+            and self.brake_history[-1][0]-self.brake_history[0][0]>=c['stop_window_sim_s']-1e-9)
+    def observe(self,stamp_s,wall_s,velocity,slam_wz,body_gyro,gyro_stamp_s,zero_command,position=None,quaternion=None):
+        values=list(velocity)+[stamp_s,wall_s,slam_wz,gyro_stamp_s]+list(body_gyro)
+        if len(velocity)!=3 or len(body_gyro)!=3 or not all(math.isfinite(x)for x in values):return False
+        if self.last_stamp is not None and stamp_s<=self.last_stamp:return False
+        self.last_stamp=stamp_s;c=self.config
+        self.latest_motion=dict(stamp_s=stamp_s,wall_s=wall_s,velocity=list(velocity),
+            slam_wz=slam_wz,body_gyro=list(body_gyro),gyro_stamp_s=gyro_stamp_s,zero_command=bool(zero_command))
+        # Every accepted header participates: a bad sample cannot disappear
+        # when another odometry callback arrives before the control callback.
+        if self.controlled_braking:
+            self.brake_last_stamp=stamp_s
+            q=list(quaternion or [])
+            qnorm=sum(v*v for v in q) if len(q)==4 and all(math.isfinite(v)for v in q) else 0.
+            heading_valid=False
+            if .98<=qnorm<=1.02:
+                x,y,z,w=[v/math.sqrt(qnorm)for v in q]
+                observed_yaw=math.atan2(2*(w*z+x*y),1-2*(y*y+z*z))
+                heading_valid=abs(self.error(self.heading,observed_yaw))<=.25*c['turn_complete_rad']
+            brake_valid=(self._motion_ready_for_zero(stamp_s,wall_s) and heading_valid
+                and self.handoff_event is not None
+                and stamp_s>self.handoff_event['brake_entry_control_s'])
+            if (not brake_valid or self.brake_history
+                    and stamp_s-self.brake_history[-1][0]>c['stop_pose_gap_max_s']):
+                self.brake_history.clear()
+            if brake_valid:self.brake_history.append((stamp_s,wall_s))
+        # Brake output (including natural exact zero) is never parking evidence.
+        if self.active_braking_enabled and self.handoff_failure:zero_command=False
+        if self.active_braking_enabled and self.phase=='settle':
+            if self.settle_control_stage in ('controlled_convergence','controlled_braking'):
+                zero_command=False
+            elif self.settle_control_stage=='authoritative_zero' and self.handoff_event is not None:
+                zero_command=bool(zero_command and self._post_handoff_zero_ack(stamp_s,wall_s))
+        self.latest_motion['zero_command']=bool(zero_command)
+        self.stop_window.observe(stamp_s,wall_s,velocity,slam_wz,body_gyro,gyro_stamp_s,zero_command,position,quaternion)
+        valid=(zero_command and math.hypot(*velocity[:2])<=c['stop_planar_speed_mps']
+            and abs(slam_wz)<=c['stop_slam_yaw_rate_radps']
+            and math.sqrt(sum(x*x for x in body_gyro))<=c['stop_body_gyro_radps']
+            and abs(stamp_s-gyro_stamp_s)<=c['gyro_pose_pair_max_s'])
+        if not valid or self.history and stamp_s-self.history[-1][0]>c['stop_pose_gap_max_s']:
+            self.history.clear()
+        if valid:self.history.append((stamp_s,wall_s))
+        return valid
+    @property
+    def controlled_settle(self):
+        return self.phase=='settle' and self.settle_control_stage=='controlled_convergence'
+    def _ordinary_handoff_enabled(self):
+        # Existing dynamic/tilt/unknown safety holds retain their exact-zero path.
+        return (self.transition_purpose in SPEC['eligible_purposes']
+            and isinstance(self.transition_context.get('request_id'),str)
+            and type(self.transition_context.get('waypoint_index'))is int
+            and self.transition_context.get('dynamic_recovery')is False)
+    def _motion_ready_for_zero(self,sim_time,wall_time):
+        # Same instantaneous limits/freshness as the original measured-stop
+        # predicate, with no claim of zero-command dwell before the handoff.
+        m=self.latest_motion;c=self.config
+        return bool(m is not None and 0<=wall_time-m['wall_s']<.3
+            and -.05<=sim_time-m['stamp_s']<.3
+            and abs(m['stamp_s']-m['gyro_stamp_s'])<=c['gyro_pose_pair_max_s']
+            and math.hypot(*m['velocity'][:2])<=c['stop_planar_speed_mps']
+            and abs(m['slam_wz'])<=c['stop_slam_yaw_rate_radps']
+            and math.sqrt(sum(x*x for x in m['body_gyro']))<=c['stop_body_gyro_radps'])
+    def _observe_stop_wait(self,sim_time,wall_time,phase):
+        config=self.diagnostic_profile.get('diagnostic_observe_only',{})
+        if not (isinstance(config,dict) and type(config.get('enabled'))is bool
+                and config['enabled'] and self.diagnostic_run is not None
+                and self.diagnostic_zero_ack_ready is True
+                and self._motion_ready_for_zero(sim_time,wall_time)
+                and self.latest_motion.get('zero_command')is True):return False
+        from diagnostic_observation import record
+        record(self.diagnostic_run,self.diagnostic_profile,'teacher_heading_'+phase,
+            'original_measured_stop_business_wait',dict(actual_control_s=sim_time,
+                original_legacy_stop_passed=False,statistics=self.stop_window.evidence(sim_time,wall_time),
+                actual_fresh_zero_actor_ack=True,fresh_instantaneous_stop_limits_passed=True,
+                zero_command=True,control_heading_math_unchanged=True))
+        return True
+    def stopped(self,sim_time,wall_time):
+        c=self.config
+        return (len(self.history)>=c['stop_min_pose_samples']
+            and 0<=wall_time-self.history[-1][1]<.3
+            and -.05<=sim_time-self.history[-1][0]<.3
+            and self.history[-1][0]-self.history[0][0]>=c['stop_window_sim_s']-1e-9)
+    def resume_after_stop(self,yaw,fresh_path_heading,stopped_duration):
+        # Caller retains unchanged cloud-clearance/new-SCAN guard. A duration
+        # alone never establishes physical stopping for the Teacher.
+        self.reset();self.transition_purpose='dynamic_recovery';self.heading=fresh_path_heading
+        return False
+    def update(self,sim_time,yaw,current_path_heading,wall_time=None):
+        import time
+        wall_time=time.monotonic()if wall_time is None else wall_time;c=self.config
+        current_error=self.error(current_path_heading,yaw)
+        if self.handoff_failure:return False,0.
+        if self.handoff_active and sim_time>self.handoff_deadline_s:
+            self.fail_handoff('active_handoff_deadline_exceeded',sim_time);return False,0.
+        if self.phase=='drive':
+            if abs(current_error)<=c['drive_heading_max_rad']:
+                return True,max(-.08,min(.08,.5*current_error))
+            self.reset()  # Stop immediately before a substantial new heading.
+            if self.transition_purpose not in ('dynamic_recovery','tilt_recovery'):
+                self.transition_purpose='heading_change'
+        if self.phase=='pre_turn':
+            if not self.stopped(sim_time,wall_time) and not self._observe_stop_wait(sim_time,wall_time,'pre_turn'):return False,0.
+            self.phase='align';self.heading=current_path_heading
+        if self.heading is None:self.heading=current_path_heading
+        error=self.error(self.heading,yaw)
+        if self.phase=='align':
+            if abs(error)>c['turn_complete_rad']:
+                return False,max(-self.max_turn_rate,min(self.max_turn_rate,1.3*error))
+            self.phase='settle';self.stop_window.clear();self.last_release=None
+            self.settle_control_stage=('controlled_convergence' if self._ordinary_handoff_enabled()
+                else 'authoritative_zero')
+        if self.phase=='settle':
+            if abs(current_error)>c['drive_heading_max_rad']:
+                if self.handoff_active:
+                    self.fail_handoff('active_handoff_heading_rearm',sim_time);return False,0.
+                self.phase='pre_turn';self.heading=None;self.settle_control_stage=None
+                self.stop_window.clear();self.last_release=None;return False,0.
+            if self.controlled_settle:
+                # This is a changed control handoff: keep the existing cascade
+                # yaw PD/PI and Student correction active toward the SAME locked
+                # center. It is not a new acceptance threshold or a timed wait.
+                # The center target is inside the original 0.1-rad band to leave
+                # room for the observed ~0.11-rad Actor zero-input recoil.
+                center_band=.25*c['turn_complete_rad']
+                if abs(error)>center_band or not self._motion_ready_for_zero(sim_time,wall_time):
+                    return False,max(-self.max_turn_rate,min(self.max_turn_rate,1.3*error))
+                if self.active_braking_enabled:
+                    self._begin_braking(sim_time)
+                    return False,0.
+                self.settle_control_stage='authoritative_zero';self.zero_handoff_count+=1
+                self.history.clear();self.stop_window.clear();self.last_release=None
+                self.last_zero_handoff=dict(actual_control_s=sim_time,locked_heading_rad=self.heading,
+                    locked_heading_error_rad=error,center_target_band_rad=center_band,
+                    fresh_motion=dict(self.latest_motion),zero_command_dwell_begins_after_this_edge=True)
+                return False,0.
+            if self.controlled_braking:
+                center_band=.25*c['turn_complete_rad']
+                if not self._braking_qualified(sim_time,wall_time,error,center_band):return False,0.
+                if self.zero_ack_candidate is None:
+                    return False,0.  # No final edge without a real frozen Actor watermark.
+                self.last_brake_qualification=dict(actual_control_s=sim_time,
+                    first_stamp_s=self.brake_history[0][0],last_stamp_s=self.brake_history[-1][0],
+                    samples=len(self.brake_history),original_stop_pass=False,
+                    center_target_band_rad=center_band,locked_heading_error_rad=error)
+                self.settle_control_stage='authoritative_zero';self.zero_handoff_count+=1
+                self.history.clear();self.stop_window.clear();self.last_release=None
+                self.final_zero_ack=None
+                self.last_zero_handoff=dict(actual_control_s=sim_time,locked_heading_rad=self.heading,
+                    locked_heading_error_rad=error,center_target_band_rad=center_band,
+                    fresh_motion=dict(self.latest_motion),zero_command_dwell_begins_after_this_edge=True,
+                    zero_publication_clock_ns=None,ack_watermark=copy.deepcopy(self.zero_ack_highwater),
+                    source_scope_sha256=self.zero_ack_candidate['source_scope_sha256'],
+                    context=copy.deepcopy(self.transition_context),deadline_s=self.handoff_deadline_s)
+                self.handoff_event.update(final_zero_control_s=sim_time)
+                return False,0.
+            legacy=self.stopped(sim_time,wall_time)
+            stats=self.stop_window.evidence(sim_time,wall_time)
+            eligible=(self.transition_purpose in SPEC['eligible_purposes']
+                and isinstance(self.transition_context.get('request_id'),str)
+                and type(self.transition_context.get('waypoint_index'))is int
+                and self.transition_context.get('dynamic_recovery')is False)
+            statistical=bool(eligible and stats['enabled'] and stats['passed'])
+            observed=(not self.handoff_active and not legacy and not statistical
+                and self._observe_stop_wait(sim_time,wall_time,'settle'))
+            if not legacy and not statistical and not observed:return False,0.
+            self.last_release=dict(predicate=('diagnostic_observe_only_original_stop_not_passed' if observed else
+                'legacy_continuous_300ms'if legacy else SPEC['schema']),
+                legacy_measured_stop=legacy,statistical_stop=statistical,purpose=self.transition_purpose,
+                context=dict(self.transition_context),actual_control_s=sim_time,statistics=stats)
+            if self.handoff_active:self.handoff_event.update(status='passed',release_control_s=sim_time)
+            self.phase='drive';self.heading=None
+            return True,max(-.08,min(.08,.5*current_error))
+        return False,0.
+    def evidence(self,sim_time,wall_time):
+        return {'transition':'teacher_measured_stop_heading_v1','phase':self.phase,
+            'measured_stop':self.stopped(sim_time,wall_time),'stop_valid_pose_samples':len(self.history),
+            'stop_first_stamp_s':self.history[0][0]if self.history else None,
+            'stop_last_stamp_s':self.history[-1][0]if self.history else None,
+            'navigation_heading_source':'SLAM body yaw only','gyro_use':'stop/tilt only; never localization',
+            'transition_purpose':self.transition_purpose,'transition_context':dict(self.transition_context),
+            'navigation_settle_statistics':self.stop_window.evidence(sim_time,wall_time),
+            'last_settle_release':self.last_release,
+            'settle_control_stage':self.settle_control_stage,
+            'controlled_settle':self.controlled_settle,'controlled_braking':self.controlled_braking,
+            'active_braking_enabled':self.active_braking_enabled,'handoff_active':self.handoff_active,
+            'handoff_failure':self.handoff_failure,'handoff_event':copy.deepcopy(self.handoff_event),
+            'brake_valid_pose_samples':len(self.brake_history),
+            'last_brake_qualification':copy.deepcopy(self.last_brake_qualification),
+            'final_zero_ack':copy.deepcopy(self.final_zero_ack),'zero_ack_error':self.zero_ack_error,
+            'zero_handoff_count':self.zero_handoff_count,'last_zero_handoff':self.last_zero_handoff,
+            'settle_center_target_band_rad':.25*self.config['turn_complete_rad'],
+            'acceptance_thresholds_changed':False}

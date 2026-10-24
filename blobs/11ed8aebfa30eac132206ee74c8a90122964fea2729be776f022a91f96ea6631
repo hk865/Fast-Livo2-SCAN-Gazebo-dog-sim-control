@@ -1,0 +1,210 @@
+from pathlib import Path
+import subprocess,hashlib,json,datetime
+ROOT=Path(__file__).resolve().parent
+SRC=ROOT.parent/'scan_ws/src/plan_manage/src/scan_replan_fsm.cpp'
+s=SRC.read_text()
+def extract(marker):
+ start=s.index(marker); begin=s.index('{',start); depth=1; i=begin+1
+ while depth:
+  if s[i]=='{':depth+=1
+  elif s[i]=='}':depth-=1
+  i+=1
+ return s[start:i]
+helpers=s[s.index('  bool valid_reference_input'):s.index('} // namespace')]
+methods=[extract(x) for x in [
+ '  bool SCANReplanFSM::mode3ReferenceUsable()',
+ '  void SCANReplanFSM::invalidateReference(',
+ '  void SCANReplanFSM::pathCallback(',
+ '  void SCANReplanFSM::localReplanCallback(',
+ '  bool SCANReplanFSM::adjustGlobalTargetIfOccupied()',
+ '  void SCANReplanFSM::publishTrajectoryMetadata(',
+ '  void SCANReplanFSM::publishReferenceAttempt(',
+ '  void SCANReplanFSM::getLocalTarget()']]
+pre=r'''
+#include <Eigen/Dense>
+#include <vector>
+#include <memory>
+#include <string>
+#include <cmath>
+#include <cstdint>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <limits>
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <unistd.h>
+using std::vector;
+#define RCLCPP_WARN(...) ((void)0)
+#define RCLCPP_INFO(...) ((void)0)
+#define RCLCPP_ERROR(...) ((void)0)
+#define RCLCPP_WARN_THROTTLE(...) ((void)0)
+struct Stamp {int sec=0; unsigned nanosec=0;};
+struct Header {std::string frame_id; Stamp stamp;};
+struct Point {double x=0,y=0,z=0;};
+struct Quaternion {double x=0,y=0,z=0,w=1;};
+struct Pose {Point position; Quaternion orientation;};
+struct PoseStamped {Header header; Pose pose;};
+namespace nav_msgs { namespace msg {
+struct Path {using ConstSharedPtr=std::shared_ptr<const Path>; Header header; std::vector<PoseStamped> poses;};
+}}
+namespace scan_planner_msgs {namespace msg {
+struct Bspline {int order=3,traj_id=1; Stamp start_time; std::vector<Point> pos_pts; std::vector<double> knots; std::vector<double> yaw_pts; double yaw_dt=0;};
+}}
+namespace std_msgs {namespace msg {struct String {std::string data;};
+struct MultiArrayDimension {std::string label;uint32_t size=5,stride=5;};
+struct UInt64MultiArray {using ConstSharedPtr=std::shared_ptr<const UInt64MultiArray>;struct {std::vector<MultiArrayDimension>dim;uint32_t data_offset=0;}layout;std::vector<uint64_t>data;};}}
+struct PolynomialTraj {
+ std::vector<double> times{2}; std::vector<std::vector<double>> coef[3]{{{0,0,1}},{{0,0,0}},{{0,0,0}}};
+ std::vector<double> getTimes(){return times;}
+ std::vector<std::vector<double>> getCoef(int i){return coef[i];}
+ Eigen::Vector3d evaluate(double t){return {t,0,0};}
+};
+struct GlobalTrajData {
+ PolynomialTraj global_traj_;double global_duration_=2,last_progress_time_=0;
+ Eigen::Vector3d getPosition(double t){return {t,0,0};}
+ Eigen::Vector3d getVelocity(double){return {0.1,0,0};}
+};
+struct Map {int occupied=0; int getInflateOccupancy(const Eigen::Vector3d&,double){return occupied;}};
+struct Manager {GlobalTrajData global_data_;std::shared_ptr<Map>grid_map_=std::make_shared<Map>(); struct {double max_vel_=1,max_acc_=1;}pp_;};
+struct ClockValue {int64_t value=1000000000;int64_t nanoseconds(){return value;}};
+struct Node {int64_t clock_ns=1000000000;ClockValue now(){return {clock_ns};}int get_logger(){return 0;}int*get_clock(){static int a=0;return &a;}};
+struct Measured {Eigen::Vector3d v=Eigen::Vector3d::Zero();Eigen::Vector3d velocity(bool f){return f?Eigen::Vector3d::Zero().eval():v;}};
+struct Pub {std::string payload;void publish(const std_msgs::msg::String&m){payload=m.data;}};
+class SCANReplanFSM {
+public:
+ enum NAVI_MODE{MANUAL_TARGET=1,PRESET_TARGET=2,REFERENCE_PATH=3};
+ enum State{INIT,WAIT_TARGET,GEN_NEW_TRAJ,REPLAN_TRAJ,EXEC_TRAJ,EMERGENCY_STOP};
+ int navi_mode_=REFERENCE_PATH;State exec_state_=WAIT_TARGET;
+ bool reference_ready_=false,have_target_=false,have_new_target_=false,trigger_=false,have_odom_=true,go2_execution_frozen_=false;
+ uint64_t reference_revision_=0,candidate_attempt_id_=1;
+ bool external_reference_protocol_=false;
+ std::string reference_run_id_="run-test";uint64_t reference_epoch_=7,localization_generation_=2;
+ uint64_t last_external_replan_sequence_=0,pending_external_replan_sequence_=0,current_attempt_replan_sequence_=0;
+ int global_endpoint_local_occupancy_=-1,local_target_occupancy_=0;
+ int64_t last_odom_stamp_ns_=1000000000;
+ std::chrono::steady_clock::time_point last_odom_receive_time_=std::chrono::steady_clock::now();
+ std::string reference_content_json_,attempt_origin_="generate_initial";
+ double body_height_=.3,reference_original_duration_=0,attempt_progress_before_=0,attempt_progress_after_=0,local_target_time_=0;
+ bool attempt_use_poly_init_=true,attempt_random_poly_=false;
+ Stamp reference_stamp_;
+ Eigen::Vector3d odom_pos_=Eigen::Vector3d::Zero(),odom_vel_=Eigen::Vector3d::Zero(),end_pt_=Eigen::Vector3d::Zero(),end_vel_=Eigen::Vector3d::Zero();
+ Eigen::Vector3d reference_body_goal_=Eigen::Vector3d::Zero(),start_pt_=Eigen::Vector3d::Zero(),start_vel_=Eigen::Vector3d::Zero(),start_acc_=Eigen::Vector3d::Zero(),local_target_pt_=Eigen::Vector3d::Zero(),local_target_vel_=Eigen::Vector3d::Zero();
+ double planning_horizon_=1;
+ Measured measured_start_;bool fit_result=true;
+ std::shared_ptr<Manager>planner_manager_=std::make_shared<Manager>();
+ Node node;Node*node_=&node;std::shared_ptr<Pub>trajectory_metadata_pub_=std::make_shared<Pub>();std::shared_ptr<Pub>reference_attempt_pub_=std::make_shared<Pub>();
+ bool mode3ReferenceUsable()const;void invalidateReference(const char*);
+ void pathCallback(const nav_msgs::msg::Path::ConstSharedPtr&);
+ void localReplanCallback(const std_msgs::msg::UInt64MultiArray::ConstSharedPtr&);
+ bool adjustGlobalTargetIfOccupied();
+ void publishTrajectoryMetadata(const scan_planner_msgs::msg::Bspline&,bool=false);
+ void getLocalTarget();void publishReferenceAttempt(bool,const std::string& reason="optimizer_return");
+ void changeFSMExecState(State s,const char*){exec_state_=s;}
+ double estimateYawFromSegment(const Eigen::Vector3d&,const Eigen::Vector3d&){return 0;}
+ bool planGlobalTrajByWaypoints(const std::vector<Eigen::Vector3d>& w){
+  planner_manager_->global_data_.global_duration_=19;planner_manager_->global_data_.last_progress_time_=9;
+  end_pt_=w.back();have_target_=have_new_target_=true;return fit_result;
+ }
+};
+'''
+main=r'''
+int main(){
+ auto p=std::make_shared<nav_msgs::msg::Path>();p->header.frame_id="camera_init";p->header.stamp.sec=19;
+ PoseStamped pose;pose.pose.position={1,0,-.3};p->poses.push_back(pose);
+ assert(valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));
+ p->header.frame_id="world";assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->header.frame_id="camera_init";
+ p->poses[0].header.frame_id="world";assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->poses[0].header.frame_id="";
+ p->poses[0].pose.position.x=std::numeric_limits<double>::quiet_NaN();assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->poses[0].pose.position.x=1;
+ p->poses[0].pose.orientation.w=std::numeric_limits<double>::infinity();assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->poses[0].pose.orientation.w=1;
+ p->poses[0].pose.position.x=0;assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->poses[0].pose.position.x=1;
+ p->poses.push_back(p->poses[0]);assert(!valid_reference_input(*p,.3,Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero()));p->poses.pop_back();
+ PolynomialTraj curve;assert(valid_reference_curve(curve,2));curve.times[0]=0;assert(!valid_reference_curve(curve,2));curve.times[0]=2;curve.coef[0][0][0]=std::numeric_limits<double>::quiet_NaN();assert(!valid_reference_curve(curve,2));
+ SCANReplanFSM f;assert(!f.mode3ReferenceUsable());f.pathCallback(p);assert(f.reference_ready_&&f.reference_revision_==1&&f.mode3ReferenceUsable());assert(f.exec_state_==f.GEN_NEW_TRAJ);
+ const auto content=f.reference_content_json_;const auto old_end=f.end_pt_;const auto old_duration=f.planner_manager_->global_data_.global_duration_;
+ f.fit_result=false;f.pathCallback(p);assert(!f.reference_ready_&&!f.have_target_&&!f.have_new_target_&&!f.trigger_);assert(f.reference_revision_==1&&f.reference_content_json_==content);assert(f.end_pt_==old_end&&f.planner_manager_->global_data_.global_duration_==old_duration);
+ f.fit_result=true;f.pathCallback(p);assert(f.reference_revision_==2&&f.reference_ready_);
+ p->header.frame_id="world";f.pathCallback(p);assert(!f.reference_ready_&&f.reference_revision_==2&&f.exec_state_==f.WAIT_TARGET);p->header.frame_id="camera_init";
+ f.pathCallback(p);assert(f.reference_revision_==3);
+ f.exec_state_=f.EMERGENCY_STOP;p->header.frame_id="world";f.pathCallback(p);assert(f.exec_state_==f.EMERGENCY_STOP&&!f.reference_ready_);p->header.frame_id="camera_init";f.pathCallback(p);
+ f.planner_manager_->grid_map_->occupied=1;const auto duration=f.planner_manager_->global_data_.global_duration_;const auto end=f.end_pt_;
+ assert(!f.adjustGlobalTargetIfOccupied());assert(f.end_pt_==end&&f.planner_manager_->global_data_.global_duration_==duration);
+ f.planner_manager_->grid_map_->occupied=-1;assert(!f.adjustGlobalTargetIfOccupied());f.planner_manager_->grid_map_->occupied=0;assert(f.adjustGlobalTargetIfOccupied());
+ f.planner_manager_->global_data_.last_progress_time_=f.planner_manager_->global_data_.global_duration_;f.local_target_pt_={-77,0,0};f.getLocalTarget();assert(f.local_target_pt_==f.end_pt_);assert(f.local_target_time_==duration);
+
+ // Only explicit external mode3 changes GLOBAL endpoint lookup scope. No truncation.
+ f.external_reference_protocol_=true;f.planner_manager_->grid_map_->occupied=-1;
+ assert(f.adjustGlobalTargetIfOccupied());assert(f.global_endpoint_local_occupancy_==-1);
+ assert(f.end_pt_==end&&f.planner_manager_->global_data_.global_duration_==duration);
+ f.planner_manager_->grid_map_->occupied=1;assert(f.adjustGlobalTargetIfOccupied());
+ f.planner_manager_->grid_map_->occupied=0;
+ // Scoped local replans never replace the curve or bump its reference identity.
+ f.exec_state_=f.EXEC_TRAJ;
+ const auto revision=f.reference_revision_;const auto snapshot=f.reference_content_json_;
+ auto request=std::make_shared<std_msgs::msg::UInt64MultiArray>();
+ request->layout.dim.push_back({"run-test",5,5});request->data={7,revision,1,19,0};
+ f.localReplanCallback(request);assert(f.exec_state_==f.REPLAN_TRAJ&&f.last_external_replan_sequence_==1);
+ assert(f.reference_revision_==revision&&f.reference_content_json_==snapshot);
+ auto reject=[&](){f.exec_state_=f.EXEC_TRAJ;f.localReplanCallback(request);assert(f.exec_state_==f.EXEC_TRAJ&&f.last_external_replan_sequence_==1);};
+ reject();request->data[2]=2;request->layout.dim[0].label="wrong";reject();request->layout.dim[0].label="run-test";
+ request->data[0]=2;reject();request->data[0]=7;request->data[1]=revision+1;reject();request->data[1]=revision;
+ request->data[3]=18;reject();request->data[3]=19;request->data[4]=1;reject();request->data[4]=0;
+ request->layout.data_offset=1;reject();request->layout.data_offset=0;
+ request->layout.dim[0].stride=4;reject();request->layout.dim[0].stride=5;
+ f.external_reference_protocol_=false;reject();f.external_reference_protocol_=true;
+ f.node.clock_ns=1300000000;reject();f.node.clock_ns=999999999;reject();f.node.clock_ns=1000000000;
+ f.last_odom_receive_time_=std::chrono::steady_clock::now()-std::chrono::seconds(1);reject();
+ f.last_odom_receive_time_=std::chrono::steady_clock::now();
+ f.odom_pos_.x()=std::numeric_limits<double>::infinity();reject();f.odom_pos_.x()=0;
+ f.exec_state_=f.EMERGENCY_STOP;f.localReplanCallback(request);assert(f.exec_state_==f.EMERGENCY_STOP&&f.last_external_replan_sequence_==1);
+ f.exec_state_=f.EXEC_TRAJ;f.localReplanCallback(request);assert(f.last_external_replan_sequence_==2);
+ auto many=std::make_shared<nav_msgs::msg::Path>(*p);many->poses.clear();
+ for(size_t i=0;i<337;++i){auto point=pose;point.pose.position.x=1+i;many->poses.push_back(point);}
+ auto old_rev=f.reference_revision_;f.pathCallback(many);assert(f.reference_revision_==old_rev+1&&f.reference_ready_);
+ for(size_t i=many->poses.size();i<4097;++i){auto point=pose;point.pose.position.x=1+i;many->poses.push_back(point);}
+ old_rev=f.reference_revision_;f.pathCallback(many);assert(f.reference_revision_==old_rev&&!f.reference_ready_);
+ f.pathCallback(p);assert(f.reference_ready_);
+ f.current_attempt_replan_sequence_=2;f.attempt_origin_="external_local_replan_poly";
+ scan_planner_msgs::msg::Bspline bs;bs.pos_pts.push_back({1,2,3});bs.knots={0,0,0,1,1,1};f.publishReferenceAttempt(false);std::cout<<f.reference_attempt_pub_->payload<<'\n';f.publishTrajectoryMetadata(bs);std::cout<<f.trajectory_metadata_pub_->payload<<'\n';
+ f.invalidateReference("test");f.trajectory_metadata_pub_->payload.clear();f.publishTrajectoryMetadata(bs);assert(f.trajectory_metadata_pub_->payload.empty());f.publishTrajectoryMetadata(bs,true);std::cout<<f.trajectory_metadata_pub_->payload<<'\n';
+ f.navi_mode_=1;f.trajectory_metadata_pub_->payload.clear();f.publishTrajectoryMetadata(bs,true);assert(f.trajectory_metadata_pub_->payload.empty());assert(f.mode3ReferenceUsable());
+ std::cout<<"PASS extracted protocol tests\n";
+}
+'''
+cpp=ROOT/'protocol_extracted.cpp';cpp.write_text(pre+helpers+'\n'.join(methods)+main)
+cmd=['/usr/bin/g++','-std=c++17','-O0','-I/usr/include/eigen3',str(cpp),'-o',str(ROOT/'protocol_extracted_test')]
+result=subprocess.run(cmd,text=True,capture_output=True)
+(ROOT/'test_compile.log').write_text(result.stdout+result.stderr)
+assert result.returncode==0,result.stderr
+run=subprocess.run([str(ROOT/'protocol_extracted_test')],text=True,capture_output=True)
+(ROOT/'test_stdout.log').write_text(run.stdout+run.stderr)
+assert run.returncode==0,run.stdout+run.stderr
+attempt,motion,emergency=map(json.loads,run.stdout.splitlines()[:3])
+assert attempt['event']=='attempt_result' and attempt['attempt']['plan_success'] is False
+assert attempt['actual_active'] is False and attempt['attempt']['id']==motion['attempt']['id']
+assert attempt['reference_content']==motion['reference_content']
+assert attempt['run_id']=='run-test' and attempt['reference_epoch']==7 and attempt['localization_generation']==2
+assert attempt['planner_process_id'] > 0 and motion['planner_process_id']==attempt['planner_process_id']
+assert attempt['attempt']['local_replan_request_sequence']==2 == motion['attempt']['local_replan_request_sequence']
+assert motion['trajectory']['yaw_pts']==[] and motion['trajectory']['yaw_dt']==0
+assert motion['global_endpoint_local_grid']['scope']=='diagnostic_only_global_reference'
+assert motion['schema']==2 and motion['actual_active'] is False and motion['publication_role']=='candidate_only'
+assert motion['outer_admission_ack_received'] is False and motion['reference_ready'] is True
+assert motion['candidate_kind']=='motion' and motion['reference_content']['global_curve']['segment_times']==[2]
+assert len(motion['reference_content']['input_poses'])==1
+assert motion['global_state']['current_curve']==motion['reference_content']['global_curve']
+assert emergency['candidate_kind']=='emergency_stop' and emergency['reference_ready'] is False
+assert emergency['actual_active'] is False and emergency['local_target']['valid'] is False
+assert 'global_state' not in emergency
+# Source-order checks cover common entrypoint and FSM closures, not full planner runtime.
+common=extract('  bool SCANReplanFSM::callReboundReplan(')
+assert common.index('mode3ReferenceUsable()')<common.index('getLocalTarget()')<common.index('reboundReplan(')<common.index('bspline_pub_->publish')
+assert 'REFERENCE_PATH && !adjustGlobalTargetIfOccupied()' in common
+assert common.index('local_target_occupancy_ != 0')<common.index('reboundReplan(')
+assert common.index('reboundReplan(')<common.index('publishReferenceAttempt(plan_success)')<common.index('bspline_pub_->publish')
+fsm=extract('  void SCANReplanFSM::execFSMCallback()')
+assert fsm.index('!mode3ReferenceUsable()')<fsm.index('switch (exec_state_)')
+receipt={'schema':'mode3-protocol-extracted-test/v3','UTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),'production_source_sha256':hashlib.sha256(SRC.read_bytes()).hexdigest(),'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'extracted_cpp_sha256':hashlib.sha256(cpp.read_bytes()).hexdigest(),'compiler_command':cmd,'compile_returncode':result.returncode,'run_returncode':run.returncode,'checks':['frame and pose-frame validation','finite position/orientation and nonzero segments','finite curve coefficients and positive times','first commit and monotonic revision','failed replacement rollback and failclosed readiness','invalid replacement does not revive old route','emergency state preserved','legacy occupied/unknown endpoint strict without truncation and external GLOBAL diagnostic scope only', 'strict LOCAL target occupancy gate before optimizer', 'local replan exact run/epoch/revision/stamp/sequence/layout guards', 'local replan stale/future/nonfinite measured source and emergency guards', 'valid local replan keeps reference snapshot/revision/global duration', 'explicit external 337 point reference retained and 4097 point reference denied before fit', 'scope metadata distinguishes planner epoch7 from localization generation2', 'entire Bspline includes yaw fields and request sequence' ,'mode3 exact-duration endpoint fallback','motion metadata JSON and original/current curve snapshot','invalid-reference motion metadata suppressed; emergency metadata candidate only','nonmode metadata unchanged','failed optimizer attempt receipt JSON and successful candidate attempt join','common moving-candidate gate precedes target selection/planning/publication','FSM missing-reference gate precedes state dispatch'],'scope':'Real extracted production method bodies in lightweight stubs; no ROS node, planner binary, optimizer, actual ACK, physics or navigation executed.'}
+(ROOT/'FINAL_FSM_TEST_RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print('PASS',len(receipt['checks']),'bounded checks; no ROS or planner binary launched')

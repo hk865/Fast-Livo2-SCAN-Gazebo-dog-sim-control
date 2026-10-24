@@ -1,0 +1,51 @@
+// generated from rosidl_generator_c/resource/idl__struct.h.em
+// with input from scan_planner_msgs:msg/DataDisp.idl
+// generated code does not contain a copyright notice
+
+// IWYU pragma: private, include "scan_planner_msgs/msg/data_disp.h"
+
+
+#ifndef SCAN_PLANNER_MSGS__MSG__DETAIL__DATA_DISP__STRUCT_H_
+#define SCAN_PLANNER_MSGS__MSG__DETAIL__DATA_DISP__STRUCT_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+// Constants defined in the message
+
+// Include directives for member types
+// Member 'header'
+#include "std_msgs/msg/detail/header__struct.h"
+
+/// Struct defined in msg/DataDisp in the package scan_planner_msgs.
+typedef struct scan_planner_msgs__msg__DataDisp
+{
+  std_msgs__msg__Header header;
+  double a;
+  double b;
+  double c;
+  double d;
+  double e;
+} scan_planner_msgs__msg__DataDisp;
+
+// Struct for a sequence of scan_planner_msgs__msg__DataDisp.
+typedef struct scan_planner_msgs__msg__DataDisp__Sequence
+{
+  scan_planner_msgs__msg__DataDisp * data;
+  /// The number of valid items in data
+  size_t size;
+  /// The number of allocated items in data
+  size_t capacity;
+} scan_planner_msgs__msg__DataDisp__Sequence;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  // SCAN_PLANNER_MSGS__MSG__DETAIL__DATA_DISP__STRUCT_H_

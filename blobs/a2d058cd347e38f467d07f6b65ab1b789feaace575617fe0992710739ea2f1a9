@@ -1,0 +1,82 @@
+"""Explicit R42 00UTC/160GB resource authority; absent option keeps legacy gates.
+
+This selects only renewed scheduling/capacity. It grants no control, stop or NAV
+acceptance credit and never changes the old shared storage module's globals.
+"""
+from pathlib import Path
+import datetime as dt
+import hashlib
+import json
+import math
+
+HERE=Path(__file__).resolve().parent
+KEY='r85_resource_renewal'
+CONFIG={'enabled':True,'kind':'explicit_until20261017T0000_160GB_v1'}
+DEADLINE_UTC='2026-10-17T00:00:00+00:00'
+BASIS='explicit_user_continue_until_20261017_0800_UTCplus08'
+HARD_BYTES=160000000000
+ROUND_BYTES=10000000000
+SOFT_BYTES=HARD_BYTES-536870912
+PROOF_PATH=Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_RESOURCE_RENEWAL_UNTIL20261017T0000.json')
+PROOF_SHA256='98bfd59399845f53f27c94f36ef65add41b0eff3be9f65c8e5fc08a4f73d49a8'
+EXPECTED_METADATA={'schema': 'r85_R42_explicit_resource_renewal/v1', 'deadline_utc': '2026-10-17T00:00:00+00:00', 'maximum_retained_bytes': 160000000000, 'maximum_round_bytes': 10000000000, 'finish_reserve_s': 300, 'predictive_drain_s': 122, 'filesystem_minimums_unchanged': True, 'permanent_deletion_allowed': False, 'navigation_acceptance_inherited': False, 'source_authority': [{'path': '/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/ROOT_USER_RETAINED_CAPACITY_160GB_UPDATE.json', 'sha256': '5da736789ed8935296d2daec279bad7608aafb593942acf65226dd2372a62e18', 'bytes': 1149}, {'path': '/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/direct_closed_loop_optimization_stage/RENEWED_USER_AUTHORIZATION_UNTIL20261017T0000.json', 'sha256': '7a914ba4fbcb206519b27d0732bf83b147276362909d6500c0e2f5d5d13a1e37', 'bytes': 1520}, {'path': '/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/ROOT_YAW_PD_FADE_NATIVE_CANDIDATE_SELECTION.json', 'sha256': 'bfc0c09d4d4923628180af0b5d2be674ca85d71786ba7d1f8b36132ce13c3739', 'bytes': 4765}, {'path': '/opt/experiment/history/2026-10-07/task/go2_engineering_v33/CURRENT_STORAGE_BUDGET_POLICY.json', 'sha256': 'ab81beba39854263b354476cfa5be4323e6b2d4dcb7d7fcb4e1b21fddc168c5f', 'bytes': 3547}, {'path': '/opt/experiment/history/2026-10-07/task/go2_engineering_v33/R83_PARKING_HYSTERESIS_STAGE/BUDGET_BINDING.json', 'sha256': '0c3529220f12d49cfbf7e7e86f80ccd2f2ff65a8fd98e8f9c9cdcefa83b34dd5', 'bytes': 2027}]}
+
+def validate_metadata(profile,document):
+    """Pure metadata validation, also usable before the new files are installed."""
+    if type(document)is not dict or document!=EXPECTED_METADATA:
+        raise ValueError('R42 resource proof metadata differs')
+    if type(profile)is not dict:raise ValueError('Resource profile must be an object')
+    option=profile.get(KEY)
+    if type(option)is not dict or set(option)!=set(CONFIG) or any(type(option[k])is not type(v) or option[k]!=v for k,v in CONFIG.items()):
+        raise ValueError('Exact explicitly selected R42 resource option required')
+    s=profile.get('r85_session',{});d=profile.get('diagnostic_observe_only',{})
+    if (type(s)is not dict or s.get('enabled')is not True or s.get('simulation_only')is not True
+            or s.get('deadline_utc')!=DEADLINE_UTC
+            or type(s.get('maximum_retained_bytes'))is not int or s['maximum_retained_bytes']!=HARD_BYTES
+            or type(s.get('maximum_round_bytes'))is not int or s['maximum_round_bytes']!=ROUND_BYTES
+            or type(d)is not dict or d.get('enabled')is not True
+            or d.get('schema')!='r85_existing_diagnostic_business_observation/v1'
+            or d.get('simulation_only')is not True or d.get('maximum_physics_rounds')!=1
+            or d.get('self_imposed_work_deadline_withdrawn')is not False
+            or d.get('formal_acceptance_pass_allowed')is not False
+            or d.get('navigation_truth_injection')is not False
+            or d.get('user_authorized_work_deadline_utc')!=DEADLINE_UTC or d.get('work_deadline_basis')!=BASIS
+            or profile.get('navigation_ground_truth_used')is not False
+            or profile.get('controller_kind')!='student' or profile.get('actor_kind')!='student'):
+        raise ValueError('Renewed resource scope/deadline/capacity differs')
+    duration=profile.get('duration_s')
+    if type(duration)not in(int,float) or not math.isfinite(duration) or not 30<=duration<=1500:
+        raise ValueError('Original finite native duration required')
+    if profile.get('raw_storage_budget')!={'max_run_bytes':HARD_BYTES,'minimum_start_available_bytes':107374182400,'minimum_runtime_available_bytes':107374182400}:
+        raise ValueError('Renewal must retain original filesystem reserves')
+    if (s.get('resource_renewal_proof')!=str(PROOF_PATH)
+            or s.get('resource_renewal_proof_sha256')!=PROOF_SHA256):
+        raise ValueError('Resource proof exact path/SHA binding differs')
+    return dict(deadline_utc=DEADLINE_UTC,maximum_retained_bytes=HARD_BYTES,
+        maximum_round_bytes=ROUND_BYTES,soft_stop_bytes=SOFT_BYTES,finish_reserve_s=300,
+        proof_path=str(PROOF_PATH),proof_sha256=PROOF_SHA256)
+
+def configuration(profile):
+    if type(profile)is not dict:return None
+    option=profile.get(KEY)
+    if option is None:return None
+    if type(option)is not dict or type(option.get('enabled'))is not bool:
+        raise ValueError('Resource renewal requires a strict object/boolean')
+    if option=={'enabled':False}:return None
+    # Do not accept False with extra keys, int booleans or an unselected option.
+    if option!=CONFIG or any(type(option.get(k))is not type(v)for k,v in CONFIG.items()):
+        raise ValueError('Unknown resource renewal configuration')
+    if PROOF_PATH.is_symlink() or not PROOF_PATH.is_file() or PROOF_PATH.stat().st_size>65536:
+        raise ValueError('Resource proof must be an installed bounded regular file')
+    raw=PROOF_PATH.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=PROOF_SHA256:raise ValueError('Resource proof bytes changed')
+    result=validate_metadata(profile,json.loads(raw))
+    for ref in EXPECTED_METADATA['source_authority']:
+        p=Path(ref['path'])
+        if p.is_symlink() or not p.is_file() or p.stat().st_size!=ref['bytes'] or hashlib.sha256(p.read_bytes()).hexdigest()!=ref['sha256']:
+            raise ValueError('Explicit resource authority changed '+str(p))
+    return result
+
+def retained_hard_bytes(profile,legacy=130000000000):
+    selected=configuration(profile)
+    return selected['maximum_retained_bytes'] if selected is not None else legacy

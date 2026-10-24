@@ -1,0 +1,156 @@
+"""Select a frozen SCAN workspace, with a separate fresh R85 mode3 contract."""
+from pathlib import Path
+import hashlib
+import json
+import re
+import shlex
+
+HERE = Path(__file__).resolve().parent
+SLOTS = {
+    'protected_baseline': (HERE.parents[2]/'navigation/ros2_ws', 'SCAN_BASELINE_WORKSPACE_CONTRACT.json'),
+    'bounded_snapshot_exporter_v20': (HERE.parent/'corridor_tracking_v20/scan_ws', 'SCAN_CANDIDATE_WORKSPACE_CONTRACT.json'),
+}
+R85_WORKSPACE = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/scan_ws')
+R85_CANDIDATE_ROOT = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate')
+R85_CONTRACT_SCHEMA = 'r85_SCAN_workspace/v1'
+R85_SELECTOR = 'r85_mode3_session_v3'
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def _r85_enabled(profile):
+    session = (profile or {}).get('r85_session', {})
+    if not isinstance(session, dict) or not isinstance(session.get('enabled', False), bool):
+        raise RuntimeError('r85_session.enabled must be an explicit boolean')
+    return session if session.get('enabled', False) else None
+
+
+def _bindings(data, required):
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or not bindings:
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path in required:
+        if str(path.resolve()) not in bindings:
+            raise RuntimeError('Mandatory SCAN binding is missing: ' + str(path))
+    for name, digest in bindings.items():
+        if (not isinstance(name, str) or not Path(name).is_absolute()
+                or str(Path(name).resolve()) != name or not isinstance(digest, str)
+                or re.fullmatch(r'[0-9a-f]{64}', digest) is None
+                or not Path(name).is_file() or sha(name) != digest):
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + str(name))
+    return bindings
+
+
+def _r85_contract(session):
+    if HERE != R85_CANDIDATE_ROOT:
+        raise RuntimeError('R85 SCAN selector is scoped to the independent C65 candidate')
+    name = session.get('scan_workspace_contract')
+    digest = session.get('scan_workspace_contract_sha256')
+    if (not isinstance(name, str) or not Path(name).is_absolute()
+            or not isinstance(digest, str) or re.fullmatch(r'[0-9a-f]{64}', digest) is None):
+        raise RuntimeError('R85 requires an absolute fresh SCAN contract and its SHA256')
+    contract = Path(name).resolve()
+    if (contract != HERE/'R85_SCAN_WORKSPACE_CONTRACT.json' or not contract.is_file()
+            or sha(contract) != digest):
+        raise RuntimeError('R85 fresh SCAN contract path or SHA256 differs')
+    data = json.loads(contract.read_text())
+    workspace = R85_WORKSPACE.resolve()
+    if (data.get('schema') != R85_CONTRACT_SCHEMA or data.get('candidate') != R85_SELECTOR
+            or data.get('candidate_root') != str(HERE)
+            or data.get('workspace') != str(workspace)
+            or data.get('protocol_version') != 3
+            or data.get('compile_only') is not True
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('navigation_acceptance_established') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('R85 requires its own compile-only mode3 source/build contract')
+    executable = workspace/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    config = workspace/'install/scan_planner/share/scan_planner/config/planner.yaml'
+    receipt = workspace.parent/'MODE3_COMPONENT_BUILD_RECEIPT_V3.json'
+    source_paths = [workspace/'src/plan_manage'/relative for relative in (
+        'package.xml', 'CMakeLists.txt', 'src/scan_replan_fsm.cpp',
+        'src/scan_planner_node.cpp', 'src/planner_manager.cpp',
+        'include/plan_manage/scan_replan_fsm.h',
+        'include/plan_manage/planner_manager.h',
+        'include/plan_manage/measured_start_state.h',
+        'include/plan_manage/plan_container.hpp')]
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        executable, config, receipt, workspace/'build/scan_planner/CMakeCache.txt',
+        workspace/'build/scan_planner/compile_commands.json',
+        workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt',
+        *source_paths]
+    link_command = (workspace/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt').read_text()
+    project_root = Path('/opt/experiment/workspace')
+    link_inputs = sorted({Path(token).resolve() for token in shlex.split(link_command)
+        if token.startswith(str(project_root) + '/') and Path(token).is_file()})
+    if not link_inputs:
+        raise RuntimeError('R85 project-specific SCAN link inputs are missing')
+    required.extend(link_inputs)
+    if (data.get('executable') != str(executable.resolve())
+            or data.get('config') != str(config.resolve())
+            or data.get('build_receipt') != str(receipt.resolve())):
+        raise RuntimeError('R85 executable, configuration or v3 build receipt differs')
+    bindings = _bindings(data, required)
+    sources = data.get('source_bindings_sha256')
+    if not isinstance(sources, dict) or any(
+            sources.get(str(path.resolve())) != bindings[str(path.resolve())]
+            for path in source_paths):
+        raise RuntimeError('R85 source identities are missing from its fresh contract')
+    linked = data.get('project_link_input_bindings_sha256')
+    if not isinstance(linked, dict) or any(
+            linked.get(str(path)) != bindings[str(path)] for path in link_inputs):
+        raise RuntimeError('R85 project-specific SCAN link identities differ')
+    build = json.loads(receipt.read_text())
+    if (build.get('schema') != 'mode3-component-build-receipt/v3'
+            or build.get('success') is not True or build.get('compile_only') is not True
+            or build.get('build_exit_code') != 0 or not isinstance(build.get('bindings'), list)):
+        raise RuntimeError('R85 selected SCAN has no successful compile-only v3 receipt')
+    build_bindings = {}
+    for item in build['bindings']:
+        if not isinstance(item, dict) or not isinstance(item.get('path'), str):
+            raise RuntimeError('Malformed v3 build binding')
+        path = str(Path(item['path']).resolve())
+        if bindings.get(path) != item.get('sha256'):
+            raise RuntimeError('R85 source/build receipt binding differs: ' + path)
+        build_bindings[path] = item['sha256']
+    if any(str(path.resolve()) not in build_bindings for path in (
+            executable, workspace/'src/plan_manage/src/scan_replan_fsm.cpp',
+            workspace/'src/plan_manage/include/plan_manage/scan_replan_fsm.h')):
+        raise RuntimeError('R85 v3 receipt does not bind the selected ELF and FSM source')
+    return workspace, contract, data
+
+
+def scan_contract(profile=None):
+    session = _r85_enabled(profile)
+    if session is not None:
+        return _r85_contract(session)
+    selector = (profile or {}).get('scan_workspace_selector', 'protected_baseline')
+    if selector not in SLOTS:
+        raise RuntimeError('An arbitrary or unreviewed SCAN workspace is prohibited')
+    workspace, name = SLOTS[selector]
+    contract = HERE/name
+    if not contract.is_file():
+        raise RuntimeError('Selected SCAN workspace has no frozen source/build contract')
+    data = json.loads(contract.read_text())
+    if (data.get('schema') != 'corridor_v20_SCAN_workspace/v1' or data.get('candidate') != selector
+            or data.get('workspace') != str(workspace.resolve()) or data.get('algorithm_math_changed') is not False
+            or data.get('runtime_acceptance_inherited') is not False
+            or data.get('actual_loaded_binary_witness_required') is not True):
+        raise RuntimeError('The selected SCAN contract identity differs')
+    required = [workspace/'install/setup.bash', workspace/'install/local_setup.bash',
+        workspace/'install/scan_planner/lib/scan_planner/scan_planner_node',
+        workspace/'install/scan_planner/share/scan_planner/config/planner.yaml']
+    bindings = data.get('bindings_sha256')
+    if not isinstance(bindings, dict) or any(str(path.resolve()) not in bindings for path in required):
+        raise RuntimeError('Mandatory SCAN runtime bindings are missing')
+    for path, digest in bindings.items():
+        if not Path(path).is_absolute() or sha(path) != digest:
+            raise RuntimeError('Frozen SCAN source/build/runtime changed: ' + path)
+    return workspace.resolve(), contract, data
+
+
+def evidence_files(profile=None):
+    _, contract, data = scan_contract(profile)
+    return [contract, *[Path(name) for name in data['bindings_sha256']]]

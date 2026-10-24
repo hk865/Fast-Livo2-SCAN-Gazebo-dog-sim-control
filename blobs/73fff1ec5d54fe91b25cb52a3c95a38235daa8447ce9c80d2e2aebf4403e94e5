@@ -1,0 +1,259 @@
+"""R85 binding of unchanged physical geometry proofs to real path admission.
+
+This adds no planner/control mathematics. Teacher callers do not construct it.
+The existing physical certifier and original execution/source gates stay separate.
+"""
+import copy
+import hashlib
+import json
+import math
+from pathlib import Path
+import time
+
+import numpy as np
+from scipy.interpolate import BSpline
+
+import r85_geometry_admission as geometry
+
+
+def digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+
+def file_value(path, limit=2_000_000):
+    path = Path(path).resolve()
+    if path.stat().st_size > limit:
+        raise ValueError('r85_physical_binding_file_size_budget')
+    raw = path.read_bytes()
+    if len(raw) > limit:
+        raise ValueError('r85_physical_binding_file_size_budget')
+    return json.loads(raw), dict(path=str(path), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+
+class R85PhysicalPathGate:
+    def __init__(self, run):
+        self.run = Path(run).resolve()
+        self.static_sources = None
+
+    def context(self, node, binding):
+        runtime = node.automatic_reference
+        if runtime is None or not isinstance(binding, dict):
+            raise ValueError('r85_physical_requires_bound_automatic_reference')
+        doc, ref_source = file_value(runtime.path)
+        registration, reg_source = file_value(runtime.registration_path)
+        scope = (binding.get('planner_epoch'), binding.get('planner_process_id'), binding.get('localization_generation'))
+        if (binding.get('schema') != 'r85_automatic_route_fence_binding/v1'
+                or Path(runtime.path).resolve().parent != self.run
+                or Path(runtime.registration_path).resolve().parent != self.run
+                or doc != {k:v for k,v in runtime.doc.items() if k not in ('_reference_file','_reference_file_sha256')}
+                or runtime.doc.get('_reference_file') != ref_source['path']
+                or runtime.doc.get('_reference_file_sha256') != ref_source['sha256']
+                or ref_source['sha256'] != runtime.file_sha
+                or binding.get('reference_file_sha256') != ref_source['sha256']
+                or binding.get('reference_id') != doc.get('reference_id')
+                or binding.get('source_route_sha256') != doc.get('source_route_sha256')
+                or doc.get('run_id') != self.run.name or doc.get('frame_id') != 'camera_init'
+                or doc.get('schema') != 'r85_pct_scan_global_reference/v1'
+                or doc.get('navigation_ground_truth_used') is not False
+                or tuple(runtime.scope) != scope
+                or (doc.get('epoch'), doc.get('localization_generation')) != (scope[0], scope[2])
+                or registration != binding.get('source_registration')
+                or registration.get('reference_file_sha256') != ref_source['sha256']
+                or registration.get('reference_id') != doc['reference_id']
+                or registration.get('run_id') != self.run.name
+                or doc['reference_id'] != str(node.request_id)+':epoch:'+str(scope[0])+':generation:'+str(scope[2])):
+            raise ValueError('r85_physical_reference_scope_or_hash_mismatch')
+        task, task_source = file_value(self.run/'r85_task_contract.json')
+        typed, typed_source = file_value(self.run/'r85_typed_route_source.json')
+        if (task.get('schema') != 'r85_pct_scan_student_task/v1' or task.get('run_id') != self.run.name
+                or task.get('actual_SCAN_curve_physical_certificate_required') is not True
+                or task.get('navigation_ground_truth_used') is not False
+                or task.get('source_typed_route_file') != typed_source['path']
+                or task.get('source_typed_route_sha256') != typed_source['sha256']
+                or doc.get('source_route_file') != typed_source['path']
+                or doc.get('source_route_sha256') != typed_source['sha256']
+                or registration.get('task_source_file') != task_source['path']
+                or registration.get('task_source_sha256') != task_source['sha256']
+                or typed.get('schema') != 'r85_prepared_typed_global_reference/v1'):
+            raise ValueError('r85_physical_task_or_typed_source_mismatch')
+        metadata, metadata_source = file_value(geometry.METADATA)
+        limits, limits_source = file_value(geometry.CONFIG)
+        actual, actual_source = file_value(self.run/'known_scene_reference.json')
+        eq, eq_source = file_value(self.run/'r85_scene_geometry_equivalence.json')
+        prior, prior_source = file_value(metadata['inputs']['reference']['path'])
+        initial, initial_source = file_value(self.run/'known_scene_initialization_frame.json')
+        _, world_source = file_value_world(self.run/'world.sdf')
+        _, geometry_source = file_value_world(geometry.__file__)
+        _, helper_source = file_value_world(geometry.LEGACY)
+        expected_T = [[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,-.3],[0.,0.,0.,1.]]
+        if (metadata.get('T_navigation_world') != expected_T or doc.get('T_navigation_world') != expected_T
+                or initial.get('T_navigation_world') != expected_T
+                or initial.get('run_id') != self.run.name or initial.get('robot_truth_pose_used') is not False
+                or metadata['inputs']['reference'] != prior_source
+                or metadata['inputs']['world']['sha256'] != world_source['sha256']
+                or limits_source['sha256'] != geometry.CONFIG_SHA or helper_source['sha256'] != geometry.LEGACY_SHA
+                or eq.get('schema') != 'r85_actual_static_geometry_equivalence/v1'
+                or eq.get('run_id') != self.run.name or eq.get('static_boxes_exact_equal') is not True
+                or eq.get('box_count') != 43 or len(actual.get('boxes', [])) != 43
+                or actual.get('boxes') != prior.get('boxes')
+                or actual.get('excluded_models') != prior.get('excluded_models')
+                or eq.get('actual_reference_sha256') != actual_source['sha256']
+                or eq.get('actual_world_file') != world_source['path']
+                or eq.get('actual_world_sha256') != world_source['sha256']
+                or eq.get('prior_reference_file') != prior_source['path']
+                or eq.get('prior_reference_sha256') != prior_source['sha256']
+                or actual.get('source') != world_source
+                or initial.get('reference_sha256') != actual_source['sha256']
+                or initial.get('world_sha256') != world_source['sha256']):
+            raise ValueError('r85_physical_actual_static_scene_or_fixed_transform_mismatch')
+        sources = dict(task=task_source, typed=typed_source, metadata=metadata_source, limits=limits_source,
+                       actual_reference=actual_source, equivalence=eq_source, prior_reference=prior_source,
+                       initial_frame=initial_source, actual_world=world_source, physical_code=geometry_source, frozen_helper=helper_source)
+        if self.static_sources is not None and sources != self.static_sources:
+            raise ValueError('r85_physical_frozen_static_sources_changed')
+        self.static_sources = copy.deepcopy(sources)
+        return dict(run_id=self.run.name, request_id=node.request_id, reference_id=doc['reference_id'],
+                    reference_file_sha256=ref_source['sha256'], source_route_sha256=typed_source['sha256'],
+                    planner_epoch=scope[0], planner_process_id=scope[1], localization_generation=scope[2],
+                    registration_sha256=reg_source['sha256'], static_sources=sources,
+                    static_sources_sha256=digest(sources), T_navigation_world=expected_T)
+
+    def candidate_identity(self, node, value, metadata, context, *, require_current_association=False):
+        if (not isinstance(metadata, dict) or metadata.get('schema') != 2
+                or metadata.get('run_id') != self.run.name or metadata.get('trajectory') != value
+                or metadata.get('reference_epoch') != context['planner_epoch']
+                or metadata.get('planner_process_id') != context['planner_process_id']
+                or metadata.get('localization_generation') != context['localization_generation']
+                or metadata.get('reference_stamp') != node.automatic_reference.reference['sent_reference']['stamp']):
+            raise ValueError('r85_physical_actual_payload_metadata_mismatch')
+        sent=node.automatic_reference.reference['sent_reference']
+        content=metadata.get('reference_content')
+        if (not isinstance(content,dict) or sent.get('frame_id')!='camera_init'
+                or sent.get('body_height_offset')!=.4
+                or {k:content.get(k) for k in sent}!=sent):
+            raise ValueError('r85_physical_body_frame_or_exact_sent_reference_mismatch')
+        if require_current_association:
+            association=node.trajectory_association
+            if association.accepted!=value or metadata['reference_stamp']!=association.reference_stamp:
+                raise ValueError('r85_physical_not_current_schema2_association_payload')
+        return dict(raw_payload_sha256=digest(value), metadata_sha256=digest(metadata),
+                    sent_reference_sha256=digest(sent), body_output_frame_id='camera_init',
+                    scan_transport_offset_m=.4, body_curve_coordinates_changed=False,
+                    source_binding=copy.deepcopy(context))
+
+    def certify(self, node, value, metadata, binding):
+        try:
+            context = self.context(node, binding)
+            identity = self.candidate_identity(node, value, metadata, context, require_current_association=True)
+            pose_stamp = int(node.pose_stamp)
+            physical_payload = dict(value, frame_id='camera_init', run_id=self.run.name,
+                request_id=node.request_id, epoch=context['planner_epoch'],
+                localization_generation=context['localization_generation'], source_stamp_ns=pose_stamp)
+            proof = geometry.certify_physical_curve(physical_payload)
+            allowed = physical_allowed(proof, physical_payload, context)
+            # Geometry computation must not grant a proof across changed inputs.
+            if self.context(node, binding) != context:
+                raise ValueError('r85_physical_sources_changed_during_compute')
+            return dict(schema='r85_actual_scan_physical_execution_gate/v1', allowed=allowed,
+                reason='actual_curve_physical_space_certified' if allowed else 'actual_curve_physical_space_not_certified',
+                **identity, source_pose_stamp_ns=pose_stamp, physical_payload=physical_payload,
+                physical_certificate=proof, navigation_PASS=False)
+        except (OSError, KeyError, ValueError, TypeError, AttributeError, IndexError, OverflowError) as error:
+            return dict(schema='r85_actual_scan_physical_execution_gate/v1', allowed=False,
+                        reason='r85_physical_binding_rejected', error=type(error).__name__+':'+str(error))
+
+    def fresh(self, node, binding, generation):
+        """Check original source clocks after work; never update source timestamps."""
+        try:
+            context = self.context(node, binding)
+            now = time.monotonic()
+            clock = node.get_clock().now().nanoseconds
+            def wall(value):
+                return isinstance(value, (int, float)) and math.isfinite(value) and 0 <= now-value < .3
+            def header(value):
+                return type(value) is int and 0 <= clock-value < 300_000_000
+            ready = node.known_scene_scan_epoch
+            conditions = dict(
+                current_planner_epoch_ready=isinstance(ready,dict) and ready.get('schema')=='known_scene_SCAN_epoch_ready/v1'
+                    and ready.get('run_id')==self.run.name and ready.get('ready') is True
+                    and ready.get('generation')==generation and ready.get('localization_generation')==context['localization_generation']
+                    and ready.get('planner_epoch')==context['planner_epoch']
+                    and ready.get('planner_identity',{}).get('pid')==context['planner_process_id'],
+                same_generation=node.known_scene_inputs['generation'] == generation == context['localization_generation'],
+                generation_ready=node._known_generation_ready(),
+                pose_present=node.pose is not None, pose_wall_fresh=wall(node.pose_updated),
+                pose_header_fresh=header(node.pose_stamp), cloud_wall_fresh=wall(node.cloud_updated),
+                cloud_header_fresh=header(node.cloud_stamp),
+                raw_imu_fresh=node.raw_imu.fresh(now, clock/1e9),
+                bridge_wall_fresh=wall(node.bridge_updated), bridge_ready=node.bridge_safety.get('state') == 'ready',
+                state_running=node.state == 'running', obstacle_not_held=not node.obstacle_hold,
+                tilt_not_held=not node.tilt_hold)
+            return dict(schema='r85_post_compute_original_source_gate/v1', allowed=all(conditions.values()),
+                conditions=conditions, source_binding=context, checked_monotonic_wall=now, control_stamp_ns=clock,
+                source_pose_stamp_ns=node.pose_stamp, source_cloud_stamp_ns=node.cloud_stamp,
+                source_timestamps_refreshed=False)
+        except (OSError, KeyError, ValueError, TypeError, AttributeError, IndexError, OverflowError) as error:
+            return dict(schema='r85_post_compute_original_source_gate/v1', allowed=False,
+                        reason='r85_post_compute_source_binding_rejected', error=type(error).__name__+':'+str(error),
+                        source_timestamps_refreshed=False)
+
+    def retain(self, node, active, route_proof, binding):
+        try:
+            context = self.context(node, binding)
+            old = active['proof']['r85_physical']
+            value, metadata = active['payload'], active['metadata']
+            identity = self.candidate_identity(node, value, metadata, context)
+            if (old.get('schema') != 'r85_actual_scan_physical_execution_gate/v1' or old.get('allowed') is not True
+                    or any(old.get(k) != v for k, v in identity.items())
+                    or old.get('physical_payload') != dict(value, frame_id='camera_init', run_id=self.run.name,
+                        request_id=node.request_id, epoch=context['planner_epoch'],
+                        localization_generation=context['localization_generation'], source_stamp_ns=old.get('source_pose_stamp_ns'))
+                    or not physical_allowed(old['physical_certificate'], old['physical_payload'], context)):
+                raise ValueError('r85_old_path_missing_same_payload_physical_proof')
+            parameter = route_proof['remaining_begin_parameter_s']
+            position = np.asarray(node.pose, float).copy()
+            target = BSpline(value['knots'], value['pos_pts'], 3)(parameter)
+            # Identical construction to original remaining_certificate connector.
+            connector = dict(order=3, pos_pts=[(position+(target-position)*u).tolist() for u in (0,1/3,2/3,1)],
+                knots=[0,0,0,0,1,1,1,1], frame_id='camera_init', run_id=self.run.name,
+                request_id=node.request_id, epoch=context['planner_epoch'],
+                localization_generation=context['localization_generation'], source_stamp_ns=int(node.pose_stamp))
+            proof = geometry.certify_physical_curve(connector)
+            allowed = physical_allowed(proof, connector, context)
+            if self.context(node, binding) != context:
+                raise ValueError('r85_retained_physical_sources_changed_during_compute')
+            fresh=self.fresh(node,binding,context['localization_generation'])
+            allowed=allowed and fresh['allowed']
+            return dict(schema='r85_retained_curve_and_actual_connector_physical_gate/v1', allowed=allowed,
+                reason='old_curve_and_actual_body_connector_physical_certified' if allowed else 'actual_body_connector_physical_not_certified',
+                whole_curve_proof_payload_sha256=old['raw_payload_sha256'], source_binding=context,
+                remaining_parameter_s=parameter, actual_body_xyz=position.tolist(), actual_body_stamp_ns=int(node.pose_stamp),
+                connector_payload=connector, connector_physical_certificate=proof, post_compute_source_gate=fresh)
+        except (OSError, KeyError, ValueError, TypeError, AttributeError, IndexError, OverflowError) as error:
+            return dict(schema='r85_retained_curve_and_actual_connector_physical_gate/v1', allowed=False,
+                        reason='r85_retained_physical_binding_rejected', error=type(error).__name__+':'+str(error))
+
+
+def file_value_world(path):
+    """SDF is bound as bytes, never parsed as JSON or used for robot pose."""
+    path = Path(path).resolve()
+    if path.stat().st_size > 2_000_000:
+        raise ValueError('r85_actual_world_file_size_budget')
+    raw = path.read_bytes()
+    if len(raw) > 2_000_000:
+        raise ValueError('r85_actual_world_file_size_budget')
+    return None, dict(path=str(path), bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+
+
+def physical_allowed(proof, payload, context):
+    return (isinstance(proof, dict) and proof.get('schema') == 'r85_continuous_scan_physical_certificate/v1'
+            and proof.get('allowed') is True and proof.get('status') == 'CERTIFIED_STATIC_SPACE_ONLY'
+            and proof.get('payload_sha256') == digest(payload)
+            and proof.get('T_navigation_world') == context['T_navigation_world']
+            and proof.get('budgets') == dict(max_patches=4096, max_depth=18, wall_budget_s=2.)
+            and proof.get('sources', {}).get('metadata') == context['static_sources']['metadata']
+            and proof.get('sources', {}).get('reference') == context['static_sources']['prior_reference']
+            and proof.get('sources', {}).get('limits') == context['static_sources']['limits']
+            and proof.get('sources', {}).get('leaf') == context['static_sources']['physical_code']
+            and proof.get('sources', {}).get('frozen_helpers') == context['static_sources']['frozen_helper']
+            and proof.get('sources', {}).get('world', {}).get('sha256') == context['static_sources']['actual_world']['sha256'])

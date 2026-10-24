@@ -1,0 +1,55 @@
+"""Serial simulation ownership and the explicit overnight deadline."""
+from pathlib import Path
+import datetime as dt
+import fcntl
+import importlib.util
+import json
+import os
+import subprocess
+
+DEADLINE = dt.datetime(2026, 10, 15, 12, tzinfo=dt.timezone.utc)
+FINISH_RESERVE_S = 1200
+LOCK = Path('/tmp/go2_pid_physics_serial.lock')
+CENSUS = Path('/opt/experiment/history/2026-10-14/task/r83_demo/owner/retained_usage.py')
+
+def remaining_seconds():
+    return (DEADLINE-dt.datetime.now(dt.timezone.utc)).total_seconds()
+
+def census():
+    spec=importlib.util.spec_from_file_location('r85_current_retained_census',CENSUS)
+    m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    return m.usage(m.declared_roots())
+
+def processes():
+    raw=subprocess.check_output(['ps','-eo','pid,ppid,pgid,comm,args'],text=True)
+    matches=[]
+    for line in raw.splitlines()[1:]:
+        x=line.split(None,4)
+        if len(x)!=5:continue
+        pid,ppid,pgid,comm,args=x
+        if int(pid) in (os.getpid(),os.getppid()) or comm in ('bash','ps','timeout','codex'):continue
+        if any(k in args for k in ('gz sim','gzserver','gzclient','train.py','student_worker.py',
+                'fastlivo_mapping','scan_planner_node','ros2 launch','ipc_request_window.py')):
+            matches.append(dict(pid=int(pid),ppid=int(ppid),pgid=int(pgid),comm=comm,args=args))
+    return dict(host_process_count=len(raw.splitlines())-1,matching_runtime=matches)
+
+def acquire():
+    """Caller retains returned fd throughout its owned round; never break a lock."""
+    f=LOCK.open('a+')
+    try:
+        fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        p=processes();u=census()
+        if p['host_process_count']<30:raise RuntimeError('Host process visibility is required')
+        if p['matching_runtime']:raise RuntimeError('External runtime active: '+json.dumps(p['matching_runtime']))
+        if u['scan_errors']:raise RuntimeError('Retained census errors')
+        # Keep the existing minimum predictive drain reserve, not merely free bytes.
+        reserve=17*1024**2*122+134217728+536870912
+        if u['current_retained_budget_bytes']+reserve>=130000000000:
+            raise RuntimeError('Insufficient retained capacity including drain reserve')
+        if remaining_seconds()<=FINISH_RESERVE_S:raise RuntimeError('Overnight finish reserve reached')
+        return f,dict(utc=dt.datetime.now(dt.timezone.utc).isoformat(),processes=p,
+            retained=u,deadline_utc=DEADLINE.isoformat(),finish_reserve_s=FINISH_RESERVE_S,
+            serial_lock=str(LOCK),physical_runtime_started=False)
+    except BaseException:
+        f.close();raise
+

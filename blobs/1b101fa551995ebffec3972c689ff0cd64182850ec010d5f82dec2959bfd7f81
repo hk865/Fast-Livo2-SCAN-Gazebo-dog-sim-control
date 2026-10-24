@@ -1,0 +1,87 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <chrono>
+#include <cmath>
+#include <algorithm>
+#include <traj_utils/polynomial_traj.h>
+
+int main(int argc, char **argv) {
+  if (argc != 3) return 2;
+  std::ifstream input(argv[1]);
+  int n;
+  Eigen::Vector3d start, vel;
+  double vmax;
+  input >> n >> start(0) >> start(1) >> start(2)
+        >> vel(0) >> vel(1) >> vel(2) >> vmax;
+  std::vector<Eigen::Vector3d> points{start};
+  for (int i=0; i<n; ++i) {
+    Eigen::Vector3d p;
+    input >> p(0) >> p(1) >> p(2);
+    points.push_back(p);
+  }
+  if (!input || n<2) return 3;
+  double total_len=0;
+  for (size_t i=0; i+1<points.size(); ++i)
+    total_len += (points[i+1]-points[i]).norm();
+  // Exact planGlobalTrajWaypoints subdivision, including the initial start.
+  std::vector<Eigen::Vector3d> inter_points;
+  double dist_thresh=std::max(total_len/8,4.0);
+  for (size_t i=0; i+1<points.size(); ++i) {
+    inter_points.push_back(points[i]);
+    double dist=(points[i+1]-points[i]).norm();
+    if (dist>dist_thresh) {
+      int id_num=std::floor(dist/dist_thresh)+1;
+      for (int j=1;j<id_num;++j)
+        inter_points.push_back(points[i]*(1.0-double(j)/id_num)+points[i+1]*double(j)/id_num);
+    }
+  }
+  inter_points.push_back(points.back());
+  int pt_num=inter_points.size(), seg_num=pt_num-1;
+  Eigen::MatrixXd pos(3,pt_num);
+  for (int i=0;i<pt_num;++i) pos.col(i)=inter_points[i];
+  Eigen::VectorXd time(seg_num);
+  for (int i=0;i<seg_num;++i) time(i)=(pos.col(i+1)-pos.col(i)).norm()/vmax;
+  time(0)*=2.0;
+  if (time.rows()>1) time(time.rows()-1)*=2.0;
+  std::cout << "{\"phase\":\"fit_start\",\"input_waypoints\":"<<n
+    <<",\"fitted_segments\":"<<seg_num<<",\"A_rows\":"<<6*seg_num
+    <<",\"Rpp_rows\":"<<2*seg_num-2<<"}"<<std::endl;
+  auto begin=std::chrono::steady_clock::now();
+  auto curve=PolynomialTraj::minSnapTraj(pos,vel,Eigen::Vector3d::Zero(),
+      Eigen::Vector3d::Zero(),Eigen::Vector3d::Zero(),time);
+  double fit_s=std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count();
+  curve.init();
+  bool finite=true;
+  double max_abs_coef=0;
+  std::ofstream output(argv[2]);
+  output<<std::setprecision(17);
+  for (int axis=0;axis<3;++axis) {
+    auto coefficients=curve.getCoef(axis);
+    for (size_t segment=0;segment<coefficients.size();++segment)
+      for (size_t j=0;j<coefficients[segment].size();++j) {
+        double c=coefficients[segment][j];
+        finite=finite && std::isfinite(c);
+        max_abs_coef=std::max(max_abs_coef,std::abs(c));
+        output<<axis<<' '<<segment<<' '<<j<<' '<<c<<'\n';
+      }
+  }
+  double duration=curve.getTimeSum();
+  double max_waypoint_error=0,t=0;
+  for (int i=0;i<pt_num;++i) {
+    auto evaluated=curve.evaluate(t);
+    finite=finite&&evaluated.allFinite();
+    max_waypoint_error=std::max(max_waypoint_error,(evaluated-pos.col(i)).norm());
+    if (i<seg_num) t+=time(i);
+  }
+  for (int i=0;i<=1000;++i) {
+    double t=duration*double(i)/1000;
+    finite=finite&&curve.evaluate(t).allFinite()
+        &&curve.evaluateVel(t).allFinite()&&curve.evaluateAcc(t).allFinite();
+  }
+  std::cout<<std::setprecision(17)<<"{\"phase\":\"fit_complete\",\"fit_wall_s\":"<<fit_s
+    <<",\"duration_s\":"<<duration<<",\"finite\":"<<(finite?"true":"false")
+    <<",\"max_abs_coefficient\":"<<max_abs_coef<<",\"max_waypoint_error_m\":"<<max_waypoint_error
+    <<",\"fitted_segments\":"<<seg_num<<"}"<<std::endl;
+  return finite?0:4;
+}

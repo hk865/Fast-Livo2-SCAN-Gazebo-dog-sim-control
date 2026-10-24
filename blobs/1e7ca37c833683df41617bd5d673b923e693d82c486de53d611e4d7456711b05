@@ -1,0 +1,191 @@
+"""Freeze the already-built, same-source Release candidate; no build or ROS calls.
+
+The complete prior 214/57 closure remains as historical frozen input. The exact
+new SCAN and traj_utils source/install/build closure is added without broadening
+the permitted external archive root. This script writes only below its W stage.
+"""
+from pathlib import Path
+import copy
+import datetime as dt
+import hashlib
+import json
+import re
+import shlex
+
+STAGE = Path(__file__).resolve().parent
+RELEASE = STAGE.parent
+BUNDLE = RELEASE/'candidate_bundle'
+SCAN = BUNDLE/'scan_ws'
+TRAJ = BUNDLE/'traj_utils_ws'
+PROJECT = Path('/opt/experiment/workspace')
+CANDIDATE = PROJECT/'multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate'
+BASE_CONTRACT = STAGE/'BASELINE_R85_SCAN_WORKSPACE_CONTRACT.json'
+BASE_READER = STAGE/'BASELINE_scan_workspace.py'
+READER = STAGE/'scan_workspace.py'
+CONTRACT = STAGE/'R85_SCAN_WORKSPACE_CONTRACT.json'
+RECEIPT = BUNDLE/'MODE3_COMPONENT_BUILD_RECEIPT_V3.json'
+ARCHIVE = TRAJ/'install/traj_utils/lib/libtraj_utils.a'
+ELF = SCAN/'install/scan_planner/lib/scan_planner/scan_planner_node'
+
+
+def sha(path):
+    path = Path(path)
+    before = path.stat()
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    after = path.stat()
+    if (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) != (
+            after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns):
+        raise RuntimeError('Input changed while hashing: '+str(path))
+    return digest
+
+
+def save(path, value):
+    path.write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+
+
+def main():
+    baseline = json.loads(BASE_CONTRACT.read_text())
+    assert len(baseline['bindings_sha256']) == 214
+    assert len(baseline['source_bindings_sha256']) == 57
+    assert len(baseline['project_link_input_bindings_sha256']) == 12
+    for name, digest in baseline['bindings_sha256'].items():
+        if sha(name) != digest:
+            raise RuntimeError('Preserved baseline changed: '+name)
+    install = json.loads((RELEASE/'COLCON_INSTALL_RESULT.json').read_text())
+    if install['returncode'] != 0 or install['ROS_started'] or install['physics_started']:
+        raise RuntimeError('Successful compile-only installation required')
+    parity_rows = []
+    for name in ('traj_utils_SOURCE_COPY_SHA256.json', 'plan_manage_SOURCE_COPY_SHA256.json'):
+        rows = json.loads((BUNDLE/name).read_text())
+        for original, copied, digest in rows:
+            if sha(original) != digest or sha(copied) != digest:
+                raise RuntimeError('Copied source differs: '+copied)
+        parity_rows.extend(rows)
+
+    text = BASE_READER.read_text()
+    old = "R85_WORKSPACE = Path('/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/scan_ws')"
+    constants = '\n'.join((
+        'R85_RELEASE_ROOT = Path('+repr(str(RELEASE))+')',
+        "R85_BUNDLE = R85_RELEASE_ROOT/'candidate_bundle'",
+        "R85_WORKSPACE = R85_BUNDLE/'scan_ws'",
+        "R85_TRAJ_WORKSPACE = R85_BUNDLE/'traj_utils_ws'",
+        "R85_TRAJ_ARCHIVE = R85_TRAJ_WORKSPACE/'install/traj_utils/lib/libtraj_utils.a'",
+        'R85_PROJECT_ROOT = Path('+repr(str(PROJECT))+')',
+        'R85_BASELINE_CONTRACT = Path('+repr(str(BASE_CONTRACT))+')',
+        'R85_BASELINE_CONTRACT_SHA256 = '+repr(sha(BASE_CONTRACT))))
+    if text.count(old) != 1:
+        raise RuntimeError('Baseline reader workspace assignment differs')
+    text = text.replace(old, constants)
+    old_filter = "if token.startswith(str(project_root) + '/') and Path(token).is_file()})"
+    new_filter = "if Path(token).is_file() and (token.startswith(str(project_root) + '/')\n            or Path(token).resolve() == R85_TRAJ_ARCHIVE.resolve())})"
+    if text.count(old_filter) != 1:
+        raise RuntimeError('Baseline reader link extraction differs')
+    text = text.replace(old_filter, new_filter)
+    text = text.replace('    bindings = _bindings(data, required)\n',
+        '    required.extend(_release_required_paths())\n'
+        '    bindings = _bindings(data, required)\n'
+        '    _release_evidence(data, bindings, link_inputs)\n')
+    text = text.replace('\ndef scan_contract(profile=None):',
+        '\n'+(STAGE/'release_reader_extension.py.txt').read_text()+'\n\ndef scan_contract(profile=None):')
+    compile(text, str(READER), 'exec')
+    READER.write_text(text)
+    namespace = {'__file__': str(READER)}
+    exec(compile(text, str(READER), 'exec'), namespace)
+    paths = set(namespace['_release_required_paths']())
+    # Preserve the entire old closure, then add exact fresh-build provenance.
+    paths.update(Path(name) for name in baseline['bindings_sha256'])
+    paths.update((READER, Path(__file__).resolve(),
+        STAGE/'release_reader_extension.py.txt', BASE_READER,
+        RELEASE/'INPUT_MANIFEST.json', RELEASE/'BENCHMARK_BUILD.json',
+        RELEASE/'BENCHMARK_RESULTS.json', RELEASE/'CANDIDATE_ARCHIVE_BENCHMARK.json',
+        RELEASE/'SHORT_OUTPUT_PARITY.json',
+        RELEASE/'build_release_candidate.py', RELEASE/'finish_colcon_install.py'))
+    paths.update(Path(name) for row in parity_rows for name in row[:2])
+    # Actual dependencies recorded by the compiler are added for every project
+    # and candidate header, rather than only trusting a hand-picked source list.
+    for workspace, package in ((SCAN, 'scan_planner'), (TRAJ, 'traj_utils')):
+        build = workspace/'build'/package
+        for dep in (build/'CMakeFiles').rglob('*.o.d'):
+            tokens = shlex.split(dep.read_text().replace('\\\n', ' '))
+            for name in tokens[1:]:
+                target = Path(name)
+                if target.is_absolute() and target.is_file() and (
+                        target.is_relative_to(PROJECT) or target.is_relative_to(BUNDLE)):
+                    paths.add(target.resolve())
+    link_file = SCAN/'build/scan_planner/CMakeFiles/scan_planner_node.dir/link.txt'
+    tokens = shlex.split(link_file.read_text())
+    link_inputs = sorted({Path(token).resolve() for token in tokens
+        if Path(token).is_file() and (token.startswith(str(PROJECT)+'/')
+            or Path(token).resolve() == ARCHIVE.resolve())})
+    expected_links = set(baseline['project_link_input_bindings_sha256'])
+    expected_links.remove(str(PROJECT/'scan_multifloor/ros2_ws/install/traj_utils/lib/libtraj_utils.a'))
+    expected_links.add(str(ARCHIVE))
+    if {str(path) for path in link_inputs} != expected_links:
+        raise RuntimeError('Unexpected archive replacement/link closure')
+    paths.update(link_inputs)
+    paths = {path.resolve() for path in paths}
+    source_paths = set(Path(name) for name in baseline['source_bindings_sha256'])
+    source_paths.update(Path(name).resolve() for row in parity_rows for name in row[:2]
+        if '__pycache__' not in Path(name).parts and Path(name).suffix != '.pyc')
+    paths.update(source_paths)
+    # Bind the final installed ELF separately: CMake installation deliberately
+    # removes the build RPATH. The preserved initial receipt predates that step.
+    receipt_paths = sorted(paths)
+    fresh_receipt = dict(schema='mode3-component-build-receipt/v3',
+        UTC=dt.datetime.now(dt.timezone.utc).isoformat(), success=True,
+        compile_only=True, build_exit_code=0, build_returncode=0,
+        workspace=str(SCAN), source_algorithm_changed=False,
+        points_simplified=False, ROS_started=False, physics_started=False,
+        command=install['command'], install_wall_s=install['wall_s'],
+        actual_install_ELF_sha256=sha(ELF),
+        build_ELF_sha256=sha(SCAN/'build/scan_planner/scan_planner_node'),
+        installed_ELF_rpath='CMake RPATH_CHANGE removed build RPATH; see bound install result/cmake_install.cmake',
+        preserved_initial_build_receipt=str(RELEASE/'RELEASE_CANDIDATE_BUILD_RECEIPT.json'),
+        bindings=[dict(path=str(path), sha256=sha(path), bytes=path.stat().st_size)
+            for path in receipt_paths],
+        execution_scope='Existing build/install receipts only; no rebuild, ROS, model or physics executed by continuation.')
+    save(RECEIPT, fresh_receipt)
+    paths.add(RECEIPT.resolve())
+    bindings = {str(path): sha(path) for path in sorted(paths)}
+    data = copy.deepcopy(baseline)
+    data.update(created_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
+        workspace=str(SCAN), executable=str(ELF),
+        config=str(SCAN/'install/scan_planner/share/scan_planner/config/planner.yaml'),
+        build_receipt=str(RECEIPT),
+        scope='Fresh same-source Release traj_utils dependency and SCAN installation; mode3 protocol v3 retained; compile-only identity, no inherited runtime/navigation acceptance.',
+        dependency_scope='Entire baseline 214/57 closure preserved as frozen history plus actual new candidate source/install/build and project compiler dependencies; exact 11 project link inputs plus new traj_utils archive. Host system shared-library closure is not complete; actual-process witness remains required.',
+        release_dependency=dict(schema='r85_fresh_release_dependency/v1',
+            source_algorithm_changed=False,input_points_changed=False,
+            archive=str(ARCHIVE),archive_sha256=sha(ARCHIVE),
+            actual_install_ELF_sha256=sha(ELF),
+            build_ELF_sha256=sha(SCAN/'build/scan_planner/scan_planner_node'),
+            runtime_acceptance_established=False,
+            old_baseline_preserved_bindings=214,old_baseline_preserved_sources=57,
+            baseline_contract=str(BASE_CONTRACT),baseline_contract_sha256=sha(BASE_CONTRACT)),
+        source_bindings_sha256={str(path): bindings[str(path)] for path in sorted(source_paths)},
+        project_link_input_bindings_sha256={str(path): bindings[str(path)] for path in link_inputs},
+        bindings_sha256=bindings,
+        mode3_source=dict(fsm_sha256=sha(SCAN/'src/plan_manage/src/scan_replan_fsm.cpp'),
+            header_sha256=sha(SCAN/'src/plan_manage/include/plan_manage/scan_replan_fsm.h'),
+            ELF_sha256=sha(ELF)),
+        creation_writes=[str(READER),str(RECEIPT),str(CONTRACT)])
+    namespace['_release_evidence'](data, bindings, link_inputs)
+    namespace['_bindings'](data, namespace['_release_required_paths']())
+    save(CONTRACT, data)
+    result=dict(schema='r85_release_contract_freeze/v1',
+        compile_only=True, ROS_started=False, physics_started=False,
+        reader=str(READER),reader_sha256=sha(READER),
+        contract=str(CONTRACT),contract_sha256=sha(CONTRACT),
+        receipt=str(RECEIPT),receipt_sha256=sha(RECEIPT),
+        binding_count=len(bindings),source_binding_count=len(source_paths),
+        actual_link_input_count=len(link_inputs),
+        actual_install_ELF_sha256=sha(ELF),archive_sha256=sha(ARCHIVE),
+        baseline_binding_count_preserved=214,baseline_source_count_preserved=57,
+        source_copy_entries_verified=len(parity_rows),
+        install_to_C65_performed=False,runtime_acceptance_established=False)
+    save(STAGE/'FREEZE_RECEIPT.json',result)
+    print(json.dumps(result,indent=2))
+
+
+if __name__ == '__main__':
+    main()

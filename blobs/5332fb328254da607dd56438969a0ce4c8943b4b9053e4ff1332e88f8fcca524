@@ -1,0 +1,155 @@
+// generated from rosidl_generator_cpp/resource/idl__builder.hpp.em
+// with input from scan_planner_msgs:msg/Bspline.idl
+// generated code does not contain a copyright notice
+
+// IWYU pragma: private, include "scan_planner_msgs/msg/bspline.hpp"
+
+
+#ifndef SCAN_PLANNER_MSGS__MSG__DETAIL__BSPLINE__BUILDER_HPP_
+#define SCAN_PLANNER_MSGS__MSG__DETAIL__BSPLINE__BUILDER_HPP_
+
+#include <algorithm>
+#include <utility>
+
+#include "scan_planner_msgs/msg/detail/bspline__struct.hpp"
+#include "rosidl_runtime_cpp/message_initialization.hpp"
+
+
+namespace scan_planner_msgs
+{
+
+namespace msg
+{
+
+namespace builder
+{
+
+class Init_Bspline_yaw_dt
+{
+public:
+  explicit Init_Bspline_yaw_dt(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  ::scan_planner_msgs::msg::Bspline yaw_dt(::scan_planner_msgs::msg::Bspline::_yaw_dt_type arg)
+  {
+    msg_.yaw_dt = std::move(arg);
+    return std::move(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_yaw_pts
+{
+public:
+  explicit Init_Bspline_yaw_pts(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  Init_Bspline_yaw_dt yaw_pts(::scan_planner_msgs::msg::Bspline::_yaw_pts_type arg)
+  {
+    msg_.yaw_pts = std::move(arg);
+    return Init_Bspline_yaw_dt(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_pos_pts
+{
+public:
+  explicit Init_Bspline_pos_pts(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  Init_Bspline_yaw_pts pos_pts(::scan_planner_msgs::msg::Bspline::_pos_pts_type arg)
+  {
+    msg_.pos_pts = std::move(arg);
+    return Init_Bspline_yaw_pts(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_knots
+{
+public:
+  explicit Init_Bspline_knots(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  Init_Bspline_pos_pts knots(::scan_planner_msgs::msg::Bspline::_knots_type arg)
+  {
+    msg_.knots = std::move(arg);
+    return Init_Bspline_pos_pts(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_start_time
+{
+public:
+  explicit Init_Bspline_start_time(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  Init_Bspline_knots start_time(::scan_planner_msgs::msg::Bspline::_start_time_type arg)
+  {
+    msg_.start_time = std::move(arg);
+    return Init_Bspline_knots(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_traj_id
+{
+public:
+  explicit Init_Bspline_traj_id(::scan_planner_msgs::msg::Bspline & msg)
+  : msg_(msg)
+  {}
+  Init_Bspline_start_time traj_id(::scan_planner_msgs::msg::Bspline::_traj_id_type arg)
+  {
+    msg_.traj_id = std::move(arg);
+    return Init_Bspline_start_time(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+class Init_Bspline_order
+{
+public:
+  Init_Bspline_order()
+  : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
+  {}
+  Init_Bspline_traj_id order(::scan_planner_msgs::msg::Bspline::_order_type arg)
+  {
+    msg_.order = std::move(arg);
+    return Init_Bspline_traj_id(msg_);
+  }
+
+private:
+  ::scan_planner_msgs::msg::Bspline msg_;
+};
+
+}  // namespace builder
+
+}  // namespace msg
+
+template<typename MessageType>
+auto build();
+
+template<>
+inline
+auto build<::scan_planner_msgs::msg::Bspline>()
+{
+  return scan_planner_msgs::msg::builder::Init_Bspline_order();
+}
+
+}  // namespace scan_planner_msgs
+
+#endif  // SCAN_PLANNER_MSGS__MSG__DETAIL__BSPLINE__BUILDER_HPP_

@@ -1,0 +1,582 @@
+"""CPU tests of the actual A1 staged modules; never ROS or physics.
+
+Fixtures stand in only for accepted source messages and ROS recording shells.
+Control math, transition gate, ACK validator and wrapper method bodies are real.
+"""
+from __future__ import annotations
+import ast
+import copy
+import hashlib
+import importlib.util
+import json
+import math
+from pathlib import Path
+import sys
+from types import SimpleNamespace
+import unittest
+import numpy as np
+
+sys.dont_write_bytecode = True
+STAGE = Path(__file__).resolve().parents[1]
+CANDIDATE = STAGE / 'candidate'
+BEFORE = STAGE / 'beforeimage'
+INSTALLED = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate')
+sys.path[:0] = [str(CANDIDATE), str(INSTALLED)]
+
+def load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+core = load('a1_actual_core', CANDIDATE/'cascade_core.py')
+oldcore = load('a1_baseline_core', BEFORE/'cascade_core.py')
+gate_module = load('a1_actual_gate', CANDIDATE/'transition_gate.py')
+oldgate = load('a1_baseline_gate', BEFORE/'transition_gate.py')
+from navigation_stop_window import SPEC
+from student_lower_loop_ack import (CONTRACT_SHA, EXPORT_SHA, CHECKPOINT_SHA,
+    CONFIG as LOWER_ACK_CONFIG, PID_SCHEMA, annotate_pending, bind_causal_ack,
+    digest as ack_digest)
+from pid_core import slew
+from launch_command_policy import constrain_exactzero_launch
+
+def sources(stamp, *, gyro=(0.,0.,0.), quaternion=(1.,0.,0.,0.),
+            position=(0.,0.,.32), velocity=(0.,0.,0.), wall=None):
+    wall = 10_000_000_000 + stamp if wall is None else wall
+    pose = dict(stamp_ns=stamp, received_wall_ns=wall, frame_id='camera_init',
+                position_world_xyz=list(position), quaternion_wxyz=list(quaternion),
+                origin_velocity_body=list(velocity))
+    imu = dict(stamp_ns=stamp-10_000_000, received_wall_ns=wall-10_000_000,
+               frame_id='body', angular_velocity_body=list(gyro))
+    ack = dict(stamp_ns=stamp-5_000_000, received_wall_ns=wall-5_000_000,
+               sequence=stamp//1_000_000, requested_command_body=[0.,0.,0.],
+               applied_command_body=[0.,0.,0.])
+    return pose, imu, ack, stamp+5_000_000, wall
+
+def controller(module=core, **config):
+    c = module.Controller(dict(desired_speed=.2, external_heading_gate=True, **config),
+                          [4.,0.,.32],0.,'fixed-test-goal')
+    c.set_path([[0.,0.,.32],[4.,0.,.32]],'checked-scan',0,0)
+    return c
+
+def quaternion(roll, pitch, yaw):
+    cr,sr=math.cos(roll/2),math.sin(roll/2)
+    cp,sp=math.cos(pitch/2),math.sin(pitch/2)
+    cy,sy=math.cos(yaw/2),math.sin(yaw/2)
+    return [cr*cp*cy+sr*sp*sy,sr*cp*cy-cr*sp*sy,
+            cr*sp*cy+sr*cp*sy,cr*cp*sy-sr*sp*cy]
+
+def production_method(file, name, extra=None):
+    tree = ast.parse((CANDIDATE/file).read_text())
+    fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name==name)
+    namespace = dict(np=np, math=math, copy=copy, hashlib=hashlib, json=json,
+                     Path=Path, time=__import__('time'))
+    namespace.update(extra or {})
+    exec(compile(ast.fix_missing_locations(ast.Module(body=[fn],type_ignores=[])),
+                 str(CANDIDATE/file), 'exec'), namespace)
+    return namespace[name]
+
+class ActualCoreContract(unittest.TestCase):
+    def test_modules_are_actual_staged_sources(self):
+        self.assertEqual(Path(core.__file__).resolve(),(CANDIDATE/'cascade_core.py').resolve())
+        self.assertEqual(Path(oldcore.__file__).resolve(),(BEFORE/'cascade_core.py').resolve())
+
+    def test_default_legacy_modes_remain_equivalent(self):
+        for mode in ['drive','turn','hold','capture']:
+            with self.subTest(mode=mode):
+                new,old=controller(),controller(oldcore)
+                position=(3.99,0.,.32) if mode=='capture' else (0.,.02,.32)
+                for stamp in range(100_000_000,800_000_000,100_000_000):
+                    args=sources(stamp,position=position,gyro=(.01,.02,-.03))
+                    a,ra=new.update(*copy.deepcopy(args),mode_override=mode,external_turn_heading=.1)
+                    b,rb=old.update(*copy.deepcopy(args),mode_override=mode,external_turn_heading=.1)
+                    np.testing.assert_array_equal(a,b)
+                    self.assertEqual(ra,rb)
+
+    def test_brake_zero_euler_reference_and_tilted_body_conversion(self):
+        roll,pitch,yaw=.23,-.18,.31
+        q=quaternion(roll,pitch,yaw)
+        for z in [-.2,.2]:
+            with self.subTest(body_wz=z):
+                c=controller();kwargs=dict(gyro=(.03,.11,z),quaternion=q)
+                c.update(*sources(100_000_000,**kwargs),mode_override='brake',external_turn_heading=.4)
+                command,row=c.update(*sources(200_000_000,**kwargs),mode_override='brake',external_turn_heading=.4)
+                self.assertEqual(row['mode'],'brake')
+                self.assertTrue(row['controller_updated'])
+                np.testing.assert_array_equal(command[:2],[0.,0.])
+                np.testing.assert_array_equal(row['reference_velocity_world'],[0.,0.,0.])
+                body_ref=-math.sin(roll)*.11/math.cos(roll)
+                self.assertAlmostEqual(row['reference_COM_velocity_body'][2],body_ref,places=12)
+                expected=(math.sin(roll)*.11+math.cos(roll)*z)/math.cos(pitch)
+                self.assertAlmostEqual(row['measured_Euler_yawrate_radps'],expected,places=12)
+                self.assertLess(command[2]*(z-body_ref),0.)
+                self.assertTrue(row['velocity_PI']['translation_integral_frozen'])
+                self.assertGreater(row['integral_dt_s'],0.)
+
+    def test_brake_keeps_existing_integral_and_antiwindup(self):
+        for blocked in [False,True]:
+            with self.subTest(blocked=blocked):
+                c=controller()
+                for stamp in [100_000_000,200_000_000]:
+                    c.update(*sources(stamp,gyro=(0.,0.,.1)),mode_override='turn',external_turn_heading=.1)
+                c.velocity_integral[:]=[.11,-.09,.2]
+                prior=c.velocity_integral.copy()
+                args=list(sources(300_000_000,gyro=(0.,0.,.1)))
+                args[2]['requested_command_body']=[0.,0.,-.2 if blocked else .2]
+                _,row=c.update(*args,mode_override='brake',external_turn_heading=.1)
+                np.testing.assert_array_equal(c.velocity_integral[:2],prior[:2])
+                self.assertEqual(row['velocity_PI']['blocked_actual_ack'][2],blocked)
+                self.assertAlmostEqual(c.velocity_integral[2],.2 if blocked else .19,places=12)
+                self.assertGreater(row['velocity_PI']['I'][2],0.)
+
+    def test_brake_can_naturally_request_exact_zero_without_epsilon(self):
+        c=controller()
+        c.update(*sources(100_000_000),mode_override='brake',external_turn_heading=.08)
+        command,row=c.update(*sources(200_000_000),mode_override='brake',external_turn_heading=.08)
+        np.testing.assert_array_equal(command,[0.,0.,0.])
+        np.testing.assert_array_equal(c.velocity_integral,[0.,0.,0.])
+        self.assertEqual(row['reference_COM_velocity_body'][2],0.)
+
+    def test_duplicate_brake_header_does_not_integrate(self):
+        c=controller()
+        for stamp in [100_000_000,200_000_000]:
+            args=sources(stamp,gyro=(0.,0.,.1))
+            c.update(*args,mode_override='brake')
+        prior=c.velocity_integral.copy()
+        args=list(copy.deepcopy(args));args[-1]+=20_000_000
+        _,row=c.update(*args,mode_override='brake')
+        self.assertFalse(row['controller_updated'])
+        np.testing.assert_array_equal(c.velocity_integral,prior)
+
+    def test_brake_guard_always_takes_immediate_exact_zero(self):
+        c=controller()
+        for stamp in [100_000_000,200_000_000]:
+            c.update(*sources(stamp,gyro=(0.,0.,.1)),mode_override='brake')
+        command,row=c.update(*sources(300_000_000,gyro=(0.,0.,.1)),
+                             mode_override='brake',guard_reason='dynamic_obstacle_hold')
+        np.testing.assert_array_equal(command,[0.,0.,0.])
+        self.assertEqual(row['mode'],'protect')
+        self.assertEqual(row['reason'],'dynamic_obstacle_hold')
+
+    def test_ordinary_terminal_capture_and_fixed_window_are_unchanged(self):
+        new,old=controller(),controller(oldcore)
+        for c in [new,old]:c.begin_ordinary_terminal(0,60_000_000_000)
+        for stamp in range(100_000_000,1_100_000_000,100_000_000):
+            args=sources(stamp,position=(3.99,0.,.32))
+            a,ra=new.update(*copy.deepcopy(args))
+            b,rb=old.update(*copy.deepcopy(args))
+            np.testing.assert_array_equal(a,b);self.assertEqual(ra,rb)
+            self.assertEqual(ra['first_fixed_parking_window_s'],5.)
+        self.assertEqual(new.ordinary_parking.stage,'zero_hold')
+        self.assertIsNone(new.ordinary_parking.first_actor_zero_ack)
+
+SCOPE='a'*64
+CONTEXT=dict(request_id='run:request',waypoint_index=3,dynamic_recovery=False,
+             dynamic_event_sequence=None)
+
+def profile(enabled=True):
+    out=dict(max_yaw_rate_radps=.6,teacher_transition=dict(stop_window_sim_s=.3,
+        stop_min_pose_samples=3,stop_pose_gap_max_s=.2,gyro_pose_pair_max_s=.15,
+        stop_planar_speed_mps=.03,stop_slam_yaw_rate_radps=.05,
+        stop_body_gyro_radps=.05,turn_complete_rad=.1,drive_heading_max_rad=.2),
+        navigation_settle_statistics_contract=copy.deepcopy(SPEC),
+        cascade=dict(r85_student_lower_loop_ack=copy.deepcopy(LOWER_ACK_CONFIG),
+                     command_limits=[.6,.2,.6]))
+    if enabled is not None:out['r85_active_turn_braking']={'enabled':enabled}
+    return out
+
+def actual_ack(input_s, *, sequence=None, frame=None, inference=None,
+               request=(0.,0.,0.), applied=(0.,0.,0.), scope=SCOPE):
+    stamp=round(input_s*1e9);seq=round(input_s*100) if sequence is None else sequence
+    frame=seq if frame is None else frame;inference=seq if inference is None else inference
+    ack=dict(stamp_ns=stamp,received_wall_ns=10_000_000_000+stamp+25_000_000,
+        sequence=seq,ack_native_clock_ns=stamp+20_000_000,
+        requested_command_body=list(request),applied_command_body=list(applied),
+        actor_kind='student',actual_checkpoint_sha256=CHECKPOINT_SHA,
+        actual_export_sha256=EXPORT_SHA,student_contract_sha256=CONTRACT_SHA,
+        source_scope_sha256=scope,actual_actor_input=dict(actor_inferred_this_frame=True,
+            exact_native45_used=True,action_finite=True,hidden_finite=True,actor_kind='student',
+            actor_observation_dimension=45,teacher247_used_for_student_inference=False,
+            export_sha256=EXPORT_SHA,checkpoint_sha256=CHECKPOINT_SHA,input_clock_ns=stamp,
+            frame_serial=frame,inference_sequence=inference,actual_observation_command_body=list(applied)))
+    pid=dict(schema=PID_SCHEMA,actual_input_clock_ns=stamp,actual_frame_serial=frame,
+        requested_command_body=list(request),final_after_legacy_slew_body=list(applied),
+        effective_command_bounds=[.3,.2,.3],pid_correction=[0.,0.,0.],
+        pid_raw_correction=[0.,0.,0.],corrected_before_legacy_slew_body=np.clip(request,[-.3,-.2,-.3],[.3,.2,.3]).tolist(),
+        authoritative_zero=not any(request),ordinary_zero_takeover=False)
+    annotate_pending(ack,pid,LOWER_ACK_CONFIG,[.6,.2,.6])
+    bind_causal_ack(ack,LOWER_ACK_CONFIG)
+    return ack
+
+def bind_ack(g,ack,control_s, *, scope=SCOPE,context=CONTEXT):
+    return g.bind_zero_ack(ack,scope,context['request_id'],context['waypoint_index'],
+        round(control_s*1e9),round((10+control_s)*1e9))
+
+def observe(g,t, *, zero=True, gyro=(0.,0.,0.), velocity=(0.,0.,0.), wz=0.,
+            wall=None,gyro_stamp=None):
+    return g.observe(t,10+t if wall is None else wall,list(velocity),wz,list(gyro),
+        t if gyro_stamp is None else gyro_stamp,zero,position=[0.,0.,.32],quaternion=[0.,0.,0.,1.])
+
+def enter_brake(*, deadline=20.):
+    g=gate_module.TeacherHeadingGate(profile())
+    g.set_transition_context('heading_change',copy.deepcopy(CONTEXT))
+    g.bind_handoff_deadline(deadline,dict(request_id=CONTEXT['request_id'],waypoint_index=3,
+        source='original_waypoint_deadline'))
+    g.phase='align';g.heading=0.
+    assert bind_ack(g,actual_ack(.95),1.)
+    observe(g,1.,zero=False)
+    g.update(1.,.01,0.,11.)
+    assert g.controlled_braking
+    return g
+
+def enter_final(*, publication=True):
+    g=enter_brake()
+    for t in [1.1,1.2,1.3,1.4]:
+        assert bind_ack(g,actual_ack(t-.05),t)
+        observe(g,t,zero=True)
+        g.update(t,.01,0.,10+t)
+    assert g.settle_control_stage=='authoritative_zero'
+    if publication:g.note_zero_publication(1_405_000_000)
+    return g
+
+class ActualGateContract(unittest.TestCase):
+    def test_profile_requires_explicit_bool_only_and_default_off(self):
+        self.assertFalse(gate_module.TeacherHeadingGate(profile(None)).active_braking_enabled)
+        for value in [True,{'enabled':1},{'enabled':True,'extra':1}]:
+            p=profile();p['r85_active_turn_braking']=value
+            with self.assertRaises(ValueError):gate_module.TeacherHeadingGate(p)
+
+    def test_default_gate_behavior_matches_real_beforeimage(self):
+        new=gate_module.TeacherHeadingGate(profile(None))
+        old=oldgate.TeacherHeadingGate(profile(None))
+        for g in [new,old]:g.set_transition_context('heading_change',copy.deepcopy(CONTEXT))
+        for t,yaw in [(1.,.3),(1.1,.3),(1.2,.3),(1.3,.3),(1.4,.09),
+                      (1.5,.01),(1.6,.01),(1.7,.01),(1.8,.01),(1.9,.01),(2.,.01)]:
+            for g in [new,old]:observe(g,t)
+            self.assertEqual(new.update(t,yaw,0.,10+t),old.update(t,yaw,0.,10+t))
+            for field in ['phase','heading','settle_control_stage','zero_handoff_count','last_release','last_zero_handoff']:
+                self.assertEqual(getattr(new,field),getattr(old,field))
+
+    def test_brake_natural_zero_never_counts_as_original_stop(self):
+        g=enter_brake()
+        for t in [1.1,1.2,1.3]:
+            observe(g,t,zero=True);g.update(t,.01,0.,10+t)
+            self.assertTrue(g.controlled_braking)
+            self.assertFalse(g.stopped(t,10+t))
+            self.assertEqual(len(g.history),0)
+            self.assertEqual(g.stop_window.metrics()['samples'],0)
+            self.assertFalse(g.latest_motion['zero_command'])
+        self.assertEqual(g.zero_handoff_count,0)
+
+    def test_brake_dwell_counts_new_headers_not_heartbeat(self):
+        g=enter_brake()
+        for now in [1.05,1.1,1.15,1.2]:g.update(now,.01,0.,10+now)
+        self.assertEqual(len(g.brake_history),0)
+        observe(g,1.1)
+        for now in [1.1,1.15,1.2]:g.update(now,.01,0.,10+now)
+        self.assertEqual(len(g.brake_history),1)
+        self.assertTrue(g.controlled_braking)
+        self.assertFalse(observe(g,1.1))
+
+    def test_brake_bad_motion_or_stale_source_clears_qualification(self):
+        g=enter_brake()
+        for t in [1.1,1.2]:observe(g,t);g.update(t,.01,0.,10+t)
+        self.assertEqual(len(g.brake_history),2)
+        observe(g,1.3,gyro=(0.,0.,.051));g.update(1.3,.01,0.,11.3)
+        self.assertEqual(len(g.brake_history),0)
+        observe(g,1.4);g.update(1.71,.01,0.,11.71)
+        self.assertEqual(len(g.brake_history),0)
+        self.assertTrue(g.controlled_braking)
+
+    def test_final_edge_does_not_mean_stop_and_requires_actual_publication(self):
+        g=enter_final(publication=False)
+        self.assertEqual(g.zero_handoff_count,1)
+        self.assertFalse(g.last_brake_qualification['original_stop_pass'])
+        self.assertEqual(len(g.history),0)
+        for t in [1.5,1.6,1.7,1.8]:
+            self.assertTrue(bind_ack(g,actual_ack(t-.05),t))
+            self.assertFalse(observe(g,t));self.assertFalse(g.update(t,.01,0.,10+t)[0])
+        self.assertIsNone(g.final_zero_ack)
+        self.assertEqual(len(g.history),0)
+        self.assertIsNone(g.handoff_failure)
+
+    def test_same_stamp_or_prepublication_input_cannot_count_stop(self):
+        g=enter_final()
+        for input_s,t in [(1.40,1.45),(1.405,1.455)]:
+            self.assertTrue(bind_ack(g,actual_ack(input_s,sequence=round(t*1000),
+                frame=round(t*1000),inference=round(t*1000)),t))
+            self.assertFalse(observe(g,t))
+            self.assertEqual(len(g.history),0)
+        self.assertIsNone(g.final_zero_ack)
+
+    def test_original_window_is_pending_then_passes_only_postpublication(self):
+        g=enter_final()
+        for t in [1.5,1.6,1.7]:
+            self.assertTrue(bind_ack(g,actual_ack(t-.05),t));self.assertTrue(observe(g,t))
+            self.assertFalse(g.update(t,.01,0.,10+t)[0])
+            self.assertIsNone(g.handoff_failure)
+            self.assertEqual(g.handoff_event['status'],'pending')
+        self.assertTrue(bind_ack(g,actual_ack(1.75),1.8));self.assertTrue(observe(g,1.8))
+        self.assertTrue(g.update(1.8,.01,0.,11.8)[0])
+        self.assertEqual(g.handoff_event['status'],'passed')
+        self.assertTrue(g.last_release['legacy_measured_stop'])
+        self.assertEqual(g.last_release['predicate'],'legacy_continuous_300ms')
+        self.assertGreater(g.final_zero_ack['input_clock_ns'],1_405_000_000)
+
+    def test_each_actual_frame_watermark_must_advance(self):
+        for key in ['sequence','frame','inference','input_s']:
+            with self.subTest(key=key):
+                g=enter_final()
+                old=g.last_zero_handoff['ack_watermark']
+                values=dict(input_s=1.45,sequence=145,frame=145,inference=145)
+                old_key=dict(sequence='sequence',frame='input_frame_serial',inference='inference_sequence',input_s='input_clock_ns')[key]
+                values[key]=old[old_key]/1e9 if key=='input_s' else old[old_key]
+                ack=actual_ack(**values)
+                self.assertFalse(bind_ack(g,ack,1.5))
+                self.assertFalse(observe(g,1.5))
+                self.assertEqual(len(g.history),0)
+
+    def test_nonzero_truthful_request_or_applied_not_zero_evidence(self):
+        for key in ['request','applied']:
+            with self.subTest(key=key):
+                g=enter_final();ack=actual_ack(1.45,**{key:(0.,0.,.01)})
+                self.assertTrue(bind_ack(g,ack,1.5))
+                self.assertFalse(observe(g,1.5));self.assertEqual(len(g.history),0)
+
+    def test_wrong_scope_context_stale_or_future_receipts_rejected(self):
+        cases=['scope','request','waypoint','stale','future','native_interval','actual_input']
+        for case in cases:
+            with self.subTest(case=case):
+                g=enter_final();ack=actual_ack(1.45);context=copy.deepcopy(CONTEXT)
+                if case=='scope':ack['source_scope_sha256']='b'*64
+                if case=='request':context['request_id']='other-request'
+                if case=='waypoint':context['waypoint_index']=4
+                if case=='stale':ack['received_wall_ns']=11_100_000_000
+                if case=='future':ack['ack_native_clock_ns']=1_500_000_001
+                if case=='native_interval':ack['ack_native_clock_ns']+=1
+                if case=='actual_input':ack['actual_actor_input']['actual_observation_command_body']=[0.,0.,.01]
+                self.assertFalse(bind_ack(g,ack,1.5,context=context))
+                self.assertFalse(observe(g,1.5));self.assertEqual(len(g.history),0)
+
+    def test_full_existing_lower_loop_ledger_is_required_for_zero_evidence(self):
+        for defect in ['missing','checksum','request','applied','bounds','correction','residual']:
+            with self.subTest(defect=defect):
+                g=enter_final();ack=actual_ack(1.45)
+                note=ack['r85_student_lower_loop_ack']
+                if defect=='missing':ack.pop('r85_student_lower_loop_ack')
+                elif defect=='checksum':note['ledger_sha256']='0'*64
+                else:
+                    if defect=='request':note['requested_command_body']=[0.,0.,.01]
+                    elif defect=='applied':note['actual_applied_policy_input_body']=[0.,0.,.01]
+                    elif defect=='bounds':note['effective_command_bounds_body']=[.6,.2,.6]
+                    elif defect=='correction':note['intentional_bounded_pid_correction_body']=[0.,0.,.01]
+                    else:note['worker_slew_residual_body']=[0.,0.,.01]
+                    note.pop('ledger_sha256');note['ledger_sha256']=ack_digest(note)
+                self.assertFalse(bind_ack(g,ack,1.5))
+                self.assertFalse(observe(g,1.5))
+                self.assertEqual(len(g.history),0)
+
+    def test_final_invalid_motion_clears_window_but_is_pending_not_fake_pass(self):
+        g=enter_final()
+        for t in [1.5,1.6]:bind_ack(g,actual_ack(t-.05),t);observe(g,t);g.update(t,.01,0.,10+t)
+        bind_ack(g,actual_ack(1.65),1.7)
+        self.assertFalse(observe(g,1.7,gyro=(0.,0.,.051)))
+        self.assertFalse(g.update(1.7,.01,0.,11.7)[0])
+        self.assertEqual(len(g.history),0);self.assertIsNone(g.handoff_failure)
+        self.assertEqual(g.handoff_event['status'],'pending')
+
+    def test_diagnostic_bypass_cannot_release_or_extend_event(self):
+        g=enter_final()
+        g._observe_stop_wait=lambda *args: True
+        self.assertFalse(g.update(1.5,.01,0.,11.5)[0])
+        g.bind_handoff_deadline(100.,g.handoff_event['deadline_binding'])
+        self.assertEqual(g.handoff_deadline_s,20.)
+        self.assertFalse(g.update(20.01,.01,0.,30.01)[0])
+        self.assertEqual(g.handoff_failure,'active_handoff_deadline_exceeded')
+        self.assertFalse(g.update(20.1,.01,0.,30.1)[0])
+        self.assertEqual(g.phase,'failed');self.assertEqual(g.zero_handoff_count,1)
+
+    def test_heading_rearm_or_protection_latches_and_forbids_repeated_turn(self):
+        for stage in ['brake','final']:
+            for reason in ['heading','guard','reset','binding']:
+                with self.subTest(stage=stage,reason=reason):
+                    g=enter_brake() if stage=='brake' else enter_final()
+                    if reason=='heading':g.update(1.6,-.21,0.,11.6)
+                    elif reason=='guard':self.assertTrue(g.fail_handoff('obstacle_hold',1.6))
+                    elif reason=='reset':g.reset()
+                    else:g.set_transition_context('heading_change',{**CONTEXT,'waypoint_index':4})
+                    self.assertIsNotNone(g.handoff_failure)
+                    self.assertEqual(g.phase,'failed')
+                    failure=g.handoff_failure
+                    for t in [1.7,1.8,2.]:
+                        observe(g,t);self.assertFalse(g.update(t,.01,0.,10+t)[0])
+                        self.assertEqual(g.handoff_failure,failure)
+
+    def test_dynamic_recovery_does_not_enter_active_brake(self):
+        g=gate_module.TeacherHeadingGate(profile())
+        g.set_transition_context('dynamic_recovery',{**CONTEXT,'dynamic_recovery':True})
+        g.phase='align';g.heading=0.;observe(g,1.)
+        g.update(1.,.01,0.,11.)
+        self.assertFalse(g.controlled_braking);self.assertFalse(g.handoff_active)
+        self.assertEqual(g.settle_control_stage,'authoritative_zero')
+
+    def test_bad_then_good_pose_between_updates_cannot_bridge_brake_dwell(self):
+        for kind in ['motion','heading','missing_quaternion']:
+            with self.subTest(kind=kind):
+                g=enter_brake()
+                for t in [1.1,1.2]:observe(g,t);g.update(t,.01,0.,10+t)
+                if kind=='motion':observe(g,1.25,gyro=(0.,0.,.051))
+                elif kind=='heading':
+                    q=quaternion(0.,0.,.03)
+                    g.observe(1.25,11.25,[0.,0.,0.],0.,[0.,0.,0.],1.25,False,
+                              position=[0.,0.,.32],quaternion=[q[1],q[2],q[3],q[0]])
+                else:g.observe(1.25,11.25,[0.,0.,0.],0.,[0.,0.,0.],1.25,False,
+                               position=[0.,0.,.32],quaternion=None)
+                observe(g,1.3);g.update(1.3,.01,0.,11.3)
+                self.assertEqual(len(g.brake_history),1)
+                observe(g,1.4);g.update(1.4,.01,0.,11.4)
+                self.assertTrue(g.controlled_braking)
+                self.assertEqual(g.zero_handoff_count,0)
+
+class ActualWrapperContract(unittest.TestCase):
+    def selector_node(self, *, obstacle=False, consistency=False, failure=None):
+        c=controller()
+        c.update(*sources(100_000_000,gyro=(0.,0.,.1)),mode_override='turn',external_turn_heading=.1)
+        c.update(*sources(200_000_000,gyro=(0.,0.,.1)),mode_override='turn',external_turn_heading=.1)
+        pose,imu,ack,clock,wall=sources(300_000_000,gyro=(0.,0.,.1))
+        gate=SimpleNamespace(controlled_settle=False,controlled_braking=True,phase='settle',
+            heading=.1,handoff_failure=failure,settle_control_stage='controlled_braking',
+            zero_handoff_count=0,last_zero_handoff=None)
+        n=SimpleNamespace(cascade=c,ensure_cascade=lambda:None,heading_gate=gate,
+            obstacle_hold=obstacle,reference_consistency_hold=consistency,
+            steering=dict(direction=[1.,0.],heading=.1),get_ack=lambda:ack,
+            feedback=pose,paired_imu=imu,state='running',message='',
+            get_clock=lambda:SimpleNamespace(now=lambda:SimpleNamespace(nanoseconds=clock)),
+            control_clock_hold=SimpleNamespace(guard_required=False),command=np.zeros(3),
+            last_command_time=.2,rotation=np.eye(3),pid_records=0,pose_stamp=pose['stamp_ns'],
+            path_receipt=None,pose=np.array([0.,0.,.32]),pose_quaternion=[0.,0.,0.,1.],
+            request_id='run:request',waypoint_index=0,active_trajectory_id=7,
+            trajectory_archive_reference=None,waypoints=np.array([[4.,0.,.32]]))
+        method=production_method('controller.py','select_pid_velocity',dict(
+            time=SimpleNamespace(monotonic_ns=lambda:wall),slew=slew,
+            constrain_exactzero_launch=constrain_exactzero_launch))
+        return n,method
+
+    def test_production_selector_routes_brake_and_preserves_slew(self):
+        n,method=self.selector_node()
+        xy,z=method(n,np.zeros(2),0.,np.array([.5,0.,.32]),False)
+        self.assertEqual(n.pid_row['mode'],'brake')
+        self.assertTrue(n.pid_row['heading_gate_reference']['controlled_braking'])
+        self.assertEqual(n.pid_row['cascade']['external_turn_heading_rad'],.1)
+        np.testing.assert_array_equal(xy,[0.,0.])
+        self.assertLess(z,0.)
+        expected=slew(n.command,np.array(n.pid_row['desired_body_command']),.105,[.6,.6,.8])
+        np.testing.assert_array_equal(n.pid_prepared_output,expected)
+
+    def test_production_selector_protection_priority_beats_brake(self):
+        for reason in ['obstacle','consistency','failure']:
+            with self.subTest(reason=reason):
+                n,method=self.selector_node(obstacle=reason=='obstacle',consistency=reason=='consistency',
+                    failure='active_handoff_deadline_exceeded' if reason=='failure' else None)
+                xy,z=method(n,np.zeros(2),0.,np.array([.5,0.,.32]),False)
+                np.testing.assert_array_equal([*xy,z],[0.,0.,0.])
+                self.assertEqual(n.pid_row['mode'],'protect')
+                if reason=='failure':self.assertEqual(n.state,'failed')
+
+    def test_production_selector_repeated_header_does_not_invent_brake_math(self):
+        n,method=self.selector_node()
+        # Reuse the exact preceding accepted source, not a fabricated new receipt.
+        pose,imu,ack,clock,wall=sources(200_000_000,gyro=(0.,0.,.1))
+        n.feedback=pose;n.paired_imu=imu;n.get_ack=lambda:ack;n.pose_stamp=pose['stamp_ns']
+        n.get_clock=lambda:SimpleNamespace(now=lambda:SimpleNamespace(nanoseconds=clock))
+        method=production_method('controller.py','select_pid_velocity',dict(
+            time=SimpleNamespace(monotonic_ns=lambda:wall),slew=slew,
+            constrain_exactzero_launch=constrain_exactzero_launch))
+        prior=n.cascade.velocity_integral.copy()
+        method(n,np.zeros(2),0.,np.array([.5,0.,.32]),False)
+        self.assertFalse(n.pid_row['cascade']['controller_updated'])
+        self.assertEqual(n.pid_row['cascade']['reason'],'duplicate_SLAM_header')
+        np.testing.assert_array_equal(n.cascade.velocity_integral,prior)
+
+    def test_actual_zero_publication_note_occurs_after_publish_call(self):
+        tree=ast.parse((CANDIDATE/'controller.py').read_text())
+        fn=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef) and n.name=='publish_command')
+        publishes=[n.lineno for n in ast.walk(fn) if isinstance(n,ast.Call)
+            and isinstance(n.func,ast.Attribute) and n.func.attr=='publish'
+            and ast.unparse(n.func.value)=='self.cmd_pub']
+        notes=[n.lineno for n in ast.walk(fn) if isinstance(n,ast.Call)
+            and isinstance(n.func,ast.Attribute) and n.func.attr=='note_zero_publication']
+        self.assertEqual(len(publishes),1);self.assertEqual(len(notes),1)
+        self.assertGreater(notes[0],publishes[0])
+
+    def test_production_shared_interrupt_latches_before_route_can_continue(self):
+        n=SimpleNamespace(heading_gate=enter_brake(),state='running',message='',
+            get_clock=lambda:SimpleNamespace(now=lambda:SimpleNamespace(nanoseconds=1_500_000_000)))
+        method=production_method('shared_controller.py','interrupt_active_handoff')
+        self.assertTrue(method(n,'original_arrival_or_path_hold'))
+        self.assertEqual(n.state,'failed')
+        self.assertEqual(n.heading_gate.handoff_failure,'original_arrival_or_path_hold')
+        self.assertFalse(n.heading_gate.handoff_active)
+
+    def test_production_hard_deadline_uses_raw_activation_not_diagnostic_gate(self):
+        ledger=SimpleNamespace(next_index=2,next_activated_ns=5_000_000_000,
+            goals=[SimpleNamespace(timeout_sim_s=90.)]*3,deadline_exceeded=lambda _:False)
+        n=SimpleNamespace(continuous_route=ledger,request_id=CONTEXT['request_id'],waypoint_index=3)
+        deadline,binding=production_method('shared_controller.py','raw_handoff_deadline')(n)
+        self.assertEqual(deadline,95.)
+        self.assertEqual(binding['activated_ns'],5_000_000_000)
+        self.assertEqual(binding['timeout_ns'],90_000_000_000)
+        self.assertEqual(binding['coverage_index'],2)
+
+    def test_production_control_entry_hard_deadline_stops_before_other_routing(self):
+        records=[]
+        n=SimpleNamespace(heading_gate=enter_brake(),ordinary_terminal_failure_latched=None,
+            request_id=CONTEXT['request_id'],state='running',message='',
+            get_clock=lambda:SimpleNamespace(now=lambda:SimpleNamespace(nanoseconds=20_010_000_000)),
+            publish_command=lambda:records.append('exact_zero_publication'),
+            _control_candidate=lambda _:records.append('UNEXPECTED_CONTROL'))
+        production_method('controller.py','control')(n,30.01)
+        self.assertEqual(n.state,'failed')
+        self.assertEqual(records,['exact_zero_publication'])
+        self.assertEqual(n.heading_gate.handoff_failure,'active_handoff_deadline_exceeded')
+
+    def test_production_odom_brake_zero_is_excluded_from_stop(self):
+        # Execute the actual subclass body. Only its super() callback and ROS shell
+        # are fixtures; the staged transition gate and input receipt validator run.
+        class MemoryPath:
+            def __truediv__(self,name):return self
+            def read_bytes(self):return b'fixed-test-scope'
+        class OdomBase:
+            def on_odom(self,msg):self.pose_stamp=self.stamp(msg)
+        tree=ast.parse((CANDIDATE/'teacher_wrapper.py').read_text())
+        fn=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef) and n.name=='on_odom')
+        cls=ast.ClassDef(name='ActualOdom',bases=[ast.Name(id='OdomBase',ctx=ast.Load())],
+            keywords=[],body=[fn],decorator_list=[])
+        space=dict(OdomBase=OdomBase,math=math,hashlib=hashlib,
+                   time=SimpleNamespace(monotonic=lambda:11.2))
+        exec(compile(ast.fix_missing_locations(ast.Module(body=[cls],type_ignores=[])),
+                     str(CANDIDATE/'teacher_wrapper.py'),'exec'),space)
+        n=space['ActualOdom']();n.pose_stamp=1_100_000_000;n.pose_timeout=.3
+        n.stamp=lambda msg:1_200_000_000
+        n.get_clock=lambda:SimpleNamespace(now=lambda:SimpleNamespace(nanoseconds=1_205_000_000))
+        n.heading_gate=enter_brake();n.command=[0.,0.,0.]
+        n.gyro_body=[0.,0.,0.];n.gyro_stamp=1.2;n.gyro_wall=11.2
+        n.run=MemoryPath();n.request_id=CONTEXT['request_id'];n.waypoint_index=3
+        n.handoff_scope_sha256=hashlib.sha256(b'fixed-test-scope').hexdigest()
+        n.get_ack=lambda **kwargs:actual_ack(1.15,scope=hashlib.sha256(b'fixed-test-scope').hexdigest())
+        recorded=[];n.evidence=SimpleNamespace(append=lambda p,row:recorded.append(row))
+        xyz=lambda:SimpleNamespace(x=0.,y=0.,z=0.)
+        p=xyz();p.z=.32
+        msg=SimpleNamespace(header=SimpleNamespace(frame_id='camera_init'),child_frame_id='demo_slam_body',
+            pose=SimpleNamespace(pose=SimpleNamespace(position=p,orientation=SimpleNamespace(x=0.,y=0.,z=0.,w=1.))),
+            twist=SimpleNamespace(twist=SimpleNamespace(linear=xyz(),angular=xyz())))
+        n.on_odom(msg)
+        self.assertEqual(n.pose_stamp,1_200_000_000)
+        self.assertTrue(recorded[-1]['zero_velocity_command'])
+        self.assertFalse(recorded[-1]['heading_stop_zero_candidate'])
+        self.assertTrue(recorded[-1]['controlled_braking'])
+        self.assertEqual(len(n.heading_gate.history),0)
+
+if __name__=='__main__':
+    unittest.main(verbosity=2)

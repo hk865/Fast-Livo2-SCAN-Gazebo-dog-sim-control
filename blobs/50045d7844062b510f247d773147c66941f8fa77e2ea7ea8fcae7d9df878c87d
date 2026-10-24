@@ -1,0 +1,133 @@
+"""Serial simulation ownership and the explicit overnight deadline."""
+from pathlib import Path
+import datetime as dt
+import fcntl
+import importlib.util
+import json
+import os
+import subprocess
+
+DEADLINE = dt.datetime(2026, 10, 15, 12, tzinfo=dt.timezone.utc)
+FINISH_RESERVE_S = 300
+LOCK = Path('/tmp/go2_pid_physics_serial.lock')
+CENSUS = Path('/opt/experiment/history/2026-10-14/task/r83_demo/owner/retained_usage.py')
+
+
+AUTHORIZED_USER_DEADLINE_UTC = '2026-10-16T14:00:00+00:00'
+
+
+def authorized_user_deadline(profile=None):
+    """Only the newly authorized, explicitly bounded diagnostic gets this UTC limit."""
+    if not isinstance(profile, dict): return None
+    d = profile.get('diagnostic_observe_only')
+    if not isinstance(d, dict) or 'user_authorized_work_deadline_utc' not in d: return None
+    from diagnostic_observation import enabled
+    import math
+    value = d['user_authorized_work_deadline_utc']
+    session = profile.get('r85_session', {})
+    duration = profile.get('duration_s')
+    if (type(value) is not str or value != AUTHORIZED_USER_DEADLINE_UTC
+            or d.get('self_imposed_work_deadline_withdrawn') is not False
+            or not enabled(profile)
+            or d.get('schema') != 'r85_existing_diagnostic_business_observation/v1'
+            or d.get('simulation_only') is not True
+            or d.get('formal_acceptance_pass_allowed') is not False
+            or d.get('navigation_truth_injection') is not False
+            or d.get('work_deadline_basis') != 'explicit_user_continue_until_20261016_2200_UTCplus08'
+            or session.get('enabled') is not True or session.get('simulation_only') is not True
+            or session.get('deadline_utc') != value
+            or session.get('maximum_retained_bytes') != 130000000000
+            or session.get('maximum_round_bytes') != 10000000000
+            or profile.get('navigation_ground_truth_used') is not False
+            or profile.get('controller_kind') != 'student' or profile.get('actor_kind') != 'student'
+            or type(duration) not in (int, float) or not math.isfinite(duration)
+            or not 30 <= duration <= 1500):
+        raise ValueError('New user deadline requires its exact bounded diagnostic authority')
+    return dt.datetime.fromisoformat(value)
+
+
+def work_deadline_withdrawn(profile=None):
+    """Only the explicitly scoped diagnostic withdraws the work-made UTC cutoff.
+
+    Per-run native/wall/storage/ownership bounds remain mandatory. The original
+    non-diagnostic session retains its prior absolute cutoff.
+    """
+    if authorized_user_deadline(profile) is not None:return False
+    if not isinstance(profile,dict):return False
+    d=profile.get('diagnostic_observe_only')
+    if not isinstance(d,dict):return False
+    flag=d.get('self_imposed_work_deadline_withdrawn')
+    if flag is None:return False
+    if type(flag)is not bool:raise ValueError('Withdrawal flag must be boolean')
+    if not flag:return False
+    from diagnostic_observation import enabled
+    session=profile.get('r85_session',{})
+    duration=profile.get('duration_s')
+    import math
+    if (not enabled(profile) or d.get('schema')!='r85_existing_diagnostic_business_observation/v1'
+            or d.get('simulation_only')is not True or d.get('formal_acceptance_pass_allowed')is not False
+            or d.get('navigation_truth_injection')is not False
+            or d.get('work_deadline_basis')!='explicit_parent_clarification_20261015'
+            or session.get('enabled')is not True or session.get('simulation_only')is not True
+            or session.get('maximum_retained_bytes')!=130000000000
+            or session.get('maximum_round_bytes')!=10000000000
+            or profile.get('navigation_ground_truth_used')is not False
+            or profile.get('controller_kind')!='student' or profile.get('actor_kind')!='student'
+            or type(duration)not in (int,float) or not math.isfinite(duration) or not 30<=duration<=1500):
+        raise ValueError('Work deadline withdrawal requires explicit bounded diagnostic scope')
+    return True
+
+def session_deadline(profile=None):
+    authorized = authorized_user_deadline(profile)
+    if authorized is not None: return authorized
+    return None if work_deadline_withdrawn(profile) else DEADLINE
+
+def session_deadline_utc(profile=None):
+    deadline = session_deadline(profile)
+    return None if deadline is None else deadline.isoformat()
+
+def remaining_seconds(profile=None):
+    deadline = session_deadline(profile)
+    return float('inf') if deadline is None else (deadline-dt.datetime.now(dt.timezone.utc)).total_seconds()
+
+def census():
+    spec=importlib.util.spec_from_file_location('r85_current_retained_census',CENSUS)
+    m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    return m.usage(m.declared_roots())
+
+def processes():
+    raw=subprocess.check_output(['ps','-eo','pid,ppid,pgid,comm,args'],text=True)
+    matches=[]
+    for line in raw.splitlines()[1:]:
+        x=line.split(None,4)
+        if len(x)!=5:continue
+        pid,ppid,pgid,comm,args=x
+        if int(pid) in (os.getpid(),os.getppid()) or comm in ('bash','ps','timeout','codex'):continue
+        if any(k in args for k in ('gz sim','gzserver','gzclient','train.py','student_worker.py',
+                'fastlivo_mapping','scan_planner_node','ros2 launch','ipc_request_window.py')):
+            matches.append(dict(pid=int(pid),ppid=int(ppid),pgid=int(pgid),comm=comm,args=args))
+    return dict(host_process_count=len(raw.splitlines())-1,matching_runtime=matches)
+
+def acquire(profile=None):
+    """Caller retains returned fd throughout its owned round; never break a lock."""
+    f=LOCK.open('a+')
+    try:
+        fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        p=processes();u=census()
+        if p['host_process_count']<30:raise RuntimeError('Host process visibility is required')
+        if p['matching_runtime']:raise RuntimeError('External runtime active: '+json.dumps(p['matching_runtime']))
+        if u['scan_errors']:raise RuntimeError('Retained census errors')
+        # Keep the existing minimum predictive drain reserve, not merely free bytes.
+        reserve=17*1024**2*122+134217728+536870912
+        if u['current_retained_budget_bytes']+reserve>=130000000000:
+            raise RuntimeError('Insufficient retained capacity including drain reserve')
+        withdrawn=work_deadline_withdrawn(profile)
+        if not withdrawn and remaining_seconds(profile)<=FINISH_RESERVE_S:raise RuntimeError('Overnight finish reserve reached')
+        return f,dict(utc=dt.datetime.now(dt.timezone.utc).isoformat(),processes=p,
+            retained=u,deadline_utc=session_deadline_utc(profile),
+            finish_reserve_s=0 if withdrawn else FINISH_RESERVE_S,
+            self_imposed_work_deadline_withdrawn=withdrawn,
+            serial_lock=str(LOCK),physical_runtime_started=False)
+    except BaseException:
+        f.close();raise
+

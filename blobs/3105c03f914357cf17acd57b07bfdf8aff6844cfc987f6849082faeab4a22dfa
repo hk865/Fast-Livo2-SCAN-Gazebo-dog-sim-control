@@ -1,0 +1,90 @@
+"""Freeze reviewed Python/SDK inputs after the native build, without rebuilding."""
+from pathlib import Path
+import argparse
+import hashlib
+import json
+import re
+
+O=Path(__file__).resolve().parent
+STAGE=O.parent
+C66=Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate')
+SDK=Path('/opt/ros/jazzy/include/rmw/rmw/types.h')
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def identity(p):
+    p=Path(p).resolve()
+    return dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p))
+
+def write(p,value):
+    p.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+
+def main(a):
+    target=O/'R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json'
+    saved=O/'NATIVE_BUILD_ONLY_CONTRACT.json'
+    if saved.exists():
+        original=json.loads(saved.read_text())
+    else:
+        original=json.loads(target.read_text())
+        saved.write_bytes(target.read_bytes())
+    runtime={
+        'scan_child_consumption.py':a.helper_sha,
+        'scan_epoch_supervisor.py':a.supervisor_sha,
+        'scan_workspace.py':a.selector_sha,
+    }
+    for name,digest in runtime.items():
+        p=STAGE/'staged'/name
+        if not re.fullmatch('[0-9a-f]{64}',digest)or sha(p)!=digest:
+            raise RuntimeError('Final reviewed runtime source changed: '+name)
+    api=STAGE/'INSTALLED_GID_API_PROBE.json'
+    if sha(api)!=a.api_sha:
+        raise RuntimeError('Installed API evidence identity changed')
+    match=re.search(r'^#define\s+RMW_GID_STORAGE_SIZE\s+(\d+)u?\s*$',SDK.read_text(),re.M)
+    if not match or int(match[1])!=16:
+        raise RuntimeError('Actual SDK GID storage is not reviewed16byte protocol')
+    value=dict(original)
+    bindings=dict(original['bindings_sha256'])
+    sources=dict(original['source_bindings_sha256'])
+    for name in runtime:
+        p=(STAGE/'staged'/name).resolve()
+        bindings[str(p)]=sha(p)
+        sources[str(p)]=sha(p)
+    for p in [SDK,api,saved,Path(__file__),O/'stage_selector.py',
+              O/'SELECTOR_STAGE_IDENTITY.json',STAGE/'CPP_FROZEN_MANIFEST.json',
+              STAGE/'FROZEN_MANIFEST.json',STAGE/'CPU_RECEIPT.json']:
+        bindings[str(p.resolve())]=sha(p)
+    sources[str(SDK.resolve())]=sha(SDK)
+    value.update(required_runtime_sources={str(C66/name):digest for name,digest in runtime.items()},
+        runtime_sdk_bindings_sha256={str(SDK):sha(SDK)},rmw_gid_storage_size=16,
+        source_abi_evidence=dict(rmw_types=identity(SDK),rclpy_installed_api_probe=identity(api)),
+        ack_identity_boundary='Owned private ROS domain, non-malicious senders: ACK payload get_gid equals sole graph endpoint GID; payload PID/PPID/startticks/nonce matches actual owned /proc/exe/argv and two fresh exact source slots. Installed Jazzy callback provides no per-message transport publisher_gid, so no such authentication is claimed.',
+        source_bindings_sha256=sources,bindings_sha256=bindings)
+    # Do not add the target profile, wrapper, or result receipt here: they embed
+    # this contract SHA and would create a hash cycle.
+    write(target,value)
+    for path,digest in bindings.items():
+        if sha(path)!=digest:
+            raise RuntimeError('Final contract binding changed: '+path)
+    result=O/'ACK_WORKSPACE_BUILD_RESULT.json'
+    old=json.loads(result.read_text())
+    old.update(contract_sha256=sha(target),bindings=len(bindings),sources=len(sources),
+        final_runtime_sources_frozen=True,per_message_transport_gid_available=False,
+        required_runtime_sources=value['required_runtime_sources'],installed_API_evidence=identity(api))
+    write(result,old)
+    write(O/'RUNTIME_INSTALL_REQUIREMENTS.json',dict(actual_C66_modified=False,
+        contract_install_path=str(C66/'R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json'),
+        contract_source=str(target),contract_sha256=sha(target),
+        runtime_sources=[dict(staged=str(STAGE/'staged'/name),destination=str(C66/name),sha256=digest)
+                         for name,digest in runtime.items()],
+        old_contract_must_remain_unchanged=str(C66/'R85_SCAN_WORKSPACE_CONTRACT.json')))
+    print(json.dumps(dict(contract=str(target),contract_sha256=sha(target),bindings=len(bindings),sources=len(sources),
+        actual_C66_modified=False,old552_and124_preserved=True),ensure_ascii=False))
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser()
+    p.add_argument('--helper-sha',required=True)
+    p.add_argument('--supervisor-sha',required=True)
+    p.add_argument('--selector-sha',required=True)
+    p.add_argument('--api-sha',required=True)
+    main(p.parse_args())

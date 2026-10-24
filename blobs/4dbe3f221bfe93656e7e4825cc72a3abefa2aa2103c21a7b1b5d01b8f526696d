@@ -1,0 +1,108 @@
+"""Generate a new three-component contract/profile, never install runtime files.
+
+The installed mode is root-owned and must run only after reviewed installation;
+it verifies real C66 bytes with no aliases before generating an identity receipt.
+"""
+from pathlib import Path
+import argparse
+import hashlib
+import json
+
+S=Path(__file__).resolve().parents[1]
+R=S.parent
+V=R/'scan_reference_protocol_v2_stage'
+C=Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate')
+NAMES=['scan_workspace.py','scan_epoch_supervisor.py','automatic_reference_runtime.py','scan_reference_protocol.py',
+       'scan_child_consumption.py','terminal_heading_contract.py','controller.py','shared_controller.py',
+       'r85_protocol_liveness.py','r85_protocol_intake_trace.py']
+SUPERSEDED=['scan_workspace.py','scan_epoch_supervisor.py','automatic_reference_runtime.py']
+BASE_PROFILE='r85_f1_f3_support_suffix_child_ack_terminal_heading.json'
+PROFILE_TARGET='r85_f1_f3_support_suffix_child_ack_terminal_heading_protocol_core.json'
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--mode',choices=['staged-draft','installed'],required=True)
+    parser.add_argument('--output',required=True)
+    parser.add_argument('--profile-output',required=True)
+    parser.add_argument('--reviewed-runtime-map')
+    args=parser.parse_args()
+    output,profile_output=Path(args.output).resolve(),Path(args.profile_output).resolve()
+    if output.exists() or profile_output.exists():raise RuntimeError('Preserve existing artifacts and choose a new output version')
+    merge_path=S/'ACTIVE_MERGE_VERSION.json'
+    merge=json.loads(merge_path.read_text())
+    if merge.get('source_frozen') is not True:raise RuntimeError('Final component merge is not frozen')
+    native=V/'build_contract_r02/R85_SCAN_REFERENCE_PROTOCOL_WORKSPACE_CONTRACT.json'
+    data=json.loads(native.read_text())
+    old=json.loads((V/'baseline/R85_SCAN_CHILD_ACK_WORKSPACE_CONTRACT.json').read_text())
+    expected={str(C/name):sha(S/'staged'/name if (S/'staged'/name).exists() else C/name) for name in NAMES}
+    if args.reviewed_runtime_map:
+        supplied=json.loads(Path(args.reviewed_runtime_map).read_text())
+        if set(supplied)!=set(expected):raise RuntimeError('Reviewed map must bind all ten actual runtime paths')
+        expected=supplied
+    if args.mode=='installed':
+        for path,value in expected.items():
+            if sha(path)!=value:raise RuntimeError('Actual installed runtime bytes differ: '+path)
+    data['required_runtime_sources']=expected
+    for name in NAMES:
+        source=C/name if args.mode=='installed' else (S/'staged'/name if (S/'staged'/name).exists() else C/name)
+        data['bindings_sha256'][str(source)]=sha(source)
+        data['source_bindings_sha256'][str(source)]=sha(source)
+    child_stage=R/'scan_child_consumption_stage'
+    data['lineage_runtime_snapshots']={name:dict(old_sha256=value,snapshot_file=str(child_stage/'staged'/Path(name).name),
+        snapshot_sha256=sha(child_stage/'staged'/Path(name).name),lineage_only=True)for name,value in old['required_runtime_sources'].items()}
+    data['reviewed_superseded_runtime']={str(C/name):dict(actual_source_path=str(C/name),old_sha256=sha(V/'baseline'/name),
+        new_sha256=expected[str(C/name)],old_snapshot_file=str(V/'baseline'/name))for name in SUPERSEDED}
+    for name in SUPERSEDED:
+        source=V/'baseline'/name;data['bindings_sha256'][str(source)]=sha(source);data['source_bindings_sha256'][str(source)]=sha(source)
+    data['core_runtime_before_after']={str(C/name):dict(actual_target=str(C/name),before_sha256=sha(S/'baseline'/name)if(S/'baseline'/name).exists()else None,
+        after_sha256=expected[str(C/name)],staged_source=str(S/'staged'/name)if(S/'staged'/name).exists()else None)for name in NAMES}
+    data['runtime_sdk_bindings_sha256']=old['runtime_sdk_bindings_sha256'];data['rmw_gid_storage_size']=16
+    data['ack_identity_boundary']=old['ack_identity_boundary']
+    data['core_merge_components']=merge['input_manifests']
+    data['core_merge_source_identity']=dict(active_version_file=str(merge_path),active_version_sha256=sha(merge_path),
+        source_change_scope='reference publication fallback plus intake observer plus cumulative unresolved wait; no IMU or dynamic lifecycle changes',
+        required_actual_runtime_source_count=10,old_runtime_snapshots_are_current_identity=False)
+    data['reference_protocol_semantics']=dict(authorization='existing local request only after actual successful bundle publication and EXEC',
+        supported_flow='one Path per owned fresh child; original local requests may repeat with increasing sequence',
+        ACK_fallback_revision_limit=1,association_revision_assignment=False,curve_or_attempt_synthesized=False,
+        physical_admission_unchanged=True,subscription_counts_are_consumer_readiness=False,
+        liveness_new_default_off_constraint='cumulative unresolved wait 90sim/600wall; not startup elapsed semantic equivalence')
+    data['runtime_validation_status']=('DRAFT_MERGED_TEN_PATH_EXPECTATIONS_NOT_INSTALLED_IDENTITY'if args.mode=='staged-draft'
+        else'ACTUAL_INSTALLED_TEN_PATH_SOURCE_CHECK_ONLY_PENDING_ROOT_FULL_ACCEPTANCE')
+    data['actual_runtime_path_validation']=args.mode=='installed'
+    for extra in [native,Path(__file__),merge_path,S/'CORE_MERGE_ACTIVE.patch',S/'checks/MERGED_AST_REVERSE_STRIP_PROOF.json',
+                  S/'checks/BASELINE_ALL_232.json',S/'checks/CONTROLLER_HUNK_MERGE.json']:
+        data['bindings_sha256'][str(extra)]=sha(extra)
+    for row in merge['input_manifests']:
+        path=Path(row['path']);assert sha(path)==row['sha256'];data['bindings_sha256'][str(path)]=sha(path)
+    if args.reviewed_runtime_map:
+        path=Path(args.reviewed_runtime_map).resolve();data['bindings_sha256'][str(path)]=sha(path)
+    for name,value in old['bindings_sha256'].items():
+        if data['bindings_sha256'].get(name)!=value or sha(name)!=value:raise RuntimeError('Frozen677 lineage changed: '+name)
+    for name,value in old['source_bindings_sha256'].items():
+        if data['source_bindings_sha256'].get(name)!=value:raise RuntimeError('Frozen156 source lineage dropped')
+    base_path=S/'baseline/profiles'/BASE_PROFILE;assert sha(base_path)=='7c2d2b68ec3d2a13ef94dffe24e1b9df90b353858a823385e74b90091620d6cb'
+    base=json.loads(base_path.read_text());profile=json.loads(base_path.read_text())
+    profile['r85_auto_reference_contract']['require_reference_protocol_ack']=True
+    profile['r85_protocol_intake_trace']=dict(enabled=True)
+    profile['r85_protocol_liveness']=dict(enabled=True,schema='r85_cumulative_unresolved_protocol_wait/v1')
+    # All checks above finish before creating either output; no runtime files copied.
+    output.write_text(json.dumps(data,indent=2)+'\n')
+    profile['r85_session'].update(scan_workspace_contract=str(C/'R85_SCAN_REFERENCE_PROTOCOL_WORKSPACE_CONTRACT.json'),
+                                  scan_workspace_contract_sha256=sha(output))
+    profile_output.write_text(json.dumps(profile,ensure_ascii=False,indent=2)+'\n')
+    restored=json.loads(json.dumps(profile));del restored['r85_auto_reference_contract']['require_reference_protocol_ack']
+    del restored['r85_protocol_intake_trace'];del restored['r85_protocol_liveness']
+    restored['r85_session']['scan_workspace_contract']=base['r85_session']['scan_workspace_contract']
+    restored['r85_session']['scan_workspace_contract_sha256']=base['r85_session']['scan_workspace_contract_sha256']
+    assert restored==base
+    mapping=output.with_name(output.stem+'_EXPECTED_RUNTIME_MAP.json')
+    if mapping.exists():raise RuntimeError('Expected map already exists')
+    mapping.write_text(json.dumps(expected,indent=2)+'\n')
+    print(json.dumps(dict(mode=args.mode,contract=str(output),contract_sha256=sha(output),bindings=len(data['bindings_sha256']),
+        sources=len(data['source_bindings_sha256']),required_runtime_sources=len(expected),profile=str(profile_output),profile_sha256=sha(profile_output),
+        actual_profile_target=str(C/'profiles'/PROFILE_TARGET),profile_exact_three_optins_plus_workspace_choice_only=True,
+        runtime_map=str(mapping),installed_runtime_files_copied=False,positive_installed_receipt_generated=args.mode=='installed',final_READY=False)))
+
+if __name__=='__main__':main()

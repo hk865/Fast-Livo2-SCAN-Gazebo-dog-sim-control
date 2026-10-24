@@ -1,0 +1,95 @@
+from pathlib import Path
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import time
+
+W = Path(__file__).resolve().parent
+OLD = W.parent / 'scan_ws'
+PROJECT = Path('/opt/experiment/workspace')
+TR = PROJECT / 'scan_multifloor/ros2_ws'
+ROOT = W / 'candidate_bundle'
+ROOT.mkdir(exist_ok=True)
+ENV = dict(os.environ)
+ENV.update({k: v for k, v in json.loads((PROJECT / 'multifloor_demo/teacher_mode/runs/20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a/navigation_stack_effective_environment.json').read_text()).items() if isinstance(v, str)})
+ENV.update(OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1')
+HISTORY = []
+
+
+def digest(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+def run(args, timeout):
+    print(json.dumps(dict(phase='start', command=args, timeout_s=timeout)), flush=True)
+    start = time.monotonic()
+    result = subprocess.run(args, cwd=ROOT, env=ENV, capture_output=True, text=True, timeout=timeout)
+    row = dict(command=args, returncode=result.returncode, wall_s=time.monotonic()-start,
+               stdout=result.stdout, stderr=result.stderr)
+    HISTORY.append(row)
+    (W / 'RELEASE_BUILD_COMMANDS.json').write_text(json.dumps(HISTORY, indent=2)+'\n')
+    print(json.dumps(dict(phase='done', command=args, returncode=result.returncode, wall_s=row['wall_s'])), flush=True)
+    if result.returncode:
+        print(result.stdout[-4000:], flush=True)
+        print(result.stderr[-4000:], flush=True)
+        raise SystemExit(result.returncode)
+
+
+def cache_dirs(cache):
+    out = {}
+    for line in Path(cache).read_text().splitlines():
+        match = re.match(r'([A-Za-z0-9_]+_DIR):PATH=(.+)', line)
+        if match and Path(match[2]).is_dir() and not match[1].startswith('AMENT_TEST_'):
+            out[match[1]] = match[2]
+    return out
+
+
+for source, dest in [(TR/'src/planner/traj_utils', ROOT/'traj_utils_ws/src/traj_utils'),
+                     (OLD/'src/plan_manage', ROOT/'scan_ws/src/plan_manage')]:
+    if not dest.exists():
+        shutil.copytree(source, dest)
+    same = [(str(p), str(dest/p.relative_to(source)), digest(p)) for p in source.rglob('*') if p.is_file()]
+    if any(digest(b) != sha for a, b, sha in same):
+        raise RuntimeError('source copy bytes differ')
+    (ROOT / (source.name+'_SOURCE_COPY_SHA256.json')).write_text(json.dumps(same, indent=2)+'\n')
+
+traj_ws = ROOT/'traj_utils_ws'
+dirs = cache_dirs(TR/'build/traj_utils/CMakeCache.txt')
+args = ['/usr/bin/cmake', '-S', str(traj_ws/'src/traj_utils'), '-B', str(traj_ws/'build/traj_utils'),
+        '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_INSTALL_PREFIX='+str(traj_ws/'install/traj_utils'),
+        '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-DBUILD_TESTING=OFF', '-DPython3_EXECUTABLE=/usr/bin/python3']
+run(args+['-D'+k+'='+v for k, v in sorted(dirs.items())], 90)
+run(['/usr/bin/cmake', '--build', str(traj_ws/'build/traj_utils'), '--parallel', '1'], 180)
+run(['/usr/bin/cmake', '--install', str(traj_ws/'build/traj_utils')], 60)
+
+scan_ws = ROOT/'scan_ws'
+dirs = cache_dirs(OLD/'build/scan_planner/CMakeCache.txt')
+dirs['traj_utils_DIR'] = str(traj_ws/'install/traj_utils/share/traj_utils/cmake')
+args = ['/usr/bin/cmake', '-S', str(scan_ws/'src/plan_manage'), '-B', str(scan_ws/'build/scan_planner'),
+        '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_INSTALL_PREFIX='+str(scan_ws/'install/scan_planner'),
+        '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-DBUILD_TESTING=OFF', '-DPython3_EXECUTABLE=/usr/bin/python3']
+run(args+['-D'+k+'='+v for k, v in sorted(dirs.items())], 90)
+run(['/usr/bin/cmake', '--build', str(scan_ws/'build/scan_planner'), '--target', 'scan_planner_node', '--parallel', '1'], 180)
+# Installation includes helper targets; preserve their existing bytes because
+# those unrelated targets were not rebuilt for this candidate.
+prefix = scan_ws/'install/scan_planner'
+prefix.mkdir(parents=True, exist_ok=True)
+for name in ['include', 'share']:
+    shutil.copytree(OLD/'install/scan_planner'/name, prefix/name, dirs_exist_ok=True)
+target = prefix/'lib/scan_planner/scan_planner_node'
+target.parent.mkdir(parents=True, exist_ok=True)
+shutil.copy2(scan_ws/'build/scan_planner/scan_planner_node', target)
+
+receipt = dict(schema='r85_Release_dependency_candidate_build/v1',
+               source_algorithm_changed=False, input_points_changed=False,
+               runtime_acceptance_established=False, ROS_started=False, physics_started=False,
+               original_workspace_untouched=str(OLD), original_project_untouched=str(TR),
+               executable=str(target), executable_sha256=digest(target),
+               archive=str(traj_ws/'install/traj_utils/lib/libtraj_utils.a'),
+               archive_sha256=digest(traj_ws/'install/traj_utils/lib/libtraj_utils.a'),
+               commands_file=str(W/'RELEASE_BUILD_COMMANDS.json'))
+(W/'RELEASE_CANDIDATE_BUILD_RECEIPT.json').write_text(json.dumps(receipt, indent=2)+'\n')
+print(json.dumps(receipt), flush=True)

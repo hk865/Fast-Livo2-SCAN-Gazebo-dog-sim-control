@@ -1,0 +1,667 @@
+"""Read-only R85 dynamic evidence verifier. No ROS, simulator or model imports.
+
+Replays the unchanged R83 two-corridor guard and stop/recovery predicates.
+The R85 crossing geometry is a separate, fixed protocol, not an R83 scene PASS.
+An ACK, independent entity observation, and guard stop are separate evidence;
+their bounded association is not a counterfactual object-causation proof.
+"""
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+import json
+import math
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path('/opt/experiment/workspace/multifloor_demo')
+C63 = ROOT/'teacher_mode/navigation/engineering_v63_r83_parking_hysteresis_candidate'
+FROZEN = {
+    'core': (ROOT/'navigation/control_core.py', 'c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f'),
+    'audit': (ROOT/'teacher_mode/navigation/guard_audit.py', '3088f7b207d7335e88108dbdaab826df5661b6172264d8dcd43aae293aea0c64'),
+    'stop': (C63/'dynamic_stop_event.py', '80a312737d3deb5fb44abc852582e40a9c2aef621761c204a0dfc0df3878474c'),
+    'payload': (C63/'known_scene_hold_guard.py', '7f1c9c157330917d9d001b266f463e0a18fff50261d02f9914a9f22250c1fee4'),
+}
+BINDING_KEYS = ('run_id', 'reference_id', 'reference_sha256', 'request_id',
+                'epoch', 'localization_generation', 'source_route_sha256')
+PROTOCOL = 'r85_f1_f3_fixed_crossing/v1'
+PARK = np.array([17., 5.7, 1.8])
+BLOCK = np.array([14.9, 5.7, 1.8])
+SIZE = np.array([.5, .5, 1.2])
+MAX_LOG_BYTES = 256*1024**2
+MAX_LINE_BYTES = 2*1024**2
+MAX_RECORDS = 500_000
+
+
+class MissingEvidence(ValueError):
+    pass
+
+
+def _require(ok, message, *, missing=False):
+    if not ok:
+        raise (MissingEvidence if missing else ValueError)(message)
+
+
+def _canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False)
+
+
+def _sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _hex(value):
+    return isinstance(value, str) and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
+
+
+def _integer(value, minimum=0):
+    return type(value) is int and value >= minimum
+
+
+def _vector(value, length=3):
+    a = np.asarray(value, dtype=float)
+    _require(a.shape == (length,) and np.isfinite(a).all(), 'Malformed/nonfinite vector')
+    return a
+
+
+def _inside(run, filename):
+    p = Path(filename)
+    if not p.is_absolute():
+        p = run/p
+    p = p.resolve()
+    _require(p.is_relative_to(run), 'Evidence file escapes this run')
+    _require(p.is_file(), 'Missing evidence file: '+str(p), missing=True)
+    return p
+
+
+def _read_json(path, expected=None):
+    _require(path.is_file(), 'Missing JSON source: '+str(path), missing=True)
+    raw = path.read_bytes()
+    _require(len(raw) <= 16*1024**2, 'JSON byte budget exceeded')
+    binding = dict(path=str(path.resolve()), sha256=_sha(raw), bytes=len(raw))
+    if expected is not None:
+        _require(_hex(expected) and binding['sha256'] == expected, 'JSON source SHA mismatch: '+str(path))
+    doc = json.loads(raw)
+    _canonical(doc)
+    return doc, binding
+
+
+def _lines(run, filename):
+    path = _inside(run, filename)
+    _require(path.stat().st_size <= MAX_LOG_BYTES, 'Log byte budget exceeded')
+    rows, offset, digest = [], 0, hashlib.sha256()
+    with path.open('rb') as stream:
+        for raw in stream:
+            _require(len(raw) <= MAX_LINE_BYTES, 'Source line byte budget exceeded')
+            if not raw.endswith(b'\n'):
+                break  # An in-progress partial line is not an observation.
+            d = json.loads(raw)
+            _canonical(d)
+            rows.append(dict(data=d, source_file=str(path), source_offset=offset,
+                source_length=len(raw), source_line_sha256=_sha(raw)))
+            offset += len(raw); digest.update(raw)
+            _require(len(rows) <= MAX_RECORDS, 'Source record budget exceeded')
+    return rows, dict(path=str(path), complete_prefix_bytes=offset, complete_prefix_sha256=digest.hexdigest())
+
+
+def _verify_line(record):
+    with Path(record['source_file']).open('rb') as stream:
+        stream.seek(record['source_offset']); raw = stream.read(record['source_length'])
+    _require(_sha(raw) == record['source_line_sha256'], 'Serialized source line changed')
+    parsed = json.loads(raw)
+    expected = record.get('_journal_raw', record['data'])
+    _require(_canonical(parsed) == _canonical(expected), 'Source line/data projection mismatch')
+
+
+def _modules():
+    result, sources = {}, {}
+    for name, (path, expected) in FROZEN.items():
+        raw = path.read_bytes()
+        _require(_sha(raw) == expected, 'Frozen native helper changed: '+name)
+        spec = importlib.util.spec_from_file_location('_r85_dynamic_'+name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        result[name] = module
+        sources[name] = dict(path=str(path), sha256=expected, bytes=len(raw))
+    return result, sources
+
+
+def _same_binding(value, expected):
+    _require(isinstance(value, dict), 'Missing causal binding')
+    for key in BINDING_KEYS:
+        _require(type(value.get(key)) is type(expected[key]) and value[key] == expected[key],
+                 'Foreign/conflicting causal binding: '+key)
+
+
+def _projection(points, point):
+    delta = np.diff(points, axis=0); lengths = np.linalg.norm(delta, axis=1)
+    _require(np.isfinite(lengths).all() and np.any(lengths > 0), 'Degenerate source route')
+    t = np.clip(np.sum((point-points[:-1])*delta, axis=1)/np.maximum(lengths**2, 1e-24), 0., 1.)
+    residual = np.linalg.norm(point-(points[:-1]+t[:, None]*delta), axis=1)
+    index = int(np.argmin(residual))
+    arc = float(np.r_[0., np.cumsum(lengths)][index]+t[index]*lengths[index])
+    return arc, float(residual[index]), index
+
+
+def _target_at(elapsed):
+    _require(type(elapsed) in (int, float) and math.isfinite(elapsed) and elapsed >= 0, 'Invalid actual protocol elapsed clock')
+    if elapsed < 8.4:
+        return np.array([17.-.25*elapsed, 5.7, 1.8]), 'entering'
+    if elapsed < 28.4:
+        return BLOCK, 'blocking'
+    if elapsed < 36.8:
+        return np.array([14.9+.25*(elapsed-28.4), 5.7, 1.8]), 'leaving'
+    return PARK, 'clear'
+
+
+def _strict_clocks(rows, key, gap, minimum_count, minimum_span, label):
+    _require(len(rows) >= minimum_count, label+' record count incomplete', missing=True)
+    clocks = [r['data'][key] for r in rows]
+    _require(all(_integer(v) for v in clocks), label+' clock type invalid')
+    _require(all(0 < b-a <= gap for a, b in zip(clocks, clocks[1:])), label+' continuity invalid')
+    _require(clocks[-1]-clocks[0] >= minimum_span, label+' duration incomplete', missing=True)
+
+
+def _native_stamp(header):
+    stamp = header.get('stamp', {})
+    values = []
+    for value in (stamp.get('sec', 0), stamp.get('nsec', stamp.get('nanosec', 0))):
+        if type(value) is int:
+            values.append(value)
+        elif isinstance(value, str) and value.isascii() and value.isdigit():
+            values.append(int(value))
+        else:
+            raise ValueError('Malformed native observer stamp')
+    sec, nsec = values
+    _require(sec >= 0 and 0 <= nsec < 1_000_000_000, 'Malformed native observer stamp')
+    return sec*1_000_000_000+nsec
+
+
+def _pretrigger_history(evidence, contract, binding, points, refdoc, registration):
+    """Read distinct monitoring sources; never migrate an old-scope event."""
+    rows = evidence.get('pretrigger_records')
+    _require(isinstance(rows, list) and rows, 'Actual pretrigger monitoring history missing', missing=True)
+    _require(contract.get('scope_locked_at_trigger') is True and _integer(contract.get('trigger_sim_ns')),
+             'Dynamic scope was not frozen at actual trigger')
+    trigger_ns = contract['trigger_sim_ns']
+    previous = None; active = None; selected = []; all_rows = {}
+    for row in rows:
+        raw = row.get('_journal_raw', row['data']); _verify_line(row)
+        _require(raw.get('schema') == 'r85_dynamic_pretrigger_record/v1', 'Wrong pretrigger monitoring schema')
+        seq, ns, wall = raw['sequence'], raw['sim_ns'], raw['monotonic_wall']
+        _require(_integer(seq, 1) and _integer(ns) and ns <= trigger_ns
+            and type(wall) in (int, float) and math.isfinite(wall), 'Pretrigger monitoring clock invalid')
+        if previous is None:_require(seq == 1, 'Pretrigger monitoring prefix missing')
+        else:_require(seq == previous[0]+1 and ns >= previous[1] and wall >= previous[2], 'Pretrigger source continuity differs')
+        previous = seq, ns, wall
+        b = raw['binding']; kind = raw['kind']; data = raw['data']
+        _require(isinstance(b, dict), 'Pretrigger binding missing')
+        for key in ('run_id', 'request_id', 'source_route_sha256'):
+            _require(type(b.get(key)) is type(binding[key]) and b[key] == binding[key], 'Pretrigger immutable task/typed binding changed: '+key)
+        _require(_integer(b.get('epoch'), 1) and _integer(b.get('localization_generation'), 1)
+            and _hex(b.get('reference_sha256')) and isinstance(b.get('reference_id'), str) and b['reference_id'],
+            'Pretrigger actual scope types invalid')
+        if kind == 'reference_binding':
+            if active is not None:
+                _require(b['epoch'] > active['epoch'] and b['localization_generation'] >= active['localization_generation'],
+                         'Pretrigger planner epoch did not advance')
+            _require(_sha(data['reference_raw_utf8'].encode()) == b['reference_sha256']
+                and _canonical(json.loads(data['reference_raw_utf8'])) == _canonical(data['document']), 'Pretrigger reference snapshot bytes differ')
+            doc = data['document']; reg = data['registration_document']
+            for key in ('run_id', 'reference_id', 'epoch', 'localization_generation', 'source_route_sha256'):
+                _require(type(doc.get(key)) is type(b[key]) and doc[key] == b[key], 'Pretrigger reference identity differs: '+key)
+            _require(doc.get('schema') == 'r85_pct_scan_global_reference/v1'
+                and doc.get('frame_id') == 'camera_init' and doc.get('reference_scope') == 'full_route'
+                and doc.get('navigation_ground_truth_used') is False
+                and doc.get('T_navigation_world') == refdoc['T_navigation_world']
+                and np.array_equal(np.asarray(doc['body_points'], float), points)
+                and Path(doc['source_route_file']).resolve() == Path(contract['typed_source_file']).resolve(),
+                'Pretrigger full typed/reference geometry changed')
+            _require(_sha(data['registration_raw_utf8'].encode()) == data['registration_sha256']
+                and _canonical(json.loads(data['registration_raw_utf8'])) == _canonical(reg), 'Pretrigger registration snapshot bytes differ')
+            _require(reg.get('schema') == 'r85_reference_source_registration/v1'
+                and reg.get('run_id') == b['run_id'] and reg.get('reference_id') == b['reference_id']
+                and reg.get('reference_file_sha256') == b['reference_sha256']
+                and reg.get('source_route_sha256') == b['source_route_sha256']
+                and type(reg.get('localization_generation')) is int and reg['localization_generation'] == b['localization_generation']
+                and reg.get('navigation_ground_truth_used') is False
+                and reg.get('producer') == 'root_authorized_PCT_route_owner'
+                and all(reg.get(k) == registration[k] for k in ('owner_source_file','owner_source_sha256','task_source_file','task_source_sha256')),
+                'Pretrigger source registration semantics differ')
+            active = dict(b)
+        else:
+            _require(active is not None, 'Pretrigger callback preceded actual source selection')
+            _same_binding(b, active)
+        if kind in ('service_request', 'service_ack'):
+            _require(data.get('phase') == 'parked' and data.get('entity') == 'moving_obstacle'
+                and data.get('service') == '/world/teacher_demo/set_pose'
+                and np.array_equal(_vector(data['position_world_xyz']), PARK), 'Actor moved before trigger')
+        _require(kind not in ('trigger','reference_lock'), 'Locked event appeared in pretrigger monitoring history')
+        projected = dict(row, data=data, _journal_raw=raw, received_sim_ns=ns, monitoring_sequence=seq)
+        all_rows[seq] = projected
+        if b == binding:selected.append(projected)
+    _same_binding(active, binding)
+    arms = contract.get('arming_pretrigger_sequences')
+    expected = dict(reference_binding='reference_binding', actual_pose='actual_pose', mission_state='mission_state',
+                    entity_observation='entity_observation', park_service_ack='service_ack')
+    _require(isinstance(arms, dict) and set(arms) == set(expected), 'Trigger arming source references missing')
+    for key, kind in expected.items():
+        seq = arms[key]
+        _require(_integer(seq, 1) and seq in all_rows, 'Actual arming callback missing: '+key, missing=True)
+        r = all_rows[seq]; _same_binding(r['_journal_raw']['binding'], binding)
+        _require(r['_journal_raw']['kind'] == kind, 'Arming callback kind differs: '+key)
+    start = all_rows[arms['reference_binding']]['received_sim_ns']
+    for key in ('actual_pose','entity_observation'):
+        r = all_rows[arms[key]]
+        _require(start <= r['data']['stamp_ns'] <= trigger_ns and trigger_ns-r['data']['stamp_ns'] <= 300_000_000,
+                 'Old/stale actual pose reused after pretrigger scope selection: '+key)
+    ack = all_rows[arms['park_service_ack']]['data']
+    _require(ack.get('success') is True and start <= ack['request_sim_ns'] <= ack['response_sim_ns'] <= trigger_ns
+        and trigger_ns-ack['response_sim_ns'] <= 300_000_000, 'Old/stale park ACK reused after pretrigger scope selection')
+    return selected
+
+
+def validate_r85_dynamic_evidence(evidence_doc, task_contract=None):
+    """Recompute real source evidence. Incomplete input waits; invalid input fails.
+
+    evidence_doc is assembled by verify_result from actual journal/guard files;
+    it contains records with exact source-line references, not trusted booleans.
+    A caller-provided task_contract is mandatory for an external task binding.
+    """
+    out = dict(schema='r85_dynamic_obstacle_verification/v1', allowed=False, passed=False,
+        state='waiting', checks={}, navigation_PASS=False, full_F3_PASS=False,
+        physical_navigation_ground_truth_used=False,
+        causal_attribution_scope='Bound native guard→stop token and independently observed obstacle spatiotemporal association; no counterfactual or LiDAR object-identity proof',
+        existing_passed_flags_used=False)
+    checks = out['checks']
+    try:
+        _require(isinstance(task_contract, dict), 'External dynamic task contract missing', missing=True)
+        _require(task_contract.get('schema') == 'r85_dynamic_task_contract/v1', 'Wrong dynamic task contract schema')
+        _require(evidence_doc.get('schema') == 'r85_dynamic_obstacle_evidence/v1', 'Wrong dynamic evidence schema')
+        binding = task_contract['binding']
+        _require(set(BINDING_KEYS) <= set(binding), 'Incomplete expected identity binding')
+        _require(all(isinstance(binding[k], str) and binding[k] for k in ('run_id','reference_id','request_id'))
+            and all(_hex(binding[k]) for k in ('reference_sha256','source_route_sha256'))
+            and _integer(binding['epoch'], 1) and _integer(binding['localization_generation'], 1), 'Invalid expected identity types')
+        run = Path(evidence_doc['run_dir']).resolve()
+        _require(run.is_dir() and run.name == binding['run_id'], 'Run directory/identity mismatch')
+        _same_binding(evidence_doc['binding'], binding)
+        out.update(run_id=binding['run_id'], request_id=binding['request_id'], binding=binding)
+        _require(task_contract.get('protocol') == PROTOCOL, 'Wrong fixed R85 crossing protocol')
+        _require(task_contract.get('entity', 'moving_obstacle') == 'moving_obstacle'
+            and task_contract.get('service', '/world/teacher_demo/set_pose') == '/world/teacher_demo/set_pose'
+            and task_contract.get('entity_pose_topic', '/world/teacher_demo/pose/info') == '/world/teacher_demo/pose/info',
+            'Entity/service/independent observer protocol differs')
+        for key, fixed in (('park_position_world_xyz', PARK), ('blocking_position_world_xyz', BLOCK), ('obstacle_size_m', SIZE)):
+            if key in task_contract:
+                _require(np.array_equal(_vector(task_contract[key]), fixed), 'Fixed protocol geometry differs: '+key)
+        _require(task_contract.get('protocol_parameters') == dict(speed_mps=.25, enter_s=8.4,
+            blocking_s=20., leave_s=8.4, retreat_same_side=True), 'Fixed crossing phase parameters differ')
+        _require(task_contract.get('phase_positions_world_xyz') == dict(entering=PARK.tolist(), blocking=BLOCK.tolist(),
+            leaving=PARK.tolist(), clear=PARK.tolist()), 'Fixed crossing phase positions differ')
+        _require(task_contract.get('privileged_actor_pose') is True
+            and task_contract.get('navigation_ground_truth_used') is False
+            and task_contract.get('robot_pose_service_called') is False, 'Actor privilege/navigation boundary differs')
+        rootdoc, root_binding = _read_json(_inside(run, task_contract['task_contract_file']), task_contract['task_contract_sha256'])
+        _require(rootdoc.get('schema') == 'r85_pct_scan_student_task/v1' and rootdoc.get('run_id') == run.name
+            and rootdoc.get('kind') == 'f1_to_f3' and rootdoc.get('dynamic_required') is True
+            and rootdoc.get('short_chain_validation_only') is False, 'Original scoped full-task dynamic contract differs')
+        source_doc, source_binding = _read_json(_inside(run, task_contract['typed_source_file']), task_contract['typed_source_sha256'])
+        _require(source_binding['sha256'] == binding['source_route_sha256'] == rootdoc['source_typed_route_sha256']
+            and Path(rootdoc['source_typed_route_file']).resolve() == Path(source_binding['path']), 'Full typed source/task binding differs')
+        _require(source_doc.get('schema') == 'r85_prepared_typed_global_reference/v1'
+            and source_doc.get('reference_scope', 'full_route') == 'full_route', 'Full prepared typed source required')
+        points = np.asarray(source_doc['body_points'], float)
+        _require(points.ndim == 2 and points.shape[1] == 3 and 2 <= len(points) <= 20000 and np.isfinite(points).all(), 'Invalid typed route')
+        _require(points.shape == (337, 3) and np.allclose(points[180]+[0,0,.3], [14.9,5.7,1.52], rtol=0, atol=1e-6),
+                 'Fixed full-chain encounter source point differs')
+        transform = np.asarray(source_doc['T_navigation_world'], float)
+        _require(np.array_equal(transform, np.array([[1,0,0,0],[0,1,0,0],[0,0,1,-.3],[0,0,0,1]])), 'Frozen canonical transform differs')
+        refdoc, ref_binding = _read_json(_inside(run, task_contract['reference_file']), binding['reference_sha256'])
+        for key in ('run_id','reference_id','epoch','localization_generation'):
+            _require(type(refdoc.get(key)) is type(binding[key]) and refdoc[key] == binding[key], 'Actual reference identity mismatch: '+key)
+        _require(refdoc.get('schema') == 'r85_pct_scan_global_reference/v1'
+            and refdoc.get('frame_id') == 'camera_init' and refdoc.get('reference_scope') == 'full_route'
+            and refdoc.get('navigation_ground_truth_used') is False
+            and np.array_equal(np.asarray(refdoc['T_navigation_world'], float), transform)
+            and refdoc.get('source_route_sha256') == binding['source_route_sha256']
+            and Path(refdoc['source_route_file']).resolve() == Path(source_binding['path'])
+            and np.array_equal(np.asarray(refdoc['body_points'], float), points), 'Reference/full typed source mismatch')
+        runtime_path = Path(task_contract['runtime_source_file']).resolve()
+        runtime_doc_binding = dict(path=str(runtime_path), sha256=_sha(runtime_path.read_bytes()))
+        _require(runtime_doc_binding['sha256'] == task_contract['runtime_source_sha256'], 'Runtime protocol source changed')
+        registration, registration_binding = _read_json(_inside(run, task_contract['registration_file']), task_contract['registration_sha256'])
+        _require(registration.get('schema') == 'r85_reference_source_registration/v1'
+            and registration.get('run_id') == run.name and registration.get('reference_file_sha256') == binding['reference_sha256']
+            and registration.get('reference_id') == binding['reference_id']
+            and registration.get('source_route_sha256') == binding['source_route_sha256']
+            and type(registration.get('localization_generation')) is int
+            and registration['localization_generation'] == binding['localization_generation']
+            and registration.get('navigation_ground_truth_used') is False
+            and registration.get('producer') == 'root_authorized_PCT_route_owner'
+            and Path(registration['task_source_file']).resolve() == Path(root_binding['path'])
+            and registration.get('task_source_sha256') == root_binding['sha256'], 'Actual source registration semantics differ')
+        owner_path = Path(registration['owner_source_file']).resolve()
+        _require(_hex(registration.get('owner_source_sha256'))
+            and _sha(owner_path.read_bytes()) == registration['owner_source_sha256'], 'Registered actual task-owner source changed')
+        checks['full_task_and_source_bindings'] = True
+        modules, helper_sources = _modules()
+        records = evidence_doc['records']
+        _require(isinstance(records, list) and len(records) <= MAX_RECORDS, 'Journal record budget invalid')
+        by_kind = {}
+        previous_sequence, previous_wall, previous_sim = None, None, None
+        for row in records:
+            raw = row.get('_journal_raw', row['data'])
+            _require(raw.get('schema') == 'r85_dynamic_obstacle_record/v1', 'Wrong journal record schema')
+            _same_binding(raw['binding'], binding)
+            seq, sim, wall = raw['sequence'], raw['sim_ns'], raw['monotonic_wall']
+            _require(_integer(seq) and _integer(sim) and type(wall) in (int,float) and math.isfinite(wall), 'Journal clock/sequence malformed')
+            _require(_integer(task_contract.get('trigger_sim_ns')) and sim >= task_contract['trigger_sim_ns'],
+                     'Pretrigger record migrated into locked event journal')
+            if previous_sequence is not None:
+                _require(seq == previous_sequence+1 and sim >= previous_sim and wall >= previous_wall, 'Journal source order/continuity differs')
+            else:
+                _require(seq == 1, 'Journal source prefix missing')
+            previous_sequence, previous_wall, previous_sim = seq, wall, sim
+            _verify_line(row)
+            projection = dict(row, data=raw['data'], _journal_raw=raw, received_sim_ns=sim)
+            by_kind.setdefault(raw['kind'], []).append(projection)
+        monitored = _pretrigger_history(evidence_doc, task_contract, binding, points, refdoc, registration)
+        for row in reversed(monitored):
+            by_kind.setdefault(row['_journal_raw']['kind'], []).insert(0, row)
+        locks = by_kind.get('reference_lock', [])
+        _require(len(locks) == 1 and locks[0]['received_sim_ns'] == task_contract['trigger_sim_ns']
+            and locks[0]['_journal_raw']['sequence'] == 1
+            and locks[0]['data'].get('scope_locked_at_trigger') is True
+            and locks[0]['data'].get('pretrigger_records_migrated') is False
+            and locks[0]['data'].get('arming_pretrigger_sequences') == task_contract['arming_pretrigger_sequences'],
+            'Actual trigger scope-lock snapshot missing/conflicting')
+        _require(_canonical(locks[0]['data']['document']) == _canonical(refdoc)
+            and _canonical(locks[0]['data']['registration_document']) == _canonical(registration)
+            and locks[0]['data']['reference_sha256'] == binding['reference_sha256']
+            and locks[0]['data']['registration_sha256'] == registration_binding['sha256'],
+            'Actual trigger scope-lock source snapshot differs')
+        reference_rows = by_kind.get('reference_binding', [])
+        _require(len(reference_rows) >= 1, 'Actual reference-binding callback absent', missing=True)
+        _require(len(reference_rows) == 1, 'Multiple/conflicting actual reference-binding callbacks')
+        reference_row = reference_rows[0]['data']
+        _require(reference_row['reference_sha256'] == ref_binding['sha256']
+            and _canonical(reference_row['document']) == _canonical(refdoc)
+            and reference_row['registration_sha256'] == registration_binding['sha256']
+            and _canonical(reference_row['registration_document']) == _canonical(registration), 'Actual reference/registration snapshot differs')
+        triggers = by_kind.get('trigger', [])
+        _require(len(triggers) >= 1, 'Actual trigger not recorded', missing=True)
+        _require(len(triggers) == 1, 'Conflicting/repeated dynamic trigger')
+        trigger = triggers[0]; td = trigger['data']
+        _require(trigger['received_sim_ns'] == task_contract['trigger_sim_ns'], 'Actual trigger/contract lock clock differs')
+        tp = td['actual_pose']
+        _require(tp.get('navigation_ground_truth_used') is False and tp.get('frame_id') == 'camera_init'
+            and tp.get('source_topic') == '/demo/slam/body_odom', 'Trigger actual SLAM provenance differs')
+        trigger_position = _vector(tp['position'])
+        _require(_integer(tp['stamp_ns']) and 0 <= trigger['received_sim_ns']-tp['stamp_ns'] <= 300_000_000, 'Trigger SLAM source stale')
+        matching_poses = [r for r in by_kind.get('actual_pose', []) if r['received_sim_ns'] <= trigger['received_sim_ns']
+            and r['data'].get('stamp_ns') == tp['stamp_ns'] and _canonical(r['data']) == _canonical(tp)]
+        _require(matching_poses, 'Trigger pose is not an exact actual SLAM callback snapshot', missing=True)
+        obstacle_arc = float(np.linalg.norm(np.diff(points[:181], axis=0), axis=1).sum())
+        actual_arc, path_error, _ = _projection(points, trigger_position)
+        remaining = obstacle_arc-actual_arc
+        _require(3.2 <= remaining <= 3.6 and path_error <= .3,
+                 'Actual trigger is outside fixed remaining-arclength/path-distance window')
+        mission_rows = [r for r in by_kind.get('mission_state', [])
+            if 0 <= trigger['received_sim_ns']-r['received_sim_ns'] <= 300_000_000]
+        _require(mission_rows, 'Fresh actual mission-state callback at trigger absent', missing=True)
+        mission = mission_rows[-1]['data']; mission_ref = mission['r85_reference']
+        _require(mission.get('run_id') == run.name and mission.get('current_request') == binding['request_id']
+            and mission.get('stage') == 'navigating' and mission.get('task_navigation_state') == 'running'
+            and mission.get('navigation_ground_truth_used') is False, 'Actual trigger mission-state provenance differs')
+        for key in ('reference_id','epoch','localization_generation','source_route_sha256'):
+            _require(type(mission_ref.get(key)) is type(binding[key]) and mission_ref[key] == binding[key], 'Actual mission reference binding differs: '+key)
+        _require(mission_ref['global_reference_sha256'] == binding['reference_sha256'], 'Actual mission reference SHA differs')
+        _require(_canonical(td['actual_mission_state']) == _canonical(mission), 'Trigger mission-state snapshot differs from actual callback')
+        _require(mission.get('schema') == 'r85_actual_single_task_mission_state/v1'
+            and mission_ref.get('reference_scope') == 'full_route'
+            and _integer(mission.get('ros_sim_time_ns'))
+            and 0 <= trigger['received_sim_ns']-mission['ros_sim_time_ns'] <= 300_000_000
+            and _integer(mission.get('source_actual_pose_stamp_ns'))
+            and 0 <= trigger['received_sim_ns']-mission['source_actual_pose_stamp_ns'] <= 300_000_000,
+            'Trigger actual task source clocks/scope differ')
+        checks['actual_slam_trigger'] = dict(remaining_arclength_m=remaining, path_distance_m=path_error, obstacle_arc_m=obstacle_arc)
+        acks = by_kind.get('service_ack', [])
+        phases = {r['data'].get('phase') for r in acks}
+        _require({'entering','blocking','leaving','clear'} <= phases, 'Actual ACK phase cycle incomplete', missing=True)
+        phase_order = {'parked':-1, 'entering':0, 'blocking':1, 'leaving':2, 'clear':3}
+        last_phase = -1
+        previous_elapsed = -1.
+        requests = by_kind.get('service_request', [])
+        park_acks = []
+        for row in acks:
+            a = row['data']; phase = a['phase']
+            _require(phase in phase_order and phase_order[phase] >= last_phase, 'ACK phase order differs')
+            last_phase = phase_order[phase]
+            _require(a.get('success') is True and a.get('entity') == 'moving_obstacle'
+                and a.get('service') == '/world/teacher_demo/set_pose', 'Actual entity/service ACK rejected')
+            request, response = a['request_sim_ns'], a['response_sim_ns']
+            _require(_integer(request) and _integer(response) and request <= response <= row['received_sim_ns'], 'Service ACK causal clock mismatch')
+            matching = [r for r in requests if r['data'].get('request_sim_ns') == request]
+            _require(len(matching) == 1 and matching[0]['received_sim_ns'] == request
+                and all(a.get(k) == v for k,v in matching[0]['data'].items()), 'ACK does not bind one exact actual service request')
+            pos = _vector(a['position_world_xyz'])
+            _require(abs(pos[1]-5.7) <= 1e-9 and abs(pos[2]-1.8) <= 1e-9 and 14.9-1e-9 <= pos[0] <= 17.+1e-9, 'ACK fixed crossing geometry differs')
+            if phase == 'parked':
+                _require(response <= trigger['received_sim_ns'] and np.max(np.abs(pos-PARK)) <= 1e-9, 'Initial park ACK geometry/order differs')
+                park_acks.append(row)
+            else:
+                _require(trigger['received_sim_ns'] <= request, 'Motion request preceded actual trigger')
+                expected_position, expected_phase = _target_at(a['protocol_elapsed_s'])
+                _require(a['protocol_elapsed_s'] >= previous_elapsed and phase == expected_phase
+                    and np.max(np.abs(pos-expected_position)) <= 1e-9, 'Actual ACK does not replay fixed phase/time target')
+                _require(a['protocol_elapsed_s'] <= (request-trigger['received_sim_ns'])/1e9+1e-9,
+                         'Protocol elapsed clock exceeds actual simulation time')
+                previous_elapsed = a['protocol_elapsed_s']
+        _require(park_acks, 'Initial actual park service ACK missing', missing=True)
+        blocking = [r for r in acks if r['data']['phase'] == 'blocking']
+        _require(blocking[-1]['data']['request_sim_ns']-blocking[0]['data']['request_sim_ns'] >= 19_000_000_000,
+                 'Original blocking ACK duration incomplete', missing=True)
+        observations = by_kind.get('entity_observation', [])
+        _require(len(observations) >= 3, 'Independent entity pose/info observations missing', missing=True)
+        for row in observations:
+            d = row['data']
+            _require(d.get('entity') == 'moving_obstacle' and d.get('topic') == '/world/teacher_demo/pose/info'
+                and d.get('native_gz_pose_info') is True and d.get('source_message_type') == 'gz.msgs.Pose_V',
+                'Entity observation is not independent native pose/info')
+            _require(_integer(d['stamp_ns']) and 0 <= row['received_sim_ns']-d['stamp_ns'] <= 500_000_000, 'Independent entity observation stale')
+            _require(_native_stamp(d['header']) == d['stamp_ns'], 'Native header/observation stamp projection differs')
+            _vector(d['position_world_xyz'])
+            native = d['raw_model_pose']
+            _require(native.get('name') == 'moving_obstacle', 'Native observer entity name differs')
+            native_position = native.get('position', {})
+            _require(np.array_equal(_vector([native_position.get(k, 0.) for k in ('x','y','z')]), _vector(d['position_world_xyz'])), 'Native observer position projection differs')
+            orientation = native.get('orientation', {})
+            q = _vector([orientation.get(k, 0.) for k in ('x','y','z','w')], 4)
+            _require(np.linalg.norm(q[:3]) <= 1e-6 and abs(abs(q[3])-1.) <= 1e-6, 'Observed actor is not axis aligned')
+        def observed(position, lower, upper):
+            return [r for r in observations if lower <= r['data']['stamp_ns'] <= upper
+                and np.linalg.norm(_vector(r['data']['position_world_xyz'])-position) <= .05]
+        block_observed = observed(BLOCK, blocking[0]['data']['request_sim_ns']-500_000_000,
+                                   blocking[-1]['data']['response_sim_ns']+500_000_000)
+        clear = [r for r in acks if r['data']['phase'] == 'clear']
+        clear_observed = observed(PARK, clear[0]['data']['request_sim_ns'], clear[-1]['received_sim_ns']+500_000_000)
+        initial_park_observed = observed(PARK, park_acks[0]['data']['request_sim_ns'], trigger['received_sim_ns'])
+        _require(initial_park_observed and 0 <= trigger['received_sim_ns']-initial_park_observed[-1]['data']['stamp_ns'] <= 300_000_000,
+                 'Actual independent parked pose near trigger missing', missing=True)
+        _require(len(block_observed) >= 2 and clear_observed, 'Independent actual blocking/clear observations incomplete', missing=True)
+        _require(block_observed[-1]['data']['stamp_ns']-block_observed[0]['data']['stamp_ns'] >= 19_000_000_000,
+                 'Independent actual blocking dwell incomplete', missing=True)
+        # A pair of endpoints cannot manufacture an observed 19-second dwell.
+        distinct_block = []
+        for row in block_observed:
+            if distinct_block and row['data']['stamp_ns'] == distinct_block[-1]['data']['stamp_ns']:
+                continue
+            distinct_block.append(row)
+        _strict_clocks(distinct_block, 'stamp_ns', 500_000_000, 39, 19_000_000_000, 'Independent blocking pose')
+        _require(any(_canonical(r['data']) == _canonical(td.get('actual_park_observation'))
+            for r in initial_park_observed), 'Trigger parked snapshot is not an independent callback')
+        for phase, direction in (('entering', -1.), ('leaving', 1.)):
+            phase_acks = [r for r in acks if r['data']['phase'] == phase]
+            lower = phase_acks[0]['data']['request_sim_ns']
+            upper = phase_acks[-1]['data']['response_sim_ns']+500_000_000
+            motion_rows = [r for r in observations if lower <= r['data']['stamp_ns'] <= upper]
+            _require(len(motion_rows) >= 3, 'Independent '+phase+' observations incomplete', missing=True)
+            _require(motion_rows[-1]['data']['stamp_ns']-motion_rows[0]['data']['stamp_ns'] >= 6_000_000_000,
+                     'Independent '+phase+' duration incomplete', missing=True)
+            positions = [_vector(r['data']['position_world_xyz']) for r in motion_rows]
+            _require(all(abs(p[1]-5.7) <= .05 and abs(p[2]-1.8) <= .05 and 14.85 <= p[0] <= 17.05 for p in positions),
+                     'Independent '+phase+' path leaves fixed crossing')
+            _require(all(direction*(b[0]-a[0]) >= -.05 for a, b in zip(positions, positions[1:]))
+                and direction*(positions[-1][0]-positions[0][0]) >= 1.5,
+                'Independent '+phase+' displacement/order differs')
+        checks['service_ack_and_independent_motion'] = True
+        statuses = [r for r in by_kind.get('status', []) if r['data'].get('request_id') == binding['request_id']]
+        held = [r for r in statuses if r['data'].get('obstacle_hold') is True]
+        _require(held, 'Actual obstacle-held status missing', missing=True)
+        for row in held:
+            command = _vector(row['data']['command'])
+            _require(np.max(np.abs(command)) <= 1e-10, 'Held command is nonzero')
+        guards = [r for r in evidence_doc['guards'] if r['data'].get('request_id') == binding['request_id']]
+        _require(guards, 'Actual native guards missing', missing=True)
+        try:
+            preroll, stop_guard, event = modules['stop'].select_event_preroll(binding['request_id'], held, guards, _verify_line)
+        except ValueError as error:
+            if 'missing' in str(error) or 'lacks' in str(error):
+                raise MissingEvidence(str(error)) from error
+            raise
+        _strict_clocks(preroll, 'compute_ros_clock_ns', 300_000_000, 3, 300_000_000, 'Native pre-roll')
+        last_held = held[-1]['received_sim_ns']
+        resumed = [r for r in statuses if r['received_sim_ns'] > last_held and r['data'].get('obstacle_hold') is False
+            and type(r['data'].get('obstacle_resumes')) is int and r['data']['obstacle_resumes'] > 0
+            and type(r['data'].get('aligned_obstacle_resumes')) is int and r['data']['aligned_obstacle_resumes'] > 0]
+        _require(resumed, 'Actual aligned recovery status missing', missing=True)
+        resume = resumed[0]['received_sim_ns']
+        cleared = [r for r in guards if resume-1_350_000_000 <= r['data']['compute_ros_clock_ns'] <= resume]
+        _strict_clocks(cleared, 'compute_ros_clock_ns', 300_000_000, 10, 1_000_000_000, 'Continuous clear guard')
+        _require(all(b['data'].get('sequence') == a['data'].get('sequence', -2)+1
+            and b['data'].get('previous_actual_guard_clock_ns') == a['data']['compute_ros_clock_ns']
+            for a,b in zip(cleared, cleared[1:])), 'Continuous clear native guard source records have a gap')
+        _require(all(r['data']['union_result']['blocked'] is False for r in cleared), 'Recovery window contains blocked guard')
+        replay_sources = []
+        for row in preroll+cleared:
+            _verify_line(row); g = row['data']; clock = g['compute_ros_clock_ns']
+            _require(g['cloud_frame_id'] == 'camera_init' and 0 <= clock-g['cloud_header_stamp_ns'] <= 300_000_000
+                and 0 <= clock-g['control_pose_stamp_ns'] <= 300_000_000, 'Actual native guard source stale/frame mismatch')
+        for row in [stop_guard, *cleared]:
+            _verify_line(row)
+            g = row['data']; clock = g['compute_ros_clock_ns']
+            payload = modules['payload'].replay_payload(run, g)
+            p = _inside(run, payload)
+            _require(p.stat().st_size <= 64*1024**2, 'Guard payload exceeds original bounded budget')
+            cloud = np.load(p, allow_pickle=False)
+            _require(cloud.ndim == 2 and cloud.shape[1] == 3 and np.isfinite(cloud).all(), 'Invalid actual guard cloud payload')
+            _require(_sha(np.asarray(cloud, dtype='<f8').tobytes()) == g['filtered_xyz_float64_sha256'], 'Actual guard cloud hash differs')
+            native = modules['audit'].NativeGuardAudit(modules['core'].steering_obstacle_ahead)
+            result = native(cloud, _vector(g['control_pose']), _vector(g['checked_target']),
+                            _vector(g['steering_direction'], 2), np.asarray(g['route'], float))
+            replay = modules['audit'].result_json
+            _require(replay(result) == g['union_result'] and replay(native.calls[0][1]) == g['goal_corridor_result']
+                and replay(native.calls[1][1]) == g['motion_corridor_result'], 'Unchanged actual native two-corridor guard does not replay')
+            replay_sources.append(dict(path=str(p), sha256=_sha(p.read_bytes()), sequence=g['sequence']))
+            if row is stop_guard:
+                nearest = min(observations, key=lambda r: abs(r['data']['stamp_ns']-clock))
+                _require(abs(nearest['data']['stamp_ns']-clock) <= 300_000_000, 'Independent entity pose near actual stop missing', missing=True)
+                obstacle = _vector(nearest['data']['position_world_xyz'])
+                world_cloud = cloud-np.array([0,0,-.3])
+                nearby = cloud[np.all(np.abs(world_cloud-obstacle) <= SIZE/2+.05, axis=1)]
+                associated = modules['core'].steering_obstacle_ahead(nearby, _vector(g['control_pose']),
+                    _vector(g['checked_target']), _vector(g['steering_direction'], 2), np.asarray(g['route'], float))
+                _require(associated[0] is True or bool(associated[0]), 'Stop cloud has no blocking returns spatially associated with independent entity observation')
+        checks['native_cloud_guard_stop_token_and_recovery'] = dict(event=event, pre_roll_count=len(preroll), clear_count=len(cleared))
+        _require(trigger['received_sim_ns'] <= event['clock_ns'] <= clear[0]['data']['request_sim_ns'],
+                 'Bound guard stop is outside actual actor motion/occupancy cycle')
+        poses = []
+        for row in by_kind.get('actual_pose', []):
+            p = row['data']; stamp = p['stamp_ns']
+            _require(_integer(stamp) and 0 <= row['received_sim_ns']-stamp <= 300_000_000
+                and p.get('source_topic') == '/demo/slam/body_odom' and p.get('frame_id') == 'camera_init'
+                and p.get('child_frame_id') == 'demo_slam_body' and p.get('navigation_ground_truth_used') is False,
+                'Actual SLAM stop/recovery pose provenance differs')
+            _vector(p['position']); _vector(p['body_velocity']); _vector(p['body_angular_velocity'])
+            if poses and stamp == poses[-1]['data']['stamp_ns']:
+                _require(all(p[k] == poses[-1]['data'][k] for k in ('position','body_velocity','body_angular_velocity')), 'Conflicting repeated SLAM pose')
+                continue  # A repeated callback must never manufacture dwell.
+            poses.append(row)
+        _require(all(a['data']['stamp_ns'] < b['data']['stamp_ns'] for a,b in zip(poses, poses[1:])), 'Actual SLAM pose stamps repeat/backtrack')
+        stop_rows = [r for r in poses if held[0]['received_sim_ns'] <= r['data']['stamp_ns'] <= last_held]
+        good, stop_window = [], None
+        for row in stop_rows:
+            p = row['data']
+            imu_valid = _integer(p.get('imu_stamp_ns')) and abs(p['stamp_ns']-p['imu_stamp_ns']) <= 300_000_000 and p.get('body_gyro') is not None
+            stopped = imu_valid and np.linalg.norm(_vector(p['body_velocity'])[:2]) <= .03 and abs(_vector(p['body_angular_velocity'])[2]) <= .05 and np.linalg.norm(_vector(p['body_gyro'])) <= .05
+            if not stopped:
+                good = []; continue
+            if good and p['stamp_ns']-good[-1]['data']['stamp_ns'] > 200_000_000:
+                good = []
+            good.append(row)
+            if len(good) >= 3 and p['stamp_ns']-good[0]['data']['stamp_ns'] >= 300_000_000:
+                stop_window = good.copy(); break
+        _require(stop_window is not None, 'Actual contiguous measured stop incomplete', missing=True)
+        moving = [r for r in poses if r['data']['stamp_ns'] >= resume]
+        _require(len(moving) >= 3, 'Actual recovery poses missing', missing=True)
+        progress = max(float(np.linalg.norm(_vector(r['data']['position'])[:2]-_vector(moving[0]['data']['position'])[:2])) for r in moving)
+        _require(any(np.linalg.norm(_vector(r['data']['body_velocity'])[:2]) > .025 for r in moving) and progress >= .08,
+                 'Actual moving recovery beyond 8cm incomplete', missing=True)
+        checks['measured_stop_and_recovery'] = dict(stop_count=len(stop_window), recovery_pose_count=len(moving), recovery_progress_m=progress)
+        for row in [*records, *evidence_doc['pretrigger_records']]:
+            _verify_line(row)
+        for source in helper_sources.values():
+            _require(_sha(Path(source['path']).read_bytes()) == source['sha256'], 'Native helper changed during verification')
+        out.update(allowed=True, passed=True, state='passed', failure_reason=None, original_R83_scene_PASS=False,
+            source_receipt=dict(root_task=root_binding, typed_source=source_binding, actual_reference=ref_binding,
+                runtime_protocol=runtime_doc_binding, registration=registration_binding, native_helpers=helper_sources, replay_payloads=replay_sources,
+                journal=evidence_doc.get('journal_source'), pretrigger_monitoring=evidence_doc.get('pretrigger_source'),
+                native_guard=evidence_doc.get('guard_source')))
+    except MissingEvidence as error:
+        out.update(allowed=False, passed=False, state='waiting', failure_reason=str(error))
+    except Exception as error:
+        out.update(allowed=False, passed=False, state='failed', failure_reason=type(error).__name__+': '+str(error))
+    return out
+
+
+def verify_result(run, request_id, profile, scope):
+    """Owner hook: reread current real files on every call, never a saved PASS."""
+    run = Path(run).resolve()
+    out = dict(schema='r85_dynamic_task_result/v1', run_id=run.name, request_id=request_id,
+        passed=False, state='waiting', failure_reason=None, navigation_PASS=False, full_F3_PASS=False)
+    try:
+        _require(isinstance(profile, dict) and profile.get('r85_task', {}).get('kind') == 'f1_to_f3', 'Full R85 task profile required')
+        _require(isinstance(scope, dict), 'Original source scope mapping missing')
+        scope = scope.get('references', scope)
+        _require(isinstance(scope, dict), 'Original source scope references malformed')
+        here = str(Path(__file__).resolve())
+        _require(here in scope and _sha(Path(here).read_bytes()) == scope[here], 'Dynamic verifier is not frozen in original source scope')
+        contract_path = _inside(run, 'r85_dynamic_task_contract.json')
+        contract, contract_source = _read_json(contract_path)
+        _require(contract['binding']['request_id'] == request_id and contract['binding']['run_id'] == run.name, 'Foreign dynamic task contract')
+        runtime_path = str(Path(contract['runtime_source_file']).resolve())
+        _require(runtime_path in scope and scope[runtime_path] == contract['runtime_source_sha256'], 'Dynamic runtime protocol is not frozen in original source scope')
+        actual_state, state_source = _read_json(_inside(run, 'r85_dynamic_obstacle_state.json'))
+        _require(actual_state.get('failure') is None, 'Actual obstacle runtime failure: '+str(actual_state.get('failure')))
+        _same_binding(actual_state['binding'], contract['binding'])
+        rows, journal_source = _lines(run, 'r85_dynamic_journal.jsonl')
+        journal = []
+        for row in rows:
+            raw = row['data']
+            journal.append(dict(row, _journal_raw=raw))
+        guards, guard_source = _lines(run, 'navigation_guard_history.jsonl')
+        pretrigger, pretrigger_source = _lines(run, contract['pretrigger_history_file'])
+        evidence = dict(schema='r85_dynamic_obstacle_evidence/v1', run_dir=str(run), binding=contract['binding'],
+                        records=journal, guards=guards, journal_source=journal_source, guard_source=guard_source,
+                        pretrigger_records=pretrigger, pretrigger_source=pretrigger_source)
+        receipt = validate_r85_dynamic_evidence(evidence, contract)
+        out.update(passed=receipt['allowed'], state=receipt['state'], failure_reason=receipt.get('failure_reason'),
+            verification=receipt, source_receipt=dict(contract=contract_source, runtime_state=state_source,
+                journal=journal_source, pretrigger_monitoring=pretrigger_source, native_guard=guard_source))
+    except MissingEvidence as error:
+        out.update(state='waiting', failure_reason=str(error))
+    except Exception as error:
+        out.update(state='failed', failure_reason=type(error).__name__+': '+str(error))
+    return out

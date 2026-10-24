@@ -1,0 +1,3220 @@
+{
+  "schema": "public_experiment_archive/v1",
+  "batch": "r85_pre_feedback",
+  "suggested_branch": "archive/r85-pre-feedback-20261014-20261016",
+  "actual_run_count": 34,
+  "actual_runs": [
+    {
+      "run_id": "20261014T163458Z_closed_loop_R85_prefix_chain_live_01_29d8",
+      "terminal_utc": "2026-10-14T16:35:37.221866+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "b968b68294377ab9ee3bae5a8592a4251e31c067f6dc3af05d506c99e8d2311d",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "936ab0c6713c475abf1eaaf4baf6020d53cf1033ccce2f261743ecd643b8e2ed",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "8be1d5b826faebe815fa83554849b04622121d41704eebbd928b099add8acbad",
+          "experiment": "r85_prefix_chain",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "8a2094687124b39685d89551fd7860b0f3c2325696dd727e524da6d906409958",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "14fcfe428793107e7f12e1c95dd4863bb7d485b692bce09b1e97de20876ec230",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T163458Z_closed_loop_R85_prefix_chain_live_01_29d8",
+            "status": "failed",
+            "runtime_error": "TimeoutError: V7 loaded mapping/core witness unavailable within30wall seconds"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "ef3355eb69bcbabf245978dee55aa2f10928cc9c6763f78e0472a6c8fe382909",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "0130d45ba8c2f10b08beafd729fb1cc4302b43e11ced1830b74507618d8ac3b6",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T163458Z_closed_loop_R85_prefix_chain_live_01_29d8",
+            "status": "failed",
+            "runtime_error": "TimeoutError: V7 loaded mapping/core witness unavailable within30wall seconds"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+      "terminal_utc": "2026-10-14T21:02:47.142502+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "6cf40b77627fc5b9666c75c60b0a8f1fe620d0910dad276fd738d7fc8b271065",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "52bd98cfb93b9965d9e73c9550e4dd98d945072084b6e66a1c58aeb6c8388049",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1dd8751c23ca2f12d263c267b82c5e33af0abce63545b7b7417a6252cbf3d99a",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "af6b21fcfcb3bda6619026687c3aef1c2763ac65b3c49b8fd9beb03deb9cd54c",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "8552c012eca0735073a2e2a25f2f60e96966e414bec0f5e6a582f7df1d998a1a",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "e1b58e9340c5a079f6dc3c1313a742e5b6034109d10d37b9c4fd0b5982c94993",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "adc32487c97aaac11571330bd48ed16edc082b95f351586a72b8d166eaf0dee4",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "d5807ec63303ee1fea8ab563a7e4e456b6849c2ff294cbaab765b070814e7193",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4ecd147093da43c4d0db820e3c5a5c92f304d1250bdc16004088bb606ef13943",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T093707Z_closed_loop_R85_turn14_baseline_20261015_b118",
+      "terminal_utc": "2026-10-15T09:37:17.852918+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "eec8d1bcd09db0094c9f25282bef9b4365d358aa81fc549797fcc6a2b3e75b9d",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "ebe29235e88a68f8203b335e83d3036ca51558469b7b98117f133d104f277c26",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1957e7715f8a6d51ab5e2f2bd107a57255045da3a14d489448be5f66cefee87f",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "bc745438f0fd733572db0f65a6ce2c52b7e2aed752c297b7b1444b1f137ddf25",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "6526a3ce878981475a8c3051ca0d0a3e34c25a7089f5cad1627caccafa3c1b0f",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T093707Z_closed_loop_R85_turn14_baseline_20261015_b118",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Owned navigation_stack exited before binary witness: [ERROR] [launch]: Caught exception in launch (see debug for traceback): R85 launch admission: root is not its recorded process-group/session leader"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "41a05decdd8ead993a5e173f13de382a35785be9a5993db432a3e73500e34f64",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "bff078f151b20b3aacb7cd8d448ebda75355d7739a77cfd3f06d89a46742bda8",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T093707Z_closed_loop_R85_turn14_baseline_20261015_b118",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "d30271e503cfd17d56b5c3ef2b89f316d616d1889de92de4efef605a550881b4",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T093707Z_closed_loop_R85_turn14_baseline_20261015_b118",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Owned navigation_stack exited before binary witness: [ERROR] [launch]: Caught exception in launch (see debug for traceback): R85 launch admission: root is not its recorded process-group/session leader"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T203816Z_closed_loop_R85_dynamic_mission_r06_20261015_bd41",
+      "terminal_utc": "2026-10-15T20:47:17.004751+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "e1e5355875ddbde48c70e682e8e2e400c525bba77294b22b5f7553bae0b5eef2",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading_protocol_core_dynamic_mission.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "3d4d58b86a2d07badafd73c5593c2e18fca99307fd357ceaf5c65fa84070cae2",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading_protocol_core_dynamic_mission.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2c1a9d9e2006ca5f14210cac841fb18914597943e4434a7935c2197eaa83db13",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "544cdb79afdfc7748b2fbc5652ff33779aed057df6c3095b1bfdc882522cc04c",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "f3b55253849dd136940160e85528a089282405de8f8d1ee76dd8671948871eb9",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T203816Z_closed_loop_R85_dynamic_mission_r06_20261015_bd41",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Current retained census failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "97d29cf72ef088433b8ed0b4e76e802fb9be6e605373b1a82c6eb0289b0b12d8",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T203816Z_closed_loop_R85_dynamic_mission_r06_20261015_bd41",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "7e13ac8853cc17b04b06afc8da2c9421c12715e2f36dda4081ad522ca01716b8",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "27862ea48519b5358c7c06c3e054b2dba2404854e6fa3005d046e0ae9e29c477",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T203816Z_closed_loop_R85_dynamic_mission_r06_20261015_bd41",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "36d7a31988e0d6729bc65dfcbd0349f674a8b7e3d3369bbd45a56f7fc45348af",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T203816Z_closed_loop_R85_dynamic_mission_r06_20261015_bd41",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Current retained census failed"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T175204Z_closed_loop_R85_f1_f3_dynamic_live_01_915d",
+      "terminal_utc": "2026-10-14T17:52:14.353942+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "c57b7d7c6cf2ab62cd343ec868266f04abfc99ff5b818d6145cf6c8b75b81d41",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "e23e8549b4be503eb0bb29e66a0b67c3c159a62ec1381b2357111515aa136751",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "28cd90effe9c657c3cc8ab5019cf8b6aa8ce831b8087a548b413a7a850452c14",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "e3800024abbf85a060b21a485a05ca1d79f3dfb34a8215df043298b222064287",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "12bf38aa37fff98cd1c7e6d1cab2387828351e46d26a0dcbff882d5e11d17be5",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175204Z_closed_loop_R85_f1_f3_dynamic_live_01_915d",
+            "status": "failed",
+            "runtime_error": "RuntimeError: R60 actual identity producer not unique: source"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "921c97b1ecfbd5b878996b8ea68648c560ca70ef972253b84090fe0f8d674163",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "471ed912ae683eb73793cb5dc5ae7908e81e57e37a826f5fff1ec0c38d8eb515",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175204Z_closed_loop_R85_f1_f3_dynamic_live_01_915d",
+            "status": "failed",
+            "runtime_error": "RuntimeError: R60 actual identity producer not unique: source"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+      "terminal_utc": "2026-10-15T16:08:10.810688+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "37e0794568c61699094041cd6a11eac7ef4c9ef64495fabe514d6bee8e2af173",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "3b6d73781907c075da6aed2e1af8515e6f4d7cde003b6dc2defd53f1b7341888",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "a9f04249cdaf10713da1bfa19d9d8ba85531cd9e2e2fca7866877e56c974bd2d",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "96179c28c430d68c32741eae75023aac820e0e131bd8b89f9900b10169a3cf5a",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "a7f602920e39a365292c01a70ca9f5f36670bca52647142a150df4dda655c249",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: EOFError: Gazebo actuator disconnected"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "feb0f740aca691049d28b61c75ca90cc32f84054ffc017b91ea2536c729cdf71",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "0b3b430a9742a7af91fc3d862b660436dfe39f577e245e4be054c6b617d0003e",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "842f3a43bf09c45ad8aadaad0c31db9b353a652673789cc86028d0705c0692b4",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "c8ba53f7d6d5978a9f97391aa03bea3a44ab6459c9f44996980fb45911486dc8",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: EOFError: Gazebo actuator disconnected"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T183144Z_closed_loop_R85_f1_f3_dynamic_live_03_bea4",
+      "terminal_utc": "2026-10-14T18:35:20.035986+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "b5cb9f8bc44088546cbdd13de85d54154169cd4e9fb38b5af70cec46ef932d08",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "d7938738df755bcb5559b399b15e0867fada872bf8e7c7c84e6887750abe721f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "d66120a2525a51f54fce3970f85a2bec8e0f410f078a664b3caebe59f1279cd8",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "77cf116e2bcb272d1879043b0f16b8189168b786e0dae7028d8d284160ace158",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "5b81d9c413da9d06909a58ba873ab058a5abd674e61f667ac8716e38afad1691",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T183144Z_closed_loop_R85_f1_f3_dynamic_live_03_bea4",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "df9d4eede014824194c1431ceb940d37e53bc0a40fab06288beca6f90c96b3ed",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T183144Z_closed_loop_R85_f1_f3_dynamic_live_03_bea4",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "f27c2605f52eac53323544b069efd16998e31b2f225264eef68df675a47d3721",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T183144Z_closed_loop_R85_f1_f3_dynamic_live_03_bea4",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "b492233dff3470384e31caa33ac5372b2121b51db941e0c5026b01c7a81b8465",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "9a4a8176f7fb957d20cb7fd54127858f7069af00a7f6427c41e50ae4997bf4e8",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T183144Z_closed_loop_R85_f1_f3_dynamic_live_03_bea4",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T104129Z_closed_loop_R85_observe_only_original_low_speed_20261015_e5ed",
+      "terminal_utc": "2026-10-15T10:46:28.419665+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "9c90541d3311256326f7c7d52b6c1aa5597a1520310e2c582ba2cd9aa74ff32f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_only.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "af509d456cb819845bb67101ad7b4c847ff4d8bdf8660d27cb50b84866459021",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_only.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "031548ee61dec9313204279af2f02dcb9383f479764cb802b294c00e99afa093",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "401b4100132386bed13a3ccb794d59786fbde488298bb0cd912f4ce9e11ea54f",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "3bb2b0a9dda75752caafeea69cffba453020cb6b4ea2d41be962a29e5b99766e",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T104129Z_closed_loop_R85_observe_only_original_low_speed_20261015_e5ed",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "3a145f0f4ddecce84a61591d83827d8f1a713a057e7c0b405a37ac0625396d47",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T104129Z_closed_loop_R85_observe_only_original_low_speed_20261015_e5ed",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "9ac64013a883e0d03c985bb6f5326499f432c6af5270a7042e48811a4b6e7c5c",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "bae5d3d62ac7e85047381532dd3b8e853cb7b75102b2f39528a57da05dbb9f57",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T104129Z_closed_loop_R85_observe_only_original_low_speed_20261015_e5ed",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "25eb85ae3d2f1b6a78121fc8473c4fd69e5172b52112e1aaf4aab44a2290b48f",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T104129Z_closed_loop_R85_observe_only_original_low_speed_20261015_e5ed",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T171327Z_closed_loop_R85_prefix_chain_live_02_9f33",
+      "terminal_utc": "2026-10-14T17:13:36.514480+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "d32bcefb573eb85cba7d100a237f73e8d397cff2c54c613bce355fbacb4d117a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "2d3078018ae8bd9b322277a18214f89187bc18129e88b7aa94fec5d5a635441a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "8be1d5b826faebe815fa83554849b04622121d41704eebbd928b099add8acbad",
+          "experiment": "r85_prefix_chain",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "6500d3c301c51d9454ec059a2af8a1750e70abf8c4c8f8ab2d919230aae235f2",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "287f8b2e27ad357e75ca1bb31d53e4fd3ef42648d1bb6b513916408fef5429cc",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T171327Z_closed_loop_R85_prefix_chain_live_02_9f33",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Owned navigation_stack exited before binary witness: [ERROR] [launch]: Caught exception in launch (see debug for traceback): R85 launch admission: actual guardian command differs"
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "942457c22c221e98dea258c1e9f5371e27e79c0fb43605f0d217ff445fba81fe",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "b43464c17b0bc3f51b95422f7486bc7f28c647653948400a26aed655387809e6",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T171327Z_closed_loop_R85_prefix_chain_live_02_9f33",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Owned navigation_stack exited before binary witness: [ERROR] [launch]: Caught exception in launch (see debug for traceback): R85 launch admission: actual guardian command differs"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+      "terminal_utc": "2026-10-15T12:24:42.248169+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "1e9c319f1107b3dad56485f8fde2155a5fad1c051d211c7920372e348af4a609",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_full_chain.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "a435de28528107b0acf6e7bf64bdbbec5c38c59d2b0690266ee0b58fb5405d0a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_full_chain.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "aaf061354f3795f92c3705e87dbc395db664a039483545ac91ff7ca8589dda8f",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "5856b3aa9d6693531412cbd2be10652229ba401457be83f92d5e7b8c53d888e3",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "483fc5744ecc48e04fb0fb1802f6981fe0da66574a91ef373a167375f40c1815",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+            "status": "failed",
+            "runtime_error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "00de5621e3a6a2abc684dcb5ce1f9dec1e2ffcb060e812080842792c8b3bbbbb",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "9f9dd8407a1b3f0565de725265c8269f4b2e102f43fc5e7c3ddbf4494b48f902",
+          "facts": {
+            "status": "recovered_failed",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "unknown"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "1300e0a53d44444e1fbd197806481176264fec18f03a510b8e6b4b6872683296",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "recovered_failed",
+            "original_runner_exitcode": "unknown"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+      "terminal_utc": "2026-10-16T10:51:48.833279+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "ba407fe0f42ad8e098d30063d22d701e37651fcc1fa9ea0840d131225d001ea6",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_neutral_rate_brake_capture_r34_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "162546ab6bdb8cf14d8c273a93eae9a1f23089f9fe8acf90a6536ab9d985de3f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_neutral_rate_brake_capture_r34_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "eee6b3677d06e5dd9994e33a9bc1a3b130b7def4679b231890e9ec261f48740a",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "376fdad8ca0d259d40030a74f0e58b4f60e7b9e99fe145eb6bf3af07f73d8a58",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "6f93cc632d50287f52d3e5be2f00f6cfce21ab4fdf6204e4c65c517e7f06b346",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "eb1aa41bd0c3ad11c7284e3bfbc2aca741d7e73ff2706cc97776e2db2d0d3f7f",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：pre_zero_integral_unload_timeout"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "9b23e58b39d530d63ad8d08a0953d56355df00db3d0627208fced6e72ed24c0a",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "8fb1b18395bde670c97a9afb86059d1d20a4eeb5942bf87441114a419b20ccee",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "76f8d1a676a671577eaf385e1d440b11f069c7c59414930983f87718e88ea39a",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "29d2047cb6495038a068a253a7c71e0b5eae269158befd24b4d1b2645e33baca",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4a79168bc8d7f3f1db936dc76f973cf101ade8eef267aa84a62a5665fc8fca3d",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T104359Z_closed_loop_R85_neutral_rate_brake_capture_r34_20261016_0ec1",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+      "terminal_utc": "2026-10-16T17:02:30.695374+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "80a2d146a3403acaaa53b4f8208869cc3716337d1bcc99f8ba8b6470e8d5b409",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_yaw_pd_fade_native_r42_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "cb9c920b69a340d504966e8b6a496e1c65beaec80126a57962303c036cca1776",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_yaw_pd_fade_native_r42_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "a80579aeb56b64db4c3bcaf22c3c6165f10b05a61a3a0626679e86bdebcab5f8",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "27d26e8c45ea43194f104cd6fd570c72a4cb00c3a1c306e3532f3997b66e5262",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "55c7c08ebfe6c2fb39f598e8dd7ba2286d50240648fa469b0eb14d565c83c1d0",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "e4b432303a780bcf2fc4ba26b68706fc67d7761a6ff4e13d79450eb448ebd334",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：pre_zero_integral_unload_timeout"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "c16ff1d5647938721e66c436de41e35aa210a53038b4d5f44adac33ba43fb661",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "9166c21d1f437da5c0a6b213184c33c3beaf2cb598998aa7439b9ee230dfcc39",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "c24b8f636af740aa7ffb4eb4731214d682851fccbd80ecc3d053e3a4be9f07ee",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "a6356c112cf3222c18cc8e33c8642fc7b553d54ffbfc0d15a919f80d0b0867b3",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "df34cdf52c1d1683d3b5219a9b0e02c0183a432fa9d815a828b3e7355ac8cfd8",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T165941Z_closed_loop_R85_yaw_pd_fade_native_r42_20261016_97e8",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T201856Z_closed_loop_R85_f1_f3_stopped_boundary_live_06_6118",
+      "terminal_utc": "2026-10-14T20:25:32.745174+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "5c88012217aed953890fbff1685d353df9ab8b1705ec46e34e94d8a2a487b8cb",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "890fe865761604a41d09a81e0729fb1045a3582b3c63138a8f1ee94a31c1cb7a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1dd8751c23ca2f12d263c267b82c5e33af0abce63545b7b7417a6252cbf3d99a",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "ef72f9ebb6fb41e81b11120d9580ac425a974127a040de2017a657e95f610b4c",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "c5025711119813c328e97db4be9a487c91298594815d01bc22adf63e7bfa9547",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T201856Z_closed_loop_R85_f1_f3_stopped_boundary_live_06_6118",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "07dad5c7cd49aa36fe89937cab0c8b465d79635f6a8f15c500bba9259381862f",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T201856Z_closed_loop_R85_f1_f3_stopped_boundary_live_06_6118",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "4317a2c88a483111bad1983151237a88e25126d4f07df82516fec25f072c2713",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T201856Z_closed_loop_R85_f1_f3_stopped_boundary_live_06_6118",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "1284b9cfd2dab69f52739cf724df192dd6506f0ee2c1a1dfaa2fab9518baf50f",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "aa93325fb3d1b5dfde4b3bdc35cfde265eb837220f0edc8431a0a796217eef79",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T201856Z_closed_loop_R85_f1_f3_stopped_boundary_live_06_6118",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+      "terminal_utc": "2026-10-16T18:03:04.878893+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "38e748c6880455b2966a1236cc946095952e09fadb3b7ef1bd6bd03efc26cf1a",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_teacher_heading_p_taper_native_r43_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "766ac3f043ab9295ad0458808640a5445334edd7da47a5306b72d1ca7943bec6",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_teacher_heading_p_taper_native_r43_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "baacf6b6fcf2e62af820c8c659d5b27dc75a265256998ff3e8cfeba52e134965",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "0d58414e7a87e5dc4baa88e4ff0469ffe84c07efc00de48fe2cbc811f86efd0e",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "d3ad91228a33ae4953f10ff0dad72d82f3b28a0fc5338130337d75e0bd5c9b87",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "1a6af3570c66ac2d1c530cc5dfa0a567658bed88cc2ffa5de9d7b01930c3006b",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：explicit_zero_protection_or_stop"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "29887fb9f8c773eeead5739d15a7845260e2962615643479cc8f4d7367bd986a",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "c601b2836933709f4a626a1af4c4faab2437ee2b95f71a4ea653160105ecbcad",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "105977934dcf9fbda6e8fa59a29a0ef1a4e0d7d3967e9fcc262c7c5457519f68",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "38084f409a8b7c24400572258cdb9cade875a45bb6c866f6d03d4bd304e2dab1",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "ac3bc28e98d208e2fad958c7cf1ca6907a32da3316cc0366ed533fc3fd63973b",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T180030Z_closed_loop_R85_teacher_heading_p_taper_native_r43_20261016_7f38",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T171725Z_closed_loop_R85_prefix_chain_live_03_5927",
+      "terminal_utc": "2026-10-14T17:18:05.824174+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "81d844c32ecec34399f3b21370cc411f63958c6d4c9502a351bc842da8b1457c",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "164a4cb7bfb533e23e69d6f3de7e68863f2b01a4859411af58f69417b57d1236",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_prefix_chain.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "8be1d5b826faebe815fa83554849b04622121d41704eebbd928b099add8acbad",
+          "experiment": "r85_prefix_chain",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "1e1d74ddb672079efa95b9586773569a90e5c2c765582be8ceffd45652ef1e1a",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "b247b22543830a28e371bd3b94f268fa63f5688070744a27d38a2148c33ad7b1",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T171725Z_closed_loop_R85_prefix_chain_live_03_5927",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "374a8422bdbaa28322d2870196a635a6d965c9bcaff57cddd80c58d9a9d9dcf3",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T171725Z_closed_loop_R85_prefix_chain_live_03_5927",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_simulation_clock_moved_backward"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "84087cb9c45d73ac98958da294cc122bf69460ce361f620cdfdddf672c34d8c2",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T171725Z_closed_loop_R85_prefix_chain_live_03_5927",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "7c974552afef8941c97451de7b7573cf61fb4808a9fde7e6881c893791a6c0a7",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "123da991b5cf5032c743e68fe1e1ba2d4f409811e76225c9289882435cb58dc2",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T171725Z_closed_loop_R85_prefix_chain_live_03_5927",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+      "terminal_utc": "2026-10-16T08:25:10.024067+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "7a69627b0c2d0e44fe8a442616a0cb0ae632b6af1a88eb18c63c1fb6cde998a9",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pre_zero_quiet_r15_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "5bfdc838fa0deaec58e38c146440d48378d3e2b6af3de20acb645bcf5459c104",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pre_zero_quiet_r15_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "0f8defdeeeedf572a83e0eec0581bd86160140e31de09cdaf39f1d68d37349a0",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "be2bde4922a8d2bfa5220d06fa4a5b85add8aaba9c448be7372992bd42980495",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "e3f51edce05a314190ed1e801b3f019ae7d3115a5429abdd05fa8dcc4ad36907",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "70d7d6e3e50c51cb1b82037d3e91983765b92ce6a7a9ffa2634a286a6679ce92",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：explicit_zero_protection_or_stop"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "2e2d556be9fe6febfe64c5976ae5d48c10e2e2fa8ab5512a5f0a7947306fedd6",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "fcab0cca27b9c25872150a3020954944c720fd7c5773d0f61b9a3f39604bfdae",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "65215a086c0a99c10f3eb73b824a45ce084663e8c9d77b5b69a91b1ee5591a5d",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "ffc5b56e94c4f8a2e3ed014a99e1632863a17aff57cc950b81358ce9b32cdf98",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "64d23a230bdc49e0679633f1669b8cdbba36c479b0a54e7bf21b13b5382e6708",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T081303Z_closed_loop_R85_pre_zero_quiet_r15_20261016_bbf3",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+      "terminal_utc": "2026-10-16T07:32:00.661267+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "eb3ebb0230d0a38fb5097bff7bfe6dd9572f1e60a2b285c4139fb750217193e3",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_handoff_seed_recovery_r14_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "ddfd28bf3ec0012a6f446876a875212b22e7841ecff2ae9140482f917b83571f",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_handoff_seed_recovery_r14_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "312efbccd8a192d5980ec65c358f710dba53b8e8ae498585d6f851ada4508649",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "85000a2a0733bca6a692838a6fe08d1977ed7aaa576b92f07f5e7efaaf21a8fc",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "542f797c421d404688ae65860602ea47779848308c0801e4632998831ff2e4a1",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "2d5439f103e5862d000f4c31782b71dac907a16e65ecca7c423a3a735b8d0862",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：active_handoff_heading_rearm"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "f83b8bd2e8e4db8c01f4d62b7a2e203b8ac8ce2e3a5ac025161edc620b027729",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "cea39b71cfb02f2635c10ff7d09944a93b06fcf1e65ec0ccd5d6f07255d3ec9b",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "b1dd380071b6e8c2faf67f712043a7b0206556ddb23d2891ba242ea31adb594b",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "83310e7396d7cde826a193d6878a1ad4145eb42bfb1da93f236c2dde71d46f57",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "405fa2a236df1cb16ebd352c607dad6f04c372959b1665836813ce911ab16033",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T072847Z_closed_loop_R85_handoff_seed_recovery_r14_20261016_b79b",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+      "terminal_utc": "2026-10-16T07:00:32.795147+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "528bb7853c1347d45c9ed2a959030c9ef1c518836f5479c6c0b46ff218e5a364",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "c310696482b85653b5c978c08b81b925dc31fe06ef7e77f8da2e2160ea1b2624",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "c12b8dc637265da62d537508838441b5a0a0cffd13a1f40053ca99a6a6eb09cf",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "20bbd6cc20283b4c30f378ff05277d73fec901c17a312c85fd438e36963b61e6",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "6499de5daef1febbc333f56e2c8e1d569c73e857164622d928ff64d1ac31b50b",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "fcd4a8ad3978a800749cbd8972e8daad458371dc0aaf526f67be1966d604b6a9",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：cascade_source_or_control_protection"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "9351fa48b7ee5971fedf5b63e7bcbe9e9816c1f8fc1218c3f282233d91fbaf64",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "d57814173512f17486c02ca08749b635017e3e4e6af64a9196cf82c0b4460d0d",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "45ff956b4740a7d2b31bdec4648947c2e6e7cd50310addbdc84d1f7d62299a6e",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "75b757fd321bdb41d790181cc460436699f42228fb61e515e131deea7730546f",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "35e0a0088c11fd0e1d6d4bcd420c715042d4ecde8bb89f6a856c6bebe65e050d",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T065723Z_closed_loop_R85_native_observation_spool_r13_archive_reprepare_until1000_20261016_5c68",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+      "terminal_utc": "2026-10-15T11:01:14.294170+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "7a33300eeadc8d3a305884ad9a531134ba4451abcf6c2601041e6bebb56fba1b",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_only.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "87183673859d8ecb42604af29d2ec3bee2bcde8a8ee16c309e7dcfce7d7784e1",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_only.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "031548ee61dec9313204279af2f02dcb9383f479764cb802b294c00e99afa093",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "a337a8243b0fc13632c63ad2e9e27c350b6861d378c5a1f8c0efde2455991724",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "b97f4c55a8fabf15ec7e3c01a4e82ce373997c138bf3c226954b0965747d0742",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "16d0edff71f4a4158637c5147f19ed304243b6af378ee6132eebbc7b6ed7500f",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:V33控制参考异常，停车：ValueError: Teacher recovery requires a newly associated SCAN"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "3c754ce8face5bb87d59c29ba8c41f010e2c8b5f03038675f1843e36d9e7838b",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "e57c62669d753ee31dcf6072826f2f910695e06e43cc19e2fa34ab74a1979b70",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "9a5f6a2fab3f1abdb1c75bd1cf600523c888bf4deb14b45e2049e9c2cd3aec47",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "94c8cff95eed934444282ae8d3c078d7074d1f190d9445da0d8281f45acef6b1",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "4efce09a6945e2c6750c3d7efeb028b2ae1053b963bca1ea715464bdbbfc0db6",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T172556Z_closed_loop_R85_support_suffix_child_ack_heading_r03_low_speed_20261015_b5de",
+      "terminal_utc": "2026-10-15T17:50:37.889404+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "bc8e82ff72de971f4e0b32b39171a63abe187d20599016d4efce68735b3d8de2",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "a620bb1b6dbbdda915abeb144c3e0c1ea3a68a91475116bff1b8024d72173269",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "7c2d2b68ec3d2a13ef94dffe24e1b9df90b353858a823385e74b90091620d6cb",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "304d69215706e3dc6a194bc830c869fde3f61902dd21714de07aed87fd035545",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "9d2cae56a2d4594e4c81cc69a92c5441bf049e0cd93843bd558e01db21c14c23",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T172556Z_closed_loop_R85_support_suffix_child_ack_heading_r03_low_speed_20261015_b5de",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: EOFError: Gazebo actuator disconnected"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "f56eb3e3df66ff73067124396fb7466b3bb74d1c92cd3903d3057b253de73cab",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T172556Z_closed_loop_R85_support_suffix_child_ack_heading_r03_low_speed_20261015_b5de",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "4722c91042d9102ca112c450e4069651c56da53ddea61ab736dd13d07f44e1c2",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "1fce1af8fd883b3ba4032504e9ee913aac612df7126a6e7686d6aefd030126e5",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T172556Z_closed_loop_R85_support_suffix_child_ack_heading_r03_low_speed_20261015_b5de",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "8496b03ddab54850c1edb1eb25693aa7fbdb4de8374ff820b62d04c7cff19610",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T172556Z_closed_loop_R85_support_suffix_child_ack_heading_r03_low_speed_20261015_b5de",
+            "status": "failed",
+            "runtime_error": "Actor/native physical fault: EOFError: Gazebo actuator disconnected"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+      "terminal_utc": "2026-10-15T10:03:29.344226+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "bc04a61b22d7137e05f5874c572362cf3b50b1f158279004d79fb9eaf3f8bb35",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "4d4f78cb90a73ab7db1683b5e34dcb04004d307f34334326963a7b095518a5b9",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1957e7715f8a6d51ab5e2f2bd107a57255045da3a14d489448be5f66cefee87f",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "4d18edd04b4be2bf29f650aa085c603582f27f7335ef216d874d4d4e4471f243",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "ba879bcf4d91d3d66043f55c2c1722df1fd6324174d45c98d5b08e3d6c99213a",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "344863fea545d9451517a98fa792e181ec4df41e7658cb9a3431589999df8bd7",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "a953a5d3e63aaa8068368984eafd206c2da4e4a1677afc1cd1efcd75518428f8",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "23b271e1ace88f9679ade5dcd526f575c135c6bd5b495538891e998d3d438079",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "2c2ed1b1a974e30c525dd735b3960f7c6064cc0ee8bcbfc7020f09d9b5fc9e6c",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "9355ea2449cb5b62600dcb64f0cc04ca30cd12a09f3fb0d5f87b9a58a60e43d6",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T095150Z_closed_loop_R85_turn14_handoff_20261015_de16",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+      "terminal_utc": "2026-10-16T04:26:54.326681+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "5006de95272135ac5cf5216c9b87f3e48b0562ad060b07bd3f26ce9ddb1a81a0",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_heading_braking_r11_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "c020efbf9ccc5d11457367df23ce83d7db978e8defc93dd61369e1121e06f5c4",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_heading_braking_r11_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "f0e547cf887abe91ed6f0f0fa47994800501b122657a9e9bc3c6edc9a622b14d",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "4a8132a855053eda2c06a10486116ad1e12177ef88b0a9fb3d73a0763a32a6e5",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "6d82674eb0800ee1a8181905f25340853c587c44d1c3d378b0b2ca983659f846",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "28ffc5c0516928d3c16404588fc4c7ac3680c7fc4e5901176764ce758f047fc0",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：explicit_zero_protection_or_stop"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "959160eb4b160d5a89ec818796091ae145fd855ddea0b9a54a5d27b97c575841",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "cfdfb9c129e7076a5874b5052e6286bf2bcbcaa74f738165254642bb9e64f0fc",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "1cc8c4038fdce73259b7ab373003db16cadb829c284080445852e81f60ead534",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "610898cb918967d231d7f9bfe193ab3fd1f64b5f7f4de0a67ef27086a3002ca7",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "c704fc51abbfe492711daf3c59ed08f6c05debf4ac6fc51a470e3e33ec68a928",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T042303Z_closed_loop_R85_heading_braking_recovery_r11_20261016_21cb",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a",
+      "terminal_utc": "2026-10-14T18:01:52.618874+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "30cc926f322b4d0db873aebe5449bcb2cc8f9874db4e3b773e3dd3320ceecaee",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "ec10bd40c572849ebfad34b795e7cda6d7260c516efacc1bccfdb1c58159b916",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "28cd90effe9c657c3cc8ab5019cf8b6aa8ce831b8087a548b413a7a850452c14",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "412c8f3d41a3a4849d8aef03d8b0273446e041188aff276fc49a99e3e1a7c339",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "a78ac7bd598f971915c2084979b68341bf4304ac3f808d02d1971723493138d4",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "23ec7d4f3121a215ff330296609d7e12f326fd077f592abeda75d994b9621401",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "b74fa8a7cf411ac7fdbb9c838acb8e8921286cea0b42c5f8e94b3245adfe4fa0",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "c8b44db8a7b5c9ce940e839ac38ad7e90b3ef9d7a9db296e556034794b5be866",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "845d70b91b3c98d5e8310c3950f0fcc8ac8dcdcc6cbe89538b961faeb6874872",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+      "terminal_utc": "2026-10-15T13:06:29.460835+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "1aadf72e7eea6ebd8fa2f73f638e185d0e73a6c696ca1e1bac325f6d7b64754d",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_lossless_pid.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "fd0bc552861608ebcaf0d3d583f2f86067ee6734ab3d005b9fa42ef62d6336ce",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_lossless_pid.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "db9b0c2398c33a95ff12476436c00b7e3a4ac03c51ae4fceced0792d0731a327",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "396e4c309504247c84b8b3183f05a23c02685fe9bd1273dcbc5796895827bad1",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "a236b66c5b22b2ee726200be324422af0bff3fb4f22b6961f61b93398e01a274",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_original_native_fault; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "56c9872c91f01f21978226ec872483fb8d73ecb5e45f0f1ed7ef9499b52cf3e1",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:raw_imu保护已锁定，停车"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "b6bec0f4fe6fdbdf2d95649a028d7f1075b8138e1b0a66d9f7f7be1369c8dff6",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "1be70c6a2c0411265c9a0bbd5278573f53b30e0ebb74de8813ed5653ae7ae093",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "acbc3e3b0c620360eb088676c3ac53a822db97ebc06ff528c8da29ab5eca22b9",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "fddc971c30ee3ca1ce32c769498606cfc8e62cdc0c06467a21e893c884ed6d32",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "8983309a17f3afa09a52aa69398d7bf9c9e97ee162e8df59b7e282141c50630c",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T124816Z_closed_loop_R85_observe_lossless_pid_low_speed_20261015_b773",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_original_native_fault; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T200117Z_closed_loop_R85_f1_f3_dynamic_live_05_4778",
+      "terminal_utc": "2026-10-14T20:07:44.512915+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "f328ef61e1008e90389bba2bc146c69de0a272994e9037a1a3677edbf6fed89c",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "30a9ab3344d14e80cfcef0654f269d21d533aa1cd42854fcf1b6ed4920e28ca1",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "d66120a2525a51f54fce3970f85a2bec8e0f410f078a664b3caebe59f1279cd8",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "88b0b5631f68b2e231c60052d7c2ad24a7c661444bfe89b1002cd72bb6ed27b9",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "e749571242170ab6856ee8357d4f99756cae20b0519f85027acf6a34910045ff",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T200117Z_closed_loop_R85_f1_f3_dynamic_live_05_4778",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "02ea75ad027b69b34bd09fca6a702fad440686ed32b1ee82ceb79bf7139a5908",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T200117Z_closed_loop_R85_f1_f3_dynamic_live_05_4778",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "f8e692a1291618b41a6453e8f2f4c841e020914d80bf1ff2468048652061ea49",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T200117Z_closed_loop_R85_f1_f3_dynamic_live_05_4778",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "3b52c1d82ef62307af9510f1c63fbd348ff22cbe5b35ba445dd5846afdad161b",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "e7ad9fa5476dd11433b0aeaaae070d55885d09d45fb54403cc3f93efbf134f7c",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T200117Z_closed_loop_R85_f1_f3_dynamic_live_05_4778",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+      "terminal_utc": "2026-10-15T09:46:04.954723+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "d2ab8b60a58f69d17d8823547f0d0c158a0ed2130133cf1cccb880d4015e4e93",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "5cf35690ab784574a043912d1a6846ea1a1732f7fb0b0bdc74e09052555cce16",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "1957e7715f8a6d51ab5e2f2bd107a57255045da3a14d489448be5f66cefee87f",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "bc745438f0fd733572db0f65a6ce2c52b7e2aed752c297b7b1444b1f137ddf25",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "54b7d9de7e3db52f37b85455b3b25755103b2f1b6ebbe525479915163a7ca26e",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "d80745f478e35aa786a1136c39f9395e56d48e0963dcf60efc397eba01d1e762",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_dynamic_runtime_fatal:ValueError:actual_reference_scope_changed_during_dynamic_protocol"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "4b9932b9077e1a5283222876ba3b7937848284d8cd241eb0603bd56d5cb730d2",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "c0c2ad65d035d284cf1b7a25dfeea65d6281ff5b074cdfdcf264bb6612d34d77",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "4be499bda810a761fb55af03c2b14332b63007b9163e0d5aae9f96de5b7e93d9",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "6be74cfc693057e2898633654a6c6e82d1b0fde32e1b249064efa37cb0b06d7f",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T093913Z_closed_loop_R85_turn14_baseline_20261015_startup2_4352",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+      "terminal_utc": "2026-10-16T04:59:11.014024+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "457e70100bad006035e1d813381541811ef8063bf6fd39b96db3407b483cfd02",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pid_archive_snapshot_r12_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "b702b0fa38d36c005bfee697a2fbcd7cbe5b2a5d3967ca05523d60f7ac78e63e",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pid_archive_snapshot_r12_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "299afcffd6ab1662d8b1a4050ed718bb55241efcfdc1c1ffd34dd012e99b7d18",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "1aa894105fa0aaf45b76728acc162852fbabea7ceaa32585b38d769b40ac9ce4",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "5b705259ed9fa147c1ae2febb4d7bfb4e76adac5b28c5790e7e32bdcf1077975",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "15f9f0ed46e2ad27204a49805844dde863a484b9f887e1b51b84ad28d6751abc",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_dynamic_runtime_fatal:Full:"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "5eaf53be8061b3a4ca8321b1dd1a26808e63110817fa0aed8f4a5cc901d10c00",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "8e37a71972fe1780a33e5a1da7175930f13c084681beed6f1a6bff0aca722da8",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "e14617bc42de84f7af60a91e2bce7f92b3c1e0cb321bd984ad32ae70a42aa34f",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "8147b32355764cac8aa61686a4319fb391f6b9c5654e6e05cefa8d8bbfc86b59",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T044650Z_closed_loop_R85_pid_archive_snapshot_r12_20261016_c130",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T205747Z_closed_loop_R85_dynamic_mission_unchanged_r07_20261015_9c37",
+      "terminal_utc": "2026-10-15T21:07:51.650639+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "eb29b9ed43fb1f6b8482783758bee07ac3564f553b4b9644b8504a36f12c4481",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading_protocol_core_dynamic_mission.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "d64e3016991d00eb2bcf68402d0ced08b853c122cb93814236ea57ca2b2ea0ce",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_support_suffix_child_ack_terminal_heading_protocol_core_dynamic_mission.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "2c1a9d9e2006ca5f14210cac841fb18914597943e4434a7935c2197eaa83db13",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "544cdb79afdfc7748b2fbc5652ff33779aed057df6c3095b1bfdc882522cc04c",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "fc0843e8ed8852c69cd1e7c4ac063afe3694b2b80cdf812a6f63b392b5d4fd84",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T205747Z_closed_loop_R85_dynamic_mission_unchanged_r07_20261015_9c37",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "22ea229c4aff729b7b6e656bbd5f56c2cda7131dbd8c77c0ef9eb38bd271c6d6",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T205747Z_closed_loop_R85_dynamic_mission_unchanged_r07_20261015_9c37",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "7eb9c2ad0a5d5a5d5f8336f76ef17300a3ce581dc1d4c918bf78a6bb96ed6777",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "c551a7871fd91df3c04604166d0fb12810a5c727aeac5f66cedb215ce644dbcd",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T205747Z_closed_loop_R85_dynamic_mission_unchanged_r07_20261015_9c37",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "59bff154dd2fd44e520dcbd0d68fa64161453ffb3f140b1f2e61a8cf2b0cdd4a",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T205747Z_closed_loop_R85_dynamic_mission_unchanged_r07_20261015_9c37",
+            "status": "failed",
+            "runtime_error": "InterruptedError: Runner interrupted; cleanup is restricted to saved owned process groups"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+      "terminal_utc": "2026-10-16T03:38:01.495900+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "7ac57cf3d194c06a397c5f1d701e6e9be30a80bdcee52df9d6375cc572654ce9",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_active_braking_v1_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "bd1ee826554d4e510e8dbc66beb29be33c0640c7ef5eb84d269ec82efaf90f79",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_active_braking_v1_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "d640bb8fe689d266450eb0e66174f9f129446f553a9579e9f6db9e3bd3a70cda",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "af609570330a25d9c39e6089104de43bdb6d1b0ca29f15099e57b5253638f2d6",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "53a804690df1a0a88df8111312ecba88c4266882d7e3199d8902b0c57e716de9",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "35f32f313a09e012d9e20c6194c67085c669faf2b220ef4ba87b3ef60efead8c",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：cascade_source_or_control_protection"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "ef7964fa72484ce4c49a78f93b421f93aba16340a2ae5ea94446a526e09cdea1",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "11ced889d70e9eb7aa9fa6db48584a298584cd52ace0b935cfcbc6db6982349d",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "19a322e78bf9f2911016f4fee753017d1fc1af63e1755af0edd650cb889fa096",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "7f137ac0ebdb856d9c44d43e4c7b7ac9fca22d73a6a9cd99ecd3cf3c8b6a19e1",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "0499a36d0a8086ecc4e3460ae5e64378e46dbf408bd22ccf243a94e104d10029",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T033622Z_closed_loop_R85_active_braking_r09_20261016_2d05",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261014T192030Z_closed_loop_R85_f1_f3_dynamic_live_04_5c91",
+      "terminal_utc": "2026-10-14T19:26:55.993498+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "2870a2f84f9d9ce9ef713a1f991c843d357aeec6258e814a0a53ed5c3d9e844b",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "65fdca25c6c18328af7dbe498d55e55bd65b2905b0b36522c9b6df2fb4b1e3ec",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v65_r85_pct_scan_student_candidate/profiles/r85_f1_f3.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "d66120a2525a51f54fce3970f85a2bec8e0f410f078a664b3caebe59f1279cd8",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "4f9d5c7c5fdc3643b799ee66f5f25405147577376aba0b9e352e6cff0ec17c1e",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "225405917146bcf957e1714c11b724f2f1334990f13f72d80f30c771edf1e3fc",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T192030Z_closed_loop_R85_f1_f3_dynamic_live_04_5c91",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "232cbde51bbf9ffb64411e5517b28b6cc7bd36a0367dc4fe466d8a80ffa91f8e",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261014T192030Z_closed_loop_R85_f1_f3_dynamic_live_04_5c91",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "90ea568f0d4caa3b9bf183a9b41787811fd17ebb5a305ac118f86b073652ac14",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261014T192030Z_closed_loop_R85_f1_f3_dynamic_live_04_5c91",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "0594d615b61a8955fed3fe12f45c0064b1d8f3b7cd8430e8280ab6a8ecf768c8",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "25c0ee25221334d3f8deb9e2bb32852d5ce7b90205cc120a86b3e43032b2bfdd",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T192030Z_closed_loop_R85_f1_f3_dynamic_live_04_5c91",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+      "terminal_utc": "2026-10-16T09:02:25.217272+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "2472fb98064118491212d06fc7fc20e259d04a16a252e65c6388a75033a159fa",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pre_zero_integral_unload_r16_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "6464aae7ec6114fce908a457886f1c5b55adbfaa995f9d13c06a34d907946f0e",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pre_zero_integral_unload_r16_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "627dbe0ded111173df9682fd3220149e2d40826daaa95ef9325f7f9f6142836b",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "ca288cadcb10f0a8975f8cb9c34951e401f9754c314f52ab3a333baa95a43b00",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "febd40cc14af20c8407af3cc403b4f1c9ba091b99d103d9baa63486d8b6dc2e5",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "663ee9949d0e4ea1f2360b548a1371784406580425dc77fa60c247c764bf0834",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：pre_zero_integral_unload_timeout"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "c85225936760dc897b585b1207ad8a9dec29da856814684e7e2c9358862ac5a0",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "76fd616409a6ded2a9b861b45d1e412ef1ff052015d536a3c5c13c527c521594",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "558825b3241800a4f374b197f49dc7e6fb1c28eaf6e4b25b03142e0aea72b4a1",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "efe87156ea7d6ad4ac1dd3ff06aedab9b7ba9d3843bad20e43f9dd5c7d356308",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "481e78547ef5ce566b2d14a412a21506233d0cd1840b24e059efd6819a53c45b",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T085935Z_closed_loop_R85_pre_zero_integral_unload_r16_20261016_c1a2",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+      "terminal_utc": "2026-10-15T11:27:40.964925+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "b88d29c11c08c5340f2ba42ca995cc766680d50dc46b05eb42074124182cfbbb",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_recovery1000.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "0d9debce36ff25a5df642948336bf9f6803ebf94dc34234b5e258477088cd9ca",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_observe_recovery1000.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "f514392a931920ac8f3c25c4e456fc1f9dd85794d8f6b37f81cfafccc4ad1d3d",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "e756f004a4754ddf2c421b6f0197bdff5a6731968709a7bf07aba184fa3273b9",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "102ec632464466ad62b724979e88d499ee416876bdaed38113486871b71723b3",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "5e153092c1a12ac309f72e6e0215d1be6cf4859d0a69e8f2ca930ae863e71d7a",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:execution_bridge保护已锁定，停车"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "2908cf65f755440e8e4977234f98fdd67024011b83e9e011d2e3274421c3e77a",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "45ce4aa844f72bc3a59d019b666bac287e122c796bb2e6205239def6881bdcd7",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "a2d85008f4d2247ef82fad1f5de8631c78c28fb28ea30263b3076c060780beba",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "17ce4189a24398ce11728b9ca797e2365a04045eb84f8753924567df0d1fa5ee",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "1ca2f9fd808a7b9dcd905790b8caea7515fd37c46208d1b1376b26798c7134be",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+      "terminal_utc": "2026-10-16T04:04:19.207380+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "abd518fbbeb92fa83a997cec1435dff18a7004ae70ba9e88dd1be7c1e0c5d876",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_active_braking_imu_pairing_v2_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "2520027db9fd40b14b82c3b98614c2d9c271798cfec03f0973bb19e32540f0b3",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_active_braking_imu_pairing_v2_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "d7acdb11669c35f5be7979a3f216a5a4b5b45aa242904775ff2ca4c090f30edd",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "b49a0d076f26bca573db8a86cdd3230ae4b8c285f15744b3288325900edc0f8a",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "b35bebfc09e607001e763f6df5d9cfbeb722cfa94e886ec41002cb3d9a0a9ff3",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "700bbe12deabc7e77e1b58ba2c56efea446ea2a9c6a9a42d43c72ac892a78790",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：explicit_zero_protection_or_stop"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "0d9a2b9d20381db2cd2d68cace408f465e83dcca88d6541110b5b2113ac80aa5",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "4be9e08ac4b29002e4fbc6c172754b45ab2af44dbe81ed52f2c41fa632dd729f",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "c1cee54eea92fa4274adbd5a72184e9b3222ac20803182c045afe220699893fd",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "9101fd3ce78ec7cb0079d9c4371b1154ed6090e153a6a0a8ff7d3980ef501bcb",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "5b45c7e0522d0684e0a072b155d6453b650246cc76b1635777132df49179c3cb",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T040147Z_closed_loop_R85_active_braking_imu_pairing_r10_20261016_c5be",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+      "terminal_utc": "2026-10-16T11:41:02.904974+00:00",
+      "lifecycle": "explicit_failure_or_termination",
+      "source_versions": [
+        {
+          "file": "runtime_manifest.json",
+          "original_sha256": "24a11c4abf2a7433e386d2026d45531fc918801245ea7d72e173108ad4de09ac",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_stance_support_capture_r41_20261016.json"
+        },
+        {
+          "file": "runtime_plan.json",
+          "original_sha256": "4d736b408a357dbd9c46ec0cbbb35b2a040133b5e0ddea19d2bb7f6b81ee3790",
+          "experiment": null,
+          "profile_reference": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_stance_support_capture_r41_20261016.json"
+        },
+        {
+          "file": "input_profile.json",
+          "original_sha256": "6163b31af953ead830d4699fb757ec10281c655de22ba25bc9186e2f3dd30829",
+          "experiment": "r85_f1_f3",
+          "profile_reference": null
+        },
+        {
+          "file": "source_manifest.json",
+          "original_sha256": "6ada462bf4e97a3fbff49a74dc1459865400301a017136dc10992be4ef5494d1",
+          "experiment": null,
+          "profile_reference": null
+        }
+      ],
+      "results": [
+        {
+          "file": "run_result.json",
+          "original_sha256": "9ca5811a2b0a3b8621748efba5a386e4533c513305c63f9fa2d4c992ba485717",
+          "facts": {
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "r85_task_result.json",
+          "original_sha256": "13014b848e9941da1bd3067aaea78cc15c348922448a3198d6abf67b542ededb",
+          "facts": {
+            "schema": "r85_pct_scan_student_task_result/v1",
+            "run_id": "20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "dynamic_pass": false,
+            "full_F3_PASS": false,
+            "original46_PASS": false,
+            "failure_reason": "actual_navigation_failed:主动转向交接失败：pre_zero_integral_unload_timeout"
+          }
+        },
+        {
+          "file": "r85_task_parking_result.json",
+          "original_sha256": "5bc1b3db8a09cc485877c99ff2e2bdb28b64432a3d72c604fb7049fc3e2b9cec",
+          "facts": {
+            "schema": "r85_actual_fixed5_parking_result/v1",
+            "run_id": "20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "state": "failed",
+            "passed": false,
+            "parking_pass": false,
+            "navigation_PASS": false,
+            "full_F3_PASS": false,
+            "failure_reason": "actual_controller_failed"
+          }
+        },
+        {
+          "file": "r85_task_status.json",
+          "original_sha256": "719653855d4464a2dc1b1da8deb3f376a12b4bdb2b09a8e0b6b3206a8bf91121",
+          "facts": {
+            "schema": "r85_actual_task_status/v1",
+            "run_id": "20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "state": "active",
+            "original46_PASS": false
+          }
+        },
+        {
+          "file": "guardian_result.json",
+          "original_sha256": "113727a5d9cb0e5075ce533655f6a96f915c72c646e497668b1d30d3fa97f274",
+          "facts": {
+            "status": "parent_cleanup_verified",
+            "all_owned_groups_absent": true,
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "terminal_facts.json",
+          "original_sha256": "67d57a741631ab2e85b106c97fccadd64c18b0ce33d9e8be7aef6879ef493289",
+          "facts": {
+            "schema": "owned_guardian_terminal_facts/v1",
+            "run_id": "20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "all_owned_groups_absent": true,
+            "observer_error": null,
+            "guardian_status": "parent_cleanup_verified",
+            "original_runner_exitcode": "not_recorded_by_guardian"
+          }
+        },
+        {
+          "file": "summary_closed_loop_navigation.json",
+          "original_sha256": "ae03aa4c3e734008bd9ddddc15acfd09dfe892d0ab543c6cd647891eb2235986",
+          "facts": {
+            "schema": "r85_student_closed_loop_runtime_summary/v1",
+            "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261016T113806Z_closed_loop_R85_stance_support_capture_r41_20261016_0a18",
+            "status": "failed",
+            "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        }
+      ]
+    }
+  ],
+  "scope_has_gaps": true,
+  "private_host_paths_normalized": true,
+  "original_local_files_retained": true,
+  "excluded_private_documents": []
+}

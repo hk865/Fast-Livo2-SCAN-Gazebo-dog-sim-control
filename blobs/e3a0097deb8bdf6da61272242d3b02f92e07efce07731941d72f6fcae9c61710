@@ -1,0 +1,26 @@
+from pathlib import Path
+import json
+import os
+import subprocess
+import time
+
+W = Path(__file__).resolve().parent
+ROOT = W/'candidate_bundle'
+env = dict(os.environ)
+original = Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a/navigation_stack_effective_environment.json')
+env.update({k:v for k,v in json.loads(original.read_text()).items() if isinstance(v,str)})
+env['AMENT_PREFIX_PATH'] = str(ROOT/'traj_utils_ws/install/traj_utils')+':'+env['AMENT_PREFIX_PATH']
+env.update(OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1')
+command = ['/usr/bin/colcon','build','--base-paths','src','--packages-select','scan_planner',
+    '--executor','sequential','--cmake-args','-DBUILD_TESTING=OFF','-DCMAKE_BUILD_TYPE=Release',
+    '-DPython3_EXECUTABLE=/usr/bin/python3','-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
+    '-Dtraj_utils_DIR='+str(ROOT/'traj_utils_ws/install/traj_utils/share/traj_utils/cmake'),
+    '--event-handlers','console_cohesion+']
+begin=time.monotonic()
+process=subprocess.run(command,cwd=ROOT/'scan_ws',env=env,capture_output=True,text=True,timeout=240)
+receipt=dict(command=command,returncode=process.returncode,wall_s=time.monotonic()-begin,
+    stdout=process.stdout,stderr=process.stderr,ROS_started=False,physics_started=False)
+(W/'COLCON_INSTALL_RESULT.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({k:v for k,v in receipt.items()if k not in ['stdout','stderr']}),flush=True)
+if process.returncode:print(process.stdout[-3000:]+process.stderr[-3000:])
+raise SystemExit(process.returncode)

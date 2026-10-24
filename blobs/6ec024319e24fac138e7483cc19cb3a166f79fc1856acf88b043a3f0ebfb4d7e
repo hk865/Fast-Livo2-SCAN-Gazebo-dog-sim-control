@@ -1,0 +1,92 @@
+"""Fresh independent round baseline; retain the original conservative budget math."""
+from pathlib import Path
+import datetime as dt
+import hashlib
+import json
+import os
+import threading
+import time
+
+HERE=Path(__file__).resolve().parent
+
+def observe(run,profile,starting=False,count_files=True,previous=None):
+    from storage_guard import base
+    from r85_session_guard import census,remaining_seconds,work_deadline_withdrawn
+    run=Path(run).resolve();known=census()
+    if known['scan_errors']:raise RuntimeError('Current retained census failed')
+    policy=json.loads(base.POLICY.read_text());binding=json.loads((base.S/'BUDGET_BINDING.json').read_text())
+    if hashlib.sha256(base.POLICY.read_bytes()).hexdigest()!=binding['active_shared_policy_sha256']:
+        raise RuntimeError('Shared storage policy binding changed')
+    if (policy.get('hard_bytes')!=130000000000 or policy.get('single_round_hard_bytes')!=10000000000
+        or policy.get('enforcement_metric')!='current_retained_budget_bytes'
+        or policy.get('historical_counter_can_stop_new_experiment')is not False):
+        raise RuntimeError('Approved storage hard limits changed')
+    expected=dict(max_run_bytes=130000000000,minimum_start_available_bytes=107374182400,minimum_runtime_available_bytes=107374182400)
+    if profile['raw_storage_budget']!=expected:raise RuntimeError('Original storage reserve profile changed')
+    if str(run)not in json.loads(base.SESSION.read_text())['roots']:raise RuntimeError('R85 round is not registered')
+    fs=[base.capacity('/home'),base.capacity('/tmp')]
+    baseline_path=run/'r85_round_storage_baseline.json'
+    if not baseline_path.exists():
+        if not starting:raise RuntimeError('Fresh round baseline missing')
+        row=dict(schema='r85_current_retained_round_baseline/v1',UTC=dt.datetime.now(dt.timezone.utc).isoformat(),
+            current_retained_budget_bytes=known['current_retained_budget_bytes'],
+            totals=dict(allocated_bytes=known['allocated_bytes'],logical_file_and_link_bytes=known['logical_bytes']),
+            filesystem_capacity=[dict(path=x['path'],device=x['device'],available_to_user_bytes=x['available_bytes'])for x in fs],
+            previous_round_evidence_retained=True,no_previous_round_reclassification=True)
+        with baseline_path.open('x')as f:json.dump(row,f,indent=2);f.write('\n')
+        with (run/'r85_round_storage_baseline.sha256').open('x')as f:f.write(hashlib.sha256(baseline_path.read_bytes()).hexdigest()+'\n')
+    if hashlib.sha256(baseline_path.read_bytes()).hexdigest()!=(run/'r85_round_storage_baseline.sha256').read_text().strip():
+        raise RuntimeError('Fresh round budget baseline changed')
+    baseline=json.loads(baseline_path.read_text());wall=time.monotonic()
+    elapsed=wall-previous['monotonic_wall']if previous else 1.
+    retained=known['current_retained_budget_bytes']
+    rate=max(base.MIN_RATE,max(0,retained-previous['current_retained_budget_bytes'])/max(elapsed,1e-6)if previous else 0.)
+    result=dict(schema='r85_current_retained_and_round_storage/v1',monotonic_wall=wall,
+        known_outputs=known,current_retained_budget_bytes=retained,remaining_retained_budget_bytes=130000000000-retained,
+        conservative_session_growth_bytes=retained,filesystems=fs,hard_bytes=130000000000,
+        soft_stop_bytes=base.SOFT_BYTES,predictive_growth_allowance_bytes_per_s=rate,
+        historical_counter_used_for_capacity=False,budget_basis='current_retained_experiment_data',
+        round_baseline=str(baseline_path),stop_reasons=[],no_deletion=True)
+    engineering=base.usage([HERE])
+    combined=base.usage([HERE,run])
+    round_row=base.round_evaluate(result,baseline,base.usage([run]),engineering,combined,
+        previous.get('R77_round_budget')if previous else None)
+    result['R77_round_budget']=round_row;result['R85_round_budget']=round_row
+    reasons=result['stop_reasons']
+    if retained+rate*base.GRACE_S+base.ATOMIC_BYTES>=base.SOFT_BYTES:reasons.append('projected_retained_capacity_stop')
+    if round_row['predictive_soft_stop']:reasons.append('fresh_round_predictive_stop')
+    if round_row['hard_stop']:reasons.append('fresh_round_hard_stop')
+    for x in fs:
+        if x['available_bytes']<policy['filesystem_minimums'][x['path']]:reasons.append('filesystem_reserve_'+x['path'])
+    # Leave owned drain time before the explicit hard deadline.
+    if not work_deadline_withdrawn(profile) and remaining_seconds(profile)<=base.GRACE_S:reasons.append('overnight_deadline_drain')
+    if reasons:raise base.StorageStop(result)
+    return result
+
+class Watchdog:
+    def __init__(self,run,profile,stop_runner):
+        self.run=Path(run);self.profile=profile;self.stop_runner=stop_runner
+        self.done=threading.Event();self.last=None;self.error=None;self.thread=None
+    def start(self):
+        self.last=observe(self.run,self.profile,starting=True)
+        self.thread=threading.Thread(target=self._loop,daemon=True);self.thread.start();return self
+    def _loop(self):
+        from storage_guard import base
+        try:
+            with (self.run/'r85_storage_observations.jsonl').open('x',buffering=1)as stream:
+                stream.write(json.dumps(self.last)+'\n')
+                while not self.done.wait(1.):
+                    self.last=observe(self.run,self.profile,previous=self.last)
+                    stream.write(json.dumps(self.last)+'\n')
+        except Exception as e:
+            self.error=type(e).__name__+': '+str(e)
+            row=e.observation if isinstance(e,base.StorageStop)else dict(error=self.error)
+            row.update(schema='r85_storage_stop/v1',monotonic_wall=time.monotonic(),
+                stop_only_current_owned_runner=True,no_old_file_deleted=True)
+            with (self.run/'r85_storage_stop.json').open('x')as out:json.dump(row,out,indent=2);out.write('\n')
+            self.stop_runner()
+    def close(self):
+        self.done.set()
+        if self.thread:self.thread.join(timeout=3.)
+        return self.last
+

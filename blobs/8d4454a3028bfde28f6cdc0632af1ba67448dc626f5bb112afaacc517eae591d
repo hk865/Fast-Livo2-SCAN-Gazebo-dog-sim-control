@@ -1,0 +1,84 @@
+"""Compile-only verification using the existing full/short fit probe."""
+from pathlib import Path
+import datetime as dt
+import hashlib
+import json
+import os
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parent
+OLD = ROOT.parent/'r85_fit_release_20261014'
+BUNDLE = ROOT/'candidate_bundle'
+SCAN = BUNDLE/'scan_ws'
+TRAJ = BUNDLE/'traj_utils_ws'
+ENV = dict(os.environ)
+ENV.update({k:v for k,v in json.loads(Path('/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T175827Z_closed_loop_R85_f1_f3_dynamic_live_02_5b9a/navigation_stack_effective_environment.json').read_text()).items() if isinstance(v,str)})
+ENV.update(OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1')
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def save(name, value):
+    (ROOT/name).write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+
+def run(command, timeout=60):
+    start=time.monotonic()
+    p=subprocess.run(command, env=ENV, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+    row=dict(command=command, returncode=p.returncode, wall_s=time.monotonic()-start,
+             stdout=p.stdout, stderr=p.stderr)
+    if p.returncode:
+        raise RuntimeError(json.dumps(row))
+    return row
+
+def main():
+    exe=SCAN/'install/scan_planner/lib/scan_planner/scan_planner_node'
+    build_exe=SCAN/'build/scan_planner/scan_planner_node'
+    archive=TRAJ/'install/traj_utils/lib/libtraj_utils.a'
+    assert sha(archive)==sha(OLD/'candidate_bundle/traj_utils_ws/install/traj_utils/lib/libtraj_utils.a')
+    for name in ['full_inputs.txt','full_inputs.json','short_inputs.txt','short_inputs.json','fit_benchmark.cpp']:
+        assert sha(ROOT/name)==sha(OLD/name)
+    compile_row=run(['/usr/bin/c++','-std=c++17','-O3','-DNDEBUG',
+        '-I/usr/include/eigen3','-I'+str(TRAJ/'src/traj_utils/include'),
+        str(ROOT/'fit_benchmark.cpp'),str(archive),'-fopenmp','-o',str(ROOT/'fit_candidate_archive')])
+    rows=[]
+    for case in ['short','full']:
+        out=ROOT/(case+'_coefficients.txt')
+        row=run([str(ROOT/'fit_candidate_archive'),str(ROOT/(case+'_inputs.txt')),str(out)])
+        parsed=[json.loads(line) for line in row['stdout'].splitlines() if line.startswith('{')]
+        completed=parsed[-1]
+        assert completed['phase']=='fit_complete' and completed['finite'] is True
+        assert parsed[0]['input_waypoints']==(337 if case=='full' else 17)
+        assert completed['max_waypoint_error_m']<1e-10
+        assert out.read_bytes()==(OLD/('candidate_archive_'+case+'_coefficients.txt')).read_bytes()
+        row.update(case=case, input_sha256=sha(ROOT/(case+'_inputs.txt')),
+            coefficients_sha256=sha(out), exact_previous_unmodified_math_coefficients=True,
+            result=completed)
+        rows.append(row)
+    save('FRESH_ARCHIVE_BENCHMARK.json',dict(schema='r85_original_fit_compile_only/v1',
+        UTC=dt.datetime.now(dt.timezone.utc).isoformat(), compile=compile_row, cases=rows,
+        archive_sha256=sha(archive), source_math_changed=False, points_changed=False,
+        ROS_started=False, physics_started=False, runtime_acceptance_established=False))
+    before=run(['/usr/bin/readelf','-d',str(build_exe)])
+    after=run(['/usr/bin/readelf','-d',str(exe)])
+    install_script=SCAN/'build/scan_planner/cmake_install.cmake'
+    assert 'RPATH_CHANGE' in install_script.read_text()
+    save('INSTALL_ELF_TRANSFORMATION.json',dict(schema='r85_cmake_install_rpath_transform/v1',
+        build_exe=str(build_exe),build_sha256=sha(build_exe),installed_exe=str(exe),
+        installed_sha256=sha(exe),same_source_build=True,
+        transformation='CMake install RPATH_CHANGE removes build-only RPATH',
+        cmake_install_script=str(install_script),cmake_install_sha256=sha(install_script),
+        build_readelf=before,install_readelf=after))
+    ld=run(['/usr/bin/ldd',str(exe)])
+    assert 'not found' not in ld['stdout']+ld['stderr']
+    save('LD_BINDING_RESULT.json',dict(schema='r85_actual_installed_ELF_ldd/v1',
+        executable=str(exe),executable_sha256=sha(exe),all_resolved=True,
+        environment_source='existing run navigation_stack_effective_environment.json',
+        ldd=ld,ROS_started=False,physics_started=False,
+        limitation='Host library resolution only; actual-process loaded binary witness remains required.'))
+    print(json.dumps(dict(success=True, installed_sha256=sha(exe),archive_sha256=sha(archive),
+        full_fit_s=rows[1]['result']['fit_wall_s'], full_waypoint_error_m=rows[1]['result']['max_waypoint_error_m'],
+        full_coefficients_bitwise_equal=True,ldd_missing=0)))
+
+if __name__=='__main__':
+    main()
