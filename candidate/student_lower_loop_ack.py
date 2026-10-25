@@ -14,7 +14,7 @@ import student_xy_stop_takeover_ack as xy_stop_ack
 import r109_speed_tiers as speed_tiers
 
 SCHEMA = 'r85_student_lower_loop_ack/v1'
-CONTRACT_SHA = '058db968f5ea471ffcc7b8bd132ab453f36c2a4911a1036d85e0db628a1f3b78'
+CONTRACT_SHA = 'd75ad63f9446a354096e12774f741cd382e1955d2f25009a7cc524c74f6b18e6'
 EXPORT_SHA = 'd8b51361ada74a80beb5e64f892447ea406d136be4c76a6ab15bae2d9b6c6185'
 CHECKPOINT_SHA = '7b59b8c7eafc9ffbc2dc32aaa2df3dadec3269d039338e4f93217bc73af66fd9'
 PID_SCHEMA = 'student_velocity_pid_motion_epoch_zero_reset/v2'

@@ -14,7 +14,7 @@ PROFILE_KEY='r85_'+KEY
 KIND='accepted_pre_zero_event_yaw_measurement_P_retention_v1'
 CONFIG=dict(enabled=True,kind=KIND)
 BASE_ACK_CONFIG=dict(enabled=True,schema='r85_student_lower_loop_ack/v1',
-    student_contract_sha256='058db968f5ea471ffcc7b8bd132ab453f36c2a4911a1036d85e0db628a1f3b78')
+    student_contract_sha256='d75ad63f9446a354096e12774f741cd382e1955d2f25009a7cc524c74f6b18e6')
 MEASUREMENT_ACK_CONFIG=dict(BASE_ACK_CONFIG,measurement_p_retention_required=True)
 SCHEMA='student_yaw_measurement_P_retention/v1'
 SOURCE_SHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()

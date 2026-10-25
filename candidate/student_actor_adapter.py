@@ -180,7 +180,7 @@ def baseline_student_options(profile):
         if option is not None and not(isinstance(option,dict)and set(option)=={'enabled'}and option['enabled']is False):
             raise ValueError('R73 base Student PID requires disabled '+key)
     ack=profile.get('cascade',{}).get('r85_student_lower_loop_ack')
-    base=dict(enabled=True,schema='r85_student_lower_loop_ack/v1',student_contract_sha256='058db968f5ea471ffcc7b8bd132ab453f36c2a4911a1036d85e0db628a1f3b78')
+    base=dict(enabled=True,schema='r85_student_lower_loop_ack/v1',student_contract_sha256='d75ad63f9446a354096e12774f741cd382e1955d2f25009a7cc524c74f6b18e6')
     if not isinstance(ack,dict):raise ValueError('R73 requires actual base Student ACK ledger')
     ack,speed_tier=speed_tiers.split_ack(ack)
     speed_tiers.configuration(profile)
