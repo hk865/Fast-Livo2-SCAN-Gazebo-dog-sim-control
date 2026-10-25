@@ -366,7 +366,7 @@ def prepare(run,args):
             R33_full_source_rebuilt_timestamp_codec=False,SLAM_private_full_source_build=True,
             SLAM_runtime_acceptance_inherited=False,
             slam_native_transport_variant=dict(schema='serial_imu_priority_transport_selection/v1',
-                selection=dict(PRIVATE_SLAM[0]),native_source_commit=PRIVATE_SLAM[1]['candidate_commit'],
+                selection=dict(PRIVATE_SLAM[0]),native_source_commit=(PRIVATE_SLAM[1]['original_native_commit'] if PRIVATE_SLAM[1].get('schema')=='published_formal22_native571_build/v1' else PRIVATE_SLAM[1]['candidate_commit']),
                 environment_flag='FASTLIVO_SERIAL_IMU_PRIORITY',environment_value='1',mode='serial',
                 build_manifest_is_not_runtime_PASS=True,actual_loaded_witness_required=True,
                 actual_group_INIT_required=True,new_source_root=True))
