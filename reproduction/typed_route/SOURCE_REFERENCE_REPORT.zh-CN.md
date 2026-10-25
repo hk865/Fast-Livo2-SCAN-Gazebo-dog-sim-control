@@ -1,0 +1,5 @@
+本次修复实际typed历史文件引用闭包：5个路径叶（4个唯一JSON）指向新deps内原SHA字节；另newstudent_pid_contract仅迁移两PID历史证据路径，参数与原证据SHA不变。原公开脱敏文件保留，route/PID精确原件另存exact_source_inputs。pid_scope.runtime_files唯一旧SCAN实际ELF项改取现有scan_contract(profile)已验证workspace，不复制旧ELF。
+
+实际03冻结profile复制到/tmp，仅更新typed路径/SHA；同03 environment调用真实r85_source_files成功列40个存在文件。随后真实runtime_files列1471项，唯一390个/opt历史别名缺失；按newdeps映射377存在、13缺失，均来自旧R33_STARTUP_PREFLIGHT verified_inputs证据列表的原安装/构建路径。完整清单已交root，未自行改preflight合同或补旧运行ELF，runtime闭包仍不通过。
+
+原几何证书不绑定typed历史路径/typed文档SHA，所有四组坐标、变换、数值、geometry sources与证书8608a95b原样，无需另跑几何。原FREEZE/静态结果保留，新manifest单独记录本次增量。7个引用对应6个唯一原JSON，敏感key/PEM/token模式只读扫描无发现；本机项目历史路径保留，不执行其中历史引用。未运行完整prepare、ROS、Gazebo或Actor。

@@ -177,8 +177,17 @@ def runtime_files(profile=None):
     from corridor_preflight import evidence_files
     from geometry_archive import geometry_helper_files
     preflight+=geometry_helper_files(HERE)
-    preflight+=evidence_files(HERE)
-    from scan_workspace import evidence_files as scan_evidence_files
+    # The published native571 package has a fresh complete current-source chain.
+    # Keep the old R33 document as history; its V32/R73 ELF list is not a
+    # current R85 execution dependency. All current geometry, native and SCAN
+    # evidence is still enumerated below. Other entry modes retain the list.
+    from slam_workspace import PRIVATE as native_selection
+    published_r85=(native_selection is not None
+        and native_selection[1].get('schema')=='published_formal22_native571_build/v1'
+        and r85_profile_identity(profile or {}) is not None)
+    if published_r85:preflight.append(HERE/'R33_STARTUP_PREFLIGHT.json')
+    else:preflight+=evidence_files(HERE)
+    from scan_workspace import evidence_files as scan_evidence_files, scan_contract
     preflight+=scan_evidence_files(profile)
     preflight+=sorted((NAV/'evidence_runtime_v32').glob('*.py'))
     preflight+=sorted((NAV/'evidence_runtime_v32').glob('*.json'))
@@ -191,7 +200,7 @@ def runtime_files(profile=None):
         DEMO/'camera_mode/slam/fastlivo.yaml',DEMO/'camera_mode/slam/camera.yaml',
         SLAM_WS/'install/fast_livo2_core/lib/libfast_livo2_core.so',
         SLAM_WS/'install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping',
-        DEMO/'navigation/ros2_ws/install/scan_planner/lib/scan_planner/scan_planner_node',
+        scan_contract(profile)[0]/'install/scan_planner/lib/scan_planner/scan_planner_node',
         ROOT/'policy/worker.py',ROOT/'policy/observation.py',ROOT/'policy/contract.json',
         ROOT/'simulation/prepare.py',ROOT/'simulation/teacher_actuator.cpp',ROOT/'simulation/build/libteacher_actuator.so',
         ROOT/'scripts/capture.py',ROOT/'runs/acceptance.json',
