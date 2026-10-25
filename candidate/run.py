@@ -40,7 +40,7 @@ DEMO=ROOT.parent
 SYSTEM_PYTHON=Path('/usr/bin/python3')
 DEFAULT_CPU_PYTHON=Path('/home/hyh001/IsaacLab/_isaac_sim/kit/python/bin/python3')
 ROS_BASE=Path('/opt/ros/jazzy/setup.bash')
-SLAM_UNDERLAY=DEMO/'slam/ros2_ws/install/setup.bash'
+SLAM_UNDERLAY=_package_paths.RELEASE/'native/install/local_setup.bash'
 from slam_workspace import SLAM_WORKSPACE, SLAM_SOURCE_ROOT, PRIVATE as PRIVATE_SLAM, verify_slam_workspace
 from ipc_fault_window import CONTRACT as IPC_FAULT_WINDOW_CONTRACT
 from ipc_request_window import CONTRACT as REQUEST_SUBSTAGE_CONTRACT
