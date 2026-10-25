@@ -45,7 +45,7 @@ from slam_workspace import SLAM_WORKSPACE, SLAM_SOURCE_ROOT, PRIVATE as PRIVATE_
 from ipc_fault_window import CONTRACT as IPC_FAULT_WINDOW_CONTRACT
 from ipc_request_window import CONTRACT as REQUEST_SUBSTAGE_CONTRACT
 SLAM_OVERLAY=SLAM_WORKSPACE/'install/local_setup.bash'
-SCAN_OVERLAY=DEMO/'navigation/ros2_ws/install/setup.bash'
+SCAN_OVERLAY=_package_paths.RELEASE/'scan/install/local_setup.bash'
 BRIDGE=Path('/opt/ros/jazzy/lib/ros_gz_bridge/parameter_bridge')
 CHECKPOINT=Path('/home/hyh001/projects/1.Project/RL_for_unitree/logs/rsl_rl/rl_unitree_go2_aer_height_distribution/2026-10-01_17-23-23_STAGE6-GO2-AER-HEIGHT-DISTRIBUTION-015-PHASE-A-FORMAL-4096ENV-3000ITER-SEED42/model_1000.pt')
 MODEL_SHA='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
