@@ -1,0 +1,182 @@
+--- actual/src/scan_replan_fsm.cpp
++++ protocol/src/scan_replan_fsm.cpp
+@@ -218,7 +218,11 @@
+     bspline_pub_ = node_->create_publisher<scan_planner_msgs::msg::Bspline>("planning/bspline", 10);
+     trajectory_metadata_pub_ = node_->create_publisher<std_msgs::msg::String>("planning/trajectory_metadata", 10);
+     if (navi_mode_ == NAVI_MODE::REFERENCE_PATH)
++    {
+       reference_attempt_pub_ = node_->create_publisher<std_msgs::msg::String>("planning/reference_attempt", 10);
++      route_definition_pub_ = node_->create_publisher<std_msgs::msg::String>(
++          "planning/route_definition", rclcpp::QoS(1).reliable().transient_local());
++    }
+     if (r74_protocol_observation_enabled_) r74InitializeObservation();
+     r107_transport::probe().configure(reference_run_id_, reference_epoch_,
+         child_odometry_ack_identity_.start_ticks);
+@@ -572,6 +576,7 @@
+     reference_original_duration_ = planner_manager_->global_data_.global_duration_;
+     reference_content_json_ = reference_content_json(*msg, body_height_, planner_manager_->global_data_.global_traj_);
+     ++reference_revision_;
++    publishRouteDefinition();
+     reference_ready_ = true;
+     if (reference_protocol_ack_enabled_)
+       reference_protocol_publication_.commit(reference_run_id_, reference_epoch_, localization_generation_,
+@@ -1304,7 +1309,7 @@
+             << ",\"qos_reliability\":" << int(qos.reliability)
+             << ",\"qos_durability\":" << int(qos.durability) << ",\"qos_depth\":" << qos.depth << '}';
+       };
+-      add(reference_attempt_pub_); add(bspline_pub_); add(trajectory_metadata_pub_);
++      add(reference_attempt_pub_); add(bspline_pub_); add(trajectory_metadata_pub_); add(route_definition_pub_);
+       endpoints << ']'; r74_observation_->endpoints=endpoints.str();
+     } catch (...) {
+       // Diagnostic construction is never a planner/control failure.
+@@ -1402,6 +1407,8 @@
+         << ",\"string_receipt\":" << o.next_fingerprint(first)
+         << ",\"failed_target\":" << ((first ? o.first_failure : o.last_failure).empty() ? "null" : (first ? o.first_failure : o.last_failure))
+         << ",\"counts\":{\"strings_seen\":" << o.strings_seen << ",\"checksums\":" << o.checksums
++        << ",\"route_definitions_published\":" << route_definitions_published_
++        << ",\"route_definition_last_bytes\":" << route_definition_last_bytes_
+         << ",\"checksum_bytes\":" << o.checksum_bytes << ",\"checksum_omitted\":" << o.checksum_omitted
+         << ",\"failed_targets\":" << o.failed_targets << ",\"target_omitted\":" << o.target_omitted
+         << ",\"observation_errors\":" << o.errors
+@@ -1419,19 +1426,46 @@
+     }
+   }
+ 
++  void SCANReplanFSM::publishRouteDefinition()
++  {
++    // One publication per real committed revision. Transient-local QoS supplies
++    // the current definition to late subscribers; candidates carry only IDs.
++    std::ostringstream out;
++    out << std::setprecision(17)
++        << "{\"schema\":\"scan_route_definition/v1\",\"run_id\":"
++        << r74_observation::quoted(reference_run_id_)
++        << ",\"reference_epoch\":" << reference_epoch_
++        << ",\"localization_generation\":" << localization_generation_
++        << ",\"planner_process_id\":" << getpid()
++        << ",\"reference_revision_scope\":\"planner_process_lifetime_requires_outer_epoch\","
++        << "\"committed_reference_revision\":" << reference_revision_
++        << ",\"reference_stamp\":[" << reference_stamp_.sec << ',' << reference_stamp_.nanosec
++        << "],\"route_id\":" << (int64_t(reference_stamp_.sec) * 1000000000LL + reference_stamp_.nanosec)
++        << ",\"route_version\":" << reference_revision_
++        << ",\"reference_content\":" << reference_content_json_
++        << ",\"reference_original_duration\":" << reference_original_duration_
++        << ",\"body_goal\":[" << reference_body_goal_.x() << ',' << reference_body_goal_.y()
++        << ',' << reference_body_goal_.z() << "]}";
++    std_msgs::msg::String definition; definition.data = out.str();
++    route_definition_pub_->publish(definition);
++    ++route_definitions_published_;
++    route_definition_last_bytes_ = definition.data.size();
++  }
++
+   void SCANReplanFSM::publishReferenceAttempt(bool plan_success, const std::string &reason)
+   {
+     if (navi_mode_ != NAVI_MODE::REFERENCE_PATH || !reference_ready_) return;
+     std::ostringstream out;
+     out << std::setprecision(17)
+-        << "{\"schema\":2,\"event\":\"attempt_result\",\"publication_role\":\"candidate_only\","
++        << "{\"schema\":3,\"event\":\"attempt_result\",\"publication_role\":\"candidate_only\","
+         << "\"actual_active\":false,\"outer_admission_ack_received\":false,"
+         << "\"run_id\":\"" << reference_run_id_ << "\",\"reference_epoch\":" << reference_epoch_
+         << ",\"localization_generation\":" << localization_generation_ << ",\"planner_process_id\":" << getpid() << ','
+         << "\"reference_revision_scope\":\"planner_process_lifetime_requires_outer_epoch\","
+         << "\"committed_reference_revision\":" << reference_revision_
+         << ",\"reference_stamp\":[" << reference_stamp_.sec << ',' << reference_stamp_.nanosec
+-        << "],\"reference_content\":" << reference_content_json_
++        << "],\"route_id\":" << (int64_t(reference_stamp_.sec) * 1000000000LL + reference_stamp_.nanosec)
++        << ",\"route_version\":" << reference_revision_
+         << ",\"attempt\":{\"id\":" << candidate_attempt_id_ << ",\"origin\":\"" << attempt_origin_
+         << "\",\"use_poly_init\":" << (attempt_use_poly_init_ ? "true" : "false")
+         << ",\"random_poly\":" << (attempt_random_poly_ ? "true" : "false")
+@@ -1467,22 +1501,23 @@
+   void SCANReplanFSM::publishTrajectoryMetadata(const scan_planner_msgs::msg::Bspline &trajectory, bool emergency_stop)
+   {
+     if (navi_mode_ != NAVI_MODE::REFERENCE_PATH || (!reference_ready_ && !emergency_stop)) return;
+-    // Full payload association avoids relying on start_time (the freeze clock
+-    // moves it), a reused trajectory id, or a geometry-only goal heuristic.
++    // Route scope plus trajectory id/start_time associates the unchanged
++    // Bspline publication without duplicating its local geometry in JSON.
+     std::ostringstream out;
+     out << std::setprecision(17);
+     auto vector = [&out](const Eigen::Vector3d &v) {
+       out << '[' << v.x() << ',' << v.y() << ',' << v.z() << ']';
+     };
+-    out << "{\"schema\":2,\"run_id\":\"" << reference_run_id_
++    out << "{\"schema\":3,\"run_id\":\"" << reference_run_id_
+         << "\",\"reference_epoch\":" << reference_epoch_ << ",\"localization_generation\":" << localization_generation_
+         << ",\"planner_process_id\":" << getpid() << ",\"reference_revision_scope\":\"planner_process_lifetime_requires_outer_epoch\","
+         << "\"publication_role\":\"candidate_only\",\"actual_active\":false,"
+         << "\"outer_admission_ack_received\":false,\"candidate_kind\":\""
+         << (emergency_stop ? "emergency_stop" : "motion") << "\",\"reference_ready\":"
+         << (reference_ready_ ? "true" : "false") << ",\"committed_reference_revision\":"
+-        << reference_revision_ << ",\"reference_content\":"
+-        << (reference_content_json_.empty() ? "null" : reference_content_json_)
++        << reference_revision_
++        << ",\"route_id\":" << (int64_t(reference_stamp_.sec) * 1000000000LL + reference_stamp_.nanosec)
++        << ",\"route_version\":" << reference_revision_
+         << ",\"reference_original_duration\":" << reference_original_duration_
+         << ",\"global_endpoint_local_grid\":{\"occupancy\":" << global_endpoint_local_occupancy_
+         << ",\"scope\":\"" << (external_reference_protocol_ ? "diagnostic_only_global_reference" : "endpoint_gate") << "\"}"
+@@ -1495,8 +1530,7 @@
+     if (reference_ready_)
+     {
+       out << ",\"global_state\":{\"duration\":" << planner_manager_->global_data_.global_duration_
+-          << ",\"progress\":" << planner_manager_->global_data_.last_progress_time_
+-          << ",\"current_curve\":" << reference_curve_json(planner_manager_->global_data_.global_traj_) << '}';
++          << ",\"progress\":" << planner_manager_->global_data_.last_progress_time_ << '}';
+     }
+     out << ",\"local_target\":{\"valid\":" << (emergency_stop ? "false" : "true")
+         << ",\"occupancy\":" << (emergency_stop ? -1 : local_target_occupancy_)
+@@ -1513,24 +1547,9 @@
+     out << ",\"used_velocity\":"; vector(emergency_stop ? Eigen::Vector3d::Zero() : start_vel_);
+     out << ",\"used_acceleration\":"; vector(emergency_stop ? Eigen::Vector3d::Zero() : start_acc_);
+     out << ",\"frozen_reference_boundary\":" << (go2_execution_frozen_ ? "true" : "false")
+-        << "},\"trajectory\":{\"order\":" << trajectory.order << ",\"traj_id\":" << trajectory.traj_id
+-        << ",\"start_time\":[" << trajectory.start_time.sec << ',' << trajectory.start_time.nanosec
+-        << "],\"pos_pts\":[";
+-    for (size_t i=0; i<trajectory.pos_pts.size(); ++i) {
+-      if (i) out << ',';
+-      const auto &p = trajectory.pos_pts[i]; out << '[' << p.x << ',' << p.y << ',' << p.z << ']';
+-    }
+-    out << "],\"knots\":[";
+-    for (size_t i=0; i<trajectory.knots.size(); ++i) {
+-      if (i) out << ',';
+-      out << trajectory.knots[i];
+-    }
+-    out << "],\"yaw_pts\":[";
+-    for (size_t i = 0; i < trajectory.yaw_pts.size(); ++i) {
+-      if (i) out << ',';
+-      out << trajectory.yaw_pts[i];
+-    }
+-    out << "],\"yaw_dt\":" << trajectory.yaw_dt << "}}";
++        << "},\"trajectory_id\":" << trajectory.traj_id
++        << ",\"trajectory_start_time\":[" << trajectory.start_time.sec << ','
++        << trajectory.start_time.nanosec << "]}";
+     std_msgs::msg::String metadata; metadata.data = out.str();
+     {
+       r107_transport::Publication observation(4, 3, reference_epoch_, localization_generation_,
+--- actual/include/plan_manage/scan_replan_fsm.h
++++ protocol/include/plan_manage/scan_replan_fsm.h
+@@ -107,6 +107,7 @@
+     uint64_t reference_revision_{0};
+     uint64_t candidate_attempt_id_{0};
+     std::string reference_content_json_;
++    uint64_t route_definitions_published_{0}, route_definition_last_bytes_{0};
+     double reference_original_duration_{0.0};
+     double attempt_progress_before_{0.0}, attempt_progress_after_{0.0};
+     double local_target_time_{0.0};
+@@ -134,6 +135,7 @@
+     rclcpp::Publisher<scan_planner_msgs::msg::Bspline>::SharedPtr bspline_pub_;
+     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr trajectory_metadata_pub_;
+     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr reference_attempt_pub_;
++    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr route_definition_pub_;
+     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr child_odometry_ack_pub_;
+     rclcpp::Publisher<scan_planner_msgs::msg::DataDisp>::SharedPtr data_disp_pub_;
+     rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr self_inflation_pub_;
+@@ -173,6 +175,7 @@
+     double estimateYawFromSegment(const Eigen::Vector3d &from, const Eigen::Vector3d &to) const;
+     void updateLocalTrajTimeFreeze();
+     void publishTrajectoryMetadata(const scan_planner_msgs::msg::Bspline &trajectory, bool emergency_stop = false);
++    void publishRouteDefinition();
+     void publishReferenceAttempt(bool plan_success, const std::string &reason = "optimizer_return");
+     bool mode3ReferenceUsable() const;
+     void invalidateReference(const char *reason);

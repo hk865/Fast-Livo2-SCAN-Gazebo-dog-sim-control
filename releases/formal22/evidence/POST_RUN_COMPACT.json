@@ -1,0 +1,552 @@
+{
+  "schema": "formal22_selected_current_F1_F3_complete_task/v1",
+  "UTC": "2026-10-25T04:34:45.624705+00:00",
+  "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+  "implementation_commit": "0f35662822925a68de9a659558cc5073845b5b87",
+  "deployment_commit": "536c9d3f4773ef43edef48992c598ccf2fc3f021",
+  "actual_loading_checks": 91,
+  "task_result": {
+    "schema": "r85_pct_scan_student_task_result/v1",
+    "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+    "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+    "kind": "f1_to_f3",
+    "state": "succeeded",
+    "passed": true,
+    "failure_reason": null,
+    "parking_pass": true,
+    "dynamic_required": true,
+    "dynamic_pass": true,
+    "short_chain_validation_only": false,
+    "full_F3_PASS": true,
+    "original46_PASS": false,
+    "navigation_ground_truth_used": false,
+    "simulation_only": true,
+    "completed_sim_ns": 350930000000,
+    "parking_result": {
+      "schema": "r85_actual_fixed5_parking_result/v1",
+      "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+      "kind": "f1_to_f3",
+      "state": "passed",
+      "passed": true,
+      "parking_pass": true,
+      "actual_first_T0_ns": 344880000000,
+      "fixed_window_end_ns": 349880000000,
+      "formal_window_never_reset": true,
+      "audit_attempted": true,
+      "failure_reason": null,
+      "reason": null,
+      "receipt": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "binding_verified": true,
+        "passed": true,
+        "checks": {
+          "no_protection": {
+            "status": "passed",
+            "passed": true
+          },
+          "native_motion_limits": {
+            "status": "passed",
+            "passed": true
+          },
+          "first_five_seconds": {
+            "status": "passed",
+            "passed": true
+          },
+          "actual_slam_hold_drift": {
+            "status": "passed",
+            "passed": true
+          },
+          "continuous_teacher_control": {
+            "status": "passed",
+            "passed": true
+          },
+          "source_freshness": {
+            "status": "passed",
+            "passed": true
+          }
+        },
+        "source_evidence_file": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_fixed5_parking_evidence.json",
+        "source_evidence_sha256": "95ef67868ca1154c7e81a331bd6a1c742b93306a0ddc6dd7e0573802852d2220",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "start_stamp_ns": 344880000000,
+        "end_stamp_ns": 349880000000,
+        "metrics": {
+          "slam_xy_drift_max_m": 0.044372906688080894,
+          "slam_yaw_drift_max_rad": 0.008698088892344469,
+          "native_planar_speed_max_mps": 0.07303317277789462,
+          "native_wz_max_radps": 0.03748285417518564,
+          "native_yaw_dot_max_radps": 0.03487053528220382
+        },
+        "parking_contract": "ordinary_zero_ack_fixed5",
+        "schema": "r85_reused_original_fixed5_verifier_receipt/v1",
+        "original_helper_schema": "teacher_mission46_final_parking/v1",
+        "r85_provenance": "r85_single_task_original_fixed5_verifier_reuse",
+        "historical_helper_name_is_not_original46_completion": true
+      },
+      "provenance": "r85_single_task_original_fixed5_verifier_reuse",
+      "compatibility_filenames_are_not_mission46": true,
+      "original46_completion_claimed": false,
+      "full_F3_PASS": false,
+      "navigation_PASS": false,
+      "navigation_ground_truth_used": false,
+      "parking_contract": "ordinary_zero_ack_fixed5",
+      "physical_thresholds_changed": false,
+      "actor_kind": "student",
+      "student_export_sha256": "d8b51361ada74a80beb5e64f892447ea406d136be4c76a6ab15bae2d9b6c6185"
+    },
+    "dynamic_result": {
+      "schema": "r85_dynamic_task_result/v1",
+      "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+      "passed": true,
+      "state": "passed",
+      "failure_reason": null,
+      "navigation_PASS": false,
+      "full_F3_PASS": false,
+      "event_lifetime_contract": "single_world_event_pre_stop_nav_segment/v2",
+      "event_window": {
+        "schema": "single_world_event_pre_stop_nav_segment/v2",
+        "binding": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "reference_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1:epoch:2:generation:1",
+          "reference_sha256": "da1c636df026a74aeadb92b772f417753e7f5fbb74df7e1cbf80ac9f67d701d0",
+          "epoch": 2,
+          "localization_generation": 1,
+          "source_route_sha256": "35b16952a9d4d1854dabfa975d817cdcfcc03d9fb7b3fe8f61aeaa0ee9d4b152"
+        },
+        "started_sim_ns": 170255000000,
+        "completed_sim_ns": 207225000000,
+        "journal_last_sequence": 4461,
+        "stop_event": {
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "waypoint_index": 0,
+          "sequence": 2893,
+          "clock_ns": 177565000000,
+          "cloud_source_ns": 177510000000,
+          "cloud_sha256": "67e30dd3a32b92db4a7975b81a843f023611d7724da000b21ab91e24a26379ab",
+          "trajectory_id": 97,
+          "reference_stamp": [
+            11,
+            870000000
+          ],
+          "stop_count": 1,
+          "schema": "teacher_dynamic_stop_event/v1"
+        },
+        "resume_sim_ns": 203625000000,
+        "recovery_origin_source_ns": 203645000000,
+        "recovery_end_source_ns": 207175000000,
+        "recovery_progress_m": 0.5939086050410315,
+        "independent_park_source_ns": 207210000000,
+        "clear_response_sim_ns": 207140000000,
+        "business_completion_only": true,
+        "physical_verified": false,
+        "dynamic_PASS": false,
+        "navigation_binding": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "reference_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1:epoch:2:generation:1",
+          "reference_sha256": "da1c636df026a74aeadb92b772f417753e7f5fbb74df7e1cbf80ac9f67d701d0",
+          "epoch": 2,
+          "localization_generation": 1,
+          "source_route_sha256": "35b16952a9d4d1854dabfa975d817cdcfcc03d9fb7b3fe8f61aeaa0ee9d4b152"
+        },
+        "navigation_boundary_sequences": []
+      },
+      "whole_task_single_scope_claimed": false,
+      "original_nine_gate_verification": false,
+      "explicit_navigation_segment_identity": true,
+      "original_numeric_physical_stop_recovery_predicates": true,
+      "verification": {
+        "schema": "r85_dynamic_obstacle_verification/v1",
+        "allowed": true,
+        "passed": true,
+        "state": "passed",
+        "checks": {
+          "full_task_and_source_bindings": true,
+          "actual_slam_trigger": {
+            "remaining_arclength_m": 2.6913845060315786,
+            "path_distance_m": 0.07563993061784827,
+            "obstacle_arc_m": 19.09697788303688
+          },
+          "service_ack_and_independent_motion": true,
+          "native_cloud_guard_stop_token_and_recovery": {
+            "event": {
+              "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+              "waypoint_index": 0,
+              "sequence": 2893,
+              "clock_ns": 177565000000,
+              "cloud_source_ns": 177510000000,
+              "cloud_sha256": "67e30dd3a32b92db4a7975b81a843f023611d7724da000b21ab91e24a26379ab",
+              "trajectory_id": 97,
+              "reference_stamp": [
+                11,
+                870000000
+              ],
+              "stop_count": 1,
+              "schema": "teacher_dynamic_stop_event/v1"
+            },
+            "pre_roll_count": 9,
+            "clear_count": 13
+          },
+          "measured_stop_and_recovery": {
+            "stop_count": 11,
+            "recovery_pose_count": 108,
+            "recovery_progress_m": 0.5939086050410316
+          }
+        },
+        "navigation_PASS": false,
+        "full_F3_PASS": false,
+        "physical_navigation_ground_truth_used": false,
+        "causal_attribution_scope": "Bound native guard→stop token and independently observed obstacle spatiotemporal association; no counterfactual or LiDAR object-identity proof",
+        "existing_passed_flags_used": false,
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "binding": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "reference_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1:epoch:2:generation:1",
+          "reference_sha256": "da1c636df026a74aeadb92b772f417753e7f5fbb74df7e1cbf80ac9f67d701d0",
+          "epoch": 2,
+          "localization_generation": 1,
+          "source_route_sha256": "35b16952a9d4d1854dabfa975d817cdcfcc03d9fb7b3fe8f61aeaa0ee9d4b152"
+        },
+        "failure_reason": null,
+        "original_R83_scene_PASS": false,
+        "source_receipt": {
+          "root_task": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_task_contract.json",
+            "sha256": "0a04b823a4ac44a9efc694e0d3e355626da530f0b7092852ce5de7f54371936f",
+            "bytes": 3937
+          },
+          "typed_source": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_typed_route_source.json",
+            "sha256": "35b16952a9d4d1854dabfa975d817cdcfcc03d9fb7b3fe8f61aeaa0ee9d4b152",
+            "bytes": 99454
+          },
+          "actual_reference": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_global_reference_epoch_2_generation_1.json",
+            "sha256": "da1c636df026a74aeadb92b772f417753e7f5fbb74df7e1cbf80ac9f67d701d0",
+            "bytes": 50788
+          },
+          "runtime_protocol": {
+            "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_dynamic_obstacle_runtime.py",
+            "sha256": "1907f92920e395dc063e8fe64a23698ee6c5793de3286edbba3aca4ef3206940"
+          },
+          "registration": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_reference_registration_epoch_2_generation_1.json",
+            "sha256": "52c30ad427ade4909addd3f7c3c594321a0431fcd6bfab2a84fac4ff1e518947",
+            "bytes": 1202
+          },
+          "native_helpers": {
+            "core": {
+              "path": "/opt/experiment/workspace/multifloor_demo/navigation/control_core.py",
+              "sha256": "c198dd11f62950d7e1a789777cb2022f717e5bc3056c0cc38ff8950d038c112f",
+              "bytes": 15661
+            },
+            "audit": {
+              "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/guard_audit.py",
+              "sha256": "3088f7b207d7335e88108dbdaab826df5661b6172264d8dcd43aae293aea0c64",
+              "bytes": 1569
+            },
+            "stop": {
+              "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v63_r83_parking_hysteresis_candidate/dynamic_stop_event.py",
+              "sha256": "80a312737d3deb5fb44abc852582e40a9c2aef621761c204a0dfc0df3878474c",
+              "bytes": 9788
+            },
+            "payload": {
+              "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v63_r83_parking_hysteresis_candidate/known_scene_hold_guard.py",
+              "sha256": "7f1c9c157330917d9d001b266f463e0a18fff50261d02f9914a9f22250c1fee4",
+              "bytes": 18181
+            }
+          },
+          "replay_payloads": [
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/177510000000_67e30dd3a32b92db4a7975b81a843f023611d7724da000b21ab91e24a26379ab.npy",
+              "sha256": "9cf8b778d72bf4e0b2def4e51c9e169ef47b8ae6deb108a5dc4e13985bf97a03",
+              "sequence": 2893
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202260000000_5272ee5ceef1087abc8c30a3c657f5c361a74b5e6d2262455a34c01f636b4ecc.npy",
+              "sha256": "50acce2ce46bfb861cb1a46a8b7617d98eead516592a47bdbd536d29aab8104c",
+              "sequence": 3145
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202360000000_6b5c3e427b434a16c4bddec2674259edeff05abf69d2f9ab28efadf9db1ef363.npy",
+              "sha256": "e39b377aad3ae5e1fa418f53cd58d03a224a6d4ccda0fe47f34fb50c5507c174",
+              "sequence": 3146
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202490000000_f2c31064ce3814e9c5090aa0b584f59c9e3df3534645c8e34a1af0fb7952de61.npy",
+              "sha256": "dcf3f753ef233093e1f5544ccb795e01bed385388cefb2629e27bf7b4abc6dcd",
+              "sequence": 3147
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202590000000_2ac51dd59d462b1a7996d7758de024ac52278607087a0b3d23ec15e921c1c8b8.npy",
+              "sha256": "79dc06e757db252f1d18d2c237b59989fdc4b2ae1a5196f838eb63c335642a93",
+              "sequence": 3148
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202655000000_b9762982bf31e9d87ea9a2db1449bfaf3c39f167992fc2c9ad4f03ff74baf874.npy",
+              "sha256": "6e6f2ab86d7151125d70965816165a77dbaad79fe8ed64a734f4d5d4c91ab97b",
+              "sequence": 3149
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202820000000_83765c1115fdee11fc662c53e864a567a49658d33922bd8c409af809672871da.npy",
+              "sha256": "84ee3463bd3114a50f28066dd4636a9f8590f57e4ba8d7d49b4dc1144a8aa931",
+              "sequence": 3150
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/202920000000_f58e76697592dd5145a9dfee128c865d26edd3baa8c1114b4143c060d6bed36c.npy",
+              "sha256": "9c5d72eff082c3c71f2256d90872f6d7f56a295e181091107f479f66a970bd3a",
+              "sequence": 3151
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203020000000_23516245f509f22fb26c71988776f65b91e3c8842d8526621db719701cc06900.npy",
+              "sha256": "95acde92c37df15456fde773a699ee8ab0852dba7c4a2660961609ea67d1331f",
+              "sequence": 3152
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203150000000_97fe4cbfffb9c5765f388269a93a17f26bc9c10583a0e4536bdfb6d8d1dbe9ed.npy",
+              "sha256": "d4e3f9f9186015beace3da513e0be39793243040cd63a7785d7d24c724160df2",
+              "sequence": 3153
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203285000000_733b9f73d17fb1ef286216fee2cb2e09ccc6a07fa2bc9c5a99d06857514a190a.npy",
+              "sha256": "e26c8adea3e180cd6ac866411dcf6baf2e4a6cb8ca58843bdb32a1ec9a7c6084",
+              "sequence": 3154
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203415000000_c54f567349b9b8b34d3bb3dd36ccae425f961e4f8a9b7acac492a5e4166d67ed.npy",
+              "sha256": "abc9f15b5f3c5751caf6c69f1a447ae8530d9a14b9367c1630d6ae863478ae6f",
+              "sequence": 3155
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203515000000_71e73a50324c9683340295749c8ca8a0ad67eb0cc6795a9ae31da673133ae36b.npy",
+              "sha256": "72f3f5ec4742a6c4873c17471954899e4d13e92c1edc4aa6ca5a62203d2e5bbc",
+              "sequence": 3156
+            },
+            {
+              "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r57_dynamic_guard_arrays/203545000000_5d2b930aaa3cc8f00ba1544cb13d9f7a2a94b3d4ce5a2ae32a1107a62dd826cf.npy",
+              "sha256": "fc5a41848105b7cf1dd2728a3854ffacae9a0bc763ba55f9bcd582af702c622e",
+              "sequence": 3157
+            }
+          ],
+          "journal": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_journal.jsonl",
+            "complete_prefix_bytes": 19270264,
+            "complete_prefix_sha256": "3ebe3a821c4806a0ad67ba31377b3d2a66ab06b2fda49b86dc80bba47e472b86"
+          },
+          "pretrigger_monitoring": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_pretrigger_history.jsonl",
+            "complete_prefix_bytes": 84086552,
+            "complete_prefix_sha256": "66c1b047875649594015a68604bc5a050844b767c102c2bd5f74015c2495897f"
+          },
+          "native_guard": {
+            "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/navigation_guard_history.jsonl",
+            "complete_prefix_bytes": 28068033,
+            "complete_prefix_sha256": "23e2a15674e71814ffcaa701686a945328d4e20de9b267b7439d85f3d63f970f"
+          }
+        }
+      },
+      "source_receipt": {
+        "contract": {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_task_contract.json",
+          "sha256": "85cc362ce270fd177b7504f8661fe6aa3549747664ff6c98b6bfd40b13ac00b0",
+          "bytes": 6135
+        },
+        "runtime_state": {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_obstacle_state.json",
+          "sha256": "38aa590a9da888e412155d9c2e71faa842ae217447049d1a9cf4be3fede5e212",
+          "bytes": 5092
+        },
+        "journal": {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_journal.jsonl",
+          "complete_prefix_bytes": 19270264,
+          "complete_prefix_sha256": "3ebe3a821c4806a0ad67ba31377b3d2a66ab06b2fda49b86dc80bba47e472b86"
+        },
+        "pretrigger_monitoring": {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_pretrigger_history.jsonl",
+          "complete_prefix_bytes": 84086552,
+          "complete_prefix_sha256": "66c1b047875649594015a68604bc5a050844b767c102c2bd5f74015c2495897f"
+        },
+        "native_guard": {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/navigation_guard_history.jsonl",
+          "complete_prefix_bytes": 28068033,
+          "complete_prefix_sha256": "23e2a15674e71814ffcaa701686a945328d4e20de9b267b7439d85f3d63f970f"
+        }
+      }
+    },
+    "dynamic_evidence_capture": {
+      "schema": "r85_dynamic_owner_verified_sources_binding/v1",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_dynamic_owner_verified_sources.json",
+      "sha256": "a46763f6bb96ecbdcf0fc21c24332e9abf94c193263752cc25ad19d0cc6d1ba7",
+      "bytes": 10156
+    },
+    "current_rgb_map_required": true,
+    "current_rgb_map_verified": true,
+    "current_rgb_map_result": {
+      "schema": "r85_actual_current_rgb_save/v1",
+      "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+      "passed": true,
+      "original_current_run_map_gate_unchanged": true,
+      "original46_PASS": false,
+      "known_map_assistance": true,
+      "navigation_ground_truth_used": false,
+      "receipt": {
+        "schema": "teacher_mission46_rgb_save/v1",
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "binding_verified": true,
+        "passed": true,
+        "checks": {
+          "current_run_rgb_provenance": {
+            "status": "passed",
+            "passed": true
+          },
+          "fresh_sensor_evidence": {
+            "status": "passed",
+            "passed": true
+          },
+          "not_capacity_truncated": {
+            "status": "passed",
+            "passed": true
+          },
+          "actual_saved_rgb_file": {
+            "status": "passed",
+            "passed": true
+          }
+        },
+        "source_evidence_file": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/mission46_rgb_save_evidence.json",
+        "source_evidence_sha256": "6168fd32cdc9a6f962da1e35f9f953a5310f5a7f0592ebb1382b8717c2d96a26",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "point_count": 233102,
+        "unique_colors": 10578,
+        "observed_rgb_samples": 59140979,
+        "capacity_rejections": 0,
+        "ground_truth_used": false,
+        "reference_map_loaded": false,
+        "source_topic": "/cloud_registered",
+        "color_source": "FAST-LIVO2 projection of /camera/image_color simulated RGB images",
+        "saved_file": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/colored_map.pcd",
+        "saved_file_sha256": "53ed44699d0b9f95f0af5ca72fbc6b4626aaa6eb423571eba4af0c1748a0f27c",
+        "sensor_ages_s": {
+          "lidar": 0.03289101101108827,
+          "imu": 0.003097627020906657,
+          "camera": 0.03356973300105892,
+          "odom": 0.01404969600844197,
+          "full_cloud": 0.011189440003363416,
+          "colored_cloud": 0.01779332000296563
+        }
+      }
+    },
+    "known_map_assistance": true,
+    "progress": {
+      "start_sim_ns": 11750000000,
+      "last_control_clock_ns": 350930000000,
+      "last_actual_pose_stamp_ns": 350860000000,
+      "last_source_header_ns": 350860000000,
+      "last_source_callback_clock_ns": 350900000000,
+      "last_source_header_age_ns": 40000000,
+      "forward_highwater_m": 34.907903789255535,
+      "failed": null,
+      "window_start_sim_ns": 281790000000,
+      "window_start_progress_m": 25.928429929328694,
+      "window_sim_s": 90,
+      "minimum_forward_progress_m": 0.5,
+      "arrival_only_exempts_progress_not_overall_deadline": true
+    },
+    "timing_scope": {
+      "whole_task_maximum_sim_s": 770,
+      "progress_window_sim_s": 90,
+      "minimum_forward_progress_m": 0.5,
+      "temporal_scope_change": "Single automatic global goal uses a 90s progress watchdog plus original 1500s overall cap; original per-region timeout is retained as historical evidence, not silently reused as one 35m deadline"
+    }
+  },
+  "entry_exit": {
+    "schema": "r118_bounded_runner_exit/v1",
+    "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+    "source_commit": "536c9d3f4773ef43edef48992c598ccf2fc3f021",
+    "returncode": 0,
+    "wall_s": 456.1250646300032,
+    "outer_stop_requested": false,
+    "outer_forced_stop": null,
+    "outer_failure": null,
+    "runner_still_alive": false,
+    "remaining_owned_groups": {
+      "bridge.identity.json": [],
+      "worker.identity.json": [],
+      "gazebo.identity.json": [],
+      "navigation_stack.identity.json": []
+    },
+    "identity_errors": [],
+    "no_other_process_signals": true,
+    "no_auto_retry": true,
+    "navigation_PASS": false
+  },
+  "curve_effect": {
+    "source": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/protocol_reduction/curve_support_grade/FORMAL22_EFFECT.json",
+    "sha256": "5f491504fbc10fbdd989c5a05173a65e17c98849d68ecc2cfd2b7e974719f981",
+    "unique_certificates": 179,
+    "with_new_basis": 41,
+    "reclassified_patches": 45,
+    "SCAN": [
+      165,
+      29,
+      33
+    ],
+    "retention_connector": [
+      14,
+      12,
+      12
+    ],
+    "whole_old_cert_replayed_two_both_pass": true,
+    "unique_cause_of_whole_PASS_not_proved": true
+  },
+  "controller_sampled_CPU": {
+    "schema": "formal22_sampled_controller_resource/v1",
+    "pid": 3643141,
+    "start_ticks": 17571107,
+    "samples": 440,
+    "sampled_interval_wall_s": 439.390366821,
+    "clock_ticks_per_s": 100,
+    "cpu_s": 407.88,
+    "cpu_percent_one_core": 92.82861682904469,
+    "max_rss_bytes": 305684480,
+    "max_threads": 18,
+    "scope": "Only observed controller process lifetime between first/last samples, excludes startup/cleanup edges; not whole host CPU or matched intervention speedup",
+    "thread_CPU_sum_not_attributed_to_GIL_wait_or_GC": true
+  },
+  "closure_complete": true,
+  "actor_archive_verified": true,
+  "pipeline_normal_completed": true,
+  "post_budget": {
+    "retained_bytes": 120278765568,
+    "round_bytes": 10000000000,
+    "additional_reserved_bytes": 10000000000,
+    "projected_bytes": 140278765568,
+    "limit_bytes": 170000000000
+  },
+  "full_navigation_PASS": true,
+  "acceptance_scope": "Selected experimental static-support/nonforeground quality + continuous finite-support terrain semantics; current R85 single F1→F3 task with genuine dynamic physical stop/resume/recovery, immutable fixed5 final parking and current RGB map checks",
+  "original46_PASS": false,
+  "legacy_quality_and_body_derivative_safety_equivalent": false,
+  "covariance_candidate_loaded": false,
+  "native_source_commit": "571161b251fbd024ce755c2dc3301a2120e8637b",
+  "root_source_HEAD_unchanged": "45396505e8facd808e38c28d674aa5a5c9c25947",
+  "no_second_success_round_or_global_adoption": true,
+  "remaining_limits": [
+    "One real successful run is not intermittent-fault eradication or statistical stability proof",
+    "Explicit quality policy removes independent5% foreground veto; continuous terrain branch no longer imposes old indirect bodyZ/XY derivative bound; neither old guarantee equivalent",
+    "Real covariance mapping candidate is compiled/CDR checked/defaultOFF, not physically loaded or calibrated; no covariance-based controller recovery",
+    "Two actual22 old whole-certifier replays also pass: prove shallower subdivision, not unique full-task causal benefit",
+    "Known-scene assistance is local scene matching; no new loop-closure/global relocalization backend"
+  ],
+  "independent_acceptance_review": {
+    "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/investigations/deployment/FORMAL22_ACCEPTANCE_INDEPENDENT_REVIEW_FINAL.json",
+    "sha256": "fcbb786d20aba7aeb968610e4a821974c1f859413b5ecb73535b83d423a02ce9",
+    "passed": true,
+    "checks": 19
+  }
+}

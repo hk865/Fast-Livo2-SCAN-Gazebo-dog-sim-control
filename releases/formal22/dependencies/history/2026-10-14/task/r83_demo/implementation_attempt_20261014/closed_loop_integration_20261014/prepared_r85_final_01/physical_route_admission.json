@@ -1,0 +1,408 @@
+{
+  "schema": "r85_typed_polyline_physical_certificate/v1",
+  "allowed": true,
+  "scope": "Continuous finite-face interval/whole-body outer geometry on this typed polyline; observation predicates do not gate",
+  "ready_for_control": false,
+  "navigation_PASS": false,
+  "sources": {
+    "metadata": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+      "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+      "bytes": 216220
+    },
+    "reference": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+      "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+      "bytes": 36018
+    },
+    "world": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+      "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+      "bytes": 99447
+    },
+    "limits": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+      "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+      "bytes": 764
+    },
+    "frozen_helpers": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+      "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+      "bytes": 37253
+    },
+    "leaf": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/physical_route_admission.py",
+      "sha256": "4555286472f46ec31c93f44616ab0ce0605d10198ab39b5129fc01c507ef0201",
+      "bytes": 33548
+    }
+  },
+  "limits": {
+    "schema": "pct_static_support_validation_limits/v1",
+    "authorization": "Parent supplied C64 controller.py runtime values; no automatic relaxation",
+    "sample_spacing_m": 0.025,
+    "body_radius_m": 0.25,
+    "body_offset_m": 0.18,
+    "body_below_m": 0.12,
+    "body_above_m": 0.12,
+    "position_uncertainty_m": 0.08,
+    "yaw_half_range_rad": 3.141592653589793,
+    "body_ground_height_m": 0.32,
+    "nominal_route_body_ground_offset_m": 0.3,
+    "support_height_tolerance_m": 0.1,
+    "max_support_slope_rad": 0.35,
+    "actor_grid_half_x_m": 0.8,
+    "actor_grid_half_y_m": 0.5,
+    "actor_grid_spacing_m": 0.1,
+    "actor_ray_start_above_body_m": 20.0,
+    "switch_height_equality_m": 1e-09,
+    "initial_provider": "lower12",
+    "numeric_epsilon_m": 1e-10,
+    "max_report_examples": 40
+  },
+  "physical_body_ground_offset_m": 0.32,
+  "coordinate_frame": "camera_init",
+  "T_navigation_world": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      -0.3
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "checked_subsegments": 1672,
+  "maximum_spacing_m": 0.025000000000000355,
+  "physical_failure_counts": {},
+  "first_examples": [],
+  "actual_support_plane_slope_max_rad": 0.09966865249116297,
+  "observation_source_diagnostics": {
+    "hard_gate": false,
+    "counts": {
+      "lower12": {
+        "coverage187_failure": 0,
+        "center_provider_band_failure": 690,
+        "provider_upper_band_failure": 0,
+        "provider_local_chassis_support_failure": 717,
+        "actor_full_yaw_outer_domain_failure": 0
+      },
+      "upper23": {
+        "coverage187_failure": 762,
+        "center_provider_band_failure": 718,
+        "provider_upper_band_failure": 161,
+        "provider_local_chassis_support_failure": 745,
+        "actor_full_yaw_outer_domain_failure": 1629
+      }
+    },
+    "examples": [
+      {
+        "edge": 224,
+        "fraction": [
+          0.0,
+          0.16666666666666666
+        ],
+        "body_world_xyz": [
+          11.1,
+          6.9,
+          1.8115422677993775
+        ],
+        "details": {
+          "lower12": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": true,
+              "uncovered_ray_count": 0,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": false
+            },
+            "provider_local_support": false,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": true,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          },
+          "upper23": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": false,
+              "uncovered_ray_count": 1,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": true
+            },
+            "provider_local_support": true,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": false,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          }
+        }
+      },
+      {
+        "edge": 224,
+        "fraction": [
+          0.16666666666666666,
+          0.3333333333333333
+        ],
+        "body_world_xyz": [
+          11.083333333333332,
+          6.916666666666667,
+          1.8132006478309632
+        ],
+        "details": {
+          "lower12": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": true,
+              "uncovered_ray_count": 0,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": false
+            },
+            "provider_local_support": false,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": true,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          },
+          "upper23": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": false,
+              "uncovered_ray_count": 1,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": true
+            },
+            "provider_local_support": true,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": false,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          }
+        }
+      }
+    ],
+    "not_actor_behavior_or_training_proof": true
+  },
+  "runtime_finite_time_freshness_dynamic_obstacle_and_ack": "NOT_EVALUATED",
+  "source_bindings_unchanged": true,
+  "created_at_utc": "2026-10-14T16:11:08.884453+00:00",
+  "typed_reference": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/prepared_r85_final_01/typed_r85_global_reference.json",
+    "sha256": "35b16952a9d4d1854dabfa975d817cdcfcc03d9fb7b3fe8f61aeaa0ee9d4b152",
+    "bytes": 99454
+  },
+  "typing_evidence": [
+    {
+      "role": "start",
+      "actual_task_body_nav_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.02076937899230677
+      ],
+      "actual_task_body_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.32076937899230673
+      ],
+      "actual_finite_support": {
+        "model": "floor_1",
+        "face": "z+",
+        "ground_world_z_m": 0.0,
+        "true_plane_slope_rad": 0.0,
+        "measured_body_height_residual_m": 0.000769378992306724,
+        "eligible_finite_faces": [
+          {
+            "model": "floor_1",
+            "world_z_m": 0.0,
+            "residual_m": 0.000769378992306724
+          }
+        ],
+        "measured_body_point_changed": false,
+        "plane_extrapolation_used": false
+      },
+      "ground_nav_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        -0.3
+      ],
+      "planned_body_nav_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.020000000000000018
+      ],
+      "measurement_residual_sweep_allowed": true,
+      "collision_models": [],
+      "task_body_and_goal_tolerances_changed": false,
+      "height_residual_not_used_as_ground_grade": true
+    },
+    {
+      "role": "goal",
+      "actual_task_body_nav_xyz": [
+        0.007048269973869731,
+        7.018014309007437,
+        2.420769378992307
+      ],
+      "actual_task_body_world_xyz": [
+        0.007048269973869731,
+        7.018014309007437,
+        2.7207693789923066
+      ],
+      "actual_finite_support": {
+        "model": "floor_3",
+        "face": "z+",
+        "ground_world_z_m": 2.4,
+        "true_plane_slope_rad": 0.0,
+        "measured_body_height_residual_m": 0.000769378992306724,
+        "eligible_finite_faces": [
+          {
+            "model": "floor_3",
+            "world_z_m": 2.4,
+            "residual_m": 0.000769378992306724
+          }
+        ],
+        "measured_body_point_changed": false,
+        "plane_extrapolation_used": false
+      },
+      "ground_nav_xyz": [
+        0.007048269973869731,
+        7.018014309007437,
+        2.1
+      ],
+      "planned_body_nav_xyz": [
+        0.007048269973869731,
+        7.018014309007437,
+        2.42
+      ],
+      "measurement_residual_sweep_allowed": true,
+      "collision_models": [],
+      "task_body_and_goal_tolerances_changed": false,
+      "height_residual_not_used_as_ground_grade": true
+    }
+  ],
+  "original_raw_grade_failures_preserved": {
+    "receipt": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/run_f1_to_f3_02/second_support_validation_01.json",
+      "sha256": "02cf1f77c57184e01e116a03774db6fba9a9688f41df6e118a4cba5212055257",
+      "bytes": 42252
+    },
+    "unchanged_status": "STATIC_GEOMETRY_REJECTED",
+    "original_failure_count": 4,
+    "original_grade_threshold_rad": 0.35,
+    "original_first_failure": {
+      "original_edge": 0,
+      "fraction": [
+        0.0,
+        0.5
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.020769378992306742
+      ],
+      "body_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.32076937899230673
+      ],
+      "slope_rad": 0.8209151930455859
+    },
+    "original_endpoint_connectors": {
+      "start_body_xyz_pair": [
+        [
+          0.007048269973869731,
+          0.018014309007437408,
+          0.02076937899230677
+        ],
+        [
+          0.0,
+          0.0,
+          -1.1920928966180355e-08
+        ]
+      ],
+      "goal_body_xyz_pair": [
+        [
+          0.0,
+          7.0,
+          2.399999904632568
+        ],
+        [
+          0.007048269973869731,
+          7.018014309007437,
+          2.420769378992307
+        ]
+      ],
+      "support_and_swept_validation": "NOT_PERFORMED; connectors are separate from the raw grid route"
+    },
+    "original_evidence_modified": false
+  },
+  "inputs": {
+    "candidate": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/run_f1_to_f3_02/route_candidate.json",
+      "sha256": "8b152f4ec1043117b61c584b6922c05670488de85a2ab1956c91d367825810e1",
+      "bytes": 63008
+    },
+    "old_receipt": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/run_f1_to_f3_02/second_support_validation_01.json",
+      "sha256": "02cf1f77c57184e01e116a03774db6fba9a9688f41df6e118a4cba5212055257",
+      "bytes": 42252
+    },
+    "metadata": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+      "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+      "bytes": 216220
+    },
+    "reference": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+      "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+      "bytes": 36018
+    },
+    "world": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+      "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+      "bytes": 99447
+    },
+    "limits": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+      "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+      "bytes": 764
+    },
+    "frozen_helpers": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+      "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+      "bytes": 37253
+    },
+    "leaf": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/physical_route_admission.py",
+      "sha256": "4555286472f46ec31c93f44616ab0ce0605d10198ab39b5129fc01c507ef0201",
+      "bytes": 33548
+    }
+  },
+  "no_physics_ros_model_or_planner_started": true
+}

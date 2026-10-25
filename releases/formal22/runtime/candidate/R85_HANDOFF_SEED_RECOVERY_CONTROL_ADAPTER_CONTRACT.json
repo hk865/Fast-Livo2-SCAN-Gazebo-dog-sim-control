@@ -1,0 +1,78 @@
+{
+  "baseline_commit": "e4005d67a767caefc818322efa309801f301db88",
+  "baseline_install": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/install_tools/INSTALL_RECEIPT.json",
+    "sha256": "f0af93ea5f57b926e544c88fc9e15e09f3beb0df977e2ae7c20dc7f62f488d58"
+  },
+  "baseline_source_bindings": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/handoff_seed_recovery_stage/source_integration/beforeimage/SOURCE_BINDINGS.json",
+    "sha256": "5d1d15d454a954f58ed5171f481e24991bee1eb3a53244154eea366907ab8dfa"
+  },
+  "bridge_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/handoff_seed_recovery_adapter.py",
+    "sha256": "dca09251ffff607e965600cef49b8124f41ac8cd9e7588eddcb993a29358040d"
+  },
+  "controller": {
+    "after_sha256": "54a3b788f2e796c43bd749932916ccea76278bb552e671c711373659bd58d08f",
+    "before_sha256": "b1ed12d5ccd66edb9b8b72b643d8c41f8a74f3010fa63f01205047eaca706805",
+    "beforeimage": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/handoff_seed_recovery_stage/source_integration/beforeimage/controller.py",
+      "sha256": "b1ed12d5ccd66edb9b8b72b643d8c41f8a74f3010fa63f01205047eaca706805"
+    },
+    "delta_sha256": "ac148542cf079d2fe17174db25d5e12cc771ee13010208aba06a67cb4a9a3d4a",
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/controller.py"
+  },
+  "exact_targets": [
+    "controller.py",
+    "scan_workspace.py",
+    "handoff_seed_recovery_adapter.py",
+    "R85_HANDOFF_SEED_RECOVERY_CONTROL_ADAPTER_CONTRACT.json",
+    "profiles/r85_f1_f3_handoff_seed_recovery_r14_20261016.json"
+  ],
+  "expected_bound_source_count_after": 255,
+  "expected_bound_source_count_before": 252,
+  "historical_R13_profile": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/handoff_seed_recovery_stage/source_integration/beforeimage/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json",
+    "sha256": "2edd6daeceacc8cfc798e674e0f1cbf001733085a178c3e9aa05cf103dae3f24"
+  },
+  "historical_schedule_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/schedule_renewal_adapter.py",
+    "sha256": "7a1c879085c55f42dfb7e7f863f64e4a77a0ea39e6343cad8fba18eecbefbf00"
+  },
+  "historical_schedule_proof": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_SCHEDULE_RENEWAL_20261016_UNTIL1000.json",
+    "sha256": "bf7960f228e137c2d3d2d2bbb44fa60378104ac8c5f7cf8e37c44bbc4621def2"
+  },
+  "kind": "external_hold_recovery_seed_classifier_v1",
+  "meaning": "Only a reviewed legitimate external-hold recovery seed is zero-waited; no math, settling statistics, ACK, feedback, source, 300ms or physical gate bypass. Source adapter grants no online acceptance.",
+  "navigation_acceptance_established": false,
+  "physical_thresholds_changed": false,
+  "profile": {
+    "added_session_keys": [
+      "handoff_seed_recovery_proof",
+      "handoff_seed_recovery_proof_sha256"
+    ],
+    "baseline_profile": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json",
+      "sha256": "2edd6daeceacc8cfc798e674e0f1cbf001733085a178c3e9aa05cf103dae3f24"
+    },
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_handoff_seed_recovery_r14_20261016.json"
+  },
+  "runtime_acceptance_inherited": false,
+  "scan_binary_changed": false,
+  "scan_contract_bytes_changed": false,
+  "scan_source_changed": false,
+  "schema": "r85_handoff_seed_recovery_source_adapter/v1",
+  "simulation_only": true,
+  "source_or_feedback_guards_changed": false,
+  "validator": {
+    "after_sha256": "8d5a55c606db6f1c97740d51424ff949f178fa1d8aea0567e1b3812f87c0e540",
+    "before_sha256": "c1af8899bea6122b55beccc8a955dff2f20b806d71288a5269872bc1a9a00315",
+    "beforeimage": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/handoff_seed_recovery_stage/source_integration/beforeimage/scan_workspace.py",
+      "sha256": "c1af8899bea6122b55beccc8a955dff2f20b806d71288a5269872bc1a9a00315"
+    },
+    "change": "Exact new repair dispatch, controller current identity/base-three override and resolved metadata only.",
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/scan_workspace.py"
+  }
+}

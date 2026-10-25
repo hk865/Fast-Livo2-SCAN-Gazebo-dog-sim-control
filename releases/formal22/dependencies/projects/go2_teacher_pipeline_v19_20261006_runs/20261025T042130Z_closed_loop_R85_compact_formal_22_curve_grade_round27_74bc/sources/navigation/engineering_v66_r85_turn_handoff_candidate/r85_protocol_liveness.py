@@ -1,0 +1,537 @@
+"""Optional cumulative unresolved-protocol wait bound; no ROS or motion authority.
+
+This is a NEW, default-off constraint.  It reuses the original profile's 90s
+simulation / 600s wall NUMBERS, not StartupDeadline's elapsed-startup semantics.
+One accepted request owns one ledger.  Scope changes, retries and duplicates
+cannot reset it.  Only a current actual outer execution-admission receipt can
+pause accrual; commit ACKs and association matches are never admission.
+
+The separately opted-in R74 simulation diagnostic policy keeps that cumulative
+history as observation and applies the same limits to an unresolved episode.
+Only the existing actual outer admission ends an episode, after its spent
+budget has been checked. It does not grant motion or formal acceptance.
+"""
+from __future__ import annotations
+import copy
+import json
+from pathlib import Path
+
+SCHEMA = 'r85_cumulative_unresolved_protocol_wait/v1'
+PROFILE_KEY = 'r85_protocol_liveness'
+SIM_LIMIT_NS = 90_000_000_000
+WALL_LIMIT_NS = 600_000_000_000
+EPISODE_PROFILE_KEY = 'r74_protocol_wait_policy'
+EPISODE_SCHEMA = 'r74_continuous_unresolved_episode_watchdog/v1'
+
+
+def episode_policy_enabled(profile):
+    if EPISODE_PROFILE_KEY not in profile:
+        return False
+    config = profile[EPISODE_PROFILE_KEY]
+    if (type(config) is not dict or type(config.get('enabled')) is not bool
+            or type(config.get('schema')) is not str
+            or config != dict(enabled=True, schema=EPISODE_SCHEMA)):
+        raise ValueError('r74_protocol_wait_policy_exact_opt_in_required')
+    from diagnostic_observation import strict_formal_enabled
+    if strict_formal_enabled(profile):
+        return True
+    from minimal_simulation_baseline import enabled as minimal_baseline_enabled
+    if not minimal_baseline_enabled(profile):
+        raise ValueError('r74_protocol_wait_policy_requires_minimal_simulation')
+    return True
+
+
+def _integer(value, name):
+    if type(value) is not int or value < 0:
+        raise ValueError('r85_protocol_liveness_nonnegative_integer_required:' + name)
+    return value
+
+
+def _text(value, name, maximum=1024):
+    if not isinstance(value, str) or not value or len(value) > maximum:
+        raise ValueError('r85_protocol_liveness_bounded_text_required:' + name)
+    return value
+
+
+def enabled(profile):
+    config = profile.get(PROFILE_KEY)
+    if config is None:
+        return False
+    if not isinstance(config, dict) or type(config.get('enabled', False)) is not bool:
+        raise ValueError('r85_protocol_liveness_explicit_boolean_required')
+    if config.get('enabled', False) is not True:
+        return False
+    if config != dict(enabled=True, schema=SCHEMA):
+        raise ValueError('r85_protocol_liveness_exact_opt_in_contract_required')
+    if (type(profile.get('request_startup_timeout_sim_s')) not in (int, float)
+            or profile['request_startup_timeout_sim_s'] != 90
+            or type(profile.get('request_startup_timeout_wall_s')) not in (int, float)
+            or profile['request_startup_timeout_wall_s'] != 600):
+        raise ValueError('r85_protocol_liveness_original_90_600_numbers_required')
+    if profile.get('r85_auto_reference_contract', {}).get('enabled') is not True:
+        raise ValueError('r85_protocol_liveness_requires_actual_R85_reference_contract')
+    return True
+
+
+class ProtocolLiveness:
+    """Pure state machine shared by the actual controller and protocol probe.
+
+    Call once on accepted request and at every actual running control tick,
+    including before source/clock/protection early returns.  The previous
+    interval is charged according to its prior observed state.  Optional
+    post-admission calls establish an exact observed pause checkpoint.  These
+    checkpoints do not claim unobserved Python-return or DDS-delivery times.
+    """
+    def __init__(self, profile, request_id, request_started_sim_ns,
+                 request_started_monotonic_ns):
+        if not enabled(profile):
+            raise ValueError('r85_protocol_liveness_disabled')
+        self._episode_policy = episode_policy_enabled(profile)
+        self.request_id = _text(request_id, 'request_id')
+        self.request_started_sim_ns = _integer(request_started_sim_ns, 'request_started_sim_ns')
+        self.request_started_monotonic_ns = _integer(request_started_monotonic_ns, 'request_started_monotonic_ns')
+        self.last_sim_ns = self.request_started_sim_ns
+        self.last_monotonic_ns = self.request_started_monotonic_ns
+        self.spent_sim_ns = self.spent_monotonic_ns = 0
+        self.waiting = True
+        self.stage = 'accepted_request_waiting_source_or_reference'
+        self.scope = None
+        self.source_reason = 'accepted_distinct_request_no_actual_outer_admission_yet'
+        self.first_blocking_reason = self.source_reason
+        self.last_blocking_reason = self.source_reason
+        self.terminal = False
+        self.failure_reason = None
+        self.terminal_state = None
+        self.original_terminal_observation = None
+        self.secondary_budget_exhaustion_observed = None
+        self.phase_started_sim_ns = self.last_sim_ns
+        self.phase_started_monotonic_ns = self.last_monotonic_ns
+        self.sequence = 0
+        self._events = []
+        self._last_report_by_kind = {}
+        if self._episode_policy:
+            self.episode_sequence = 1
+            self.episode_active = True
+            self.episode_spent_sim_ns = self.episode_spent_monotonic_ns = 0
+            self.episode_started_sim_ns = self.last_sim_ns
+            self.episode_started_monotonic_ns = self.last_monotonic_ns
+            self.last_resolved_episode = None
+            self.cumulative_limit_observation = None
+        self._emit('request_started')
+
+    def snapshot(self):
+        result = dict(schema=SCHEMA, request_id=self.request_id,
+            request_started_sim_ns=self.request_started_sim_ns,
+            request_started_monotonic_ns=self.request_started_monotonic_ns,
+            observed_sim_ns=self.last_sim_ns,
+            observed_monotonic_ns=self.last_monotonic_ns,
+            cumulative_unresolved_sim_ns=self.spent_sim_ns,
+            cumulative_unresolved_monotonic_ns=self.spent_monotonic_ns,
+            sim_budget_ns=SIM_LIMIT_NS, wall_budget_ns=WALL_LIMIT_NS,
+            waiting=self.waiting, stage=self.stage, scope=copy.deepcopy(self.scope),
+            source_reason=self.source_reason, first_blocking_reason=self.first_blocking_reason,
+            last_blocking_reason=self.last_blocking_reason, terminal=self.terminal,
+            failed=self.failure_reason is not None, failure_reason=self.failure_reason,
+            terminal_state=self.terminal_state, ledger_sequence=self.sequence,
+            original_terminal_observation=copy.deepcopy(self.original_terminal_observation),
+            secondary_budget_exhaustion_observed=copy.deepcopy(self.secondary_budget_exhaustion_observed),
+            phase_started_sim_ns=self.phase_started_sim_ns,
+            phase_started_monotonic_ns=self.phase_started_monotonic_ns,
+            default_off_new_constraint=True, startup_elapsed_semantics_reused=False,
+            association_or_commit_is_admission=False, motion_authority=False,
+            navigation_PASS=False)
+        if self._episode_policy:
+            result.update(wait_policy=dict(schema=EPISODE_SCHEMA,
+                selector_key=EPISODE_PROFILE_KEY, terminal_budget_basis='continuous_unresolved_episode',
+                cumulative_budget_observation_only=True, original_cumulative_budget_pass_claimed=False,
+                episode_resolution_authority='existing_actual_outer_admission'),
+                unresolved_episode=dict(sequence=self.episode_sequence, active=self.episode_active,
+                    started_sim_ns=self.episode_started_sim_ns,
+                    started_monotonic_ns=self.episode_started_monotonic_ns,
+                    spent_sim_ns=self.episode_spent_sim_ns,
+                    spent_monotonic_ns=self.episode_spent_monotonic_ns,
+                    sim_budget_ns=SIM_LIMIT_NS, wall_budget_ns=WALL_LIMIT_NS,
+                    last_resolved=copy.deepcopy(self.last_resolved_episode)),
+                cumulative_limit_observation=copy.deepcopy(self.cumulative_limit_observation))
+        return result
+
+    def _emit(self, event, **fields):
+        self.sequence += 1
+        self._events.append(dict(self.snapshot(), event=event, **fields))
+
+    def note_source_report(self, kind, identity, report):
+        """Preserve a reported rejection/failure; it grants no timing reset."""
+        kind = _text(kind, 'source_report_kind', 64)
+        encoded = json.dumps(dict(identity=identity, report=report), sort_keys=True, allow_nan=False)
+        if len(encoded) > 4096:
+            raise ValueError('r85_protocol_liveness_source_report_budget')
+        if self._last_report_by_kind.get(kind) == encoded:
+            return
+        self._last_report_by_kind[kind] = encoded
+        self._emit('source_rejection_or_failure_reported', report_kind=kind,
+            reported_identity=copy.deepcopy(identity), source_report=copy.deepcopy(report),
+            report_is_motion_or_admission_authority=False)
+
+    def drain_events(self):
+        events, self._events = self._events, []
+        return events
+
+    def _charge_episode_wait(self, sim_ns, monotonic_ns):
+        if self.waiting:
+            sim_delta = sim_ns - self.last_sim_ns if self.last_sim_ns > 0 else 0
+            wall_delta = monotonic_ns - self.last_monotonic_ns
+            self.spent_sim_ns += sim_delta
+            self.spent_monotonic_ns += wall_delta
+            self.episode_spent_sim_ns += sim_delta
+            self.episode_spent_monotonic_ns += wall_delta
+
+    def _note_cumulative_limit(self, sim_ns, monotonic_ns):
+        if self.cumulative_limit_observation is not None:
+            return False
+        if self.spent_sim_ns < SIM_LIMIT_NS and self.spent_monotonic_ns < WALL_LIMIT_NS:
+            return False
+        self.cumulative_limit_observation = dict(observed_sim_ns=sim_ns,
+            observed_monotonic_ns=monotonic_ns,
+            sim_exhausted=self.spent_sim_ns >= SIM_LIMIT_NS,
+            wall_exhausted=self.spent_monotonic_ns >= WALL_LIMIT_NS,
+            observed_only=True, terminal_authority=False, original_cumulative_budget_pass_claimed=False)
+        return True
+
+    def _observe_episode(self, *, sim_ns, monotonic_ns, waiting, stage, scope=None,
+                         source_reason, terminal_state=None):
+        sim_ns = _integer(sim_ns, 'sim_ns')
+        monotonic_ns = _integer(monotonic_ns, 'monotonic_ns')
+        if type(waiting) is not bool:
+            raise ValueError('r85_protocol_liveness_waiting_boolean_required')
+        stage = _text(stage, 'stage', 128)
+        source_reason = _text(source_reason, 'source_reason')
+        scope = copy.deepcopy(scope)
+        if len(json.dumps(scope, sort_keys=True, allow_nan=False)) > 2048:
+            raise ValueError('r85_protocol_liveness_scope_budget')
+        if terminal_state is not None:
+            terminal_state = _text(terminal_state, 'terminal_state', 64)
+        if self.terminal:
+            return self.snapshot()
+        previous_phase = dict(stage=self.stage, waiting=self.waiting, scope=copy.deepcopy(self.scope),
+            source_reason=self.source_reason, entered_sim_ns=self.phase_started_sim_ns,
+            entered_monotonic_ns=self.phase_started_monotonic_ns,
+            exit_observed_sim_ns=sim_ns, exit_observed_monotonic_ns=monotonic_ns)
+        if terminal_state is not None:
+            clock_valid = sim_ns >= self.last_sim_ns and monotonic_ns >= self.last_monotonic_ns
+            if clock_valid:
+                self._charge_episode_wait(sim_ns, monotonic_ns)
+            self.original_terminal_observation = dict(request_id=self.request_id,
+                state=terminal_state, source_reason=source_reason, scope=copy.deepcopy(scope),
+                observed_sim_ns=sim_ns, observed_monotonic_ns=monotonic_ns,
+                observed_clock_monotonic=clock_valid, original_terminal_priority_preserved=True)
+            if self.episode_spent_sim_ns >= SIM_LIMIT_NS or self.episode_spent_monotonic_ns >= WALL_LIMIT_NS:
+                self.secondary_budget_exhaustion_observed = dict(
+                    sim_exhausted=self.episode_spent_sim_ns >= SIM_LIMIT_NS,
+                    wall_exhausted=self.episode_spent_monotonic_ns >= WALL_LIMIT_NS,
+                    observed_sim_ns=sim_ns, observed_monotonic_ns=monotonic_ns,
+                    budget_basis='continuous_unresolved_episode', replaces_original_terminal_reason=False)
+            self.last_sim_ns, self.last_monotonic_ns = sim_ns, monotonic_ns
+            self.waiting, self.stage, self.scope, self.source_reason = False, stage, scope, source_reason
+            self.terminal, self.terminal_state = True, terminal_state
+            cumulative_observed = self._note_cumulative_limit(sim_ns, monotonic_ns)
+            self._emit('original_request_terminal', previous_phase=previous_phase)
+            if cumulative_observed:
+                self._emit('cumulative_unresolved_budget_observed_only')
+            return self.snapshot()
+        if sim_ns < self.last_sim_ns or monotonic_ns < self.last_monotonic_ns:
+            self.failure_reason = ('r85_protocol_liveness_sim_clock_moved_backward'
+                if sim_ns < self.last_sim_ns else 'r85_protocol_liveness_monotonic_clock_moved_backward')
+            self.terminal = True
+            self.terminal_state = 'failed'
+            self._emit('clock_rejected_fail_closed', rejected_observed_sim_ns=sim_ns,
+                rejected_observed_monotonic_ns=monotonic_ns)
+            return self.snapshot()
+        # The unchanged controller hook supplies false only from actual_outer_admission.
+        if not waiting and (stage != 'actual_outer_admitted_path'
+                or source_reason != 'current_request_child_generation_and_committed_outer_receipt'):
+            raise ValueError('r74_episode_resolution_requires_actual_outer_admission_stage')
+        self._charge_episode_wait(sim_ns, monotonic_ns)
+        cumulative_observed = self._note_cumulative_limit(sim_ns, monotonic_ns)
+        changed = (waiting, stage, scope, source_reason) != (
+            self.waiting, self.stage, self.scope, self.source_reason)
+        self.last_sim_ns, self.last_monotonic_ns = sim_ns, monotonic_ns
+        self.waiting, self.stage, self.scope, self.source_reason = waiting, stage, scope, source_reason
+        if changed:
+            self.phase_started_sim_ns, self.phase_started_monotonic_ns = sim_ns, monotonic_ns
+        if waiting:
+            self.last_blocking_reason = source_reason
+        # Charge and check before allowing even a real late admission to end an episode.
+        if self.episode_spent_sim_ns >= SIM_LIMIT_NS or self.episode_spent_monotonic_ns >= WALL_LIMIT_NS:
+            self.failure_reason = ('r85_unresolved_protocol_wait_sim_budget_exhausted'
+                if self.episode_spent_sim_ns >= SIM_LIMIT_NS else 'r85_unresolved_protocol_wait_wall_budget_exhausted')
+            self.terminal = True
+            self.terminal_state = 'failed'
+            self._emit('budget_exhausted_fail_closed', previous_phase=previous_phase)
+        else:
+            if not waiting and self.episode_active:
+                self.last_resolved_episode = dict(sequence=self.episode_sequence,
+                    started_sim_ns=self.episode_started_sim_ns,
+                    started_monotonic_ns=self.episode_started_monotonic_ns,
+                    ended_sim_ns=sim_ns, ended_monotonic_ns=monotonic_ns,
+                    spent_sim_ns=self.episode_spent_sim_ns,
+                    spent_monotonic_ns=self.episode_spent_monotonic_ns,
+                    resolved_by='existing_actual_outer_admission')
+                self.episode_active = False
+                self.episode_spent_sim_ns = self.episode_spent_monotonic_ns = 0
+                self.episode_started_sim_ns = self.episode_started_monotonic_ns = None
+            elif waiting and not self.episode_active:
+                self.episode_sequence += 1
+                self.episode_active = True
+                self.episode_started_sim_ns = sim_ns
+                self.episode_started_monotonic_ns = monotonic_ns
+            if changed:
+                self._emit('wait_phase_changed' if waiting else 'actual_outer_admission_pause',
+                    previous_phase=previous_phase)
+        if cumulative_observed:
+            self._emit('cumulative_unresolved_budget_observed_only')
+        return self.snapshot()
+
+    def observe(self, *, sim_ns, monotonic_ns, waiting, stage, scope=None,
+                source_reason, terminal_state=None):
+        if self._episode_policy:
+            return self._observe_episode(sim_ns=sim_ns, monotonic_ns=monotonic_ns,
+                waiting=waiting, stage=stage, scope=scope,
+                source_reason=source_reason, terminal_state=terminal_state)
+        sim_ns = _integer(sim_ns, 'sim_ns')
+        monotonic_ns = _integer(monotonic_ns, 'monotonic_ns')
+        if type(waiting) is not bool:
+            raise ValueError('r85_protocol_liveness_waiting_boolean_required')
+        stage = _text(stage, 'stage', 128)
+        source_reason = _text(source_reason, 'source_reason')
+        scope = copy.deepcopy(scope)
+        if len(json.dumps(scope, sort_keys=True, allow_nan=False)) > 2048:
+            raise ValueError('r85_protocol_liveness_scope_budget')
+        if terminal_state is not None:
+            terminal_state = _text(terminal_state, 'terminal_state', 64)
+        if self.terminal:
+            return self.snapshot()
+        if terminal_state is not None:
+            previous_phase = dict(stage=self.stage, waiting=self.waiting, scope=copy.deepcopy(self.scope),
+                source_reason=self.source_reason, entered_sim_ns=self.phase_started_sim_ns,
+                entered_monotonic_ns=self.phase_started_monotonic_ns,
+                exit_observed_sim_ns=sim_ns, exit_observed_monotonic_ns=monotonic_ns)
+            clock_valid = sim_ns >= self.last_sim_ns and monotonic_ns >= self.last_monotonic_ns
+            if clock_valid and self.waiting:
+                if self.last_sim_ns > 0:
+                    self.spent_sim_ns += sim_ns - self.last_sim_ns
+                self.spent_monotonic_ns += monotonic_ns - self.last_monotonic_ns
+            self.original_terminal_observation = dict(request_id=self.request_id,
+                state=terminal_state, source_reason=source_reason, scope=copy.deepcopy(scope),
+                observed_sim_ns=sim_ns, observed_monotonic_ns=monotonic_ns,
+                observed_clock_monotonic=clock_valid,
+                original_terminal_priority_preserved=True)
+            if self.spent_sim_ns >= SIM_LIMIT_NS or self.spent_monotonic_ns >= WALL_LIMIT_NS:
+                self.secondary_budget_exhaustion_observed = dict(
+                    sim_exhausted=self.spent_sim_ns >= SIM_LIMIT_NS,
+                    wall_exhausted=self.spent_monotonic_ns >= WALL_LIMIT_NS,
+                    observed_sim_ns=sim_ns, observed_monotonic_ns=monotonic_ns,
+                    replaces_original_terminal_reason=False)
+            self.last_sim_ns, self.last_monotonic_ns = sim_ns, monotonic_ns
+            self.waiting, self.stage, self.scope, self.source_reason = False, stage, scope, source_reason
+            self.terminal, self.terminal_state = True, terminal_state
+            self._emit('original_request_terminal', previous_phase=previous_phase)
+            return self.snapshot()
+        if sim_ns < self.last_sim_ns or monotonic_ns < self.last_monotonic_ns:
+            self.failure_reason = ('r85_protocol_liveness_sim_clock_moved_backward'
+                if sim_ns < self.last_sim_ns else 'r85_protocol_liveness_monotonic_clock_moved_backward')
+            self.terminal = True
+            self.terminal_state = 'failed'
+            self._emit('clock_rejected_fail_closed', rejected_observed_sim_ns=sim_ns,
+                rejected_observed_monotonic_ns=monotonic_ns)
+            return self.snapshot()
+        if self.waiting:
+            # A zero /clock before the first positive clock is not a forged
+            # simulation origin; wall still accrues while /clock is absent.
+            if self.last_sim_ns > 0:
+                self.spent_sim_ns += sim_ns - self.last_sim_ns
+            self.spent_monotonic_ns += monotonic_ns - self.last_monotonic_ns
+        changed = (waiting, stage, scope, source_reason) != (
+            self.waiting, self.stage, self.scope, self.source_reason)
+        previous_phase = dict(stage=self.stage, waiting=self.waiting, scope=copy.deepcopy(self.scope),
+            source_reason=self.source_reason, entered_sim_ns=self.phase_started_sim_ns,
+            entered_monotonic_ns=self.phase_started_monotonic_ns,
+            exit_observed_sim_ns=sim_ns, exit_observed_monotonic_ns=monotonic_ns)
+        self.last_sim_ns, self.last_monotonic_ns = sim_ns, monotonic_ns
+        self.waiting, self.stage, self.scope, self.source_reason = waiting, stage, scope, source_reason
+        if changed:
+            self.phase_started_sim_ns, self.phase_started_monotonic_ns = sim_ns, monotonic_ns
+        if waiting:
+            self.last_blocking_reason = source_reason
+        # A late admission cannot forgive a budget already spent before it.
+        if self.spent_sim_ns >= SIM_LIMIT_NS or self.spent_monotonic_ns >= WALL_LIMIT_NS:
+            self.failure_reason = ('r85_unresolved_protocol_wait_sim_budget_exhausted'
+                if self.spent_sim_ns >= SIM_LIMIT_NS else 'r85_unresolved_protocol_wait_wall_budget_exhausted')
+            self.terminal = True
+            self.terminal_state = 'failed'
+            self._emit('budget_exhausted_fail_closed', previous_phase=previous_phase)
+        elif changed:
+            self._emit('wait_phase_changed' if waiting else 'actual_outer_admission_pause',
+                previous_phase=previous_phase)
+        return self.snapshot()
+
+
+def _scope(node):
+    epoch = getattr(node, 'known_scene_scan_epoch', None) or {}
+    bundle = getattr(node, 'known_scene_inputs', None) or {}
+    identity = epoch.get('planner_identity') or {}
+    return dict(planner_epoch=epoch.get('planner_epoch'), planner_process_id=identity.get('pid'),
+        localization_generation=bundle.get('generation'),
+        epoch_localization_generation=epoch.get('generation'))
+
+
+def actual_outer_admission(node, scope):
+    """Read current committed fields only; never invoke/recreate an admission.
+
+    A source-freshness, obstacle, tilt or heading hold does not by itself revoke
+    this historical execution-admission identity.  Those original guards retain
+    their own stop/failure authority.  Changed generation/child, cleared or
+    exhausted samples, a true admission hold, and a mismatched receipt do revoke
+    its use as the protocol-ledger pause condition.
+    """
+    active = getattr(node, 'path_admission_active', None)
+    receipt = getattr(node, 'path_receipt', None)
+    runtime = getattr(node, 'automatic_reference', None)
+    reference = None if runtime is None else runtime.reference
+    if not all(isinstance(v, dict) for v in (active, receipt, reference)):
+        return False
+    binding = active.get('anchor_binding') or {}
+    metadata = active.get('metadata') or {}
+    proof = active.get('proof') or {}
+    final_source = proof.get('r85_final_execution_source_gate') or {}
+    identity = active.get('identity') or {}
+    expected_scope = dict(planner_epoch=binding.get('planner_epoch'),
+        planner_process_id=binding.get('planner_process_id'),
+        localization_generation=binding.get('localization_generation'))
+    return bool(getattr(node, 'samples', None) is not None
+        and not getattr(node, 'path_admission_hold', True)
+        and not getattr(node, 'known_scene_transition', False)
+        and proof.get('allowed') is True and final_source.get('allowed') is True
+        and all(type(expected_scope[k]) is int and expected_scope[k] > 0
+            for k in ('planner_epoch', 'planner_process_id'))
+        and type(expected_scope['localization_generation']) is int
+        and expected_scope['localization_generation'] >= 0
+        and all(type(scope.get(k)) is int and scope[k] == v for k, v in expected_scope.items())
+        and type(scope.get('epoch_localization_generation')) is int
+        and scope['epoch_localization_generation'] == expected_scope['localization_generation']
+        and active.get('correction_generation') == expected_scope['localization_generation']
+        and metadata.get('reference_epoch') == expected_scope['planner_epoch']
+        and metadata.get('planner_process_id') == expected_scope['planner_process_id']
+        and metadata.get('localization_generation') == expected_scope['localization_generation']
+        and all(reference.get(k) == v for k, v in expected_scope.items())
+        and reference.get('reference_id') == binding.get('reference_id')
+        and reference.get('reference_file_sha256') == binding.get('reference_file_sha256')
+        and identity == node.admission_identity()
+        and identity.get('request_id') == node.request_id
+        and identity.get('waypoint_index') == node.waypoint_index
+        and receipt.get('request_id') == node.request_id
+        and receipt.get('waypoint_index') == node.waypoint_index
+        and active.get('trajectory_id') == receipt.get('trajectory_id') == node.active_trajectory_id
+        and tuple(active.get('active_reference_stamp') or ())
+            == tuple(receipt.get('metadata', {}).get('reference_stamp') or receipt.get('metadata', {}).get('reference_content', {}).get('stamp') or ())
+            == tuple(node.active_reference_stamp or ())
+            == tuple(reference.get('sent_reference', {}).get('stamp') or ()))
+
+
+def _write_events(node, ledger):
+    for event in ledger.drain_events():
+        node.evidence.append(Path(node.run) / 'r85_protocol_liveness_events.jsonl', event)
+
+
+def _preserve_source_reports(node, ledger):
+    """Record original v2 reported failures without treating ACK as admission."""
+    ready = getattr(node, 'known_scene_scan_epoch', None) or {}
+    ack = (ready.get('child_odometry_consumption') or {}).get('latest_actual_child_ACK') or {}
+    protocol = ack.get('reference_protocol') or {}
+    identity = {key: ack.get(key) for key in (
+        'run_id', 'planner_pid', 'planner_epoch', 'localization_generation', 'startup_nonce')}
+    last = protocol.get('last_attempt') or {}
+    if last.get('completed') is True and last.get('plan_success') is False:
+        ledger.note_source_report('reported_actual_optimizer_failure',
+            dict(identity, attempt_id=last.get('id')),
+            dict(last, attribution_basis='existing_known_scene_ready_ACK_projection_not_revalidated_by_liveness'))
+    local = protocol.get('local_request') or {}
+    if local.get('last_result') == 'rejected':
+        ledger.note_source_report('reported_actual_local_request_rejection',
+            dict(identity, rejected_count=local.get('rejected_count'), sequence=local.get('last_sequence')),
+            dict(local, attribution_basis='existing_known_scene_ready_ACK_projection_not_revalidated_by_liveness'))
+    # Original Path rejection has no unique structured reason in v2 ACK.
+    # Keep the navigation_stack original log; never derive it from ready=false.
+
+
+def start_controller_request(node, sim_ns, monotonic_ns):
+    """Called only after original on_request accepted a distinct request ID."""
+    if not enabled(node.profile):
+        return
+    existing = getattr(node, '_r85_protocol_liveness', None)
+    if existing is not None and existing.request_id == node.request_id:
+        return
+    if node.state != 'running':
+        raise ValueError('r85_protocol_liveness_start_requires_original_running_request')
+    node._r85_protocol_liveness = ProtocolLiveness(node.profile, node.request_id, sim_ns, monotonic_ns)
+    _write_events(node, node._r85_protocol_liveness)
+
+
+def observe_controller(node, sim_ns, monotonic_ns):
+    """Return True only after installing an exact-zero failed terminal state."""
+    ledger = getattr(node, '_r85_protocol_liveness', None)
+    if ledger is None:
+        return False
+    if ledger.request_id != node.request_id:
+        raise ValueError('r85_protocol_liveness_accepted_request_hook_missing')
+    scope = _scope(node)
+    terminal_state = node.state if node.state != 'running' else None
+    reason = str(getattr(node, 'message', '') or 'no_current_actual_outer_admission')[:1024]
+    if terminal_state is not None:
+        # Original terminal identity/reason wins even when a historical actual
+        # admitted path remains in memory.  Do not classify its wait/admission
+        # phase, or replace the original message with a generic phase reason.
+        admitted = False
+        stage = 'original_request_terminal'
+    else:
+        admitted = actual_outer_admission(node, scope)
+        runtime = getattr(node, 'automatic_reference', None)
+        reference = None if runtime is None else runtime.reference
+        decision = getattr(node, 'path_admission_last_decision', None) or {}
+        if admitted:
+            stage, reason = 'actual_outer_admitted_path', 'current_request_child_generation_and_committed_outer_receipt'
+        elif getattr(node, 'known_scene_transition', False):
+            stage = 'correction_scope_rebind'
+        elif reference is None:
+            ready = getattr(node, 'known_scene_scan_epoch', None) or {}
+            stage = 'source_or_child_ready' if ready.get('ready') is not True else 'reference_publication'
+        elif getattr(node, 'path_admission_hold', False) or getattr(node, 'pending_path_commit', None) is not None:
+            stage = 'outer_admission'
+            reason = str(decision.get('reason') or reason)[:1024]
+        else:
+            ready = getattr(node, 'known_scene_scan_epoch', None) or {}
+            ack = (ready.get('child_odometry_consumption') or {}).get('latest_actual_child_ACK') or {}
+            protocol = ack.get('reference_protocol') or {}
+            first = protocol.get('first_attempt') or {}
+            last = protocol.get('last_attempt') or {}
+            if ack.get('reference_ready') is not True:
+                stage = 'reference_commit_or_unstructured_input_rejection'
+            elif first.get('completed') is not True:
+                stage = 'first_attempt_completion'
+            elif last.get('completed') is True and last.get('plan_success') is False:
+                stage = 'original_optimizer_retry_no_admitted_candidate'
+                reason = str(last.get('result_reason') or 'reported_original_attempt_failed_no_structured_reason')[:1024]
+            else:
+                stage = ('local_replan_or_candidate_triplet' if getattr(runtime, 'replan_sequence', 0) > 0
+                    else 'candidate_triplet_or_outer_admission')
+    result = ledger.observe(sim_ns=sim_ns, monotonic_ns=monotonic_ns,
+        waiting=not admitted and terminal_state is None, stage=stage, scope=scope,
+        source_reason=reason, terminal_state=terminal_state)
+    _preserve_source_reports(node, ledger)
+    _write_events(node, ledger)
+    if terminal_state is not None or not result['failed']:
+        return False
+    node.state = 'failed'
+    node.message = result['failure_reason']
+    node.reset_region_arrival('r85_protocol_liveness_failed')
+    node.publish_command()
+    return True

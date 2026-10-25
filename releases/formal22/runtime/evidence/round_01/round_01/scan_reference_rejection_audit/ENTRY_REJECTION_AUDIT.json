@@ -1,0 +1,392 @@
+{
+  "schema": "r85_cc45_reference_entry_rejection_audit/v1",
+  "created_utc": "2026-10-15T16:09:04.427927+00:00",
+  "run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+  "read_only": true,
+  "active_run_not_interrupted": true,
+  "no_native_truth_read": true,
+  "no_source_or_overlay_modified": true,
+  "publication_source": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/r85_reference_publications.jsonl",
+    "line": 2,
+    "line_sha256": "f90725e2f327adf7b988cd57cc365321717d87fa6576edeef318196c5106a727"
+  },
+  "publication_scope": {
+    "planner_epoch": 3,
+    "planner_process_id": 1154583,
+    "localization_generation": 27,
+    "source_pose_stamp_ns": 245755000000,
+    "control_clock_ns": 245800000000,
+    "reference_id": "20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45:r85:f1_to_f3:1:epoch:3:generation:27"
+  },
+  "saved_input_checks": {
+    "path_frame": "camera_init",
+    "pose_frames": [
+      "camera_init"
+    ],
+    "pose_count": 150,
+    "max_pose_count": 4096,
+    "body_height_m": 0.4,
+    "all_points_and_quaternions_finite": true,
+    "min_internal_segment_m": 0.019344080196512018,
+    "min_internal_segment_zero_based": 148,
+    "internal_segments_le_1um": [],
+    "first_point_body_xyz": [
+      14.76315469448237,
+      6.43684530551763,
+      1.2199999761581422
+    ],
+    "recorded_source_start_body_xyz": [
+      14.748317479709861,
+      6.422008090745121,
+      1.1764648468247154
+    ],
+    "recorded_source_start_to_first_point_m": 0.04832797709908121
+  },
+  "minimum_cpu_replay": {
+    "language": "scalar Python equivalent of exact C++ Boolean conditions, not an actual ROS replay",
+    "results": [
+      {
+        "have_odom": false,
+        "odom_source": "recorded actual connector source SLAM245.755",
+        "used_velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "result": [
+          false,
+          "have_odom_false_before_helper"
+        ]
+      },
+      {
+        "have_odom": true,
+        "odom_source": "recorded actual connector source SLAM245.755",
+        "used_velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "result": [
+          true,
+          "input_predicates_pass"
+        ]
+      }
+    ],
+    "cpu_seconds": 9.583300000000003e-05,
+    "does_not_prove_historical_have_odom_value": true
+  },
+  "adjacent_corrected_SLAM_samples": [
+    {
+      "source_line": 6471,
+      "stamp_ns": 245620000000,
+      "position": [
+        14.74750904630779,
+        6.421484490780365,
+        1.1754431525776963
+      ],
+      "body_velocity": [
+        -0.002953008441424731,
+        0.002354241426355511,
+        0.005752342465678303
+      ],
+      "received_monotonic_wall": 432693.788136052,
+      "callback_ros_clock_ns": 245645000000,
+      "first_reference_point_distance_m": 0.049659354242421225,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6472,
+      "stamp_ns": 245655000000,
+      "position": [
+        14.747510589977633,
+        6.421574248262175,
+        1.1759593332327651
+      ],
+      "body_velocity": [
+        0.0014047669855060073,
+        -0.0016061276277596701,
+        0.014816532746808279
+      ],
+      "received_monotonic_wall": 432693.853138614,
+      "callback_ros_clock_ns": 245680000000,
+      "first_reference_point_distance_m": 0.049168296947678415,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6473,
+      "stamp_ns": 245690000000,
+      "position": [
+        14.747760798730077,
+        6.421827584424918,
+        1.1763226618205778
+      ],
+      "body_velocity": [
+        4.2917356938807866e-05,
+        -0.010034821806577388,
+        0.010514690128170925
+      ],
+      "received_monotonic_wall": 432693.923908556,
+      "callback_ros_clock_ns": 245720000000,
+      "first_reference_point_distance_m": 0.04868482064250999,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6474,
+      "stamp_ns": 245720000000,
+      "position": [
+        14.748023864036549,
+        6.421880536395218,
+        1.1763579202911623
+      ],
+      "body_velocity": [
+        -0.004778628045919874,
+        -0.007567692844211912,
+        0.0011331820918557124
+      ],
+      "received_monotonic_wall": 432693.965179764,
+      "callback_ros_clock_ns": 245745000000,
+      "first_reference_point_distance_m": 0.0485542519782139,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6475,
+      "stamp_ns": 245755000000,
+      "position": [
+        14.748317479709861,
+        6.422008090745121,
+        1.1764648468247154
+      ],
+      "body_velocity": [
+        -0.0032103813622711896,
+        -0.008558485772542278,
+        0.0030718778462586133
+      ],
+      "received_monotonic_wall": 432694.030926465,
+      "callback_ros_clock_ns": 245785000000,
+      "first_reference_point_distance_m": 0.04832797709908121,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6476,
+      "stamp_ns": 245785000000,
+      "position": [
+        14.748699106400359,
+        6.422332031438796,
+        1.176593109686126
+      ],
+      "body_velocity": [
+        -0.001035985746005833,
+        -0.016605665341644562,
+        0.004458277747061799
+      ],
+      "received_monotonic_wall": 432694.099272747,
+      "callback_ros_clock_ns": 245820000000,
+      "first_reference_point_distance_m": 0.04799745001772044,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6477,
+      "stamp_ns": 245820000000,
+      "position": [
+        14.74895448853259,
+        6.422244762122375,
+        1.1763876112058935
+      ],
+      "body_velocity": [
+        -0.006655848358245274,
+        -0.003656277014314216,
+        -0.006021828367446547
+      ],
+      "received_monotonic_wall": 432694.133672713,
+      "callback_ros_clock_ns": 245840000000,
+      "first_reference_point_distance_m": 0.048133772895764405,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6478,
+      "stamp_ns": 245855000000,
+      "position": [
+        14.749112151199705,
+        6.422219185463606,
+        1.176294099147619
+      ],
+      "body_velocity": [
+        -0.003550998402902679,
+        -0.00280016583886219,
+        -0.002741115831160932
+      ],
+      "received_monotonic_wall": 432694.199888816,
+      "callback_ros_clock_ns": 245880000000,
+      "first_reference_point_distance_m": 0.048180079856089957,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    },
+    {
+      "source_line": 6479,
+      "stamp_ns": 245885000000,
+      "position": [
+        14.749185094573786,
+        6.42220613319616,
+        1.1763489430516518
+      ],
+      "body_velocity": [
+        -0.0020418421567323635,
+        -0.0014415643843367241,
+        0.0017877505346649252
+      ],
+      "received_monotonic_wall": 432694.248656236,
+      "callback_ros_clock_ns": 245910000000,
+      "first_reference_point_distance_m": 0.04811307285060398,
+      "scalar_validation_if_already_consumed": [
+        true,
+        "input_predicates_pass"
+      ]
+    }
+  ],
+  "actual_cpp_log": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/ros_logs/scan_planner_node_1154583_1792079734593.log",
+    "bytes": 324,
+    "sha256": "eacff6a41a704c6a3540ff1ec27d00fba26bac74d38b6e35b9f3c6f1f39d71d7",
+    "text": "[WARN] [1792079735.037409782] [scan_planner_node]: Reference disabled: replacement received; outer hold remains authoritative\n[WARN] [1792079735.037506564] [scan_planner_node]: Rejected reference: frame/finite/odometry/nonzero-segment validation failed\n[INFO] [1792080488.870281208] [rclcpp]: signal_handler(SIGINT/SIGTERM)\n",
+    "contains_specific_subpredicate": false
+  },
+  "precise_conclusion": {
+    "observed": "New PID1154583 logged replacement received followed by generic path-entry rejection; no committed reference appears in this log snapshot.",
+    "excluded_for_saved_sent_message": [
+      "wrong path/pose frame",
+      "nonfinite path position/quaternion/body-height",
+      "over4096 budget",
+      "zero-length internal reference segment",
+      "first segment <=1um relative to recorded nearby corrected-SLAM sources"
+    ],
+    "most_likely_unobserved_branch": "!have_odom_ at first pathCallback: a startup/consumption race, not proven by a dedicated value in old log",
+    "remaining_evidence_gap": "Combined log does not record have_odom_, callback-local odom_position/used_velocity, nor received Path payload. Exact historical child subpredicate cannot be established uniquely from these saved records."
+  },
+  "upstream_contract_gap": [
+    "Supervisor graph tests any node_name==scan_planner_node subscriber; not subscriber GID/current child callback execution.",
+    "confirmed source stamps are received by supervisor metadata/odom/cloud subscribers; they are not acknowledgments from child C++ odometryCallback.",
+    "Path is reliable depth1 while body_pose is SensorDataQoS; ordering across different topics/subscriptions is not a consumption guarantee.",
+    "First publication becomes persistent owner.reference before a committed-reference acknowledgment. Subsequent localReplan requires mode3ReferenceUsable and is ignored when initial Path was rejected."
+  ],
+  "correction_contract_without_relaxing_validator": [
+    "Require new owned child has actually consumed a causal fresh corrected body_odom before first Path publication; scope run/epoch/generation/PID or unique publisher identity.",
+    "Require a committed-reference ACK with matching sent reference identity before marking initial reference delivery complete or emitting local replan requests.",
+    "Retry the same scoped reference only if it was explicitly rejected/pending and inputs remain fresh; never forge times, mutate task goal, or revive old epoch.",
+    "Reuse existing self_inflation callback signal only with fresh new-child publisher-GID binding and validation, excluding old transient-local messages. It is only published after have_odom_=true, but its Marker contains no explicit PID/epoch/header source stamp.",
+    "If reliable child identity cannot be established through existing output, add an explicit scope-bound odom-consumed and reference-commit ACK to a fresh isolated overlay. Keep original validation unchanged."
+  ],
+  "source_excerpts": [
+    {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/external/42b65c4fe4a8a1e2_scan_replan_fsm.cpp",
+      "bytes": 54424,
+      "sha256": "42b65c4fe4a8a1e2ceabee12e039d05fabe5c04b448ccaa6d4c37fab8373d9b5",
+      "spans": [
+        {
+          "first": 19,
+          "last": 40,
+          "text": "19:   bool valid_reference_input(const nav_msgs::msg::Path &path, double body_height,\n20:                              const Eigen::Vector3d &odom_position,\n21:                              const Eigen::Vector3d &used_velocity)\n22:   {\n23:     if (path.header.frame_id != \"camera_init\" || path.poses.empty() ||\n24:         !std::isfinite(body_height) || !odom_position.allFinite() || !used_velocity.allFinite())\n25:       return false;\n26:     Eigen::Vector3d previous = odom_position;\n27:     for (const auto &pose : path.poses)\n28:     {\n29:       if (!pose.header.frame_id.empty() && pose.header.frame_id != \"camera_init\") return false;\n30:       const auto &p = pose.pose.position;\n31:       const auto &q = pose.pose.orientation;\n32:       Eigen::Vector3d body_point(p.x, p.y, p.z + body_height);\n33:       if (!body_point.allFinite() || !std::isfinite(p.z) || !std::isfinite(q.x) ||\n34:           !std::isfinite(q.y) || !std::isfinite(q.z) || !std::isfinite(q.w) ||\n35:           (body_point - previous).norm() <= 1e-6)\n36:         return false; // A zero-duration segment makes the polynomial fit singular.\n37:       previous = body_point;\n38:     }\n39:     return true;\n40:   }"
+        },
+        {
+          "first": 118,
+          "last": 128,
+          "text": "118:   void SCANReplanFSM::init(rclcpp::Node *node)\n119:   {\n120:     node_ = node;\n121:     current_wp_ = 0;\n122:     exec_state_ = FSM_EXEC_STATE::INIT;\n123:     trigger_ = false;\n124:     have_target_ = false;\n125:     have_odom_ = false;\n126:     have_new_target_ = false;\n127:     rviz_height_ready_ = false;\n128:     go2_execution_frozen_ = false;"
+        },
+        {
+          "first": 194,
+          "last": 220,
+          "text": "194:     odom_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(\n195:         \"body_pose\", rclcpp::SensorDataQoS(),\n196:         std::bind(&SCANReplanFSM::odometryCallback, this, std::placeholders::_1));\n197:     go2_execution_frozen_sub_ = node_->create_subscription<std_msgs::msg::Bool>(\n198:         \"planning/go2_execution_frozen\", 10,\n199:         std::bind(&SCANReplanFSM::go2ExecutionFrozenCallback, this, std::placeholders::_1));\n200: \n201:     bspline_pub_ = node_->create_publisher<scan_planner_msgs::msg::Bspline>(\"planning/bspline\", 10);\n202:     trajectory_metadata_pub_ = node_->create_publisher<std_msgs::msg::String>(\"planning/trajectory_metadata\", 10);\n203:     if (navi_mode_ == NAVI_MODE::REFERENCE_PATH)\n204:       reference_attempt_pub_ = node_->create_publisher<std_msgs::msg::String>(\"planning/reference_attempt\", 10);\n205:     data_disp_pub_ = node_->create_publisher<scan_planner_msgs::msg::DataDisp>(\"planning/data_display\", 100);\n206:     self_inflation_pub_ = node_->create_publisher<visualization_msgs::msg::Marker>(\n207:         \"self_inflation\", rclcpp::QoS(1).reliable().transient_local());\n208: \n209:     if (navi_mode_ == NAVI_MODE::MANUAL_TARGET)\n210:       goal_sub_ = node_->create_subscription<geometry_msgs::msg::PoseStamped>(\n211:           \"move_base_simple/goal\", 1,\n212:           std::bind(&SCANReplanFSM::rvizGoalCallback, this, std::placeholders::_1));\n213:     else if (navi_mode_ == NAVI_MODE::REFERENCE_PATH)\n214:     {\n215:       path_sub_ = node_->create_subscription<nav_msgs::msg::Path>(\n216:           \"initial_path\", 1, std::bind(&SCANReplanFSM::pathCallback, this, std::placeholders::_1));\n217:       if (external_reference_protocol_)\n218:         local_replan_sub_ = node_->create_subscription<std_msgs::msg::UInt64MultiArray>(\n219:             \"planning/local_replan_request\", 10,\n220:             std::bind(&SCANReplanFSM::localReplanCallback, this, std::placeholders::_1));"
+        },
+        {
+          "first": 508,
+          "last": 519,
+          "text": "508:   void SCANReplanFSM::pathCallback(const nav_msgs::msg::Path::ConstSharedPtr &msg)\n509:   {\n510:     if (navi_mode_ != NAVI_MODE::REFERENCE_PATH) return;\n511:     invalidateReference(\"replacement received\");\n512:     if (!msg || !have_odom_ ||\n513:         (external_reference_protocol_ && msg->poses.size() > 4096) || // Explicit R85 input budget; no simplification.\n514:         !valid_reference_input(*msg, body_height_, odom_pos_,\n515:                                measured_start_.velocity(go2_execution_frozen_)))\n516:     {\n517:       RCLCPP_WARN(node_->get_logger(), \"Rejected reference: frame/finite/odometry/nonzero-segment validation failed\");\n518:       return;\n519:     }"
+        },
+        {
+          "first": 594,
+          "last": 628,
+          "text": "594:   void SCANReplanFSM::odometryCallback(const nav_msgs::msg::Odometry::ConstSharedPtr &msg)\n595:   {\n596:     last_odom_stamp_ns_ = rclcpp::Time(msg->header.stamp).nanoseconds();\n597:     last_odom_receive_time_ = std::chrono::steady_clock::now();\n598:     odom_pos_(0) = msg->pose.pose.position.x;\n599:     odom_pos_(1) = msg->pose.pose.position.y;\n600:     odom_pos_(2) = msg->pose.pose.position.z;\n601: \n602:     if (navi_mode_ == NAVI_MODE::MANUAL_TARGET && !rviz_height_ready_)\n603:     {\n604:       rviz_goal_height_ = odom_pos_(2);\n605:       rviz_height_ready_ = true;\n606:       RCLCPP_INFO(node_->get_logger(), \"Set RViz goal height from initial body_pose z: %.3f\", rviz_goal_height_);\n607:     }\n608: \n609:     odom_vel_(0) = msg->twist.twist.linear.x;\n610:     odom_vel_(1) = msg->twist.twist.linear.y;\n611:     odom_vel_(2) = msg->twist.twist.linear.z;\n612:     measured_start_.update(odom_vel_, rclcpp::Time(msg->header.stamp).nanoseconds(), go2_execution_frozen_);\n613: \n614:     //odom_acc_ = estimateAcc( msg );\n615: \n616:     odom_orient_.w() = msg->pose.pose.orientation.w;\n617:     odom_orient_.x() = msg->pose.pose.orientation.x;\n618:     odom_orient_.y() = msg->pose.pose.orientation.y;\n619:     odom_orient_.z() = msg->pose.pose.orientation.z;\n620: \n621:     have_odom_ = true;\n622:     publishSelfInflationMarker();\n623:     if (navi_mode_ == NAVI_MODE::PRESET_TARGET && !preset_started_)\n624:     {\n625:       preset_started_ = true;\n626:       planGlobalTrajbyGivenWps();\n627:     }\n628:   }"
+        },
+        {
+          "first": 666,
+          "last": 706,
+          "text": "666:   void SCANReplanFSM::publishSelfInflationMarker()\n667:   {\n668:     const double radius = std::max(0.0, self_double_cylinder_radius_);\n669:     const double z_up = std::max(0.0, self_inflation_z_up_);\n670:     const double z_down = std::max(0.0, self_inflation_z_down_);\n671:     const double height = std::max(1e-3, z_up + z_down);\n672: \n673:     visualization_msgs::msg::Marker marker;\n674:     marker.header.frame_id = self_inflation_frame_id_.empty() ? \"world\" : self_inflation_frame_id_;\n675:     marker.header.stamp = node_->now();\n676:     marker.ns = \"self_inflation\";\n677:     marker.type = visualization_msgs::msg::Marker::CYLINDER;\n678:     marker.action = visualization_msgs::msg::Marker::ADD;\n679:     marker.pose.orientation.w = 1.0;\n680:     marker.scale.x = 2.0 * radius;\n681:     marker.scale.y = 2.0 * radius;\n682:     marker.scale.z = height;\n683:     marker.color.r = 0.1;\n684:     marker.color.g = 0.6;\n685:     marker.color.b = 1.0;\n686:     marker.color.a = 0.4;\n687:     marker.lifetime = rclcpp::Duration::from_seconds(0.2);\n688: \n689:     Eigen::Vector3d center = odom_pos_;\n690:     center(2) += 0.5 * (z_up - z_down);\n691: \n692:     Eigen::Vector3d heading(std::cos(getOdomYaw()), std::sin(getOdomYaw()), 0.0);\n693:     Eigen::Vector3d front = center + self_double_cylinder_offset_ * heading;\n694:     Eigen::Vector3d rear = center - self_double_cylinder_offset_ * heading;\n695: \n696:     marker.id = 0;\n697:     marker.pose.position.x = front(0);\n698:     marker.pose.position.y = front(1);\n699:     marker.pose.position.z = front(2);\n700:     self_inflation_pub_->publish(marker);\n701: \n702:     marker.id = 1;\n703:     marker.pose.position.x = rear(0);\n704:     marker.pose.position.y = rear(1);\n705:     marker.pose.position.z = rear(2);\n706:     self_inflation_pub_->publish(marker);"
+        }
+      ]
+    },
+    {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/external/a7e33a7ec8b783c0_measured_start_state.h",
+      "bytes": 1178,
+      "sha256": "a7e33a7ec8b783c0b2fc7295313a3a054018c506b746ff5fc0343dd7799df20b",
+      "spans": [
+        {
+          "first": 1,
+          "last": 34,
+          "text": "1: #pragma once\n2: #include <Eigen/Core>\n3: #include <algorithm>\n4: #include <cmath>\n5: #include <cstdint>\n6: \n7: namespace scan_planner {\n8: // Timestamp-based measured world velocity. Never inherit unexecuted spline\n9: // derivatives after a turn/stop, and never change the measured start position.\n10: class MeasuredStartState {\n11: public:\n12:   double max_speed{.12};\n13:   double time_constant{.4};\n14:   void update(const Eigen::Vector3d &velocity, int64_t stamp, bool frozen) {\n15:     if (!velocity.allFinite() || stamp <= stamp_) return;\n16:     Eigen::Vector3d observed = velocity;\n17:     if (observed.norm() > max_speed) observed *= max_speed/observed.norm();\n18:     const double dt = stamp_ < 0 ? 0. : (stamp-stamp_)*1e-9;\n19:     stamp_ = stamp;\n20:     if (frozen) { filtered_.setZero(); ready_=true; return; }\n21:     if (!ready_) filtered_=observed;\n22:     else filtered_ += (-std::expm1(-dt/time_constant))*(observed-filtered_);\n23:     ready_=true;\n24:   }\n25:   Eigen::Vector3d velocity(bool frozen) const {\n26:     return frozen ? Eigen::Vector3d::Zero() : filtered_;\n27:   }\n28:   void stop() { filtered_.setZero(); }\n29: private:\n30:   Eigen::Vector3d filtered_{Eigen::Vector3d::Zero()};\n31:   int64_t stamp_{-1};\n32:   bool ready_{false};\n33: };\n34: } // namespace scan_planner"
+        }
+      ]
+    },
+    {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/navigation/engineering_v66_r85_turn_handoff_candidate/scan_epoch_supervisor.py",
+      "bytes": 10364,
+      "sha256": "529a3a3dcd7ac05883447182d098d90f5fc223d7f6fef5b1343fcef710ca47f4",
+      "spans": [
+        {
+          "first": 58,
+          "last": 77,
+          "text": "58:         def start_child(self):\n59:             if self.child is not None and self.child.poll() is None:raise RuntimeError('Second SCAN writer forbidden')\n60:             self.planner_epoch += 1\n61:             command=[str(binary),'--ros-args','-r','__node:=scan_planner_node','--params-file',str(a.config),\n62:                 '--params-file',str(a.params)]\n63:             if external_reference_protocol:\n64:                 command += ['-p','fsm.external_reference_protocol:=true',\n65:                     '-p','fsm.reference_run_id:='+run.name,'-p','fsm.reference_epoch:='+str(self.planner_epoch),\n66:                     '-p','fsm.localization_generation:='+str(self.epoch)]\n67:             for name,topic in REMAPPINGS.items():command+=['-r',name+':='+topic]\n68:             self.child=subprocess.Popen(command)\n69:             deadline=time.monotonic()+5\n70:             while time.monotonic()<deadline:\n71:                 saved=identity(self.child.pid)\n72:                 if saved and Path(saved['exe']).resolve()==binary:self.saved=saved;break\n73:                 if self.child.poll() is not None:raise RuntimeError('SCAN exited during owned bootstrap')\n74:                 time.sleep(.01)\n75:             else:raise RuntimeError('Cannot bind owned SCAN executable identity')\n76:             self.restart_clock=self.get_clock().now().nanoseconds;self.slots.clear();self.confirmed=[]\n77:             self.ready=False;self.record('new_planner_with_empty_grid',identity=self.saved,binary_sha256=digest)"
+        },
+        {
+          "first": 94,
+          "last": 118,
+          "text": "94:         def receive(self,role,msg):\n95:             if role=='metadata':\n96:                 value=json.loads(msg.data)\n97:                 if value.get('run_id')!=run.name:return\n98:                 ns=value['source_ns']\n99:                 if value['generation']!=self.epoch or value['correction_transition']:self.ready=False\n100:             else:ns=msg.header.stamp.sec*10**9+msg.header.stamp.nanosec;value=None\n101:             if ns<self.restart_clock:return\n102:             slot=self.slots.setdefault(ns,{})\n103:             slot[role]=(value,time.monotonic())\n104:             while len(self.slots)>16:self.slots.popitem(last=False)\n105:             if all(k in slot for k in ('metadata','odom','cloud')):\n106:                 d=slot['metadata'][0];clock=self.get_clock().now().nanoseconds\n107:                 source_ready=(d['generation']==self.epoch and not d['correction_transition']\n108:                     and -50_000_000<=clock-ns<300_000_000 and all(time.monotonic()-v[1]<.3 for v in slot.values()))\n109:                 age_allowed=not d['correction_stale']\n110:                 if source_ready and not age_allowed and diagnostic_enabled(profile):\n111:                     age_allowed=diagnostic_record(run,profile,'known_scene_SCAN_source_confirmation',\n112:                         'original_correction_stale_prevents_planner_ready_confirmation',\n113:                         dict(source_ns=ns,generation=d['generation'],planner_epoch=self.planner_epoch,\n114:                             match_source_ns=d.get('match_source_ns'),correction_stale=True,\n115:                             correction_transition=False,actual_sources_fresh=True,same_generation=True,\n116:                             original_control_allowed=d.get('control_allowed'),old_generation_curve_reused=False))\n117:                 if source_ready and age_allowed:\n118:                     if not self.confirmed or ns>self.confirmed[-1]:self.confirmed=(self.confirmed+[ns])[-4:]"
+        },
+        {
+          "first": 128,
+          "last": 141,
+          "text": "128:         def tick(self):\n129:             if self.child.poll() is not None:raise RuntimeError('Required SCAN child exited outside an owned epoch transaction')\n130:             s=self.status\n131:             if s is None or time.monotonic()-s['received_wall']>=.3 or s['correction_transition'] or not s['initialized']:\n132:                 self.ready=False;self.publish();return\n133:             if s['generation']!=self.epoch:\n134:                 self.ready=False;self.publish();self.stop_child('completed_navigation_frame_transaction')\n135:                 self.epoch=s['generation'];self.restarts+=1;self.start_child()\n136:             # Both inputs have reached the newly created planner subscriptions.\n137:             graph=all(any(i.node_name=='scan_planner_node' for i in self.get_subscriptions_info_by_topic(topic))\n138:                 for topic in ('/demo/navigation/scan_body_odom','/demo/navigation/cloud'))\n139:             clock=self.get_clock().now().nanoseconds\n140:             self.ready=graph and len(self.confirmed)>=2 and 0<=clock-self.confirmed[-1]<300_000_000\n141:             self.publish()"
+        }
+      ]
+    },
+    {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/navigation/engineering_v66_r85_turn_handoff_candidate/automatic_reference_runtime.py",
+      "bytes": 18904,
+      "sha256": "22f43bc58758a9d8ed107d959e61aabf79a364cfa88857d10fc39117b1616180",
+      "spans": [
+        {
+          "first": 211,
+          "last": 243,
+          "text": "211:     def request_plan(self, owner):\n212:         scope, clock, pose_stamp = self._ready_scope(owner)\n213:         if owner.reference_pub.get_subscription_count() == 0:\n214:             raise ValueError('r85_SCAN_reference_subscription_missing')\n215:         d = self.load(scope[0], scope[2])\n216:         if self.reference is None:\n217:             selected_suffix = None\n218:             if self.config.get('resume_from_actual_route_projection') is True:\n219:                 from r85_reference_suffix import select_route_suffix\n220:                 selected_suffix = select_route_suffix(d['body_points'], d['ground_points'], xyz(owner.pose.tolist()))\n221:             certificate = self._physical_connector(owner, d, scope, pose_stamp, selected_suffix)\n222:             # Geometry work can outlive the source freshness window. Never turn\n223:             # that older spatial receipt into a newly published reference.\n224:             checked_scope, clock, checked_pose_stamp = self._ready_scope(owner)\n225:             if (checked_scope != scope or checked_pose_stamp != pose_stamp\n226:                     or xyz(owner.pose.tolist()) != certificate['actual_start_body_xyz']):\n227:                 raise ValueError('r85_actual_start_changed_during_physical_certificate')\n228:             body = d['body_points'] if selected_suffix is None else selected_suffix['body_points']\n229:             index = 0\n230:             while index < len(body) and math.dist(body[index], owner.pose.tolist()) <= 1e-6:\n231:                 index += 1\n232:             if index == len(body):\n233:                 raise ValueError('r85_nonmoving_global_reference')\n234:             # True ground+.32 is distinct from the paired SCAN transport offset .4.\n235:             msg = owner.make_path(body[index:], height_offset=.4)\n236:             stamp = max(owner.last_reference_stamp+1, owner.stamp(msg))\n237:             msg.header.stamp.sec, msg.header.stamp.nanosec = divmod(stamp,1_000_000_000)\n238:             expected = exact_sent_path(msg)\n239:             self.association.request(expected['stamp'],body[-1],expected)\n240:             owner.reference_pub.publish(msg)\n241:             owner.last_reference_stamp = stamp\n242:             owner.reference_requests += 1\n243:             owner.last_reference = __import__('time').monotonic()"
+        },
+        {
+          "first": 257,
+          "last": 275,
+          "text": "257:         revision = getattr(self.association,'observed_reference_revision',None) or self.association.reference_revision\n258:         if revision is None:\n259:             owner.message = '等待规划器提交参考身份，未重复发送全局参考'\n260:             return False\n261:         if owner.local_replan_pub.get_subscription_count() == 0:\n262:             raise ValueError('r85_local_replan_subscription_missing')\n263:         self.replan_sequence += 1\n264:         msg = owner.make_local_replan_message(scope[0], revision, self.replan_sequence, self.reference['sent_reference']['stamp'])\n265:         owner.local_replan_pub.publish(msg)\n266:         # No ROS callback dispatch occurs between this synchronous publish and\n267:         # registration; unsolicited external-sequence metadata stays rejected.\n268:         self.association.note_local_replan_request(self.replan_sequence)\n269:         owner.last_reference = __import__('time').monotonic()\n270:         owner.evidence.append(self.run/'r85_local_replan_requests.jsonl',dict(\n271:             schema='r85_scoped_local_replan_request/v1',run_id=self.run.name,planner_epoch=scope[0],\n272:             planner_process_id=scope[1],localization_generation=scope[2],reference_stamp=self.reference['sent_reference']['stamp'],\n273:             committed_reference_revision=revision,sequence=self.replan_sequence,\n274:             source_pose_stamp_ns=pose_stamp,control_clock_ns=clock,global_reference_republished=False))\n275:         owner.message = '已请求沿同一 PCT 全局参考进行局部重规划'"
+        }
+      ]
+    }
+  ]
+}

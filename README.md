@@ -1,55 +1,37 @@
-# FAST-LIVO2 / SCAN / Gazebo Go2 Frozen Teacher
+# FAST-LIVO2 / SCAN / Gazebo Go2 — formal22阶段基线
 
-本仓库保存本地仿真适配的源码、场景资产、冻结配置和精简实验报告。仅仿真；不包含实体机器人部署，也不重新训练 Teacher。
+2026-10-25：**当前选定策略下，R85单次F1→F3完整仿真任务通过**。实际部署`536c9d3f4773ef43edef48992c598ccf2fc3f021`，业务候选`0f35662822925a68de9a659558cc5073845b5b87`。真实动态停止/恢复、首次T0起固定5秒停车、当前RGB地图检查通过，独立复核19/19。任务在350.930仿真秒完成，路线高水位34.9079m（不是累计行走里程）。
 
-- [总实验报告](docs/EXPERIMENT_REPORT_20261006.md)：通过、失败及尚未验证范围。
-- [精简证据与曲线](evidence/INDEX.md)、[证据清单](evidence/EVIDENCE_MANIFEST.json)。
-- [原始数据保留边界](docs/EVIDENCE_RETENTION.md)。已删除351.5 GiB原始数据，见[清理总计](maintenance/CLEANUP_SUMMARY.json)及[首批删除回执](maintenance/PURGE_RECEIPT.json)、[核验](maintenance/PURGE_VERIFICATION.json)和[压缩逐文件清单](maintenance/PURGE_JOURNAL.jsonl.gz)。
-- [原 Teacher 开发说明](multifloor_demo/teacher_mode/README.md)。旧路径与旧 PASS 均为历史记录；新机器必须重新构建和预检。
+这是新质量/地形策略下的一次完整任务通过；**原46区域任务未声明通过，间歇时序故障未证明全部根治，也不是实机或所有场景安全证明**。原质量5%限制和车体导数保证并不等价。真实协方差导出候选没有加载；不新增回环、位姿图或全局重定位。
 
-## 2026-10-06 V19最新实测
+- [正式结果与边界](releases/formal22/evidence/RESULT.zh-CN.md) · [独立19项复核](releases/formal22/evidence/FORMAL22_ACCEPTANCE_INDEPENDENT_REVIEW_FINAL.zh-CN.md)
+- [目录和模块职责](docs/FORMAL22_MODULES.md) · [数据流与进程图](docs/FORMAL22_DATAFLOW.md)
+- [实际入口、构建和复现边界](docs/REPRODUCE_FORMAL22.md) · [发布来源与许可](releases/formal22/README.md)
+- [历史记录入口](docs/EXPERIMENT_HISTORY.md) · [原2026-10-06报告](docs/EXPERIMENT_REPORT_20261006.md)
 
-多线程接收/点云解码/图像解码流水线已在原工作区实现并实测；IMU→LIO→VIO共享状态仍由唯一owner顺序执行。同包1.5x单次容量对照的最大位姿滞后2.535 s→50 ms，1x ABBA未见明显时效改善，不能宣称所有场景同幅提速。
+## 当前版本范围
 
-原46任务启动失败1次，运动尝试2次，最终 **8/46失败**。修复内外朝向参考冲突后，SCAN微小起始段的切线仍104次跳变触发转向门，第9区90 s超时；139,102条输入全部正常提交，0取消。较长任务源时间30.303 Hz、墙钟22.338 Hz，整套系统尚未持续满实时。
-
-[本轮最终报告](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/README.md)、[失败因果与曲线](multifloor_demo/teacher_mode/test_results/pipeline_v19_20261006/evaluation/V19_9779_FAILURE_REPORT.md)。本轮新raw留在原工作区，Git只保存精简证据。V19在新目录提供源码和构建入口，便携运行仍阻断，不能用原机gate绕过重新验证。
-
-## 已有实验结果
-
-| 范围 | 历史结论 |
+|项目|本轮真实结果|
 |---|---|
-| 冻结网络接口、关节映射、基础运动 | 通过；5/10 cm 持续登台各3次功能通过 |
-| 真值反馈 PID 标定及保留场景 | 有限范围通过，不能当成 SLAM 导航 |
-| 实际 SLAM/SCAN 导航 | V12、V18 指定静态32区域、两条完整12 m上坡及固定5 s停车各单轮通过 |
-| V17 接收队列流水线 | 严格失败：31615条接受、31614条提交、1条取消 |
-| 新控制器完整跨引擎 Sim2Sim | 尚未通过；缺少匹配 Isaac 闭环对照，旧失败保留 |
-| 新版动态障碍整线、全部真实传感器 Actor、真机 | 尚未验证 |
+|任务|R85单次自动F1→F3，启动、真实感知定位、SCAN规划、跟踪、动态停走、终点、固定5秒停车及本轮RGB保存通过|
+|动态事件|stop177.565s → resume203.625s；恢复0.593909m；最终独立物理核验通过|
+|停车|首次T0=344.880s，固定结束349.880s，不重置窗口；原6项停车判据通过|
+|定位质量|沿用既有robust fit/残差/覆盖/退化/歧义/两帧确认；取消独立5%前景整帧否决，以非前景总体计算表面误差；非旧策略等价|
+|连续地形判定|同一有限地面完整支撑曲线及脚印时以真实地形坡度判定，保留原0.35rad、残差/净空/碰撞；非旧bodyZ/XY导数间接界等价|
+|结束|自然返回0，6项进程/锁/ROS域退出检查、Actor18295样本CRC及pipeline提交闭合通过|
 
-三层连接为坡道。导航使用实际 SLAM/IMU/点云与 SCAN；当前 Teacher Actor 仍保留232维特权仿真输入。V18采用 LIO 4线程、VIO块处理1线程；局部计算优化已测得，但没有证明整条链加速。完整结论以总报告的具体版本与判据为准。
+## 目录
 
-## 代码与模型
+`releases/formal22/`是本次实际冻结版本的源码/配置和小型证据导出；`multifloor_demo/`、`scan_multifloor/`、`slam5_navigation/`、`go2_sim_control/`、`tools/`等原目录保留2026-10-06 main历史，不自动代表formal22入口。不要把旧网页/CHAMP/Teacher命令当成本轮Student入口。
 
-`multifloor_demo/teacher_mode/` 包含推理、观测、唯一执行器、控制器、导航、评估器和各独立优化版本；`scan_multifloor/` 与 `slam5_navigation/` 保存构建所需源包；`go2_sim_control/` 保存模型网格。`tools/` 是本仓库路径迁移和新构建入口；`provenance/SOURCE_EXPORT_INITIAL.json` 记录复制时的源码身份，后续迁移修改另记。
+导出包含实际runtime checkout、native571源码以及真实scope中的文本依赖；兼容/历史绑定文件随冻结包保留，不意味着每个模块启用。实际加载和触发以本轮回执为准。权重、ELF、构建输出、点云/bag/大原始流未上传，模型/二进制保留SHA和依赖引用。公开导出规范化了本机路径等私人信息，原部署SHA与公开文件SHA分别登记；**尚未从此脱敏目录重新运行仿真，不能继承新机器的运行PASS**。
 
-权重不提交Git。将自己的冻结权重放到 `models/model_1000.pt`，或设置 `TEACHER_MODEL_CHECKPOINT`。必须匹配：
-
-```text
-bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34
-```
-
-Teacher CPU单线程、50 Hz；执行器物理200 Hz；300 ms新鲜度保护与唯一关节执行权保留。动作零值不等于停车。源自上游的代码和资产保留各自许可证；本仓库不重新许可这些内容。
-
-## 新环境复现状态
-
-新目录已从源码构建SDK、ROS依赖、SCAN、执行器及V12/V18/V17；150次有限数值检查通过，V18 prepare-only已运行成功（没有启动ROS/Gazebo）。V17保持队列语义预检阻断。操作命令见[构建与运行说明](tools/README.md)，实际验证范围见[迁移说明](tools/PORTABILITY_CHANGES.md)与[验证收据](tools/PORTABILITY_VALIDATION.json)。新目录尚未重跑实际仿真，不继承历史导航PASS。完整原始数据删除后不能精确回放或重新独立验收旧实验，源码用于重新运行新的实验。
-
-无需 ROS、torch 即可检查场景资产与配置：
+不启动ROS或仿真即可核查导出文件：
 
 ```bash
-python3 -B tools/prepare_offline.py --variant v18 \
-  --profile combined_lio4_vio1_l64_r30_c30_600 \
-  --output /tmp/go2_teacher_source_preview
+python3 -B tools/formal22_manifest_check.py
 ```
 
-输出目录必须不存在。`PASS_SOURCE_ASSETS_ONLY` 仅表示源码/资产预检，不授权真实运行，也不表示运动、Sim2Sim或导航通过。实际仿真需按tools说明完成当前主机的新构建和数值预检，再显式选择执行；准备成功不等于实际仿真通过。
+真实运行仍需冻结模型、本机依赖构建、来源/配置重绑定和当次资源/时间证明；本轮旧行政窗口不能复用。详见复现说明。模型是冻结Student45推理，外层导航不用机器人真值；native传感代理与内层PID仍含特权仿真反馈，不声称全链非特权或Sim2Sim通过。仅仿真，不连接实机、不训练。
+
+原main历史保留。源自上游的代码/资产沿用各自许可，本仓库不重新许可模型或第三方内容；[旧README](https://github.com/hk865/Fast-Livo2-SCAN-Gazebo-dog-sim-control/blob/5237b8865d1f788b88f86fe21b72852db3bedb03/README.md)及历史失败不改写。

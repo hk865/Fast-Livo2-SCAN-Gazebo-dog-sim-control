@@ -1,0 +1,104 @@
+{
+  "schema": "ACK_prefix_actual_method_software/v1",
+  "base_commit": "7fc8cfe8150d8d41447d828f3669dce865e53316",
+  "PASS": true,
+  "groups": {
+    "1_real_closed_ACK_equal_and_cache_alias_private": "PASS",
+    "2_atomic_new_inode_updated_ACK_bad_JSON_halfline_missing_recovery": "PASS",
+    "3_scope_future_causal_older_selection_and_original300ms_rejection": "PASS",
+    "4_same_file_fallback_init_binding_and_bounded_component_cost": "PASS"
+  },
+  "NoNode": true,
+  "original_closed_run_unchanged": true,
+  "source_fixture": {
+    "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T151836Z_closed_loop_R85_compact_protocol_02_round27_b077",
+    "ACK_bytes": 91712,
+    "ACK_SHA256": "815ebf01226e1a69316fcc2ad5ea97671d9e1a9480c0e49f7e637684e4cb9373",
+    "scope_bytes": 579378,
+    "scope_SHA256": "47732286d4e655abebd585b8d71493ee3493b838ea26561247c9c84192ee986c",
+    "profile_non_braking": true
+  },
+  "counts": {
+    "new_inode_same_payload_combined_old_new": {
+      "ACK_read_text": 1,
+      "ACK_read_bytes": 183424,
+      "json_loads": 1,
+      "json_input_bytes": 91712,
+      "scope_read_bytes_calls": 1,
+      "scope_read_bytes": 579378,
+      "sha256": 1,
+      "hash_input_bytes": 579378,
+      "ACK_stat": 1,
+      "ACK_binary_reads": 1
+    },
+    "new_init_binding": {
+      "scope_read_bytes_calls": 1,
+      "scope_read_bytes": 579378,
+      "sha256": 1,
+      "hash_input_bytes": 579378
+    },
+    "new_cold_get_ack": {
+      "ACK_stat": 1,
+      "ACK_binary_reads": 1,
+      "ACK_read_bytes": 91712,
+      "json_loads": 32,
+      "json_input_bytes": 91594
+    }
+  },
+  "cost": {
+    "old_unchanged200": {
+      "wall_ns": 74123844,
+      "thread_CPU_ns": 74123549,
+      "operations": {
+        "ACK_read_text": 200,
+        "ACK_read_bytes": 18342400,
+        "json_loads": 200,
+        "json_input_bytes": 18342400,
+        "scope_read_bytes_calls": 200,
+        "scope_read_bytes": 115875600,
+        "sha256": 200,
+        "hash_input_bytes": 115875600
+      }
+    },
+    "new_unchanged200": {
+      "wall_ns": 6512300,
+      "thread_CPU_ns": 6512801,
+      "operations": {
+        "ACK_stat": 200
+      }
+    },
+    "old_new_inode50": {
+      "wall_ns": 20545874,
+      "thread_CPU_ns": 20549901,
+      "operations": {
+        "ACK_read_text": 50,
+        "ACK_read_bytes": 4585600,
+        "json_loads": 50,
+        "json_input_bytes": 4585600,
+        "scope_read_bytes_calls": 50,
+        "scope_read_bytes": 28968900,
+        "sha256": 50,
+        "hash_input_bytes": 28968900
+      }
+    },
+    "new_new_inode50": {
+      "wall_ns": 6222464,
+      "thread_CPU_ns": 6224363,
+      "operations": {
+        "ACK_stat": 50,
+        "ACK_binary_reads": 50,
+        "ACK_read_bytes": 4585600,
+        "json_loads": 50,
+        "json_input_bytes": 143350
+      }
+    }
+  },
+  "cost_limit": "Offline hot prefix only; fixed closed ACK/50 scalar sequence updates and OS page cache, no executor/ROS/Actor load or real-time/navigation benefit claim. Writes excluded from timed get_ack. Instrumented operation counters add bookkeeping overhead, so measured numbers are not production latency.",
+  "actual_production_changed_methods": [
+    "PIDNavigation.__init__ scalar binding",
+    "PIDNavigation.get_ack parsing source/selected-copy"
+  ],
+  "cascade_math_and_all_other_controller_methods_unchanged": true,
+  "candidate_source_sha256": "a11b9d8828dcd4d4a225e908074f40c2ff25b321308937bdb4425518def9b79e",
+  "base_source_sha256": "6eeabfd414429c7c59cb05d79b99e35e0b6951295e3a55fb9923fa8467cd9642"
+}

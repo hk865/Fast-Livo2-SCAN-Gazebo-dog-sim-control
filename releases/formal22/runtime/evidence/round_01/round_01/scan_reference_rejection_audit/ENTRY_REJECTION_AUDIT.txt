@@ -1,0 +1,11 @@
+cc45 SCAN参考入口拒绝：已排除保存的suffix消息几何/数值错误；最强推断是新child首Path先于odom消费，但旧日志未逐项记录，不能装作已直接观测到该bool。
+
+实际PID1154583、epoch3、generation27，使用原ff98b442…SCAN binary。245.800s发出的唯一参考含150点，path/pose frame均camera_init、坐标/四元数/0.4高度偏置均有限；内部最短段19.344mm，未发现<=1µm零段；记录的245.755真实校正SLAM到首参考点48.328mm。相邻245.6–245.9的已保存SLAM也均与首点非重合。小型标量CPU重演：相同消息及有限已保存odom，have_odom=true通过该入口；have_odom=false立即拒绝。
+
+C++准确条件：scan_replan_fsm.cpp:512–515 是 !msg || !have_odom_ || (external && size>4096) || !valid_reference_input。helper23–37检查frame、空消息、bodyheight/odom/velocity有限、各pose数值及每段>1e-6。init125令have_odom=false，只有odometryCallback621置true。日志517把这些子项合为一句，不保存callback当刻odom/velocity或received payload，所以无法唯一确定历史子谓词；不能用当前ready或后续SLAM倒推其首callback已经ready。
+
+上游契约缺口已由源码确认：scan_epoch_supervisor.py137–140只检查任意同名node的订阅graph+supervisor自己收到2组metadata/odom/cloud。graph存在与外部源已到，不证明新C++进程的odometryCallback已执行。path为reliable depth1，body_pose为SensorDataQoS，跨topic没有先消费odom的保证。初次Path被拒后reference_ready=false；后续localReplan入口要求mode3ReferenceUsable，无法修复一个从未commit的参考。由另一agent负责控制侧完整死锁链，本报告不改活动实例。
+
+最小修正契约：先取得新owned child消费新鲜odom的回执，再发首Path；收到匹配scope/reference的commit ACK后才将其视为已交付，并允许localReplan。原frame/finite/非零段校验保持。可研究复用现有self_inflation：该输出只在odom callback have_odom=true之后生成，reliable+transient_local，但Marker无PID/epoch，必须严格绑定新publisher GID并排除旧latched消息，不能只看stamp或node_name。若不能严绑则新隔离overlay显式提供scope化odom-consumed/reference-commit ACK。不能放松validator或伪造odom来推进。
+
+本审查只读冻结源码、已保存参考和校正SLAM；未读取live native truth、未改C66/overlay、未停当前运行、未起新仿真。精确逐项predicate的历史值仍未记录，这是证据边界而非行动被拒。

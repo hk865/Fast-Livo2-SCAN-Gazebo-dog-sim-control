@@ -1,0 +1,120 @@
+{
+  "authorization": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/RENEWED_USER_AUTHORIZATION.json",
+    "sha256": "1b07c4b39727ebdcb11b8d35537519bb4e64a9be566c4382fa58a1751d1bbec7"
+  },
+  "base_contract": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_SCAN_REFERENCE_PROTOCOL_WORKSPACE_CONTRACT.json",
+    "sha256": "6a028cb1dc37dfab63840172b9e0ba35fec3e0b3d09aa0926e91747f229e5a67"
+  },
+  "baseline_async_install": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/native_observer_queue_v1/INSTALL_RECEIPT.json",
+    "sha256": "a9ec63333de181e51d31c315221b5bd75dd9142ae3ff5b938fc8dea83a18b2a8"
+  },
+  "baseline_commit": "836606ee8f887dd112020f2c1763fc1e0f738a56",
+  "bridge_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/schedule_renewal_adapter.py",
+    "sha256": "7a1c879085c55f42dfb7e7f863f64e4a77a0ea39e6343cad8fba18eecbefbf00"
+  },
+  "budget_review": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/FINISH_BUDGET_RENEWAL_REVIEW.json",
+    "sha256": "b9a700b8b0334d72f0c8e1e70c51ad460cc0eb4dfb1c19bce2fdd110f82c695b"
+  },
+  "exact_targets": [
+    "r85_session_guard.py",
+    "scan_workspace.py",
+    "schedule_renewal_adapter.py",
+    "R85_SCHEDULE_RENEWAL_20261016_UNTIL1000.json",
+    "profiles/r85_f1_f3_native_observation_spool_r13_20261016.json"
+  ],
+  "expected_bound_source_count_after": 252,
+  "expected_bound_source_count_before": 250,
+  "guard": {
+    "after_sha256": "e3d65e45a704b09a033809dd3d8bcb891129f825f2a8c13239db6d1c00679210",
+    "before_sha256": "3a08ca4f1cdc38f6abf59efb31b5d7ff7a15194ff4e7137d8ed14e4fdc44e942",
+    "beforeimage": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/schedule_adapter_stage/beforeimage/r85_session_guard.py",
+      "sha256": "3a08ca4f1cdc38f6abf59efb31b5d7ff7a15194ff4e7137d8ed14e4fdc44e942"
+    },
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_session_guard.py",
+    "substitutions": [
+      [
+        "FINISH_RESERVE_S = 1200",
+        "FINISH_RESERVE_S = 300"
+      ],
+      [
+        "AUTHORIZED_USER_DEADLINE_UTC = '2026-10-16T06:00:00+00:00'",
+        "AUTHORIZED_USER_DEADLINE_UTC = '2026-10-16T10:00:00+00:00'"
+      ],
+      [
+        "explicit_user_continue_until_20261016_1400_UTCplus08",
+        "explicit_user_continue_until_20261016_1800_UTCplus08"
+      ]
+    ]
+  },
+  "historical_v3_adapter": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_HEADING_BRAKING_CONTROL_ADAPTER_CONTRACT.json",
+    "sha256": "3fb1795ada9a6296c0cb84e352f6c27a5996b7458f74ffc47274fc082dcc5058"
+  },
+  "kind": "until_20261016_1000UTC",
+  "navigation_acceptance_established": false,
+  "physical_thresholds_changed": false,
+  "profile": {
+    "added_session_keys": [
+      "schedule_renewal_proof",
+      "schedule_renewal_proof_sha256"
+    ],
+    "beforeimage": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/schedule_adapter_stage/beforeimage/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json",
+      "sha256": "6861d06415af56a809182517480bf9eaec0ee2c39342bb58e11f3f005abc2164"
+    },
+    "changed_value_paths": [
+      "r85_session.deadline_utc",
+      "diagnostic_observe_only.user_authorized_work_deadline_utc",
+      "diagnostic_observe_only.work_deadline_basis"
+    ],
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_native_observation_spool_r13_20261016.json"
+  },
+  "root_scheduling_selection": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/ROOT_SCHEDULING_SELECTION.json",
+    "sha256": "fc0b50276803cb68a01b45e778453576248663292fe56d52ef17caa5f806b26b"
+  },
+  "runtime_acceptance_inherited": false,
+  "scan_binary_changed": false,
+  "scan_contract_bytes_changed": false,
+  "scan_source_changed": false,
+  "schedule": {
+    "basis": "explicit_user_continue_until_20261016_1800_UTCplus08",
+    "deadline_utc": "2026-10-16T10:00:00+00:00",
+    "finish_reserve_s": 300,
+    "original_native_cap_s": 770,
+    "original_runner_wall_cap_s": 2400,
+    "outer_supervisor_wall_cap_s": 2700
+  },
+  "schema": "r85_explicit_schedule_renewal/v1",
+  "simulation_only": true,
+  "unchanged_sources": {
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/cascade_core.py": "f05efd2fb3cddf3f4652c949ccc436ce061d0cbc6ca482389360d46fb997eae7",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/compact_archives.py": "3623c25f5343542811725556ef4b75883c298e4c27d1011e92e1589fb89d69fc",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/controller.py": "b1ed12d5ccd66edb9b8b72b643d8c41f8a74f3010fa63f01205047eaca706805",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/frozen_qualification.py": "bf9fc8a293ad6fa6e767410f43480282b8e64cbe87bda97b58aecd8bbff31477",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/imu_causal_buffer.py": "66bb3f9be5c590049bea2e44128763c3f249c40b7955f92f3d3be4c7626434ee",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/native_observation_spool.py": "3e0f1b94e85ea0943c0bd0b937ffd6829439af1af8cdb44abdcaf444b120194d",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_dynamic_completed_scope.py": "f48134ce5593a52279c59fbdbb3a84a515d18c43787747be4eb8520de91aa216",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_dynamic_obstacle_runtime.py": "723a8389d390efadced0fa7e5a0f04bb6959ce65b155e396115347835e1186d2",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_preflight.py": "bea31da0491eab2ae7e3a060e16b4cc3729a758382f2d8987f73594ba31fade8",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/shared_controller.py": "13ab6d6dd28785e4fd30d4d93d81c61f69a79c2e693e04edacff09316896029f",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/teacher_wrapper.py": "d9c7eb947815339bc363f3a8ce3fd9ccab1fb5ccea5d2d321d10a6dd94034466",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/transition_gate.py": "e33190adfa679a3a9bb955930e6f8425ef20f3895fb3abb342a11c1d835291c8"
+  },
+  "validator": {
+    "after_sha256": "c1af8899bea6122b55beccc8a955dff2f20b806d71288a5269872bc1a9a00315",
+    "before_sha256": "fd89311e46399f63fef537c73e7a2d13d655e02f2b69591668ccd604e8398b9b",
+    "beforeimage": {
+      "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/schedule_adapter_stage/beforeimage/scan_workspace.py",
+      "sha256": "fd89311e46399f63fef537c73e7a2d13d655e02f2b69591668ccd604e8398b9b"
+    },
+    "change": "Exact schedule-only bridge replacement table in pinned new helper; inverse recovers original fd893 bytes.",
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/scan_workspace.py"
+  }
+}

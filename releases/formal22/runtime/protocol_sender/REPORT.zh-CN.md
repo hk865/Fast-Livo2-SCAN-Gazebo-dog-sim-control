@@ -1,0 +1,13 @@
+# SCAN 一次路线定义与小候选 sender
+
+从9cd4ed6独立实现，只复制实际R107 plan_manage 28文件/211086B，SOURCE_COPY_MANIFEST逐文件绑定；仅fsm.cpp/.h两文件业务diff。没有R123或其它旧候选混入。
+
+真实pathCallback成功拟合、reference_content_json_更新、++reference_revision_后一次发布planning/route_definition。String schema scan_route_definition/v1，RELIABLE/TRANSIENT_LOCAL/KEEP_LAST1。原scope+route_id（stamp总ns）/route_version（committed_revision），完整reference_content/原时长/body_goal在此低频边界发送。无周期重发、无新通用缓存/队列。root集成负责remap到/demo/navigation/route_definition。
+
+attempt/metadata schema3只携带route编号/版本；metadata不再序列化global_state.current_curve，也不再重复整个trajectory，改为trajectory_id/trajectory_start_time。原Bspline照发；原小目标、start、progress、negative、optimizer与sequence字段保留。完整reference_curve_json只留在原创建reference_content的低频helper，不再由metadata调用。算法、planner.yaml、物理/新鲜度门、原发布时序与ACK未改。definition增加的观测仅为已有R74启动endpoint和低频summary两个scalar，不增加R107高频层；R107原三路bytes/pub wall/threadCPU/身份逻辑逐字保留。
+
+私有单worker完整package构建PASS：24.160480s、rc0，输出35,221,504allocatedB，ELF5,607,184B/SHA abc6af16dfe298d8ee5006eb6c4bd574b715397424a73f426265177f8f700faa。源/原只读依赖SHA构建前后相等，原config逐字相同；实际compile_commands/.o.d绑定私有fsm和R107头，原project link inputs全部在实际link命令。host三锁/进程/内存准入、600s/3GBcap、收尾组为空通过。默认隔离namespace首试只见3进程，准入失败且未启动compiler，原收据BUILD_PREFLIGHT_NAMESPACE保留；host获授权后才执行build。P14closure retained90,128,318,464B，+3GBbuild+20GBreserve=113,128,318,464<170GB；只核私有输出，未重扫全库CRC。
+
+有限软件检查7项PASS：从实际新/原C++方法提取序列化段运行，不启动Node；复用P12保留trajectory3样本SHA3656c6cc...，原serializer输出JSON与保留metadata字段完全一致（仅本进程PID变化）。新旧字段差异严格限于合同删除/schema/编号；负attempt、emergency、stamp/revision更新均保留。重建UTF8：metadata298424→1692B，attempt169861→1053B，definition169349B。完整JSON在这里仅为software fixture；原reference_content字符串从已解析保存样本重建，其数字编码可能不同，故298424不冒充原wire298335B，也不假称历史全程重放/CDR。实际新运行bytes仍由原R107直接计。
+
+本交付仅编译与序列化软件PASS；没有ROS节点/Gazebo、DDS晚订阅/跨话题到达或完整导航PASS。真实QoS、单revision触发、definition最后到达、接收端pending以及原300ms数据裁决必须由root唯一owner后续运行验证。LOADING_CONTRACT提供实际路径、SHA、remap、字段及未证边界。

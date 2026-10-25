@@ -1,0 +1,73 @@
+{
+  "schema": "r85_read_only_existing_normal_stop_path_review/v1",
+  "UTC": "2026-10-15T16:07:09.461671+00:00",
+  "run_id": "20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45",
+  "decision": "Existing Gazebo-only owned-group SIGINT is compatible with natural worker EOF/archive path, conditionally on original worker10s wait and normal pipeline drain; reviewer sends no signal.",
+  "no_active_source_or_control_modified": true,
+  "no_signals_sent": true,
+  "no_native_pose_read": true,
+  "recorded_gazebo_identity": {
+    "pid": 1151343,
+    "state": "R",
+    "ppid": 1150963,
+    "pgid": 1151343,
+    "session": 1151343,
+    "start_ticks": 43223539,
+    "boot_id": "00000000-0000-4000-8000-000000000000",
+    "ownership_token": "9862c71073ef4a7cac2b9849d028706d",
+    "role": "gazebo",
+    "owned_run": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45"
+  },
+  "identity_note": "Recorded identity only; sender must freshly validate pid/start_ticks/pgid/session/boot_id, all group members, actual exe and run marker immediately before signalling. No live target validity is claimed here.",
+  "source_chain": [
+    {
+      "source": "run.py:720",
+      "fact": "gazebo and worker explicitly excluded from dependency-exited exception"
+    },
+    {
+      "source": "external/77529f3155017e5b_teacher_actuator.cpp:68",
+      "fact": "actuator destructor closes Unix socket fd"
+    },
+    {
+      "source": "policy/worker.py:150-155",
+      "fact": "disconnected native socket raises EOFError; if disconnect races send, another transport exception can occur"
+    },
+    {
+      "source": "policy/worker.py:313-323",
+      "fact": "exception records fault text but finally closes streams and writes compressed NPZ then worker_result; no physical success is invented"
+    },
+    {
+      "source": "navigation/engineering_v66_r85_turn_handoff_candidate/worker.py:323-340",
+      "fact": "outer finally closes Student/provider and evidence/timing/command/ACK writers"
+    },
+    {
+      "source": "run.py:764-765",
+      "fact": "Gazebo process exit leads to worker.wait(timeout=10) before leaving execution loop"
+    },
+    {
+      "source": "run.py:795-822",
+      "fact": "pipeline normal drain then owned cleanup then archive integrity check and original worker escalation"
+    }
+  ],
+  "remaining_original_conditions": [
+    "Worker natural EOF, NPZ compression and outer writer drain must finish within existing10s wait to avoid execution exception.",
+    "If that wait times out while worker remains alive, archive_abort_reason805-808 treats it as exceptional and may cancel archive grace; original30s grace is not promised.",
+    "Pipeline normal_completed, role cleanup, storage/watchdog/guardian and original wall deadline remain requirements; no relaxation.",
+    "Gazebo SIGINT exit may be nonzero; preserve actual cleanup status and any normal-drain failure. Never convert it to PASS."
+  ],
+  "reason_attribution": [
+    "Write an independent external-owner-stop receipt with actual deadlock evidence and exact signal/target identity before action.",
+    "Do not fabricate R85 task failure, diagnostic endpoint or success artifacts.",
+    "EOFError/ConnectionReset/BrokenPipe in worker_result after intentional physics stop are shutdown transport consequences unless evidence proves an earlier physical fault.",
+    "run.py789 labels any worker fault text as Actor/native physical fault; final reporting must explicitly distinguish this generic text from actual original physical fault predicates and pre-stop chronology."
+  ],
+  "better_existing_owner_entry": "No truthful external stop-request input exists in frozen runtime_stop_decision; runner SIGTERM/SIGINT takes exceptional archive path. No better existing graceful owner entrance identified.",
+  "outcome_pending": "Parent action and actual archive/cleanup verification remain pending; this is source-path feasibility only.",
+  "frozen_sources_sha256": {
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/navigation/engineering_v66_r85_turn_handoff_candidate/run.py": "ea360e4a9ad25300cd5ba7a739f85ae8e27f7b771e84450ea40e04b72f431dfe",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/navigation/engineering_v66_r85_turn_handoff_candidate/worker.py": "3726ad1b45019b297098e1e8dc4b9b6adaac3274023c26fee96f4b67ffdbe6cb",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/navigation/engineering_v66_r85_turn_handoff_candidate/worker_archive_shutdown.py": "1ff614c2f69048f5f806c6e6f24ccd0ccaec7084930a897981003850c379855b",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/policy/worker.py": "70b9a7564c58be23ca070c6e8da8fbfedfa3cadd5eb7696aa1441f46206a83a5",
+    "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T154745Z_closed_loop_R85_support_suffix_r01_low_speed_20261015_cc45/sources/external/77529f3155017e5b_teacher_actuator.cpp": "77529f3155017e5be054bb97192dd117e19ba5ade1637dbc6cbb70a390c3aa56"
+  }
+}

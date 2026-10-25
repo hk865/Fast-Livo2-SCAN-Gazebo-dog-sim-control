@@ -1,0 +1,2229 @@
+{
+  "schema": "formal22_continuous_terrain_grade_actual_effect/v1",
+  "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+  "implementation": "0f35662822925a68de9a659558cc5073845b5b87",
+  "physical_source_sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2",
+  "actual_worker_startup": {
+    "worker_pid": 3643479,
+    "worker_tid": 3643479,
+    "eager_submit": false,
+    "process_group": 3642810,
+    "parent_pid": 3643141,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "thread_caps": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "modules": {
+      "worker": {
+        "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r88_physical_worker.py",
+        "sha256": "8d71eef6fc62801cf80ab46276510fd7dddeffba5841305d3a0373128a11cd98"
+      },
+      "geometry": {
+        "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+        "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2"
+      }
+    },
+    "startup_ready_monotonic_ns": 175712051319607
+  },
+  "counts": {
+    "physical_certificate_rows": 165,
+    "unique_payload_certificates": 165,
+    "duplicates": 0,
+    "certificates_using_new_basis": 29,
+    "zero_use_certificates": 136,
+    "total_reclassified_patches": 33,
+    "reclassified_patch_count_distribution": {
+      "0": 136,
+      "1": 25,
+      "2": 4
+    },
+    "certificate_allowed_admitted": [
+      {
+        "physical_allowed": true,
+        "admitted": true,
+        "count": 143
+      },
+      {
+        "physical_allowed": true,
+        "admitted": false,
+        "count": 18
+      },
+      {
+        "physical_allowed": false,
+        "admitted": false,
+        "count": 4
+      }
+    ],
+    "last_support_face_distribution": {
+      "floor_1": 1,
+      "ramp_12": 13,
+      "ramp_23": 15
+    },
+    "support_face_scope": "Only last_terrain_grade_evaluation per certificate retained; not exact per-all33-patches face attribution",
+    "scope_distribution": [
+      {
+        "epoch": 2,
+        "generation": 1,
+        "certificates": 22
+      },
+      {
+        "epoch": 3,
+        "generation": 31,
+        "certificates": 7
+      }
+    ],
+    "first_trigger": 48250000000,
+    "last_trigger": 322345000000
+  },
+  "actual_trigger_rows": [
+    {
+      "line": 16,
+      "payload_sha256": "d8d5a94fea7888ed337cde7b39827b23959b18f8099640b9805fd5da461a1f29",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 16,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 48250000000,
+        "start_time": [
+          48,
+          300000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "floor_1",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.0,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.36578573004921733,
+          0.7315714600984347
+        ]
+      },
+      "actual_certificate_wall_ms": 37.27095102658495
+    },
+    {
+      "line": 38,
+      "payload_sha256": "39e8a0bd92378db11c3a9030c9945272823ee5979712f315b42124dbb8cbfa0e",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 38,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 86925000000,
+        "start_time": [
+          86,
+          930000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.0,
+          0.39708725285276286
+        ]
+      },
+      "actual_certificate_wall_ms": 37.23519199411385
+    },
+    {
+      "line": 39,
+      "payload_sha256": "9bc8a07c805a215166d8316a3185712f5720fb843cac81de10ee547ee1aafc37",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 39,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 88940000000,
+        "start_time": [
+          88,
+          990000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.36349755322411625,
+          0.7269951064482325
+        ]
+      },
+      "actual_certificate_wall_ms": 37.00948299956508
+    },
+    {
+      "line": 41,
+      "payload_sha256": "034f7258e2bfe16905966e840ef8873a3e9fd23a59e391f577c145e4c9a4c7cf",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 41,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 92040000000,
+        "start_time": [
+          92,
+          75000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.35427691767744734,
+          0.7085538353548947
+        ]
+      },
+      "actual_certificate_wall_ms": 37.50318198581226
+    },
+    {
+      "line": 50,
+      "payload_sha256": "425909329612ac0414e6b9f1e8f7c5289585fb494e84b9792a59e81955f39864",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 50,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 104975000000,
+        "start_time": [
+          105,
+          30000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.0,
+          0.3975630354757829
+        ]
+      },
+      "actual_certificate_wall_ms": 25.786574988160282
+    },
+    {
+      "line": 51,
+      "payload_sha256": "3806d346c632f3ed776a180b40915ce7fb8a21d8d9123ff78a087ca521580eec",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 51,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 107020000000,
+        "start_time": [
+          107,
+          50000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3700162276051959,
+          0.7400324552103918
+        ]
+      },
+      "actual_certificate_wall_ms": 27.23935298854485
+    },
+    {
+      "line": 53,
+      "payload_sha256": "79f3900a761ab5d8cb4673715ee337abe736c0ee53d0f79c3e62417ad0936e27",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 53,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 108970000000,
+        "start_time": [
+          109,
+          20000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 2,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.41609480678475347,
+          0.8321896135695069
+        ]
+      },
+      "actual_certificate_wall_ms": 27.907645009690896
+    },
+    {
+      "line": 56,
+      "payload_sha256": "c24d0f443c1094736f25c5edc9b80db892bfbb522ecb4714f37f091bb3f32235",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 56,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 112335000000,
+        "start_time": [
+          112,
+          365000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.38946228903847063,
+          0.7789245780769413
+        ]
+      },
+      "actual_certificate_wall_ms": 28.213921992573887
+    },
+    {
+      "line": 60,
+      "payload_sha256": "5e31480a5bd241a139dec785f73f14051fa16a9c0be27c5605a2d9ee663dcdd3",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 60,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 118310000000,
+        "start_time": [
+          118,
+          350000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.356464993876775,
+          0.71292998775355
+        ]
+      },
+      "actual_certificate_wall_ms": 25.13449001708068
+    },
+    {
+      "line": 63,
+      "payload_sha256": "81357109711dff20ef1825496b7c04e66849ed19e4c37744326970574324c960",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 63,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 122270000000,
+        "start_time": [
+          122,
+          310000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3572634337399066,
+          0.7145268674798132
+        ]
+      },
+      "actual_certificate_wall_ms": 24.5145280205179
+    },
+    {
+      "line": 65,
+      "payload_sha256": "2b5df9c1b5e8eb1416168f9f10652989a4d6ac722fc662e8f7b6643e6bfdf2f1",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 65,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 125405000000,
+        "start_time": [
+          125,
+          455000000
+        ]
+      },
+      "admitted": false,
+      "admission_reason": "handoff_not_ready",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.39158159279170707,
+          0.7831631855834141
+        ]
+      },
+      "actual_certificate_wall_ms": 24.895266979001462
+    },
+    {
+      "line": 67,
+      "payload_sha256": "bc56d8412ed02031ae4c79968a66cbcbf07ea04de28d47c0bc8b33922e0f6006",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 67,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 130055000000,
+        "start_time": [
+          130,
+          95000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.36691249964304146,
+          0.7338249992860829
+        ]
+      },
+      "actual_certificate_wall_ms": 37.296435999451205
+    },
+    {
+      "line": 70,
+      "payload_sha256": "51c1e53e062a37b561055152cef9376eb6bca956ae44e59c82ee054f1e52bd9a",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 70,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 134280000000,
+        "start_time": [
+          134,
+          310000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3546932353345725,
+          0.709386470669145
+        ]
+      },
+      "actual_certificate_wall_ms": 36.7184070055373
+    },
+    {
+      "line": 76,
+      "payload_sha256": "12bc77417a704e8b14c09af84d17b31d9e94279592fcce57846582fbb6da148f",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 76,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 142300000000,
+        "start_time": [
+          142,
+          330000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_12",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.354629296417517,
+          0.709258592835034
+        ]
+      },
+      "actual_certificate_wall_ms": 24.903555982746184
+    },
+    {
+      "line": 119,
+      "payload_sha256": "59f538d61ff925fd64146e286a22a69641c0da6f0006aa5d60507dce99a1ec78",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 119,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 241495000000,
+        "start_time": [
+          241,
+          515000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.38147809603379584,
+          0.7629561920675917
+        ]
+      },
+      "actual_certificate_wall_ms": 24.594927002908662
+    },
+    {
+      "line": 120,
+      "payload_sha256": "cb698becc6df418b0d72c56e543d891c9e8573caf57bc322b8610ee9920e955f",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 120,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 243675000000,
+        "start_time": [
+          243,
+          700000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.0,
+          0.3865725370655655
+        ]
+      },
+      "actual_certificate_wall_ms": 36.44153999630362
+    },
+    {
+      "line": 126,
+      "payload_sha256": "af755a1a4ef9896f634b253ab2283b552d1a7159fafd672cf1dd9c379b4a43d9",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 126,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 253610000000,
+        "start_time": [
+          253,
+          650000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3707515804850565,
+          0.741503160970113
+        ]
+      },
+      "actual_certificate_wall_ms": 26.51820599567145
+    },
+    {
+      "line": 133,
+      "payload_sha256": "34087d56a2d136a3f0419bec4247247f8c436e7b50c1210545b873a44df618e4",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 133,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 265025000000,
+        "start_time": [
+          265,
+          30000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3508762477663356,
+          0.7017524955326712
+        ]
+      },
+      "actual_certificate_wall_ms": 36.658955010352656
+    },
+    {
+      "line": 137,
+      "payload_sha256": "297af6a04403d6909751c0596a393c23f2f2b82e55a1f49bbce2846766fbe5d8",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 137,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 270670000000,
+        "start_time": [
+          270,
+          730000000
+        ]
+      },
+      "admitted": false,
+      "admission_reason": "actual_curve_physical_space_not_certified",
+      "certificate_reason": "continuous_outer_bound_not_certified",
+      "patches": 2,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.805432344868137,
+          1.2081485173022055
+        ]
+      },
+      "actual_certificate_wall_ms": 108.29491200274788
+    },
+    {
+      "line": 138,
+      "payload_sha256": "7d6bdfd3bf4b3891bfd66c255b2cd7cc9e17bbeaed87636a3295bf015d39c0bf",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 138,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 270900000000,
+        "start_time": [
+          270,
+          950000000
+        ]
+      },
+      "admitted": false,
+      "admission_reason": "actual_curve_physical_space_not_certified",
+      "certificate_reason": "continuous_outer_bound_not_certified",
+      "patches": 2,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.6257715729111792,
+          0.750925887493415
+        ]
+      },
+      "actual_certificate_wall_ms": 100.34862000611611
+    },
+    {
+      "line": 140,
+      "payload_sha256": "871743f48b1486de6fa6065474807250b2b016b1173cccb84e9a8cbe05e98a67",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 140,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 275620000000,
+        "start_time": [
+          275,
+          665000000
+        ]
+      },
+      "admitted": false,
+      "admission_reason": "actual_curve_physical_space_not_certified",
+      "certificate_reason": "continuous_outer_bound_not_certified",
+      "patches": 2,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.7449177879422004,
+          1.1173766819133006
+        ]
+      },
+      "actual_certificate_wall_ms": 82.41852500941604
+    },
+    {
+      "line": 141,
+      "payload_sha256": "8424398658bb1b57dd0827a20c0db59150eb5fc6bb9ce7538d74f9fdaf271e50",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 141,
+        "epoch": 2,
+        "localization_generation": 1,
+        "source_stamp_ns": 276080000000,
+        "start_time": [
+          276,
+          150000000
+        ]
+      },
+      "admitted": false,
+      "admission_reason": "actual_curve_physical_space_not_certified",
+      "certificate_reason": "continuous_outer_bound_not_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          2.506318556583722,
+          3.0075822679004665
+        ]
+      },
+      "actual_certificate_wall_ms": 89.35797898448072
+    },
+    {
+      "line": 149,
+      "payload_sha256": "3294efd9ba9c35b61800faca1223d393489155711ff24540c4af06ee93c7cfd7",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 10,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 293240000000,
+        "start_time": [
+          293,
+          315000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.35138729652411466,
+          0.7027745930482293
+        ]
+      },
+      "actual_certificate_wall_ms": 24.65173800010234
+    },
+    {
+      "line": 152,
+      "payload_sha256": "6598429b20c8756e7d60153da06f2eda0c5effb22835c0b8020fc5dd05fcb8ae",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 13,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 297200000000,
+        "start_time": [
+          297,
+          270000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3681087766527123,
+          0.7362175533054246
+        ]
+      },
+      "actual_certificate_wall_ms": 24.73036400624551
+    },
+    {
+      "line": 155,
+      "payload_sha256": "46d18e48ada1a4aafef29e0462363b56c23b3b00b23f66a4bba1d38a93bb420c",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 16,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 301195000000,
+        "start_time": [
+          301,
+          235000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.35261699461343143,
+          0.7052339892268629
+        ]
+      },
+      "actual_certificate_wall_ms": 26.556447992334142
+    },
+    {
+      "line": 159,
+      "payload_sha256": "9f127eb7fcc0bb1661a9e475323a080eaaa18d264c907b648c4977dad9b85fc0",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 20,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 306175000000,
+        "start_time": [
+          306,
+          185000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.39731728951939943,
+          0.7946345790387989
+        ]
+      },
+      "actual_certificate_wall_ms": 24.449628981528804
+    },
+    {
+      "line": 160,
+      "payload_sha256": "0e74a4360815ec21818c39ad85da57082a73af30b35c4a9471c97986f0edca45",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 21,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 308225000000,
+        "start_time": [
+          308,
+          250000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.364330639500743,
+          0.728661279001486
+        ]
+      },
+      "actual_certificate_wall_ms": 37.60865700314753
+    },
+    {
+      "line": 166,
+      "payload_sha256": "c92dc8fba77efe3c8227794fa7886e94bce758c33379fc72212e2796ce251416",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 27,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 317230000000,
+        "start_time": [
+          317,
+          285000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.380234136032888,
+          0.760468272065776
+        ]
+      },
+      "actual_certificate_wall_ms": 25.487896986305714
+    },
+    {
+      "line": 169,
+      "payload_sha256": "2056042fcbbaf3d9a42657169e7a2a7a68cb7714dcaa05a1d80f025391689092",
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 30,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 322345000000,
+        "start_time": [
+          322,
+          350000000
+        ]
+      },
+      "admitted": true,
+      "admission_reason": "continuous_fence_and_existing_execution_gates_passed",
+      "certificate_reason": "all_continuous_spans_certified",
+      "patches": 1,
+      "last_basis": {
+        "schema": "same_finite_face_curve_terrain_grade/v1",
+        "applied": true,
+        "model": "ramp_23",
+        "finite_face_full_patch_and_footprint": true,
+        "footprint_radius_m": 0.51,
+        "original_body_residual_bound_preserved": true,
+        "terrain_max_direction_grade_rad": 0.09966865249116297,
+        "original_grade_limit_rad": 0.35,
+        "original_typed_ground_grade_cone_certified": false,
+        "parameter_interval": [
+          0.3741220919040557,
+          0.7482441838081114
+        ]
+      },
+      "actual_certificate_wall_ms": 24.810304981656373
+    }
+  ],
+  "two_original_policy_replays": [
+    {
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 27,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 317230000000,
+        "start_time": [
+          317,
+          285000000
+        ]
+      },
+      "payload_sha256": "c92dc8fba77efe3c8227794fa7886e94bce758c33379fc72212e2796ce251416",
+      "original58_whole_certificate": {
+        "schema": "r85_continuous_scan_physical_certificate/v1",
+        "allowed": true,
+        "ready_for_control": false,
+        "navigation_PASS": false,
+        "physical_space_only": true,
+        "status": "CERTIFIED_STATIC_SPACE_ONLY",
+        "method": "Exact cubic spans to Bezier; control-hull finite-support union/SAT/derivative-cone; bounded de Casteljau",
+        "runtime_finite_time_freshness_dynamic_and_ack": "EXTERNAL_ORIGINAL_GATES_REQUIRED",
+        "reason": "all_continuous_spans_certified",
+        "sources": {
+          "metadata": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+            "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+            "bytes": 216220
+          },
+          "reference": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+            "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+            "bytes": 36018
+          },
+          "world": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+            "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+            "bytes": 99447
+          },
+          "limits": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+            "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+            "bytes": 764
+          },
+          "frozen_helpers": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+            "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+            "bytes": 37253
+          },
+          "leaf": {
+            "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/dynamic_status_epoch/candidate/r85_geometry_admission.py",
+            "sha256": "6fd32c198820bf3a7c10b56cc32facabe5cadc080eb7d73a359259b19da776c0",
+            "bytes": 44238
+          }
+        },
+        "payload_sha256": "c92dc8fba77efe3c8227794fa7886e94bce758c33379fc72212e2796ce251416",
+        "coordinate_frame": "camera_init",
+        "T_navigation_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            -0.3
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "curve_parameter_interval": [
+          0.0,
+          2.281404816197328
+        ],
+        "physical_body_ground_offset_m": 0.32,
+        "processed_patches": 10,
+        "certified_patches": 8,
+        "deepest_subdivision": 2,
+        "identity_fields": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "traj_id": 27,
+          "epoch": 3,
+          "localization_generation": 31,
+          "source_stamp_ns": 317230000000,
+          "start_time": [
+            317,
+            285000000
+          ]
+        },
+        "budgets": {
+          "max_patches": 4096,
+          "max_depth": 18,
+          "wall_budget_s": 2.0
+        },
+        "arithmetic": "float64 engineering bounds; not formal exact-arithmetic proof",
+        "limitations": [
+          "No live time/freshness/dynamic/actual terrain-ACK proof",
+          "No foot contact/load/gait proof",
+          "AABB/rectangle/cone refusal is not an actual collision/support-loss witness",
+          "Zero derivative does not certify a heading or dynamic followability"
+        ],
+        "elapsed_wall_ms": 102.19882300589234
+      },
+      "actual22_certificate": {
+        "schema": "r85_continuous_scan_physical_certificate/v1",
+        "allowed": true,
+        "ready_for_control": false,
+        "navigation_PASS": false,
+        "physical_space_only": true,
+        "status": "CERTIFIED_STATIC_SPACE_ONLY",
+        "method": "Exact cubic spans to Bezier; control-hull finite-support union/SAT/derivative-cone; bounded de Casteljau",
+        "runtime_finite_time_freshness_dynamic_and_ack": "EXTERNAL_ORIGINAL_GATES_REQUIRED",
+        "reason": "all_continuous_spans_certified",
+        "sources": {
+          "metadata": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+            "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+            "bytes": 216220
+          },
+          "reference": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+            "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+            "bytes": 36018
+          },
+          "world": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+            "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+            "bytes": 99447
+          },
+          "limits": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+            "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+            "bytes": 764
+          },
+          "frozen_helpers": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+            "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+            "bytes": 37253
+          },
+          "leaf": {
+            "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+            "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2",
+            "bytes": 46402
+          }
+        },
+        "payload_sha256": "c92dc8fba77efe3c8227794fa7886e94bce758c33379fc72212e2796ce251416",
+        "coordinate_frame": "camera_init",
+        "T_navigation_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            -0.3
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "curve_parameter_interval": [
+          0.0,
+          2.281404816197328
+        ],
+        "physical_body_ground_offset_m": 0.32,
+        "processed_patches": 6,
+        "certified_patches": 6,
+        "deepest_subdivision": 0,
+        "terrain_grade_semantics": "same_finite_face_max_direction_bound_else_original_typed_cone/v1",
+        "terrain_grade_reclassified_patches": 1,
+        "last_terrain_grade_evaluation": {
+          "schema": "same_finite_face_curve_terrain_grade/v1",
+          "applied": true,
+          "model": "ramp_23",
+          "finite_face_full_patch_and_footprint": true,
+          "footprint_radius_m": 0.51,
+          "original_body_residual_bound_preserved": true,
+          "terrain_max_direction_grade_rad": 0.09966865249116297,
+          "original_grade_limit_rad": 0.35,
+          "original_typed_ground_grade_cone_certified": false,
+          "parameter_interval": [
+            0.380234136032888,
+            0.760468272065776
+          ]
+        },
+        "identity_fields": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "traj_id": 27,
+          "epoch": 3,
+          "localization_generation": 31,
+          "source_stamp_ns": 317230000000,
+          "start_time": [
+            317,
+            285000000
+          ]
+        },
+        "budgets": {
+          "max_patches": 4096,
+          "max_depth": 18,
+          "wall_budget_s": 2.0
+        },
+        "arithmetic": "float64 engineering bounds; not formal exact-arithmetic proof",
+        "limitations": [
+          "No live time/freshness/dynamic/actual terrain-ACK proof",
+          "No foot contact/load/gait proof",
+          "AABB/rectangle/cone refusal is not an actual collision/support-loss witness",
+          "Zero derivative does not certify a heading or dynamic followability"
+        ],
+        "elapsed_wall_ms": 25.487896986305714
+      },
+      "actual_job": {
+        "token": 166,
+        "submit": {
+          "schema": "r88_async_physical_admission/v1",
+          "event": "submitted",
+          "observed_monotonic_wall_ns": 176091846289195,
+          "control_stamp_ns": 317300000000,
+          "source_pose_stamp_ns": 317230000000,
+          "navigation_PASS": false,
+          "job_token": 166,
+          "trajectory_id": 27,
+          "owner": {
+            "admission": {
+              "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+              "waypoint_index": 0,
+              "goal_xyz": [
+                0.021898548521995374,
+                7.01578766571454,
+                2.402302864967937
+              ]
+            },
+            "state": "running",
+            "scope": [
+              3,
+              3674770,
+              31
+            ],
+            "reference_file_sha256": "c17ee7598f25ba6db2fc2aeb43b10c9a619d75c54d16d086adca3d9ea754e296",
+            "route_key": [
+              281130000000,
+              1
+            ],
+            "association": {
+              "epoch": 3,
+              "planner_process_id": 3674770,
+              "localization_generation": 31,
+              "reference_stamp": [
+                281,
+                130000000
+              ],
+              "reference_revision": 1,
+              "accepted_metadata": {
+                "schema": 3,
+                "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+                "reference_epoch": 3,
+                "localization_generation": 31,
+                "planner_process_id": 3674770,
+                "reference_revision_scope": "planner_process_lifetime_requires_outer_epoch",
+                "publication_role": "candidate_only",
+                "actual_active": false,
+                "outer_admission_ack_received": false,
+                "committed_reference_revision": 1,
+                "route_id": 281130000000,
+                "route_version": 1,
+                "reference_stamp": [
+                  281,
+                  130000000
+                ],
+                "candidate_kind": "motion",
+                "reference_ready": true,
+                "reference_original_duration": 18.21064507804154,
+                "body_goal": [
+                  0.007048269973869731,
+                  7.018014309007437,
+                  2.42
+                ],
+                "adjusted_body_goal": [
+                  0.007048269973869731,
+                  7.018014309007437,
+                  2.42
+                ],
+                "trajectory_id": 27,
+                "trajectory_start_time": [
+                  317,
+                  285000000
+                ],
+                "global_state": {
+                  "duration": 18.21064507804154,
+                  "progress": 8.970000000000015
+                },
+                "local_target": {
+                  "valid": true,
+                  "occupancy": 0,
+                  "time": 10.335000000000004,
+                  "position": [
+                    3.8897825040035863,
+                    7,
+                    2.233952036719328
+                  ],
+                  "velocity": [
+                    -0.4975430758878714,
+                    -3.705074449497158e-15,
+                    0.049506442251297744
+                  ]
+                },
+                "start_state": {
+                  "boundary_kind": "measured",
+                  "frozen_reference_boundary": false,
+                  "position": [
+                    4.5594052762180635,
+                    7.019178421556277,
+                    2.133978874802652
+                  ],
+                  "measured_velocity": [
+                    -0.11075707354720393,
+                    -0.016656381208666186,
+                    0.027095563008565814
+                  ],
+                  "used_velocity": [
+                    -0.0452585522151425,
+                    0.01106678274140553,
+                    -0.015174269247279711
+                  ],
+                  "used_acceleration": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "attempt": {
+                  "id": 27,
+                  "origin": "replan_poly",
+                  "use_poly_init": true,
+                  "random_poly": false,
+                  "local_replan_request_sequence": 0,
+                  "progress_before_target_selection": 8.515000000000018,
+                  "progress_after_target_selection": 8.970000000000015
+                }
+              },
+              "accepted_highwater_id": 27,
+              "accepted_attempt_highwater_id": 27,
+              "goal": [
+                0.007048269973869731,
+                7.018014309007437,
+                2.42
+              ]
+            },
+            "generation": 31,
+            "requested_generation": 31,
+            "coverage": null,
+            "requested_coverage": null,
+            "active_trajectory_id": 26,
+            "active_reference_stamp": [
+              281,
+              130000000
+            ],
+            "cascade_path_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1:0:125:26"
+          },
+          "source_token": [
+            "247c44bcb78e0a6b1b0d501c8ac992a1",
+            9421
+          ],
+          "original_received_wall_ns": 176091829705991,
+          "admission_started_monotonic": 176091.845813549,
+          "event_index": 512,
+          "physical_payload_sha256": "c92dc8fba77efe3c8227794fa7886e94bce758c33379fc72212e2796ce251416",
+          "worker_pid": 3643479
+        },
+        "result": {
+          "schema": "r88_async_physical_admission/v1",
+          "event": "result_consumed",
+          "observed_monotonic_wall_ns": 176091966007030,
+          "control_stamp_ns": 317395000000,
+          "source_pose_stamp_ns": 317330000000,
+          "navigation_PASS": false,
+          "job_token": 166,
+          "metrics": {
+            "worker_pid": 3643479,
+            "worker_tid": 3643479,
+            "startup_receipt": {
+              "worker_pid": 3643479,
+              "worker_tid": 3643479,
+              "eager_submit": false,
+              "process_group": 3642810,
+              "parent_pid": 3643141,
+              "affinity": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19
+              ],
+              "thread_caps": {
+                "OMP_NUM_THREADS": "1",
+                "OPENBLAS_NUM_THREADS": "1",
+                "MKL_NUM_THREADS": "1",
+                "NUMEXPR_NUM_THREADS": "1",
+                "BLIS_NUM_THREADS": "1"
+              },
+              "modules": {
+                "worker": {
+                  "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r88_physical_worker.py",
+                  "sha256": "8d71eef6fc62801cf80ab46276510fd7dddeffba5841305d3a0373128a11cd98"
+                },
+                "geometry": {
+                  "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+                  "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2"
+                }
+              },
+              "startup_ready_monotonic_ns": 175712051319607
+            },
+            "compute_started_monotonic_ns": 176091910810101,
+            "compute_finished_monotonic_ns": 176091936357080,
+            "compute_wall_ns": 25546979,
+            "compute_thread_cpu_ns": 25119470,
+            "compute_process_cpu_ns": 25119808,
+            "submitted_monotonic_ns": 176091846231638,
+            "received_monotonic_ns": 176091965937186
+          },
+          "original_received_wall_ns": 176091829705991,
+          "admission_elapsed_wall_ms": 120.17798499437049
+        }
+      },
+      "offline_original_time_ns": {
+        "wall": 102250250,
+        "thread_cpu": 95368986,
+        "process_cpu": 95368895
+      },
+      "counterfactual": {
+        "old_whole_rejected": false,
+        "new_recorded_static_allowed": true,
+        "actual_new_admitted": true,
+        "original_whole_old_reject_to_new_cert": false,
+        "old_coarse_false_does_not_imply_old_whole_failure": true
+      }
+    },
+    {
+      "identity": {
+        "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+        "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+        "traj_id": 30,
+        "epoch": 3,
+        "localization_generation": 31,
+        "source_stamp_ns": 322345000000,
+        "start_time": [
+          322,
+          350000000
+        ]
+      },
+      "payload_sha256": "2056042fcbbaf3d9a42657169e7a2a7a68cb7714dcaa05a1d80f025391689092",
+      "original58_whole_certificate": {
+        "schema": "r85_continuous_scan_physical_certificate/v1",
+        "allowed": true,
+        "ready_for_control": false,
+        "navigation_PASS": false,
+        "physical_space_only": true,
+        "status": "CERTIFIED_STATIC_SPACE_ONLY",
+        "method": "Exact cubic spans to Bezier; control-hull finite-support union/SAT/derivative-cone; bounded de Casteljau",
+        "runtime_finite_time_freshness_dynamic_and_ack": "EXTERNAL_ORIGINAL_GATES_REQUIRED",
+        "reason": "all_continuous_spans_certified",
+        "sources": {
+          "metadata": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+            "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+            "bytes": 216220
+          },
+          "reference": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+            "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+            "bytes": 36018
+          },
+          "world": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+            "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+            "bytes": 99447
+          },
+          "limits": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+            "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+            "bytes": 764
+          },
+          "frozen_helpers": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+            "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+            "bytes": 37253
+          },
+          "leaf": {
+            "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/dynamic_status_epoch/candidate/r85_geometry_admission.py",
+            "sha256": "6fd32c198820bf3a7c10b56cc32facabe5cadc080eb7d73a359259b19da776c0",
+            "bytes": 44238
+          }
+        },
+        "payload_sha256": "2056042fcbbaf3d9a42657169e7a2a7a68cb7714dcaa05a1d80f025391689092",
+        "coordinate_frame": "camera_init",
+        "T_navigation_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            -0.3
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "curve_parameter_interval": [
+          0.0,
+          2.244732551424334
+        ],
+        "physical_body_ground_offset_m": 0.32,
+        "processed_patches": 8,
+        "certified_patches": 7,
+        "deepest_subdivision": 1,
+        "identity_fields": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "traj_id": 30,
+          "epoch": 3,
+          "localization_generation": 31,
+          "source_stamp_ns": 322345000000,
+          "start_time": [
+            322,
+            350000000
+          ]
+        },
+        "budgets": {
+          "max_patches": 4096,
+          "max_depth": 18,
+          "wall_budget_s": 2.0
+        },
+        "arithmetic": "float64 engineering bounds; not formal exact-arithmetic proof",
+        "limitations": [
+          "No live time/freshness/dynamic/actual terrain-ACK proof",
+          "No foot contact/load/gait proof",
+          "AABB/rectangle/cone refusal is not an actual collision/support-loss witness",
+          "Zero derivative does not certify a heading or dynamic followability"
+        ],
+        "elapsed_wall_ms": 30.3594839933794
+      },
+      "actual22_certificate": {
+        "schema": "r85_continuous_scan_physical_certificate/v1",
+        "allowed": true,
+        "ready_for_control": false,
+        "navigation_PASS": false,
+        "physical_space_only": true,
+        "status": "CERTIFIED_STATIC_SPACE_ONLY",
+        "method": "Exact cubic spans to Bezier; control-hull finite-support union/SAT/derivative-cone; bounded de Casteljau",
+        "runtime_finite_time_freshness_dynamic_and_ack": "EXTERNAL_ORIGINAL_GATES_REQUIRED",
+        "reason": "all_continuous_spans_certified",
+        "sources": {
+          "metadata": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+            "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+            "bytes": 216220
+          },
+          "reference": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+            "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+            "bytes": 36018
+          },
+          "world": {
+            "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/world.sdf",
+            "sha256": "a5adcf511c1aa1cbfc3be392c75191705c80bb601c89c937f2cc5d2190f55970",
+            "bytes": 99447
+          },
+          "limits": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+            "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+            "bytes": 764
+          },
+          "frozen_helpers": {
+            "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+            "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+            "bytes": 37253
+          },
+          "leaf": {
+            "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+            "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2",
+            "bytes": 46402
+          }
+        },
+        "payload_sha256": "2056042fcbbaf3d9a42657169e7a2a7a68cb7714dcaa05a1d80f025391689092",
+        "coordinate_frame": "camera_init",
+        "T_navigation_world": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            -0.3
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "curve_parameter_interval": [
+          0.0,
+          2.244732551424334
+        ],
+        "physical_body_ground_offset_m": 0.32,
+        "processed_patches": 6,
+        "certified_patches": 6,
+        "deepest_subdivision": 0,
+        "terrain_grade_semantics": "same_finite_face_max_direction_bound_else_original_typed_cone/v1",
+        "terrain_grade_reclassified_patches": 1,
+        "last_terrain_grade_evaluation": {
+          "schema": "same_finite_face_curve_terrain_grade/v1",
+          "applied": true,
+          "model": "ramp_23",
+          "finite_face_full_patch_and_footprint": true,
+          "footprint_radius_m": 0.51,
+          "original_body_residual_bound_preserved": true,
+          "terrain_max_direction_grade_rad": 0.09966865249116297,
+          "original_grade_limit_rad": 0.35,
+          "original_typed_ground_grade_cone_certified": false,
+          "parameter_interval": [
+            0.3741220919040557,
+            0.7482441838081114
+          ]
+        },
+        "identity_fields": {
+          "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+          "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+          "traj_id": 30,
+          "epoch": 3,
+          "localization_generation": 31,
+          "source_stamp_ns": 322345000000,
+          "start_time": [
+            322,
+            350000000
+          ]
+        },
+        "budgets": {
+          "max_patches": 4096,
+          "max_depth": 18,
+          "wall_budget_s": 2.0
+        },
+        "arithmetic": "float64 engineering bounds; not formal exact-arithmetic proof",
+        "limitations": [
+          "No live time/freshness/dynamic/actual terrain-ACK proof",
+          "No foot contact/load/gait proof",
+          "AABB/rectangle/cone refusal is not an actual collision/support-loss witness",
+          "Zero derivative does not certify a heading or dynamic followability"
+        ],
+        "elapsed_wall_ms": 24.810304981656373
+      },
+      "actual_job": {
+        "token": 169,
+        "submit": {
+          "schema": "r88_async_physical_admission/v1",
+          "event": "submitted",
+          "observed_monotonic_wall_ns": 176097874847726,
+          "control_stamp_ns": 322390000000,
+          "source_pose_stamp_ns": 322345000000,
+          "navigation_PASS": false,
+          "job_token": 169,
+          "trajectory_id": 30,
+          "owner": {
+            "admission": {
+              "request_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1",
+              "waypoint_index": 0,
+              "goal_xyz": [
+                0.021898548521995374,
+                7.01578766571454,
+                2.402302864967937
+              ]
+            },
+            "state": "running",
+            "scope": [
+              3,
+              3674770,
+              31
+            ],
+            "reference_file_sha256": "c17ee7598f25ba6db2fc2aeb43b10c9a619d75c54d16d086adca3d9ea754e296",
+            "route_key": [
+              281130000000,
+              1
+            ],
+            "association": {
+              "epoch": 3,
+              "planner_process_id": 3674770,
+              "localization_generation": 31,
+              "reference_stamp": [
+                281,
+                130000000
+              ],
+              "reference_revision": 1,
+              "accepted_metadata": {
+                "schema": 3,
+                "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+                "reference_epoch": 3,
+                "localization_generation": 31,
+                "planner_process_id": 3674770,
+                "reference_revision_scope": "planner_process_lifetime_requires_outer_epoch",
+                "publication_role": "candidate_only",
+                "actual_active": false,
+                "outer_admission_ack_received": false,
+                "committed_reference_revision": 1,
+                "route_id": 281130000000,
+                "route_version": 1,
+                "reference_stamp": [
+                  281,
+                  130000000
+                ],
+                "candidate_kind": "motion",
+                "reference_ready": true,
+                "reference_original_duration": 18.21064507804154,
+                "body_goal": [
+                  0.007048269973869731,
+                  7.018014309007437,
+                  2.42
+                ],
+                "adjusted_body_goal": [
+                  0.007048269973869731,
+                  7.018014309007437,
+                  2.42
+                ],
+                "trajectory_id": 30,
+                "trajectory_start_time": [
+                  322,
+                  350000000
+                ],
+                "global_state": {
+                  "duration": 18.21064507804154,
+                  "progress": 10.790000000000001
+                },
+                "local_target": {
+                  "valid": true,
+                  "occupancy": 0,
+                  "time": 12.15499999999999,
+                  "position": [
+                    2.984254163829266,
+                    7.000000000000225,
+                    2.3240542253324143
+                  ],
+                  "velocity": [
+                    -0.49754327335270526,
+                    7.433127295970234e-12,
+                    0.04950063838830049
+                  ]
+                },
+                "start_state": {
+                  "boundary_kind": "measured",
+                  "frozen_reference_boundary": false,
+                  "position": [
+                    3.6543426078108343,
+                    7.017861792504078,
+                    2.2359292350083573
+                  ],
+                  "measured_velocity": [
+                    -0.09391621238758484,
+                    0.0003867047476565651,
+                    0.024654524392201504
+                  ],
+                  "used_velocity": [
+                    -0.052469086630198614,
+                    0.01035872436058579,
+                    -0.010215277327184906
+                  ],
+                  "used_acceleration": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "attempt": {
+                  "id": 30,
+                  "origin": "replan_poly",
+                  "use_poly_init": true,
+                  "random_poly": false,
+                  "local_replan_request_sequence": 0,
+                  "progress_before_target_selection": 10.205000000000005,
+                  "progress_after_target_selection": 10.790000000000001
+                }
+              },
+              "accepted_highwater_id": 30,
+              "accepted_attempt_highwater_id": 30,
+              "goal": [
+                0.007048269973869731,
+                7.018014309007437,
+                2.42
+              ]
+            },
+            "generation": 31,
+            "requested_generation": 31,
+            "coverage": null,
+            "requested_coverage": null,
+            "active_trajectory_id": 29,
+            "active_reference_stamp": [
+              281,
+              130000000
+            ],
+            "cascade_path_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc:r85:f1_to_f3:1:0:128:29"
+          },
+          "source_token": [
+            "247c44bcb78e0a6b1b0d501c8ac992a1",
+            9576
+          ],
+          "original_received_wall_ns": 176097829510782,
+          "admission_started_monotonic": 176097.874464694,
+          "event_index": 521,
+          "physical_payload_sha256": "2056042fcbbaf3d9a42657169e7a2a7a68cb7714dcaa05a1d80f025391689092",
+          "worker_pid": 3643479
+        },
+        "result": {
+          "schema": "r88_async_physical_admission/v1",
+          "event": "result_consumed",
+          "observed_monotonic_wall_ns": 176098002253622,
+          "control_stamp_ns": 322505000000,
+          "source_pose_stamp_ns": 322445000000,
+          "navigation_PASS": false,
+          "job_token": 169,
+          "metrics": {
+            "worker_pid": 3643479,
+            "worker_tid": 3643479,
+            "startup_receipt": {
+              "worker_pid": 3643479,
+              "worker_tid": 3643479,
+              "eager_submit": false,
+              "process_group": 3642810,
+              "parent_pid": 3643141,
+              "affinity": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19
+              ],
+              "thread_caps": {
+                "OMP_NUM_THREADS": "1",
+                "OPENBLAS_NUM_THREADS": "1",
+                "MKL_NUM_THREADS": "1",
+                "NUMEXPR_NUM_THREADS": "1",
+                "BLIS_NUM_THREADS": "1"
+              },
+              "modules": {
+                "worker": {
+                  "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r88_physical_worker.py",
+                  "sha256": "8d71eef6fc62801cf80ab46276510fd7dddeffba5841305d3a0373128a11cd98"
+                },
+                "geometry": {
+                  "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+                  "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2"
+                }
+              },
+              "startup_ready_monotonic_ns": 175712051319607
+            },
+            "compute_started_monotonic_ns": 176097934703912,
+            "compute_finished_monotonic_ns": 176097959585063,
+            "compute_wall_ns": 24881151,
+            "compute_thread_cpu_ns": 24881411,
+            "compute_process_cpu_ns": 24881014,
+            "submitted_monotonic_ns": 176097874808010,
+            "received_monotonic_ns": 176098002179147
+          },
+          "original_received_wall_ns": 176097829510782,
+          "admission_elapsed_wall_ms": 127.77635100064799
+        }
+      },
+      "offline_original_time_ns": {
+        "wall": 30388232,
+        "thread_cpu": 30389383,
+        "process_cpu": 30390248
+      },
+      "counterfactual": {
+        "old_whole_rejected": false,
+        "new_recorded_static_allowed": true,
+        "actual_new_admitted": true,
+        "original_whole_old_reject_to_new_cert": false,
+        "old_coarse_false_does_not_imply_old_whole_failure": true
+      }
+    }
+  ],
+  "task_result_projection": {
+    "passed": true,
+    "state": "succeeded",
+    "parking_pass": true,
+    "dynamic_pass": true,
+    "full_F3_PASS": true,
+    "original46_PASS": false,
+    "completed_sim_ns": 350930000000
+  },
+  "async_counts": {
+    "received": 563,
+    "consumed": 563,
+    "submitted": 183,
+    "completed": 183,
+    "invalidated": 0,
+    "discarded_events": 0,
+    "faults": 0
+  },
+  "source_bindings": {
+    "path_admission_decisions.jsonl": {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/path_admission_decisions.jsonl",
+      "bytes": 5286273,
+      "sha256": "c2e657cdf94fc0cbeb08a19f783ffde1275106316a8609f0fb08db14c2054aab"
+    },
+    "r88_async_admission.jsonl": {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r88_async_admission.jsonl",
+      "bytes": 1504812,
+      "sha256": "4fe1667bbc12cf7f4d9951c7083ccdd4985f0e103e770367b3af66e6f59a41f6"
+    },
+    "r88_async_physical_exit.json": {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r88_async_physical_exit.json",
+      "bytes": 177156,
+      "sha256": "2f041992579b9033b7859b64a4c109bf997e390a9877dd0e16d2aa7cbfa14f8c"
+    },
+    "r85_task_result.json": {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc/r85_task_result.json",
+      "bytes": 25233,
+      "sha256": "24037ed0fb9f8732884a3fb8a385ffa98cf01457f9f6e53716aa415091551f1a"
+    }
+  },
+  "original_source": {
+    "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/dynamic_status_epoch/candidate/r85_geometry_admission.py",
+    "bytes": 44238,
+    "sha256": "6fd32c198820bf3a7c10b56cc32facabe5cadc080eb7d73a359259b19da776c0"
+  },
+  "actual_loaded_geometry": {
+    "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/runtime_compact_formal_22/candidate/r85_geometry_admission.py",
+    "bytes": 46402,
+    "sha256": "73804fb93fc450bfcf44b1cb0086bddda97bb5587c6b66e23187027427afd3b2"
+  },
+  "limitations": [
+    "29 new-basis certificates are not automatically29 old whole-certifier failures; only2 old whole replayed",
+    "Physical source max slope proof is not old body derivative-cone equivalence or dynamics calibration",
+    "Recorded certificate wall time and worker whole-compute wall/CPU differ in scope; offline old elapsed is a distinct run",
+    "Formal22 explicit F1F3/profile task PASS; original46 remains false, not universal safety or original unchanged contract PASS",
+    "No code/raw run mutation, no ROS/Node/physical run, no global replay"
+  ],
+  "counts_scope": "Original counts field covers only top-level SCAN candidate curves; see recursive_population for ALL schema-compatible certificates including old-path-retention connectors.",
+  "recursive_population": {
+    "schema": "formal22_recursive_certificate_population/v1",
+    "unique_key": [
+      "business_category",
+      "certificate.schema",
+      "payload_sha256",
+      "T_navigation_world",
+      "sources(allbindings)"
+    ],
+    "occurrences": 179,
+    "unique": 179,
+    "occurrence_paths": {
+      "$.proof.r85_physical.physical_certificate": 165,
+      "$.old_path_retention.r85_physical_retention.connector_physical_certificate": 14
+    },
+    "reclassified": 41,
+    "patches": 45,
+    "last_face_distribution": {
+      "floor_1": 7,
+      "ramp_12": 14,
+      "floor_2": 5,
+      "ramp_23": 15
+    },
+    "business_categories": {
+      "SCAN_candidate_curve": {
+        "certificates": 165,
+        "reclassified": 29,
+        "reclassified_patches": 33,
+        "last_face_distribution": {
+          "floor_1": 1,
+          "ramp_12": 13,
+          "ramp_23": 15
+        }
+      },
+      "old_path_retention_connector": {
+        "certificates": 14,
+        "reclassified": 12,
+        "reclassified_patches": 12,
+        "last_face_distribution": {
+          "floor_1": 6,
+          "ramp_12": 1,
+          "floor_2": 5
+        }
+      }
+    }
+  },
+  "root_prefix_reconciliation": {
+    "target_payload": "481742202112a9b209750c2eaea399093528ece25044f0628952aac5eff37d78",
+    "category": "old_path_retention_connector",
+    "decision_line": 111,
+    "source_ns": 225985000000,
+    "last_face": "floor_2",
+    "explanation": "Root110/26 is an earlier streaming prefix including nested retention connector certificates. Initial165/29 is final top-level SCAN-only population. Final recursive total179/41, separate denominators."
+  },
+  "causal_conclusion": "Actual branch use proved:41 of179 categorized unique continuous certificates/45 patches. Of top-level SCAN curves29/165 use33 patches. The TWO selected last positive-use SCAN payloads are also accepted by original whole certifier after subdivision, so these examples prove changed proof path/depth, NOT avoided whole-certificate rejection. Actual22 PASS cannot be uniquely attributed to this branch; no final-stage floor3 new-basis trigger observed.",
+  "recursive_population_receipt": {
+    "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/protocol_reduction/curve_support_grade/FORMAL22_CERTIFICATE_POPULATION.json",
+    "bytes": 259014,
+    "sha256": "b278bd103f37727e89c538a599873eb5699f0ffbeb862747b237dbd88d64de07"
+  }
+}

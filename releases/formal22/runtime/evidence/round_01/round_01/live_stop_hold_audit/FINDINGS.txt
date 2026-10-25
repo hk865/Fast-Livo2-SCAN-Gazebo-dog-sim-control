@@ -1,0 +1,49 @@
+cc45 read-only F2 hold audit
+
+Confirmed cause: rejected new-epoch reference then persistent commit wait;
+measured stopping is not the blocking predicate.
+
+At245.415sim, epoch3/gen27 planner1154583 replaced the old child following a
+navigation-frame correction. Its sole150-point suffix was published245.800,
+using actualSLAM245.755 and projecting to original PCT progress19.890506m.
+The child log contains only replacement-received and the combined rejection
+"frame/finite/odometry/nonzero-segment validation failed". No commit/candidate
+followed; the last PID4428 is still oldtrajectory58 at244.000/source243.940,
+zero/protect. The last scoped replan request is oldepoch2/seq35 at243.550.
+
+After publishing, automatic_reference_runtime239-255 records self.reference;
+257-260 then waits while observed/accepted revision=None without retransmission
+or terminal failure. shared_controller770-776 has samples=None, emitszero and
+returns before heading_gate.update. teacher_wrapper284-287 overwrites any
+underlying wait with generic measured-stop text whenever phase=pre_turn/settle.
+Thus a healthy parked robot cannot recover this reference commit wait.
+
+Measured evidence: bounded navigation_slam_poses prefix245.820..670.760 contains
+12878 accepted actualSLAM rows, all12878 legacy measured_stop=true;12730 had
+statistical stop=true. No nonzero-command, planar-speed>.03m/s, absSLAMwz>.05,
+bodygyro-norm>.05rad/s, gyro/pose-pair>.15s, source-age>=.3s violation occurred.
+No legacy-history clear or statistics-window reset occurred. Original stop
+requires3samples,0.3s span,newest wall/sim age<.3s and posegap<=.2s.
+Final NAV_STATUS_OBSERVATION shows staleIMU/stopfalse after root's physical stop;
+that shutdown effect is not the cause of the earlier >250sim-second hold.
+
+The actual sent suffix's frame/finite checks pass; first segment48.328mm,
+minimum segment19.344mm. C++pathCallback512 combines !have_odom_ with the generic
+input validation log, so the exact disjunct is not directly observed. The
+strongest inference is Path-before-new-child-odomcallback; supervisor external
+2stamp+graph confirmation does not prove child consumedodom. Keep every
+finite/nonzero check. Standard ROS endpoint graph has GID but noPID; a fresh
+source-stamp/PID/epoch scoped childACK is the appropriate next contract.
+
+Stop-entry audit: /demo/navigation/stop Bool really sets state=stopped but owner
+on_nav only terminates for realfailed; Owner.close has no failure-result entry.
+No owner cancel/fail service or operator request branch exists in current
+runtime_stop_decision. Do not fake actualfailed. Runner SIGINT/SIGTERM enters
+finally+mapper drain, but archive_abort_reason normal whitelist excludes
+operator interruption. Gazebo-first EOF also has worker.wait10s, insufficient
+to guarantee longer NPZ close. Worker signal can induce nativefault before
+archive closure. Root alone executed EXTERNAL_OWNER_PHYSICS_STOP_SENT; this
+subtask made no process/ROS/parameter action and does not claim cleanup success.
+
+All outputs are workspace evidence. No live native/truth pose files read;
+no activeC66/frozen sources or runtime configuration changed.

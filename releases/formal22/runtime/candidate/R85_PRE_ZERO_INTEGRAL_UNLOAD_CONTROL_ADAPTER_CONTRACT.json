@@ -1,0 +1,141 @@
+{
+  "SCAN_contract_bytes_changed": false,
+  "baseline_commit": "b5f7b6b65fbd1fb53b026504dcfde42977ba3475",
+  "baseline_install": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/round_15_pre_zero_quiet/install_tools/INSTALL_RECEIPT.json",
+    "sha256": "0f508d54a51bd6c17bd3efc6ac23a63aec18dccd3ab98630f8c24aa685b36d8c"
+  },
+  "baseline_profile": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_pre_zero_quiet_r15_20261016.json",
+    "sha256": "8ecd452a40f651b0b364fcc71f8cf73cdb49c45cda54b3ae55f92bb875fdd7f8"
+  },
+  "baseline_source_bindings": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/SOURCE_BINDINGS.json",
+    "sha256": "9d2d71028f30fbf9bc7f1a0ebb6a8b3b6dea98d33443742cfb161cc585535d0f"
+  },
+  "behavior_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/pre_zero_integral_unload.py",
+    "sha256": "84ea9e6fe1a9f0cea81c46aef75a23c8f6d50496c098fc79fcb333553ebdb5c8"
+  },
+  "behavior_manifest": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_stage/FINAL_BEHAVIOR_CANDIDATE_MANIFEST_v2.json",
+    "sha256": "3a7ae336499fdf55b36bd0d0806502f2fc308df1fd2c012c9113acd318dc727b"
+  },
+  "bridge_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/pre_zero_integral_unload_adapter.py",
+    "sha256": "40376b484097910734da40916409bee661471e65d99546a30debd50bb5fd84c9"
+  },
+  "configuration": {
+    "enabled": true,
+    "kind": "coordinated_yaw_toward_zero_v1",
+    "maneuver_timeout_s": 10.0,
+    "student_rate_integral_per_s": 0.04,
+    "teacher_rate_integral_per_s": 0.1
+  },
+  "event_scope_clarification": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/R16_PER_OWNED_EVENT_SCOPE_CLARIFICATION.json",
+    "sha256": "dbc7e5ea8d7a15fa262089f5c90bf537e7f4e2cf1eb57dffecdbaf5b6da18ace"
+  },
+  "exact_targets": [
+    "cascade_core.py",
+    "controller.py",
+    "pre_zero_integral_unload.py",
+    "student_actor_adapter.py",
+    "student_lower_loop_ack.py",
+    "transition_gate.py",
+    "scan_workspace.py",
+    "pre_zero_integral_unload_adapter.py",
+    "R85_PRE_ZERO_INTEGRAL_UNLOAD_CONTROL_ADAPTER_CONTRACT.json",
+    "profiles/r85_f1_f3_pre_zero_integral_unload_r16_20261016.json"
+  ],
+  "expected_bound_source_count_after": 262,
+  "expected_bound_source_count_before": 258,
+  "historical_R15_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/pre_zero_quiet_adapter.py",
+    "sha256": "71c7c05f3071a03d32dc930f5423331534817aceda264af0f22a2a81b846410e"
+  },
+  "math_extension": {
+    "base_contract_is_complete_active_math": false,
+    "base_student_contract_sha256": "058db968f5ea471ffcc7b8bd132ab453f36c2a4911a1036d85e0db628a1f3b78",
+    "extension_receipt_in_canonical_causal_ACK_ledger": true,
+    "extension_receipt_schema": "r85_pre_zero_yaw_integral_update/v1",
+    "kind": "coordinated_yaw_toward_zero_v1",
+    "new_integral_math": true,
+    "original_gains_limits_slew_reset_45_weights_preserved": true,
+    "per_owned_event": true,
+    "student_yaw_integral_recurrence": "sign(I)*max(0,abs(I)-0.04*dt)",
+    "teacher_yaw_integral_recurrence": "sign(I)*max(0,abs(I)-0.1*dt)"
+  },
+  "mode_selection": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/R16_CONTROL_ONLY_COORDINATED_UNLOAD_MODE_SELECTION.json",
+    "sha256": "3f6ff7c37dcea0b938e4d082b2e3ef445446ecb8eeaad0f16dc60c0418e7b091"
+  },
+  "navigation_acceptance_established": false,
+  "physical_thresholds_changed": false,
+  "runtime_acceptance_inherited": false,
+  "schema": "r85_pre_zero_integral_unload_source_adapter/v1",
+  "simulation_only": true,
+  "source_or_feedback_guards_changed": false,
+  "sources": {
+    "cascade_core.py": {
+      "after_sha256": "8f9a7276c15c86d7c1de13e619d59f1f27861fd12518dc5b454805148fc96bd8",
+      "before_sha256": "f05efd2fb3cddf3f4652c949ccc436ce061d0cbc6ca482389360d46fb997eae7",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/cascade_core.py",
+        "sha256": "f05efd2fb3cddf3f4652c949ccc436ce061d0cbc6ca482389360d46fb997eae7"
+      },
+      "delta_sha256": "286e62cff3d78bc3bdf0601a00214b6e57e7b7ceae2ed037e83f4de303ca8ae0",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/cascade_core.py"
+    },
+    "controller.py": {
+      "after_sha256": "eb54d8b7c15df077de83724e527f51578aa40c361abbbd2ef0fc334fbabcce54",
+      "before_sha256": "85c418262ddae38a9c8c46bcc2dbe725dbad0a3e13389e3c17dd71817a813b98",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/controller.py",
+        "sha256": "85c418262ddae38a9c8c46bcc2dbe725dbad0a3e13389e3c17dd71817a813b98"
+      },
+      "delta_sha256": "d86babdcf6d6d99a53c8c95d85a47bbbfa4104f613eb5aac7d98c64fbd9abede",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/controller.py"
+    },
+    "scan_workspace.py": {
+      "after_sha256": "bf86b3ca9bfbd24cb7f66adbfb0d08abdd27eba4325efa23dabcbc1607a42551",
+      "before_sha256": "04a85638a2e99d94457789909b550edacbcc7c0469ad67eb7a986c5a78fb6aba",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/scan_workspace.py",
+        "sha256": "04a85638a2e99d94457789909b550edacbcc7c0469ad67eb7a986c5a78fb6aba"
+      },
+      "delta_sha256": "34210013582381ec225de7798c14df807a0a7b605141aaee599b879c30bd6a81",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/scan_workspace.py"
+    },
+    "student_actor_adapter.py": {
+      "after_sha256": "6f14828e53831c997ae3cd845b243b75dbcecd91b5b24caaaa2be37357923275",
+      "before_sha256": "2de4338a884499b5ac20cadaca1d08e588d30b55329913ff1acce0dd161176b7",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/student_actor_adapter.py",
+        "sha256": "2de4338a884499b5ac20cadaca1d08e588d30b55329913ff1acce0dd161176b7"
+      },
+      "delta_sha256": "46af7267996153822689cc8685c42912e289654e84bce28c675cefe3538f03ce",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/student_actor_adapter.py"
+    },
+    "student_lower_loop_ack.py": {
+      "after_sha256": "92756657427bd447742411e644a3a68540875183fa51af7d595e3c30fcef119d",
+      "before_sha256": "f13854eb0b75bec7554019d17c6bdd9afff3452b4ffac17e9db4fe23cf0e6839",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/student_lower_loop_ack.py",
+        "sha256": "f13854eb0b75bec7554019d17c6bdd9afff3452b4ffac17e9db4fe23cf0e6839"
+      },
+      "delta_sha256": "7794aee99927654fa596a20abc2e8dc88e20e397edacfb52dea2b7aceae34f98",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/student_lower_loop_ack.py"
+    },
+    "transition_gate.py": {
+      "after_sha256": "011041952eea773db281be8716f519f384bcfca9a8d6998073e669fe009a3a71",
+      "before_sha256": "13d626f3e17d54d0f811cc63549f0d8167294c82231cc26099cd4d27f2b9d4c1",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1000/pre_zero_integral_unload_source_integration/beforeimage/transition_gate.py",
+        "sha256": "13d626f3e17d54d0f811cc63549f0d8167294c82231cc26099cd4d27f2b9d4c1"
+      },
+      "delta_sha256": "ac6310c363693280eae6434d0443a0ed281c0d5ee3f9d20527c919ce11b8d0b1",
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/transition_gate.py"
+    }
+  }
+}
