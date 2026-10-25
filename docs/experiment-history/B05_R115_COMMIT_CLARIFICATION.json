@@ -1,0 +1,112 @@
+{
+  "schema": "publication_B05_R115_commit_role_clarification/v1",
+  "UTC": "2026-10-25T05:06:00.422805+00:00",
+  "existing_history_row_changed": false,
+  "old_17_files_unchanged": true,
+  "previous_deliverable_manifest_sha256": "9a6b8d3ace6eb19523c9ad44fb5e7920c84d6f04c6ff3dab64267d202b2993c3",
+  "B05": {
+    "implementation": "cd19e89a4120d13daeb16d38f92d932d41e9a040",
+    "implementation_field_source": "SPECIFICATION.implementation_commit",
+    "actual_deployment": "d6f84da81ced8738b8d7a7c3ff0f1a06639148ba",
+    "deployment_field_sources": [
+      "DEPLOYMENT_FREEZE.source_commit",
+      "ENTRY_EXIT.source_commit",
+      "ACTUAL_LOADING.deployment",
+      "POST_RUN_COMPACT.deployment"
+    ],
+    "deployment_direct_parent": "cd19e89a4120d13daeb16d38f92d932d41e9a040",
+    "only_admin_files_differ": [
+      "candidate/POLICY_SELECTION_CONTRACT.json",
+      "candidate/R118_B05_METADATA_ASYNC_RESOURCE_ADMIN_SINGLE_ROUND.json",
+      "candidate/R73_SCAN_RUNTIME_CONTRACT.json",
+      "candidate/r85_resource_renewal.py"
+    ],
+    "business_components": {
+      "r119_metadata_async.py": {
+        "sha256": "530cbad6c4856b8293376b73555648f4aa6a6968e5d35573d4493fd9c56ce17b",
+        "bytes": 9764,
+        "identical_implementation_to_deployment": true,
+        "matches_actual_setup_receipt": true
+      },
+      "r119_metadata_async.xml": {
+        "sha256": "f52f648be6c86bc20f2fbb16db47e9949e50637b84c177a481aa100a14ca90cd",
+        "bytes": 295,
+        "identical_implementation_to_deployment": true,
+        "matches_actual_setup_receipt": true
+      },
+      "r119_writer_qos.cpp": {
+        "sha256": "c6e77d370ed46001944a805aa20f5b61d4865ec1513c5240a0bbc9e8f0b2c3d4",
+        "bytes": 2232,
+        "identical_implementation_to_deployment": true,
+        "matches_actual_setup_receipt": true
+      },
+      "r119_writer_qos.so": {
+        "sha256": "ffadbbddd668e728b109a61ffc222a259e36b82dc1a10f05657f20b211312370",
+        "bytes": 57504,
+        "identical_implementation_to_deployment": true,
+        "matches_actual_setup_receipt": true
+      },
+      "r119_writer_qos_build.json": {
+        "sha256": "db5f298b4ca06e4364605a485fa1cc4e6608e043c06d6f79aade8226df0f4c4c",
+        "bytes": 11869,
+        "identical_implementation_to_deployment": true,
+        "matches_actual_setup_receipt": true
+      }
+    },
+    "actual_writer_checked": true,
+    "actual_publish_modes": {
+      "metadata": 1,
+      "body": 0,
+      "lidar": 0,
+      "cloud": 0,
+      "status": 0
+    },
+    "note": "d6f84da is the actual deployment commit, not a component-only candidate. cd19e89 is the implementation direct parent; all5 R119 component bytes are identical and match actual loaded setup receipt."
+  },
+  "R115": {
+    "common_implementation": "4bac533bcccc493f5a606942842fcf83e824ddda",
+    "deployment020": "c57f85a4a2c9f53f9b899553c6a0f95fbf1492b8",
+    "deployment050": "49c9cfe23b554923ba336498529bfbc201b21706",
+    "note": "Published rows retain separate common implementation and each actual deployment. Different startup outcomes remain separate."
+  },
+  "sources": [
+    {
+      "logical_source": "ROUND27/trials/b05/SPECIFICATION.json",
+      "bytes": 9479,
+      "sha256": "382e04fabbde4b820f5fe8b0ea7a932fa271a3c3b101bd847b1044a8c3a53c2d"
+    },
+    {
+      "logical_source": "ROUND27/trials/b05/DEPLOYMENT_FREEZE.json",
+      "bytes": 115249,
+      "sha256": "56e35e0c500b09f1902f8335f8b0db71d1ab1365a247caa6d388c3a07009efb1"
+    },
+    {
+      "logical_source": "ROUND27/trials/b05/ENTRY_EXIT.json",
+      "bytes": 716,
+      "sha256": "aac19ef8f6ec88f924de3a70a64cf3faf66c435b48cefde56ef25421843578f6"
+    },
+    {
+      "logical_source": "ROUND27/trials/b05/ACTUAL_LOADING.json",
+      "bytes": 2188,
+      "sha256": "7686cf73ba075d101d3b2d848446bac09cb5935eba20dab138289dd4cf97204a"
+    },
+    {
+      "logical_source": "ROUND27/trials/b05/POST_RUN_COMPACT.json",
+      "bytes": 2547,
+      "sha256": "c28f792906a3a451237d07c4991b9ac2b7450bcb6249ded6d6377e41a16ffa62"
+    },
+    {
+      "logical_source": "RUNS/B05/r119_metadata_async_actual.json",
+      "bytes": 8906,
+      "sha256": "307c7eccd7eb84db23d37742e525cceef0f6ab54abf507812631c015ecb73d5a"
+    },
+    {
+      "logical_source": "HISTORY/structural_recovery_round26_20261023/RESULT.zh-CN.md",
+      "bytes": 32779,
+      "sha256": "385a33f7427c616344111edca174d3f168182668165bd4116f98cef5dae5ef08"
+    }
+  ],
+  "no_source_change": true,
+  "no_simulation": true,
+  "no_remote_action": true
+}

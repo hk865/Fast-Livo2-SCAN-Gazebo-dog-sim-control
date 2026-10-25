@@ -1,0 +1,2254 @@
+{
+  "schema": "publication_cleanup_exact_candidate_manifest/v1",
+  "UTC": "2026-10-25T05:05:05.821620+00:00",
+  "purpose": "READ_ONLY_INVENTORY_FOR_FUTURE_EXPLICIT_HUMAN_DECISION_NOT_EXECUTION",
+  "scope_authorization": "Current parent/user request permits inventory/report/publication only. Prior purge approvals are not reused. No delete/move/compress/replace/push/ROS/training was performed.",
+  "manifest_has_no_glob_or_directory_delete_scope": true,
+  "candidate_count": 5,
+  "candidates": [
+    {
+      "candidate_id": "C001",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.gz.partial",
+      "category": "FAILED_PARTIAL_ARCHIVE_WITH_VERIFIED_COMPLETE_CARRIER_RETAINED",
+      "proposal_status": "LOWER_RISK_PROPOSAL_ONLY_AWAIT_EXPLICIT_CONFIRMATION_AND_PUBLICATION_VERIFICATION",
+      "delete_authorized": false,
+      "execution_ready": false,
+      "identity": {
+        "logical_bytes": 536542129,
+        "allocated_bytes": 536547328,
+        "nlink": 1,
+        "regular_non_symlink": true,
+        "mode": "0o600"
+      },
+      "sha256": "e160a40ecf7352fe1349df0dcfeafde6e1fcc780c5b2010835d51694a75f902a",
+      "hash_read_method": "single sequential8MiB-buffer SHA256 under ioniceclass3/nice19; no decompress/CRC/replay",
+      "identity_stable_after_hash": true,
+      "run_UTC_label": "20261017T204349Z",
+      "recorded_deployment_commits": [],
+      "commit_unknown_explicit": true,
+      "run_exit_receipt_summary": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "RuntimeError: Guardian release incomplete"
+        },
+        "guardian": {
+          "status": "recovered_failed",
+          "reason": "StorageStop: R80 current retained/round storage stop: fresh_round_predictive_stop",
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": false,
+          "samples": null,
+          "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+          "worker_fault": null
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        }
+      },
+      "closed_receipt_evidence": true,
+      "fresh_recorded_owner_identity_checks": [
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+          "role": "worker",
+          "pid": 1998277,
+          "recorded_start_ticks": 62279988,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+          "role": "bridge",
+          "pid": 1998285,
+          "recorded_start_ticks": 62280195,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+          "role": "navigation_stack",
+          "pid": 1998286,
+          "recorded_start_ticks": 62280247,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+          "role": "gazebo",
+          "pid": 1998456,
+          "recorded_start_ticks": 62280596,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        }
+      ],
+      "raw_replay_loss": "The exact failed compressed partial bytes and aborted-writer intermediate artifact would be permanently lost. Original3,357,631,202-byte logical source remains recoverable from preserved complete manual2gzip under existing decompression proof, whose exact compressedSHA is freshly revalidated. This partial is not claimed byte-identical to fullgzip; original failure713B receipt remains.",
+      "exact_text_reference_hits": [
+        {
+          "candidate": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.gz.partial",
+          "in_file": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.archive.failed.json",
+          "match_types": [
+            "exact_absolute_candidate_path",
+            "run_label_reference_not_payload_dependency_proof"
+          ],
+          "file_sha256": "3d4c8a69b4bfc27cb98cd2808292d9737c47894d12d750d4aaa2131113eeb80c",
+          "examples": [
+            {
+              "line": 8,
+              "excerpt": "    \"archive_partial\": \"/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.gz.partial\","
+            }
+          ]
+        }
+      ],
+      "runlabel_or_basename_reference_hits_count": 19,
+      "reference_coverage_caveat": "SeeREFERENCE_SCAN.json. Only bounded enumeratedtexts; no exacthit is NOT no dependency. Historicalpath reference does not automatically require fullpartialpayload; rawpacket reuse by dynamicpaths/future investigation is UNKNOWN.",
+      "retain_mapping": [
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/runtime_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540331,
+            "logical_bytes": 438217,
+            "allocated_bytes": 438272,
+            "mtime_ns": 1792270892051943889,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "2545263fb1070880001c8132be15ea3ad00c4f6ce2a128385df3607aa5c036e9"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/run_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540332,
+            "logical_bytes": 325,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792270892054014370,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "133644e0723c8accb9b570362a0ffc499e2388e23e95bb259209106c28f4e4c0"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/guardian_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540329,
+            "logical_bytes": 1155,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792270892030689376,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "093b5ef53f25f3bff9bbb2934dc03f145ba61a2e0a1e559e4dc8838a3976fb08"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/terminal_facts.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540330,
+            "logical_bytes": 2501,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792270892034211445,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "172c3127608324493a45be0acca9b7f251c8e0069899e7c348291b40ca0eb5e0"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/source_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 538482,
+            "logical_bytes": 518745,
+            "allocated_bytes": 520192,
+            "mtime_ns": 1792269830768710753,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "9268c2dc61e47ac0b10c89c265d89421b72004fe8a0d8d2992b906f479e5ec8f"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/navigation_scope.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 538484,
+            "logical_bytes": 794271,
+            "allocated_bytes": 794624,
+            "mtime_ns": 1792269830778816456,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "4f8e49da192ef637ddfbe99295076efeb5dc21c88e45834cd9e5b7389eefc2ff"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/selected_policy_binding.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 537344,
+            "logical_bytes": 2888,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792269830079535873,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "d2066d91b3a49bd8233807a0f3333894c26a77b056cac31cae5156b95344b285"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/worker_archive_close.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540277,
+            "logical_bytes": 338,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792270891752230928,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "7c6e0e8adfc0b85787f10ff9aba990326bfaf8c777ba4cb4e191e659e85482d4"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/worker_archive_integrity.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540323,
+            "logical_bytes": 250,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792270891752297790,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/observations_actions.npz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 540281,
+            "logical_bytes": 18630,
+            "allocated_bytes": 20480,
+            "mtime_ns": 1792270891416941727,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.manual2.gz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 543751,
+            "logical_bytes": 1204816549,
+            "allocated_bytes": 1204822016,
+            "mtime_ns": 1792274466068059788,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.archive.failed.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 543749,
+            "logical_bytes": 713,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792273842243718659,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600"
+          },
+          "sha256": "3d4c8a69b4bfc27cb98cd2808292d9737c47894d12d750d4aaa2131113eeb80c"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.manual2.archive.result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 538625,
+            "logical_bytes": 898,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792274474766255447,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600"
+          },
+          "sha256": "be291fabb97b67046722a58ff8d307beb8443ee777cc62d161b33c4cf1d53436"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.manual2.gz.restore.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 543752,
+            "logical_bytes": 3791,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792274474174777295,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o600"
+          },
+          "sha256": "31c27cbbf531132eb20e64704720e47895aecf09f9eec5b6ea2e2a353232ade5"
+        }
+      ],
+      "all_other_source_models_configs_certificates_results_analyses_in_run_retained": true,
+      "hardlink_release": {
+        "nlink": 1,
+        "same_inode_multiple_candidate_entries": false,
+        "logical_release_upper_bound_bytes": 536542129,
+        "allocated_release_upper_bound_bytes": 536547328,
+        "guaranteed_free_bytes": 0,
+        "reason": "No unlink occurred. st_blocks upperbound only: openFDs outside reviewed scope, filesystem snapshots/reflinks/sharedextents and metadata allocation can delay/reduce realfree. No reflink extent audit. Futureexecution must re-stat and check locks/owner/identity."
+      }
+    },
+    {
+      "candidate_id": "C002",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/fastlivo_diagnostics/records.bin",
+      "category": "CLOSED_EARLY_FORMAL_NATIVE_DIAGNOSTIC_STREAM",
+      "proposal_status": "HOLD_REQUIRES_EXPLICIT_ACCEPTANCE_OF_IRREVERSIBLE_REPLAY_LOSS",
+      "delete_authorized": false,
+      "execution_ready": false,
+      "identity": {
+        "logical_bytes": 150662016,
+        "allocated_bytes": 150667264,
+        "nlink": 1,
+        "regular_non_symlink": true,
+        "mode": "0o664"
+      },
+      "sha256": "7c3a716c51649947fcd72500f70e5142d5338aa5c647bd8da83e64fb303f7e55",
+      "hash_read_method": "single sequential8MiB-buffer SHA256 under ioniceclass3/nice19; no decompress/CRC/replay",
+      "identity_stable_after_hash": true,
+      "run_UTC_label": "20261024T173337Z",
+      "recorded_deployment_commits": [
+        "9ee25a8325b79d9d78b8d1e26989f920d6e21405"
+      ],
+      "commit_unknown_explicit": false,
+      "run_exit_receipt_summary": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 9797,
+          "last_sim_time": 195.92000000000002
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 9797,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 192790000000
+        }
+      },
+      "closed_receipt_evidence": true,
+      "fresh_recorded_owner_identity_checks": [
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+          "role": "worker",
+          "pid": 3909588,
+          "recorded_start_ticks": 13685964,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+          "role": "bridge",
+          "pid": 3909757,
+          "recorded_start_ticks": 13686133,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+          "role": "capture",
+          "pid": 3909807,
+          "recorded_start_ticks": 13686182,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+          "role": "navigation_stack",
+          "pid": 3909965,
+          "recorded_start_ticks": 13686322,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+          "role": "gazebo",
+          "pid": 3910346,
+          "recorded_start_ticks": 13686565,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        }
+      ],
+      "raw_replay_loss": "All binary diagnostic packets in this stream and any unique source/solver/timing excerpts would be unrecoverable. Preserved index and writer statistics are NOT a substitute for packet payload or a rawbackup. Future old-run packet/native timing replay may fail even while published result/certificates remain readable. No complete alternate copy was proven.",
+      "exact_text_reference_hits": [],
+      "runlabel_or_basename_reference_hits_count": 58,
+      "reference_coverage_caveat": "SeeREFERENCE_SCAN.json. Only bounded enumeratedtexts; no exacthit is NOT no dependency. Historicalpath reference does not automatically require fullpartialpayload; rawpacket reuse by dynamicpaths/future investigation is UNKNOWN.",
+      "retain_mapping": [
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/runtime_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246836,
+            "logical_bytes": 325850,
+            "allocated_bytes": 327680,
+            "mtime_ns": 1792863511019139159,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "fba38ed1422519c54803159849b83458a7737097a46b8d3f9871966dee1b6ad8"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/run_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246839,
+            "logical_bytes": 362,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863511045740119,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "350753db2d7852198055540e1865fc377472246f143d39f6179a6ce836e2fc96"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/guardian_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246819,
+            "logical_bytes": 2183,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863510957690994,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "f97200b3a43f7b5a758a1669effe70eb1d77c8862ecf6d0b981dbe6572d64c48"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/terminal_facts.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246835,
+            "logical_bytes": 2092,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863510960732309,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "0760ab0829873c385620f2d721081640657be118f48dc81ae4a6e9d75b92b5cd"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/source_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246316,
+            "logical_bytes": 332435,
+            "allocated_bytes": 335872,
+            "mtime_ns": 1792863217820042825,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "c48eb5f3ea8091ef4e189bdaa0c3f983283cd909bd09e1b4d173f9368aa3d3e1"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/navigation_scope.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246318,
+            "logical_bytes": 579610,
+            "allocated_bytes": 581632,
+            "mtime_ns": 1792863217827560540,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "36a39e440781519b22d0db4c3af3c6bc3d10918be9acd0c6ed2c3839392001b3"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/selected_policy_binding.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2245437,
+            "logical_bytes": 3260,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863217541851670,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "0ad0c77060ac0272aaf207d66986d60cb5836f83f376b8188432ded1859f322c"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/worker_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246821,
+            "logical_bytes": 14595,
+            "allocated_bytes": 16384,
+            "mtime_ns": 1792863510105009805,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "dd2b32eacc5f13d8748ea357d98f21abb0f970e1717762c107a3dfdda6f3154a"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/worker_archive_close.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246794,
+            "logical_bytes": 723,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863510478135390,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "ae7d549064178db00598c5b0eb583198395b1150737d38ad575d1fa5e4d3474d"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/worker_archive_integrity.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246832,
+            "logical_bytes": 909,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863510479077110,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "8e8f93f16ac072a420bca2987eb327b7afa280385ac157b6c457b17e9e392da9"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/observations_actions.npz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246786,
+            "logical_bytes": 4978637,
+            "allocated_bytes": 4980736,
+            "mtime_ns": 1792863510097132737,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/r85_task_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246761,
+            "logical_bytes": 1839,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863506376141575,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "42d1aaa5dbda2f41ad9f7fe33131a85799f63cb0b31ee9c3af03374d40270323"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/fastlivo_diagnostics/index.csv",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246377,
+            "logical_bytes": 7566983,
+            "allocated_bytes": 7569408,
+            "mtime_ns": 1792863508262226130,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d/fastlivo_diagnostics/writer_stats.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2246800,
+            "logical_bytes": 215,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863508262226130,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "08b2fdde9582951acc33b173ad0ca7af58b29397b3d8440e8d71174a968bd751"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_02/ENTRY_EXIT.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843458,
+            "logical_bytes": 744,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792863511591677645,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "4e3d9af6099dcb2023b5a76f1b9d1d68867c896743b6535e0c2fd0423196307b"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_02/POST_RUN_CLOSURE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843459,
+            "logical_bytes": 2631426,
+            "allocated_bytes": 2633728,
+            "mtime_ns": 1792863566185520122,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "538f2ef0e2a2fac837b9a5d55b8bce04d15ae753da390dd6e83af55d89e7e742"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_02/SPECIFICATION.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843435,
+            "logical_bytes": 27472,
+            "allocated_bytes": 28672,
+            "mtime_ns": 1792863165594712721,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "489eff1fe3beb3dff09d708343cfdc26c8a4a90c7477b030d23de1f5c2f13f4e"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_02/PROFILE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843433,
+            "logical_bytes": 102386,
+            "allocated_bytes": 102400,
+            "mtime_ns": 1792863165593563266,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "6a5d94133caed33d301df3f220dd23e756668f46d5d3dec9db1c6a5413f069d9"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_02/DEPLOYMENT_REVIEW.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843438,
+            "logical_bytes": 120767,
+            "allocated_bytes": 122880,
+            "mtime_ns": 1792863189598755803,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "829dfb24be25c4b1850b1b6badaa4e262715f7b3241f3e5184c74d6280372ff4"
+        }
+      ],
+      "all_other_source_models_configs_certificates_results_analyses_in_run_retained": true,
+      "hardlink_release": {
+        "nlink": 1,
+        "same_inode_multiple_candidate_entries": false,
+        "logical_release_upper_bound_bytes": 150662016,
+        "allocated_release_upper_bound_bytes": 150667264,
+        "guaranteed_free_bytes": 0,
+        "reason": "No unlink occurred. st_blocks upperbound only: openFDs outside reviewed scope, filesystem snapshots/reflinks/sharedextents and metadata allocation can delay/reduce realfree. No reflink extent audit. Futureexecution must re-stat and check locks/owner/identity."
+      }
+    },
+    {
+      "candidate_id": "C003",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/fastlivo_diagnostics/records.bin",
+      "category": "CLOSED_EARLY_FORMAL_NATIVE_DIAGNOSTIC_STREAM",
+      "proposal_status": "HOLD_REQUIRES_EXPLICIT_ACCEPTANCE_OF_IRREVERSIBLE_REPLAY_LOSS",
+      "delete_authorized": false,
+      "execution_ready": false,
+      "identity": {
+        "logical_bytes": 154081912,
+        "allocated_bytes": 154087424,
+        "nlink": 1,
+        "regular_non_symlink": true,
+        "mode": "0o664"
+      },
+      "sha256": "d5f327044ab60b3f8b25924a1ed90367afa3b720b4fd3a02ce972e666110a3e4",
+      "hash_read_method": "single sequential8MiB-buffer SHA256 under ioniceclass3/nice19; no decompress/CRC/replay",
+      "identity_stable_after_hash": true,
+      "run_UTC_label": "20261024T175959Z",
+      "recorded_deployment_commits": [
+        "96cbff304758442fce8c7b932ecf02f6f50e1712"
+      ],
+      "commit_unknown_explicit": false,
+      "run_exit_receipt_summary": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 10001,
+          "last_sim_time": 200.0
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 10001,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 198075000000
+        }
+      },
+      "closed_receipt_evidence": true,
+      "fresh_recorded_owner_identity_checks": [
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+          "role": "worker",
+          "pid": 4068660,
+          "recorded_start_ticks": 13845638,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+          "role": "bridge",
+          "pid": 4068818,
+          "recorded_start_ticks": 13845802,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+          "role": "navigation_stack",
+          "pid": 4068872,
+          "recorded_start_ticks": 13845850,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+          "role": "gazebo",
+          "pid": 4069259,
+          "recorded_start_ticks": 13846094,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        }
+      ],
+      "raw_replay_loss": "All binary diagnostic packets in this stream and any unique source/solver/timing excerpts would be unrecoverable. Preserved index and writer statistics are NOT a substitute for packet payload or a rawbackup. Future old-run packet/native timing replay may fail even while published result/certificates remain readable. No complete alternate copy was proven.",
+      "exact_text_reference_hits": [],
+      "runlabel_or_basename_reference_hits_count": 53,
+      "reference_coverage_caveat": "SeeREFERENCE_SCAN.json. Only bounded enumeratedtexts; no exacthit is NOT no dependency. Historicalpath reference does not automatically require fullpartialpayload; rawpacket reuse by dynamicpaths/future investigation is UNKNOWN.",
+      "retain_mapping": [
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/runtime_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249681,
+            "logical_bytes": 324509,
+            "allocated_bytes": 327680,
+            "mtime_ns": 1792865110519488917,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "279b33979108f52930dfd1a23fd6370aa0157cba4120f7052631575deabac763"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/run_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249684,
+            "logical_bytes": 362,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865110539261430,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "9ce4f91d1c2b2b8e5b480b2ff34d181ebb8501b2f51d056b40b128160302013e"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/guardian_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249666,
+            "logical_bytes": 1785,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865109269356833,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "d1f02e9101a04edeaea0f62a8b443086997f8c2c78eb4131f3fa56043d9b302c"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/terminal_facts.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249680,
+            "logical_bytes": 2094,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865109273037508,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "30303a9b7bfa961b200744f8ab20fd05b6807404c0697d58ceb3799a7374738b"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/source_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249388,
+            "logical_bytes": 332435,
+            "allocated_bytes": 335872,
+            "mtime_ns": 1792864799564122757,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "d9b33f8074cdca65d6b441180dcaec8ca2de3fc8959a4a58bdc57cb0b2eee1e1"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/navigation_scope.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249390,
+            "logical_bytes": 579610,
+            "allocated_bytes": 581632,
+            "mtime_ns": 1792864799570103102,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "fac746f2f17ce93bb0d33e53382f2e10bcefc569e288703b0186228dbc7bda73"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/selected_policy_binding.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2248509,
+            "logical_bytes": 3260,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792864799295026508,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "371dcd00e951c0077354345c84def410a776a97b75d688dabaaf78924b5eb293"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/worker_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249611,
+            "logical_bytes": 14568,
+            "allocated_bytes": 16384,
+            "mtime_ns": 1792865107955877871,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "41cf577851c4e6e2eae17d271b1c9c59d46fdaff3a279f97b44002990d2eba79"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/worker_archive_close.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249661,
+            "logical_bytes": 723,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865108295734711,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "fa7f2211a044a9eaa2d2b99ead57164f302042b2bb3d69a1f59728d286a3d800"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/worker_archive_integrity.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249677,
+            "logical_bytes": 912,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865108295817908,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "cb708ade3f6f9d4842ff257a945222be5595b0a2fdbf4225f2071584039bac0f"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/observations_actions.npz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249648,
+            "logical_bytes": 5234131,
+            "allocated_bytes": 5234688,
+            "mtime_ns": 1792865107947437215,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/r85_task_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249612,
+            "logical_bytes": 1838,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865105541726701,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "f513a3fac79448f93ce21daa793f402ba29a5be2015a296b6783a03c1183f157"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/fastlivo_diagnostics/index.csv",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249445,
+            "logical_bytes": 7746711,
+            "allocated_bytes": 7749632,
+            "mtime_ns": 1792865106420406447,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67/fastlivo_diagnostics/writer_stats.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2249640,
+            "logical_bytes": 215,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865106420406447,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "c0503a500e94b8bf82e1c5bad9203c18cd6589d9f3dad6fbce326eb0ac791435"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_03/ENTRY_EXIT.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843519,
+            "logical_bytes": 711,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865110646386909,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "6da207d63844aa1ab09b7d0468a5e22cb26d1f21ea14e3ffdbec591cc56d15bc"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_03/POST_RUN_CLOSURE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843520,
+            "logical_bytes": 2629947,
+            "allocated_bytes": 2633728,
+            "mtime_ns": 1792865219141549891,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "2b7e9d67f7becefe2cd9d8955c8e9a0a34b34f75bcd325837d475b9b0e57b50d"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_03/SPECIFICATION.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843493,
+            "logical_bytes": 29627,
+            "allocated_bytes": 32768,
+            "mtime_ns": 1792864746543443415,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "68cc64d2df16925c34dd9249f29b1f4163d2aedf134bd669890bc7c3bb5d5dc4"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_03/PROFILE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843491,
+            "logical_bytes": 102386,
+            "allocated_bytes": 102400,
+            "mtime_ns": 1792864746542331431,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "faaa6e101088ef97080cd843512252cbbc94594b28e627642c1f4c040802fdbb"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_03/DEPLOYMENT_REVIEW.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843496,
+            "logical_bytes": 121028,
+            "allocated_bytes": 122880,
+            "mtime_ns": 1792864775603231414,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "44f7edb697addb00157bc1597903dec996e2fea491d2d82f7d2ca8caff55131c"
+        }
+      ],
+      "all_other_source_models_configs_certificates_results_analyses_in_run_retained": true,
+      "hardlink_release": {
+        "nlink": 1,
+        "same_inode_multiple_candidate_entries": false,
+        "logical_release_upper_bound_bytes": 154081912,
+        "allocated_release_upper_bound_bytes": 154087424,
+        "guaranteed_free_bytes": 0,
+        "reason": "No unlink occurred. st_blocks upperbound only: openFDs outside reviewed scope, filesystem snapshots/reflinks/sharedextents and metadata allocation can delay/reduce realfree. No reflink extent audit. Futureexecution must re-stat and check locks/owner/identity."
+      }
+    },
+    {
+      "candidate_id": "C004",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/fastlivo_diagnostics/records.bin",
+      "category": "CLOSED_EARLY_FORMAL_NATIVE_DIAGNOSTIC_STREAM",
+      "proposal_status": "HOLD_REQUIRES_EXPLICIT_ACCEPTANCE_OF_IRREVERSIBLE_REPLAY_LOSS",
+      "delete_authorized": false,
+      "execution_ready": false,
+      "identity": {
+        "logical_bytes": 151435056,
+        "allocated_bytes": 151441408,
+        "nlink": 1,
+        "regular_non_symlink": true,
+        "mode": "0o664"
+      },
+      "sha256": "3e6e58dd755bc97e891e9a0eda12d131f321b7cff27121588b5c1f132c1b62ab",
+      "hash_read_method": "single sequential8MiB-buffer SHA256 under ioniceclass3/nice19; no decompress/CRC/replay",
+      "identity_stable_after_hash": true,
+      "run_UTC_label": "20261024T181929Z",
+      "recorded_deployment_commits": [
+        "cbdda9e9c7605242d914c00318337b06ab9935aa"
+      ],
+      "commit_unknown_explicit": false,
+      "run_exit_receipt_summary": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 9829,
+          "last_sim_time": 196.56
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 9829,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 191630000000
+        }
+      },
+      "closed_receipt_evidence": true,
+      "fresh_recorded_owner_identity_checks": [
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+          "role": "worker",
+          "pid": 4185314,
+          "recorded_start_ticks": 13963209,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+          "role": "bridge",
+          "pid": 4185482,
+          "recorded_start_ticks": 13963382,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+          "role": "navigation_stack",
+          "pid": 4185527,
+          "recorded_start_ticks": 13963433,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+          "role": "gazebo",
+          "pid": 4185958,
+          "recorded_start_ticks": 13963684,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        }
+      ],
+      "raw_replay_loss": "All binary diagnostic packets in this stream and any unique source/solver/timing excerpts would be unrecoverable. Preserved index and writer statistics are NOT a substitute for packet payload or a rawbackup. Future old-run packet/native timing replay may fail even while published result/certificates remain readable. No complete alternate copy was proven.",
+      "exact_text_reference_hits": [],
+      "runlabel_or_basename_reference_hits_count": 55,
+      "reference_coverage_caveat": "SeeREFERENCE_SCAN.json. Only bounded enumeratedtexts; no exacthit is NOT no dependency. Historicalpath reference does not automatically require fullpartialpayload; rawpacket reuse by dynamicpaths/future investigation is UNKNOWN.",
+      "retain_mapping": [
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/runtime_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252067,
+            "logical_bytes": 324557,
+            "allocated_bytes": 327680,
+            "mtime_ns": 1792866281008086757,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "da89cb1ade1e08f3112fd2a87dea9db19a5c679856470a10edbdb09bb7c2e6a2"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/run_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252070,
+            "logical_bytes": 362,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866281028644863,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "a9c0e58ac634a11f5d86195e86c6d1c70417ac3008ae1793c3ecb1849b2ae3d3"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/guardian_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252019,
+            "logical_bytes": 1785,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866280665687429,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "6a256e4375c95849bb624bd06e437a70b828f6da6ec4dd1585771f3aec937421"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/terminal_facts.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252066,
+            "logical_bytes": 2092,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866280668887530,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "9d50c12d4b7f90fd95f307bcc762d519a98a9872698df35f6f1088b29806b861"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/source_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2251686,
+            "logical_bytes": 332435,
+            "allocated_bytes": 335872,
+            "mtime_ns": 1792865970074848220,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "fae6801aa5e2873216a18d3df07f56f8e476af552bb7cd170de29ea913496691"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/navigation_scope.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2251688,
+            "logical_bytes": 579610,
+            "allocated_bytes": 581632,
+            "mtime_ns": 1792865970080748990,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "952ea1213fd61d67e7e1a9fa9941ea01d7bed361d4a93a3748a42a9fa160fb61"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/selected_policy_binding.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2250807,
+            "logical_bytes": 3260,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792865969805702589,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "e3d51afda13c3d6f93dd05ef7b1a1540d48b3d61a6a1dd5ccf34e442ba995c49"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/worker_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252017,
+            "logical_bytes": 14596,
+            "allocated_bytes": 16384,
+            "mtime_ns": 1792866279896075536,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "7c6080a0a815b694c2dd392ef4ba7778243b8341663e4097001aff73ea4e3220"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/worker_archive_close.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252062,
+            "logical_bytes": 724,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866280290079513,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "0222a1075bb05728fadcfad782e461ce6fdbb06a086f51067335d72f590c8f49"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/worker_archive_integrity.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252063,
+            "logical_bytes": 909,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866280291152144,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "e29a50d3d59a4c7dd0e6eceee2f9c66682fda36c2431f92becfd1170658a1cea"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/observations_actions.npz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252035,
+            "logical_bytes": 4536431,
+            "allocated_bytes": 4538368,
+            "mtime_ns": 1792866279889075465,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/r85_task_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252013,
+            "logical_bytes": 1840,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866273982407534,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "40c60bab1a92d34ebc41519903ce401e2d0c94d64788ed3e0fb46415e15ab669"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/fastlivo_diagnostics/index.csv",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2251743,
+            "logical_bytes": 7607840,
+            "allocated_bytes": 7610368,
+            "mtime_ns": 1792866278432060757,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4/fastlivo_diagnostics/writer_stats.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2252007,
+            "logical_bytes": 214,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866278432060757,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "3fa1231ad4da873379d01787e5d138f605305706b7d46a529319a15628bc0428"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_04/ENTRY_EXIT.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843569,
+            "logical_bytes": 710,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792866281424075985,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "cc36854f4b23a3b93d3e38bfa0189becfa30d14d59137ad338a427ac4fc12b87"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_04/POST_RUN_CLOSURE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843570,
+            "logical_bytes": 2629999,
+            "allocated_bytes": 2633728,
+            "mtime_ns": 1792866443092696031,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "0f1e2f170e5bbc0b88f976c71e5747f1b569518780a96ff3d23b04f13fb8cd28"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_04/SPECIFICATION.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843546,
+            "logical_bytes": 31231,
+            "allocated_bytes": 32768,
+            "mtime_ns": 1792865917904391720,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "25b253216cde7b64292e72de34bd6a4bb05854e19ff5e9220132fcf6946c5ab2"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_04/PROFILE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843544,
+            "logical_bytes": 102386,
+            "allocated_bytes": 102400,
+            "mtime_ns": 1792865917903236421,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "b2cee531cb1d57114b5fc0929321bee5b349c5ed8db8e831c65517a9969f1d81"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_04/DEPLOYMENT_REVIEW.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843549,
+            "logical_bytes": 121379,
+            "allocated_bytes": 122880,
+            "mtime_ns": 1792865941253498020,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "5c5712deaef85586ef479ed0d203ad3fa41a0d0af1fa21c03cbfda7925c4de02"
+        }
+      ],
+      "all_other_source_models_configs_certificates_results_analyses_in_run_retained": true,
+      "hardlink_release": {
+        "nlink": 1,
+        "same_inode_multiple_candidate_entries": false,
+        "logical_release_upper_bound_bytes": 151435056,
+        "allocated_release_upper_bound_bytes": 151441408,
+        "guaranteed_free_bytes": 0,
+        "reason": "No unlink occurred. st_blocks upperbound only: openFDs outside reviewed scope, filesystem snapshots/reflinks/sharedextents and metadata allocation can delay/reduce realfree. No reflink extent audit. Futureexecution must re-stat and check locks/owner/identity."
+      }
+    },
+    {
+      "candidate_id": "C005",
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/fastlivo_diagnostics/records.bin",
+      "category": "CLOSED_EARLY_FORMAL_NATIVE_DIAGNOSTIC_STREAM",
+      "proposal_status": "HOLD_REQUIRES_EXPLICIT_ACCEPTANCE_OF_IRREVERSIBLE_REPLAY_LOSS",
+      "delete_authorized": false,
+      "execution_ready": false,
+      "identity": {
+        "logical_bytes": 150986592,
+        "allocated_bytes": 150990848,
+        "nlink": 1,
+        "regular_non_symlink": true,
+        "mode": "0o664"
+      },
+      "sha256": "5e6e20c527cc577203e79625f6da72a2c4001402fd90c8669e143f52eab907d1",
+      "hash_read_method": "single sequential8MiB-buffer SHA256 under ioniceclass3/nice19; no decompress/CRC/replay",
+      "identity_stable_after_hash": true,
+      "run_UTC_label": "20261024T184628Z",
+      "recorded_deployment_commits": [
+        "4b449e55ac109bb323bee18ac7fcbfff9939e3c8"
+      ],
+      "commit_unknown_explicit": false,
+      "run_exit_receipt_summary": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 9794,
+          "last_sim_time": 195.86
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 9794,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 193855000000
+        }
+      },
+      "closed_receipt_evidence": true,
+      "fresh_recorded_owner_identity_checks": [
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+          "role": "worker",
+          "pid": 152233,
+          "recorded_start_ticks": 14123558,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+          "role": "bridge",
+          "pid": 152403,
+          "recorded_start_ticks": 14123732,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+          "role": "navigation_stack",
+          "pid": 152453,
+          "recorded_start_ticks": 14123781,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        },
+        {
+          "run": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+          "role": "gazebo",
+          "pid": 152946,
+          "recorded_start_ticks": 14124026,
+          "recorded_boot_id": "00000000-0000-4000-8000-000000000000",
+          "current_process_absent": true,
+          "same_owned_identity": false
+        }
+      ],
+      "raw_replay_loss": "All binary diagnostic packets in this stream and any unique source/solver/timing excerpts would be unrecoverable. Preserved index and writer statistics are NOT a substitute for packet payload or a rawbackup. Future old-run packet/native timing replay may fail even while published result/certificates remain readable. No complete alternate copy was proven.",
+      "exact_text_reference_hits": [],
+      "runlabel_or_basename_reference_hits_count": 72,
+      "reference_coverage_caveat": "SeeREFERENCE_SCAN.json. Only bounded enumeratedtexts; no exacthit is NOT no dependency. Historicalpath reference does not automatically require fullpartialpayload; rawpacket reuse by dynamicpaths/future investigation is UNKNOWN.",
+      "retain_mapping": [
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/runtime_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255035,
+            "logical_bytes": 324522,
+            "allocated_bytes": 327680,
+            "mtime_ns": 1792867885872843703,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "a22f7056e4ad6e12590d7f03313c6c583105e7ad7ee8c78dc7e8b38218fa2d12"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/run_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255038,
+            "logical_bytes": 362,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867885891713157,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "a8710db98c4e08381f117bc96acff208762ea688e36680195e5729bc596f443b"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/guardian_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254999,
+            "logical_bytes": 1769,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867885256768063,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "27a82482307e02cbd7ab658548bdc27a0f5f5ea6e33e016a5a9479a21ce7c0e8"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/terminal_facts.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255034,
+            "logical_bytes": 2092,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867885259397892,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "b6519e35dd1a782c4c563cb47b48ea6482458a08aaae5cadbc29d572a05f74bd"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/source_manifest.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254615,
+            "logical_bytes": 332435,
+            "allocated_bytes": 335872,
+            "mtime_ns": 1792867588718527465,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "78d64520a27003a6580d02425c7fdeee7b46d73a2ee133e8007bc0e4d5e50ad0"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/navigation_scope.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254617,
+            "logical_bytes": 579610,
+            "allocated_bytes": 581632,
+            "mtime_ns": 1792867588724402660,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "44f43b9213ae3defa2d7a0bdabc8a5de007b0cc67d731bf1c145a13f79cdfc45"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/selected_policy_binding.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2253736,
+            "logical_bytes": 3260,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867588448077771,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "11f5d139f7486b1d7758163a906d1ecde7c38d53589af6e23b4f77fd93f06eab"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/worker_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255019,
+            "logical_bytes": 15128,
+            "allocated_bytes": 16384,
+            "mtime_ns": 1792867884303478118,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "0f20f5bc116878c4b5f8b7351f2229d08de4f2b043fa5ed2ebbce3962a630012"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/worker_archive_close.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255003,
+            "logical_bytes": 724,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867884684505405,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "d144ae5e5f413f258ec7d679d6b70f3c5ca9742ecfbd61a3340b8f879f97f3d3"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/worker_archive_integrity.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2255031,
+            "logical_bytes": 909,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867884684604479,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "b36c1e0615e9210fe9c8174ace092c5bee2a3320e5a83fdc562b9f2d6fcba575"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/observations_actions.npz",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254985,
+            "logical_bytes": 5075362,
+            "allocated_bytes": 5079040,
+            "mtime_ns": 1792867884295841106,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/r85_task_result.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254950,
+            "logical_bytes": 1840,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867881768137642,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "2f02cc693553190560b24cf03fc397174106cb527f13b2bb28b0549c311b9612"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/fastlivo_diagnostics/index.csv",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254672,
+            "logical_bytes": 7584427,
+            "allocated_bytes": 7585792,
+            "mtime_ns": 1792867882954838910,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "NOT_REREAD_RETAIN_ONLY"
+        },
+        {
+          "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea/fastlivo_diagnostics/writer_stats.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 2254974,
+            "logical_bytes": 215,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867882954838910,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "2083417873f74e563a35dd9d618587d40f85cb54cfce83421c2285666ff1685e"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_05/ENTRY_EXIT.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843626,
+            "logical_bytes": 710,
+            "allocated_bytes": 4096,
+            "mtime_ns": 1792867886397197196,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "cf30bbd24a91b4007b1218faf57fbfc86504ca6290945cf5278814b78e0981e1"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_05/POST_RUN_CLOSURE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843859,
+            "logical_bytes": 2629964,
+            "allocated_bytes": 2633728,
+            "mtime_ns": 1792868289276928460,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "54be5400464b8160d0c901dcd40e6574e440ad1463e8aa31392589ee06cf29cf"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_05/SPECIFICATION.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843602,
+            "logical_bytes": 33351,
+            "allocated_bytes": 36864,
+            "mtime_ns": 1792867533059645250,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "56e64328f26ef1f080aef6802416518cdf11ba7e1a1850401183a22578cbbd2e"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_05/PROFILE.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843600,
+            "logical_bytes": 102386,
+            "allocated_bytes": 102400,
+            "mtime_ns": 1792867533058782971,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "ce28316c1b82501d556ae8ee7ba67005a5e43ca83a6482bf7b130aae78120bdd"
+        },
+        {
+          "path": "/opt/experiment/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/compact_formal_05/DEPLOYMENT_REVIEW.json",
+          "exists": true,
+          "identity": {
+            "device": 66313,
+            "inode": 1843605,
+            "logical_bytes": 121664,
+            "allocated_bytes": 122880,
+            "mtime_ns": 1792867567518694439,
+            "nlink": 1,
+            "regular_non_symlink": true,
+            "uid": 1000,
+            "gid": 1000,
+            "mode": "0o664"
+          },
+          "sha256": "e3f8d56684ef5562e7144aa3eb4b032af2170da89cd47d8739995c2388913b40"
+        }
+      ],
+      "all_other_source_models_configs_certificates_results_analyses_in_run_retained": true,
+      "hardlink_release": {
+        "nlink": 1,
+        "same_inode_multiple_candidate_entries": false,
+        "logical_release_upper_bound_bytes": 150986592,
+        "allocated_release_upper_bound_bytes": 150990848,
+        "guaranteed_free_bytes": 0,
+        "reason": "No unlink occurred. st_blocks upperbound only: openFDs outside reviewed scope, filesystem snapshots/reflinks/sharedextents and metadata allocation can delay/reduce realfree. No reflink extent audit. Futureexecution must re-stat and check locks/owner/identity."
+      }
+    }
+  ],
+  "protected_exact_run_and_archive_scopes": [
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T202603Z_closed_loop_R85_compact_formal_07_round27_c77c",
+      "allocated_bytes": 123224064,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T210841Z_closed_loop_R85_compact_formal_09_round27_e864",
+      "allocated_bytes": 122810368,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T230834Z_closed_loop_R85_compact_formal_13_round27_c7d3",
+      "allocated_bytes": 1474260992,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T234212Z_closed_loop_R85_compact_formal_14_round27_e112",
+      "allocated_bytes": 1472561152,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T000014Z_closed_loop_R85_compact_formal_15_round27_fa2f",
+      "allocated_bytes": 1854361600,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T002000Z_closed_loop_R85_compact_formal_16b_round27_1f2a",
+      "allocated_bytes": 130805760,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T003822Z_closed_loop_R85_compact_formal_17_round27_0c7f",
+      "allocated_bytes": 1456214016,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T024858Z_closed_loop_R85_compact_formal_18b_static_support_reassessment_round27_f684",
+      "allocated_bytes": 82128896,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T030830Z_closed_loop_R85_compact_formal_19_relay_writer_round27_a529",
+      "allocated_bytes": 2070487040,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T033615Z_closed_loop_R85_compact_formal_20_connector_grade_round27_ba39",
+      "allocated_bytes": 1190490112,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T035308Z_closed_loop_R85_compact_formal_21_status_epoch_round27_7117",
+      "allocated_bytes": 2228772864,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Native startup/quality/causality/timing or geometry milestone: preserve whole run until independently approved exact-window/retain mapping exists; not merely old orFAIL."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "allocated_bytes": 1934856192,
+      "policy": "ENTIRE_RUN_OUTSIDE_CURRENT_DELETE_PROPOSAL",
+      "reason": "Formal22 complete successfulraw evidence"
+    },
+    {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+      "policy": "ENTIRE_LEGACY_BASELINE_PROTECTED",
+      "reason": "Current physical geometry helpers reference known_scene_reference.json/world.sdf in this run; do not prune directory wholesale."
+    },
+    {
+      "path": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5/r85_reference_attempts.jsonl.manual2.gz",
+      "policy": "EXACT_COMPLETE_ARCHIVE_CARRIER_PROTECTED",
+      "sha256": "5a8f6ab234cdb8d0ea2055617244cd590d1825277b5809b1b2fb7176d6d9a4ed",
+      "identity": {
+        "device": 66313,
+        "inode": 543751,
+        "logical_bytes": 1204816549,
+        "allocated_bytes": 1204822016,
+        "mtime_ns": 1792274466068059788,
+        "nlink": 1,
+        "regular_non_symlink": true
+      },
+      "reason": "Verified complete logicalsource carrier; only failedpartial is proposed, no carrier/removal/restoration action."
+    }
+  ],
+  "global_retention_policy": [
+    "All code/build sources/native artifacts/models/configs/snapshots/certificates/results/analysis stay outside candidatepaths.",
+    "No formal22 file is candidate; no old failure/result/denial/cleanup receipt is altered.",
+    "Logs are reports not rawbackups. Upload verification and later exactlist confirmation are required before any irreversible operation.",
+    "Only5 exactregularfiles proposed; no directory/wildcard/expansion allowed. Records C002-C005 are HOLD, not execution-ready."
+  ],
+  "totals": {
+    "logical_candidate_bytes": 1143707705,
+    "allocated_upper_bound_bytes": 1143734272,
+    "actual_released_bytes": 0,
+    "guaranteed_future_released_bytes": 0,
+    "all_candidate_nlink1": true,
+    "minimum_confirmation_risk": "C001 failedpartial ~.536GB lower-risk because completecarrier retained; C002–5 ~.607GB knowingly destroys unique diagnosticreplay."
+  },
+  "supporting_manifest_sha256": {
+    "RUN_AND_ROOT_INVENTORY.json": "39b4a3ef50e39a18dfaa27ce0311bd6aadf3a022dcff2259f52c6edb37d59a5b",
+    "LEGACY_RUN_INVENTORY.json": "a6af78d641901b3304b7a4c7b785517aa88b5399160b57fb6e8abf7b2f351ce0",
+    "FIRST_BATCH_HASHES.json": "6674bcf113fb632c1331de771efb331a48cd7bf569d0500215ebd017a2ae6471",
+    "REFERENCE_SCAN.json": "ceb990eb96f39b5158a8898da91958e9b93800b71d3b1c9242dc15aa1e2e288c",
+    "CANDIDATE_OWNER_FD_OBSERVATION.json": "a6509a696f8f6c3db6268377bfdb8d15ef3c0734d9d367ccaccfc1220eaf203b"
+  },
+  "FD_observation_limitation": {
+    "sameUID_proc_directories": 2,
+    "fd_entries": 6,
+    "matching_open_FDs": [],
+    "read_errors": 0,
+    "statement": "Only currentUID observation, not proof of allhost holders. DifferentUID/open-after-observation remains unknown. No execution allowed from this snapshot."
+  },
+  "remaining_work": [
+    "284other largefiles metadata-only/unhashed (seeUNHASHED_LARGE_FILES.json); not delete-ready.",
+    "No selected true rawrun originals beyond4 earlydiagnosticstreams assessed; legacy522 runarea entries incl offline/prepares remainpreserved.",
+    "Outside boundedtext roots/largeJSONL/binary/dynamicconstructed consumers and externalusers unresolved; do not claim no dependency.",
+    "CurrentGit actualcommit unknown for some oldruns, retained as UNKNOWN; original source/profile/hash receipts retained.",
+    "No directoryextent/reflink snapshot audit, no current originaladmission/lockrun, no deletion plan executed."
+  ],
+  "public_read_only_projection_not_execution_manifest": true,
+  "local_exact_manifest_sha256": "05ce917212e52cec2cfd1db5b454bccd4ef60d497a3b0a4cf50f3ea1b24a5fbf",
+  "delete_authorized": false,
+  "execution_ready": false
+}
