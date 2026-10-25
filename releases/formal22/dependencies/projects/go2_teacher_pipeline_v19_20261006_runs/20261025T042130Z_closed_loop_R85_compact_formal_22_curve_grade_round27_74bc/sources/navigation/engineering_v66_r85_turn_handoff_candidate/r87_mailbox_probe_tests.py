@@ -11,8 +11,8 @@ from r86_prepared_feedback_tests import feed, packet
 
 class MailboxDiagnosticTests(unittest.TestCase):
     def test_disabled_probe_never_samples_or_formats_scope(self):
-        with patch.object(diag, 'RECORDER', None), \
-             patch.object(diag, 'sample', side_effect=AssertionError('disabled sample')), \
+        with patch.object(diag, 'RECORDER', None),\
+             patch.object(diag, 'sample', side_effect=AssertionError('disabled sample')),\
              patch.object(mailbox, '_scope_text', side_effect=AssertionError('disabled scope')):
             box = mailbox.ros_mailbox(verify_corrected)
             box.set_scope(b'a' * 32)

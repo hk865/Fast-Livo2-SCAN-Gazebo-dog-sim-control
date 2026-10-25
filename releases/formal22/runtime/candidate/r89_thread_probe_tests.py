@@ -42,8 +42,8 @@ class ThreadProbeTests(unittest.TestCase):
         source = Path(probe.__file__).read_text()
         for option in (None, '0', 'invalid', '1'):
             namespace = {'__name__': '_r89_test_import'}
-            with patch.dict(os.environ, {}, clear=False), \
-                 patch.object(threading.Thread, 'start', side_effect=AssertionError('thread on import')), \
+            with patch.dict(os.environ, {}, clear=False),\
+                 patch.object(threading.Thread, 'start', side_effect=AssertionError('thread on import')),\
                  patch.object(builtins, 'open', side_effect=AssertionError('I/O on import')):
                 os.environ.pop(probe.KEY, None)
                 if option is not None:
@@ -80,8 +80,8 @@ class ThreadProbeTests(unittest.TestCase):
         recorder = probe.ThreadProbe(capacity=3, max_threads=2)
         secret_payload = 'DO_NOT_CAPTURE_this_local_value_98278'
         main = types.SimpleNamespace(native_id=321, ident=threading.get_ident(), name='fixture-owner')
-        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321, 322, 323])), \
-             patch.object(probe, '_read', side_effect=fixture_read), \
+        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321, 322, 323])),\
+             patch.object(probe, '_read', side_effect=fixture_read),\
              patch.object(probe.threading, 'enumerate', return_value=[main]):
             recorder._sample(time.monotonic_ns())
         row = recorder.rows[0]
@@ -108,7 +108,7 @@ class ThreadProbeTests(unittest.TestCase):
                 count += 1
                 return stat_text(start=count)
             return fixture_read(path)
-        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])), \
+        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])),\
              patch.object(probe, '_read', side_effect=reused_read):
             recorder._sample(time.monotonic_ns())
         self.assertEqual(recorder.identity_changed, 1)
@@ -120,7 +120,7 @@ class ThreadProbeTests(unittest.TestCase):
             if path.endswith('/stat'):
                 return stat_text()
             raise PermissionError('fixture denied')
-        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])), \
+        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])),\
              patch.object(probe, '_read', side_effect=denied):
             recorder._sample(time.monotonic_ns())
         self.assertEqual(len(recorder.rows[0]['threads']), 1)
@@ -129,7 +129,7 @@ class ThreadProbeTests(unittest.TestCase):
             self.assertIsNone(recorder.rows[0]['threads'][0][name])
         with patch.object(probe.os, 'scandir', side_effect=PermissionError('fixture denied')):
             recorder._sample(time.monotonic_ns())
-        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])), \
+        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])),\
              patch.object(probe, '_read', side_effect=FileNotFoundError('gone')):
             recorder._sample(time.monotonic_ns())
         self.assertEqual(recorder.errors['task_list:denied'], 1)
@@ -197,12 +197,12 @@ class ThreadProbeTests(unittest.TestCase):
     def test_zone_freeze_hot_paths_have_no_io_or_lock_and_slow_request_at_exit(self):
         recorder = probe.ThreadProbe(capacity=4)
         forbidden = AssertionError('hot path performed I/O')
-        with recorder.guard, \
-             patch.object(builtins, 'open', side_effect=forbidden), \
-             patch.object(builtins, 'print', side_effect=forbidden), \
-             patch.object(probe.os, 'scandir', side_effect=forbidden), \
-             patch.object(probe.sys, '_current_frames', side_effect=forbidden), \
-             patch.object(recorder, '_cpu_snapshot', return_value={'fixture': True}), \
+        with recorder.guard,\
+             patch.object(builtins, 'open', side_effect=forbidden),\
+             patch.object(builtins, 'print', side_effect=forbidden),\
+             patch.object(probe.os, 'scandir', side_effect=forbidden),\
+             patch.object(probe.sys, '_current_frames', side_effect=forbidden),\
+             patch.object(recorder, '_cpu_snapshot', return_value={'fixture': True}),\
              patch.object(probe.time, 'monotonic_ns', side_effect=[100, 101, 200_000_101, 200_000_102]):
             with recorder.zone('native_geometry', 91):
                 pass
@@ -227,14 +227,14 @@ class ThreadProbeTests(unittest.TestCase):
 
     def test_startup_failure_and_thread_start_failure_never_escape(self):
         recorder = probe.ThreadProbe(capacity=4)
-        with patch.object(probe, '_read', side_effect=PermissionError('denied')), \
-             patch.object(builtins, 'open', side_effect=PermissionError('denied')), \
+        with patch.object(probe, '_read', side_effect=PermissionError('denied')),\
+             patch.object(builtins, 'open', side_effect=PermissionError('denied')),\
              patch.object(probe.importlib, 'import_module', side_effect=ImportError('absent')):
             startup = recorder._startup()
         self.assertTrue(startup['captured_once'])
         self.assertFalse(startup['changed_thread_limits'])
         self.assertEqual(startup['threadpool_status'], 'ImportError')
-        with patch.object(recorder, '_startup', return_value=startup), \
+        with patch.object(recorder, '_startup', return_value=startup),\
              patch.object(threading.Thread, 'start', side_effect=RuntimeError('no threads')):
             self.assertFalse(recorder.start())
         self.assertTrue(recorder.finished)
@@ -246,7 +246,7 @@ class ThreadProbeTests(unittest.TestCase):
         calls = []
         module = types.SimpleNamespace(threadpool_info=lambda: calls.append('info') or
             [dict(internal_api='openblas', num_threads=1, irrelevant='private', filepath='/tmp/libblas.so')])
-        with patch.object(recorder, '_run', return_value=None), \
+        with patch.object(recorder, '_run', return_value=None),\
              patch.object(probe.importlib, 'import_module', return_value=module):
             self.assertTrue(recorder.start())
             self.assertFalse(recorder.start())
@@ -305,7 +305,7 @@ class ThreadProbeTests(unittest.TestCase):
         def delayed():
             entered.set()
             release.wait(2)
-        with patch.object(recorder, '_startup', return_value={}), \
+        with patch.object(recorder, '_startup', return_value={}),\
              patch.object(recorder, '_run', side_effect=delayed):
             try:
                 self.assertTrue(recorder.start())
@@ -321,7 +321,7 @@ class ThreadProbeTests(unittest.TestCase):
 
     def test_capture_timestamps_bracket_stacks_and_task_reads(self):
         recorder = probe.ThreadProbe(capacity=3)
-        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])), \
+        with patch.object(probe.os, 'scandir', side_effect=lambda path: entries([321])),\
              patch.object(probe, '_read', side_effect=fixture_read):
             recorder._sample(time.monotonic_ns())
         row = recorder.rows[0]

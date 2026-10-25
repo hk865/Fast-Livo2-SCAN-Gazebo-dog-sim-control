@@ -161,8 +161,8 @@ class CoreProbeTests(unittest.TestCase):
         recorder.mark('tail')
         cleanup = []
         stderr = io.StringIO()
-        with patch.object(diag, 'RECORDER', recorder), \
-             patch.object(Path, 'write_text', side_effect=OSError('fixture disk failure')), \
+        with patch.object(diag, 'RECORDER', recorder),\
+             patch.object(Path, 'write_text', side_effect=OSError('fixture disk failure')),\
              patch.object(sys, 'stderr', stderr):
             diag.flush(Path('/not-written-fixture'))
             cleanup.append('existing cleanup reached')
@@ -177,7 +177,7 @@ class CoreProbeTests(unittest.TestCase):
         def callback(value):
             seen.append(value)
             return value + 1
-        with patch.object(diag, 'RECORDER', recorder), \
+        with patch.object(diag, 'RECORDER', recorder),\
              patch.object(diag, 'sample', side_effect=OSError('injected sampler failure')):
             self.assertEqual(callback(4), 5)
             with self.assertRaisesRegex(RuntimeError, 'original business error'):
@@ -190,12 +190,12 @@ class CoreProbeTests(unittest.TestCase):
     def test_no_hot_path_io_or_print(self):
         recorder = diag.Recorder(capacity=16)
         forbidden = AssertionError('observer hot-path I/O')
-        with patch.object(diag, 'RECORDER', recorder), \
-             patch.object(builtins, 'open', side_effect=forbidden), \
-             patch.object(builtins, 'print', side_effect=forbidden), \
-             patch.object(os, 'open', side_effect=forbidden), \
-             patch.object(os, 'write', side_effect=forbidden), \
-             patch.object(Path, 'write_text', side_effect=forbidden), \
+        with patch.object(diag, 'RECORDER', recorder),\
+             patch.object(builtins, 'open', side_effect=forbidden),\
+             patch.object(builtins, 'print', side_effect=forbidden),\
+             patch.object(os, 'open', side_effect=forbidden),\
+             patch.object(os, 'write', side_effect=forbidden),\
+             patch.object(Path, 'write_text', side_effect=forbidden),\
              patch.object(json, 'dumps', side_effect=forbidden):
             with diag.span('no_io', 1):
                 diag.mark('inside', 1, value=2)

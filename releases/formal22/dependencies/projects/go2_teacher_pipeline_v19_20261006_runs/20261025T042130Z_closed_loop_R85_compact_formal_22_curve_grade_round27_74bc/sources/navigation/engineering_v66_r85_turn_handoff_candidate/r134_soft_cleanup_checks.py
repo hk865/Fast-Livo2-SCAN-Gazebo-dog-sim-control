@@ -70,10 +70,10 @@ def sequence(root,kind='soft'):
     def stop(saved,**kwargs):
         stops.append(saved['role']);state['recovered']=True
         return dict(sent_signals=[],remaining_members=[])
-    with patch.object(guardian,'atomic',side_effect=record),patch.object(guardian.os,'getpid',return_value=900004), \
-         patch.object(guardian,'ident',side_effect=identity),patch.object(guardian,'validated_members',side_effect=members), \
-         patch.object(guardian,'stop_group',side_effect=stop),patch.object(guardian,'members',return_value=[]), \
-         patch.object(guardian.signal,'signal'),patch.object(guardian.os,'kill',side_effect=lambda p,s:signals.append([p,int(s)])), \
+    with patch.object(guardian,'atomic',side_effect=record),patch.object(guardian.os,'getpid',return_value=900004),\
+         patch.object(guardian,'ident',side_effect=identity),patch.object(guardian,'validated_members',side_effect=members),\
+         patch.object(guardian,'stop_group',side_effect=stop),patch.object(guardian,'members',return_value=[]),\
+         patch.object(guardian.signal,'signal'),patch.object(guardian.os,'kill',side_effect=lambda p,s:signals.append([p,int(s)])),\
          patch.object(guardian.time,'monotonic',side_effect=lambda:clock.t),patch.object(guardian.time,'sleep',side_effect=sleep):
         rc=guardian._watch(root,storage_check=storage)
     result=json.loads((root/'guardian_result.json').read_text())
@@ -94,7 +94,7 @@ def monitor(root,beats,*,lost=False):
             value=next((row for row in reversed(beats) if row['monotonic_wall']<=limit),beats[0])
             return json.dumps(value)
         return real_read(path,*args,**kwargs)
-    with patch.object(Path,'read_text',reading),patch.object(guardian.time,'monotonic',side_effect=lambda:current[0]), \
+    with patch.object(Path,'read_text',reading),patch.object(guardian.time,'monotonic',side_effect=lambda:current[0]),\
          patch.object(guardian.os,'kill',side_effect=lambda p,s:sent.append([p,int(s)])):
         obj._heartbeat()
     return obj.error,sent

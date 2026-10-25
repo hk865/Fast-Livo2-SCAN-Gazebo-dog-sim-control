@@ -120,7 +120,7 @@ class TeacherNavigation(base.Navigation):
                                      msg.orientation_covariance[0]>=0)
         if accepted:
             self.counts['imu']+=1;v=msg.angular_velocity
-            gyro=redacted-contact@example.invalid([v.x,v.y,v.z])
+            gyro=self.imu_body_rotation@np.array([v.x,v.y,v.z])
             if np.isfinite(gyro).all():
                 self.gyro_body=gyro.tolist();self.gyro_stamp=self.stamp(msg)/1e9;self.gyro_wall=now
         if self.state=='running'and self.apply_tilt_guard(now,ros_now):

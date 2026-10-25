@@ -145,10 +145,10 @@ class FaultWindowTests(unittest.TestCase):
         def fake_worker():
             raise RuntimeError("original worker exception")
         fake_module = types.SimpleNamespace(main=fake_worker)
-        with patch.dict("sys.modules", {"worker": fake_module}), \
-             patch("sys.argv", ["ipc_fault_window.py", "--run", "/synthetic/run"]), \
-             patch.object(Path, "read_bytes", return_value=b"synthetic source"), \
-             patch.object(FaultWindow, "save", side_effect=OSError("synthetic write failure")), \
+        with patch.dict("sys.modules", {"worker": fake_module}),\
+             patch("sys.argv", ["ipc_fault_window.py", "--run", "/synthetic/run"]),\
+             patch.object(Path, "read_bytes", return_value=b"synthetic source"),\
+             patch.object(FaultWindow, "save", side_effect=OSError("synthetic write failure")),\
              patch("builtins.print", side_effect=BrokenPipeError("synthetic stderr failure")):
             with self.assertRaisesRegex(RuntimeError, "original worker exception"):
                 ipc_fault_window.main()

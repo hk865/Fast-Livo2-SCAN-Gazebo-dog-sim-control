@@ -53,10 +53,10 @@ class ProbeTests(unittest.TestCase):
             def f(*args):order.append(name);return value
             return f
         usage=type('Usage',(),{'ru_'+k:1 for k in ('nvcsw','nivcsw','minflt','majflt','inblock','oublock')})()
-        with patch.object(probe.time,'monotonic_ns',side_effect=reader('wall',100)), \
-             patch.object(probe.threading,'get_native_id',side_effect=reader('tid',2)), \
-             patch.object(probe.time,'thread_time_ns',side_effect=reader('thread',3)), \
-             patch.object(probe.time,'process_time_ns',side_effect=reader('process',4)), \
+        with patch.object(probe.time,'monotonic_ns',side_effect=reader('wall',100)),\
+             patch.object(probe.threading,'get_native_id',side_effect=reader('tid',2)),\
+             patch.object(probe.time,'thread_time_ns',side_effect=reader('thread',3)),\
+             patch.object(probe.time,'process_time_ns',side_effect=reader('process',4)),\
              patch.object(probe.resource,'getrusage',side_effect=reader('rusage',usage)):
             row=probe.sample()
         self.assertEqual(order,['wall','tid','thread','process','rusage','wall'])
@@ -87,7 +87,7 @@ class ProbeTests(unittest.TestCase):
     def test_capacity_and_no_hot_path_io(self):
         cls, _ = timing_type()
         observer = cls(Path('/unused'))
-        with patch('builtins.open', side_effect=AssertionError('hot I/O')), \
+        with patch('builtins.open', side_effect=AssertionError('hot I/O')),\
                 patch.object(os, 'open', side_effect=AssertionError('hot I/O')):
             for _ in range(5000):
                 observer.mark(None, 'remember_native_guard_before')

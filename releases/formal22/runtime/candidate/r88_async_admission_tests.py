@@ -292,7 +292,7 @@ class CoordinatorTests(unittest.TestCase):
         for kind in ('count', 'bytes'):
             node, worker, admission = self.make()
             admission.start(message(), {})
-            with patch.object(service, 'MAX_EVENTS', 2 if kind == 'count' else 32), \
+            with patch.object(service, 'MAX_EVENTS', 2 if kind == 'count' else 32),\
                  patch.object(service, 'MAX_QUEUE_BYTES', 100 if kind == 'bytes' else 2**20):
                 for _ in range(3):
                     admission.receive('metadata', NS(data='x'*60), lambda msg: node.order.append('unexpected'))

@@ -96,7 +96,7 @@ def scene_waypoints_in_slam(world_axis_offsets, slam_origin, yaw_camera_init_fro
     world coordinates must first have the known scene anchor subtracted.
     """
     offsets=np.asarray(world_axis_offsets,dtype=float);origin=np.asarray(slam_origin,dtype=float)
-    if offsets.ndim!=2 or offsets.shape[1]!=3 or origin.shape!=(3,) \
+    if offsets.ndim!=2 or offsets.shape[1]!=3 or origin.shape!=(3,)\
             or not np.isfinite(offsets).all() or not np.isfinite(origin).all():
         raise ValueError('waypoints must be finite N×3 offsets and origin a finite 3-vector')
     return (offsets@yaw_rotation(yaw_camera_init_from_world).T+origin).tolist()

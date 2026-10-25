@@ -1171,7 +1171,7 @@ def main():
             'runtime_plan_sha256':sha(run/'runtime_plan.json'),'navigation_scope_sha256':plan['scope_sha256']}
     else:
         latch=Path(json.loads((HERE/'R33_SHORT_STARTUP_CONTRACT.json').read_text())['source_stage'])/'ONE_SIMULATION_LATCH.json'
-        write_new(latch,dict(run=str(run),runner_sha256=sha(__file__),parent_authorization_thread='00000000-0000-4000-8000-000000000000',maximum_attempts=1))
+        write_new(latch,dict(run=str(run),runner_sha256=sha(__file__),parent_authorization_thread='01a119af-6f52-71ee-a0aa-e8f82a9e50f3',maximum_attempts=1))
         try:error=execute(run,plan)
         except Exception as e:
             failure=exceptional_runtime_manifest(run,plan,e);error=failure['error']

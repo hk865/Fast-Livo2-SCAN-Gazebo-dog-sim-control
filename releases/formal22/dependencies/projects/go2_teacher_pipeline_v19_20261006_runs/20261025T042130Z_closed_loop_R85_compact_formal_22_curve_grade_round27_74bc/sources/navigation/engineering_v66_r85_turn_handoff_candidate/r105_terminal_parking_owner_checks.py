@@ -382,8 +382,8 @@ class StartupLoadedChecks(unittest.TestCase):
     code=worker.main.__code__
     if kind=='wrong_function_path':code=code.replace(co_filename='/wrong-loaded-worker.py')
     module_file='/wrong-loaded-executor_command.py' if kind=='wrong_module_path' else executor_command.__file__
-    with patch.object(sys.modules['__main__'],'__file__',str(entry)),patch.object(sys,'argv',[str(entry),'--run',str(run)]), \
-         patch.object(executor_command,'__file__',module_file),temporary_function_code(worker.main,code), \
+    with patch.object(sys.modules['__main__'],'__file__',str(entry)),patch.object(sys,'argv',[str(entry),'--run',str(run)]),\
+         patch.object(executor_command,'__file__',module_file),temporary_function_code(worker.main,code),\
          patch.object(worker,'Path',observed_path(Path,RequestWindow())):
      if kind=='valid':
       reader=worker.initialize_command_reader(run,scope,scope_sha,np.array([.6,.2,.6]),{})

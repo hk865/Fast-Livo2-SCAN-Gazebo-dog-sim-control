@@ -46,7 +46,7 @@ class EagerSendTests(unittest.TestCase):
 
     def test_disabled_submit_has_no_write_or_read_and_same_timeout_origin(self):
         worker = self.fake(False)
-        with patch.object(service.os, 'write') as write, patch.object(service.os, 'read') as read, \
+        with patch.object(service.os, 'write') as write, patch.object(service.os, 'read') as read,\
                 patch.object(service.time, 'monotonic_ns', return_value=1000):
             self.assertTrue(worker.submit('token', self.payload))
         write.assert_not_called()
@@ -59,8 +59,8 @@ class EagerSendTests(unittest.TestCase):
         worker = self.fake()
         payload = dict(self.payload, padding='x'*(service.IO_CHUNK_BYTES+200))
         raw = service._encoded(dict(token=7, payload=payload), service.MAX_REQUEST_BYTES)
-        with patch.object(service.os, 'write', return_value=17) as write, \
-                patch.object(service.os, 'read') as read, \
+        with patch.object(service.os, 'write', return_value=17) as write,\
+                patch.object(service.os, 'read') as read,\
                 patch.object(service.time, 'monotonic_ns', return_value=2000) as clock:
             self.assertTrue(worker.submit(7, payload))
         write.assert_called_once_with(42, raw[:service.IO_CHUNK_BYTES])
@@ -96,7 +96,7 @@ class EagerSendTests(unittest.TestCase):
             amount = 11 if not written else len(data)
             written.append(data[:amount])
             return amount
-        with patch.object(service.os, 'write', side_effect=write) as sender, \
+        with patch.object(service.os, 'write', side_effect=write) as sender,\
                 patch.object(service.os, 'read', side_effect=BlockingIOError()):
             worker.submit(4, self.payload)
             origin = worker._submitted_ns
@@ -110,7 +110,7 @@ class EagerSendTests(unittest.TestCase):
 
     def test_broken_pipe_reports_original_token_once_via_poll_without_rewrite(self):
         worker = self.fake()
-        with patch.object(service.os, 'write', side_effect=BrokenPipeError(32, 'closed')) as write, \
+        with patch.object(service.os, 'write', side_effect=BrokenPipeError(32, 'closed')) as write,\
                 patch.object(service.os, 'read') as read:
             self.assertTrue(worker.submit(5, self.payload))
             self.assertTrue(worker.busy)
@@ -137,7 +137,7 @@ class EagerSendTests(unittest.TestCase):
             outcomes = []
             for eager in (False, True):
                 worker = self.fake(eager)
-                with patch.object(service.os, 'write', side_effect=error_type('x'*3000)), \
+                with patch.object(service.os, 'write', side_effect=error_type('x'*3000)),\
                         patch.object(service.os, 'read') as read:
                     worker.submit('failure-token', self.payload)
                     result = worker.poll()
@@ -153,7 +153,7 @@ class EagerSendTests(unittest.TestCase):
             with self.subTest(lose_owner=lose_owner):
                 worker, node = self.fake(), MinNode()
                 admission = coordinator.Admission(node, worker)
-                with patch.object(service.os, 'write', side_effect=BrokenPipeError('closed')) as write, \
+                with patch.object(service.os, 'write', side_effect=BrokenPipeError('closed')) as write,\
                         patch.object(service.os, 'read') as read:
                     admission.start(message(), {})
                     self.assertIsNotNone(admission.current)
@@ -193,7 +193,7 @@ class EagerSendTests(unittest.TestCase):
 
     def test_eager_result_does_not_bypass_original_job_timeout(self):
         worker = self.fake()
-        with patch.object(service.os, 'write', side_effect=BlockingIOError()), \
+        with patch.object(service.os, 'write', side_effect=BlockingIOError()),\
                 patch.object(service.os, 'read', side_effect=BlockingIOError()):
             worker.submit(6, self.payload)
             worker._submitted_ns -= int(9e9)
@@ -206,7 +206,7 @@ class EagerSendTests(unittest.TestCase):
         worker = self.fake()
         raw = json.dumps(dict(event='ready', receipt=dict(worker_pid=12345,
             eager_submit=False, thread_caps=service.THREAD_CAPS))).encode()+b'\n'
-        with patch.object(service.os, 'write', side_effect=lambda fd, data:len(data)), \
+        with patch.object(service.os, 'write', side_effect=lambda fd, data:len(data)),\
                 patch.object(service.os, 'read', return_value=raw):
             worker.submit(8, self.payload)
             token, proof, metrics = worker.poll()

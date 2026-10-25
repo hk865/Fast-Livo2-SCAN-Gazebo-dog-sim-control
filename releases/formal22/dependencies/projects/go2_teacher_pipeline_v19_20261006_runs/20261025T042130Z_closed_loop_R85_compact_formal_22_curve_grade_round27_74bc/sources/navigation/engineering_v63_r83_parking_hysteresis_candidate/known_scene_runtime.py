@@ -247,7 +247,7 @@ def main():
                         target_C_world_odom=self.pending_target.tolist(),
                         frozen_T_odom_body=self.pending_body.tolist(),
                         measured_zero_stop_verified=True),allow_nan=False)+'\n')
-            c=redacted-contact@example.invalid(snapshot['C_world_odom'])
+            c=self.nav_world@np.asarray(snapshot['C_world_odom'])
             metadata=dict(schema='known_scene_navigation_bundle/v1',run_id=run.name,source_ns=ns,
                 generation=snapshot['generation'],C_world_odom=snapshot['C_world_odom'],
                 T_navigation_world=self.nav_world.tolist(),match_source_ns=snapshot['match_source_ns'],
