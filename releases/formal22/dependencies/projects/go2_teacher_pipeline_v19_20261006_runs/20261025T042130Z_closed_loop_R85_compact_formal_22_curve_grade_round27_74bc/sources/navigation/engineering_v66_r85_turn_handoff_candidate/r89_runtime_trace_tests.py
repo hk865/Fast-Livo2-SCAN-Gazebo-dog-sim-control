@@ -218,7 +218,7 @@ class RuntimeTraceTests(unittest.TestCase):
         for snapshot in (dict(enabled=True, bad=float('nan')), dict(enabled=True), None):
             with self.subTest(snapshot=snapshot):
                 self.threads.stop.return_value = snapshot
-                with patch.object(Path, 'write_text', side_effect=OSError('injected disk fault')), \
+                with patch.object(Path, 'write_text', side_effect=OSError('injected disk fault')),\
                      patch.object(sys, 'stderr', NS(write=Mock(side_effect=OSError('stderr closed')))):
                     self.trace.finish(self.node)
         self.assertEqual(self.threads.stop.call_count, 3)

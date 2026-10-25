@@ -126,7 +126,7 @@ class RecoveryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='go2_R26_recovery_cpu_')as folder:
             o,tick,a=self.callback_fixture(Path(folder));target=o.pending_target.copy()
             result=copy.deepcopy(a['result']);result['C_world_odom']=target.tolist()
-            result['T_world_body']=(redacted-contact@example.invalid(result['T_odom_body'])).tolist()
+            result['T_world_body']=(target@np.asarray(result['T_odom_body'])).tolist()
             o.worker.poll=lambda:result;tick(o)
             self.assertTrue(o.transition);self.assertEqual(o.pending_recovery_count,0)
             self.assertEqual(o.pending_source_ns,292550000000)

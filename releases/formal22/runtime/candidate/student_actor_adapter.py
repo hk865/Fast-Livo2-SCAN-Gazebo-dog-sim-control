@@ -38,7 +38,7 @@ def exact_student45(state, command, previous_action):
     R=np.array([[1-2*(y*y+z*z),2*(x*y-z*w),2*(x*z+y*w)],
                 [2*(x*y+z*w),1-2*(x*x+z*z),2*(y*z-x*w)],
                 [2*(x*z-y*w),2*(y*z+x*w),1-2*(x*x+y*y)]])
-    out=np.r_[state[11:14]*.2,redacted-contact@example.invalid([0.,0.,-1.]),command,
+    out=np.r_[state[11:14]*.2,R.T@np.array([0.,0.,-1.]),command,
               state[14:26]-QDEFAULT,state[26:38]*.05,previous_action].astype(np.float32)
     if out.shape!=(45,) or not np.isfinite(out).all():raise ValueError('Student45 nonfinite')
     return out

@@ -78,7 +78,7 @@ class MissionGuardTests(unittest.TestCase):
         self.assertTrue(all(x.split('/')[0]=='floor_1' for x in names))
         for yaw in (0.,np.pi/2,np.pi,-np.pi/2):
             c,s=np.cos(yaw),np.sin(yaw)
-            xy=redacted-contact@example.invalid([[c,s],[-s,c]])+[16,4.5]
+            xy=SCAN_GRID_XY@np.array([[c,s],[-s,c]])+[16,4.5]
             starts=np.column_stack((xy,np.full(187,21.6)))
             a,an=lower.raycast(starts);b,bn=upper.raycast(starts)
             self.assertTrue(np.isfinite(a).all() and np.isfinite(b).all())

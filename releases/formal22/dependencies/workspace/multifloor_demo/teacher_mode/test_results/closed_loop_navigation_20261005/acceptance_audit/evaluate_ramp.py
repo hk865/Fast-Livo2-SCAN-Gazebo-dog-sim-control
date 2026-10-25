@@ -520,7 +520,7 @@ def terrain_switch_audit(run,n,execution,contract,base):
     if set(initial['include_models'])!={'floor_1','ramp_12','floor_2'} or set(alternate['include_models'])!={'floor_2','ramp_23','floor_3'}:
         raise ValueError('Switch raw manifests differ from explicit lower12/upper23 providers')
     yaw=math.atan2(n['rot'][k,1,0],n['rot'][k,0,0]);c,s=math.cos(yaw),math.sin(yaw)
-    xy=redacted-contact@example.invalid([[c,s],[-s,c]])+pos[:2]
+    xy=observation.SCAN_GRID_XY@np.array([[c,s],[-s,c]])+pos[:2]
     expected_starts=np.column_stack((xy,np.full(187,pos[2]+20.)))
     ray=event['ray_equivalence'];starts=np.asarray(ray['starts'],float)
     if starts.shape!=(187,3) or not np.isfinite(starts).all() or not np.allclose(starts,expected_starts,atol=1e-8,rtol=0):raise ValueError('Switch altered the frozen grid or +20m ray origin')

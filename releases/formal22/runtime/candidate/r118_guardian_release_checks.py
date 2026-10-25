@@ -102,11 +102,11 @@ def sequence(root,kind):
         nonlocal pending
         cleanup.append(saved['role']);pending=False
         return dict(sent_signals=[],remaining_members=[])
-    with patch.object(guardian.os,'getpid',return_value=900004),patch.object(guardian,'ident',side_effect=identity), \
-         patch.object(guardian,'validated_members',side_effect=validated),patch.object(guardian,'stop_group',side_effect=stop), \
-         patch.object(guardian,'members',return_value=[]),patch.object(guardian.signal,'signal'), \
-         patch.object(guardian.os,'kill',side_effect=lambda pid,sig:signals.append([pid,int(sig)])), \
-         patch.object(guardian.time,'monotonic',side_effect=clock.now),patch.object(guardian.time,'sleep',side_effect=clock.sleep), \
+    with patch.object(guardian.os,'getpid',return_value=900004),patch.object(guardian,'ident',side_effect=identity),\
+         patch.object(guardian,'validated_members',side_effect=validated),patch.object(guardian,'stop_group',side_effect=stop),\
+         patch.object(guardian,'members',return_value=[]),patch.object(guardian.signal,'signal'),\
+         patch.object(guardian.os,'kill',side_effect=lambda pid,sig:signals.append([pid,int(sig)])),\
+         patch.object(guardian.time,'monotonic',side_effect=clock.now),patch.object(guardian.time,'sleep',side_effect=clock.sleep),\
          contextlib.redirect_stderr(io.StringIO()) as stderr:
         rc=guardian._watch(root,storage_check=storage)
     result=json.loads((root/'guardian_result.json').read_text())

@@ -34,7 +34,7 @@ def filter_records(msg, lidar):
     if any(name not in fields or fields[name].datatype!=7 or fields[name].count!=1 for name in ('x','y','z')):
         raise ValueError('sensor cloud requires scalar float32 XYZ')
     offsets=[fields[name].offset for name in ('x','y','z')]
-    if any(offset<0 or offset+4>msg.point_step for offset in offsets) \
+    if any(offset<0 or offset+4>msg.point_step for offset in offsets)\
             or msg.row_step<msg.width*msg.point_step or len(msg.data)<msg.height*msg.row_step:
         raise ValueError('malformed sensor cloud field/row layout')
     endian='>' if msg.is_bigendian else '<'

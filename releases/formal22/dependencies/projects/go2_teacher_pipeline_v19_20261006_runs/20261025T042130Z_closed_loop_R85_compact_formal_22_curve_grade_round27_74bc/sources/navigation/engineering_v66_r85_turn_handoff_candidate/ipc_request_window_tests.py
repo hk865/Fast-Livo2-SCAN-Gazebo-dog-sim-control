@@ -224,10 +224,10 @@ class RequestWindowTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as td, patch.dict("sys.modules", {
                 "worker": fake_worker, "mission46_terrain": fake_provider,
-                "evidence_runtime_v32.worker_logging": fake_recording}), \
-                patch.object(ipc_fault_window, "main", fail), \
-                patch("sys.argv", ["test", "--run", td]), patch("sys.stderr", FailingStderr()), \
-                patch.object(module.Path, "read_bytes", return_value=b"finite fake source receipt"), \
+                "evidence_runtime_v32.worker_logging": fake_recording}),\
+                patch.object(ipc_fault_window, "main", fail),\
+                patch("sys.argv", ["test", "--run", td]), patch("sys.stderr", FailingStderr()),\
+                patch.object(module.Path, "read_bytes", return_value=b"finite fake source receipt"),\
                 patch.object(RequestWindow, "save", side_effect=OSError("actual optional save failure")) as saved:
             with self.assertRaises(RuntimeError) as raised:
                 module.main()
@@ -262,9 +262,9 @@ class StartupIntegrationTests(unittest.TestCase):
             argv[2] = td
             with patch.dict("sys.modules", {"worker": w,
                     "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
-                    "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
-                    patch.object(module.StartupPartition, "for_run", return_value=partition) as selected, \
-                    patch.object(ipc_fault_window, "main", original), patch("sys.argv", argv), \
+                    "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}),\
+                    patch.object(module.StartupPartition, "for_run", return_value=partition) as selected,\
+                    patch.object(ipc_fault_window, "main", original), patch("sys.argv", argv),\
                     patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"):
                 self.assertIs(module.main(owned_cli=True), token)
                 selected.assert_called_once_with(Path(td), owned_cli=True)
@@ -298,11 +298,11 @@ class StartupIntegrationTests(unittest.TestCase):
                 raise RuntimeError("stderr error")
         with tempfile.TemporaryDirectory() as td, patch.dict("sys.modules", {"worker": w,
                 "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
-                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
-                patch.object(module.StartupPartition, "for_run", return_value=partition), \
-                patch.object(ipc_fault_window, "main", original), patch("sys.argv", ["test", "--run", td]), \
-                patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"), \
-                patch.object(RequestWindow, "save", side_effect=OSError("optional evidence failure")), \
+                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}),\
+                patch.object(module.StartupPartition, "for_run", return_value=partition),\
+                patch.object(ipc_fault_window, "main", original), patch("sys.argv", ["test", "--run", td]),\
+                patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"),\
+                patch.object(RequestWindow, "save", side_effect=OSError("optional evidence failure")),\
                 patch("sys.stderr", BadStderr()):
             with self.assertRaises(RuntimeError) as raised:
                 module.main(owned_cli=True)
@@ -352,10 +352,10 @@ class StartupIntegrationTests(unittest.TestCase):
                 importer=lambda _: self.fail("imported main cannot import dependency"))
         with tempfile.TemporaryDirectory() as td, patch.dict("sys.modules", {"worker": w,
                 "mission46_terrain": types.SimpleNamespace(MissionTerrainProvider=P),
-                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}), \
-                patch.object(module.StartupPartition, "for_run", side_effect=select) as selected, \
-                patch.object(ipc_fault_window, "main", return_value=token), \
-                patch("sys.argv", ["test", "--run", td]), \
+                "evidence_runtime_v32.worker_logging": types.SimpleNamespace(RecordingContext=R)}),\
+                patch.object(module.StartupPartition, "for_run", side_effect=select) as selected,\
+                patch.object(ipc_fault_window, "main", return_value=token),\
+                patch("sys.argv", ["test", "--run", td]),\
                 patch.object(module.Path, "read_bytes", return_value=b"finite source bytes"):
             self.assertIs(module.main(), token)
             selected.assert_called_once_with(Path(td), owned_cli=False)

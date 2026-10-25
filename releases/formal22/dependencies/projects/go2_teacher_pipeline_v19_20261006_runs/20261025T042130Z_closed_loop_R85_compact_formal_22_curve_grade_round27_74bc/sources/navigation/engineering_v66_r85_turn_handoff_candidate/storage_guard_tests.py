@@ -48,7 +48,7 @@ class StorageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             calls=[];w=Watchdog(tmp,{},lambda:calls.append('only_runner'));w.last={}
             w.done.wait=lambda seconds:False
-            with patch('storage_guard.observe',side_effect=StorageStop({'stop_reasons':['budget']})), \
+            with patch('storage_guard.observe',side_effect=StorageStop({'stop_reasons':['budget']})),\
                  patch.object(Path,'write_text',side_effect=OSError('injected full disk')):
                 w._loop()
             self.assertEqual(calls,['only_runner'])

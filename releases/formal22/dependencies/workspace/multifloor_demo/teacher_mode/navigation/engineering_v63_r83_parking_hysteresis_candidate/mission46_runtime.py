@@ -188,7 +188,7 @@ def build_node(run, scope, profile):
                 angular_velocity_sensor=[w.x,w.y,w.z],linear_acceleration_sensor=[a.x,a.y,a.z],
                 orientation_covariance_0=float(msg.orientation_covariance[0]),source_topic='/livox/imu')
             if self.registration.observe_imu(row):
-                row['angular_velocity_body']=(redacted-contact@example.invalid(row['angular_velocity_sensor'])).tolist()
+                row['angular_velocity_body']=(self.registration.mount_rotation@np.asarray(row['angular_velocity_sensor'])).tolist()
                 if all(math.isfinite(x) for x in row['linear_acceleration_sensor']):self.imu_rows.append(row)
         def on_pose(self,msg):
             now_ns=self.clock_ns();wall_ns=time.monotonic_ns();stamp=msg.header.stamp.sec*1_000_000_000+msg.header.stamp.nanosec

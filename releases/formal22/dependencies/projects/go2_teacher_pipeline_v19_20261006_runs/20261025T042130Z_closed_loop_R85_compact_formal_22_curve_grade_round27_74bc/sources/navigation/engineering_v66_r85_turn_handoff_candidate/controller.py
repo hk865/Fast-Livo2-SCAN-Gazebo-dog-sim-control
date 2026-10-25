@@ -1078,7 +1078,7 @@ class PIDNavigation(TeacherNavigation):
                 position_world_xyz=self.pose.tolist(),quaternion_wxyz=[q.w,q.x,q.y,q.z],
                 origin_velocity_body=[v.x,v.y,v.z],callback_ros_clock_ns=clock)
             self.paired_imu=copy.deepcopy(paired)
-            self.pid_velocity=redacted-contact@example.invalid([v.x,v.y,v.z]);self.pid_pose_stamp=stamp
+            self.pid_velocity=self.rotation@np.array([v.x,v.y,v.z]);self.pid_pose_stamp=stamp
             self.evidence.append(self.run/'navigation_feedback_history.jsonl',dict(
                 **self.feedback,paired_imu=copy.deepcopy(paired),navigation_ground_truth_used=False))
         _sensor_callback_odom(self,stamp,clock,wall,before,self.pose_stamp,message=msg)

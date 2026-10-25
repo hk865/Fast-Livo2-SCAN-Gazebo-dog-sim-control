@@ -207,7 +207,7 @@ class MapArchive(Node):
             self.snapshot()
             return response
         health = self.metadata()
-        if not health['slam_healthy'] or not health['camera_healthy'] \
+        if not health['slam_healthy'] or not health['camera_healthy']\
                 or health['message_age'] is None or health['message_age'] >= 2 or health['error']:
             response.success = False
             response.message = 'SLAM, sensor or colored-cloud evidence is stale/invalid; refusing map save'
