@@ -185,7 +185,11 @@ def runtime_files(profile=None):
     published_r85=(native_selection is not None
         and native_selection[1].get('schema')=='published_formal22_native571_build/v1'
         and r85_profile_identity(profile or {}) is not None)
-    if published_r85:preflight.append(HERE/'R33_STARTUP_PREFLIGHT.json')
+    if published_r85:
+        startup_contract=HERE/'R33_SHORT_STARTUP_CONTRACT.json'
+        active_native=Path(json.loads(startup_contract.read_text())['native_guard_private_reuse_path'])
+        preflight += [HERE/'R33_STARTUP_PREFLIGHT.json',startup_contract,active_native,
+            _package_paths.GUARD_ROOT/'storage_guard.py',_package_paths.GUARD_ROOT/'retained_usage.py']
     else:preflight+=evidence_files(HERE)
     from scan_workspace import evidence_files as scan_evidence_files, scan_contract
     preflight+=scan_evidence_files(profile)
