@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,copy,shutil,xml.etree.ElementTree as E,ast,re,sys,time
+A=Path('/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024');W=A/'worktrees/published_formal22_repro';C=W/'candidate';D=W/'releases/formal22/dependencies';O=W/'reproduction/typed_route/world_identity';O.mkdir(parents=True,exist_ok=True);R=Path((A/'trials/published_repro_10/RUN_PATH.txt').read_text().strip());sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest();info=lambda p:dict(path=str(Path(p).resolve()),sha256=sha(p),bytes=Path(p).stat().st_size)
+P=W/'reproduction/typed_route/typed_r85_global_reference.json';oldtyped=P.read_bytes();typed=json.loads(oldtyped);oldmeta=Path(typed['physical_sources']['geometry_metadata_file']);m=json.loads(oldmeta.read_text());oldworld=Path(m['inputs']['world']['path']);actual=R/'world.sdf';assert sha(oldworld)=='066022cb94c7eb52fed9a5241bb0c0b223001db2175b7af15910497ab156e3ef';assert sha(actual)=='7da821ac7d4dc09bccdedc99f0ce1ba7e7b7af73bc28b8835ae49dbb617e4c27';diffs=[]
+def compare(a,b,k=''):
+ assert a.tag==b.tag
+ k+=f'/{a.tag}'+('[@name='+a.get('name')+']'if a.get('name')else'')
+ if a.attrib!=b.attrib:
+  assert a.tag=='plugin' and a.get('name')=='teacher_sim::TeacherActuator' and set(a.attrib)==set(b.attrib)=={'name','filename'}
+  assert Path(b.get('filename')).is_file() and sha(b.get('filename'))=='a37807e30464feb775e5f28d063016a6771cabda4867d7582dfc807ff8e2f5ba';diffs.append(dict(xpath=k,kind='plugin filename',old=a.get('filename'),new=b.get('filename')))
+ if(a.text or '').strip()!=(b.text or '').strip():
+  assert a.tag=='uri'and b.text.startswith('file://') and Path(b.text[7:]).is_file();diffs.append(dict(xpath=k,kind='mesh URI',old=a.text.strip(),new=b.text.strip()))
+ assert len(a)==len(b)
+ for x,y in zip(a,b):compare(x,y,k)
+compare(E.parse(oldworld).getroot(),E.parse(actual).getroot());assert len(diffs)==20;assert R.name not in actual.read_text() and 'run_id'not in actual.read_text()
+fixed=D/'derived_inputs/typed_route/world_prepared_package.sdf';assert not fixed.exists();shutil.copy2(actual,fixed);newmeta=D/'derived_inputs/typed_route/metadata_actual_world.json';assert not newmeta.exists();m['inputs']['world']=info(fixed);newmeta.write_text(json.dumps(m,indent=2,allow_nan=False)+'\n');reverted=copy.deepcopy(m);reverted['inputs']['world']=json.loads(oldmeta.read_text())['inputs']['world'];assert reverted==json.loads(oldmeta.read_text())
+leaf=C/'r85_geometry_admission.py';before=leaf.read_text();(O/'r85_geometry_admission_before.py').write_text(before);after,n=re.subn(r'(?m)^METADATA = .*$',lambda _: 'METADATA = Path('+repr(str(newmeta))+')',before);assert n==1
+functions=lambda s:{x.name:ast.dump(x,include_attributes=False)for x in ast.parse(s).body if isinstance(x,(ast.FunctionDef,ast.ClassDef,ast.AsyncFunctionDef))};assert functions(before)==functions(after);leaf.write_text(after)
+for src,name in [(P,'typed_before.json'),(oldmeta,'metadata_before.json'),(Path(typed['physical_certificate_file']),'certificate_before.json')]:shutil.copy2(src,O/name)
+intent=O/'RECERT_CALL_INTENT.json';assert not intent.exists();intent.write_text(json.dumps(dict(actual_calls_allowed=1,leaf=info(leaf),metadata=info(newmeta),same_337_route=True))+'\n')
+sys.path.insert(0,str(C));import r85_geometry_admission as geometry
+start=time.monotonic_ns();cpu=time.process_time_ns();certificate=geometry.check_typed_polyline(typed['ground_points'],typed['body_points'],observation_diagnostics=False);elapsed=dict(wall_ns=time.monotonic_ns()-start,process_cpu_ns=time.process_time_ns()-cpu);assert certificate['allowed']and certificate['ready_for_control']is False and certificate['navigation_PASS']is False
+cp=W/'reproduction/typed_route/physical_route_admission_actual_world.json';assert not cp.exists();cp.write_text(json.dumps(certificate,indent=2,allow_nan=False)+'\n')
+rawold=Path(typed['source_route_file']);raw=json.loads(rawold.read_text());raw['source_map_metadata_sha256']=sha(newmeta);rawnew=D/'derived_inputs/typed_route/route_candidate_actual_world.json';assert not rawnew.exists();rawnew.write_text(json.dumps(raw,indent=2,allow_nan=False)+'\n');typed['source_route_file']=str(rawnew);typed['source_route_sha256']=sha(rawnew);s=typed['physical_sources'];s['geometry_metadata_file']=str(newmeta);s['geometry_metadata_sha256']=sha(newmeta);s['world_file']=str(fixed);s['world_sha256']=sha(fixed);typed['physical_certificate_file']=str(cp);P.write_text(json.dumps(typed,indent=2,allow_nan=False)+'\n')
+# All task coordinates, geometry reference, helper, limits and physical values remain exact.
+beforetyped=json.loads(oldtyped)
+for k in typed:
+ if k not in ['source_route_file','source_route_sha256','physical_sources','physical_certificate_file']:assert typed[k]==beforetyped[k],k
+for k in s:
+ if k not in ['geometry_metadata_file','geometry_metadata_sha256','world_file','world_sha256']:assert s[k]==beforetyped['physical_sources'][k]
+assert sha(Path(s['frozen_geometry_helper_file']))==beforetyped['physical_sources']['frozen_geometry_helper_sha256'];assert sha(Path(s['limits_file']))==beforetyped['physical_sources']['limits_sha256'];assert sha(O/'certificate_before.json')=='8608a95b17796ca00255a9eca6cdaec2919b1a55e65e4f0eb8efa75e7d678998'
+r=dict(schema='published_prepared_world_identity_closure/v1',prior_world=info(oldworld),actual10_world=info(actual),fixed_world_template=info(fixed),world_contains_run_id=False,all_XML_differences=diffs,only19meshURI_and1pluginPath=True,all_physical_geometry_sampling_nodes_attributes_and_values_equal=True,prior_metadata=info(oldmeta),derived_metadata=info(newmeta),metadata_only_world_descriptor_changed=True,geometry_leaf=info(leaf),geometry_leaf_only_METADATA_literal_changed=True,all_function_class_AST_unchanged=True,helper_SHA_unchanged=True,limits_SHA_unchanged=True,original_raw=info(rawold),derived_raw=info(rawnew),derived_raw_only_metadata_SHA_changed=True,typed_before_sha256=hashlib.sha256(oldtyped).hexdigest(),typed_after=info(P),all337points_endpoints_offset_transform_unchanged=True,old_certificate=info(O/'certificate_before.json'),new_certificate=info(cp),actual_recertification_calls=1,recertification_elapsed=elapsed,checked_subsegments=certificate['checked_subsegments'],physical_failure_counts=certificate['physical_failure_counts'],ready_for_control=False,navigation_PASS=False,no_ROS_Node_Gazebo_started=True)
+(O/'WORLD_IDENTITY_CLOSURE.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(dict(typed_sha256=sha(P),metadata_sha256=sha(newmeta),certificate_sha256=sha(cp),leaf_sha256=sha(leaf),recertification_elapsed=elapsed,receipt=str(O/'WORLD_IDENTITY_CLOSURE.json'))))

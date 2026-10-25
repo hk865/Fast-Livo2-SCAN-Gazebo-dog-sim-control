@@ -26,7 +26,7 @@ LEGACY = STAGE / "validate_route_support.py"
 LEGACY_SHA = '0dd5d3025fde1c0510e8bfa1ca9aa56c13be51bad2d5166a8b804791784638fd'
 CONFIG = STAGE / "support_validation_config.json"
 CONFIG_SHA = "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe"
-METADATA = STAGE / "data/known_scene43_camera_init_h005/metadata.json"
+METADATA = Path('/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/derived_inputs/typed_route/metadata_actual_world.json')
 BODY_HEIGHT = .32
 HERE = Path(__file__).resolve().parent
 
