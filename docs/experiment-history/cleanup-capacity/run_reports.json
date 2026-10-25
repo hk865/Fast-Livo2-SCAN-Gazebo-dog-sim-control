@@ -1,0 +1,3448 @@
+{
+  "schema": "cleanup_capacity_existing_report_mapping/v1",
+  "runs": [
+    {
+      "run_id": "20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": null,
+          "samples": 45112,
+          "last_sim_time": 902.22
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 45112,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": null
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 160594,
+          "sha256": "25b895bb4c198d15f25db334d1a83935ddf9639aa045524a12fedf9e100a2497",
+          "selected_facts": {
+            "error": null
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 880,
+          "sha256": "9efcfe698c59ab5b4d5d9f8ed31ca1a045d951f928d0fcc4f3cd75e1f9cdce6a",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 45112
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1485,
+          "sha256": "52b6ba93de24b127cf40d29cb13c3b5de51301d03dae4e41cdf7e0adf0fccc3d",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261014T205347Z_closed_loop_R85_f1_f3_imu_commit_live_07_55ef",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 14104,
+          "last_sim_time": 282.06
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 14104,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1836,
+          "sha256": "e1b58e9340c5a079f6dc3c1313a742e5b6034109d10d37b9c4fd0b5982c94993",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 372,
+          "sha256": "8552c012eca0735073a2e2a25f2f60e96966e414bec0f5e6a582f7df1d998a1a",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 335629,
+          "sha256": "6cf40b77627fc5b9666c75c60b0a8f1fe620d0910dad276fd738d7fc8b271065",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "8c337574aea43f0d1cf0a119de2baf016c8a1f453736523c1695b7ac0992569e",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 14104
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1491,
+          "sha256": "20147c2a49ffc40263c8043b923de15d791cc988750089eb8b0a369d5ce729b0",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T151836Z_closed_loop_R85_compact_protocol_02_round27_b077",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T151836Z_closed_loop_R85_compact_protocol_02_round27_b077",
+      "history_id": "compact02",
+      "goal": "完整动态事件窗口",
+      "change": "版本化reference/guard descriptor/完成不追溯取消",
+      "progress": "真实九门离线PASS，F3区域到达",
+      "confirmed_issue": "首T0未建立后永久zero_hold；全程deadline FAIL",
+      "followup": "compact03 preT0 recapture",
+      "implementation_commit": "de5fe1fd61f8021c30eb1cb2a4df4ecebad332f1",
+      "deployment_commit": "1ef8d580d957aa58df6fe2d33cc7fc82920898bc",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#compact02",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1823,
+          "sha256": "9d88ba1091e891f35323291bbd8db8fec83d2170230a7438dc24c9bc5abb6321",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "whole_task_simulation_deadline_exceeded"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 364,
+          "sha256": "8b0e7c36f2051dcd62eab126b87c00d12ed870daba6066126cc4be58968d7d03",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 321062,
+          "sha256": "2cb092f7ebd53c4dc09327a3d290a015d5f929f87dda030808d36f276094a4fc",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 915,
+          "sha256": "c2e63709ef1c83ba1d8255432333d9e36df997c9889b894d9e088a2886ed8e0c",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 39645
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1483,
+          "sha256": "c252f9cdf51fcc0b8f3e4ef7314d5a51122cfb2fad13c74f56699c0d8a1b5c0f",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T122842Z_closed_loop_R85_R104_causal_join_round26_c865",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T122842Z_closed_loop_R85_R104_causal_join_round26_c865",
+      "history_id": "R104-causal-join-round26",
+      "goal": "保留因果IMU完整提交",
+      "change": "合法post-fixed5因果join",
+      "progress": "保留原20ms及300ms",
+      "confirmed_issue": "不能用缺gyro当safe，也不吞负样本",
+      "followup": "R105 terminal owner",
+      "implementation_commit": "84392fa5cb3bb215173bbd52f0ac27ce68cd0877",
+      "deployment_commit": "ac6f8a60dbbe1f6ebc3a2a57b01ebd35942a8157",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R104-causal-join-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1819,
+          "sha256": "456ecf5c6795328228c6efabc9dd970d49f404f1d19e11bbd1cf2accf628be8b",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "whole_task_simulation_deadline_exceeded"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 361,
+          "sha256": "6e8f0c6c868a3663821a3ecc4bd40e9ba72f5193d721978fa77c55185c517316",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 545971,
+          "sha256": "34735403b7353b0f573b9239129b3492f2822a204ed075dfd95387194c034e4f",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 915,
+          "sha256": "6d0a8a59e9f2de20fa21d900111475cf53c8e6ae5371c3fbde1afe1fcdafcdba",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 39285
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1476,
+          "sha256": "a5643df955f84d8b142fdbfbe4a0842b513a033b0ccd1bfe3f1755756259413b",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T204349Z_closed_loop_R85_R74_night_round14_9ae5",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "RuntimeError: Guardian release incomplete"
+        },
+        "guardian": {
+          "status": "recovered_failed",
+          "reason": "StorageStop: R80 current retained/round storage stop: fresh_round_predictive_stop",
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": false,
+          "samples": null,
+          "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+          "worker_fault": null
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 325,
+          "sha256": "133644e0723c8accb9b570362a0ffc499e2388e23e95bb259209106c28f4e4c0",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 438217,
+          "sha256": "2545263fb1070880001c8132be15ea3ad00c4f6ce2a128385df3607aa5c036e9",
+          "selected_facts": {
+            "error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "411fdb3c7fc4da1eaf919c700dca882516f2e14a316bb1932cc8dec6ea9c56cc",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T111955Z_closed_loop_R85_observe_recovery_compat_low_speed_20261015_5188",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 12197,
+          "last_sim_time": 243.92000000000002
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 12197,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1869,
+          "sha256": "5e153092c1a12ac309f72e6e0215d1be6cf4859d0a69e8f2ca930ae863e71d7a",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:execution_bridge保护已锁定，停车"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 390,
+          "sha256": "102ec632464466ad62b724979e88d499ee416876bdaed38113486871b71723b3",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 336576,
+          "sha256": "b88d29c11c08c5340f2ba42ca995cc766680d50dc46b05eb42074124182cfbbb",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "8116eeb2e1ed361d2809f9d14a2606a87e9b4e05262639f3bb61107e814dc306",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 12197
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1509,
+          "sha256": "56e516b0104790562eb7daabd5eaf1fac2eba112720b0e1a8d886dd66384bb55",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T121810Z_closed_loop_R85_observe_full_chain_corrected_low_speed_20261015_eb8f",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "RuntimeError: Guardian release incomplete"
+        },
+        "guardian_result.json": {
+          "status": "recovered_failed",
+          "all_owned_groups_absent": true
+        },
+        "worker_archive_integrity.json": {
+          "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+          "samples": null,
+          "verified": false
+        },
+        "runtime_manifest.json": {
+          "error": "RuntimeError: Guardian release incomplete"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 366,
+          "sha256": "483fc5744ecc48e04fb0fb1802f6981fe0da66574a91ef373a167375f40c1815",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 314440,
+          "sha256": "1e9c319f1107b3dad56485f8fde2155a5fad1c051d211c7920372e348af4a609",
+          "selected_facts": {
+            "error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1510,
+          "sha256": "386aeca6a0f0a51bf26588189d69d32f946c5183cced79202416b9fa0df00988",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T105430Z_closed_loop_R85_observe_only_corrected_original_low_speed_20261015_9127",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 10463,
+          "last_sim_time": 209.24
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 10463,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1945,
+          "sha256": "16d0edff71f4a4158637c5147f19ed304243b6af378ee6132eebbc7b6ed7500f",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:V33控制参考异常，停车：ValueError: Teacher recovery requires a newly associated SCAN"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 398,
+          "sha256": "b97f4c55a8fabf15ec7e3c01a4e82ce373997c138bf3c226954b0965747d0742",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 336973,
+          "sha256": "7a33300eeadc8d3a305884ad9a531134ba4451abcf6c2601041e6bebb56fba1b",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "972597e1141ad320ee3408c7f25a8717b3e0191912aa9473ec4f8e99ad7f70bc",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 10463
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1517,
+          "sha256": "0a49b951d465d172e9b0aa5dc986f5b0be3b0413c7d4e1382fe2d59c5fe945c6",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T035308Z_closed_loop_R85_compact_formal_21_status_epoch_round27_7117",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T035308Z_closed_loop_R85_compact_formal_21_status_epoch_round27_7117",
+      "history_id": "formal21",
+      "goal": "epoch准备不是route发布",
+      "change": "status等待，真实mission换代仍严格",
+      "progress": "动态完成；到34.885m",
+      "confirmed_issue": "31末端候选全grade cone UNKNOWN，body残差导数误当地面坡",
+      "followup": "formal22连续同面terrain/body语义",
+      "implementation_commit": "58bdc24e3af4d1e8ab209952b2cbd5c8e83427e3",
+      "deployment_commit": "bc1522ebcdc33e3ca401f7cc9d9d94ef43d0f67e",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal21",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1844,
+          "sha256": "9abb2afeecb1a113b5782df04c8981a67c6297fb829c8c51571bea3cda3127de",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r85_unresolved_protocol_wait_sim_budget_exhausted"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 375,
+          "sha256": "2075c3aa22537555957df81703a1d4fc98e0fef66f47a905bdeb9309f1cdaf21",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 328501,
+          "sha256": "99500a907cb1f4df724d748a3e35eaaef3504a4aafb676ee34decd26a8efb7eb",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "94a7e1374ea8eeb11b86c6ee096c30fd6786e595aa6232a3d56a5e5a0745bd22",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 22684
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1494,
+          "sha256": "f8e76678085c2f60cda3616ff539ebc0133b28e25ec0ff06892a8bdcfe146008",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T164546Z_closed_loop_R85_support_suffix_child_ack_r02_low_speed_20261015_a2d5",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T164546Z_closed_loop_R85_support_suffix_child_ack_r02_low_speed_20261015_a2d5",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 22079,
+          "last_sim_time": 441.56
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 22079,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1937,
+          "sha256": "94cdf087181122b81632004eb096b930de6d191220600bde0ee1a7c1494f1580",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_interrupted: actual_causal_feedback_or_ack_missing"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 395,
+          "sha256": "6a306e99f1823f4dd4ba043ab281ed5e40c8ad8cb1b41c8ba527b10476d5f81f",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 389132,
+          "sha256": "1aaa8d896d67f5fdc8725c0b34cb3ce4401fb647f7576005f38ba8bf01aa4f14",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 915,
+          "sha256": "a11816bdb0b564a79b0c397ed2adbaea3d53f9cbb4f71778fb3b8a1960126e98",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 22079
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1514,
+          "sha256": "c3c7127dc422c02ea3f2dda1a0f10243a8e3406a43967eb4ea8c6f5618ddda44",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T030830Z_closed_loop_R85_compact_formal_19_relay_writer_round27_a529",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T030830Z_closed_loop_R85_compact_formal_19_relay_writer_round27_a529",
+      "history_id": "formal19",
+      "goal": "避免relay同步publish阻塞",
+      "change": "两writer ASYNC+有界RAM计时",
+      "progress": "启动成功，quality实际有新增放行，进度31.933m",
+      "confirmed_issue": "connector把毫米高度残差算.3949rad坡；不是最终ACK缺失根因",
+      "followup": "formal20同面connector terrain grade",
+      "implementation_commit": "c0b0b29081b1e1736ba92d9e43e4468f6b70f934",
+      "deployment_commit": "31241d2b2902fff82af863b1d952e06556e1dc86",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal19",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1846,
+          "sha256": "e878ccd4ac08bbdc4347380423f41727463b3db69e39d8fb8befddd187a61a43",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r85_unresolved_protocol_wait_sim_budget_exhausted"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 375,
+          "sha256": "4104936e157ce740f6d372bff9619f9e7e45ef1428e9512ff3defb6745d41177",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 328561,
+          "sha256": "9343248ce276d759da8f5187a6a8753305b68ca522e3bcacdc1b5c73b78b7211",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "b3a4c321adb6040bc7e67c20df7a42ad73315396df198417abef608a8f82866a",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 21257
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1494,
+          "sha256": "df86c569d5cb7d58787208085acd06a2bddd2cbf629dd086c0d3f199f17554ae",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T093405Z_closed_loop_R85_R128_D11_closer_dynamic_trigger_round27_4555",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T093405Z_closed_loop_R85_R128_D11_closer_dynamic_trigger_round27_4555",
+      "history_id": "D11",
+      "goal": "更近动态触发",
+      "change": "R1282.4–2.7m场景lead",
+      "progress": "产生局部动态证据",
+      "confirmed_issue": "395SIM缺20ms IMU pair，body/cloud已partialaccept",
+      "followup": "R131保留capture unknown scope gap",
+      "implementation_commit": "5757c38261719a73138d53309a8549461ac73f29",
+      "deployment_commit": "6215d846a5cb43e9ddf8d736e19e145c0f1ab267",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#D11",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1883,
+          "sha256": "1a88ce0ecdc653541486e5335223109cfb9a000cee81ce9ede9a2957764fe1b5",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:queued_parking_pose_without_causal_IMU"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 463,
+          "sha256": "1cf4baf46d5b6977ce804d7c796b588e530f433dd56e682b12846126c625424a",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 340538,
+          "sha256": "0d05069d5c878d95e797264ca7ffdac8ebd40b447028b283cb9f0c11d7b6fb21",
+          "selected_facts": {
+            "error": "GuardianOperationalStop: Guardian operational stop: StorageStop: R80 current retained/round storage stop: fresh_round_predictive_stop; cleanup_verified=False"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1495,
+          "sha256": "d97b075fd3519fc416e35859b0180134be89fdde2669a0408f00691f489d7fa5",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T113004Z_closed_loop_R85_R87_diagnostic_round02_9522",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T113004Z_closed_loop_R85_R87_diagnostic_round02_9522",
+      "history_id": "R87-diagnostic-round02",
+      "goal": "定位长回调与反馈失败",
+      "change": "诊断和有界观测",
+      "progress": "新增时序证据而非修好导航",
+      "confirmed_issue": "CPU资源停止与归档不完整；原失败保留",
+      "followup": "R88异步计算",
+      "implementation_commit": "928d8b328f6791a240f5bdc3ffb19e62b2d737ac",
+      "deployment_commit": "8face819c7851db762a32f37d07a4707925caa32",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R87-diagnostic-round02",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 363,
+          "sha256": "53ef348f9f4418b16a7d7557e23550ee1f2cf5dc4877ba9e47cfb67a736c0152",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 504481,
+          "sha256": "a1432bd33921c8c2bb82f6572e3e15776dc73997b622ceea09af87d70136d0d7",
+          "selected_facts": {
+            "error": "RuntimeError: Shared CPU load guard exceeded; only own run will be stopped"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1474,
+          "sha256": "08f19ff7f84413556cd50bd69ecead53da1557d4a45ec106dbcb4428521a2a5e",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T063612Z_closed_loop_R85_R120_D06_native_queue_round27_5b76",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T063612Z_closed_loop_R85_R120_D06_native_queue_round27_5b76",
+      "history_id": "D06",
+      "goal": "原生GC服务队列",
+      "change": "R120队列服务",
+      "progress": "trigger/wake/service/consume各73",
+      "confirmed_issue": "90s未解决protocol wait；归档退出异常",
+      "followup": "B10基线/退出修复",
+      "implementation_commit": "95fa0a4cda0eb5438ecf886a0b5cf9edc4cc0b29",
+      "deployment_commit": "418b071dd7bd6cfb5194353d265a21e3fd6e2cbd",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#D06",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1828,
+          "sha256": "c8f10a43c7a6c394ca68728973cfce25984fd1cbdef1dd3e3754b238e773aeda",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r85_unresolved_protocol_wait_sim_budget_exhausted"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 366,
+          "sha256": "cd8f5a49d903a87e603e151762d61e9d0304618c20f436e8405754740909e32e",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 337871,
+          "sha256": "5f1295efc04059e0f2ac24d5dcd1cb63da0cbde7bdda3f21f61bc50350ca7964",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1480,
+          "sha256": "0c4d7af0d2137a171ce813dfb206ad0944f686491bbc34161d2dd4a4a4648c6e",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261017T223310Z_closed_loop_R85_R74_night_round18_a5e7",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T223310Z_closed_loop_R85_R74_night_round18_a5e7",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 19691,
+          "last_sim_time": 393.8
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 19691,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "actual_navigation_failed:r85_unresolved_protocol_wait_sim_budget_exhausted",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 391525000000
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1802,
+          "sha256": "2e642b449e4db61e5605e838846f2e097a9ae3007af88facfa8aa3849a7c7fb8",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r85_unresolved_protocol_wait_sim_budget_exhausted"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 354,
+          "sha256": "f8cb36a0599aed6ce86b672ce42893c5492f586c1188c5fdc634ff5f00b381bf",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 460494,
+          "sha256": "bc9f261f2129fa1dcfde896ac2990f2357cee3d56f52b70e4b147925613f25fb",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "0da7d43f17e93b959b14bffe7db42bae3df367cf8e2914c79bc8a0f0a3d12d03",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 19691
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "213ea794dfadfc6408a0fc1bc9dd458dc29cc41cab59fbe0ad70c5d4ae00cfd2",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261017T220221Z_closed_loop_R85_R74_night_round17_6d2b",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261017T220221Z_closed_loop_R85_R74_night_round17_6d2b",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 19679,
+          "last_sim_time": 393.56
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 19679,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_interrupted: external_hold",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 389880000000
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1853,
+          "sha256": "09bf21545e978c4809d9133238d61e3b7bb31fe0a8e1252f854b1b83ee0287a8",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_interrupted: external_hold"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 354,
+          "sha256": "7a424a1abeddee34ca09fb275c2d72a11744b8d795d914cf7b6895e9246c5e83",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 460594,
+          "sha256": "5e30ad45597b01ad2c5cdef102fd1cbc1898c0c6eae415d9fb97efa63e162b1d",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "b58054b0fc8d0e3280605aac2d47c42e8532b8fcd8f13ad810f1b6a32bd45dfe",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 19679
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "7263adc3141ab4f1a6cf89ab83c8a46ffc4f74d43dfad9cd8d6077d402d019a0",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T192439Z_closed_loop_R85_demo_r05_20261015_bfd3",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T192439Z_closed_loop_R85_demo_r05_20261015_bfd3",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_archive_integrity.json": {
+          "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+          "samples": null,
+          "verified": false
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 10954,
+          "sha256": "b2d007bc31d2797ae519690c07a845ad30c975c7f34dd26f21373d178cbb0af8",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_failed:ValueError: JSON source SHA mismatch: /opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T192439Z_closed_loop_R85_demo_r05_20261015_bfd3/r85_global_reference.json"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 365,
+          "sha256": "d19fd87c5ccceab2e4f76dc5d1c8961e9ad0f1e9432b36e1ad36ad3fe2383694",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 483272,
+          "sha256": "da18485002afe8f9d29e1efe19be142952786fa70e0bb60cff0d6fd418705f85",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1484,
+          "sha256": "09aa31e37817800d5f39e0139a55dbb1b966ac25192459ff5cb63b56112447eb",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T060252Z_closed_loop_R85_R119_B05_metadata_async_round27_0129",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T060252Z_closed_loop_R85_R119_B05_metadata_async_round27_0129",
+      "history_id": "B05",
+      "goal": "减metadata发布等待",
+      "change": "仅metadata ASYNC",
+      "progress": "331ms未复现，至34.905m",
+      "confirmed_issue": "缺因果IMU在body/cloud后抛错，真实partialaccept",
+      "followup": "R121/R127/R131原子准备调查",
+      "implementation_commit": "cd19e89a4120d13daeb16d38f92d932d41e9a040",
+      "deployment_commit": "d6f84da81ced8738b8d7a7c3ff0f1a06639148ba",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#B05",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1869,
+          "sha256": "ca0c9489544052c46ee8e93366c4da516653b7a1583eb005fa6c7ca46e570fa4",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:queued_parking_pose_without_causal_IMU"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 339,
+          "sha256": "8893520c51710e6b5b51db2cc9c302f7ad3cd423c9dfce8cae3a5b861fdfe1be",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 319248,
+          "sha256": "3fc34376185cfd65b81c782adab0bca838056c233e5823b33504c73babf110c2",
+          "selected_facts": {
+            "error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "8622690e1d822e4a05f53b1a5bcd14d167faf82d3ab4b2211b727d700710a957",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 19273
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1483,
+          "sha256": "82038c1e71576244cf68622bedf6179b0891ec90af834f4325077d61e4ef9341",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T000014Z_closed_loop_R85_compact_formal_15_round27_fa2f",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T000014Z_closed_loop_R85_compact_formal_15_round27_fa2f",
+      "history_id": "formal15",
+      "goal": "只对已有NF人口算ray质量",
+      "change": "默认旧/显式新NF ray policy",
+      "progress": "4帧新增放行，真实obstacle_stop建立",
+      "confirmed_issue": "后续FG>5%与all surface仍拒；navfresh耦合冻结Actor",
+      "followup": "formal16b/17显式独立world motion",
+      "implementation_commit": "9c0c45e55fe775f1984825c370b074ec42622e3a",
+      "deployment_commit": "9bbd3d987239434e1d5bc1f08afbaee915a09adc",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal15",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 336,
+          "sha256": "a2736e81c2023f4245b8ad36314539f7a06ef583523fb845284bd6f06cd0efc3",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 322619,
+          "sha256": "c94c3f154d7598414c09fcdb60260ff9ecb4f7bc0c1bb3ca47f0c653f0164fa7",
+          "selected_facts": {
+            "error": "RuntimeError: Current retained census failed"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1481,
+          "sha256": "872b072c90b533df9ad927a5e17228011ca94cccbc3743b28f202186dd0bbfdf",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T060426Z_closed_loop_R85_R74_night_round20_1c1b",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T060426Z_closed_loop_R85_R74_night_round20_1c1b",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "worker": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 18366,
+          "last_sim_time": 367.3
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": true,
+          "samples": 18366,
+          "error": null,
+          "worker_fault": "EOFError: Gazebo actuator disconnected"
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        },
+        "task": {
+          "kind": "f1_to_f3",
+          "state": "failed",
+          "passed": false,
+          "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_interrupted: external_hold",
+          "parking_pass": false,
+          "dynamic_pass": false,
+          "full_F3_PASS": false,
+          "original46_PASS": false,
+          "completed_sim_ns": 363730000000
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1852,
+          "sha256": "c305f51f2e421340e0f99e80ce2f42026a8c926415f6d5681721fdfe49bc9af4",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_interrupted: external_hold"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 354,
+          "sha256": "8264872c2c5e28b28248a7d755e26b084a902d4e248a188f3e4a7628d3961848",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 499406,
+          "sha256": "044587d08e3f38e03f7f039bf3cce1816cb5ceac38707499a187ad33920a0b84",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "d4f38383864ec144764ce43b6e7bf4ce92dfc7c10ce031a04de0de69d8ceeb25",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 18366
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "1eb009b2cee131c7d1222a7dc18a472e9390dfd30905d0cd7de5180abf4c5967",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T140833Z_closed_loop_R85_R106_prequalification_hold_round26_bad1",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T140833Z_closed_loop_R85_R106_prequalification_hold_round26_bad1",
+      "history_id": "R106-prequalification-hold-round26",
+      "goal": "T0前有界准备恢复",
+      "change": "原严格保护与有限恢复",
+      "progress": "固定5秒局部通过，整体仍失败",
+      "confirmed_issue": "动态读取可变reference SHA不一致；hold目标分支0",
+      "followup": "R108快照/R128触发/R后续版本文件",
+      "implementation_commit": "1b7d8208ff48bbc8356386e95b0baa7c6a5cb79a",
+      "deployment_commit": "64a6dfe0898c197272f520dd1fc092589cef0a96",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R106-prequalification-hold-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 11316,
+          "sha256": "331ec2af9617162c66e557eb437c9fa97b29eb1ccd1144c29a41073477f457df",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_failed:ValueError: JSON source SHA mismatch: /opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T140833Z_closed_loop_R85_R106_prequalification_hold_round26_bad1/r85_global_reference.json"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 371,
+          "sha256": "954c6293c2aa96290a4fe6995acceb639d67776cc4b6c5aac214c4d33149c9f2",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 574263,
+          "sha256": "09a8af43bb3c6fc181dd23bdc93f0a4891185a082eb856d03272dca085d85b17",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "b5db1ed4f81a10e5c9bebf3b85a66e1b3b377b58bb264c35e47cc08f460a8897",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 18333
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1486,
+          "sha256": "4fffe0cc4a92cae36a9a5a2de58a1d5b11f438839d5fb4a90393445590835d4a",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T042130Z_closed_loop_R85_compact_formal_22_curve_grade_round27_74bc",
+      "history_id": "formal22",
+      "goal": "完成选定R85 F1→F3全任务",
+      "change": "只改连续曲线terrain/body分离+exact vertical排除",
+      "progress": "350.930SIM task/动态/fixed5/当前RGB真PASS",
+      "confirmed_issue": "旧46false；策略不等价；间歇/统计稳定未证明",
+      "followup": "发布选定策略和事实，保留未决",
+      "implementation_commit": "0f35662822925a68de9a659558cc5073845b5b87",
+      "deployment_commit": "536c9d3f4773ef43edef48992c598ccf2fc3f021",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal22",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 25233,
+          "sha256": "24037ed0fb9f8732884a3fb8a385ffa98cf01457f9f6e53716aa415091551f1a",
+          "selected_facts": {
+            "state": "succeeded",
+            "passed": true,
+            "failure_reason": null
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 339,
+          "sha256": "f68482aa14006da0d23e935ec7087c263f3b237f198dcf75617889ea50a6ad8a",
+          "selected_facts": {
+            "status": "runtime_completed_navigation_unverified"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 324008,
+          "sha256": "e849d39a88c0782b79584c3eec270e76f8bfae4566760b7f726231f8c99a7035",
+          "selected_facts": {
+            "error": null
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 877,
+          "sha256": "d20a9eccdbefd936557b17262976b171ae8b39ba336e98ce14002727f21d4099",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 18295
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1493,
+          "sha256": "8d5509c956393e683f50ef71e4b98ee5f3bf30cdc2fb50afb9ce8c8ea06eb762",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261015T190729Z_closed_loop_R85_support_suffix_child_ack_protocol_r04_low_speed_20261015_5c31",
+      "scope": "/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T190729Z_closed_loop_R85_support_suffix_child_ack_protocol_r04_low_speed_20261015_5c31",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "run_result.json": {
+          "status": "failed",
+          "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "guardian_result.json": {
+          "status": "parent_cleanup_verified",
+          "all_owned_groups_absent": true
+        },
+        "worker_result.json": {
+          "completed": true,
+          "fault": "EOFError: Gazebo actuator disconnected",
+          "samples": 18171,
+          "last_sim_time": 363.40000000000003
+        },
+        "worker_archive_integrity.json": {
+          "error": null,
+          "samples": 18171,
+          "verified": true
+        },
+        "runtime_manifest.json": {
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 12047,
+          "sha256": "8eda7f67e1997800a4ec880d467affa25d804d7b39757c266c1f61f01243f873",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_failed:ValueError: JSON source SHA mismatch: /opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261015T190729Z_closed_loop_R85_support_suffix_child_ack_protocol_r04_low_speed_20261015_5c31/r85_global_reference.json"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 404,
+          "sha256": "c5677517ce7683b921c4f990a81e95746ea9b8f920d36f62141ac237f43cf89c",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 487065,
+          "sha256": "359d523d4d392c06981461f3a4b34dc9469256be0c264dbdb71e81d74a4ec789",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "ef2ec4a8c2689ad535cd321c27a209abc22a72013013da229e28fb4ca1d403a8",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 18171
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1523,
+          "sha256": "ffb1816930bf775b86e15d4737d1e638825171f6d7cb9182d95b0b4090b03e81",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T133356Z_closed_loop_R85_R105_terminal_owner_round26_a8bc",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T133356Z_closed_loop_R85_R105_terminal_owner_round26_a8bc",
+      "history_id": "R105-terminal-owner-round26",
+      "goal": "终点owner生命周期",
+      "change": "无轨迹终点分支",
+      "progress": "实际到终点但正式T0未建立",
+      "confirmed_issue": "资格保护/失败语义冲突；新分支无created不归功",
+      "followup": "R106 prequalification",
+      "implementation_commit": "59f96ab341fa63045e02d97baa30edacd0a5a0ef",
+      "deployment_commit": "78883bb881812c8ba67e7b365e032466b487ce83",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R105-terminal-owner-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 2973,
+          "sha256": "94a84bbbc3081acd1b5018a0c55d51fa3892c65599f21d6a77d2852e3e1a98f5",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_fixed5_parking_failed:ValueError: Ordinary zero qualification is protected/failed"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 364,
+          "sha256": "1a62caa0a6a8d8d88d5c5ae7c7a0ffc24834d89b38424f6b5cddccd5765c0792",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 551647,
+          "sha256": "5e600ebe7185be7ad15dca78c9fb2feb14749a9a4cd78dc2c566d2047ae03266",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "54c3add88f4395bd6e5354c7601470397b2faa6f66a64dd01c9dbf731e990a3a",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 17365
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1479,
+          "sha256": "d237478e4c45018054e25f67c21d3df4e7e21237d82f34e4d6077adcd617c640",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T081822Z_closed_loop_R85_R125_B10_B05_business_control_round27_f019",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T081822Z_closed_loop_R85_R125_B10_B05_business_control_round27_f019",
+      "history_id": "B10",
+      "goal": "验证B05业务底座",
+      "change": "R125控制基线+固定退出源",
+      "progress": "原fixed5停车PASS",
+      "confirmed_issue": "整体动态SHA/取消FAIL，IMU间歇未根治",
+      "followup": "D11更近真实动态trigger",
+      "implementation_commit": "f8b0900d32de3b4ba0f49ea156b99d6dbaff19e5",
+      "deployment_commit": "e2adafa08bbaf3b5ce53ea9fd4ce57064c07a186",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#B10",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 11386,
+          "sha256": "01c0a2a2177fb2bdc93c433e76cbd54675617bab93572c001e3d594f2e9a1b0b",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_failed:ValueError: JSON source SHA mismatch: /opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T081822Z_closed_loop_R85_R125_B10_B05_business_control_round27_f019/r85_global_reference.json"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 374,
+          "sha256": "a148d1c66cbdb2b898b9d706e0bc1c0671f4d73391fe401ae9c2d363674037c3",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 362025,
+          "sha256": "e160f7595cdb0e62a126c318178287d079e78129e8ffd953afe76f2f7ad7f1c0",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 911,
+          "sha256": "93d9315f996ad8783e2d35af867f14c07bdc031ff05bae30648ce3083159e28c",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 17298
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1489,
+          "sha256": "cb5752e2b944c2f46e67bd5581ceed6d25a605fa51609eb11721f4af1a9f730d",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T163202Z_closed_loop_R85_compact_protocol_03_round27_1dc2",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T163202Z_closed_loop_R85_compact_protocol_03_round27_1dc2",
+      "history_id": "compact03",
+      "goal": "preT0和ACK减负",
+      "change": "小协议+恢复/原ACK复用",
+      "progress": "五项actual原谓词真、fixed5真",
+      "confirmed_issue": "仍diagnostic minimal，不能正式PASS；断线缺原ENTRY_EXIT",
+      "followup": "formal01/02严格模式",
+      "implementation_commit": "ac0dfcef0d5d5a642f4f9111e1e28c29fad39455",
+      "deployment_commit": "f93bc27bcdbd48e33d2c3b19b5e97b1c8619eecc",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#compact03",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 29047,
+          "sha256": "9c5b9a04110deb9010aebebe41df434cfb858cc8ecd416c9cfa69c843843e52c",
+          "selected_facts": {
+            "state": "diagnostic_evidence_complete",
+            "passed": false,
+            "failure_reason": null
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 374,
+          "sha256": "48c256711fada250eab8be4202b797c8c28b148ddc0022bf66b906fa7829ef77",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 380035,
+          "sha256": "fe67ddd5501d3486a800b1860ce4497227427b0d818778b2165317e90eb430b3",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_diagnostic_terminated; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 912,
+          "sha256": "c8187d7cd9b3bf74654562daa7ed8d38ddca83027425948986e60fc68189128b",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 17293
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1483,
+          "sha256": "e098e65031cb814b2408733df175f20bc8a76e9ecd0e2369025cc49550b84b90",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T121028Z_closed_loop_R85_R88_async_admission_round03_0c54",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T121028Z_closed_loop_R85_R88_async_admission_round03_0c54",
+      "history_id": "R88-async-admission-round03",
+      "goal": "将几何证书移出控制互斥组",
+      "change": "独立worker计算，单owner校验/提交",
+      "progress": "计算已移出但330.370SIM仍失败",
+      "confirmed_issue": "body_not_accepted_at_commit复现",
+      "followup": "R89–R94时序/调度调查",
+      "implementation_commit": "0669cbb7500634fc98adc7a26004ec17ce91d3e4",
+      "deployment_commit": "0669cbb7500634fc98adc7a26004ec17ce91d3e4",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R88-async-admission-round03",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1849,
+          "sha256": "3fcb40348382b263529e5d1c0b320b44dc324d905c2f3a1d95e00eae89123de8",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:body_not_accepted_at_commit"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 364,
+          "sha256": "7ff3dee0c6b542d62254fd4c4e1db5fa7cc06fc3b32de9b924b75c838ed1f54b",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 511349,
+          "sha256": "79e5c154554ee493c523235064bd133191d3004fbd27f7d57ae071bd2f2026ac",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 915,
+          "sha256": "ec6ed8c3eb1d989063dbcd8696c1e388f025b2fb330574a00397b09463ae6117",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 16613
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1479,
+          "sha256": "c73bd093b0a0fe0d5b49ff09e19b971a46f233f60079add20d9d6d320ff408e1",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T114455Z_closed_loop_R85_R103_replacement_round26_590e",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T114455Z_closed_loop_R85_R103_replacement_round26_590e",
+      "history_id": "R103-replacement-round26",
+      "goal": "状态/IMU/交接/替换",
+      "change": "四个单独物理方向",
+      "progress": "替换方向曾原fixed5局部通过",
+      "confirmed_issue": "仍有因果IMU和停车保持失败",
+      "followup": "R104 causal join",
+      "implementation_commit": "aa7c23a9",
+      "deployment_commit": "2209d18715de91cead0a274e11dd4530a50a2d6a",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R103-replacement-round26",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 332,
+          "sha256": "43a0919d56f5465276e44162f60126a9fef762d6193e6954f1df6ea33d67d6f7",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 527139,
+          "sha256": "a3d6cb358b6aaae94279578b1ecc870ad8e355d47e8081450b03084822602471",
+          "selected_facts": {
+            "error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "ba33cb823c88458b1af36ce7d1cd1eef5774fd86e963f4dd1617b299c20932ef",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 16880
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1476,
+          "sha256": "095600c60a8270cb89b0136abac062fb94c4627125790bc8e8ad7d76e54b99e4",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T052402Z_closed_loop_R85_R118_A03_consumption_round27_0096",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T052402Z_closed_loop_R85_R118_A03_consumption_round27_0096",
+      "history_id": "A03",
+      "goal": "消费与反馈时序",
+      "change": "R116+有界probe",
+      "progress": "到34.826m，捕获publish331ms包络",
+      "confirmed_issue": "原header305ms/body拒；R116 pressure0",
+      "followup": "B04/B05定向metadata ASYNC",
+      "implementation_commit": "572375caaf64b429ff6bbd36dae4d834679324f4",
+      "deployment_commit": "8cb4f43928db8bc77c7001f376f276a2fc245086",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#A03",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1850,
+          "sha256": "70e051a35a7fcccf32b12e43026cceccf149a64be3a721d051a27da5b310bc55",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:body_not_accepted_at_commit"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 336,
+          "sha256": "c974b6a1f93d6c88c6f4291e585727d8d2917cf88bad0feda9467274c0e250ad",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 317739,
+          "sha256": "665ff463367ffc798d64993c80decad2b0fc5212e6f0c3a146682c0f7b4110df",
+          "selected_facts": {
+            "error": "RuntimeError: Guardian release incomplete"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "dc359a5f78654c9198763191cd8c5ba003ea17a791cc7ba7205641ef3c50d423",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 16763
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1480,
+          "sha256": "0ac0e80dba085636585901193eda702b97a28b9034e1a7f8be7ea11a854dcf07",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T164049Z_closed_loop_R85_R114_clock_service_round26_383b",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T164049Z_closed_loop_R85_R114_clock_service_round26_383b",
+      "history_id": "R114-clock-service-round26",
+      "goal": "原clock单次非等待服务",
+      "change": "不启R99，原take/TimeSource",
+      "progress": "真实调用8855，未伪刷新",
+      "confirmed_issue": "32项满时第33项拒；worker当时已空闲",
+      "followup": "R116有界pressure；round27重审",
+      "implementation_commit": "e05475da50b4efdc54d7aa3b7b6f9e7e4b82c964",
+      "deployment_commit": "5fbe0f9721124324621c602dd778239d013adb60",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R114-clock-service-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1799,
+          "sha256": "11f87b7a24d64757167b342cd15ed858855a82c5b0c85616e7aa9cf3a5d996f1",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r88_scan_event_queue_bound"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 363,
+          "sha256": "093730dce27c246d8e1d01647abc1cdc95972000aa51451d94905140e2c1c727",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 330615,
+          "sha256": "e1905336eaeba0701331638b48dcd34b9dc1e4208c901300471742ac22b9a243",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "64861067f0cd4d6e6bfdf29ccbde56da19ffb0114986064480341ac11de2923e",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 15529
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1478,
+          "sha256": "b371e721471516a15d469f2939b9f439347e583e539c32a1bba216624325f7d4",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T143353Z_closed_loop_R85_compact_protocol_01_round27_9464",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T143353Z_closed_loop_R85_compact_protocol_01_round27_9464",
+      "history_id": "compact01",
+      "goal": "减少高频大JSON",
+      "change": "低频route_definition/schema3小局部消息",
+      "progress": "34.967m、原fixed5 PASS、375receive=consume",
+      "confirmed_issue": "动态真取消+可变reference SHA，不能只改SHA称PASS",
+      "followup": "compact02版本文件/事件终态",
+      "implementation_commit": "cec8a1f1a28c1460f80e04229a560e7a4ba5de8e",
+      "deployment_commit": "3c4bcd2a7e282e445486b26379908a4dfb873c38",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#compact01",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 11116,
+          "sha256": "e318b3b57b6697ea716d7b519165e1bf8aa4c19adc255160ecd9f3b6f0d14f59",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_failed:ValueError: JSON source SHA mismatch: /opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T143353Z_closed_loop_R85_compact_protocol_01_round27_9464/r85_global_reference.json"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 364,
+          "sha256": "fcad65a19c6154660d96b1159cbb0ca91a53300521ece3435d63b450f3507046",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 340439,
+          "sha256": "b74ee2be82423e492afd4bc8fa66645cca796903202688103cf6d926dae7ecd7",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "3f49946df5a43855f52ee3be2d69739a3a2be7b4dd79197276cd23f1bb0505ad",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 14902
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1482,
+          "sha256": "e84c04b63a11c28586176995ba7c7a65bad78a5a07d43b09566cb52751192ddf",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T112001Z_closed_loop_R85_R137_P12_parking_transaction_round27_2e07",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T112001Z_closed_loop_R85_R137_P12_parking_transaction_round27_2e07",
+      "history_id": "P12",
+      "goal": "停车原子准备与退出",
+      "change": "R131/R134/R136在B05底座",
+      "progress": "退出链通过，至24.544m",
+      "confirmed_issue": "r88队列2MiB字节上限；不是第33项count证据",
+      "followup": "R138驻留表示（后被取消）",
+      "implementation_commit": "104109a34c1acbda8722e0459d2fb0e19fe97a56",
+      "deployment_commit": "2708e8c7e761f384e76cb2552b9ea0b958d3fc94",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#P12",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1818,
+          "sha256": "3d04774acf57af41956f6484a14ad86bdbcf42290972654dc2b96bf86211a7c9",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:r88_scan_event_queue_bound"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 459,
+          "sha256": "ff8e42808f2cc33b95c4504c250fc68a296cfad7e498d85444b542684fe97bd4",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 346585,
+          "sha256": "58fb6fc020fcc396fdb0ae8582ab6cef1e3d6b49815578d2b488bbfb5b95d29e",
+          "selected_facts": {
+            "error": "GuardianOperationalStop: Guardian operational stop: StorageStop: R80 current retained/round storage stop: fresh_round_predictive_stop; cleanup_verified=True"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 914,
+          "sha256": "72abd30861250afff80a6960f2c37e94f651fde367bc9ee8e687c745424bee69",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 14591
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1491,
+          "sha256": "2cf952a5ef6b81acae699cf9f56a143bd80cd26e9444addb09c3ea73aebc4162",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T230834Z_closed_loop_R85_compact_formal_13_round27_c7d3",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T230834Z_closed_loop_R85_compact_formal_13_round27_c7d3",
+      "history_id": "formal13",
+      "goal": "SCAN接收与owner解耦",
+      "change": "四topic短回调，同boundedFIFO，R116显式0",
+      "progress": "85活跃轨迹；metadata return→intake max6.811ms",
+      "confirmed_issue": "knownscene quality持续拒/3s保护，非队列首因",
+      "followup": "formal14有界真实query捕获",
+      "implementation_commit": "c144ed79ee295583253f1624d1a08102186b2f0d",
+      "deployment_commit": "d2db07b68b847e490a6b7e0497b8c30b5966c09c",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal13",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1840,
+          "sha256": "b485e398e95ff79a5b8a19750a2ebd7cb043101530aeef4162415c43b1fd6028",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "2d5ab52bafc5962e89c24540196d2a98b04433b1427d7bd72a17e3ee41e77e57",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 326884,
+          "sha256": "f2a415dd07dd7093e759ff2b616e84f8e441fd4528fa23c83d2d90228160f607",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "454e56da5ffee4a19c67c9fc233f880d02170d6b1daefc270a8384b553475a24",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 14423
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1480,
+          "sha256": "8e7c3ea5c27cb758ed49fa204d6422ee51132cd5b5443c4dee01a36b835db3e3",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T234212Z_closed_loop_R85_compact_formal_14_round27_e112",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T234212Z_closed_loop_R85_compact_formal_14_round27_e112",
+      "history_id": "formal14",
+      "goal": "保存失败matcher完整输入",
+      "change": "原writer ≤3输入/8MiB observer",
+      "progress": "真实good179.195/bad180.215/181.240，重放匹配",
+      "confirmed_issue": "预算内前景把all-ray尾4.56%推至5.29%，静态子集稳定",
+      "followup": "formal15 NF ray人口",
+      "implementation_commit": "aa3e4b67517c815439addd880c88c14a0144f26d",
+      "deployment_commit": "c1103b0bbc4888d85c3a31da42b6e5d6cdf8b34f",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal14",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1840,
+          "sha256": "7ca6b94e8d36af6042aeed1cfd8cf867904093b4c5632968b4f512acd8f52ff8",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "4c7e61b631a1cd53250146a586f17bf015834ec63a8bbe91e0db621c99ea702d",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 327385,
+          "sha256": "912b9055ab8df169614b3fdec2422f8f2d5c2ff6ad95fe48b106a21a82a8e1a2",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 912,
+          "sha256": "5f1b2f0a6fcdfc1162f5eda00909c9a5ae5f237ac5f34e0ecc13383d49c3e130",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 14175
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1481,
+          "sha256": "97bb1b81665d487343fc62379ece0fa0e2d2987637400207feae34fa688c656d",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T045644Z_closed_loop_R85_R74_night_round19_8511",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T045644Z_closed_loop_R85_R74_night_round19_8511",
+      "history_id": null,
+      "goal": "Exact original goal/change not established from selected surviving receipts; do not infer from name alone.",
+      "change": "UNKNOWN unless preserved configuration/source receipts establish it.",
+      "progress": {
+        "runtime": {
+          "status": "failed",
+          "runtime_error": "RuntimeError: Shared CPU load guard exceeded; only own run will be stopped"
+        },
+        "guardian": {
+          "status": "parent_cleanup_verified",
+          "reason": null,
+          "all_owned_groups_absent": true
+        },
+        "archive": {
+          "verified": false,
+          "samples": null,
+          "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+          "worker_fault": null
+        },
+        "pipeline": {
+          "normal_completed": true,
+          "error": null
+        }
+      },
+      "confirmed_issue": "Only recorded termination/failure facts below; unique root cause not inferred.",
+      "followup": "No verified next-round causal improvement link in this inventory.",
+      "implementation_commit": null,
+      "deployment_commit": [],
+      "evidence_level": "Existing result/metadata, original source/config retained; explicit narrative gaps.",
+      "existing_uploaded_mapping": "docs/experiment-history/storage_inventory.json or cleanup-capacity/run_reports.json (supplement)",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 358,
+          "sha256": "a6585645cbfae924d2643b86be7940f355faa18cfb8f72f041b1d3b015821440",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 494520,
+          "sha256": "dc23b878983f8f3151487f5ed38a898ae084bb720906918a386c14971bd4dcaa",
+          "selected_facts": {
+            "error": "RuntimeError: Shared CPU load guard exceeded; only own run will be stopped"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 250,
+          "sha256": "edec44cc1a21315a1c7d3fa7e302301cf34ac26ee2872fd95e6078e7f6bcc423",
+          "selected_facts": {
+            "error": "ValueError: worker_result.json is missing or not a regular owned artifact",
+            "verified": false,
+            "samples": null
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "eaae506db6dbb723dc634c6c044d518b6a4da487823271e776449d2c356e50f5",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T003822Z_closed_loop_R85_compact_formal_17_round27_0c7f",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T003822Z_closed_loop_R85_compact_formal_17_round27_0c7f",
+      "history_id": "formal17",
+      "goal": "观察native粗Scope与world motion",
+      "change": "仅已有boundary timing ON",
+      "progress": "Actor解耦389ticks/33.345s清场",
+      "confirmed_issue": "无真实obstacle_stop/resume，后续真scope变化FAIL；质量仍拒",
+      "followup": "静态支持新模型原型/held-out离线",
+      "implementation_commit": "9143f06b594df3216b498a87ebd6ec7a8c13a7dd",
+      "deployment_commit": "a662f2bbe693f5a107cb915e4d19ce8bed1ad3d0",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal17",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 2561,
+          "sha256": "ae45fe59c52b99d1c4bd4284016bd201cd33ff891f13857db50c5901d805acfb",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_runtime_fatal:ValueError:actual_reference_scope_changed_during_dynamic_protocol"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "9fbda99b047224c8e246ab3df680c42f87492f60611de5a1fcac3c81a5baccbe",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 329103,
+          "sha256": "9e575e3f82f377a372c9aef77967d086255f5bcfd2f84ab09a7a0af3772747a3",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "785efc40e95883ee6906641dc4b52f8bde42360956e403372c9b33b76e729965",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 13572
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1481,
+          "sha256": "1e2c8a65f86fc4fb301296a807d648dfd654347a757f801159db37e0694b1c6d",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T095411Z_closed_loop_R85_R86_feedback_isolation_round01_9c74",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T095411Z_closed_loop_R85_R86_feedback_isolation_round01_9c74",
+      "history_id": "R86-feedback-isolation-round01",
+      "goal": "隔离校正反馈提交",
+      "change": "准备/提交反馈隔离",
+      "progress": "反馈路径实际运行",
+      "confirmed_issue": "body未被Teacher接受仍触发提交拒绝",
+      "followup": "R87诊断/R88拆计算",
+      "implementation_commit": "928d8b328f6791a240f5bdc3ffb19e62b2d737ac",
+      "deployment_commit": "ebec30cae924e1fd4487709ffe9dd4396277cec6",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R86-feedback-isolation-round01",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1857,
+          "sha256": "639245e91ac26fade22a6b0bed6fc5eb7bea1999230e6968c19bbfc39736b960",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:body_not_accepted_at_commit"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 367,
+          "sha256": "cb5a0da347855a9c57a72dbe9be60b37396a834c1f6c00ffbfc08f12c8419dce",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 508167,
+          "sha256": "8d7d16d1e2cd58f4642a1f438fdf4bdbde3b6248e88ce962040fa78ed6cc3d2d",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 913,
+          "sha256": "a82865ab0a1fabdecc9e93a1cc7cf8f520351d12975a250f2a0551b5dd576a94",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 11586
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1485,
+          "sha256": "2d75779ce6d2543b2ee8bef6a827650a6e81ad18ac3d61836bececa8bd905cc9",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T033615Z_closed_loop_R85_compact_formal_20_connector_grade_round27_ba39",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T033615Z_closed_loop_R85_compact_formal_20_connector_grade_round27_ba39",
+      "history_id": "formal20",
+      "goal": "connector语义修复",
+      "change": "同finiteface真实坡度替typed残差chord",
+      "progress": "到18.073m，真实stop1",
+      "confirmed_issue": "新notready epoch误报真reference变化；实际reference未发",
+      "followup": "formal21 status准备/发布分类",
+      "implementation_commit": "28a9791c9460280a0f621f6967172fdb12ed4d42",
+      "deployment_commit": "a5faa0837ac2678bb51fe8786a238e94662e9daa",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal20",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 2628,
+          "sha256": "dd05a4043d0b5f040e2dc25384c39b67c687e5977acf75776087deeaa2757a41",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_runtime_fatal:ValueError:actual_reference_scope_changed_after_dynamic_proof"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 378,
+          "sha256": "0695eaa5aad63f8ba8b5e52693ec61285fca0b188775f8c3787c1fa36fd61c2f",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 330248,
+          "sha256": "b97ce83ce52c3f45ad73470155ab58cf4dbb33d2f7e809049e08c9db84e8d5bd",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 912,
+          "sha256": "bef6edfb3be06ecc63d847ff6782339dfaf0939665930e4685493a3d6be4dfa0",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 10786
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1494,
+          "sha256": "4d44bf789e7d020baa0c750300d28f6aa0ef5ff6014bcc54f3ea56e3a5a9169f",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T203818Z_closed_loop_R85_compact_formal_08_round27_321e",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T203818Z_closed_loop_R85_compact_formal_08_round27_321e",
+      "history_id": "formal08",
+      "goal": "复验v2并观察控制",
+      "change": "同候选",
+      "progress": "R60未复现，仍90s零进展",
+      "confirmed_issue": "heading settle/drive循环；20ms drive被Actor采样错过",
+      "followup": "formal09 gate零后重收敛",
+      "implementation_commit": "cfd9b3f9a67f8a1d2c0212ed71ec57bcc1ada12a",
+      "deployment_commit": "0ac5eec019e6ad35c028462c48fbdd7de01a105f",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal08",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1840,
+          "sha256": "a0f96cf88ccc1d9e76c0ff258c12178931bc5f6a0b5a3dc223e5ae6b1789ec29",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "de92a2cc9c6c9d190dbe1e71f978cb066775dfbd742269ff8f8d651212baa586",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 325040,
+          "sha256": "93ee0699da466756b322cbebc3a14c85b8506bf7212c06f988746bbfca1547f4",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "386abebc71b1f23aaf07f3e7b3c69235928c3c13ce5713b71dc7c7c84ffa23a1",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9871
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1474,
+          "sha256": "3ee67d240f48c1f68295ff0888698112b5416df897ce33cc08766f02b8a51942",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T175959Z_closed_loop_R85_compact_formal_03_round27_3c67",
+      "history_id": "formal03",
+      "goal": "heartbeat职责修复",
+      "change": "helper去重复年龄门",
+      "progress": "真实跑仍watchdog",
+      "confirmed_issue": "main观察wrapper复制旧predicate，helper未实际委托",
+      "followup": "formal04 actual dispatcher修复",
+      "implementation_commit": "ab9e30f2f912476597dda4c0429f3eedadae46e6",
+      "deployment_commit": "96cbff304758442fce8c7b932ecf02f6f50e1712",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal03",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1838,
+          "sha256": "f513a3fac79448f93ce21daa793f402ba29a5be2015a296b6783a03c1183f157",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "9ce4f91d1c2b2b8e5b480b2ff34d181ebb8501b2f51d056b40b128160302013e",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 324509,
+          "sha256": "279b33979108f52930dfd1a23fd6370aa0157cba4120f7052631575deabac763",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 912,
+          "sha256": "cb708ade3f6f9d4842ff257a945222be5595b0a2fdbf4225f2071584039bac0f",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 10001
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1477,
+          "sha256": "cdf3eb47439c92c22f87227a78c8bfbc85dfb544df70d2067eb7bde5d6c5fa12",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T223240Z_closed_loop_R85_compact_formal_12_round27_8905",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T223240Z_closed_loop_R85_compact_formal_12_round27_8905",
+      "history_id": "formal12",
+      "goal": "普通turn连续控制",
+      "change": "显式ordinary continuous handoff",
+      "progress": "实际4次，进度4.767m",
+      "confirmed_issue": "本地path耗尽/curvature hold；63replan已发，SCAN回调服务缺口",
+      "followup": "formal13 SCAN短入口",
+      "implementation_commit": "0c69a852df84c42629d11cd8089a083ccb343d7b",
+      "deployment_commit": "1fbbd0f235642886d6cecb4f5d125a9e4eb88c9d",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal12",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1838,
+          "sha256": "f710aebfec74728e347be27c4590f919e5f9119de7dd621d42433d1416769667",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "1dd9c65fb6b4ac95c47ef06d94aa4897a54918fdbcda4b48dc8a6aa3a3d53a30",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 326923,
+          "sha256": "42aa2a18edc051579dbab1c93fae9280aa260fd96495c69c0d5ce7b909fa8537",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "05d420c1791c0f8f61aeae819f1036d25b1840334df6798597ff73dcc29a8d87",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9799
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1478,
+          "sha256": "9f0da2c551b8ec01b5c3327a9cca065c46649784d38de8150a94cc735a373dc8",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T184628Z_closed_loop_R85_compact_formal_05_round27_ceea",
+      "history_id": "formal05",
+      "goal": "核bridge接收与slew",
+      "change": "真实slew时钟+只读callback receipt",
+      "progress": "clock值改变有真实覆盖，仍90s停滞",
+      "confirmed_issue": "bridge callback与重控制组竞争假设；非所有零命令均同因",
+      "followup": "formal06安全小入口/owner handoff",
+      "implementation_commit": "53bd8b519836d347606765eb2ec7d6442e7b8ec3",
+      "deployment_commit": "4b449e55ac109bb323bee18ac7fcbfff9939e3c8",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal05",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1840,
+          "sha256": "2f02cc693553190560b24cf03fc397174106cb527f13b2bb28b0549c311b9612",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "a8710db98c4e08381f117bc96acff208762ea688e36680195e5729bc596f443b",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 324522,
+          "sha256": "a22f7056e4ad6e12590d7f03313c6c583105e7ad7ee8c78dc7e8b38218fa2d12",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "b36c1e0615e9210fe9c8174ace092c5bee2a3320e5a83fdc562b9f2d6fcba575",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9794
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1474,
+          "sha256": "0415628afc3f9ee9ae1f078f26da6fa3d38deea48b2f5a8c5735f5883e3872ce",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T221644Z_closed_loop_R85_compact_formal_11_round27_d9ca",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T221644Z_closed_loop_R85_compact_formal_11_round27_d9ca",
+      "history_id": "formal11",
+      "goal": "实际加载native571",
+      "change": "同owner IMU-first、无新增线程/队列",
+      "progress": "R60未复现；重收敛多次",
+      "confirmed_issue": "零后真实yaw回弹/停稳循环；常规hold反复protect",
+      "followup": "formal12普通turn连续交接",
+      "implementation_commit": "8ffd2ca71549c83f5f75241e3d29fa53ce4fd22e",
+      "deployment_commit": "d88727011227646b8952c6eee81529fbfb6c7bf6",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal11",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1838,
+          "sha256": "c8f9e9806c0ec4d4523f33f44d58c3ff7e4023d694815f7fa5bc361817c977f3",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "efce62d46c0ca977d6ae394e42685b177f32f06f2ae1b3b27d898a73cbb39fec",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 326803,
+          "sha256": "ab381e02d9616c56bc2742931fefb80368b03f455f699bed91765036c7eeaeba",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 907,
+          "sha256": "9037b9441f39d508028de6b0c44d1f6429615d20c8e603a0501b34cec2d830f4",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9671
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1477,
+          "sha256": "3e85cf881538dec47bd28509d3481a9f3aa37afa4554e898b91edf35737113a5",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T181929Z_closed_loop_R85_compact_formal_04_round27_58b4",
+      "history_id": "formal04",
+      "goal": "实际委托原predicate",
+      "change": "wrapper只调用original一次",
+      "progress": "较前多推进但仍watchdog",
+      "confirmed_issue": "None/状态边界因果捕获有限，默认互斥竞争未唯一归因",
+      "followup": "formal05 late slew+bridge receipt",
+      "implementation_commit": "340945ebf08494bf0a5db52e7529745d6e4ad4b9",
+      "deployment_commit": "cbdda9e9c7605242d914c00318337b06ab9935aa",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal04",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1840,
+          "sha256": "40c60bab1a92d34ebc41519903ce401e2d0c94d64788ed3e0fb46415e15ab669",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "a9c0e58ac634a11f5d86195e86c6d1c70417ac3008ae1793c3ecb1849b2ae3d3",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 324557,
+          "sha256": "da89cb1ade1e08f3112fd2a87dea9db19a5c679856470a10edbdb09bb7c2e6a2",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "e29a50d3d59a4c7dd0e6eceee2f9c66682fda36c2431f92becfd1170658a1cea",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9829
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1478,
+          "sha256": "62312c45e8861f8f1e95e330b60c27d5a0f2790351ede7ccedbd95185c0a60f0",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T173337Z_closed_loop_R85_compact_formal_02_round27_d66d",
+      "history_id": "formal02",
+      "goal": "正式全任务",
+      "change": "strict profile、恢复身份迁移",
+      "progress": "真实窗90s仅增.099m",
+      "confirmed_issue": "低频status/epoch年龄重复否决；仍有转向/曲率/重置",
+      "followup": "formal03 heartbeat职责修复",
+      "implementation_commit": "baab445ef6faa8a6b25b33adfcf69ecc38a13fc0",
+      "deployment_commit": "9ee25a8325b79d9d78b8d1e26989f920d6e21405",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal02",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1839,
+          "sha256": "42d1aaa5dbda2f41ad9f7fe33131a85799f63cb0b31ee9c3af03374d40270323",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "350753db2d7852198055540e1865fc377472246f143d39f6179a6ce836e2fc96",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 325850,
+          "sha256": "fba38ed1422519c54803159849b83458a7737097a46b8d3f9871966dee1b6ad8",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "8e8f93f16ac072a420bca2987eb327b7afa280385ac157b6c457b17e9e392da9",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9797
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1477,
+          "sha256": "19e4377be7151f96d1b4d56e2790841a3ab08a65072efe8edb56bb33a14a9505",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261024T193254Z_closed_loop_R85_compact_formal_06_round27_4e08",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261024T193254Z_closed_loop_R85_compact_formal_06_round27_4e08",
+      "history_id": "formal06",
+      "goal": "桥安全接收隔离",
+      "change": "短ingress+negative latch+controlowner GC",
+      "progress": "实际推进17.157m",
+      "confirmed_issue": "动态事件未完成就真reference换代，原scope取消",
+      "followup": "formal07显式world event/nav segment v2",
+      "implementation_commit": "2e715883abb19dd702498f46b82fe2c68684dcf3",
+      "deployment_commit": "50b9ac810b1ae7f78a7df2b3760447fff2d1c6bd",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#formal06",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 2561,
+          "sha256": "270b9a65b5bc6df278dad8332395ad584a894ab04413ed52043c9e5b84803ce4",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_dynamic_runtime_fatal:ValueError:actual_reference_scope_changed_during_dynamic_protocol"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "2c266cb66e9f6f08bf7973bd39957af069388c0fe1e15d2b79594bce564c1fbb",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 326565,
+          "sha256": "73bbbce75e9cb44dbecc3dc4cd51cca1bdb7b8c8546bf253de3ef94638599db2",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "ec0317b13b50559117ee15b07066cd95a3c683dc6c3f3eb720014a76d28d029e",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9793
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1473,
+          "sha256": "e958314c792fcd7611a621d83e75a017561506d7805a4cc7698629988b2652bc",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T170727Z_closed_loop_R85_R115_r115_speed020_round26_fde3",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T170727Z_closed_loop_R85_R115_r115_speed020_round26_fde3",
+      "history_id": "R115-r115-speed020-round26",
+      "goal": "共同源码速度两档",
+      "change": "同源码020/050绑定",
+      "progress": "单轮启动/窗口事实分别保留",
+      "confirmed_issue": "不是严格有效全程速度比较；不能宣称提速解决根因",
+      "followup": "R117动态lead设计",
+      "implementation_commit": "4bac533bcccc493f5a606942842fcf83e824ddda",
+      "deployment_commit": "c57f85a4a2c9f53f9b899553c6a0f95fbf1492b8",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R115-r115-speed020-round26",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 328,
+          "sha256": "8217533eddfb5b28ddbc9b6ccafac2ba44f70e1f42a5f88e53e0cedfc8afd935",
+          "selected_facts": {
+            "status": "runtime_completed_navigation_unverified"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 327862,
+          "sha256": "2cc551079eaac9d29c2819f24cd7d90197b072974ac6f6193141584340595ad4",
+          "selected_facts": {
+            "error": null
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 874,
+          "sha256": "82c808eb65c9189e02cac9b195eac58d5485af10056a564f770fb753e33f98e1",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9001
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1475,
+          "sha256": "cbc532938d6fbebd4366cff24e27e57028114b1560300d5ec6e5cea0d9a98480",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T173209Z_closed_loop_R85_R117_r117_speed050_round26_904a",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T173209Z_closed_loop_R85_R117_r117_speed050_round26_904a",
+      "history_id": "R117-r117-speed050-round26",
+      "goal": "速度/动态触发研究",
+      "change": "提前lead配置与原保护",
+      "progress": "实际证据存在但完整任务未过",
+      "confirmed_issue": "未形成原严格同代码双档完整验收",
+      "followup": "round27重回B05/B10控制底座",
+      "implementation_commit": "191582d537fc991fb86fa1cf557af475bafa4664",
+      "deployment_commit": "a5dde265db355fd32da6d38c68051d605542d986",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R117-r117-speed050-round26",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 328,
+          "sha256": "f7ac3c8009a586d9b0bd3183b042015ef14ace03c8aee19d24b1d94184bf2f7c",
+          "selected_facts": {
+            "status": "runtime_completed_navigation_unverified"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 328839,
+          "sha256": "30ac6401f5a7fd83f2ecb2e2717bd39394a7163e044c3afe0557f7bd35345fb7",
+          "selected_facts": {
+            "error": null
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 874,
+          "sha256": "00037160d95ab3c0f254009d283c6b852080927857dff747a877a4e2112772a4",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 9001
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1475,
+          "sha256": "e291982725dbac4d93d0991fab6d90a584b0015523d4d3482a9b7f6cd6ec33c3",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261018T145924Z_closed_loop_R85_R89_thread_attribution_round04_6064",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261018T145924Z_closed_loop_R85_R89_thread_attribution_round04_6064",
+      "history_id": "R89-thread-attribution-round04",
+      "goal": "线程归属",
+      "change": "有界线程/阶段观测",
+      "progress": "区分CPU占用与等待",
+      "confirmed_issue": "观察可能扰动，未形成导航PASS",
+      "followup": "后续phase观测优化",
+      "implementation_commit": "8b5812d5ba04246cd4fdc38a03e9db36fe000254",
+      "deployment_commit": null,
+      "evidence_level": "实际尝试目录/保留报告；缺task/exit的边界明确",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R89-thread-attribution-round04",
+      "source_receipts": [
+        {
+          "file": "run_result.json",
+          "bytes": 371,
+          "sha256": "5c8807cb549def1912380c02bbb76cb9a1ba1ffd07e3c455b1ab06fbc4fe0cfa",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 509238,
+          "sha256": "4657f7c0636f3e83fdedaf4af96239a26bf645d883d174aecbd143e14f7ee72b",
+          "selected_facts": {
+            "error": "RuntimeError: Shared CPU load guard exceeded; only own run will be stopped"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 910,
+          "sha256": "db938b84a47797fe659cf24d92d642ba183e8d02119ba91457511340c6994f61",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 7364
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1482,
+          "sha256": "24b8f0c8005daea0f9ebad83eeac0a61377c5bd0cb149157f0259bedb83ce1e2",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T150223Z_closed_loop_R85_R107_queue_timing_round26_765d",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T150223Z_closed_loop_R85_R107_queue_timing_round26_765d",
+      "history_id": "R107-queue-timing-round26",
+      "goal": "发布至消费时序",
+      "change": "C++/Python同boot单调端点",
+      "progress": "确认长控制事务与ready313.7ms",
+      "confirmed_issue": "315ms源过期；非纯网络结论",
+      "followup": "R110结果让出/R114 clock",
+      "implementation_commit": "3ae0d078",
+      "deployment_commit": "cb9e55c7d6715f550e7607fcaab398036eba5d34",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R107-queue-timing-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1846,
+          "sha256": "f4b1533d78f589884eec757206faa4c218f748494d78478ce6608c796e2bf45b",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:body_not_accepted_at_commit"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 362,
+          "sha256": "da90f4a857588c7dd89e21a413ffd8a0098fcdac2859553108a9c822a49d7ef0",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 328701,
+          "sha256": "d62ec787b84603f795c2eb3670b280cb87d75e2156bacdce972463d78a792c34",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 910,
+          "sha256": "f0cee9f6c82c5eec1ad27fcbec55a293d1af4e2d505f0dd765aa5e3365408a9a",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 6997
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1474,
+          "sha256": "7bad6e9809a30c8a198dd1ba44e053f10be8371c5767225c14a22af01864e773",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261023T160159Z_closed_loop_R85_R110_poll_yield_round26_dfc7",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261023T160159Z_closed_loop_R85_R110_poll_yield_round26_dfc7",
+      "history_id": "R110-poll-yield-round26",
+      "goal": "结果事务与消费拆分",
+      "change": "result后yield",
+      "progress": "实际yield和反馈机会",
+      "confirmed_issue": "长metadata/GC仍在，另出现真future拒绝",
+      "followup": "R114/R116/R最终short intake",
+      "implementation_commit": "f0854affad7b64ef38c953ff5a9be7c2e619bc31",
+      "deployment_commit": "04197d136d45ae86e1febcb6e1c356284514c863",
+      "evidence_level": "实际运行小结果/退出收据",
+      "existing_uploaded_mapping": "docs/experiment-history/history.json#R110-poll-yield-round26",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1821,
+          "sha256": "3790725960c16af17df2bfb3c5ab1865e9ef57924c674239c2737b2f68290e01",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "actual_navigation_failed:R86 corrected input integrity: commit:ValueError:body_not_accepted_at_commit"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 360,
+          "sha256": "46060ec2b5477d0eecc571f0b56d544efa54dad6fd27588b91b805c5565909ef",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 328044,
+          "sha256": "34ed32ebcd3e435ef33cc2f8b8d1609bbb7c04885668eee8fe0630085eb0fe2d",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 908,
+          "sha256": "89d944cf60205ba63802f702f0fb3db5c4766c2a74d16d240cd6443837560d8d",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 5076
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1472,
+          "sha256": "4dca0c7f5a8e79a1795e46f31639687e83fa99caaa31d7d9d16b9c29f97eaba5",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    },
+    {
+      "run_id": "20261025T072013Z_closed_loop_R85_published_repro_10_same_formal22_9f0e",
+      "scope": "/opt/experiment/projects/go2_teacher_pipeline_v19_20261006_runs/20261025T072013Z_closed_loop_R85_published_repro_10_same_formal22_9f0e",
+      "history_id": "published_repro_10",
+      "goal": "整理目录同formal22策略实际复现",
+      "change": "raw元数据SHA迁移后首次完整启动；其几何证书仍绑定旧world",
+      "progress": "task11.805→101.820 SIM，90秒仅.044762m，last world106.790",
+      "confirmed_issue": "物理静态准入23项中world身份不符，未生成可接纳路径；不是进度判据本身的修复",
+      "followup": "11按实际world重新作同门槛准入，路线到达但停车FAIL",
+      "implementation_commit": "cd8816fb",
+      "deployment_commit": "f77972a4",
+      "evidence_level": "Existing actual run result and direct gate failure readback",
+      "existing_uploaded_mapping": "reproduction/PUBLICATION_REPRODUCTION_HISTORY.json and docs/experiment-history/chapters/09_整理目录复现与发布.zh-CN.md",
+      "source_receipts": [
+        {
+          "file": "r85_task_result.json",
+          "bytes": 1839,
+          "sha256": "aaeddc688ec8a7af6a842368342f11c09a97c14415b8aca74aecd892e03b67b9",
+          "selected_facts": {
+            "state": "failed",
+            "passed": false,
+            "failure_reason": "less_than_05m_forward_progress_in_90_sim_seconds"
+          }
+        },
+        {
+          "file": "run_result.json",
+          "bytes": 369,
+          "sha256": "e7669bfa7b3b9d3faae7e327332d66f894a8f17910a48218ced4ccce70e1ec4f",
+          "selected_facts": {
+            "status": "failed"
+          }
+        },
+        {
+          "file": "runtime_manifest.json",
+          "bytes": 419511,
+          "sha256": "23dfa1ee0312afd987f058de478548ca1aca99bc3589e87e0983fb63e0aaf01d",
+          "selected_facts": {
+            "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+          }
+        },
+        {
+          "file": "worker_archive_integrity.json",
+          "bytes": 909,
+          "sha256": "2ed871a17d60244ea638f7b8928ad561a070dae23b5ab06555d30b620685e352",
+          "selected_facts": {
+            "error": null,
+            "verified": true,
+            "samples": 5341
+          }
+        },
+        {
+          "file": "pipeline_normal_stop.json",
+          "bytes": 1480,
+          "sha256": "259aac94961d4d3c8b09e46dfa308e4fe87b06b71d5eab34928511c75156d707",
+          "selected_facts": {
+            "error": null,
+            "normal_completed": true
+          }
+        },
+        {
+          "file": "trials/published_repro_10/RESULT.zh-CN.md",
+          "sha256": "5769a9845da096936c8b98404bd23202187e010047f1123dfae0e12a26d49064",
+          "bytes": 1513
+        }
+      ],
+      "raw_replay_kept_if_selected_files_deleted": false
+    }
+  ],
+  "no_deleted_raw_replay_claimed": true,
+  "public_readonly_projection_not_execution_manifest": true,
+  "original_exact_local_sha256": "bbb2021ea34e23d1fc4892e1508484a00ecf695484bea7620c638e79bc1355d0"
+}

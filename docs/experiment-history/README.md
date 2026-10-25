@@ -117,3 +117,9 @@
 本分支从正式main的formal22发布提交派生，main保留清晰当前架构与源码；本页提供按时间、实现/部署和证据等级整理的演进。
 
 原历史包的DELIVERABLES_SHA256记录原始文档字节；公开版换行/路径规范化后的对应SHA见PUBLIC_EXPORT.json，两者不混用。
+
+## 后续完整清理容量方案（未删除）
+
+[20.31/30.75/50.91/56.20GB四档、逐文件范围与不可恢复损失](cleanup-capacity/README.zh-CN.md)。本计划取代仅C001的局部建议，当前全部删除授权仍false。原停车命令时序澄清已正常追加到main结果，本次/新测试原始数据继续保护。
+
+前阶段PUBLIC_EXPORT.json/PUBLICATION_APPENDIX.json是各自历史时点清单；本次新增清理附录与当前索引以[cleanup-capacity/export_index.json](cleanup-capacity/export_index.json)校验，不把旧SHA清单冒称当前全树。

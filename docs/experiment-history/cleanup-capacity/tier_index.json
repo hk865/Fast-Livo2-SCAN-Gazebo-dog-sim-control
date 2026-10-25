@@ -1,0 +1,70 @@
+{
+  "schema": "cleanup_capacity_decision_index/v1",
+  "tiers": [
+    {
+      "id": "T1",
+      "groups": [
+        "G0_PARTIAL",
+        "G1_PRIOR_STAGE_RAW"
+      ],
+      "file_count": 110,
+      "conditional_allocated_release_bytes": 20313190400,
+      "guaranteed_release_bytes": 0,
+      "delete_authorized": false,
+      "manifest_file": "T1_EXACT_FILE_MANIFEST.json",
+      "manifest_sha256": "5de282e16d46310e23f9ccd5b2405622e6004d787362fcd0d5b9b2e37038bccc"
+    },
+    {
+      "id": "T2",
+      "groups": [
+        "G0_PARTIAL",
+        "G1_PRIOR_STAGE_RAW",
+        "G2_LATER_STAGE_RAW"
+      ],
+      "file_count": 170,
+      "conditional_allocated_release_bytes": 30750932992,
+      "guaranteed_release_bytes": 0,
+      "delete_authorized": false,
+      "manifest_file": "T2_EXACT_FILE_MANIFEST.json",
+      "manifest_sha256": "340f5c66369191c651f602aa65e530a609638f3df22c031b36f4e264215c6515"
+    },
+    {
+      "id": "T3",
+      "groups": [
+        "G0_PARTIAL",
+        "G1_PRIOR_STAGE_RAW",
+        "G2_LATER_STAGE_RAW",
+        "G3_REPRESENTATIVE_RAW",
+        "G4_EARLY_RAW"
+      ],
+      "file_count": 260,
+      "conditional_allocated_release_bytes": 50907336704,
+      "guaranteed_release_bytes": 0,
+      "delete_authorized": false,
+      "manifest_file": "T3_EXACT_FILE_MANIFEST.json",
+      "manifest_sha256": "e82a47f29cf7f169b149e4086221552361c97c19a4dd0397b1a4e05f61b2b4dc"
+    },
+    {
+      "id": "T4",
+      "groups": [
+        "G0_PARTIAL",
+        "G1_PRIOR_STAGE_RAW",
+        "G2_LATER_STAGE_RAW",
+        "G3_REPRESENTATIVE_RAW",
+        "G4_EARLY_RAW",
+        "G5_ARCHIVE_OR_DERIVED_LOSS"
+      ],
+      "file_count": 276,
+      "conditional_allocated_release_bytes": 56195870720,
+      "guaranteed_release_bytes": 0,
+      "delete_authorized": false,
+      "manifest_file": "T4_EXACT_FILE_MANIFEST.json",
+      "manifest_sha256": "032d354d952891550a34f7ab5d1a96dfbf43336aa342f54be9c81788b059d0c6"
+    }
+  ],
+  "all_nested_not_additive": true,
+  "recommended_tier": "T2",
+  "actual_released_bytes": 0,
+  "public_readonly_projection_not_execution_manifest": true,
+  "original_exact_local_sha256": "5121ff3fce62708d21a48f6b4db0a12603b6a57a0ea786a233c621016b4ce584"
+}
