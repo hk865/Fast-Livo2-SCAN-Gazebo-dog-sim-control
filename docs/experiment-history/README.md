@@ -4,6 +4,10 @@
 
 本地既有资源快照总留存120.278765568GB；本次135个run目录元数据计78.098878464GB。76项重点记录，另列软件/未启动与前史载体。源数据仍在/已知删除/无法确认完整重放分列。
 
+本阶段追加：**整理目录ecb62ad实际到达全路线，但严格固定5秒停车FAIL；动态/RGB终验未完成，原成功不转授。** [逐标签准备/实跑与故障改进](chapters/09_整理目录复现与发布.zh-CN.md)。
+
+原76条重点记录与原存量表保持原时点；新增11标签（6个execute尝试）见[JSON](published_directory_reproduction.json) / [CSV](published_directory_reproduction.csv)。最新收尾快照124.216GB，未永久删除。
+
 ## 章节
 
 - [R85任务链：反馈、队列、时钟和停车准备](chapters/02_R85至R117.zh-CN.md)
