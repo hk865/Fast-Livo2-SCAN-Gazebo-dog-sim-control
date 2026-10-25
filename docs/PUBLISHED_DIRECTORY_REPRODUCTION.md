@@ -21,6 +21,13 @@
 
 ## 当前复现记录
 
-`published_repro_01` 在启动前因旧 SLAM setup 路径缺失退出；`published_repro_02` 在启动前因导出缺少生成资产输入退出。两次均未启动 ROS/Gazebo/Actor，原日志保留。路径与必要资产的打包修正不记为导航收益；新目录实际加载、动态事件、完整路线、固定5秒停车、RGB和退出/CRC结果另行记录。
+已完成11个准备/修正标签，其中06–11有execute尝试；这不等于11次完整仿真。01/02是启动前路径/资产遗漏，03–05是来源闭包与审查冻结，06缺Python包路径、07 helper身份不一致、08 ACK契约身份未迁移、09路线来源SHA未迁移、10静态几何证书绑定旧world。上述失败及未启动状态全部保留；修正的是打包和身份，不记作导航算法收益。见[逐标签实录](../reproduction/PUBLICATION_REPRODUCTION_HISTORY.json)。
 
+最终11实际部署`ecb62ad`，实现`e4b120d`，prepare52项/加载91项通过。13.865 SIM接纳任务，34.913044m到终点，389.015 SIM停车失败；首次T0=388.790不重置，完整5秒未完成。在线SLAM速度0.080310m/s越过原0.08m/s界，同期native实际速度最高0.084245m/s。动态业务停走有证据，但最终dynamic/RGB终验未形成。六退出、Actor19582样本CRC、pipeline174583包drain通过；worker EOF fault保留。见[本轮完整报告](../reproduction/results/published_repro_11/RESULT.zh-CN.md)。未继续调参数/改策略或自动再跑。
 整理目录还将原 R33/V32 历史来源清单与当前执行来源分开：只对已验证 published-native571 + R85 分支，不再要求旧 V32/R73 的390条历史输入充当当前运行件，历史清单原文保留。当前候选、几何、native、SCAN、路线/PID及运行配置仍完整绑定和归档；其他入口保留原逻辑。新增7个引用对应6个唯一历史JSON保留原始SHA，单独存放 exact_source_inputs，未覆盖公开导出或把历史FAIL改成PASS。
+
+## 文档与外部源码片段
+
+`dependencies/exact_source_inputs/` 保留来源校验实际读取的原始开源文件字节，包含上游 README 片段。该 README 的三个 QUALITY_DECLARATION 相对链接依赖原上游完整仓库布局，本包没有复制那些目录；静态工具会单独列出这类未提供上下文的链接，不改写原文件摘要，也不把它们当作本项目操作文档。项目 README、模块/数据流及复现说明的本地链接仍必须通过。
+
+宿主软件版本实录见 [DEPENDENCY_VERSIONS.json](DEPENDENCY_VERSIONS.json)。没有执行新的异机安装或 Docker 镜像验收。

@@ -9,7 +9,7 @@
 - [实际入口、构建和复现边界](docs/REPRODUCE_FORMAL22.md) · [发布来源与许可](releases/formal22/README.md)
 - [历史记录入口](docs/EXPERIMENT_HISTORY.md) · [原2026-10-06报告](docs/EXPERIMENT_REPORT_20261006.md)
 
-## 当前版本范围
+## 原成功部署的版本范围
 
 |项目|本轮真实结果|
 |---|---|
@@ -20,11 +20,15 @@
 |连续地形判定|同一有限地面完整支撑曲线及脚印时以真实地形坡度判定，保留原0.35rad、残差/净空/碰撞；非旧bodyZ/XY导数间接界等价|
 |结束|自然返回0，6项进程/锁/ROS域退出检查、Actor18295样本CRC及pipeline提交闭合通过|
 
+## 整理目录的实际复验
+
+新目录部署`ecb62adb4e55513e6a11f23f23803838b19e09f6`已从本目录源码/配置及新native/SCAN构建完整实跑：到达F3终点区域，路线高水位34.913044m，但在389.015 SIM因停车速度越界失败，**新目录完整验收未通过**。首次T0=388.790，固定5秒窗口未完成、未重置；动态有停止/恢复片段而无最终验收。加载91项、六项退出及Actor CRC通过，worker EOF fault仍保留。详见[本轮结果](reproduction/results/published_repro_11/RESULT.zh-CN.md)、[触发量](reproduction/results/published_repro_11/PARKING_LEAF_READBACK.json)与[独立复核](reproduction/results/published_repro_11/INDEPENDENT_REVIEW.zh-CN.md)。
+
 ## 目录
 
-`releases/formal22/`是本次实际冻结版本的源码/配置和小型证据导出；`multifloor_demo/`、`scan_multifloor/`、`slam5_navigation/`、`go2_sim_control/`、`tools/`等原目录保留2026-10-06 main历史，不自动代表formal22入口。不要把旧网页/CHAMP/Teacher命令当成本轮Student入口。
+根`candidate/`是新目录实际复验入口；`releases/formal22/`保留原成功版本公开快照及native/SCAN源码、依赖和小型证据；`multifloor_demo/`、`scan_multifloor/`、`slam5_navigation/`、`go2_sim_control/`、`tools/`等原目录保留2026-10-06 main历史，不自动代表formal22入口。不要把旧网页/CHAMP/Teacher命令当成本轮Student入口。
 
-导出包含实际runtime checkout、native571源码以及真实scope中的文本依赖；兼容/历史绑定文件随冻结包保留，不意味着每个模块启用。实际加载和触发以本轮回执为准。权重、ELF、构建输出、点云/bag/大原始流未上传，模型/二进制保留SHA和依赖引用。公开导出规范化了本机路径等私人信息，原部署SHA与公开文件SHA分别登记；**尚未从此脱敏目录重新运行仿真，不能继承新机器的运行PASS**。
+导出包含实际runtime checkout、native571源码以及真实scope中的文本依赖；兼容/历史绑定文件随冻结包保留，不意味着每个模块启用。实际加载和触发以本轮回执为准。权重、ELF、构建输出、点云/bag/大原始流未上传，模型/二进制保留SHA和依赖引用。公开导出规范化了本机路径等私人信息，原部署SHA与公开文件SHA分别登记；**已在原机从整理目录重建并实跑，但严格停车未通过；没有异机安装或Docker实测，不继承原成功PASS**。
 
 不启动ROS或仿真即可核查导出文件：
 
@@ -40,6 +44,6 @@ python3 -B tools/formal22_manifest_check.py
 
 最初公开main `63e6b82225c7b3718c4e170e5005bfd6a387b69f` 的通用邮箱脱敏错误改写了Python的`@`表达式。原formal22部署与成功不受影响，但公开目录当时尚未运行，不能继承原结果。现已从原冻结文件重新进行token级导出，全部1068个Python文件核对，36份受损文件（含重复依赖）修复；代码常规字符串除明确路径前缀外保留原值，不再对源码整体做邮箱/UUID/IP替换。
 
-此前“文本绑定一致”比的是**导出前原文件SHA与原scope**，并非导出后语义；公开SHA清单和可解析性也不能代替这个核对。[更正谱系](provenance/FORMAL22_PUBLICATION_CORRECTION.json)和[全量差异审查](provenance/FORMAL22_ALL_EXPORT_DIFFERENCES.json)分别记录。新整理目录的依赖补齐、重新构建和完整实跑正在独立进行，最终结果另记。
+此前“文本绑定一致”比的是**导出前原文件SHA与原scope**，并非导出后语义；公开SHA清单和可解析性也不能代替这个核对。[更正谱系](provenance/FORMAL22_PUBLICATION_CORRECTION.json)和[全量差异审查](provenance/FORMAL22_ALL_EXPORT_DIFFERENCES.json)分别记录。新整理目录已补齐依赖并重新构建native/SCAN；完整实跑结果为路线到达而停车失败，原/新目录结果分开记录。
 
 整理目录另有根 `candidate/` 的路径适配入口、新 native/SCAN 构建和显式 SDK 配置；与保留的公开快照分开，见[整理目录依赖与复现边界](docs/PUBLISHED_DIRECTORY_REPRODUCTION.md)。本目录的新实跑结果单独记录，不沿用旧通过。

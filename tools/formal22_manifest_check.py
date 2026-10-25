@@ -7,7 +7,7 @@ import ast,hashlib,json,re,sys
 ROOT=Path(__file__).resolve().parents[1]
 RELEASE=ROOT/'releases/formal22'
 manifest=json.loads((RELEASE/'SOURCE_EXPORT.json').read_text())
-errors=[];counts={'hashed_files':0,'python_syntax':0,'python_nonstring_AST':0,'json_files':0,'markdown_links':0}
+errors=[];upstream_fragment_links=[];counts={'hashed_files':0,'python_syntax':0,'python_nonstring_AST':0,'json_files':0,'markdown_links':0}
 class NonStringAST(ast.NodeTransformer):
  def visit_Constant(self,node):
   return ast.copy_location(ast.Constant(value='<STRING>'),node) if isinstance(node.value,str) else node
@@ -26,13 +26,17 @@ for name,row in manifest['files'].items():
   elif p.suffix=='.json':json.loads(p.read_text());counts['json_files']+=1
  except (SyntaxError,ValueError)as e:errors.append([name,type(e).__name__,str(e)[:180]])
 paths=[ROOT/'README.md',*sorted((ROOT/'docs').glob('*FORMAL22*.md')),ROOT/'docs/EXPERIMENT_HISTORY.md',RELEASE/'README.md']
+paths+=[ROOT/'docs/PUBLISHED_DIRECTORY_REPRODUCTION.md']
 paths+=list(RELEASE.rglob('*.md'))
 for p in sorted(set(paths)):
  for target in re.findall(r'!?\[[^\]\n]+\]\(([^)\n]+)\)',p.read_text()):
   target=target.strip('<>')
   if re.match(r'^[A-Za-z][A-Za-z0-9+.-]*:',target)or target.startswith('#'):continue
   dest=p.parent/target.split('#',1)[0]
-  if not dest.exists():errors.append([str(p.relative_to(ROOT)),'broken relative link',target])
+  if not dest.exists():
+   if p.is_relative_to(RELEASE/'dependencies/exact_source_inputs'):
+    upstream_fragment_links.append([str(p.relative_to(ROOT)),target])
+   else:errors.append([str(p.relative_to(ROOT)),'broken relative link',target])
   counts['markdown_links']+=1
-result={'status':'PASS_PUBLIC_SNAPSHOT_ONLY'if not errors else'FAIL','counts':counts,'errors':errors,'runtime_or_navigation_PASS_not_implied':True}
+result={'status':'PASS_PUBLIC_SNAPSHOT_ONLY'if not errors else'FAIL','counts':counts,'errors':errors,'frozen_upstream_fragment_links_without_original_package_context':upstream_fragment_links,'upstream_fragment_scope':'Exact historical upstream bytes are preserved; their original repository-relative context is not a packaged project document. These unresolved links remain explicitly listed.','runtime_or_navigation_PASS_not_implied':True}
 print(json.dumps(result,ensure_ascii=False,indent=2));sys.exit(bool(errors))

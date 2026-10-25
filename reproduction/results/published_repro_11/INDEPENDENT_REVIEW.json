@@ -1,0 +1,380 @@
+{
+  "schema": "published_formal22_repro11_actual_acceptance_independent_review/v1",
+  "UTC": "2026-10-25T07:51:17.464297+00:00",
+  "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d",
+  "review_complete": true,
+  "passed": false,
+  "outcome": "NOT_PASSED_SELECTED_FORMAL_F1_TO_F3_TASK",
+  "checks": {
+    "same_run_request_selected_fullF3_task_success": false,
+    "immutable_first_zero_ACK_T0_and_exact5s": false,
+    "causal_real_actor_zero_before_observation_and_nativeACK": true,
+    "original_parking_receipt_all6_gates_sha_bound": false,
+    "recorded_parking_metrics_within_original_limits": false,
+    "fixed_window_actual_sample_coverage": false,
+    "actual_zero_control_inference_and_no_protection_whole5s": false,
+    "dynamic_real_stop_resume_recovery_completed_window": false,
+    "independent_dynamic_physical_verifier_PASS_not_business_flags_only": false,
+    "dynamic_archived_source_binding_receipts_reused": false,
+    "required_current_run_RGB_verified": false,
+    "normal_runtime_and_owned_cleanup_no_resource_stop": false,
+    "natural_worker_archive_no_signal_no_fault": false,
+    "pipeline_normal_drained_all_recorded_packets": true,
+    "original_closure_six_checks_CRC91loading_PASS": true,
+    "runner_ENTRY_EXIT0_no_outer_forcedstop": false,
+    "selected_native571_rebuilt_actual_source_artifacts_not_old_ELF": true,
+    "selected_scope_formal_no_diag_minimal_R99OFF": true,
+    "tool_false_fields_are_deliberate_nonbusiness_scope": true
+  },
+  "criterion_results": {
+    "same_run_request_selected_fullF3_task_success": {
+      "passed": false,
+      "status": "failed",
+      "evidence": {
+        "same_run_request_kind_and_scope": true,
+        "state": "failed",
+        "passed": false,
+        "failure_reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_actual_motion_or_drift_exceeded",
+        "completed_sim_ns": 389015000000
+      }
+    },
+    "immutable_first_zero_ACK_T0_and_exact5s": {
+      "passed": false,
+      "status": "anchor_established_but_full_window_not_completed",
+      "evidence": {
+        "first_T0_binding_valid": true,
+        "T0_ns": 388790000000,
+        "required_fixed_end_ns": 393790000000,
+        "duration_required_ns": 5000000000,
+        "formal_window_never_reset": true,
+        "task_completed_before_required_end": true,
+        "fixed5_evidence_exists": false
+      }
+    },
+    "causal_real_actor_zero_before_observation_and_nativeACK": {
+      "passed": true,
+      "status": "passed",
+      "evidence": {
+        "input_clock_ns": 388730000000,
+        "native_ACK_clock_ns": 388750000000,
+        "qualification_clock_ns": 388790000000,
+        "qualification_pose_stamp_ns": 388745000000,
+        "event_id": "e392ba645635f7047904671b1a9b720f3f1e6b64bec6f9193137f32703a08f82",
+        "actor_dimension": 45,
+        "claims_only_initial_qualification_not_hold_success": true
+      }
+    },
+    "original_parking_receipt_all6_gates_sha_bound": {
+      "passed": false,
+      "status": "not_run_after_controller_failure",
+      "evidence": {
+        "passed": false,
+        "audit_attempted": false,
+        "receipt": null,
+        "reason": "actual_controller_failed",
+        "physical_thresholds_changed": false
+      }
+    },
+    "recorded_parking_metrics_within_original_limits": {
+      "passed": false,
+      "status": "full_window_metrics_not_available",
+      "evidence": {
+        "fixed5_evidence_missing": true,
+        "trigger_quantity_analysis_delegated_to_root_not_repeated": true
+      }
+    },
+    "fixed_window_actual_sample_coverage": {
+      "passed": false,
+      "status": "full5s_evidence_not_available",
+      "evidence": {
+        "no_fixed5_sample_claim": true
+      }
+    },
+    "actual_zero_control_inference_and_no_protection_whole5s": {
+      "passed": false,
+      "status": "initial_zero_proven_but_whole5s_not_proven",
+      "evidence": {
+        "no_extension_reset_or_shortening_of_window": true
+      }
+    },
+    "dynamic_real_stop_resume_recovery_completed_window": {
+      "passed": false,
+      "status": "business_fragment_observed_not_final_dynamic_acceptance",
+      "evidence": {
+        "business_fragment_in_state": true,
+        "event_state": "completed_pending_verification",
+        "visible_phase": "clear",
+        "business_completion_only": true,
+        "physical_verified": false,
+        "task_dynamic_result": null,
+        "task_dynamic_pass": false
+      }
+    },
+    "independent_dynamic_physical_verifier_PASS_not_business_flags_only": {
+      "passed": false,
+      "status": "final_independent_verification_not_available",
+      "evidence": {
+        "task_dynamic_result": null,
+        "state_dynamic_PASS": false
+      }
+    },
+    "dynamic_archived_source_binding_receipts_reused": {
+      "passed": false,
+      "status": "final_owner_verification_capsule_not_available",
+      "evidence": {
+        "dynamic_evidence_capture": null,
+        "owner_verified_sources_exists": false,
+        "mutable_final_state_not_promoted_to_verified_snapshot": true
+      }
+    },
+    "required_current_run_RGB_verified": {
+      "passed": false,
+      "status": "required_but_not_finally_verified",
+      "evidence": {
+        "required": true,
+        "verified": false,
+        "result": null,
+        "does_not_assert_RGB_sensor_or_map_data_absent": true
+      }
+    },
+    "normal_runtime_and_owned_cleanup_no_resource_stop": {
+      "passed": false,
+      "status": "task_stop_recorded_clean_processes",
+      "evidence": {
+        "runtime_error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS",
+        "first_failure": {
+          "phase": "runtime_outcome",
+          "monotonic_ns": 187840053331476,
+          "kind": "reported_outcome",
+          "error": "R85 actual task stop: actual_R85_task_failed; no autonomous route PASS"
+        },
+        "storage_watchdog_error": null,
+        "owned_cleanup_complete": true,
+        "no_resource_stop_reported": true
+      }
+    },
+    "natural_worker_archive_no_signal_no_fault": {
+      "passed": false,
+      "status": "CRC_and_natural_exit_PASS_but_worker_fault_recorded",
+      "evidence": {
+        "CRC_verified": true,
+        "samples": 19582,
+        "natural_worker_exit": true,
+        "completed": true,
+        "fault": "EOFError: Gazebo actuator disconnected",
+        "integrity_worker_fault": "EOFError: Gazebo actuator disconnected",
+        "no_cause_repair_or_reclassification_attempted": true
+      }
+    },
+    "pipeline_normal_drained_all_recorded_packets": {
+      "passed": true,
+      "status": "passed",
+      "evidence": {
+        "accepted": 174583,
+        "delivered": 174583,
+        "committed": 174583,
+        "all_residual_channels_zero": true,
+        "normal_stop_summary_SHA": "a37cfc333ea48aed57cf8fde62741ed3fca6b69665aee2fa2b6dba60f6e8fb22"
+      }
+    },
+    "original_closure_six_checks_CRC91loading_PASS": {
+      "passed": true,
+      "status": "passed",
+      "evidence": {
+        "six_checks": {
+          "runner_absent": true,
+          "owned_groups_absent": true,
+          "entry_exit_recorded": true,
+          "private_domain_clear": true,
+          "no_matching_runtime": true,
+          "three_locks_available": true
+        },
+        "errors": [],
+        "actual_loading_count": 91,
+        "actual_loading_passed": true,
+        "ActorCRC_verified": true,
+        "samples": 19582,
+        "this_is_not_business_acceptance": true
+      }
+    },
+    "runner_ENTRY_EXIT0_no_outer_forcedstop": {
+      "passed": false,
+      "status": "rc1_task_failed_no_outer_forcing",
+      "evidence": {
+        "returncode": 1,
+        "wall_s": 473.6231261510111,
+        "owned_run_and_no_outer_forcing_verified": true
+      }
+    },
+    "selected_native571_rebuilt_actual_source_artifacts_not_old_ELF": {
+      "passed": true,
+      "status": "passed",
+      "evidence": {
+        "native_executable": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/native/.local_install/fast_livo2_ros/lib/fast_livo2_ros/fastlivo_mapping",
+        "native_executable_sha256": "f5b82d9383a3ae5680f1a57d1e33c650bd4aa8dc459e8be8a28d727b9fcc2ca8",
+        "native_core_sha256": "e0f0a80a81f94e0b2263b1bf5569b0fc942adbc97f160352bfe2f99f52a811bd",
+        "SCAN_actual_executable_path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/scan/.local_install/scan_planner/lib/scan_planner/scan_planner_node",
+        "SCAN_actual_executable_sha256": "3a44129cb18695437d2131316b656933d611297b6e3743c355582116b8cd2eeb",
+        "source_witness_scope": "Original91 loading checks reused; no ELF/source rescan or covariance candidate mixed."
+      }
+    },
+    "selected_scope_formal_no_diag_minimal_R99OFF": {
+      "passed": true,
+      "status": "passed",
+      "evidence": {
+        "known_map_assisted": true,
+        "same_explicit_quality_terrain_actor_strategy": true,
+        "original46_PASS": false
+      }
+    },
+    "tool_false_fields_are_deliberate_nonbusiness_scope": {
+      "passed": true,
+      "status": "nonbusiness_tool_scope_recognized",
+      "evidence": {
+        "business_failure_from_task_result_not_tool_placeholder": true
+      }
+    }
+  },
+  "business_failure": {
+    "state": "failed",
+    "passed": false,
+    "reason": "actual_navigation_failed:普通停车失败锁定：ordinary_zero_hold_actual_motion_or_drift_exceeded",
+    "completed_sim_ns": 389015000000,
+    "forward_highwater_m": 34.91304422814489,
+    "parking_pass": false,
+    "dynamic_pass": false,
+    "full_F3_PASS": false,
+    "original46_PASS": false
+  },
+  "parking_proven_fragment": {
+    "anchor_bound": true,
+    "T0_ns": 388790000000,
+    "required_end_ns": 393790000000,
+    "formal_window_never_reset": true,
+    "initial_Actor_zero_causal_proof_passed": true,
+    "input_clock_ns": 388730000000,
+    "ACK_clock_ns": 388750000000,
+    "qualification_clock_ns": 388790000000,
+    "parking_audit_attempted": false,
+    "fixed5_evidence_available": false,
+    "specific_motion_or_drift_trigger_quantity_not_reanalyzed": true
+  },
+  "dynamic_proven_fragment": {
+    "state": "completed_pending_verification",
+    "phase": "clear",
+    "same_run_stop_resume_recovery_business_fragment": true,
+    "stop_event": {
+      "request_id": "20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d:r85:f1_to_f3:1",
+      "waypoint_index": 0,
+      "sequence": 2973,
+      "clock_ns": 211510000000,
+      "cloud_source_ns": 211465000000,
+      "cloud_sha256": "c3a36a1d8b89b0d1d3527851a85fcf58f4d728bfead5405d7633e510f00f2d0b",
+      "trajectory_id": 93,
+      "reference_stamp": [
+        13,
+        970000000
+      ],
+      "stop_count": 1,
+      "schema": "teacher_dynamic_stop_event/v1"
+    },
+    "resume_sim_ns": 236805000000,
+    "recovery_progress_m": 0.7915667779284885,
+    "recovery_end_source_ns": 240835000000,
+    "clear_completed_sim_ns": 240890000000,
+    "business_completion_only": true,
+    "independent_final_verification_available": false,
+    "dynamic_PASS": false,
+    "final_mutable_source_fresh_or_owner_stopped_not_used_to_explain_prior_motion": true
+  },
+  "RGB_final_verification": {
+    "required": true,
+    "verified": false,
+    "result": null,
+    "not_inferred_to_mean_missing_RGB_data": true
+  },
+  "exit_archive": {
+    "closure_complete": true,
+    "six_checks": {
+      "runner_absent": true,
+      "owned_groups_absent": true,
+      "entry_exit_recorded": true,
+      "private_domain_clear": true,
+      "no_matching_runtime": true,
+      "three_locks_available": true
+    },
+    "loading_passed": true,
+    "loading_count": 91,
+    "ActorCRC_verified": true,
+    "samples": 19582,
+    "worker_natural_rc0_no_signals": true,
+    "worker_completed": true,
+    "worker_fault": "EOFError: Gazebo actuator disconnected",
+    "pipeline_normal_completed": true,
+    "packet_counts": {
+      "accepted": 174583,
+      "delivered": 174583,
+      "committed": 174583,
+      "pending": 0,
+      "inflight": 0,
+      "ready": 0,
+      "bytes": 0
+    },
+    "closure_errors": [],
+    "ENTRY_EXIT": {
+      "schema": "r118_bounded_runner_exit/v1",
+      "run": "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d",
+      "source_commit": "ecb62adb4e55513e6a11f23f23803838b19e09f6",
+      "returncode": 1,
+      "wall_s": 473.6231261510111,
+      "outer_stop_requested": false,
+      "outer_forced_stop": null,
+      "outer_failure": null,
+      "runner_still_alive": false,
+      "remaining_owned_groups": {
+        "bridge.identity.json": [],
+        "worker.identity.json": [],
+        "gazebo.identity.json": [],
+        "navigation_stack.identity.json": []
+      },
+      "identity_errors": [],
+      "no_other_process_signals": true,
+      "no_auto_retry": true,
+      "navigation_PASS": false
+    },
+    "cleanup_success_is_not_task_PASS": true,
+    "CRC_arrays_not_unpacked_or_recomputed": true
+  },
+  "guarantee_scope": [
+    "Same selected explicit formal22 F1→F3 strategy in repackaged directory; current run failed and old successful run remains independently valid.",
+    "No old5% foreground/body-derivative-cone/original46 equivalence, global safety, performance causality or hardware readiness claim.",
+    "No control gains/thresholds, source, runtime receipts or old failure results modified; no new simulation/Node/repair executed.",
+    "Absent full parking/dynamic/RGB final evidence is not promoted to successful validation.",
+    "Worker archive byte/CRC validity and natural rc0 coexist with a recorded EOFError; no fault-free worker claim."
+  ],
+  "verified_selected_file_sha256": {
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/r85_task_result.json": "2c46e3a8168923b418a794c498d91897a56c9127c4ba4af4b06dc1abadfc0255",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/r85_task_parking_result.json": "2dfd6e2bdafe7f47690624a80a2d3dfc1f5735f51e69732bb7b1464dc8b65953",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/mission46_parking_T0_anchor.json": "1bde0288077e8781ffaf1a33829bf062a356583c1a0f9f3ae760e3468da81f93",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/r85_dynamic_task_contract.json": "9cec5060f27b041afcf9f05a4c981063898b88d331544f5d06fbb0d54d440fbd",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/r85_dynamic_obstacle_state.json": "e4818d56f1447301d0cd986fa1afdbe3a1f05ea7517669a0d546b161f108df78",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/worker_result.json": "a9d2cf924053783b5ad8ea0a0f667fa1109d5d4c0cc98f8b67ffea50ba6596a3",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/worker_archive_close.json": "bfd8413fef2960b43955a0989e9d9c7ec1bf4b5ee08ec6448276ee9399c5775f",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/worker_archive_integrity.json": "fa07622694163d7fedc6445a34cdc1aea1bc139a82d7fb93fb2bf1e70373b915",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/pipeline_normal_stop.json": "475744b21df4519e666db005f23aa3f9776c5bdd77e31fff9f6245f3440b7aa3",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/guardian_result.json": "dda3337121d39dffbe2d0bb33b80808b76b267f9b386b5dff5536434243295a0",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/run_result.json": "63a38091e582b9e9e167814f2388d05eacbf89193e1fb351efe1a5514f78de05",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/slam_loaded_binary.json": "275ff0648d04fed6dacc4efc77697d65baa1d376fe491aaa1182fc153245b2a3",
+    "/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs/20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d/scan_loaded_binary.json": "3169fa9e6e46165e8e400986ac4da8b31fdab448be4d3ffa2c1807c95157db86",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/ENTRY_EXIT.json": "9225f1d784b17f615a813088399278c29eb764415ce21921eec21409907b6829",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/POST_RUN_CLOSURE.json": "397dfa945d5900cfc310926121ff9702f1948ef1bb62a389acc8cacc0969df86",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/ACTUAL_LOADING_STARTUP.json": "2646790bece7955f613bc0ac32db499768aa9dcff8078a3ee82d99ac9732f94c",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/PROFILE.json": "72ff442e80af036caaa21e933e3a063f78783dd82b423e2a29cdd22b95a2f221",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/SPECIFICATION.json": "d7e5ad6e03dc1e2ad093e107720598e6ddb776ea87476f1409aa5ac73f2f4deb",
+    "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/trials/published_repro_11/DEPLOYMENT_REVIEW.json": "eb1b7bb6059b5c1fb36baab5aa563602f8d2ef5cf081e486070e72ac2e78c7da"
+  },
+  "existing_receipt_verifier_geometry_or_CRC_rerun": false,
+  "current_W_or_source_modified": false,
+  "only_output_written_under_investigations": true,
+  "remaining_blocker_for_full_acceptance": "Actual ordinary_zero_hold_actual_motion_or_drift_exceeded; parent handles control diagnosis separately. No automatic parameter change or rerun recommended here."
+}
