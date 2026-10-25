@@ -1,0 +1,43 @@
+{
+  "schema": "pipeline_v19_contract/v1",
+  "simulation_only": true,
+  "modes": [
+    "serial",
+    "rx_decode",
+    "staged"
+  ],
+  "default_mode": "serial",
+  "environment_mode_key": "FASTLIVO_PIPELINE_MODE",
+  "image_copy_opt_key": "FASTLIVO_IMAGE_COPY_OPT",
+  "image_copy_opt_values": [
+    0,
+    1
+  ],
+  "whole_inflight_max_items": 512,
+  "whole_inflight_reserved_bytes": 67108864,
+  "owner_state_map_threads": 1,
+  "staged_receiver_threads": 1,
+  "staged_cloud_decode_threads": 1,
+  "staged_image_decode_threads": 1,
+  "single_cloud_decoder_owns_Preprocess_scratch": true,
+  "packet_order": "original receiver global admission sequence",
+  "source_stamp_and_original_receipt_preserved": true,
+  "no_imu_thinning_or_packet_overwrite": true,
+  "normal_stop_signal": "SIGUSR1",
+  "emergency_stop_signal": "SIGINT",
+  "normal_stop_requires_valid_context_until_drain": true,
+  "normal_stop_gate": "accepted=delivered=committed; pending=inflight=ready=bytes=canceled=rejected_capacity=closed_rejections=0; failure empty",
+  "summary_file": "fastlivo_debug/pipeline_v19_summary.json",
+  "runtime_summary_schema": "staged_input_pipeline_v19/v1",
+  "copy_optimization_default": false,
+  "estimation_dependency": "IMU propagation, LIO, VIO, state/map updates stay ordered in one owner; only immutable ingress work overlapped",
+  "LIO_threads": 4,
+  "VIO_threads": 1,
+  "Teacher_CPU_threads": 1,
+  "policy_hz": 50,
+  "physics_PD_hz": 200,
+  "source_timeout_s": 0.3,
+  "truth_navigation_allowed": false,
+  "historical_pass_inherited": false,
+  "scope": "Preflight authorizes only a new bounded experiment, not measured speedup or46-region pass"
+}

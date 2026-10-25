@@ -1,0 +1,52 @@
+{
+  "schema": "v33_compact_history_spec/v1",
+  "format": "v33_dictionary_jsonl/v1",
+  "streams": {
+    "navigation_command_history.jsonl": [
+      [
+        "acceptance"
+      ]
+    ],
+    "navigation_status.jsonl": [
+      [
+        "goals_definitions"
+      ],
+      [
+        "execution_bridge_safety",
+        "acceptance"
+      ]
+    ],
+    "mission46_status_history.jsonl": [
+      [
+        "current_goals"
+      ],
+      [
+        "navigation",
+        "goals_definitions"
+      ],
+      [
+        "navigation",
+        "execution_bridge_safety",
+        "acceptance"
+      ],
+      [
+        "heading_alignment"
+      ],
+      [
+        "goal_region"
+      ]
+    ]
+  },
+  "physical_filename_pattern": "original basename .jsonl replaced by .compact.jsonl",
+  "original_JSON_values_preserved": true,
+  "raw_lexical_whitespace_preserved": false,
+  "live_messages_and_atomic_latest_and_command_input_unchanged": true,
+  "native_SLAM_PID_guard_path_arrival_ledgers_unchanged": true,
+  "reader": "compact_archives.open_history or restore_compact_history.py",
+  "strict_integrity": "source-manifest/input-profile identity; dictionary hash; frame sequence and canonical full original JSON SHA; footer count/hash",
+  "truncated_prefix": "Only --allow-prefix / require_complete=False permits analysis of complete preceding frames; marks truncated_tail_record and archive_integrity_complete=false; never mission acceptance",
+  "restore_example": "python3 -B restore_compact_history.py RUN/navigation_status.compact.jsonl RUN/restored_navigation_status.jsonl --receipt RUN/restore_receipt.json --max-output-bytes 67108864",
+  "existing_history_reader_note": "Selected histories have no known live candidate consumer; legacy offline JSONL readers must use restored flat JSON. Existing PID/guards/native/telemetry filenames and content untouched.",
+  "simulation_started": false,
+  "storage_budget_not_increased": true
+}

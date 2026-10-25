@@ -1,5 +1,8 @@
 # formal22目录与模块职责
 
+整理目录的实际运行入口现为根 `candidate/`，对应冻结部署 `ecb62ad`。`releases/formal22/runtime/candidate/` 保留源公开快照及原formal22证据。native/SCAN从本包源码重编，模型与固定SDK/执行插件按明确来源使用；具体边界见 [新目录复现](PUBLISHED_DIRECTORY_REPRODUCTION.md)。以下职责不因路径适配改变。
+
+
 本说明只对实际部署536c9d3负责。下表中的路径相对于`releases/formal22/`。兼容模块、历史源码绑定与实际启用分开看；32项关键源绑定、91项实际加载检查及worker回执确定本轮来源。
 
 |层|主要文件/入口|输入→输出及职责|
@@ -26,3 +29,11 @@
 ## 当前选项及未启用项
 
 已选：native571、Student45、ASYNC relay、compact route protocol、短SCAN intake、明确非前景质量模型、prepared状态分类修复、同有限地形支撑判定。R99未来帧等待OFF、R116压力旁路OFF；不恢复已停止的R138压缩/还原路线。真实协方差导出仅另一个离线构建候选，本包未混入；原生cov未正确输出时adapter固定回退不是校准置信度，不能据此控制恢复。
+
+## 整理目录的来源链
+
+`candidate/package_paths.py` 明确本包位置；`candidate/slam_workspace.py` 读取新native构建来源，`scan_workspace.py`读取新SCAN来源。来源归档将当前执行输入与旧R33/V32历史输入分开，保留实际actor/guard/native/SCAN来源，不把历史PASS当授权。运行输出和持久资源账本沿用原机受管池。
+
+`reproduction/typed_route/`保存坐标不变的337点路线及来源迁移记录。`dependencies/derived_inputs/typed_route/world_prepared_package.sdf` 是固定新目录world模板；它相对旧world只改资源URI/插件路径。几何metadata、PCT来源身份和证书对齐这份固定模板，原严格world SHA、43boxes、transform、limits和连续曲线判定保留。
+
+`student_lower_loop_ack.py` 等当前合同pin绑定实际迁移后合同，原模型/45维输入、PID数值、限幅、时间/序列/同帧校验不变。旧源文件与失败结果保留于来源和历史记录，不能将身份修正解释成新的控制律。

@@ -1,0 +1,1513 @@
+{
+  "schema": "pct_static_polyline_support_receipt/v1",
+  "created_at_utc": "2026-10-14T11:44:30.565611+00:00",
+  "status": "STATIC_GEOMETRY_REJECTED",
+  "ready_for_control": false,
+  "navigation_PASS": false,
+  "scope": "One PCT polyline plus its explicit endpoint connectors; no original intermediate mission route read",
+  "control_ros_pct_or_simulation_started": false,
+  "inputs": {
+    "route": {
+      "path": "/home/hyh001/Documents/Codex/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/run_f1_to_f3_02/route_candidate.json",
+      "sha256": "8b152f4ec1043117b61c584b6922c05670488de85a2ab1956c91d367825810e1",
+      "bytes": 63008
+    },
+    "metadata": {
+      "path": "/home/hyh001/Documents/Codex/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/data/known_scene43_camera_init_h005/metadata.json",
+      "sha256": "42c3e0eafe9e37f57d3bf1c9f7e90636eb742106a34e0cfc9a1c9a62d8d49047",
+      "bytes": 216220
+    },
+    "reference": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+      "sha256": "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f",
+      "bytes": 36018
+    },
+    "limits": {
+      "path": "/home/hyh001/Documents/Codex/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+      "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+      "bytes": 764
+    },
+    "validator": {
+      "path": "/home/hyh001/Documents/Codex/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+      "sha256": "8df75a64388a4e5d926d73a2720e5f3060b3b42bdeacca83202a655302ef422f",
+      "bytes": 37253
+    }
+  },
+  "limits": {
+    "schema": "pct_static_support_validation_limits/v1",
+    "authorization": "Parent supplied C64 controller.py runtime values; no automatic relaxation",
+    "sample_spacing_m": 0.025,
+    "body_radius_m": 0.25,
+    "body_offset_m": 0.18,
+    "body_below_m": 0.12,
+    "body_above_m": 0.12,
+    "position_uncertainty_m": 0.08,
+    "yaw_half_range_rad": 3.141592653589793,
+    "body_ground_height_m": 0.32,
+    "nominal_route_body_ground_offset_m": 0.3,
+    "support_height_tolerance_m": 0.1,
+    "max_support_slope_rad": 0.35,
+    "actor_grid_half_x_m": 0.8,
+    "actor_grid_half_y_m": 0.5,
+    "actor_grid_spacing_m": 0.1,
+    "actor_ray_start_above_body_m": 20.0,
+    "switch_height_equality_m": 1e-09,
+    "initial_provider": "lower12",
+    "numeric_epsilon_m": 1e-10,
+    "max_report_examples": 40
+  },
+  "speed_profile": {
+    "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/navigation_profile.json",
+    "sha256": "549ba2bdbdd6e1d95cad1750887bd49ca2ab42cc0e482cdf6cf6e70811557bdd",
+    "bytes": 92852,
+    "field": "max_speed_mps",
+    "value_mps": 0.2,
+    "line": 5,
+    "used_for_time_parameterization": false,
+    "intermediate_mission_points_used": false
+  },
+  "endpoint_connectors": [
+    "Exact supplied task-start\u2192first-grid connector included; ground derived using explicit0.3m offset",
+    "Last-grid\u2192exact supplied task-goal connector included; ground derived using explicit0.3m offset"
+  ],
+  "original_body_point_count": 337,
+  "checked_subsegments": 1674,
+  "duplicate_zero_edges": 0,
+  "maximum_3d_sample_spacing_m": 0.025000000000000355,
+  "basic_geometry_conditions_passed": false,
+  "sample_spacing_numeric_tolerance_m": 1e-10,
+  "maximum_true_support_face_slope_rad": 0.09966865249116297,
+  "raw_polyline_grade_failure_semantics": "Conservative grade of supplied ground polyline, including derived task connectors; this is distinct from true support-plane slope. Endpoint measurement height residual can trigger it; no endpoint or tolerance was altered.",
+  "failure_counts": {
+    "route_grade_exceeds_limit": 4,
+    "no_compatible_nominal_provider": 2
+  },
+  "first_failure_per_reason": {
+    "route_grade_exceeds_limit": {
+      "original_edge": 0,
+      "fraction": [
+        0.0,
+        0.5
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.020769378992306742
+      ],
+      "body_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.32076937899230673
+      ],
+      "slope_rad": 0.8209151930455859
+    },
+    "no_compatible_nominal_provider": {
+      "original_edge": 224,
+      "fraction": [
+        0.0,
+        0.16666666666666666
+      ],
+      "reason": "no compatible nominal provider",
+      "world_body_xyz": [
+        11.1,
+        6.9,
+        1.7915422677993775
+      ],
+      "nominal_yaw_rad": 2.356194490192345,
+      "details": {
+        "lower12": {
+          "nominal": {
+            "continuous_187_ray_coverage": true,
+            "uncovered_ray_count": 0,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": false
+          },
+          "filled_layer_support": false,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": true,
+            "outer_bound_overhead": false
+          }
+        },
+        "upper23": {
+          "nominal": {
+            "continuous_187_ray_coverage": false,
+            "uncovered_ray_count": 1,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": true
+          },
+          "filled_layer_support": true,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": false,
+            "outer_bound_overhead": false
+          }
+        }
+      }
+    }
+  },
+  "bounded_examples": [
+    {
+      "original_edge": 0,
+      "fraction": [
+        0.0,
+        0.5
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.020769378992306742
+      ],
+      "body_world_xyz": [
+        0.007048269973869731,
+        0.018014309007437408,
+        0.32076937899230673
+      ],
+      "slope_rad": 0.8209151930455859
+    },
+    {
+      "original_edge": 0,
+      "fraction": [
+        0.5,
+        1.0
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.0035241349869348654,
+        0.009007154503718704,
+        0.010384683535688888
+      ],
+      "body_world_xyz": [
+        0.0035241349869348654,
+        0.009007154503718704,
+        0.3103846835356889
+      ],
+      "slope_rad": 0.8209151930455859
+    },
+    {
+      "original_edge": 224,
+      "fraction": [
+        0.0,
+        0.16666666666666666
+      ],
+      "reason": "no compatible nominal provider",
+      "world_body_xyz": [
+        11.1,
+        6.9,
+        1.7915422677993775
+      ],
+      "nominal_yaw_rad": 2.356194490192345,
+      "details": {
+        "lower12": {
+          "nominal": {
+            "continuous_187_ray_coverage": true,
+            "uncovered_ray_count": 0,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": false
+          },
+          "filled_layer_support": false,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": true,
+            "outer_bound_overhead": false
+          }
+        },
+        "upper23": {
+          "nominal": {
+            "continuous_187_ray_coverage": false,
+            "uncovered_ray_count": 1,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": true
+          },
+          "filled_layer_support": true,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": false,
+            "outer_bound_overhead": false
+          }
+        }
+      }
+    },
+    {
+      "original_edge": 224,
+      "fraction": [
+        0.16666666666666666,
+        0.3333333333333333
+      ],
+      "reason": "no compatible nominal provider",
+      "world_body_xyz": [
+        11.083333333333332,
+        6.916666666666667,
+        1.7932006478309632
+      ],
+      "nominal_yaw_rad": 2.356194490192345,
+      "details": {
+        "lower12": {
+          "nominal": {
+            "continuous_187_ray_coverage": true,
+            "uncovered_ray_count": 0,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": false
+          },
+          "filled_layer_support": false,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": true,
+            "outer_bound_overhead": false
+          }
+        },
+        "upper23": {
+          "nominal": {
+            "continuous_187_ray_coverage": false,
+            "uncovered_ray_count": 1,
+            "potential_highest_hit_above_body_band": false,
+            "center_highest_hit_matches_support_band": true
+          },
+          "filled_layer_support": true,
+          "full_yaw": {
+            "enclosing_xy_radius_m": 1.0233981132056604,
+            "continuous_filled_outer_bound_coverage": false,
+            "outer_bound_overhead": false
+          }
+        }
+      }
+    },
+    {
+      "original_edge": 335,
+      "fraction": [
+        0.0,
+        0.5
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.0,
+        7.0,
+        2.399999904632568
+      ],
+      "body_world_xyz": [
+        0.0,
+        7.0,
+        2.699999904632568
+      ],
+      "slope_rad": 0.8209171968569633
+    },
+    {
+      "original_edge": 335,
+      "fraction": [
+        0.5,
+        1.0
+      ],
+      "reasons": {
+        "ground_center_not_supported": false,
+        "live032_height_not_supported": false,
+        "swept_chassis_outer_bound_intersects_static_box": false,
+        "filled_chassis_footprint_support_not_certified": false,
+        "route_grade_exceeds_limit": true
+      },
+      "collision_boxes": [],
+      "ground_world_xyz": [
+        0.0035241349869348654,
+        7.009007154503719,
+        2.4103846418124375
+      ],
+      "body_world_xyz": [
+        0.0035241349869348654,
+        7.009007154503719,
+        2.7103846418124373
+      ],
+      "slope_rad": 0.8209171968569633
+    }
+  ],
+  "provider_predicate_failure_counts": {
+    "lower12": {
+      "continuous187_coverage_failures": 0,
+      "center_highest_support_band_failures": 691,
+      "potential_overhead_failures": 0,
+      "filled_layer_support_failures": 718,
+      "compatible_subsegments": 956
+    },
+    "upper23": {
+      "continuous187_coverage_failures": 763,
+      "center_highest_support_band_failures": 719,
+      "potential_overhead_failures": 162,
+      "filled_layer_support_failures": 746,
+      "compatible_subsegments": 903
+    }
+  },
+  "nominal_187_provider_domain": {
+    "compatible_provider_sequence_exists": false,
+    "first_unclassified_edge": 1128,
+    "first_unclassified_original_edge": 224,
+    "first_unclassified_fraction": [
+      0.0,
+      0.16666666666666666
+    ],
+    "first_unclassified_world_body_xyz": [
+      11.1,
+      6.9,
+      1.7915422677993775
+    ],
+    "compatible_final_providers": [],
+    "pending_ack_landings": [],
+    "filled_chassis_support_and_collision_included": false,
+    "scope": "Continuous187 coverage, highest-center support band and no overhead at nominal fixed segment yaw only; not actual heading/foot load"
+  },
+  "shared_floor2_geometric_landing_candidates": [
+    {
+      "first_edge_index": 769,
+      "last_edge_index": 932,
+      "first_world_body_xyz": [
+        14.9,
+        2.7,
+        1.4999999761581422
+      ],
+      "last_world_body_xyz": [
+        14.9,
+        6.28,
+        1.4999999761581422
+      ],
+      "nominal_187_both_maps_hit_floor2": true,
+      "maximum_hit_difference_m": 0.0,
+      "full_yaw_all_points_certified": false,
+      "actual_slam_dwell_intent_and_causal_ack_observed": false
+    }
+  ],
+  "nominal_tangent_yaw": {
+    "compatible_provider_sequence_exists": false,
+    "first_unclassified_edge": 1128,
+    "first_unclassified_original_edge": 224,
+    "first_unclassified_fraction": [
+      0.0,
+      0.16666666666666666
+    ],
+    "first_unclassified_world_body_xyz": [
+      11.1,
+      6.9,
+      1.7915422677993775
+    ],
+    "compatible_final_providers": [],
+    "pending_ack_landings": [],
+    "actual_heading_bound_verified": false,
+    "status": "FAILED"
+  },
+  "conservative_full_yaw": {
+    "compatible_provider_sequence_exists": false,
+    "first_unclassified_edge": 956,
+    "first_unclassified_original_edge": 189,
+    "first_unclassified_fraction": [
+      0.8333333333333334,
+      1.0
+    ],
+    "first_unclassified_world_body_xyz": [
+      14.516666666666667,
+      6.683333333333334,
+      1.4999999761581422
+    ],
+    "compatible_final_providers": [],
+    "pending_ack_landings": [],
+    "yaw_half_range_rad": 3.141592653589793,
+    "position_uncertainty_m": 0.08,
+    "actor_all_yaw_corner_radius_m": 0.9433981132056605,
+    "enclosing_radius_with_uncertainty_m": 1.0233981132056604,
+    "switch_guard": "Independent full-yaw+uncertainty outer square must hit common floor2 only in BOTH maps; nominal guard never reused",
+    "counterexamples": [
+      {
+        "edge_index": 769,
+        "original_edge": 150,
+        "fraction": [
+          0.0,
+          0.25
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.7,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.2866008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 770,
+        "original_edge": 150,
+        "fraction": [
+          0.25,
+          0.5
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.725,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.3116008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 771,
+        "original_edge": 150,
+        "fraction": [
+          0.5,
+          0.75
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.75,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.3366008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 772,
+        "original_edge": 150,
+        "fraction": [
+          0.75,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.775,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.3616008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 773,
+        "original_edge": 151,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.8,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.3866008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 774,
+        "original_edge": 151,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.82,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.4066008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 775,
+        "original_edge": 151,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.84,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.4266008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 776,
+        "original_edge": 151,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.86,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.4466008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 777,
+        "original_edge": 151,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.88,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.4666008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 778,
+        "original_edge": 152,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.9,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.4866008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 779,
+        "original_edge": 152,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.92,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.5066008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 780,
+        "original_edge": 152,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.94,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.5266008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 781,
+        "original_edge": 152,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.96,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.5466008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 782,
+        "original_edge": 152,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          2.98,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.5666008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 783,
+        "original_edge": 153,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.0,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.5866008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 784,
+        "original_edge": 153,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.02,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.6066008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 785,
+        "original_edge": 153,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.04,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.6266008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 786,
+        "original_edge": 153,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.06,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.6466008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 787,
+        "original_edge": 153,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.08,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.6666008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 788,
+        "original_edge": 154,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.1,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.6866008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 789,
+        "original_edge": 154,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.12,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.7066008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 790,
+        "original_edge": 154,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.14,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.7266008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 791,
+        "original_edge": 154,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.16,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.7466008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 792,
+        "original_edge": 154,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.18,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.7666008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 793,
+        "original_edge": 155,
+        "fraction": [
+          0.0,
+          0.25
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.2,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.7866008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 794,
+        "original_edge": 155,
+        "fraction": [
+          0.25,
+          0.5
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.225,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.8116008267975197
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 795,
+        "original_edge": 155,
+        "fraction": [
+          0.5,
+          0.75
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.25,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.8366008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 796,
+        "original_edge": 155,
+        "fraction": [
+          0.75,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.275,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.8616008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 797,
+        "original_edge": 156,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.3,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.8866008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 798,
+        "original_edge": 156,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.32,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.9066008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 799,
+        "original_edge": 156,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.34,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.9266008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 800,
+        "original_edge": 156,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.36,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.9466008267975194
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 801,
+        "original_edge": 156,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.38,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.9666008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 802,
+        "original_edge": 157,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.4,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          2.9866008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 803,
+        "original_edge": 157,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.42,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.0066008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 804,
+        "original_edge": 157,
+        "fraction": [
+          0.4,
+          0.6
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.44,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.0266008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 805,
+        "original_edge": 157,
+        "fraction": [
+          0.6,
+          0.8
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.46,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.0466008267975195
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 806,
+        "original_edge": 157,
+        "fraction": [
+          0.8,
+          1.0
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.48,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.0666008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 807,
+        "original_edge": 158,
+        "fraction": [
+          0.0,
+          0.2
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.5,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.0866008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      },
+      {
+        "edge_index": 808,
+        "original_edge": 158,
+        "fraction": [
+          0.2,
+          0.4
+        ],
+        "world_body_xyz": [
+          14.9,
+          3.52,
+          1.4999999761581422
+        ],
+        "provider": "upper23",
+        "yaw_rad": -2.129395642138459,
+        "position_error_xy_m": [
+          -0.08,
+          0
+        ],
+        "missing_ray_count": 1,
+        "first_missing_ray_index": 16,
+        "first_missing_world_ray_xy": [
+          13.972001695994912,
+          3.1066008267975196
+        ],
+        "kind": "actual187_ray_counterexample_within_declared_bounds"
+      }
+    ],
+    "status": "FAILED_WITH_COUNTEREXAMPLE"
+  },
+  "body_height_contract": {
+    "candidate_nominal_m": 0.3,
+    "live_guard_m": 0.32,
+    "difference_m": 0.02,
+    "silently_adjusted": false,
+    "both_support_height_checks_performed": true
+  },
+  "continuous_evidence": {
+    "center_support": "Union of exact finite-z+ face line intervals and explicit height bands",
+    "chassis_collision": "Full-yaw C64 swept AABB outer bound vs every frozen OBB using SAT; overlap rejects certification, may be conservative",
+    "filled_chassis_support": "Rectangle-union coverage of whole swept XY outer bound, five eligible finite top faces and declared height/slope band",
+    "filled_support_height_rule": "Each eligible actual plane's affine centerline residual stays within unchanged0.10m at both endpoints; no slope\u00d7radius addition to tolerance",
+    "nominal187": "Exact upper-facet parameter-interval union per ray along each fixed-yaw linear subsegment, highest-hit center/overhead bounds; endcaps not extrapolated as slope",
+    "full_yaw187": "Filled XY outer square encloses all187 yaws plus position uncertainty; domain union and upper-facet height bounds",
+    "numeric_arithmetic": "float64 with explicit1e-10 interval tolerance; engineering evidence, not exact-arithmetic formal proof",
+    "discrete_limit": "<=.025m samples alone are not continuity proof. Certificates apply only to the provided piecewise-linear geometry and declared outer bounds."
+  },
+  "limitations": [
+    "No candidate BSpline/SCAN curve or tracking-error certificate; verify every future curve independently.",
+    "No Actor per-foot contact/load, friction, gait, real-robot or stair guarantee.",
+    "Envelope is authorized C64 chassis model; parts/roll/pitch outside that envelope are not certified.",
+    "No dynamic-obstacle timing, live map freshness, control/latency or actual yaw evidence.",
+    "Nominal yaw can jump at polyline vertices; actual rotation/reachable-yaw envelopes remain unverified. Full-yaw result is retained separately.",
+    "A multi-provider classification only identifies static segments and candidate shared-floor2 landings. It does not authorize a provider switch or supply runtime ACK.",
+    "Any future restricted-heading adoption must bind original0.2rad drive/handoff gates, actualSLAM-yaw187allhit and future command reachable-yaw evidence; no bound was narrowed here."
+  ]
+}

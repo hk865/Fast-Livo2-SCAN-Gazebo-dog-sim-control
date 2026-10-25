@@ -1,0 +1,106 @@
+{
+  "schema": "r85_typed_polyline_physical_certificate/v1",
+  "allowed": true,
+  "scope": "Continuous finite-face interval/whole-body outer geometry on this typed polyline; observation predicates do not gate",
+  "ready_for_control": false,
+  "navigation_PASS": false,
+  "sources": {
+    "metadata": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/derived_inputs/typed_route/metadata_actual_world.json",
+      "sha256": "40efcbba629df26ef2a98f04331823abfeb2c6ce7caa9cb95f473f94e79fe159",
+      "bytes": 216647
+    },
+    "reference": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7/known_scene_reference.json",
+      "sha256": "f37a0693f6ad463a5ba2edbb8415b035d0dfef115470319dae92885257de4914",
+      "bytes": 35996
+    },
+    "world": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/derived_inputs/typed_route/world_prepared_package.sdf",
+      "sha256": "7da821ac7d4dc09bccdedc99f0ce1ba7e7b7af73bc28b8835ae49dbb617e4c27",
+      "bytes": 102760
+    },
+    "limits": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/support_validation_config.json",
+      "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+      "bytes": 764
+    },
+    "frozen_helpers": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage/validate_route_support.py",
+      "sha256": "0dd5d3025fde1c0510e8bfa1ca9aa56c13be51bad2d5166a8b804791784638fd",
+      "bytes": 37231
+    },
+    "leaf": {
+      "path": "/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/candidate/r85_geometry_admission.py",
+      "sha256": "0500518a1c587b7eabace09e8b704d1ab5d4644e54ed2bfa9338ab2195e5e433",
+      "bytes": 46791
+    }
+  },
+  "limits": {
+    "schema": "pct_static_support_validation_limits/v1",
+    "authorization": "Parent supplied C64 controller.py runtime values; no automatic relaxation",
+    "sample_spacing_m": 0.025,
+    "body_radius_m": 0.25,
+    "body_offset_m": 0.18,
+    "body_below_m": 0.12,
+    "body_above_m": 0.12,
+    "position_uncertainty_m": 0.08,
+    "yaw_half_range_rad": 3.141592653589793,
+    "body_ground_height_m": 0.32,
+    "nominal_route_body_ground_offset_m": 0.3,
+    "support_height_tolerance_m": 0.1,
+    "max_support_slope_rad": 0.35,
+    "actor_grid_half_x_m": 0.8,
+    "actor_grid_half_y_m": 0.5,
+    "actor_grid_spacing_m": 0.1,
+    "actor_ray_start_above_body_m": 20.0,
+    "switch_height_equality_m": 1e-09,
+    "initial_provider": "lower12",
+    "numeric_epsilon_m": 1e-10,
+    "max_report_examples": 40
+  },
+  "physical_body_ground_offset_m": 0.32,
+  "coordinate_frame": "camera_init",
+  "T_navigation_world": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      -0.3
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "checked_subsegments": 1672,
+  "maximum_spacing_m": 0.025000000000000355,
+  "physical_failure_counts": {},
+  "first_examples": [],
+  "actual_support_plane_slope_max_rad": 0.09966865249116297,
+  "observation_source_diagnostics": {
+    "hard_gate": false,
+    "counts": {
+      "lower12": {},
+      "upper23": {}
+    },
+    "examples": [],
+    "not_actor_behavior_or_training_proof": true
+  },
+  "runtime_finite_time_freshness_dynamic_obstacle_and_ack": "NOT_EVALUATED",
+  "source_bindings_unchanged": true
+}

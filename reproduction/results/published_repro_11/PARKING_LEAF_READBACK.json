@@ -1,0 +1,1035 @@
+{
+  "schema": "published_repro11_parking_leaf_readback/v1",
+  "UTC": "2026-10-25T07:51:21.906732+00:00",
+  "run_id": "20261025T073601Z_closed_loop_R85_published_repro_11_same_formal22_fb3d",
+  "implementation_commit": "e4b120d2e52d24fe441bc61ae543ac020cc966ca",
+  "deployment_commit": "ecb62adb4e55513e6a11f23f23803838b19e09f6",
+  "immutable_T0_ns": 388790000000,
+  "fixed_end_ns": 393790000000,
+  "controller_failure_clock_ns": 388965000000,
+  "task_failed_sim_s": 389.015,
+  "reason": "ordinary_zero_hold_actual_motion_or_drift_exceeded",
+  "qualification_origin": {
+    "stamp_ns": 388745000000,
+    "position": [
+      0.03499644150739635,
+      7.019918745528754,
+      2.420337913957962
+    ],
+    "body_velocity": [
+      0.00322341726389335,
+      -0.006511982925065956,
+      -0.0025219343235171865
+    ],
+    "quaternion_xyzw": [
+      -0.003189451769653926,
+      0.009888655164296368,
+      0.9999411627908341,
+      0.003116545036633474
+    ],
+    "received_wall_ns": 187838813979745,
+    "source_received_wall_ns": 187838813979745,
+    "received_sim_ns": 388790000000,
+    "source_topic": "/demo/slam/body_odom",
+    "navigation_ground_truth_used": false
+  },
+  "actual_zero_ACK": {
+    "input_clock_ns": 388730000000,
+    "ack_native_clock_ns": 388750000000,
+    "actual_observation_command_body": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "previous_slew_command": [
+      0.08610853995333648,
+      0.00030069226064677844,
+      0.0
+    ],
+    "qualification_clock_ns": 388790000000,
+    "qualification_pose_stamp_ns": 388745000000
+  },
+  "guard_source": {
+    "path": "candidate/ordinary_parking.py",
+    "line": 153,
+    "sha256": "6d57cd45a1400719511cf62d644159bdd40f43a5b716057d9c25dd62ccea7373"
+  },
+  "source_files": [
+    {
+      "name": "navigation_slam_poses.jsonl",
+      "sha256": "8a8408dd4e81885712090f55f2af9e669aeece1eb1cbe5370ed9d25747cc5de5"
+    },
+    {
+      "name": "telemetry.jsonl",
+      "sha256": "42c87908b747eb304cb9ab2fb5e7cda36663fe9cf5e9aef6ffa94a7b11d11fa8"
+    },
+    {
+      "name": "ordinary_terminal_failure_history.jsonl",
+      "sha256": "46a6f15e46c8291b236196b55b872b079c8108bce02083b72f78af2d1a4bd3e4"
+    }
+  ],
+  "observed_slam_window": [
+    {
+      "line": 11440,
+      "stamp_ns": 388610000000,
+      "callback_ros_clock_ns": 388650000000,
+      "planar_slam_speed_mps": 0.00704981952224482,
+      "xy_drift_from_T0_m": 0.0003138692665231343,
+      "yaw_drift_rad": 8.255537825041515e-05,
+      "paired_imu_body_wz_radps": 0.003084753641305653,
+      "euler_yawrate_radps": 0.0030868961692750827,
+      "gyro_stamp_s": 388.605,
+      "position": [
+        0.03483456640528841,
+        7.019649839657146,
+        2.4205282579641083
+      ],
+      "body_velocity": [
+        -0.002701445347149133,
+        0.006511693200127788,
+        0.004772113267312615
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11441,
+      "stamp_ns": 388645000000,
+      "callback_ros_clock_ns": 388685000000,
+      "planar_slam_speed_mps": 0.004848543768758526,
+      "xy_drift_from_T0_m": 0.0003933224406176726,
+      "yaw_drift_rad": 7.509691436702326e-06,
+      "paired_imu_body_wz_radps": 0.0018134548759438948,
+      "euler_yawrate_radps": 0.0018276470301393781,
+      "gyro_stamp_s": 388.645,
+      "position": [
+        0.03495449848923934,
+        7.01952766583672,
+        2.4204509758179773
+      ],
+      "body_velocity": [
+        -0.0034327443707569453,
+        0.0034241265693025474,
+        -0.0023008278615065728
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11442,
+      "stamp_ns": 388675000000,
+      "callback_ros_clock_ns": 388720000000,
+      "planar_slam_speed_mps": 0.003729411827350125,
+      "xy_drift_from_T0_m": 0.00033202109420716556,
+      "yaw_drift_rad": 3.987974039088016e-05,
+      "paired_imu_body_wz_radps": 0.0010386820514634008,
+      "euler_yawrate_radps": 0.001022448088105094,
+      "gyro_stamp_s": 388.675,
+      "position": [
+        0.03504764817962412,
+        7.019590696929126,
+        2.420557648609811
+      ],
+      "body_velocity": [
+        -0.0031162947389321827,
+        -0.0020487117118039317,
+        0.0035763430462494293
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11443,
+      "stamp_ns": 388710000000,
+      "callback_ros_clock_ns": 388765000000,
+      "planar_slam_speed_mps": 0.0034070077804376673,
+      "xy_drift_from_T0_m": 0.0002524451567742284,
+      "yaw_drift_rad": 3.705658532071609e-05,
+      "paired_imu_body_wz_radps": 0.0004054742327460349,
+      "euler_yawrate_radps": 0.0003638857412873946,
+      "gyro_stamp_s": 388.705,
+      "position": [
+        0.03510726411176081,
+        7.019691926421224,
+        2.4204313920142004
+      ],
+      "body_velocity": [
+        -0.0016613391140937526,
+        -0.0029745006915354692,
+        -0.003559725098368897
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11444,
+      "stamp_ns": 388745000000,
+      "callback_ros_clock_ns": 388785000000,
+      "planar_slam_speed_mps": 0.0072661090325920824,
+      "xy_drift_from_T0_m": 0.0,
+      "yaw_drift_rad": 0.0,
+      "paired_imu_body_wz_radps": -0.0031512207740685906,
+      "euler_yawrate_radps": -0.0033560706670680636,
+      "gyro_stamp_s": 388.745,
+      "position": [
+        0.03499644150739635,
+        7.019918745528754,
+        2.420337913957962
+      ],
+      "body_velocity": [
+        0.00322341726389335,
+        -0.006511982925065956,
+        -0.0025219343235171865
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11445,
+      "stamp_ns": 388775000000,
+      "callback_ros_clock_ns": 388820000000,
+      "planar_slam_speed_mps": 0.005299160768209464,
+      "xy_drift_from_T0_m": 0.00015292023826929188,
+      "yaw_drift_rad": 5.594268622299836e-05,
+      "paired_imu_body_wz_radps": 0.0012157891675758908,
+      "euler_yawrate_radps": 0.0011160098193449923,
+      "gyro_stamp_s": 388.775,
+      "position": [
+        0.03505795737526633,
+        7.020058746947577,
+        2.419939954333288
+      ],
+      "body_velocity": [
+        -0.0019399721164883293,
+        -0.00493128918585983,
+        -0.013185997108908883
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11446,
+      "stamp_ns": 388810000000,
+      "callback_ros_clock_ns": 388865000000,
+      "planar_slam_speed_mps": 0.030692080834362624,
+      "xy_drift_from_T0_m": 0.0011858790320110875,
+      "yaw_drift_rad": 8.403116843513915e-05,
+      "paired_imu_body_wz_radps": 0.009164776316847515,
+      "euler_yawrate_radps": 0.009346768156132234,
+      "gyro_stamp_s": 388.81,
+      "position": [
+        0.03606234764523304,
+        7.020438508151386,
+        2.419466807014043
+      ],
+      "body_velocity": [
+        -0.028546555985933572,
+        -0.011273773427074432,
+        -0.013490195540236439
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11447,
+      "stamp_ns": 388840000000,
+      "callback_ros_clock_ns": 388885000000,
+      "planar_slam_speed_mps": 0.05531281199827868,
+      "xy_drift_from_T0_m": 0.0028031466945384422,
+      "yaw_drift_rad": 0.00036823993655588083,
+      "paired_imu_body_wz_radps": 0.010491104745415328,
+      "euler_yawrate_radps": 0.010950281145686394,
+      "gyro_stamp_s": 388.84,
+      "position": [
+        0.0377150224380057,
+        7.020602082279433,
+        2.419173963975681
+      ],
+      "body_velocity": [
+        -0.05499098071852013,
+        -0.005958121413018503,
+        -0.010016156787568219
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11448,
+      "stamp_ns": 388875000000,
+      "callback_ros_clock_ns": 388910000000,
+      "planar_slam_speed_mps": 0.06618136960712612,
+      "xy_drift_from_T0_m": 0.0051155025579545516,
+      "yaw_drift_rad": 0.0006290110955786687,
+      "paired_imu_body_wz_radps": 0.004011375677712504,
+      "euler_yawrate_radps": 0.004821349735274197,
+      "gyro_stamp_s": 388.875,
+      "position": [
+        0.040007124800477106,
+        7.020948997612897,
+        2.4187814647305146
+      ],
+      "body_velocity": [
+        -0.06534390359820264,
+        -0.01049513914266209,
+        -0.011523583070895307
+      ],
+      "crossed": []
+    },
+    {
+      "line": 11449,
+      "stamp_ns": 388910000000,
+      "callback_ros_clock_ns": 388960000000,
+      "planar_slam_speed_mps": 0.0803100300810365,
+      "xy_drift_from_T0_m": 0.007920925590851275,
+      "yaw_drift_rad": 0.0005809704622397049,
+      "paired_imu_body_wz_radps": -0.0052566420155043935,
+      "euler_yawrate_radps": -0.00447439795244916,
+      "gyro_stamp_s": 388.905,
+      "position": [
+        0.042705122871072504,
+        7.021740089496574,
+        2.4185609724768433
+      ],
+      "body_velocity": [
+        -0.07689688954082961,
+        -0.023163965777958616,
+        -0.006562301117385103
+      ],
+      "crossed": [
+        "planar_slam_speed>.08"
+      ]
+    }
+  ],
+  "first_observed_post_T0_crossing": {
+    "line": 11449,
+    "stamp_ns": 388910000000,
+    "callback_ros_clock_ns": 388960000000,
+    "planar_slam_speed_mps": 0.0803100300810365,
+    "xy_drift_from_T0_m": 0.007920925590851275,
+    "yaw_drift_rad": 0.0005809704622397049,
+    "paired_imu_body_wz_radps": -0.0052566420155043935,
+    "euler_yawrate_radps": -0.00447439795244916,
+    "gyro_stamp_s": 388.905,
+    "position": [
+      0.042705122871072504,
+      7.021740089496574,
+      2.4185609724768433
+    ],
+    "body_velocity": [
+      -0.07689688954082961,
+      -0.023163965777958616,
+      -0.006562301117385103
+    ],
+    "crossed": [
+      "planar_slam_speed>.08"
+    ]
+  },
+  "native_window": [
+    {
+      "world_sim_time": 388.71,
+      "state_physics_world_time": 388.705,
+      "body_lin_vel": [
+        0.00573806775865245,
+        -6.462731644876916e-05,
+        0.0036272806717762784
+      ],
+      "body_ang_vel": [
+        -0.003059064751757142,
+        -0.002213845320661379,
+        0.00028525065329738225
+      ],
+      "position": [
+        0.03637052965656631,
+        7.022057288585597,
+        2.7027945713971144
+      ],
+      "rpy": [
+        0.013327811866769144,
+        0.009879082054636138,
+        3.132647818050599
+      ],
+      "command": [
+        0.09810853995333647,
+        0.012300692260646779,
+        0.004774460334394486
+      ],
+      "requested": [
+        0.04811552165775598,
+        0.0032768705380605122,
+        0.0012719123766773259
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19436,
+      "planar_native_speed_mps": 0.005738431692798837
+    },
+    {
+      "world_sim_time": 388.73,
+      "state_physics_world_time": 388.725,
+      "body_lin_vel": [
+        0.007139206578287158,
+        0.0001769497215867931,
+        0.003268261533782395
+      ],
+      "body_ang_vel": [
+        -0.004243564910941243,
+        -0.0026660208325588594,
+        1.1150134732971001e-05
+      ],
+      "position": [
+        0.03623713143735832,
+        7.02205829021279,
+        2.702858926426077
+      ],
+      "rpy": [
+        0.01324725839941886,
+        0.009826953832713365,
+        3.132649215340926
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19437,
+      "planar_native_speed_mps": 0.00714139914662584
+    },
+    {
+      "world_sim_time": 388.75,
+      "state_physics_world_time": 388.745,
+      "body_lin_vel": [
+        0.0024687545264188288,
+        -0.00019791055470500242,
+        0.0007604702872790112
+      ],
+      "body_ang_vel": [
+        -0.014537912997862213,
+        -0.010242423499656896,
+        -0.0029321425700033882
+      ],
+      "position": [
+        0.03615143429460756,
+        7.022060195625018,
+        2.702882499792466
+      ],
+      "rpy": [
+        0.013010391987362728,
+        0.009671865471456884,
+        3.132610508327627
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19438,
+      "planar_native_speed_mps": 0.002476674685819092
+    },
+    {
+      "world_sim_time": 388.77,
+      "state_physics_world_time": 388.765,
+      "body_lin_vel": [
+        -0.0074812568305406245,
+        -0.0014757790813341362,
+        -0.003333354225446437
+      ],
+      "body_ang_vel": [
+        -0.02631175429900551,
+        -0.009648541553063762,
+        -0.001053014273266253
+      ],
+      "position": [
+        0.03622611806665258,
+        7.022080407175194,
+        2.702833185500476
+      ],
+      "rpy": [
+        0.012526176725796355,
+        0.009471817420245875,
+        3.1325739073018974
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19439,
+      "planar_native_speed_mps": 0.007625426392105177
+    },
+    {
+      "world_sim_time": 388.79,
+      "state_physics_world_time": 388.785,
+      "body_lin_vel": [
+        -0.020434504732283896,
+        -0.0034418985579557633,
+        -0.007852197276477941
+      ],
+      "body_ang_vel": [
+        -0.025882738090294264,
+        -0.0016633361406435687,
+        0.0032880015036820744
+      ],
+      "position": [
+        0.03653987977114224,
+        7.0221360377205855,
+        2.702703629332235
+      ],
+      "rpy": [
+        0.011956367353412201,
+        0.009386301731827718,
+        3.132607686475651
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19440,
+      "planar_native_speed_mps": 0.020722346617528406
+    },
+    {
+      "world_sim_time": 388.81,
+      "state_physics_world_time": 388.805,
+      "body_lin_vel": [
+        -0.03427645948802097,
+        -0.005765640294903034,
+        -0.011765114006296613
+      ],
+      "body_ang_vel": [
+        -0.010889484603748171,
+        0.006155344844227711,
+        0.00839163253036723
+      ],
+      "position": [
+        0.03712747711248812,
+        7.02223613510254,
+        2.7025025653494485
+      ],
+      "rpy": [
+        0.011590572399690639,
+        0.009477251554168214,
+        3.1327374506313768
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19441,
+      "planar_native_speed_mps": 0.034757995958400026
+    },
+    {
+      "world_sim_time": 388.83,
+      "state_physics_world_time": 388.825,
+      "body_lin_vel": [
+        -0.04740570716642181,
+        -0.007992828222158315,
+        -0.014374307752319761
+      ],
+      "body_ang_vel": [
+        0.00817152876219706,
+        0.01342754899137909,
+        0.01126503194961894
+      ],
+      "position": [
+        0.037984118952009406,
+        7.02238036657276,
+        2.702250223554783
+      ],
+      "rpy": [
+        0.011596312385971997,
+        0.009712915587281637,
+        3.132947036646793
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19442,
+      "planar_native_speed_mps": 0.048074799790924425
+    },
+    {
+      "world_sim_time": 388.85,
+      "state_physics_world_time": 388.845,
+      "body_lin_vel": [
+        -0.05940140739614573,
+        -0.009872042167083877,
+        -0.015486081121830704
+      ],
+      "body_ang_vel": [
+        0.0157547396388187,
+        0.025759736733645105,
+        0.009836479524966905
+      ],
+      "position": [
+        0.03909094306779533,
+        7.022561386336783,
+        2.701979173037891
+      ],
+      "rpy": [
+        0.011841017829137256,
+        0.010165128731018038,
+        3.1331651069977013
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19443,
+      "planar_native_speed_mps": 0.06021614747882464
+    },
+    {
+      "world_sim_time": 388.87,
+      "state_physics_world_time": 388.865,
+      "body_lin_vel": [
+        -0.06935263189673953,
+        -0.011013935717253565,
+        -0.015410444211373473
+      ],
+      "body_ang_vel": [
+        0.014129011326006819,
+        0.03594166321892791,
+        0.0060010951580616225
+      ],
+      "position": [
+        0.04041415670162092,
+        7.022765825588325,
+        2.701716606758515
+      ],
+      "rpy": [
+        0.012111865438553337,
+        0.01085120378962544,
+        3.133326659678692
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19444,
+      "planar_native_speed_mps": 0.07022175112448027
+    },
+    {
+      "world_sim_time": 388.89,
+      "state_physics_world_time": 388.885,
+      "body_lin_vel": [
+        -0.07679846729422211,
+        -0.01115566940828838,
+        -0.014537989816080949
+      ],
+      "body_ang_vel": [
+        0.00973653767141857,
+        0.04108922906675975,
+        0.000619050125112498
+      ],
+      "position": [
+        0.041905814129055724,
+        7.022974656846846,
+        2.7014766542941593
+      ],
+      "rpy": [
+        0.012311482018763408,
+        0.011684990763101028,
+        3.133394000686032
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19445,
+      "planar_native_speed_mps": 0.07760446854845876
+    },
+    {
+      "world_sim_time": 388.91,
+      "state_physics_world_time": 388.90500000000003,
+      "body_lin_vel": [
+        -0.08159739787694982,
+        -0.010253160557828708,
+        -0.013211750676744141
+      ],
+      "body_ang_vel": [
+        0.005774300673848828,
+        0.04058741420442478,
+        -0.005471553967078483
+      ],
+      "position": [
+        0.043512974115032875,
+        7.023166552804606,
+        2.7012647259642195
+      ],
+      "rpy": [
+        0.012430235781927961,
+        0.012554147666371586,
+        3.133344899414876
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19446,
+      "planar_native_speed_mps": 0.08223905788440107
+    },
+    {
+      "world_sim_time": 388.93,
+      "state_physics_world_time": 388.925,
+      "body_lin_vel": [
+        -0.08382206713807931,
+        -0.008427196085703465,
+        -0.011651695891095144
+      ],
+      "body_ang_vel": [
+        0.0018512043820579015,
+        0.03471008786016964,
+        -0.011623119284997287
+      ],
+      "position": [
+        0.04518261855913994,
+        7.023321987842919,
+        2.7010805471629347
+      ],
+      "rpy": [
+        0.012474057112132324,
+        0.01334528675090098,
+        3.1331715534726614
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19447,
+      "planar_native_speed_mps": 0.08424462340807021
+    },
+    {
+      "world_sim_time": 388.95,
+      "state_physics_world_time": 388.945,
+      "body_lin_vel": [
+        -0.08371515423562487,
+        -0.005873038595163933,
+        -0.009911513316298548
+      ],
+      "body_ang_vel": [
+        -0.004338917142407984,
+        0.024695906282397546,
+        -0.017503332661157195
+      ],
+      "position": [
+        0.04686548319294499,
+        7.023425507399152,
+        2.7009222072639174
+      ],
+      "rpy": [
+        0.012412461394964925,
+        0.01396353916343402,
+        3.132875512283238
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19448,
+      "planar_native_speed_mps": 0.08392091295401131
+    },
+    {
+      "world_sim_time": 388.97,
+      "state_physics_world_time": 388.96500000000003,
+      "body_lin_vel": [
+        -0.08167370426030855,
+        -0.0027821948274091117,
+        -0.008006707509648808
+      ],
+      "body_ang_vel": [
+        -0.012890008493032767,
+        0.012512995353507236,
+        -0.02274095357196139
+      ],
+      "position": [
+        0.04851934668503492,
+        7.023466012199664,
+        2.7007889623291943
+      ],
+      "rpy": [
+        0.012197149482144617,
+        0.014349249038946585,
+        3.1324660117703425
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19449,
+      "planar_native_speed_mps": 0.08172107791541913
+    },
+    {
+      "world_sim_time": 388.99,
+      "state_physics_world_time": 388.985,
+      "body_lin_vel": [
+        -0.07822526012423511,
+        0.0006618322611356561,
+        -0.0060494500570779765
+      ],
+      "body_ang_vel": [
+        -0.019643198325780542,
+        0.0003882201036980585,
+        -0.02677269173687919
+      ],
+      "position": [
+        0.05011188998210513,
+        7.0234362367240895,
+        2.700681062795396
+      ],
+      "rpy": [
+        0.011838089272531254,
+        0.014486525851108847,
+        3.131962795530211
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19450,
+      "planar_native_speed_mps": 0.07822805982156357
+    },
+    {
+      "world_sim_time": 389.01,
+      "state_physics_world_time": 389.005,
+      "body_lin_vel": [
+        -0.07478188528343091,
+        0.002044276472634697,
+        -0.01059137876977043
+      ],
+      "body_ang_vel": [
+        0.03038843482734064,
+        -0.08420591881555854,
+        -0.009226430873450497
+      ],
+      "position": [
+        0.051623831776568194,
+        7.023365747869882,
+        2.7004445786881823
+      ],
+      "rpy": [
+        0.012267554938569961,
+        0.013296134084638513,
+        3.1316314902650535
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19451,
+      "planar_native_speed_mps": 0.07480982176720373
+    },
+    {
+      "world_sim_time": 389.03,
+      "state_physics_world_time": 389.025,
+      "body_lin_vel": [
+        -0.0715283281689604,
+        0.004253725234421277,
+        -0.008332042263353222
+      ],
+      "body_ang_vel": [
+        0.0008921730901783333,
+        -0.06035707865096467,
+        -0.012907961942806936
+      ],
+      "position": [
+        0.05307234167237151,
+        7.023264966492651,
+        2.700201084896145
+      ],
+      "rpy": [
+        0.012509472140857852,
+        0.011918443834568252,
+        3.131383890637052
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19452,
+      "planar_native_speed_mps": 0.0716546991412039
+    },
+    {
+      "world_sim_time": 389.05,
+      "state_physics_world_time": 389.045,
+      "body_lin_vel": [
+        -0.067985947683249,
+        0.006812103739164423,
+        -0.0057990768852361155
+      ],
+      "body_ang_vel": [
+        -0.0118716360979448,
+        -0.025513530539406977,
+        -0.017281570782810653
+      ],
+      "position": [
+        0.05445461807309534,
+        7.023114611683637,
+        2.7000404683845316
+      ],
+      "rpy": [
+        0.012375223002310122,
+        0.011177770472969473,
+        3.1310617692288045
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "requested": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_reason": "Fresh actual SLAM/IMU/SCAN velocity",
+      "fault": null,
+      "command_expired": false,
+      "line": 19453,
+      "planar_native_speed_mps": 0.0683263773351303
+    }
+  ],
+  "native_before_failure_summary": {
+    "count": 8,
+    "max_planar_speed_mps": 0.08424462340807021,
+    "max_abs_body_wz_radps": 0.017503332661157195,
+    "max_position_XY_drift_m": 0.00981037047633583
+  },
+  "boundaries": [
+    "SLAM velocity in the online guard is an estimate, not native physical velocity.",
+    "Native telemetry is privileged audit only; not navigation input.",
+    "This readback identifies a guard input crossing and available physical samples; it does not establish why the estimate moved or prove the unique root cause.",
+    "No thresholds, business code or old failure records changed; no rerun."
+  ]
+}
