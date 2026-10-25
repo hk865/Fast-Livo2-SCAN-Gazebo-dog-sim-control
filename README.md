@@ -41,3 +41,5 @@ python3 -B tools/formal22_manifest_check.py
 最初公开main `63e6b82225c7b3718c4e170e5005bfd6a387b69f` 的通用邮箱脱敏错误改写了Python的`@`表达式。原formal22部署与成功不受影响，但公开目录当时尚未运行，不能继承原结果。现已从原冻结文件重新进行token级导出，全部1068个Python文件核对，36份受损文件（含重复依赖）修复；代码常规字符串除明确路径前缀外保留原值，不再对源码整体做邮箱/UUID/IP替换。
 
 此前“文本绑定一致”比的是**导出前原文件SHA与原scope**，并非导出后语义；公开SHA清单和可解析性也不能代替这个核对。[更正谱系](provenance/FORMAL22_PUBLICATION_CORRECTION.json)和[全量差异审查](provenance/FORMAL22_ALL_EXPORT_DIFFERENCES.json)分别记录。新整理目录的依赖补齐、重新构建和完整实跑正在独立进行，最终结果另记。
+
+整理目录另有根 `candidate/` 的路径适配入口、新 native/SCAN 构建和显式 SDK 配置；与保留的公开快照分开，见[整理目录依赖与复现边界](docs/PUBLISHED_DIRECTORY_REPRODUCTION.md)。本目录的新实跑结果单独记录，不沿用旧通过。
