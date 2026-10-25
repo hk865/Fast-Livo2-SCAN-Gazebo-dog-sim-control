@@ -1,5 +1,4 @@
 """Actual Teacher sensors to isolated FAST-LIVO2 only; no velocity publisher."""
-import package_paths as _package_paths
 import hashlib
 import json
 import os
@@ -15,7 +14,10 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    here=Path(__file__).resolve().parent;teacher=_package_paths.TEACHER_ROOT;demo=teacher.parent
+    here=Path(__file__).resolve().parent
+    sys.path.insert(0,str(here))
+    import package_paths as _package_paths
+    teacher=_package_paths.TEACHER_ROOT;demo=teacher.parent
     run_dir=LaunchConfiguration('run_dir')
     def start(context):
         run=Path(run_dir.perform(context)).resolve()

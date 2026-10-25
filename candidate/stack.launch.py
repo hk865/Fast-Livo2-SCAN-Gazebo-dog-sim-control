@@ -1,5 +1,4 @@
 """Independent finite Teacher navigation stack; no Gazebo/CHAMP/camera carrier."""
-import package_paths as _package_paths
 import os
 from pathlib import Path
 from ament_index_python.packages import get_package_prefix,get_package_share_directory
@@ -14,8 +13,10 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     import sys
-    here=Path(__file__).resolve().parent;teacher=_package_paths.TEACHER_ROOT;demo=teacher.parent;nav=teacher/'navigation'
+    here=Path(__file__).resolve().parent
     sys.path.insert(0,str(here))
+    import package_paths as _package_paths
+    teacher=_package_paths.TEACHER_ROOT;demo=teacher.parent;nav=teacher/'navigation'
     from pid_scope import verify_scope
     DYNAMIC_EXPERIMENTS=set()
     run_dir=LaunchConfiguration('run_dir')
