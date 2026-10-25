@@ -15,7 +15,7 @@ SCHEMA = 'r117_typed_dynamic_cruise_lead/v1'
 # Explicit input-timing experiment; neither robot speed nor a stopping bound.
 APPROACH_KEY = 'r128_observed_approach_trigger'
 APPROACH_SCHEMA = 'r128_observed_approach_trigger/v1'
-APPROACH_BASIS_PATH = '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/workspace/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/investigations/association/B10_DYNAMIC_PROTOCOL_REVIEW.json'
+APPROACH_BASIS_PATH = '/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/releases/formal22/dependencies/round27/investigations/association/B10_DYNAMIC_PROTOCOL_REVIEW.json'
 APPROACH_BASIS_SHA256 = '97ff89ce9cecee3058308777c8cf86fea9d59daea4d6e35fc49850fd460bb816'
 APPROACH_RUN = '20261024T081822Z_closed_loop_R85_R125_B10_B05_business_control_round27_f019'
 
