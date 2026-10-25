@@ -26,3 +26,12 @@ logs/
 /maintenance/private_execution/
 
 /tools_build_local.log
+
+# Published-directory reproduction: private ledger/vendor/build artifacts
+.local_install/
+private_build_receipts/
+.local_dependencies/*
+!.local_dependencies/storage_guard/
+.local_dependencies/storage_guard/*
+!.local_dependencies/storage_guard/storage_guard.py
+!.local_dependencies/storage_guard/retained_usage.py

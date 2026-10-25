@@ -1,0 +1,264 @@
+{
+  "actual_predecessor_validation": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_41_stance_support_capture/install_tools/ACTUAL_POSTINSTALL_PROFILE_VALIDATION.json",
+    "sha256": "9d46d5b3899e5ff50af2b1fc8210dc43eba23bdf51501808ede838aed3331644"
+  },
+  "base_contract": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_SCAN_REFERENCE_PROTOCOL_WORKSPACE_CONTRACT.json",
+    "sha256": "6a028cb1dc37dfab63840172b9e0ba35fec3e0b3d09aa0926e91747f229e5a67"
+  },
+  "baseline_commit": "2f17e25e1bb55e48d0548d551e5a2685e18bd5dc",
+  "baseline_profile": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_stance_support_capture_r41_20261016.json",
+    "sha256": "6163b31af953ead830d4699fb757ec10281c655de22ba25bc9186e2f3dd30829"
+  },
+  "baseline_source_bindings": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/source_integration/beforeimage/SOURCE_BINDINGS.json",
+    "sha256": "cbd3e5b61e75385ada627ba013f8fabdebc6792fad368fca94c1478de98ab64c"
+  },
+  "bridge_helper": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/yaw_pd_fade_native_adapter.py",
+    "sha256": "5fcec08a8352bac7a1fa4fb2f7d8ad1f33278af7e47930766509242c0f792578"
+  },
+  "change_declaration": {
+    "I_state_and_original_unload_formulas_unchanged": true,
+    "Student_yaw_PD_math_changed": true,
+    "Teacher_core_controller_gate_unchanged": true,
+    "accepted_owned_prezero_event_only": true,
+    "alpha_rate_abs_max_per_s": 1.0,
+    "deadline_from": "2026-10-16T14:00:00+00:00",
+    "deadline_to": "2026-10-17T00:00:00+00:00",
+    "exact_zero_priority_unchanged": true,
+    "formal_T0_moved": false,
+    "new_math_identity_in_actual_input_and_canonical_ACK": true,
+    "original058_is_base_not_complete_new_math": true,
+    "original_business_acceptance_unchanged": true,
+    "performance_or_physical_safety_proven": false,
+    "retained_bytes_from": 130000000000,
+    "retained_bytes_to": 160000000000,
+    "round_bytes_unchanged": 10000000000,
+    "source_authorization_and_freshness_unchanged": true,
+    "yaw_Kd_base": 0.015,
+    "yaw_Kp_base": 0.5
+  },
+  "configuration": {
+    "enabled": true,
+    "kind": "accepted_pre_zero_event_yaw_PD_fade_v1",
+    "maximum_alpha_rate_per_s": 1.0
+  },
+  "current_source_authorization_inherited": false,
+  "exact_targets": [
+    "student_actor_adapter.py",
+    "scan_workspace.py",
+    "r85_preflight.py",
+    "r85_session_guard.py",
+    "r85_storage_guard.py",
+    "pid_scope.py",
+    "guardian_archive_shutdown.py",
+    "student_lower_loop_ack.py",
+    "student_yaw_pd_fade.py",
+    "r85_resource_renewal.py",
+    "R85_RESOURCE_RENEWAL_UNTIL20261017T0000.json",
+    "yaw_pd_fade_native_adapter.py",
+    "R85_YAW_PD_FADE_NATIVE_CONTROL_ADAPTER_CONTRACT.json",
+    "profiles/r85_f1_f3_yaw_pd_fade_native_r42_20261016.json"
+  ],
+  "expected_bound_source_count_after": 274,
+  "expected_bound_source_count_before": 268,
+  "historical_adapter": {
+    "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_HEADING_BRAKING_CONTROL_ADAPTER_CONTRACT.json",
+    "sha256": "3fb1795ada9a6296c0cb84e352f6c27a5996b7458f74ffc47274fc082dcc5058"
+  },
+  "identity_verification_method": "verified_R41_source_checkpoint_plus_exact_current_delta_v1",
+  "navigation_acceptance_established": false,
+  "new_sources": {
+    "R85_RESOURCE_RENEWAL_UNTIL20261017T0000.json": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_RESOURCE_RENEWAL_UNTIL20261017T0000.json",
+      "sha256": "98bfd59399845f53f27c94f36ef65add41b0eff3be9f65c8e5fc08a4f73d49a8"
+    },
+    "r85_resource_renewal.py": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_resource_renewal.py",
+      "sha256": "e154bc4b038eaba9ac8d30f0b3e190c750f89350061d9fd18ed76496279df4b0"
+    },
+    "student_yaw_pd_fade.py": {
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/student_yaw_pd_fade.py",
+      "sha256": "84cec93abb32f58da42a6ede3f507c4339e198838d2ea10f1ec212c9c7428d7d"
+    }
+  },
+  "physical_thresholds_changed": false,
+  "predecessor_installation": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_41_stance_support_capture/install_tools/INSTALL_RECEIPT.json",
+    "sha256": "0f9bfefe289e7d55f1ca61baa01ebb10e45bfb1a6a22581623ff0aae534a3f16"
+  },
+  "profile": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/profiles/r85_f1_f3_yaw_pd_fade_native_r42_20261016.json",
+  "profile_delta": [
+    {
+      "new_value": "2026-10-17T00:00:00+00:00",
+      "old_present": true,
+      "old_value": "2026-10-16T14:00:00+00:00",
+      "path": [
+        "diagnostic_observe_only",
+        "user_authorized_work_deadline_utc"
+      ]
+    },
+    {
+      "new_value": "explicit_user_continue_until_20261017_0800_UTCplus08",
+      "old_present": true,
+      "old_value": "explicit_user_continue_until_20261016_2200_UTCplus08",
+      "path": [
+        "diagnostic_observe_only",
+        "work_deadline_basis"
+      ]
+    },
+    {
+      "new_value": {
+        "enabled": true,
+        "kind": "explicit_until20261017T0000_160GB_v1"
+      },
+      "old_present": false,
+      "path": [
+        "r85_resource_renewal"
+      ]
+    },
+    {
+      "new_value": "2026-10-17T00:00:00+00:00",
+      "old_present": true,
+      "old_value": "2026-10-16T14:00:00+00:00",
+      "path": [
+        "r85_session",
+        "deadline_utc"
+      ]
+    },
+    {
+      "new_value": 160000000000,
+      "old_present": true,
+      "old_value": 130000000000,
+      "path": [
+        "r85_session",
+        "maximum_retained_bytes"
+      ]
+    },
+    {
+      "new_value": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/R85_RESOURCE_RENEWAL_UNTIL20261017T0000.json",
+      "old_present": false,
+      "path": [
+        "r85_session",
+        "resource_renewal_proof"
+      ]
+    },
+    {
+      "new_value": "98bfd59399845f53f27c94f36ef65add41b0eff3be9f65c8e5fc08a4f73d49a8",
+      "old_present": false,
+      "path": [
+        "r85_session",
+        "resource_renewal_proof_sha256"
+      ]
+    },
+    {
+      "new_value": {
+        "enabled": true,
+        "kind": "accepted_pre_zero_event_yaw_PD_fade_v1",
+        "maximum_alpha_rate_per_s": 1.0
+      },
+      "old_present": false,
+      "path": [
+        "r85_student_yaw_pd_fade"
+      ]
+    },
+    {
+      "new_value": 160000000000,
+      "old_present": true,
+      "old_value": 130000000000,
+      "path": [
+        "raw_storage_budget",
+        "max_run_bytes"
+      ]
+    }
+  ],
+  "runtime_acceptance_inherited": false,
+  "schema": "r85_yaw_PD_fade_native_current_source_delta/v1",
+  "selection": {
+    "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/ROOT_YAW_PD_FADE_NATIVE_CANDIDATE_SELECTION.json",
+    "sha256": "bfc0c09d4d4923628180af0b5d2be674ca85d71786ba7d1f8b36132ce13c3739"
+  },
+  "source_identity_checks": {
+    "installer_active_tracked_copy_verification_required": true,
+    "runtime_all_active_SHA": true,
+    "runtime_current_binding_map_exact": true,
+    "tracked_files_are_evidence_copies_not_runtime_inputs": true
+  },
+  "sources": {
+    "guardian_archive_shutdown.py": {
+      "after_sha256": "312c63d813a5af9d7507fac280fa76dfe08fe5f795e7b17eed023c1ca28af8be",
+      "before_sha256": "e16a84682069a4277ab3a8f91f92e2535d3b6b5430c9c1ef182446bd50d8e054",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/guardian_archive_shutdown.py",
+        "sha256": "e16a84682069a4277ab3a8f91f92e2535d3b6b5430c9c1ef182446bd50d8e054"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/guardian_archive_shutdown.py"
+    },
+    "pid_scope.py": {
+      "after_sha256": "1b667160255d4f1df0599fe50707c72022d649640c54a52876eaca912dea6d69",
+      "before_sha256": "ef87a923caced8c58e7425ddd0293ae6abf9295041c1970f56bdfef3dc3d6d0a",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/pid_scope.py",
+        "sha256": "ef87a923caced8c58e7425ddd0293ae6abf9295041c1970f56bdfef3dc3d6d0a"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/pid_scope.py"
+    },
+    "r85_preflight.py": {
+      "after_sha256": "2dfa70601870c6586f33050ffe9c00634e6b838e6c0da3ec5b78d0eb573d2029",
+      "before_sha256": "bea31da0491eab2ae7e3a060e16b4cc3729a758382f2d8987f73594ba31fade8",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/r85_preflight.py",
+        "sha256": "bea31da0491eab2ae7e3a060e16b4cc3729a758382f2d8987f73594ba31fade8"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_preflight.py"
+    },
+    "r85_session_guard.py": {
+      "after_sha256": "2b9954022713bae94512106da7e5bde80bd9eea6c06834a3380a6fbe908e1ac0",
+      "before_sha256": "412c2362b8b2b987236196701db1377e1d7054d1a74567126f3f0ec4dbe84e91",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/r85_session_guard.py",
+        "sha256": "412c2362b8b2b987236196701db1377e1d7054d1a74567126f3f0ec4dbe84e91"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_session_guard.py"
+    },
+    "r85_storage_guard.py": {
+      "after_sha256": "e9448e11c3a2d28080214cbd2286795c3f1d222f58e27ae58751a150e8c81fbd",
+      "before_sha256": "6ec024319e24fac138e7483cc19cb3a166f79fc1856acf88b043a3f0ebfb4d7e",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/r85_storage_guard.py",
+        "sha256": "6ec024319e24fac138e7483cc19cb3a166f79fc1856acf88b043a3f0ebfb4d7e"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/r85_storage_guard.py"
+    },
+    "scan_workspace.py": {
+      "after_sha256": "33271619d58ec5d44d41678bc3f154cb53640c22bccb6f20395c02c48d84c29e",
+      "before_sha256": "4cfb6c4855e998a2d5f8dc1db0fba906a9e484a9a6f11065eacadbb8fd6f3bdb",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/scan_workspace.py",
+        "sha256": "4cfb6c4855e998a2d5f8dc1db0fba906a9e484a9a6f11065eacadbb8fd6f3bdb"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/scan_workspace.py"
+    },
+    "student_actor_adapter.py": {
+      "after_sha256": "1a5baa2f9bf1eca3dee71427dfafc64f5e1145292900c5e620ff9faccc43201a",
+      "before_sha256": "6f14828e53831c997ae3cd845b243b75dbcecd91b5b24caaaa2be37357923275",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/student_actor_adapter.py",
+        "sha256": "6f14828e53831c997ae3cd845b243b75dbcecd91b5b24caaaa2be37357923275"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/student_actor_adapter.py"
+    },
+    "student_lower_loop_ack.py": {
+      "after_sha256": "17a3718866e9d62dfc083cfe0abe7d8349413fb1500af4190fc074aaf50b65be",
+      "before_sha256": "92756657427bd447742411e644a3a68540875183fa51af7d595e3c30fcef119d",
+      "beforeimage": {
+        "path": "/opt/experiment/history/2026-10-14/task/r83_demo/implementation_attempt_20261014/closed_loop_integration_20261014/r85_support_contract_repair_20261015/window_20261016_until1400/round_42_yaw_pd_fade_native_validation/beforeimage/student_lower_loop_ack.py",
+        "sha256": "92756657427bd447742411e644a3a68540875183fa51af7d595e3c30fcef119d"
+      },
+      "path": "/opt/experiment/workspace/multifloor_demo/teacher_mode/navigation/engineering_v66_r85_turn_handoff_candidate/student_lower_loop_ack.py"
+    }
+  }
+}

@@ -21,7 +21,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 RUN = Path("/opt/experiment/workspace/multifloor_demo/teacher_mode/runs/20261013T185800Z_closed_loop_R83_parking_hysteresis_57e7")
-REFERENCE_SHA = "264057b37031a99b1a5e7a6adfd86dc36989e64a82efa88de6c378e4dfd8e01f"
+REFERENCE_SHA = 'f37a0693f6ad463a5ba2edbb8415b035d0dfef115470319dae92885257de4914'
 SUPPORTS = ("floor_1", "floor_2", "floor_3", "ramp_12", "ramp_23")
 LAYERS = {"lower12": ("floor_1", "ramp_12", "floor_2"),
           "upper23": ("floor_2", "ramp_23", "floor_3")}
