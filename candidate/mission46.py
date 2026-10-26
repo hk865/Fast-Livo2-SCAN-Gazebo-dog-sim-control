@@ -34,7 +34,9 @@ DYNAMIC_CHECKS = {'actual_entity_motion', 'actual_slam_scene_trigger',
 TERRAIN_CHECKS = {'actual_slam_arrival', 'shared_landing_187_rays_equal',
                   'causal_provider_application', 'privileged_actor_source_declared',
                   'frozen_sdf_geometry'}
-PARK_CHECKS = {'first_five_seconds', 'actual_slam_hold_drift', 'native_motion_limits',
+PARK_CHECKS = {'first_five_seconds', 'actual_slam_pose_10hz_fixed_anchor', 'high_frequency_motion_diagnostic_only',
+               'source_freshness', 'continuous_teacher_control', 'no_protection'}
+LEGACY_PARK_CHECKS = {'first_five_seconds', 'actual_slam_hold_drift', 'native_motion_limits',
                'source_freshness', 'continuous_teacher_control', 'no_protection'}
 TRANSITIONS = {
     'exploring': ('exploration:11', 'lower12', 'upper23'),
@@ -388,7 +390,8 @@ class TeacherMission46:
         self._time(wall_s, sim_ns)
         if self.pending_final is None:
             raise ValueError('Original final navigation has not completed')
-        self._bound(receipt, 'teacher_mission46_final_parking/v1', PARK_CHECKS,
+        self._bound(receipt, 'teacher_mission46_final_parking/v1',
+                    PARK_CHECKS if self.parking_contract==ZERO_PARKING_MODE else LEGACY_PARK_CHECKS,
                     self.original.current_request)
         start = self.pending_final['parking_start_sim_ns']
         if self.parking_contract==ZERO_PARKING_MODE and (start is None or receipt.get('parking_contract')!=ZERO_PARKING_MODE):

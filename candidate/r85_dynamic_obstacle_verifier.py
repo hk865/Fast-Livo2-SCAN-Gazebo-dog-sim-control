@@ -302,8 +302,111 @@ def _guard_route(g, points, refdoc, ref_binding, route_sha, run):
     return points  # Already validated full typed/reference points, no new file read.
 
 
+def _coordinate_segments(evidence,contract,profile,refdoc,run,registration):
+    from r85_dynamic_obstacle_runtime import COORDINATE_WINDOW,COORDINATE_SELECTION,validate_coordinate_handoff_edge
+    _require(contract.get('event_lifetime_contract')==COORDINATE_WINDOW
+        and contract.get('navigation_segment_policy')==COORDINATE_SELECTION,'Coordinate handoff contract differs')
+    rows=[r for r in evidence['records'] if r.get('_journal_raw',r['data']).get('kind')=='navigation_segment_boundary']
+    _require(len(rows)<=2,'Coordinate handoff bound exceeded')
+    previous=contract['binding'];previous_doc=refdoc;cut=-1;segments=[]
+    for index,row in enumerate(rows,1):
+        _verify_line(row);raw=row.get('_journal_raw',row['data']);edge=raw['data']
+        _same_binding(raw['binding'],contract['binding']);_same_binding(edge['old_binding'],previous)
+        _require(edge['switch_index']==index and edge['old_reference']==previous_doc
+            and edge['cut_sim_ns']>cut and 0<=raw['sim_ns']-edge['cut_sim_ns']<=300_000_000,
+            'Coordinate edge order/old reference differs')
+        validate_coordinate_handoff_edge(edge)
+        reference=edge['new_reference'];b=edge['new_binding']
+        doc,rb=_read_json(_inside(run,reference['reference_file']),b['reference_sha256'])
+        reg,rg=_read_json(_inside(run,reference['registration_file']),reference['registration_sha256'])
+        _require(doc==reference['document'] and reg==reference['registration_document']
+            and _sha(reference['reference_raw_utf8'].encode())==rb['sha256']
+            and _sha(reference['registration_raw_utf8'].encode())==rg['sha256'],'Coordinate version bytes differ')
+        for key in ('run_id','reference_id','epoch','localization_generation','source_route_sha256'):
+            _require(type(doc.get(key))is type(b[key]) and doc[key]==b[key],'Coordinate version identity differs: '+key)
+        _require(reg.get('reference_file_sha256')==b['reference_sha256'] and reg.get('reference_id')==b['reference_id']
+            and reg.get('localization_generation')==b['localization_generation'] and reg.get('run_id')==b['run_id']
+            and reg.get('source_route_sha256')==b['source_route_sha256']
+            and reg.get('producer')=='root_authorized_PCT_route_owner','Coordinate registration differs')
+        _require(all(type(reg.get(k))is type(registration.get(k)) and reg.get(k)==registration.get(k)
+            for k in ('owner_source_file','owner_source_sha256','task_source_file','task_source_sha256','navigation_ground_truth_used')),
+            'Coordinate owner/task differs')
+        _require(_sha(Path(reg['owner_source_file']).read_bytes())==reg['owner_source_sha256']
+            and _sha(Path(reg['task_source_file']).read_bytes())==reg['task_source_sha256'],'Coordinate owner/task source changed')
+        segments.append(dict(edge=edge,sequence=raw['sequence'],cut=edge['cut_sim_ns'],binding=b,reference=doc,reference_source=rb))
+        previous=b;previous_doc=doc;cut=edge['cut_sim_ns']
+    return dict(coordinate_chain=segments,binding=previous,anchor=contract['binding'],trigger_cut=contract['trigger_sim_ns'])
+
+
+def _coordinate_at(segment,*,sequence=None,clock=None):
+    selected=None
+    for item in segment['coordinate_chain']:
+        if (sequence is not None and sequence>item['sequence']) or (clock is not None and clock>=item['cut']):selected=item
+    return selected
+
+
+def _coordinate_body_sha(value):
+    return type(value)is str and len(value)==64 and all(c in '0123456789abcdef'for c in value)
+
+
+def _coordinate_pose_sources(run,evidence,segment):
+    # One bounded streaming pass over the existing producer's own exact-body
+    # witnesses. An Odometry callback itself carries no localization generation.
+    wanted={(r.get('_journal_raw',r['data'])['data'].get('stamp_ns'),
+        r.get('_journal_raw',r['data'])['data'].get('corrected_body_message_sha256'))
+        for r in evidence['records'] if r.get('_journal_raw',r['data']).get('kind')=='actual_pose'
+        and _integer(r.get('_journal_raw',r['data'])['data'].get('stamp_ns'))
+        and _coordinate_body_sha(r.get('_journal_raw',r['data'])['data'].get('corrected_body_message_sha256'))}
+    found={};path=_inside(run,'known_scene_bundles.jsonl');digest=hashlib.sha256()
+    with path.open('rb') as stream:
+        count=0;prefix_bytes=0
+        while True:
+            raw=stream.readline(MAX_LINE_BYTES+1)
+            if not raw:break
+            count+=1;_require(count<=MAX_RECORDS and len(raw)<=MAX_LINE_BYTES and raw.endswith(b'\n'),
+                'Coordinate producer bundle witness bound/incomplete')
+            digest.update(raw);prefix_bytes+=len(raw)
+            row=json.loads(raw);key=(row.get('source_ns'),row.get('corrected_body_message_sha256'))
+            if key not in wanted:continue
+            _require(row.get('run_id')==run.name and row.get('schema')=='known_scene_navigation_bundle/v1'
+                and type(row.get('generation'))is int and row['generation']>0,
+                'Coordinate pose witness producer identity malformed')
+            _require(key not in found,'Coordinate pose witness duplicate/ambiguous')
+            found[key]=row['generation']
+    segment['pose_sources']=found
+    return dict(path=str(path),source_prefix_sha256=digest.hexdigest(),source_prefix_bytes=prefix_bytes,matched=len(found),requested=len(wanted))
+
+
+def _coordinate_recovery_rows(poses,segment,resume):
+    latest=segment['coordinate_chain'][-1] if segment['coordinate_chain'] else None
+    binding=segment['anchor'] if latest is None else latest['binding']
+    cut=segment.get('trigger_cut',0) if latest is None else latest['cut']
+    return [row for row in poses if _integer(row['data'].get('stamp_ns'))
+        and row['data']['stamp_ns']>=max(resume,cut)
+        and segment.get('pose_sources',{}).get((row['data']['stamp_ns'],row['data'].get('corrected_body_message_sha256')))==binding['localization_generation']]
+
+
+def _coordinate_guard_reference(g,segment,refdoc,refsource):
+    selected=_coordinate_at(segment,clock=g.get('compute_ros_clock_ns',-1))
+    if selected is None:return refdoc,refsource
+    _require('route'not in g,'Coordinate new-segment guard lacks actual route-version identity')
+    stamp=g.get('reference_stamp');reference=g.get('route_reference')or{}
+    _require(type(stamp)in(list,tuple) and len(stamp)==2 and all(type(n)is int for n in stamp)
+        and stamp[0]>=0 and 0<=stamp[1]<1_000_000_000
+        and stamp[0]*1_000_000_000+stamp[1]==reference.get('route_id'),
+        'Coordinate guard reference stamp differs from route id')
+    cut=selected['cut']
+    _require(all(_integer(g.get(k)) and cut<=g[k]<=g['compute_ros_clock_ns']
+        for k in ('control_pose_stamp_ns','cloud_header_stamp_ns','cloud_filtering_body_stamp_ns'))
+        and type(g.get('compute_monotonic_wall'))in(int,float)
+        and g['compute_monotonic_wall']>selected['edge']['boundary_wall'],
+        'Coordinate guard uses old/unproven source after boundary')
+    return selected['reference'],selected['reference_source']
+
+
 def _navigation_segment(evidence,contract,profile,refdoc,run,registration):
-    from r85_dynamic_obstacle_runtime import navigation_segments_enabled,SEGMENT_WINDOW,SEGMENT_SELECTION,validate_navigation_segment_edge
+    from r85_dynamic_obstacle_runtime import navigation_segments_enabled,SEGMENT_WINDOW,SEGMENT_SELECTION,validate_navigation_segment_edge,coordinate_handoffs_enabled
+    if coordinate_handoffs_enabled(profile):return _coordinate_segments(evidence,contract,profile,refdoc,run,registration)
     if not navigation_segments_enabled(profile):return None
     _require(contract.get('event_lifetime_contract')==SEGMENT_WINDOW and contract.get('navigation_segment_policy')==SEGMENT_SELECTION,
         'Explicit world-event/navigation-segment contract missing')
@@ -364,6 +467,34 @@ def _navigation_segment(evidence,contract,profile,refdoc,run,registration):
 
 def _new_navigation_row(raw,segment):
     if segment is None:return True
+    if 'coordinate_chain'in segment:
+        from r85_dynamic_obstacle_runtime import coordinate_navigation_source,coordinate_status_matches
+        d=raw['data'];kind=raw['kind'];source=coordinate_navigation_source(kind,d)
+        _require(raw.get('navigation_source_identity')==source,'Coordinate immutable payload identity differs')
+        selected=_coordinate_at(segment,sequence=raw['sequence'])
+        binding=segment['anchor'] if selected is None else selected['binding']
+        cut=segment.get('trigger_cut',0) if selected is None else selected['cut']
+        if kind=='actual_pose':
+            stamp=d.get('stamp_ns');fingerprint=d.get('corrected_body_message_sha256')
+            if not _integer(stamp) or not _coordinate_body_sha(fingerprint):return False
+            key=(stamp,fingerprint)
+            # Select by the original body source stamp and producer generation,
+            # not by callback arrival relative to a journal boundary.
+            pose_segment=_coordinate_at(segment,clock=stamp) if _integer(stamp) else None
+            expected=segment['anchor'] if pose_segment is None else pose_segment['binding']
+            if pose_segment is not None and raw['sequence']<=pose_segment['sequence']:return False
+            return (_integer(stamp) and segment.get('pose_sources',{}).get(key)==expected['localization_generation'])
+        if kind=='status':
+            if not coordinate_status_matches(d,binding):return False
+            stamp=(d.get('known_scene_localization')or{}).get('source_ns')
+            return _integer(stamp) and stamp>=cut
+        if kind=='mission_state':
+            ref=d.get('r85_reference')or{}
+            if not (type(ref.get('epoch'))is int and ref['epoch']==binding['epoch']
+                    and type(ref.get('localization_generation'))is int and ref['localization_generation']==binding['localization_generation']
+                    and ref.get('reference_id')==binding['reference_id']):return False
+            return _integer(d.get('source_actual_pose_stamp_ns')) and d['source_actual_pose_stamp_ns']>=cut
+        return False
     d=raw['data'];kind=raw['kind'];cut=segment['cut']
     if raw['sequence']<segment['sequence']:
         if kind=='status':
@@ -501,15 +632,29 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
         modules, helper_sources = _modules()
         records = evidence_doc['records']
         segment=_navigation_segment(evidence_doc,task_contract,profile,refdoc,run,registration)
-        guard_refdoc=refdoc if segment is None else segment['reference']
-        guard_ref_binding=ref_binding if segment is None else segment['reference_source']
+        coordinate=segment is not None and 'coordinate_chain'in segment
+        if coordinate:checks['coordinate_pose_producer_witness']=_coordinate_pose_sources(run,evidence_doc,segment)
+        guard_refdoc=refdoc if segment is None or coordinate else segment['reference']
+        guard_ref_binding=ref_binding if segment is None or coordinate else segment['reference_source']
+        if coordinate:
+            for row in evidence_doc['guards']:
+                g=row['data']
+                proof=((g.get('union_result')or{}).get('blocked')is True or g.get('obstacle_hold_before')is True
+                    or g.get('obstacle_hold_after')is True or any(type(g.get(k))is int and g[k]>0 for k in ('obstacle_stops_before','obstacle_stops_after')))
+                if not proof or g.get('request_id')!=binding['request_id']:continue
+                clock=g.get('compute_ros_clock_ns');_require(_integer(clock),'Coordinate proof guard source clock missing')
+                if clock<task_contract['trigger_sim_ns']:continue
+                _verify_line(row);gd,gb=_coordinate_guard_reference(g,segment,refdoc,ref_binding)
+                _guard_route(g,points,gd,gb,guard_route_sha,run)
         _require(isinstance(records, list) and len(records) <= MAX_RECORDS, 'Journal record budget invalid')
         by_kind = {}
         previous_sequence, previous_wall, previous_sim = None, None, None
         for row in records:
             raw = row.get('_journal_raw', row['data'])
             _require(raw.get('schema') == 'r85_dynamic_obstacle_record/v1', 'Wrong journal record schema')
-            expected_binding=(segment['binding'] if segment is not None and raw['kind'] in ('status','actual_pose','mission_state') and raw['sequence']>segment['sequence'] else binding)
+            expected_binding=(segment['binding'] if segment is not None and not coordinate and raw['kind'] in ('status','actual_pose','mission_state') and raw['sequence']>segment['sequence'] else binding)
+            if coordinate and raw['kind']in ('status','actual_pose','mission_state'):
+                expected_binding=binding # Immutable world anchor; actual payload identity is separate.
             _same_binding(raw['binding'], expected_binding)
             seq, sim, wall = raw['sequence'], raw['sim_ns'], raw['monotonic_wall']
             _require(_integer(seq) and _integer(sim) and type(wall) in (int,float) and math.isfinite(wall), 'Journal clock/sequence malformed')
@@ -553,11 +698,15 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
         trigger = triggers[0]; td = trigger['data']
         _require(trigger['received_sim_ns'] == task_contract['trigger_sim_ns'], 'Actual trigger/contract lock clock differs')
         tp = td['actual_pose']
-        if segment is not None:
+        if segment is not None and not coordinate:
             _require(segment['edge']['world_event_trigger_sim_ns']==trigger['received_sim_ns']
                 and segment['edge']['trigger_actor_identity']=={k:td['actual_park_observation'][k]for k in ('entity','entity_id')},'Original world trigger/actor was changed by navigation handoff')
         _require(tp.get('navigation_ground_truth_used') is False and tp.get('frame_id') == 'camera_init'
             and tp.get('source_topic') == '/demo/slam/body_odom', 'Trigger actual SLAM provenance differs')
+        if coordinate:
+            _require(all(item['edge']['world_event_trigger_sim_ns']==trigger['received_sim_ns']
+                and item['edge']['trigger_actor_identity']=={k:td['actual_park_observation'][k]for k in ('entity','entity_id')}
+                for item in segment['coordinate_chain']),'Coordinate handoff changed world trigger or actor')
         trigger_position = _vector(tp['position'])
         _require(_integer(tp['stamp_ns']) and 0 <= trigger['received_sim_ns']-tp['stamp_ns'] <= 300_000_000, 'Trigger SLAM source stale')
         matching_poses = [r for r in by_kind.get('actual_pose', []) if r['received_sim_ns'] <= trigger['received_sim_ns']
@@ -696,14 +845,14 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
                 and direction*(positions[-1][0]-positions[0][0]) >= 1.5,
                 'Independent '+phase+' displacement/order differs')
         checks['service_ack_and_independent_motion'] = True
-        statuses = [r for r in by_kind.get('status', []) if r['data'].get('request_id') == binding['request_id'] and (segment is None or r['received_sim_ns']>=segment['cut'])]
+        statuses = [r for r in by_kind.get('status', []) if r['data'].get('request_id') == binding['request_id'] and (segment is None or coordinate or r['received_sim_ns']>=segment['cut'])]
         held = [r for r in statuses if r['data'].get('obstacle_hold') is True]
         _require(held, 'Actual obstacle-held status missing', missing=True)
         for row in held:
             command = _vector(row['data']['command'])
             _require(np.max(np.abs(command)) <= 1e-10, 'Held command is nonzero')
         guards = [r for r in evidence_doc['guards'] if r['data'].get('request_id') == binding['request_id']]
-        if segment is not None:
+        if segment is not None and not coordinate:
             guards=[r for r in guards if r['data'].get('compute_ros_clock_ns',-1)>=segment['cut']
                 and r['data'].get('control_pose_stamp_ns',-1)>=segment['cut'] and r['data'].get('cloud_header_stamp_ns',-1)>=segment['cut']]
         _require(guards, 'Actual native guards missing', missing=True)
@@ -726,15 +875,23 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
             and b['data'].get('previous_actual_guard_clock_ns') == a['data']['compute_ros_clock_ns']
             for a,b in zip(cleared, cleared[1:])), 'Continuous clear native guard source records have a gap')
         _require(all(r['data']['union_result']['blocked'] is False for r in cleared), 'Recovery window contains blocked guard')
-        if segment is not None:_verify_segment_control_ACKs(run,[*preroll,stop_guard,*cleared],segment['cut'],binding['request_id'])
+        if segment is not None and not coordinate:_verify_segment_control_ACKs(run,[*preroll,stop_guard,*cleared],segment['cut'],binding['request_id'])
+        if coordinate:
+            for item in segment['coordinate_chain']:
+                selected=[r for r in [*preroll,stop_guard,*cleared] if _coordinate_at(segment,clock=r['data']['compute_ros_clock_ns'])is item]
+                if selected:_verify_segment_control_ACKs(run,selected,item['cut'],binding['request_id'])
         replay_sources = []
         for row in preroll+cleared:
             _verify_line(row); g = row['data']; clock = g['compute_ros_clock_ns']
+            if coordinate:
+                gd,gb=_coordinate_guard_reference(g,segment,refdoc,ref_binding)
+                _guard_route(g,points,gd,gb,guard_route_sha,run)
             _require(g['cloud_frame_id'] == 'camera_init' and 0 <= clock-g['cloud_header_stamp_ns'] <= 300_000_000
                 and 0 <= clock-g['control_pose_stamp_ns'] <= 300_000_000, 'Actual native guard source stale/frame mismatch')
         for row in [stop_guard, *cleared]:
             _verify_line(row)
             g = row['data']; clock = g['compute_ros_clock_ns']
+            if coordinate:guard_refdoc,guard_ref_binding=_coordinate_guard_reference(g,segment,refdoc,ref_binding)
             payload = modules['payload'].replay_payload(run, g)
             p = _inside(run, payload)
             _require(p.stat().st_size <= 64*1024**2, 'Guard payload exceeds original bounded budget')
@@ -787,7 +944,8 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
             if len(good) >= 3 and p['stamp_ns']-good[0]['data']['stamp_ns'] >= 300_000_000:
                 stop_window = good.copy(); break
         _require(stop_window is not None, 'Actual contiguous measured stop incomplete', missing=True)
-        moving = [r for r in poses if r['data']['stamp_ns'] >= resume]
+        moving = (_coordinate_recovery_rows(poses,segment,resume) if coordinate
+            else [r for r in poses if r['data']['stamp_ns'] >= resume])
         _require(len(moving) >= 3, 'Actual recovery poses missing', missing=True)
         progress = max(float(np.linalg.norm(_vector(r['data']['position'])[:2]-_vector(moving[0]['data']['position'])[:2])) for r in moving)
         _require(any(np.linalg.norm(_vector(r['data']['body_velocity'])[:2]) > .025 for r in moving) and progress >= .08,
@@ -797,7 +955,8 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
             _verify_line(row)
         for source in helper_sources.values():
             _require(_sha(Path(source['path']).read_bytes()) == source['sha256'], 'Native helper changed during verification')
-        if segment is not None:checks['explicit_pre_stop_navigation_edge']=dict(world_binding=binding,navigation_binding=segment['binding'],cut_sim_ns=segment['cut'],old_navigation_stop_credit=False)
+        if coordinate:checks['explicit_coordinate_handoffs']=dict(world_binding=binding,navigation_binding=segment['binding'],edges=[x['edge']for x in segment['coordinate_chain']],old_proof_identity_preserved=True)
+        if segment is not None and not coordinate:checks['explicit_pre_stop_navigation_edge']=dict(world_binding=binding,navigation_binding=segment['binding'],cut_sim_ns=segment['cut'],old_navigation_stop_credit=False)
         out.update(allowed=True, passed=True, state='passed', failure_reason=None, original_R83_scene_PASS=False,
             source_receipt=dict(root_task=root_binding, typed_source=source_binding, actual_reference=ref_binding,
                 runtime_protocol=runtime_doc_binding, registration=registration_binding, native_helpers=helper_sources, replay_payloads=replay_sources,
@@ -839,10 +998,10 @@ def verify_result(run, request_id, profile, scope, *, evidence_io=None):
             else evidence_io.read_json(_inside(run, 'r85_dynamic_obstacle_state.json')))
         _require(actual_state.get('failure') is None, 'Actual obstacle runtime failure: '+str(actual_state.get('failure')))
         _same_binding(actual_state['binding'], contract['binding'])
-        from r85_dynamic_obstacle_runtime import event_window_enabled,completed_event_window,EVENT_WINDOW,SEGMENT_WINDOW,navigation_segments_enabled
+        from r85_dynamic_obstacle_runtime import event_window_enabled,completed_event_window,EVENT_WINDOW,SEGMENT_WINDOW,COORDINATE_WINDOW,navigation_segments_enabled,navigation_segment_schema
         window=None
         if event_window_enabled(profile):
-            event_schema=SEGMENT_WINDOW if navigation_segments_enabled(profile) else EVENT_WINDOW
+            event_schema=navigation_segment_schema(profile) if navigation_segments_enabled(profile) else EVENT_WINDOW
             _require(contract.get('event_lifetime_contract')==event_schema
                 and contract.get('whole_task_single_scope_claimed')is False,
                 'Explicit single completed event-window contract missing')
@@ -858,7 +1017,7 @@ def verify_result(run, request_id, profile, scope, *, evidence_io=None):
                 and rows[-1]['data'].get('sim_ns')==window['completed_sim_ns']
                 and rows[-1]['data'].get('data')==window,
                 'Completed event journal endpoint differs or has later records')
-        if window is not None and event_schema==SEGMENT_WINDOW:
+        if window is not None and event_schema in (SEGMENT_WINDOW,COORDINATE_WINDOW):
             edges=[r['data']for r in rows if r['data'].get('kind')=='navigation_segment_boundary']
             _require([r['sequence']for r in edges]==window['navigation_boundary_sequences']
                 and window['navigation_binding']==(edges[-1]['data']['new_binding']if edges else contract['binding']),
@@ -882,7 +1041,7 @@ def verify_result(run, request_id, profile, scope, *, evidence_io=None):
         if window is not None:
             out.update(event_lifetime_contract=event_schema,event_window=window,
                 whole_task_single_scope_claimed=False,original_nine_gate_verification=event_schema==EVENT_WINDOW,
-                explicit_navigation_segment_identity=event_schema==SEGMENT_WINDOW,
+                explicit_navigation_segment_identity=event_schema in (SEGMENT_WINDOW,COORDINATE_WINDOW),
                 original_numeric_physical_stop_recovery_predicates=True)
         out.update(passed=receipt['allowed'], state=receipt['state'], failure_reason=receipt.get('failure_reason'),
             verification=receipt, source_receipt=dict(contract=contract_source, runtime_state=state_source,

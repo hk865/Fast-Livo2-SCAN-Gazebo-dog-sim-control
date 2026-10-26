@@ -207,6 +207,8 @@ def run_command(command,log):
 
 
 def prepare(run,args):
+    from private_dds_runtime import binding as private_dds_binding
+    frozen_private_dds=private_dds_binding()
     selected=profile_path(args.profile);p=json.loads(selected.read_text());duration,overview=validate_profile(p)
     r85=p.get('r85_session',{}).get('enabled') is True
     if not r85 and (selected.name!='engineering_nav46.json' or args.shadow_sample_contract is not None):raise RuntimeError('R33 permits only the original46 startup profile without an extra collector')
@@ -449,16 +451,21 @@ def prepare(run,args):
         plan['R81_approved_new_navigation_settle_statistics_contract']=approved_navigation_settle_SPEC
         plan['R81_original_continuous300ms_predicate_retained_and_not_relabelled']=True
         plan['R80_original_geometry_source_quality_and_safety_thresholds_preserved']=True
+    plan['private_dds_runtime_binding']=frozen_private_dds
     write_new(run/'runtime_plan.json',plan)
     return plan
 
 
-def ros_environment(scan_overlay=SCAN_OVERLAY):
+def ros_environment(scan_overlay=SCAN_OVERLAY,*,run=None):
     # SCAN's generated setup may source the old core underlay again. Apply the
     # independent overlay's local_setup LAST, without replaying its underlays.
+    from private_dds_runtime import reject_unknown_preloads,configure
+    reject_unknown_preloads(os.environ)
     r=subprocess.run(['bash','-c','set -e; source "$1" >/dev/null; source "$2" >/dev/null; source "$3" >/dev/null; source "$4" >/dev/null; env -0',
         'closed-loop-ros-env',str(ROS_BASE),str(SLAM_UNDERLAY),str(scan_overlay),str(SLAM_OVERLAY)],check=True,capture_output=True)
-    return dict(x.decode().split('=',1)for x in r.stdout.split(b'\0')if b'='in x)
+    environment=dict(x.decode().split('=',1)for x in r.stdout.split(b'\0')if b'='in x)
+    # Prefix and preload are applied after every inherited setup has finished.
+    return configure(environment,**({}if run is None else dict(witness_directory=Path(run).resolve()/'private_dds_participants',fresh=True)))
 
 
 def identity(pid):
@@ -728,7 +735,10 @@ def execute(run,plan):
         and diagnostic_config.get('recording_requested') is False)
     actual_expected_roles=set((*REQUIRED_ROLES,*(['shadow_sampler']if plan.get('bounded_shadow_sampling')else[])))
     if not capture_requested:actual_expected_roles.remove('capture')
-    env=ros_environment(Path(plan['scan_workspace_contract']['workspace'])/'install/setup.bash');transport=json.loads((run/'cloud_transport_manifest.json').read_text())
+    from private_dds_runtime import binding as private_dds_binding,verify_environment,ENV_KEYS
+    if plan.get('private_dds_runtime_binding')!=private_dds_binding():
+        raise RuntimeError('Private DDS binding changed after preparation')
+    env=ros_environment(Path(plan['scan_workspace_contract']['workspace'])/'install/setup.bash',run=run);transport=json.loads((run/'cloud_transport_manifest.json').read_text())
     for k in transport['remove_environment_keys']:env.pop(k,None)
     env.update(transport['environment'])
     for k in plan['navigation_stack_diagnostic_environment']:
@@ -741,7 +751,8 @@ def execute(run,plan):
     selected_keys=('ROS_DOMAIN_ID','ROS_LOG_DIR','ROS_LOCALHOST_ONLY','ROS_AUTOMATIC_DISCOVERY_RANGE','RMW_IMPLEMENTATION',
                    'FASTRTPS_DEFAULT_PROFILES_FILE','FASTDDS_DEFAULT_PROFILES_FILE','GZ_PARTITION','GZ_IP','DISPLAY',
                    'LIBGL_ALWAYS_SOFTWARE','GALLIUM_DRIVER','OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS',
-                   'AMENT_PREFIX_PATH','COLCON_PREFIX_PATH','LD_LIBRARY_PATH','PYTHONPATH')
+                   'AMENT_PREFIX_PATH','COLCON_PREFIX_PATH','LD_LIBRARY_PATH','PYTHONPATH',*ENV_KEYS)
+    verify_environment(env,witness_directory=run.resolve()/'private_dds_participants')
     write_new(run/'effective_environment.json',{k:env.get(k)for k in selected_keys})
     from storage_guard import observe as storage_observe, Watchdog
     from r100_resource_observer import Observer as ResourceObserver
@@ -759,7 +770,9 @@ def execute(run,plan):
     stream=(run/'owned_resources.jsonl').open('x',buffering=1)
     def start(role,command,child_env=None):
         log=(run/(role+'.log')).open('x');handles.append(log)
-        child,saved=guardian.start_role(role,command,env if child_env is None else child_env,log)
+        launch_environment=env if child_env is None else child_env
+        verify_environment(launch_environment,witness_directory=run.resolve()/'private_dds_participants')
+        child,saved=guardian.start_role(role,command,launch_environment,log)
         children[role]=child;identities[role]=saved
         if identities[role]is None:raise RuntimeError('Could not bind owned process identity '+role)
         return child
@@ -825,6 +838,7 @@ def execute(run,plan):
                     actual_expected_owned_roles=sorted(actual_expected_roles),
                     actual_ROS_GZ_camera_and_LIVO_sources_preserved=True,overview_used_for_vio=False))
         navigation_env={**env,'DEMO_RUN_DIR':str(run),**plan['navigation_stack_diagnostic_environment']}
+        verify_environment(navigation_env,witness_directory=run.resolve()/'private_dds_participants')
         write_new(run/'navigation_stack_effective_environment.json',{
             k:navigation_env.get(k)for k in (*selected_keys,'DEMO_RUN_DIR',*plan['navigation_stack_diagnostic_environment'])})
         start('navigation_stack',['ros2','launch',str(HERE/'stack.launch.py'),'run_dir:='+str(run)],navigation_env)

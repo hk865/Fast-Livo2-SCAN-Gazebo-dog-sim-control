@@ -2488,6 +2488,22 @@ class PIDNavigation(TeacherNavigation):
         if ordinary_parking_enabled(self.profile):
             self.cascade.begin_ordinary_terminal(int(ns),round(float(self.goals[self.waypoint_index].timeout_sim_s)*1e9))
             self.terminal_parking_owner=self.cascade.ordinary_parking;self.terminal_parking_request=self.request_id
+            if self.terminal_parking_owner.pose10hz and not getattr(self,'_parking_pose10hz_loaded',False):
+                import parking_pose10hz as pose_rule
+                import ordinary_parking as pose_owner
+                import cascade_core as pose_core
+                from pathlib import Path as SourcePath
+                import hashlib as source_hashlib
+                modules={m.__name__:dict(path=str(SourcePath(m.__file__).resolve()),
+                    sha256=source_hashlib.sha256(SourcePath(m.__file__).read_bytes()).hexdigest())
+                    for m in (pose_rule,pose_owner,pose_core)}
+                with (self.run/'parking_pose10hz_controller_loaded.json').open('x')as record:
+                    json.dump(dict(schema='actual_parking_pose10hz_controller_loaded/v1',
+                        run_id=self.run.name,request_id=self.request_id,control_clock_ns=int(ns),
+                        configuration=pose_rule.CONFIG,actual_instance_enabled=True,modules=modules,
+                        actual_owner_class=type(self.terminal_parking_owner).__name__,
+                        high_frequency_motion_gate=False,formal_parking_PASS=False),record,sort_keys=True)
+                self._parking_pose10hz_loaded=True
         self.steering=dict(direction=(goal-self.pose)[:2].tolist(),heading=self.cascade.goal_yaw,
             heading_error=0.,exhausted=False)
         _parking_sensor_row=None

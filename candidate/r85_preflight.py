@@ -169,6 +169,9 @@ def validate_profile(p,here):
     from student_lower_loop_ack import (CONFIG as STUDENT_LOWER_ACK_CONFIG,
         MEASUREMENT_CONFIG as MEASUREMENT_LOWER_ACK_CONFIG, configuration as lower_ack_configuration)
     original_cascade=dict(p['cascade'])
+    from parking_pose10hz import configuration as pose10hz_configuration
+    if not pose10hz_configuration(original_cascade.pop('parking_pose10hz',None)):
+        raise ValueError('Explicit approved 10Hz parking configuration required')
     if turn_brake_reference is not None:original_cascade.pop('r85_turn_brake_reference')
     lower_ack_configuration(original_cascade.pop('r85_student_lower_loop_ack',None))
     expected_ack=(MEASUREMENT_LOWER_ACK_CONFIG if measurement_p_retention is not None else STUDENT_LOWER_ACK_CONFIG)
@@ -187,7 +190,8 @@ def validate_profile(p,here):
     for key in ('warmup_history','teacher_transition','sensor_sampling','control_clock_contract',
                 'ordinary_terminal_parking_contract','navigation_settle_statistics_contract','known_scene_localization_contract',
                 'pose_cloud_timeout_s','max_speed_mps','max_yaw_rate_radps','max_lateral_speed_mps','clear_guard_gap_max_sim_s'):
-        expected=(speed_tier['cruise_mps'] if speed_tier is not None and key=='max_speed_mps' else baseline.get(key))
+        expected=(SPEC if key=='ordinary_terminal_parking_contract' else
+            speed_tier['cruise_mps'] if speed_tier is not None and key=='max_speed_mps' else baseline.get(key))
         if p.get(key)!=expected:raise ValueError('Unchanged baseline navigation/safety field differs: '+key)
     cascade=p['cascade']
     if cascade['command_limits']!=[.6,.2,.6] or cascade['command_slew_per_s']!=[.6,.6,.8] or cascade['desired_speed']!=(.2 if speed_tier is None else speed_tier['cruise_mps']):

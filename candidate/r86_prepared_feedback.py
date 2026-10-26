@@ -486,6 +486,20 @@ def check_negative_parking(node):
         raise ValueError('queued_parking_unsafe_attitude')
     yawdot = (math.sin(roll)*gyro[1]+math.cos(roll)*gyro[2])/math.cos(pitch)
     clock = node.get_clock().now().nanoseconds
+    if ordinary.pose10hz:
+        # The accepted commit stream is also replayed by the final audit.
+        # This intake owns samples only; control owns handoff, ACK and T0.
+        from parking_pose10hz import from_feedback
+        ordinary.observe_pose10hz_source(from_feedback(feedback))
+        grid=ordinary.pose_grid
+        failure=('parking_pose10hz_data_unavailable' if grid is not None and grid.missing else
+                 'parking_pose10hz_fixed_anchor_exceeded' if grid is not None and grid.motion_failure else None)
+        if failure:
+            ordinary.failure,ordinary.stage=failure,'failed'
+            core._protect(failure,fatal=True)
+            # Preserve this successful source commit in its original journal.
+            # A sampled motion/data failure is not an R86 source-integrity fault.
+        return True
     diagnostic = getattr(core, 'diagnostic_observe_only', None)
     distance=float(np.linalg.norm(core.goal[:2]-p[:2]))
     yaw_error=wrap(core.goal_yaw-yaw)

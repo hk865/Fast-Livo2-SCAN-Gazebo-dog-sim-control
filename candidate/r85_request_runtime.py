@@ -325,14 +325,14 @@ def dynamic_fatal_decision(run,task,scope,request_id,current_reference,reference
                 localization_generation=current_reference['localization_generation'],
                 source_route_sha256=task['source_typed_route_sha256'])
             navigation_binding=binding
-            from r85_dynamic_obstacle_runtime import navigation_segments_enabled,SEGMENT_WINDOW
+            from r85_dynamic_obstacle_runtime import navigation_segments_enabled,SEGMENT_WINDOW,coordinate_handoffs_enabled,navigation_segment_schema,coordinate_owner_binding
             segmented=navigation_segments_enabled(scope.get('profile',{}))
             if segmented:
-                if actual.get('event_lifetime_contract')!=SEGMENT_WINDOW:raise ValueError('navigation_segment_state_contract_differs')
+                if actual.get('event_lifetime_contract')!=navigation_segment_schema(scope.get('profile',{})):raise ValueError('navigation_segment_state_contract_differs')
                 if actual.get('diagnostic_protocol_cancelled')is not False:raise ValueError('cancelled_navigation_event_cannot_wait_or_resume')
                 boundaries=actual.get('navigation_boundary_sequences')
                 nav=actual.get('current_navigation_binding')
-                if (type(boundaries)is not list or len(boundaries)>1 or any(type(q)is not int or q<1 for q in boundaries)
+                if (type(boundaries)is not list or len(boundaries)>(2 if coordinate_handoffs_enabled(scope.get('profile',{})) else 1) or any(type(q)is not int or q<1 for q in boundaries)
                         or type(nav)is not dict or set(nav)!=set(binding)
                         or any(type(nav.get(k))is not type(binding[k]) or nav[k]!=binding[k] for k in ('run_id','request_id','source_route_sha256'))):
                     raise ValueError('malformed_navigation_segment_owner_binding')
@@ -342,6 +342,8 @@ def dynamic_fatal_decision(run,task,scope,request_id,current_reference,reference
                         raise ValueError('navigation_segment_owner_identity_did_not_advance')
                     navigation_binding=nav
                 elif nav!=binding:raise ValueError('navigation_segment_missing_real_boundary')
+                if coordinate_handoffs_enabled(scope.get('profile',{})):
+                    navigation_binding=coordinate_owner_binding(run,binding,actual)
             completed_helper=completed_history_module(scope.get('profile',{}))
             if completed_helper is not None and (actual.get('current_navigation_binding')is not None
                     or actual.get('completed_history_qualification')is not None):
@@ -368,14 +370,15 @@ def dynamic_fatal_decision(run,task,scope,request_id,current_reference,reference
                     reference_scope_history_file=str(history),reference_scope_history_sha256=sha(history))
                 if started is not None and failure is None:
                     from r85_dynamic_obstacle_runtime import event_window_enabled, completed_event_window
-                    if (segmented and not boundaries and actual.get('event_state')=='active'
-                            and actual.get('dynamic_proof_seen')is False
+                    if (segmented and actual.get('event_state')=='active'
+                            and ((coordinate_handoffs_enabled(scope.get('profile',{})) and len(boundaries)<2)
+                                 or (not boundaries and actual.get('dynamic_proof_seen')is False))
                             and expected['epoch']>binding['epoch']
                             and expected['localization_generation']>binding['localization_generation']):
                         # This grants no new binding or motion. The actor runtime
                         # freezes until its original ready gates validate the edge.
                         decision.update(state='waiting_pre_stop_navigation_segment_boundary',
-                            event_lifetime_contract=SEGMENT_WINDOW,physical_verification_pending=True)
+                            event_lifetime_contract=navigation_segment_schema(scope.get('profile',{})),physical_verification_pending=True)
                     elif event_window_enabled(scope.get('profile',{})) and completed_event_window(actual) is not None:
                         decision.update(state='completed_event_pending_verification',
                             binding_identity='completed_event_anchor_separate_from_later_navigation',
@@ -701,7 +704,7 @@ def build_node(run,scope,profile):
                 ns=self.ns();wall=time.monotonic_ns();self.nav,self.nav_wall=d,wall/1e9
                 row=dict(data=status_projection(d),actual_full_status_canonical_sha256=hashlib.sha256(canonical(d).encode()).hexdigest(),
                     received_wall_ns=wall,received_sim_ns=ns,actual_slam_pose=copy.deepcopy(self.pose),
-                    r85_provenance='r85_single_task_original_fixed5_verifier_reuse')
+                    r85_provenance='r85_single_task_pose10hz_fixed5_v1')
                 self.status_stream.write(json_bytes(row));self.parking.on_status(row)
                 if d.get('state')=='failed':
                     reason='actual_navigation_failed:'+str(d.get('message'))

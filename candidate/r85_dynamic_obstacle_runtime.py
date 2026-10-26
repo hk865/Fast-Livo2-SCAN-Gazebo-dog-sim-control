@@ -62,9 +62,50 @@ SEGMENT_WINDOW='single_world_event_pre_stop_nav_segment/v2'
 SEGMENT_SELECTION=dict(schema=SEGMENT_WINDOW,completed_event_window=True,
     whole_task_single_scope=False,completed_same_geometry_preservation=False,
     maximum_pre_stop_navigation_switches=1)
+COORDINATE_WINDOW='single_world_event_coordinate_handoffs/v3'
+COORDINATE_SELECTION=dict(schema=COORDINATE_WINDOW,completed_event_window=True,
+    whole_task_single_scope=False,completed_same_geometry_preservation=False,maximum_coordinate_handoffs=2)
+
+def coordinate_handoffs_enabled(profile):
+    value=profile.get('r85_dynamic_event_contract',{})
+    if not isinstance(value,dict) or value.get('schema')!=COORDINATE_WINDOW:return False
+    if set(value)!=set(COORDINATE_SELECTION) or any(type(value[k])is not type(v) or value[k]!=v for k,v in COORDINATE_SELECTION.items()):
+        raise ValueError('dynamic_coordinate_handoff_selection_differs')
+    return True
+
+def navigation_segment_schema(profile):
+    return COORDINATE_WINDOW if coordinate_handoffs_enabled(profile) else SEGMENT_WINDOW
+
+def navigation_segment_policy(profile):
+    return dict(COORDINATE_SELECTION if coordinate_handoffs_enabled(profile) else SEGMENT_SELECTION)
+
 NAVIGATION_KINDS=frozenset(('status','actual_pose','mission_state'))
 
+def coordinate_navigation_source(kind,data):
+    """Original payload identity only; never infer an epoch from callback order."""
+    if kind=='status':
+        epoch=data.get('known_scene_scan_epoch')or{};localization=data.get('known_scene_localization')or{}
+        status=data.get('known_scene_runtime_status')or{}
+        return dict(kind=kind,planner_epoch=epoch.get('planner_epoch'),
+            localization_generation=epoch.get('localization_generation'),
+            localization_payload_generation=localization.get('generation'),runtime_payload_generation=status.get('generation'))
+    if kind=='mission_state':
+        ref=data.get('r85_reference')or{}
+        return dict(kind=kind,planner_epoch=ref.get('epoch'),localization_generation=ref.get('localization_generation'))
+    return dict(kind=kind,planner_epoch=None,localization_generation=None,source_stamp_ns=data.get('stamp_ns'),
+        corrected_body_message_sha256=data.get('corrected_body_message_sha256'),
+        identity_scope='exact_body_bundle_join_required_offline')
+
+
+def coordinate_status_matches(data,binding):
+    source=coordinate_navigation_source('status',data)
+    return (type(source['planner_epoch'])is int and source['planner_epoch']==binding['epoch']
+        and all(type(source[k])is int and source[k]==binding['localization_generation']
+            for k in ('localization_generation','localization_payload_generation','runtime_payload_generation')))
+
+
 def navigation_segments_enabled(profile):
+    if coordinate_handoffs_enabled(profile):return True
     value=profile.get('r85_dynamic_event_contract',{})
     if not isinstance(value,dict) or value.get('schema')!=SEGMENT_WINDOW:return False
     if set(value)!=set(SEGMENT_SELECTION) or any(type(value[k])is not type(v) or value[k]!=v for k,v in SEGMENT_SELECTION.items()):
@@ -118,6 +159,64 @@ def validate_navigation_segment_edge(edge):
         raise ValueError('navigation_segment_actor_continuity_not_observed')
     return True
 
+def validate_coordinate_handoff_edge(edge):
+    if (edge.get('schema')!='world_event_coordinate_handoff_edge/v1'
+            or type(edge.get('switch_index'))is not int or not 1<=edge['switch_index']<=2
+            or edge.get('event_state')!='active'
+            or type(edge.get('dynamic_proof_seen'))is not bool):
+        raise ValueError('coordinate_handoff_state_or_bound_differs')
+    # Reuse every original geometry, owner, transaction, source-freshness and
+    # actor-continuity gate; the new policy changes only the event phase limit.
+    checked=dict(edge,schema='world_event_pre_stop_navigation_edge/v1',switch_index=1,dynamic_proof_seen=False)
+    validate_navigation_segment_edge(checked)
+    return True
+
+
+def coordinate_owner_binding(run,anchor,actual):
+    sequences=actual.get('navigation_boundary_sequences')
+    if (type(sequences)is not list or len(sequences)>2
+            or any(type(q)is not int or q<1 for q in sequences)
+            or sequences!=sorted(set(sequences))):
+        raise ValueError('coordinate_handoff_sequence_chain_invalid')
+    key=(str(run),json.dumps(anchor,sort_keys=True),tuple(sequences),actual.get('started_sim_ns'),json.dumps(actual.get('coordinate_boundary_receipts'),sort_keys=True))
+    cached=getattr(coordinate_owner_binding,'_validated_tip',None)
+    if cached is not None and cached[0]==key:
+        if actual.get('current_navigation_binding')!=cached[1]:raise ValueError('coordinate_handoff_current_binding_not_chain_tip')
+        return dict(cached[1])
+    previous=anchor;previous_reference=None;last_cut=-1
+    if sequences:
+        path=run/'r85_dynamic_journal.jsonl';receipts=actual.get('coordinate_boundary_receipts')
+        if type(receipts)is not list or len(receipts)!=len(sequences):
+            raise ValueError('coordinate_handoff_receipts_missing')
+        edges=[]
+        with path.open('rb') as stream:
+            for sequence,receipt in zip(sequences,receipts):
+                offset=receipt.get('source_offset');length=receipt.get('source_length')
+                if (receipt.get('path')!=str(path) or type(offset)is not int or offset<0
+                        or type(length)is not int or not 0<length<=2*1024**2):
+                    raise ValueError('coordinate_handoff_receipt_bound_or_path')
+                stream.seek(offset);raw=stream.read(length)
+                if (len(raw)!=length or not raw.endswith(b'\n')
+                        or hashlib.sha256(raw).hexdigest()!=receipt.get('source_line_sha256')):
+                    raise ValueError('coordinate_handoff_real_journal_bytes_differ')
+                row=json.loads(raw)
+                if row.get('kind')!='navigation_segment_boundary' or row.get('sequence')!=sequence:
+                    raise ValueError('coordinate_handoff_journal_sequence_differs')
+                edges.append(row)
+        for index,row in enumerate(edges,1):
+            edge=row['data'];validate_coordinate_handoff_edge(edge)
+            if (row.get('binding')!=anchor or edge['switch_index']!=index
+                    or edge['old_binding']!=previous or edge['cut_sim_ns']<=last_cut
+                    or (previous_reference is not None and edge['old_reference']!=previous_reference)
+                    or edge['world_event_trigger_sim_ns']!=actual.get('started_sim_ns')):
+                raise ValueError('coordinate_handoff_anchor_or_order_differs')
+            previous=edge['new_binding'];previous_reference=edge['new_reference']['document'];last_cut=edge['cut_sim_ns']
+    if actual.get('current_navigation_binding')!=previous:
+        raise ValueError('coordinate_handoff_current_binding_not_chain_tip')
+    coordinate_owner_binding._validated_tip=(key,dict(previous))
+    return previous
+
+
 def event_window_enabled(profile):
     if navigation_segments_enabled(profile):return True
     value=profile.get('r85_dynamic_event_contract',{})
@@ -130,7 +229,7 @@ def event_window_enabled(profile):
 def completed_event_window(state):
     """Small program terminal record only; never a physical PASS assertion."""
     schema=state.get('event_lifetime_contract')
-    if (schema not in (EVENT_WINDOW,SEGMENT_WINDOW)
+    if (schema not in (EVENT_WINDOW,SEGMENT_WINDOW,COORDINATE_WINDOW)
             or state.get('event_state')!='completed_pending_verification'
             or state.get('diagnostic_protocol_cancelled')is not False
             or state.get('failure')is not None):return None
@@ -143,10 +242,10 @@ def completed_event_window(state):
             or not window['started_sim_ns']<=window['recovery_origin_source_ns']<=window['recovery_end_source_ns']<=window['completed_sim_ns']<=state.get('sim_ns',-1)
             or window.get('business_completion_only')is not True
             or window.get('physical_verified')is not False):return None
-    if schema==SEGMENT_WINDOW and (window.get('navigation_binding')!=state.get('current_navigation_binding')
+    if schema in (SEGMENT_WINDOW,COORDINATE_WINDOW) and (window.get('navigation_binding')!=state.get('current_navigation_binding')
             or window.get('navigation_boundary_sequences')!=state.get('navigation_boundary_sequences')
             or type(window.get('navigation_boundary_sequences'))is not list
-            or len(window['navigation_boundary_sequences'])>1):return None
+            or len(window['navigation_boundary_sequences'])>(2 if schema==COORDINATE_WINDOW else 1)):return None
     return window
 
 
@@ -451,7 +550,9 @@ def build_node(run, scope, task_path, expected_partition):
             self.world_owner_stopped=False;self.world_motion_decoupled_ticks=0;self.world_motion_decoupled_s=0.
             self.event_window_enabled=event_window_enabled(self.profile)
             self.navigation_segments_enabled=navigation_segments_enabled(self.profile)
-            self.event_schema=SEGMENT_WINDOW if self.navigation_segments_enabled else EVENT_WINDOW
+            self.coordinate_handoffs_enabled=coordinate_handoffs_enabled(self.profile)
+            self.coordinate_boundary_receipts=[]
+            self.event_schema=navigation_segment_schema(self.profile) if self.navigation_segments_enabled else EVENT_WINDOW
             self.navigation_boundary_sequences=[];self.navigation_status=None;self.navigation_status_wall=-math.inf
             self.dynamic_proof_seen=False;self.pending_navigation_binding=None;self.trigger_actor_identity=None
 
@@ -498,18 +599,20 @@ def build_node(run, scope, task_path, expected_partition):
             if self.event_window_enabled and self.event_state=='completed_pending_verification':return
             pretrigger=self.started is None
             record_binding=self.binding
-            if self.navigation_segments_enabled and not pretrigger and kind in NAVIGATION_KINDS:
+            if self.navigation_segments_enabled and not self.coordinate_handoffs_enabled and not pretrigger and kind in NAVIGATION_KINDS:
                 record_binding=self.current_navigation_binding or self.binding
             if pretrigger:self.presequence+=1;sequence=self.presequence
             else:self.sequence+=1;sequence=self.sequence
             try:
-                if self.completed_history_enabled:
+                if self.completed_history_enabled or self.coordinate_handoffs_enabled:
                     path=run/('r85_dynamic_pretrigger_history.jsonl' if pretrigger else 'r85_dynamic_journal.jsonl')
                     event=dict(schema='r85_dynamic_pretrigger_record/v1' if pretrigger else 'r85_dynamic_obstacle_record/v1',kind=kind,
                         sequence=sequence,binding=dict(record_binding),sim_ns=self.ns(),monotonic_wall=time.monotonic(),
                         source='actual_R85_runtime_callback_or_owned_service',data=data)
+                    if self.coordinate_handoffs_enabled and kind in NAVIGATION_KINDS:
+                        event['navigation_source_identity']=coordinate_navigation_source(kind,data)
                     self.writer.append(path,event)
-                    if self.completed_history_enabled and not pretrigger:
+                    if (self.completed_history_enabled or self.coordinate_handoffs_enabled) and not pretrigger:
                         # Exact EvidenceWriter serialization; its FIFO atomic state
                         # follows this append. Owner must verify the real line SHA.
                         raw=(json.dumps(event,allow_nan=False,ensure_ascii=False)+'\n').encode('utf-8')
@@ -554,7 +657,7 @@ def build_node(run, scope, task_path, expected_partition):
             if self.event_window_enabled:
                 contract.update(event_lifetime_contract=self.event_schema,whole_task_single_scope_claimed=False,
                     completion_is_business_pending_offline_original_nine_gate=True)
-            if self.navigation_segments_enabled:contract.update(navigation_segment_policy=dict(SEGMENT_SELECTION),
+            if self.navigation_segments_enabled:contract.update(navigation_segment_policy=navigation_segment_policy(self.profile),
                 completion_is_business_pending_offline_original_nine_gate=False,
                 completion_is_business_pending_offline_segment_identity_and_original_numeric_physical_gates=True)
             if self.speed_lead is not None:contract[speed_lead.KEY]=self.speed_lead
@@ -595,7 +698,9 @@ def build_node(run, scope, task_path, expected_partition):
                 raise ValueError('actual_reference_source_registration_mismatch')
             return p,raw,doc,registration,registered
         def switch_navigation_segment(self,binding,p,raw,doc,registration,registered,clock):
-            if self.dynamic_proof_seen or self.event_stop_token is not None or self.event_resume_ns is not None or self.navigation_boundary_sequences:
+            coordinate=coordinate_handoffs_enabled(self.profile)
+            if ((coordinate and (self.event_state!='active' or len(self.navigation_boundary_sequences)>=2))
+                    or (not coordinate and (self.dynamic_proof_seen or self.event_stop_token is not None or self.event_resume_ns is not None or self.navigation_boundary_sequences))):
                 raise ValueError('actual_reference_scope_changed_during_dynamic_protocol')
             releases=[]
             with (run/'known_scene_transaction_releases.jsonl').open() as stream:
@@ -607,17 +712,30 @@ def build_node(run, scope, task_path, expected_partition):
             reference=dict(reference_file=str(p),reference_sha256=binding['reference_sha256'],document=doc,
                 registration_file=str(registration),registration_sha256=sha(registration),registration_document=registered,
                 reference_raw_utf8=raw.decode('utf-8'),registration_raw_utf8=registration.read_text())
-            edge=dict(schema='world_event_pre_stop_navigation_edge/v1',switch_index=1,
-                old_binding=dict(self.binding),new_binding=dict(binding),old_reference=self.reference,new_reference=reference,
+            old_binding=(self.current_navigation_binding or self.binding) if coordinate else self.binding
+            old_reference=self.current_navigation_reference if coordinate else self.reference
+            edge=dict(schema='world_event_coordinate_handoff_edge/v1' if coordinate else 'world_event_pre_stop_navigation_edge/v1',
+                switch_index=len(self.navigation_boundary_sequences)+1 if coordinate else 1,
+                old_binding=dict(old_binding),new_binding=dict(binding),old_reference=old_reference,new_reference=reference,
                 cut_sim_ns=clock,boundary_wall=time.monotonic(),dynamic_proof_seen=self.dynamic_proof_seen,
                 navigation_status=self.navigation_status,status_received_wall=self.navigation_status_wall,
                 transaction_release=releases[0],actor_observation=self.latest_observation,
                 actor_received_wall=self.observation_wall,last_actor_ACK_position=self.ack_position,
                 trigger_actor_identity=self.trigger_actor_identity,world_event_trigger_sim_ns=self.started)
-            validate_navigation_segment_edge(edge)
+            if coordinate:
+                edge.update(event_state=self.event_state,event_stop_token=self.event_stop_token,event_resume_ns=self.event_resume_ns)
+                validate_coordinate_handoff_edge(edge)
+            else:validate_navigation_segment_edge(edge)
             sequence=self.record('navigation_segment_boundary',edge)
             if sequence is None or self.failure is not None:raise ValueError('navigation_segment_boundary_not_recorded')
             self.navigation_boundary_sequences.append(sequence);self.current_navigation_binding=dict(binding)
+            if coordinate:
+                self.current_navigation_reference=doc
+                self.coordinate_boundary_receipts.append(dict(self.last_journal_record_receipt))
+                # The world stop/resume facts stay immutable, but coordinate
+                # correction displacement is never physical recovery progress.
+                self.event_recovery_origin=None;self.event_recovery_last_ns=None
+                self.event_recovery_count=0;self.event_recovery_progress=0.;self.event_recovery_moving=False
             self.scope_selected_sim_ns=clock;self.event_scope_ready=False;self.event_scope_changed=False
             self.pending_navigation_binding=None
 
@@ -834,7 +952,9 @@ def build_node(run, scope, task_path, expected_partition):
                         or binding['localization_generation']<previous['localization_generation']):
                     raise ValueError('pretrigger_reference_scope_did_not_advance_actual_planner_epoch')
                 if changed and self.started is not None and self.navigation_segments_enabled:
-                    if (self.dynamic_proof_seen or self.navigation_boundary_sequences or any(binding.get(k)!=self.binding.get(k) for k in ('run_id','request_id','source_route_sha256'))):
+                    if (((not coordinate_handoffs_enabled(self.profile)) and (self.dynamic_proof_seen or self.navigation_boundary_sequences))
+                            or (coordinate_handoffs_enabled(self.profile) and len(self.navigation_boundary_sequences)>=2)
+                            or any(binding.get(k)!=self.binding.get(k) for k in ('run_id','request_id','source_route_sha256'))):
                         raise ValueError('actual_reference_scope_changed_during_dynamic_protocol')
                     if self.pending_navigation_binding is not None and self.pending_navigation_binding!=binding:
                         raise ValueError('multiple_pending_navigation_scopes')
@@ -870,6 +990,7 @@ def build_node(run, scope, task_path, expected_partition):
                     # the new scope's arming evidence.
                     if changed and self.pending is not None:return
                     self.binding=binding;self.reference=doc;self.reference_sha=binding['reference_sha256']
+                    self.current_navigation_reference=doc
                     self.registration_sha=sha(registration)
                     self.scope_selected_sim_ns=self.ns();self.park_ack=False;self.pre_last={}
                     self.latest_observation=None;self.observation_wall=-math.inf;self.pose=None;self.pose_wall=-math.inf
@@ -911,7 +1032,7 @@ def build_node(run, scope, task_path, expected_partition):
                             and data.get('run_id',run.name)==run.name
                             and type(data.get('state'))is str and data['state'] in ('failed','stopped','succeeded')):
                         self.world_owner_stopped=True
-                    if self.started is not None and (data.get('obstacle_hold')is True or data.get('dynamic_stop_event')is not None
+                    if (not self.coordinate_handoffs_enabled or coordinate_status_matches(data,self.current_navigation_binding or self.binding)) and self.started is not None and (data.get('obstacle_hold')is True or data.get('dynamic_stop_event')is not None
                             or any(type(data.get(k))is int and data[k]>0 for k in ('obstacle_stops','obstacle_resumes','aligned_obstacle_resumes'))):self.dynamic_proof_seen=True
                     self.record('status',data)
                     if self.event_window_enabled and self.event_state=='active':
@@ -926,8 +1047,9 @@ def build_node(run, scope, task_path, expected_partition):
                             # A child epoch, even ready, is preparation rather than
                             # publication of a new route definition. Keep this event
                             # unready without moving its binding or granting evidence.
-                            # _mission_body still rejects a genuine post-stop reference
-                            # change; no old token/ACK is transferred to a new scope.
+                            # v2 rejects post-stop changes; v3 admits only an explicit
+                            # certified edge, retaining old token/ACK history identities.
+                        if self.coordinate_handoffs_enabled:same_scope=same_scope and coordinate_status_matches(data,active_binding)
                         self.event_scope_ready=same_scope and not self.event_scope_changed
                         if not same_scope:return
                         token=data.get('dynamic_stop_event')
@@ -954,13 +1076,14 @@ def build_node(run, scope, task_path, expected_partition):
                 source_topic='/demo/slam/body_odom',body_velocity=[v.x,v.y,v.z],body_angular_velocity=[w.x,w.y,w.z],
                 body_gyro=None if self.imu is None else self.imu['gyro'],imu_stamp_ns=None if self.imu is None else self.imu['stamp_ns'],
                 navigation_ground_truth_used=False)
-            if self.completed_history_enabled:
+            if self.completed_history_enabled or self.coordinate_handoffs_enabled:
                 from point_provenance import message_sha
                 self.pose['corrected_body_message_sha256']=message_sha(msg)
                 self.pose['corrected_body_message_fingerprint']='go2_ros_semantic/v1:Odometry'
             self.pose_wall=time.monotonic();self.record('actual_pose',self.pose)
             if (self.event_window_enabled and self.event_state=='active' and self.event_resume_ns is not None
-                    and stamp>=self.event_resume_ns and (self.event_recovery_last_ns is None or stamp>self.event_recovery_last_ns)):
+                    and stamp>=self.event_resume_ns and (not self.coordinate_handoffs_enabled or stamp>=self.scope_selected_sim_ns)
+                    and (self.event_recovery_last_ns is None or stamp>self.event_recovery_last_ns)):
                 if self.event_recovery_origin is None:self.event_recovery_origin=dict(self.pose)
                 self.event_recovery_last_ns=stamp;self.event_recovery_count+=1
                 self.event_recovery_progress=max(self.event_recovery_progress,
@@ -1172,6 +1295,7 @@ def build_node(run, scope, task_path, expected_partition):
                 state.update(event_lifetime_contract=self.event_schema,event_state=self.event_state,
                     completed_event_window=self.completed_window,whole_task_single_scope_claimed=False)
             if self.navigation_segments_enabled:state.update(current_navigation_binding=self.current_navigation_binding or self.binding,navigation_boundary_sequences=list(self.navigation_boundary_sequences),dynamic_proof_seen=self.dynamic_proof_seen)
+            if self.coordinate_handoffs_enabled:state['coordinate_boundary_receipts']=list(self.coordinate_boundary_receipts)
             if self.completed_history_enabled and self.completed_history_qualification is not None:
                 state.update(current_navigation_binding=self.current_navigation_binding,
                     completed_history_qualification=self.completed_history_qualification,

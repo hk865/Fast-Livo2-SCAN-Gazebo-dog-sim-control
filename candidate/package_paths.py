@@ -7,4 +7,9 @@ TEACHER_ROOT = DEPENDENCIES / 'workspace/multifloor_demo/teacher_mode'
 DEMO_ROOT = TEACHER_ROOT.parent
 GUARD_ROOT = REPOSITORY / '.local_dependencies/storage_guard'
 # Shared owned output pool only; never an executed source dependency.
-RUN_STORAGE_ROOT = Path('/home/hyh001/projects/1.Project/go2_teacher_pipeline_v19_20261006_runs')
+RUN_STORAGE_ROOT = REPOSITORY / '.local/runs'
+# Geometry source locations are explicit package assets, never a legacy checkout.
+GEOMETRY_STAGE = DEPENDENCIES / 'history/2026-10-14/task/r83_demo/implementation_attempt_20261014/pct_route_stage'
+GEOMETRY_HELPER = GEOMETRY_STAGE / 'validate_route_support.py'
+GEOMETRY_CONFIG = GEOMETRY_STAGE / 'support_validation_config.json'
+GEOMETRY_METADATA = DEPENDENCIES / 'derived_inputs/typed_route/metadata_actual_world.json'

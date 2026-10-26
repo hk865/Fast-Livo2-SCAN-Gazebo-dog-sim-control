@@ -49,6 +49,73 @@ class OrdinaryParking:
         self.diagnostic_business_run=None
         self.diagnostic_business_observation_count=0
         self.diagnostic_last_business_rejection=None
+        self.pose10hz=False;self.capture_grid=None;self.pose_grid=None
+        self.capture_goal=None;self.capture_heading=None
+        self.pose10hz_last_source=None
+
+    def configure_pose10hz(self,value):
+        from parking_pose10hz import configuration,CaptureGrid
+        self.pose10hz=configuration(value)
+        if self.pose10hz:self.capture_grid=CaptureGrid()
+
+    def start_pose10hz_window(self,proof):
+        if not self.pose10hz:return
+        from parking_pose10hz import PoseGrid
+        if self.pose_grid is not None:raise ValueError('Never reset the first 10Hz parking anchor')
+        origin=proof['qualification_origin']
+        self.pose_grid=PoseGrid(proof['qualification_clock_ns'],origin)
+        self.origin=np.asarray(origin['position'],float).copy()
+        self.origin_yaw=self.pose_grid.base_yaw
+
+    def observe_pose10hz_source(self,row):
+        """Every accepted commit feeds one persistent grid; no positive handoff."""
+        if not self.pose10hz or not self.enabled:return
+        from parking_pose10hz import pose
+        stamp,p,yaw=pose(row)
+        if self.pose10hz_last_source is not None:
+            old_stamp,old_p,old_yaw=pose(self.pose10hz_last_source)
+            if stamp<old_stamp:raise ValueError('10Hz committed SLAM clock went backwards')
+            if stamp==old_stamp:
+                if (p,yaw)!=(old_p,old_yaw):raise ValueError('10Hz repeated committed header changed pose')
+                return
+        if self.pose_grid is not None:self.pose_grid.observe(row)
+        else:self.capture_grid.observe(row,self.capture_goal,self.capture_heading)
+        self.pose10hz_last_source=row
+
+    def invalidate_pose10hz_capture(self):
+        if self.pose10hz and self.pose_grid is None:
+            from parking_pose10hz import CaptureGrid
+            self.capture_grid=CaptureGrid();self.pose10hz_last_source=None
+
+    def update_pose10hz(self,stamp,clock,position,yaw,goal_distance,yaw_error,sensor_pose):
+        if sensor_pose is None:raise ValueError('10Hz parking needs its exact original SLAM pose record')
+        self.observe_pose10hz_source(sensor_pose)
+        if self.pose_grid is not None:
+            if self.pose_grid.missing:
+                self.failure='parking_pose10hz_data_unavailable';self.stage='failed'
+            elif self.pose_grid.motion_failure:
+                self.failure='parking_pose10hz_fixed_anchor_exceeded';self.stage='failed'
+            else:self.stage='zero_hold'
+            return self.stage
+        if clock>self.deadline:
+            self.failure='ordinary_actual_zero_ACK_timeout' if self.ready_stamp is not None else 'ordinary_precise_capture_deceleration_timeout'
+            self.stage='failed';return self.stage
+        if self.capture_goal is None:raise ValueError('10Hz capture requires the fixed goal')
+        ready=self.capture_grid.ready
+        self.dwell=self.capture_grid.since
+        if self.ready_stamp is not None:
+            self.stage='zero_hold';return self.stage
+        if ready:
+            selected=self.capture_grid.last
+            self.ready_stamp=selected['source_stamp_ns'];self.ready_clock=clock;self.handoff_clock=clock
+            self.origin=np.asarray(selected['position'],float).copy();self.origin_yaw=selected['yaw_rad']
+            self.stage='handoff_zero'
+        else:
+            # This controls deceleration only; positive qualification comes from
+            # the 10Hz geometric capture above, never instantaneous motion.
+            band=.020 if self.stage=='controlled_deceleration' else .015
+            self.stage='controlled_deceleration' if goal_distance<=band and abs(yaw_error)<=.035 else 'capture'
+        return self.stage
 
     def begin(self,clock,timeout_ns):
         if self.enabled:return False
@@ -116,6 +183,7 @@ class OrdinaryParking:
         self.ready_stamp=self.ready_clock=self.handoff_clock=None
         self.first_zero_publication_clock=None;self.origin=self.origin_yaw=None
         self.dwell=None;self.stage='capture';self.deceleration_trigger=None
+        self.invalidate_pose10hz_capture()
         return True
 
     def guard(self,reason):
@@ -130,12 +198,14 @@ class OrdinaryParking:
                 self.failure=self.failure or 'ordinary_zero_hold_interrupted: '+str(reason)
             self.stage='failed'
         else:
-            self.stage='capture';self.dwell=None
+            self.stage='capture';self.dwell=None;self.invalidate_pose10hz_capture()
 
     def update(self,stamp,clock,position,yaw,velocity,yawdot,body_wz,goal_distance,yaw_error,
-               *,diagnostic=None):
+               *,diagnostic=None,sensor_pose=None):
         if not self.enabled:return None
         if self.failure and not self.diagnostic_failure_is_observed(diagnostic):return 'failed'
+        if self.pose10hz:
+            return self.update_pose10hz(stamp,clock,position,yaw,goal_distance,yaw_error,sensor_pose)
         if _diagnostic_enabled(diagnostic):
             # A score-only exception never admits malformed measured state.
             p,v=np.asarray(position,dtype=float),np.asarray(velocity,dtype=float)
@@ -211,4 +281,10 @@ class OrdinaryParking:
                 count=self.prequalification_source_hold_count,
                 first=None if self.prequalification_source_hold_first is None else dict(self.prequalification_source_hold_first),
                 last=None if self.prequalification_source_hold_last is None else dict(self.prequalification_source_hold_last))
+        if self.pose10hz:
+            result['parking_rule']='ordinary_pose10hz_zero_ack_fixed5/v1'
+            if self.pose_grid is not None:
+                summary=self.pose_grid.evidence();summary.pop('samples',None)
+                result['pose10hz_window']=summary
+            result['high_frequency_motion_used_for_decision']=False
         return result

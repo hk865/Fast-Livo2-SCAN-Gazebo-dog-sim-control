@@ -19,7 +19,7 @@ from mission46_runtime_evidence import (FileTail, native_projection, native_ns,
 
 RESULT_SCHEMA='r85_actual_fixed5_parking_result/v1'
 STUDENT_EXPORT_SHA='d8b51361ada74a80beb5e64f892447ea406d136be4c76a6ab15bae2d9b6c6185'
-PROVENANCE='r85_single_task_original_fixed5_verifier_reuse'
+PROVENANCE='r85_single_task_pose10hz_fixed5_v1'
 
 
 class R85ParkingRuntime:
@@ -57,7 +57,9 @@ class R85ParkingRuntime:
             provenance=PROVENANCE,compatibility_filenames_are_not_mission46=True,
             original46_completion_claimed=False,full_F3_PASS=False,navigation_PASS=False,
             navigation_ground_truth_used=False,parking_contract=MODE,
-            physical_thresholds_changed=False,actor_kind='student',student_export_sha256=STUDENT_EXPORT_SHA)
+            parking_motion_rule_changed=True,parking_position_yaw_limits_unchanged=True,
+            native_actuator_limits_changed=False,high_frequency_motion_gate=False,
+            actor_kind='student',student_export_sha256=STUDENT_EXPORT_SHA)
         seal(self.run,'r85_task_parking_result.json',row)
         self.result=copy.deepcopy(row)
         return self.result

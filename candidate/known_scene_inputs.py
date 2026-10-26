@@ -257,7 +257,7 @@ class KnownSceneInputMixin:
                 # Activate generation only here, after both original callbacks.
                 self.known_scene_commit_token=bundle.token
                 self.known_scene_inputs={**metadata,'received_monotonic_wall':max(bundle.arrivals_ns)/1e9}
-                if same_control_frame:_r86_negative_parking(self)
+                pose10hz_intake=_r86_negative_parking(self) if same_control_frame else False
                 mailbox.committed(bundle,time.monotonic_ns())
                 if join is not None:join.committed(bundle)
                 if policy is not None and policy.source_ns==ns:policy.clear('committed')
@@ -267,6 +267,7 @@ class KnownSceneInputMixin:
                     intake_arrivals_ns=bundle.arrivals_ns,prepared_ns=bundle.prepared_ns,
                     committed_monotonic_wall_ns=time.monotonic_ns(),
                     positive_stop_scope_qualified=self._r86_positive_stop_allowed,
+                    parking_pose10hz_source_intake=pose10hz_intake is True,
                     source_receipts_refreshed=False,navigation_ground_truth_used=False))
             except Exception as error:
                 if policy is not None and policy.source_ns==bundle.source_ns:

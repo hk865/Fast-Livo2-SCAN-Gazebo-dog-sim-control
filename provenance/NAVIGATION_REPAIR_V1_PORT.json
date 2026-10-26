@@ -1,0 +1,321 @@
+{
+  "schema": "dds_parking_publication_business_port/v1",
+  "created_UTC": "2026-10-26T15:54:37.593579+00:00",
+  "source_base": "e6714a43759e676353b224b5bd13947041fbd4a6",
+  "source_repair": "7b95487270a7cd6a9548a4008d0a43ea87b4ff43",
+  "publication_base": "d884650622d78798284197eee653098f003f7855",
+  "public_worktree": "<LOCAL_EXPERIMENT>/publication_20261026/main",
+  "merge": "git merge-file three-way clean: main portable file / original-A baseline / repaired file. No source-history cherry-pick.",
+  "files": [
+    {
+      "path": "candidate/POLICY_SELECTION_CONTRACT.json",
+      "scope": "delegated_or_not_copied",
+      "reason": "Local administrative path/pin not transplanted; retain published contract until explicit build/rebind",
+      "old_A_sha256": "495218237b6c280d20bb26658f10f133c1c16ddeb2b0aa00bdb3293adaffb0c7",
+      "repair_7b95487_sha256": "7320627a9fefcf972a349743934c489694929ba7119a23aa325d40d14337593d"
+    },
+    {
+      "path": "candidate/PRIVATE_DDS_CONTRACT.json",
+      "scope": "delegated_or_not_copied",
+      "reason": "DDS agent creates portable runtime build contract; original local ELF pins not copied",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "5be1ca085ee7993d62a055f4924c653e3ac32890e76351b5fed49eb99516a5af"
+    },
+    {
+      "path": "candidate/R73_SCAN_RUNTIME_CONTRACT.json",
+      "scope": "delegated_or_not_copied",
+      "reason": "Local administrative path/pin not transplanted; retain published contract until explicit build/rebind",
+      "old_A_sha256": "1ed1705a471470df0c5f8e6b8dccde1c33743f6ed95771929ca7f092668f6cba",
+      "repair_7b95487_sha256": "8ceeb77ba2f1c5414b0ca82f098e4647564b4006e35f406dca5d732a83a046d7"
+    },
+    {
+      "path": "candidate/cascade_core.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "f6cb4e4dd00bf440e11f9574b98a9d4ab7d638233d0a932079f51966a870195f",
+      "repair_7b95487_sha256": "ca0ec164f38c393cf039995f471700fa61a7ebb8a17f26035b0a804f55a9d517",
+      "published_d884650_sha256": "f6cb4e4dd00bf440e11f9574b98a9d4ab7d638233d0a932079f51966a870195f",
+      "ported_sha256": "ca0ec164f38c393cf039995f471700fa61a7ebb8a17f26035b0a804f55a9d517",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 3,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/controller.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "9c33ea7376ff7a8589939fa6c57d7e4d342d036a543ed0d35958626d2b62754f",
+      "repair_7b95487_sha256": "a4293f9cb357df0572c8e74aa190df34229db08c6a48c728f2c4f89e561507ef",
+      "published_d884650_sha256": "9c33ea7376ff7a8589939fa6c57d7e4d342d036a543ed0d35958626d2b62754f",
+      "ported_sha256": "a4293f9cb357df0572c8e74aa190df34229db08c6a48c728f2c4f89e561507ef",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/diagnostic_observation.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "a303674abfe0163994f442cb6a5c091bab530f4e7d77ad31f746c541b1789b4f",
+      "repair_7b95487_sha256": "81f7035f04f1cb7b41dba697fe2e22a87cf3ceed54994da3370b486d4ecb020a",
+      "published_d884650_sha256": "a303674abfe0163994f442cb6a5c091bab530f4e7d77ad31f746c541b1789b4f",
+      "ported_sha256": "81f7035f04f1cb7b41dba697fe2e22a87cf3ceed54994da3370b486d4ecb020a",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 1,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/dynamic_coordinate_handoff_checks.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "d49ec1ce91d23c1acfcab56d2c0c82ae1b4ace1872135afe7a3fe86cd0451313",
+      "published_d884650_sha256": null,
+      "ported_sha256": "d49ec1ce91d23c1acfcab56d2c0c82ae1b4ace1872135afe7a3fe86cd0451313",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 6,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/dynamic_formal_selector_checks.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "a3c5b44ef2381be9e197e40877256928e70a23e2b61de25f4a1ec44e53e4d675",
+      "published_d884650_sha256": null,
+      "ported_sha256": "a3c5b44ef2381be9e197e40877256928e70a23e2b61de25f4a1ec44e53e4d675",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 7,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/known_scene_inputs.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "85f5eca75055ddbd8294ae6c3e881ef8c43821bb22f36e8ab36d0a2135ab04f8",
+      "repair_7b95487_sha256": "264bcf8e1c0280a2ccdc40ed1d5e2b5e70fdc1ba8462c433cf017ac06a22d615",
+      "published_d884650_sha256": "85f5eca75055ddbd8294ae6c3e881ef8c43821bb22f36e8ab36d0a2135ab04f8",
+      "ported_sha256": "264bcf8e1c0280a2ccdc40ed1d5e2b5e70fdc1ba8462c433cf017ac06a22d615",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/mission46.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "12d6728c4e99526af0a53509df4e427d59496de907da61bbe071f4a19f508aff",
+      "repair_7b95487_sha256": "fbc7b9ae615c68c9176b1c83e76ebddfeb577f138948a901bb6ccb0e6c7a3690",
+      "published_d884650_sha256": "12d6728c4e99526af0a53509df4e427d59496de907da61bbe071f4a19f508aff",
+      "ported_sha256": "fbc7b9ae615c68c9176b1c83e76ebddfeb577f138948a901bb6ccb0e6c7a3690",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/mission46_runtime_evidence.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "23c16e5f2fcbe929dad6a83b3f48fe36fc6852f4fee7041ad8a5207aa954d911",
+      "repair_7b95487_sha256": "004c280370b4d762ba629a4422b4775511d3d6508787dbbaa250991719d68105",
+      "published_d884650_sha256": "23c16e5f2fcbe929dad6a83b3f48fe36fc6852f4fee7041ad8a5207aa954d911",
+      "ported_sha256": "004c280370b4d762ba629a4422b4775511d3d6508787dbbaa250991719d68105",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/ordinary_parking.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "6d57cd45a1400719511cf62d644159bdd40f43a5b716057d9c25dd62ccea7373",
+      "repair_7b95487_sha256": "28eaecf561c13dfa64620ef06507ec97d1b61ebeb1d93c430eb4f4a3c03fe9eb",
+      "published_d884650_sha256": "6d57cd45a1400719511cf62d644159bdd40f43a5b716057d9c25dd62ccea7373",
+      "ported_sha256": "28eaecf561c13dfa64620ef06507ec97d1b61ebeb1d93c430eb4f4a3c03fe9eb",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 11,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/parking_contract.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "dbc3b4ac20c0ce6ea33bc1af4ed45474b1cf3a9c26282b23b7268804d0ccabc9",
+      "repair_7b95487_sha256": "8486d9f9c931aa989af588e32c3ffd62dcf71793596233d41b98611d88b296d2",
+      "published_d884650_sha256": "dbc3b4ac20c0ce6ea33bc1af4ed45474b1cf3a9c26282b23b7268804d0ccabc9",
+      "ported_sha256": "8486d9f9c931aa989af588e32c3ffd62dcf71793596233d41b98611d88b296d2",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 1,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/parking_pose10hz.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "247bafb5bf076e6193bf30db2369a8e451bf0ecaf0b6219744266f6a118cb28b",
+      "published_d884650_sha256": null,
+      "ported_sha256": "247bafb5bf076e6193bf30db2369a8e451bf0ecaf0b6219744266f6a118cb28b",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 16,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/parking_pose10hz_checks.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "b8608e07dfb9dc5579253297fe9369fff95128929b857fea21cb9f33c183b021",
+      "published_d884650_sha256": null,
+      "ported_sha256": "b8608e07dfb9dc5579253297fe9369fff95128929b857fea21cb9f33c183b021",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 22,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/parking_pose10hz_terminal_checks.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "5bf83f05b191f0e2565c99d1de275ad12cfe63f71213a232943c93ac7565813b",
+      "published_d884650_sha256": null,
+      "ported_sha256": "abda76d4d2872bf890484c7d60cad1a4534034fe2bc0496c92b267e272900352",
+      "nonstring_AST_equal_to_7b95487": false,
+      "changed_function_count": 5,
+      "changed_functions_nonstring_AST_different_from_7b95487": [
+        ".TerminalFlowCheck",
+        ".TerminalFlowCheck.test_actual_terminal_control_publication_and_Student_ACK_make_one_fixed_T0"
+      ],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/private_dds_runtime.py",
+      "scope": "delegated_or_not_copied",
+      "reason": "DDS agent owns portable path integration",
+      "old_A_sha256": null,
+      "repair_7b95487_sha256": "bef660c7024a72eae3dd4bfa03dc0bf2a393a5ff6061047e69e1c01fca745ed4"
+    },
+    {
+      "path": "candidate/r85_dynamic_obstacle_runtime.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "1907f92920e395dc063e8fe64a23698ee6c5793de3286edbba3aca4ef3206940",
+      "repair_7b95487_sha256": "dbf03b0a95e0a20a948ca4daab137eb2d3ac6c1ef25622194d7ebf7313c13b09",
+      "published_d884650_sha256": "82763999f3a2a633640160d787afae4a6d63bdae4a1f1d36bf8df3d25833b65c",
+      "ported_sha256": "6f19342193a170d9dfbd807d2cd1634ea7a17b0d4a346effcbd4ced930c8d842",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 19,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/r85_dynamic_obstacle_verifier.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "70247d4ad26a61e1fcfa98c144d3ec921cb59d85d29d66fd33fa11a453c1a97e",
+      "repair_7b95487_sha256": "202967c760c30089bbde3ebfd7ec1d0301569c4e1f55ced614232d3e8b4b73e7",
+      "published_d884650_sha256": "4f90c39832723a7de54377b1980d81442340678ca2b01b8bba1389644699f6fb",
+      "ported_sha256": "af7c6c90cdd4c9aa71ffac3d93035e78cb499acaa468fe78b03adbbb97378617",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 10,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/r85_parking_runtime.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "33fae63966d88c55b6500298468ff0adc450d36d9ed89b260c000364ed3b2794",
+      "repair_7b95487_sha256": "9e3d38d861ad8822f469e373cb49d5792819d3423b0ac64c6bccf92fa98afb84",
+      "published_d884650_sha256": "33fae63966d88c55b6500298468ff0adc450d36d9ed89b260c000364ed3b2794",
+      "ported_sha256": "9e3d38d861ad8822f469e373cb49d5792819d3423b0ac64c6bccf92fa98afb84",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/r85_preflight.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "accac60b138eb6de0371fdef2846bc9d8422573204e9c1b3c0e44da9b0aac2e8",
+      "repair_7b95487_sha256": "cae1c2217b8eb51e6b2b2807594852ce203cd837c63206a84d771388c05a24fa",
+      "published_d884650_sha256": "accac60b138eb6de0371fdef2846bc9d8422573204e9c1b3c0e44da9b0aac2e8",
+      "ported_sha256": "cae1c2217b8eb51e6b2b2807594852ce203cd837c63206a84d771388c05a24fa",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 1,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/r85_request_runtime.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "9103f2bd76edcc227b4e0f579859bd7d3e1fcc824789e64cb3d9c6e867bef86c",
+      "repair_7b95487_sha256": "38210ddb8cd3bdd69aa4bf3a26f5ca773d1cddaf74177be41d932fe1a1792d47",
+      "published_d884650_sha256": "cd1d34a0fd8d5e69d8292a3cae1392fc0a36699a442ef4f6ae4adc3277aa38a9",
+      "ported_sha256": "5e1ea50c5982df9768965377cdb5b5952d1a3d5a1767955c38c6c1a9f0629f84",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 1,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/r86_prepared_feedback.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "3c33ec2af3c176a4a02035e7e2059e67c039fcfbeef67bdfa4ea31652aa91c7e",
+      "repair_7b95487_sha256": "d9b8f3e9888b39fe8aebd5e99ac1c63f2d323930fa9d3a3e1a4bc67838e668da",
+      "published_d884650_sha256": "3c33ec2af3c176a4a02035e7e2059e67c039fcfbeef67bdfa4ea31652aa91c7e",
+      "ported_sha256": "d9b8f3e9888b39fe8aebd5e99ac1c63f2d323930fa9d3a3e1a4bc67838e668da",
+      "nonstring_AST_equal_to_7b95487": true,
+      "changed_function_count": 1,
+      "changed_functions_nonstring_AST_different_from_7b95487": [],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/run.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "66aeea6970d94b3c4fbf62f22bcd24e73065f85e29f3bb752aa3bdef2b7768b4",
+      "repair_7b95487_sha256": "85b6e49f0f291d1d693a296d8953e88a9ad608426c924cc5a9f823fbb2a97c6b",
+      "published_d884650_sha256": "147a002e7c32279d6516b89d345adc2cef7c64b496074b2a3a8ab46b813289dc",
+      "ported_sha256": "1d46d3cfa7d462fc4b1137ab52583231b835598af408f0fc04f6bb0b150b0723",
+      "nonstring_AST_equal_to_7b95487": false,
+      "changed_function_count": 4,
+      "changed_functions_nonstring_AST_different_from_7b95487": [
+        ".prepare"
+      ],
+      "private_home_literals_added": false
+    },
+    {
+      "path": "candidate/slam.launch.py",
+      "scope": "business_or_offline_check",
+      "old_A_sha256": "ffd9eb02da571100ff5be98a8c82aafdda45081c2637e60365cd7e5ae24c75a7",
+      "repair_7b95487_sha256": "6abb1a77156e691dd8a717b27e522968b05ea7851c9adb2cdf7fbb3741d3bd64",
+      "published_d884650_sha256": "2a0b4bac5d00917350f031ea417c69ba309551acf96e372c49a0191cb7bc79b7",
+      "ported_sha256": "920cca2fbd0801a1417ab68a97bbf4c8cf22b76dd385ca4bb72c7c93d7b7e6f2",
+      "nonstring_AST_equal_to_7b95487": false,
+      "changed_function_count": 2,
+      "changed_functions_nonstring_AST_different_from_7b95487": [
+        ".generate_launch_description"
+      ],
+      "private_home_literals_added": false
+    }
+  ],
+  "scope": "Only candidate business files; DDS agent owns helper/contract, historical releases/formal22 unchanged.",
+  "checks": {
+    "parking_pose10hz_unit_methods": 14,
+    "dynamic_coordinate_cases": 48,
+    "strict_formal_unit_methods": 5,
+    "terminal_real_method_check": 1,
+    "passed": true,
+    "terminal_external_fixture_required": true,
+    "terminal_public_profile": "reproduction/typed_route/TERMINAL_HEADING_UPDATED_PROFILE_FIXTURE.json",
+    "ROS_nodes_or_model_or_physics_started": false
+  },
+  "explicit_adaptations": [
+    {
+      "path": "candidate/parking_pose10hz_terminal_checks.py",
+      "change": "Replace added private historical RUN and A/deployment PROFILE literals with explicit PARKING_TERMINAL_SOURCE_RUN and PARKING_TERMINAL_PROFILE prerequisites; missing inputs fail closed. No production control behavior changed."
+    }
+  ],
+  "limits": [
+    "Full module nonstring AST can differ from7b95487 because preexisting main package_paths/local_setup/SDK/source-role adaptations are retained; exact changed-function exceptions are enumerated, not silently declared equivalent.",
+    "Terminal method test used an externally retained real region fixture plus existing published-profile ACK hash and local installed ROS/scan_planner_msgs SDK; it does not prove external clone fixture availability or full runtime.",
+    "POLICY/SCAN and fresh DDS runtime ELF/descriptor/source-role bindings must be generated/rebound for this checkout; do not transplant stale local pins.",
+    "No commit, push, simulation or root historical checkout edits."
+  ]
+}

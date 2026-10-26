@@ -15,7 +15,7 @@ from dynamic_stop_event import audited_dynamic, select_event_preroll
 from parking_contract import MODE as ZERO_PARKING_MODE, enabled as zero_parking_enabled, qualification as zero_qualification
 from parking_zero_contract import validate_zero_observation,validate_zero_ack
 
-from mission46 import INIT_CHECKS, MAP_CHECKS, TERRAIN_CHECKS, DYNAMIC_CHECKS, PARK_CHECKS
+from mission46 import INIT_CHECKS, MAP_CHECKS, TERRAIN_CHECKS, DYNAMIC_CHECKS, PARK_CHECKS, LEGACY_PARK_CHECKS
 from mission46_profile import FROZEN_SHA, ORIGINAL_SCENARIO_SHA, SPAWN
 
 
@@ -462,6 +462,84 @@ def verify_zero_qualification_sources(run,anchor):
         raise ValueError('Actual T0 native/ACK source tuple differs')
     return dict(sources=source_receipt,original_qualification_status_line=found)
 
+def verify_pose10hz_parking(run,request_id,start_ns,pose_rows,native_records,status_rows,origin,
+                           anchor,qualification_sources,evidence_basename):
+    """Same pose-only grid as the live owner; native motion is diagnostic only."""
+    from parking_pose10hz import PoseGrid,SOURCE_AGE_NS,committed_poses
+    end=start_ns+5_000_000_000;grid=PoseGrid(start_ns,origin)
+    certificate=anchor.get('proof',{}).get('pose10hz_capture')
+    if certificate is not None:
+        actual_by_stamp={r['stamp_ns']:r for r in pose_rows}
+        for sample in certificate['samples']:
+            source=sample['source'];actual=actual_by_stamp.get(source['stamp_ns'])
+            if actual is None or any(actual.get(k)!=source.get(k)for k in ('position','quaternion_xyzw','source_topic','navigation_ground_truth_used')):
+                raise ValueError('Parking 10Hz capture data unavailable from original SLAM callbacks')
+    poses,source_lines=committed_poses(run,pose_rows,origin['stamp_ns'],end+SOURCE_AGE_NS,window_end_ns=end)
+    poses=[r for r in poses if r['stamp_ns']>origin['stamp_ns']]
+    for row in poses:
+        if (not 0<=row['received_sim_ns']-row['stamp_ns']<=SOURCE_AGE_NS or
+                not 0<=row['received_wall_ns']-row['source_received_wall_ns']<=SOURCE_AGE_NS):
+            raise ValueError('Parking 10Hz data unavailable: original source expired')
+        grid.observe(row)
+    sampled=grid.evidence()
+    if not sampled['data_available']:
+        raise ValueError('Parking 10Hz data unavailable: missing complete fixed-window samples')
+    if sampled['motion_failure']:
+        raise ValueError('Parking 10Hz fixed-anchor displacement/yaw exceeded')
+    statuses=[r for r in status_rows if start_ns<=r['received_sim_ns']<=end]
+    if not statuses:raise ValueError('Parking control evidence unavailable')
+    stamps=[r['received_sim_ns']for r in statuses]
+    if (stamps[0]-start_ns>SOURCE_AGE_NS or end-stamps[-1]>SOURCE_AGE_NS
+            or any(b-a>SOURCE_AGE_NS for a,b in zip(stamps,stamps[1:]))):
+        raise ValueError('Parking zero-command/status source evidence unavailable')
+    generations=set();assisted=json.loads((Path(run)/'navigation_profile.json').read_text()).get('known_scene_localization_contract',{}).get('enabled')
+    for row in statuses:
+        d=row['data'];cascade=d.get('cascade_parking')or{};owner=cascade.get('ordinary_parking')or{}
+        if (d.get('state')!='succeeded' or d.get('request_id')!=request_id
+                or cascade.get('mode')!='ordinary_zero_hold' or cascade.get('protection_active')
+                or cascade.get('failure_latched') or d.get('ordinary_terminal_failure_latched')is not None
+                or owner.get('failure') or cascade.get('ordinary_terminal_zero_event')!=anchor['event']
+                or d.get('tilt_hold') or d.get('obstacle_hold')
+                or (d.get('execution_bridge_safety')or{}).get('state')!='ready'
+                or d.get('command')!=[0.,0.,0.]):
+            raise ValueError('Parking independent control/source/protection fault')
+        if assisted:
+            m=d.get('known_scene_localization')or{};s=d.get('known_scene_runtime_status')or{};e=d.get('known_scene_scan_epoch')or{}
+            if (not m.get('control_allowed') or m.get('correction_stale') or m.get('correction_transition')
+                    or not s.get('initialized') or s.get('correction_transition') or not e.get('ready')
+                    or not(m.get('generation')==s.get('generation')==e.get('generation'))):
+                raise ValueError('Parking source coordinate generation unavailable')
+            generations.add(m['generation'])
+    if assisted and len(generations)!=1:raise ValueError('Parking source coordinate generation changed')
+    natives=[r for r in native_records if start_ns<=native_ns(r['data'])<=end]
+    for record in natives:
+        verify_line(record);d=record['data']
+        # These are the existing independent native fault/attitude/contact/
+        # joint/effort and command-integrity predicates, never velocity peaks.
+        if not native_safe(d) or d.get('command_expired')is not False:
+            raise ValueError('Independent native physical/control fault during parking')
+        if d.get('command')!=[0.,0.,0.] or d.get('requested')!=[0.,0.,0.]:
+            raise ValueError('Parking actual Actor input/request was not exact zero')
+        validate_zero_observation(d.get('ordinary_zero_before_actor_observation'),anchor['event'],round(d['world_sim_time']*1e9))
+    # Neither the number/coverage of native samples nor their motion magnitude
+    # influences the pose parking verdict. These values are observation only.
+    diagnostics=dict(native_samples=len(natives),native_planar_speed_max_mps=max((float(np.linalg.norm(r['data']['body_lin_vel'][:2]))for r in natives),default=None),
+        native_wz_max_radps=max((abs(r['data']['body_ang_vel'][2])for r in natives),default=None),used_for_parking_decision=False)
+    metrics=dict(slam_pose10hz_xy_drift_max_m=sampled['max_xy_from_anchor_m'],
+        slam_pose10hz_yaw_drift_max_rad=sampled['max_abs_yaw_from_anchor_rad'],
+        adjacent_xy_max_m=sampled['max_adjacent_xy_m'],adjacent_yaw_abs_max_rad=sampled['max_abs_adjacent_yaw_rad'])
+    proof=dict(schema='actual_pose10hz_fixed5_parking_evidence/v1',interval=[start_ns,end],
+        samples_10hz=sampled,actual_slam_poses=poses,actual_controller_statuses=statuses,
+        controller_commit_source_file='known_scene_controller_inputs.jsonl',controller_commit_source_lines=source_lines['commit_lines'],
+        controller_feedback_source_file='navigation_feedback_history.jsonl',controller_feedback_source_lines=source_lines['feedback_lines'],
+        native_source_records=natives,native_motion_diagnostic=diagnostics,metrics=metrics,
+        origin=origin,T0_origin_anchor=anchor,original_T0_source_replay=qualification_sources,
+        parking_contract=ZERO_PARKING_MODE,navigation_ground_truth_used=False,
+        high_frequency_motion_gate=False,independent_hard_fault_protection_retained=True)
+    evidence=seal(run,evidence_basename,proof)
+    return receipt(run,'teacher_mission46_final_parking/v1',PARK_CHECKS,evidence,
+        request_id=request_id,start_stamp_ns=start_ns,end_stamp_ns=end,metrics=metrics,parking_contract=ZERO_PARKING_MODE)
+
 def verify_parking(run, request_id, start_ns, pose_rows, native_records, status_rows, origin, *,
                    parking_contract='legacy_arrival_fixed5', anchor=None, evidence_basename='mission46_final_parking_evidence.json'):
     ordinary=parking_contract==ZERO_PARKING_MODE
@@ -471,6 +549,9 @@ def verify_parking(run, request_id, start_ns, pose_rows, native_records, status_
             or actual_anchor.get('run_id')!=Path(run).name or actual_anchor.get('request_id')!=request_id
             or origin!=anchor['origin']):raise ValueError('First ordinary zero T0/origin binding differs')
         qualification_sources=verify_zero_qualification_sources(run,anchor)
+        if anchor['proof'].get('parking_rule')=='ordinary_pose10hz_zero_ack_fixed5/v1':
+            return verify_pose10hz_parking(run,request_id,start_ns,pose_rows,native_records,status_rows,
+                origin,anchor,qualification_sources,evidence_basename)
     end=start_ns+5_000_000_000
     poses=[r for r in pose_rows if start_ns<=r['stamp_ns']<=end]
     natives=[r for r in native_records if start_ns<=native_ns(r['data'])<=end]
@@ -535,7 +616,7 @@ def verify_parking(run, request_id, start_ns, pose_rows, native_records, status_
     proof.update(parking_contract=parking_contract,T0_origin_anchor=anchor if ordinary else None,
                  original_T0_source_replay=qualification_sources if ordinary else None)
     evidence=seal(run,evidence_basename,proof)
-    return receipt(run,'teacher_mission46_final_parking/v1',PARK_CHECKS,evidence,
+    return receipt(run,'teacher_mission46_final_parking/v1',LEGACY_PARK_CHECKS,evidence,
                    request_id=request_id,start_stamp_ns=start_ns,end_stamp_ns=end,metrics=proof['metrics'],
                    parking_contract=parking_contract)
 

@@ -31,6 +31,7 @@ def strict_formal_enabled(profile):
     expected=dict(schema='r85_strict_formal_f1_f3/v1',enabled=True,kind='f1_to_f3',
         original_single_scope_dynamic_required=True,business_rejections_must_stop=True)
     segmented=type(value) is dict and value.get('schema')=='r85_strict_formal_f1_f3/v3'
+    coordinate=type(value) is dict and value.get('schema')=='r85_strict_formal_f1_f3/v4'
     event_window=type(value) is dict and value.get('schema')in ('r85_strict_formal_f1_f3/v2','r85_strict_formal_f1_f3/v3')
     if event_window:
         # The event owns its real completed window; current control still owns
@@ -39,6 +40,8 @@ def strict_formal_enabled(profile):
             dynamic_event_lifetime='single_completed_event_window/v1',business_rejections_must_stop=True)
     if segmented:expected=dict(schema='r85_strict_formal_f1_f3/v3',enabled=True,kind='f1_to_f3',
         dynamic_event_lifetime='single_world_event_pre_stop_nav_segment/v2',business_rejections_must_stop=True)
+    if coordinate:expected=dict(schema='r85_strict_formal_f1_f3/v4',enabled=True,kind='f1_to_f3',
+        dynamic_event_lifetime='single_world_event_coordinate_handoffs/v3',business_rejections_must_stop=True)
     if (type(value) is not dict or set(value)!=set(expected)
             or any(type(value[k]) is not type(v) or value[k]!=v for k,v in expected.items())):
         raise ValueError('Exact typed strict formal F1-to-F3 scope required')
@@ -56,6 +59,8 @@ def strict_formal_enabled(profile):
         if event_window else dict(completed_same_geometry_preservation=False))
     if segmented:expected_dynamic=dict(schema='single_world_event_pre_stop_nav_segment/v2',completed_event_window=True,
         whole_task_single_scope=False,completed_same_geometry_preservation=False,maximum_pre_stop_navigation_switches=1)
+    if coordinate:expected_dynamic=dict(schema='single_world_event_coordinate_handoffs/v3',completed_event_window=True,
+        whole_task_single_scope=False,completed_same_geometry_preservation=False,maximum_coordinate_handoffs=2)
     dynamic_matches=(type(dynamic) is dict and set(dynamic)==set(expected_dynamic)
         and all(type(dynamic[k]) is type(v) and dynamic[k]==v for k,v in expected_dynamic.items()))
     if (type(diagnostic) is not dict or diagnostic.get('enabled') is not False

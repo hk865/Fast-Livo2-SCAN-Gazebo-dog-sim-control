@@ -236,6 +236,9 @@ class Controller:
         self.parking_interrupted = False
         self.row = {}
         self.ordinary_parking=OrdinaryParking()
+        self.ordinary_parking.configure_pose10hz(config.get('parking_pose10hz'))
+        self.ordinary_parking.capture_goal=self.goal.tolist()
+        self.ordinary_parking.capture_heading=self.goal_yaw
         self.ordinary_reset_pending=False
         self.ordinary_reset_receipt=None
         self.ordinary_zero_event=None
@@ -721,7 +724,7 @@ class Controller:
                 self.goal_yaw!=self.goal_record['heading_rad']):
                 self._protect('ordinary_fixed_goal_identity_changed',fatal=True)
                 return self._output('protect',clock,wall,reason=self.protection_reason)
-            if goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance or abs(wrap(self.goal_yaw-yaw))>.6:
+            if not ordinary.pose10hz and (goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance or abs(wrap(self.goal_yaw-yaw))>.6):
                 observed=ordinary.observe_business_rejection('parking_fixed_target_lost',stamp,clock,
                     dict(goal_distance_xy_m=goal_distance,goal_z_error_m=goal_z_error,
                          goal_yaw_error_rad=wrap(self.goal_yaw-yaw),
@@ -732,9 +735,11 @@ class Controller:
                     self._protect('parking_fixed_target_lost')
                     return self._output('protect',clock,wall,reason=self.protection_reason)
         previous_ordinary_stage=ordinary.stage
+        from parking_pose10hz import from_feedback
+        sensor_pose=from_feedback(feedback) if ordinary.pose10hz else None
         stage=ordinary.update(stamp,clock,position,yaw,origin_body,yawdot,gyro[2],
                               goal_distance,wrap(self.goal_yaw-yaw),
-                              diagnostic=getattr(self,'diagnostic_observe_only',None))
+                              diagnostic=getattr(self,'diagnostic_observe_only',None),sensor_pose=sensor_pose)
         if stage=='controlled_deceleration' and previous_ordinary_stage!='controlled_deceleration':
             self.reset_control_memory('ordinary_controlled_deceleration_entry',measurement,actual)
         if stage=='failed':
@@ -753,7 +758,8 @@ class Controller:
                 measured_COM_velocity_body=com_body.tolist(),measured_Euler_yawrate_radps=yawdot,
                 measured_body_omega=gyro.tolist(),body_roll_rad=roll,body_pitch_rad=pitch,
                 goal_distance_xy_m=goal_distance,goal_z_error_m=goal_z_error,
-                capture_measurement_eligible=bool(goal_distance<=.025 and abs(wrap(self.goal_yaw-yaw))<=.035 and
+                capture_measurement_eligible=bool(ordinary.capture_grid.ready if ordinary.pose10hz else
+                    goal_distance<=.025 and abs(wrap(self.goal_yaw-yaw))<=.035 and
                     np.linalg.norm(origin_body[:2])<.03 and abs(yawdot)<.06),
                 precise_capture_completed=True,capture_fresh_dwell_start_pose_stamp_ns=ordinary.dwell,
                 source_hz_is_math_update_hz=True,parking_active_command_need_not_be_zero=False)
@@ -774,7 +780,16 @@ class Controller:
                             quaternion_xyzw=vector(feedback['quaternion_wxyz'],4)[[1,2,3,0]].tolist(),
                             received_wall_ns=receipt,source_received_wall_ns=receipt,received_sim_ns=clock,
                             source_topic='/demo/slam/body_odom',navigation_ground_truth_used=False))
+                    if ordinary.pose10hz:
+                        selected=ordinary.capture_grid.last
+                        qualified.update(parking_rule='ordinary_pose10hz_zero_ack_fixed5/v1',
+                            pose10hz_capture=ordinary.capture_grid.evidence(),
+                            qualification_pose_stamp_ns=selected['source_stamp_ns'],
+                            qualification_origin=copy.deepcopy(selected['source']))
                     ordinary.first_actor_zero_ack=copy.deepcopy(qualified)
+                    if ordinary.pose10hz:
+                        ordinary.start_pose10hz_window(qualified)
+                        ordinary.pose_grid.observe(sensor_pose)
                 else:
                     # ACK validity above is unchanged. This attempt never
                     # acquired a first qualifying proof or a formal T0.
@@ -805,8 +820,8 @@ class Controller:
                             reason='ordinary_preT0_precise_qualification_lost')
             return self._output('ordinary_zero_hold',clock,wall,updated=True)
         capture_ready = (terminal is None and endpoint_is_goal and remaining <= .15 and goal_distance <= .12 and
-            abs(goal_z_error) <= self.goal_z_tolerance and np.linalg.norm(origin_body[:2])<.08 and
-            abs(yawdot)<.1 and abs(wrap(self.goal_yaw-yaw))<.2)
+            abs(goal_z_error) <= self.goal_z_tolerance and (ordinary.pose10hz or np.linalg.norm(origin_body[:2])<.08 and
+            abs(yawdot)<.1) and abs(wrap(self.goal_yaw-yaw))<.2)
         entry_reset = False
         if self.capture_stamp is None and (capture_ready and mode_override!='brake' or mode_override=='capture'):
             if goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance:
@@ -830,7 +845,7 @@ class Controller:
         vertical_reference_model='fixed_goal_world_xy_hold'
         external_turn_reference = None
         if self.capture_stamp is not None:
-            if goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance or abs(wrap(self.goal_yaw-yaw))>.6:
+            if not ordinary.pose10hz and (goal_distance>.3 or abs(goal_z_error)>self.goal_z_tolerance or abs(wrap(self.goal_yaw-yaw))>.6):
                 observed=ordinary.observe_business_rejection('parking_fixed_target_lost',stamp,clock,
                     dict(goal_distance_xy_m=goal_distance,goal_z_error_m=goal_z_error,
                          goal_yaw_error_rad=wrap(self.goal_yaw-yaw),

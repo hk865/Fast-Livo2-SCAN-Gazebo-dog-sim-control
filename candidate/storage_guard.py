@@ -1,7 +1,8 @@
 """Explicit R80 current-retained guard proxy; no historical fallback."""
 from pathlib import Path
 import hashlib,importlib.util,sys
-S=Path('/home/hyh001/projects/1.Project/Ros2_fastlivo2_/multifloor_demo/development/r86_feedback_isolation/navigation_acceptance_round27_20261024/worktrees/published_formal22_repro/.local_dependencies/storage_guard')
+import package_paths as _package_paths
+S=_package_paths.GUARD_ROOT
 PATH=S/'storage_guard.py'
 if hashlib.sha256(PATH.read_bytes()).hexdigest()!='ebf29f18def24fe32955c93547ebd29d8cc989ded71acdb79bf2e040f91a5717':
     raise RuntimeError('R80 approved current-retained guard source changed')

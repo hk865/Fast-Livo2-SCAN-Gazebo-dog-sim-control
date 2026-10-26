@@ -62,6 +62,8 @@ def generate_launch_description():
             raise ValueError('Unknown sensor relay publication mode')
         relay_cmd=([str(teacher/'navigation/sensor_relay.py')] if relay_mode=='legacy' else
             [str(here/'sensor_relay.py'),'--run-dir',str(run),'--mode',relay_mode])
+        from private_dds_runtime import native_environment
+        native_env=native_environment(run,os.environ)
         processes=[
             ExecuteProcess(cmd=['python3',*relay_cmd,*ros],output='screen'),
             ExecuteProcess(cmd=['python3',str(here/'self_echo_filter.py'),'--scenario',str(run/'navigation_scenario.json'),
@@ -69,7 +71,7 @@ def generate_launch_description():
             Node(package='demo_nodes_cpp',executable='parameter_blackboard',name='parameter_blackboard',
                  output='screen',parameters=[str(run/'navigation_camera.yaml'),{'use_sim_time':True}]),
             Node(package='fast_livo2_ros',executable='fastlivo_mapping',name='laserMapping',output='screen',
-                 additional_env={'DEMO_RUN_DIR':str(run)},parameters=[str(run/'navigation_fastlivo.yaml'),
+                 additional_env=native_env,parameters=[str(run/'navigation_fastlivo.yaml'),
                     str(run/'navigation_camera.yaml'),{'use_sim_time':True}],
                  remappings=[('/cloud_registered_full','/demo/slam/raw_registered_full')]),
             ExecuteProcess(cmd=['python3',str(here/'odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros,
