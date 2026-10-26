@@ -10,6 +10,10 @@
 4. 为本 checkout 重新绑定 native/SCAN、POLICY、几何元数据及所有被引用文件 SHA。合同中的历史本机绑定不能在异机当成已验证依赖。生成新的本轮资源证明、时间窗口与实际加载期望，既有过期行政窗口不续用。
 5. 使用现有原机管理入口 `round27_v3.py` 的 propose → 独立审核 → apply → 冻结 → prepare → execute → verify-loaded → closure。它属于当前部署环境，不以文档中的占位路径替代真实依赖。运行命令与最终输入清单保存在该轮回执。
 
+第 3–4 步还必须将 `r85_task.typed_route_source_file` 绑定到本包 [typed route](../reproduction/typed_route/typed_r85_global_reference.json)，按最终实际文件重新计算 `typed_route_source_sha256`。当前包内原文件 SHA256 为 `5ea8157fcfc0284dd928d13e9f303905a693d6254eaee83e9b1cd06352a086aa`。337×3 路线点、变换和目标相同，不代表原 A 的 typed source 可直接复用：其旧 reference/helper 身份与本包不匹配。嵌套 `physical_sources` 的 metadata/reference/world/limits/helper、`source_route_file`/SHA 和 `physical_certificate_file` 必须与当前几何上下文整链一致；现有 DDS `bind_runtime.py` 不处理这些路线绑定。
+
+execute 前须用当前几何实现和已记录的真实初始位姿样本做无 ROS 的连接器检查，确认 `certify_start_connector(..., resume_from_actual_route_projection=True)` 返回 `allowed=true` 且包含相符的 `route_resume`。运行时仍须用本轮新鲜位姿重新检查。静态物理证书仅说明静态空间检查通过，不授予导航 PASS。旧 A 的身份不匹配输入必须继续被拒绝，不能将两个 helper SHA 同时放行。
+
 默认保持 serial 输入模式、IMU 优先、LIO 内部原并行、异步中转发布、SHM+UDP/可靠 QoS。没有恢复 V19 staged 输入、替换 SLAM/SCAN 算法或抬高 300ms/容量门。正式选择必须为 `r85_strict_formal_f1_f3/v4`，并实际装载相应停车和动态合同。
 
 ## 无仿真检查
