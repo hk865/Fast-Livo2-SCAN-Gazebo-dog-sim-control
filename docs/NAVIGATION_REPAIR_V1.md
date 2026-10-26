@@ -14,6 +14,8 @@
 
 execute 前须用当前几何实现和已记录的真实初始位姿样本做无 ROS 的连接器检查，确认 `certify_start_connector(..., resume_from_actual_route_projection=True)` 返回 `allowed=true` 且包含相符的 `route_resume`。运行时仍须用本轮新鲜位姿重新检查。静态物理证书仅说明静态空间检查通过，不授予导航 PASS。旧 A 的身份不匹配输入必须继续被拒绝，不能将两个 helper SHA 同时放行。
 
+完整初始 `world.sdf` 的 SHA 也是几何来源合同的一部分，包含 overview 相机初始 pose。本包静态证书绑定的 world SHA256 为 `7da821ac7d4dc09bccdedc99f0ce1ba7e7b7af73bc28b8835ae49dbb617e4c27`，对应相机 pose `[8,-1,2.5,0,0.45,1.5707963267948966]`。修改 profile 的相机 pose 后，必须正式重新绑定 world/reference/metadata/helper/typed route 并真实重算静态证书；不能只沿用旧证书或校验后移动世界实体。GUI 自己的观看相机不改变 world，但新增 GUI/录屏负载需单独验证。
+
 默认保持 serial 输入模式、IMU 优先、LIO 内部原并行、异步中转发布、SHM+UDP/可靠 QoS。没有恢复 V19 staged 输入、替换 SLAM/SCAN 算法或抬高 300ms/容量门。正式选择必须为 `r85_strict_formal_f1_f3/v4`，并实际装载相应停车和动态合同。
 
 ## 无仿真检查
@@ -29,3 +31,5 @@ PYTHONDONTWRITEBYTECODE=1 python3 candidate/dynamic_formal_selector_checks.py
 真实 terminal 方法检查还需要 `PARKING_TERMINAL_SOURCE_RUN`、`PARKING_TERMINAL_PROFILE` 和对应消息 SDK；这些外部历史数据未打包。缺失时应报告未运行，不能生成假原始消息。
 
 [两轮自然结果及受控切换重放](../reproduction/results/navigation_repair_v1/RESULT.zh-CN.md) 的范围不等于异机复现。demo 将在发布后用同一业务代码和新的行政绑定录制；旁观镜头与归档开销另记，真实业务验收不放宽。
+
+发布后录制尝试尚未完整通过，见 [实际状态及输入绑定问题](../reproduction/results/navigation_repair_v1/PUBLISHED_DEMO_STATUS.zh-CN.md)。不得把原环境两轮 PASS 当作发布目录的 demo 已完成。
