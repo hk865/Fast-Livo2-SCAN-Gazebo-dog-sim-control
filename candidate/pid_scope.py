@@ -177,13 +177,15 @@ def runtime_files(profile=None):
     from corridor_preflight import evidence_files
     from geometry_archive import geometry_helper_files
     preflight+=geometry_helper_files(HERE)
-    # The published native571 package has a fresh complete current-source chain.
+    # Both supported private native schemas have a complete current-source chain,
+    # verified by slam_workspace.evidence_files() below before archival.
     # Keep the old R33 document as history; its V32/R73 ELF list is not a
     # current R85 execution dependency. All current geometry, native and SCAN
     # evidence is still enumerated below. Other entry modes retain the list.
     from slam_workspace import PRIVATE as native_selection
     published_r85=(native_selection is not None
-        and native_selection[1].get('schema')=='published_formal22_native571_build/v1'
+        and native_selection[1].get('schema') in (
+            'published_formal22_native571_build/v1','serial_imu_priority_native_build/v1')
         and r85_profile_identity(profile or {}) is not None)
     if published_r85:
         startup_contract=HERE/'R33_SHORT_STARTUP_CONTRACT.json'

@@ -14,6 +14,8 @@
 
 ## 无仿真检查
 
+R85 源归档支持 `published_formal22_native571_build/v1` 与 `serial_imu_priority_native_build/v1` 两种现有 native 合同，均须通过 `slam_workspace` 的完整当前源码、构建及产物校验；几何、SCAN、模型等实际依赖继续绑定。旧 `R33_STARTUP_PREFLIGHT.json` 本身保留归档，其历史 V32/R73 文件清单不作为这两种 R85 当前源链的依赖；其他合同及非 R85 入口保留原路径。
+
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python3 candidate/parking_pose10hz_checks.py
 PYTHONDONTWRITEBYTECODE=1 python3 candidate/dynamic_coordinate_handoff_checks.py
