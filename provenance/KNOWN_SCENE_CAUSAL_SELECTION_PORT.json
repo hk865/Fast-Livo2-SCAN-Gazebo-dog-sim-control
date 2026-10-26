@@ -45,7 +45,7 @@
   ],
   "regression_scope": "Opaque payload selection fixtures and isolated worker with a geometry stub; no geometry or physical navigation certification.",
   "browser_scope": "Single-run local read-only file display; no ROS subscriptions or mission-control endpoint.",
-  "current_runtime_acceptance": "one_new_full_run_and_video_validated; same_business_repeat_pending",
+  "current_runtime_acceptance": "one_new_full_PASS_and_video_delivered;two_CPU_resource_aborts_without_business_verdict;full_repeat_validation_incomplete",
   "tests_or_compilation_executed_for_this_publication_preparation": false,
   "historical_two_PASS_results_modified": false,
   "license_note": "Existing repository code/page adaptation; no new external JS/CDN, third-party source or model artifact added.",
@@ -60,7 +60,7 @@
   },
   "dynamic_release_anchor_fix": {
     "source_status": "frozen_reviewed_source_copied",
-    "runtime_acceptance": "first_new_full_run_PASS; repeat_pending",
+    "runtime_acceptance": "first_new_full_run_PASS;two_same_business_repeats_CPU_resource_aborted_no_business_verdict",
     "scope": "Bind clear recovery and stable witness to the same actual hold-release anchor and source cloud; preserve all numeric physical and freshness gates.",
     "old_selected_alignment_sim_s": 195.07,
     "actual_hold_release_sim_s": 192.9,
@@ -112,10 +112,7 @@
     "numeric_gates": "1.35s lookback,>=10 records,>=1s span,<=300ms gap,original sequence/previous-clock continuity,all clear and native geometry replay retained.",
     "recorded_history_limit": "Archived runs lack some required raw release clouds; old full-validator outcomes remain failed. New pinning cannot synthesize old payloads or grant historical/new physical PASS."
   },
-  "final_evidence_needed": [
-    "same_business_repeat_run_id_and_task_dynamic_parking_full_F3_results",
-    "repeat_loading_Actor_CRC_and_closure_receipts"
-  ],
+  "final_evidence_needed": [],
   "first_published_clear_anchor_fix_run": {
     "run_id": "20261026T192415Z_closed_loop_R85_published_clear_anchor_fix_1_full_F1_F3_bcb2",
     "deployment_commit": "2b81b7b96ef47cd0cd2b1b6914e962e895e7e508",
@@ -156,9 +153,37 @@
       "ffprobe_duration_wall_s": 461.2,
       "frames": 2306,
       "screen_fps": 5,
-      "physical_unique_sampler_claimed": false
+      "physical_unique_sampler_claimed": false,
+      "original_duration_s": 461.2,
+      "full_decode_return_code": 0,
+      "actual_reviewed_frame_wall_seconds": [
+        45,
+        250,
+        458
+      ],
+      "original_video_rewritten": false,
+      "original_display_differences": "Browser target2/1 and map-save labels retained in original recording; later UI corrections do not alter it.",
+      "delivery_plan": "Completed: browser chrome/window border cropped only, full time preserved, video saved privately in Library; no video or private Library identifier in Git.",
+      "delivery_export": {
+        "width": 1440,
+        "height": 996,
+        "crop_scope": "browser top bar and border only",
+        "temporal_trim": false,
+        "speed_change": false,
+        "frame_interpolation": false,
+        "duration_s": 461.2,
+        "frames": 2306,
+        "bytes": 5666737,
+        "final_decode_and_Library_save_status": "completed",
+        "private_Library_identifier_published": false,
+        "video_published_in_Git": false,
+        "full_decode_returncode": 0,
+        "sha256": "6eb11e7c795beb7d1bfe46ed629e1bfda1d3d79075612e3e7c7d44707c9c2084",
+        "private_Library_saved": true,
+        "metadata_identity_persisted": true
+      }
     },
-    "same_business_repeat_status": "pending",
+    "same_business_repeat_status": "incomplete_after_two_original_CPU_resource_aborts",
     "cross_machine_acceptance_claimed": false,
     "closure": {
       "closure_complete": true,
@@ -168,5 +193,89 @@
       "three_locks_available": true
     },
     "runtime_error": null
-  }
+  },
+  "second_published_clear_anchor_fix_attempt": {
+    "identifier_suffix": "f98f",
+    "classification": "resource_abort_not_business_verdict",
+    "business_task_result_created": false,
+    "business_verdict": "not_produced",
+    "approximate_forward_progress_m": 25,
+    "resource_guard": {
+      "cpu_count": 20,
+      "load1": 18.1005859375,
+      "original_load1_limit": 18.0,
+      "monotonic_s": 317850.152119379,
+      "runner_exit_code": 1
+    },
+    "closure": {
+      "all_six_checks_passed": true
+    },
+    "actual_loading_passed": true,
+    "Actor_archive_CRC": {
+      "passed": true,
+      "records": 14243
+    },
+    "browser_recording": {
+      "bytes": 13062947,
+      "ended_normally": true,
+      "successful_demo_delivery_claimed": false
+    },
+    "cleanup": {
+      "previous_extra_readonly_browser_closed_normally": true,
+      "previous_extra_browser_absence_confirmed": true,
+      "new_recording_browsers_closed_normally": true,
+      "CPU_peak_causality_proven": false
+    },
+    "historical_verdicts_modified": false
+  },
+  "planned_cleanup_repeat": {
+    "status": "executed_e908_resource_abort_no_business_verdict",
+    "maximum_new_attempts": 1,
+    "business_code_unchanged": true,
+    "original_CPU_threshold_unchanged": true,
+    "screen_recording_wall_fps": 5,
+    "capacity_limits_changed": false,
+    "further_simulation_planned": false
+  },
+  "third_published_clear_anchor_fix_attempt": {
+    "identifier_suffix": "e908",
+    "classification": "resource_abort_not_business_verdict",
+    "business_task_result_created": false,
+    "business_verdict": "not_produced",
+    "resource_guard": {
+      "cpu_count": 20,
+      "load1": 18.38037109375,
+      "original_load1_limit": 18.0,
+      "monotonic_s": 318567.343949849,
+      "runner_exit_code": 1
+    },
+    "Actor_archive_CRC_passed": true,
+    "closure_status": "confirmed_complete",
+    "historical_verdicts_modified": false,
+    "closure": {
+      "closure_complete": true,
+      "all_six_checks_passed": true,
+      "owned_groups_absent": true,
+      "private_domain_clear": true,
+      "three_locks_available": true
+    },
+    "actual_loading": {
+      "passed": true,
+      "error_count": 0
+    },
+    "runtime_error_classification": "original_CPU_resource_protection_stop_preserved_not_business_verdict",
+    "browser_recording_shutdown": {
+      "browser_return_code": 0,
+      "encoder_return_code": 0,
+      "normal_exit": true,
+      "server_stopped_by_SIGINT": true
+    }
+  },
+  "new_business_attempt_summary": {
+    "attempts": 3,
+    "full_PASS": 1,
+    "resource_abort_without_business_verdict": 2,
+    "repeated_full_validation_completed": false
+  },
+  "completion_scope": "Main source repair and first full-PASS browser demo delivery completed. Same-business complete repeat verification remains incomplete after two original CPU resource-protection aborts; no overall stability-completion claim."
 }
