@@ -30,6 +30,18 @@ PYTHONDONTWRITEBYTECODE=1 python3 candidate/dynamic_formal_selector_checks.py
 
 真实 terminal 方法检查还需要 `PARKING_TERMINAL_SOURCE_RUN`、`PARKING_TERMINAL_PROFILE` 和对应消息 SDK；这些外部历史数据未打包。缺失时应报告未运行，不能生成假原始消息。
 
-[两轮自然结果及受控切换重放](../reproduction/results/navigation_repair_v1/RESULT.zh-CN.md) 的范围不等于异机复现。demo 将在发布后用同一业务代码和新的行政绑定录制；旁观镜头与归档开销另记，真实业务验收不放宽。
+[两轮自然结果及受控切换重放](../reproduction/results/navigation_repair_v1/RESULT.zh-CN.md) 的范围不等于异机复现。发布目录使用冻结业务代码和新的行政绑定运行录制；旁观镜头与归档开销另记，真实业务验收不放宽。
 
-发布后录制尝试尚未完整通过，见 [实际状态及输入绑定问题](../reproduction/results/navigation_repair_v1/PUBLISHED_DEMO_STATUS.zh-CN.md)。不得把原环境两轮 PASS 当作发布目录的 demo 已完成。
+发布后新修复首轮真实任务已通过；加载、Actor CRC 和收尾已确认；视频核对与同业务复验仍待完成，见 [实际状态及输入绑定问题](../reproduction/results/navigation_repair_v1/PUBLISHED_DEMO_STATUS.zh-CN.md)。不得把原环境两轮 PASS 当作发布目录的 demo 已完成。
+
+## 已选中的因果输入修复与只读显示
+
+`known_scene_adapter.py` 的最新完整输入选择已改为：在任务捕获的 ROS clock 之前或相等的完整九路源组中选最新一组；较新的 future 组留待后续任务，不因它到得更晚而消费它、推进完成水位或替换仍可用的因果组。没有可选因果组时等待。墙钟在取得 join 锁后采样，避免锁等待期间新到的接收时间被较早的墙钟误判。任务仍使用原捕获 clock，3 秒源龄/接收墙龄、原匹配间隔、几何与质量门、队列容量及控制端 300ms 门保持原值。
+
+这改变了实际匹配输入的选择行为，包含选择与拒绝时间记录，**不是仅增加诊断**。`known_scene_causal_join_checks.py` 是不透明消息占位及独立几何 stub 的确定性选择/worker 回归检查；不验证真实几何、导航或停车。首次仅含因果选择修复的运行 `0549` 到达 F3 且停车通过，但动态终审失败，整轮仍为 FAIL，详见上述实际状态；不能继承原两轮 PASS。[来源清单](../provenance/KNOWN_SCENE_CAUSAL_SELECTION_PORT.json) 不授予运行验收。
+
+动态恢复窗口修复已冻结为 `06de9bb062ce8862d059a2449cd8ec916a220062` 的五份源码，身份见上述来源清单；独立软件语义与预算审查通过，首轮新物理运行 `bcb2` 的整轮、动态和停车验收均通过；加载、Actor CRC 和收尾已确认；视频核对及同业务复验仍待完成。clear 窗口绑定唯一同一次停止的真实 obstacle-hold 释放及连续 clear timer 首次实际观测，稳定证据共用该释放锚点；timer 可在两次缓存 callback 求值之间初始化，不要求不存在的精确起点记录。稍后 alignment 完成仍单独用于实际移动恢复，不提前取得运动信用。
+
+R85 专用 pin 仅保留原只读 cloud 数组/绑定引用，不复制点、不重建历史缺失消息，legacy 路径不变。原 1.35 秒 lookback、至少 10 条/1 秒、最大 300ms 间隙、sequence/previous-clock 连续性、全 clear、源龄及 native 几何重放继续检查；原 2 秒滚动、合计 512 个绑定、64MiB 保留/复制及 48MiB 归档界限不变。这是证据选择与保留行为修复，不能把旧失败轮重标为通过。
+
+[单轮浏览器适配器](../tools/demo_browser/README.md) 只读本轮 RGB 点云、真实 SLAM 四元数位姿、已接纳 SCAN 路径和原任务结果；没有 ROS 订阅或启动/停止接口。UI 每 0.8 秒刷新、外部浏览器屏录 5Hz 墙钟、vehicle RGB 30Hz 和 overview 2Hz 是不同口径。首轮任务 PASS 不替代视频覆盖核对；第二轮同业务复验仍为 pending。

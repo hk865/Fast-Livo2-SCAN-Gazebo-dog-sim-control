@@ -136,7 +136,8 @@ def stable_selected_witness(verifier,run,result,handoff_source_ns,*,identity_pre
         and r['data']['obstacle_resumes']>0 and type(r['data'].get('aligned_obstacle_resumes'))is int
         and r['data']['aligned_obstacle_resumes']>0]
     require(resumed,'stable_witness_original_resume_missing');resume=resumed[0]['received_sim_ns']
-    cleared=[r for r in guards if resume-1350000000<=r['data']['compute_ros_clock_ns']<=resume]
+    release,cleared=verifier.select_clear_window(guards,event,resume)
+    clear_end=release['data']['compute_ros_clock_ns']
     verifier._strict_clocks(cleared,'compute_ros_clock_ns',300000000,10,1000000000,'Continuous clear guard')
     require(all(b['data'].get('sequence')==a['data'].get('sequence',-2)+1
         and b['data'].get('previous_actual_guard_clock_ns')==a['data']['compute_ros_clock_ns']
@@ -144,7 +145,10 @@ def stable_selected_witness(verifier,run,result,handoff_source_ns,*,identity_pre
         'stable_witness_original_clear_guard_changed')
     expected=result['verification']['checks']['native_cloud_guard_stop_token_and_recovery']
     require(_equal(event,expected['event']) and len(preroll)==expected['pre_roll_count']
-        and len(cleared)==expected['clear_count'],'stable_witness_original_guard_selection_changed')
+        and len(cleared)==expected['clear_count']
+        and release['data']['sequence']==expected['clear_release_sequence']
+        and clear_end==expected['clear_release_clock_ns']
+        and resume==expected['aligned_resume_sim_ns'],'stable_witness_original_guard_selection_changed')
     selected=preroll+cleared
     for row in selected:verifier._verify_line(row)
     poses=[]

@@ -184,6 +184,84 @@ def _strict_clocks(rows, key, gap, minimum_count, minimum_span, label):
     _require(clocks[-1]-clocks[0] >= minimum_span, label+' duration incomplete', missing=True)
 
 
+def select_clear_release(guards, event, aligned_resume_ns):
+    """Bind clear evidence to this stop's native release, before aligned drive."""
+    _require(_integer(aligned_resume_ns), 'Actual aligned recovery clock invalid')
+    active = [r for r in guards if event['clock_ns'] < r['data']['compute_ros_clock_ns'] <= aligned_resume_ns]
+    _require(active, 'Actual stop-to-release guards missing', missing=True)
+    releases = []
+    stop_rows = [r for r in guards if r['data'].get('sequence') == event['sequence']]
+    _require(len(stop_rows) == 1, 'Actual clear release stop source missing or duplicated')
+    previous = stop_rows[0]['data']
+    for row in active:
+        g = row['data']
+        _require(_integer(g.get('sequence'),1) and _integer(g.get('compute_ros_clock_ns'))
+            and g.get('request_id') == event['request_id']
+            and type(g.get('waypoint_index')) is int and g['waypoint_index'] == event['waypoint_index']
+            and type(g.get('obstacle_stops_before')) is int and g['obstacle_stops_before'] == event['stop_count']
+            and type(g.get('obstacle_hold_before')) is bool and type(g.get('obstacle_hold_after')) is bool
+            and type(g.get('obstacle_resumes_after')) is int and g['obstacle_resumes_after'] >= 0,
+            'Actual clear release mixes stop events or malformed counters')
+        if g['obstacle_hold_before'] is True and g['obstacle_hold_after'] is False:
+            _require(previous is not None and type(previous.get('obstacle_resumes_after')) is int
+                and g['obstacle_resumes_after'] == previous['obstacle_resumes_after'] + 1
+                and g['sequence'] == previous['sequence'] + 1
+                and g.get('previous_actual_guard_clock_ns') == previous['compute_ros_clock_ns']
+                and g['union_result']['blocked'] is False,
+                'Actual clear release counter/source transition differs')
+            releases.append(row)
+        else:
+            _require(type(previous.get('obstacle_resumes_after')) is int
+                and g['obstacle_resumes_after'] == previous['obstacle_resumes_after'],
+                'Actual clear release counter changed without release')
+        if 'obstacle_stops_after' in g:
+            _require(type(g['obstacle_stops_after']) is int and g['obstacle_stops_after'] == event['stop_count'],
+                'Actual clear release crosses another counted stop')
+        if releases:
+            _require(g['union_result']['blocked'] is False and g['obstacle_hold_after'] is False,
+                'Actual clear release followed by another blockage/hold')
+        previous = g
+    _require(len(releases) == 1, 'Actual unique native clear release missing or duplicated', missing=not releases)
+    release = releases[0]
+    _require(release['data']['compute_ros_clock_ns'] > event['clock_ns'], 'Actual clear release precedes stop')
+    return release
+
+
+def select_clear_window(guards, event, aligned_resume_ns):
+    release=select_clear_release(guards,event,aligned_resume_ns)
+    g=release['data'];start=g.get('clear_start_before_s')
+    _require(type(start) in (int,float) and math.isfinite(start) and start>=0
+        and type(g.get('clear_start_after_s')) in (int,float) and g['clear_start_after_s']==start,
+        'Actual native clear timer source invalid')
+    start_ns=round(start*1e9);end=g['compute_ros_clock_ns']
+    _require(event['clock_ns']<start_ns<=end,'Actual native clear timer outside stop/release')
+    observed=[r for r in guards if event['clock_ns']<r['data']['compute_ros_clock_ns']<=end
+        and type(r['data'].get('clear_start_after_s')) in (int,float)
+        and r['data']['clear_start_after_s']==start]
+    _require(observed,'Actual native clear timer observations missing',missing=True)
+    first=observed[0]['data']
+    # A cached-clear control callback may initialize the timer between native
+    # evaluations. The first same-timer guard is evidence, not an invented origin.
+    _require(_integer(first.get('after_control_ros_clock_ns'))
+        and start_ns<=first['after_control_ros_clock_ns'],
+        'Actual native clear timer observation clock differs')
+    timer=[r for r in guards if first['sequence']<=r['data']['sequence']<=g['sequence']]
+    _require(all(type(r['data'].get('clear_start_after_s')) in (int,float)
+        and r['data']['clear_start_after_s']==start and r['data']['union_result']['blocked'] is False
+        and r['data'].get('obstacle_hold_before') is True for r in timer),
+        'Actual native clear timer reset or blockage')
+    _require(all(type(r['data'].get('clear_start_before_s')) in (int,float)
+        and math.isfinite(r['data']['clear_start_before_s'])
+        and r['data']['clear_start_before_s']==start for r in timer[1:]),
+        'Actual native clear timer interrupted before evaluation')
+    _strict_clocks(timer,'compute_ros_clock_ns',300_000_000,1,0,'Actual native clear timer')
+    _require(all(b['data']['sequence']==a['data']['sequence']+1
+        and b['data'].get('previous_actual_guard_clock_ns')==a['data']['compute_ros_clock_ns']
+        for a,b in zip(timer,timer[1:])), 'Actual native clear timer source records have a gap')
+    lower=end-1_350_000_000
+    return release,[r for r in timer if lower<=r['data']['compute_ros_clock_ns']<=end]
+
+
 def _native_stamp(header):
     stamp = header.get('stamp', {})
     values = []
@@ -869,7 +947,8 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
             and type(r['data'].get('aligned_obstacle_resumes')) is int and r['data']['aligned_obstacle_resumes'] > 0]
         _require(resumed, 'Actual aligned recovery status missing', missing=True)
         resume = resumed[0]['received_sim_ns']
-        cleared = [r for r in guards if resume-1_350_000_000 <= r['data']['compute_ros_clock_ns'] <= resume]
+        release, cleared = select_clear_window(guards, event, resume)
+        clear_end = release['data']['compute_ros_clock_ns']
         _strict_clocks(cleared, 'compute_ros_clock_ns', 300_000_000, 10, 1_000_000_000, 'Continuous clear guard')
         _require(all(b['data'].get('sequence') == a['data'].get('sequence', -2)+1
             and b['data'].get('previous_actual_guard_clock_ns') == a['data']['compute_ros_clock_ns']
@@ -914,7 +993,9 @@ def validate_r85_dynamic_evidence(evidence_doc, task_contract=None, *, profile=N
                 associated = modules['core'].steering_obstacle_ahead(nearby, _vector(g['control_pose']),
                     _vector(g['checked_target']), _vector(g['steering_direction'], 2), _guard_route(g,points,guard_refdoc,guard_ref_binding,guard_route_sha,run))
                 _require(associated[0] is True or bool(associated[0]), 'Stop cloud has no blocking returns spatially associated with independent entity observation')
-        checks['native_cloud_guard_stop_token_and_recovery'] = dict(event=event, pre_roll_count=len(preroll), clear_count=len(cleared))
+        checks['native_cloud_guard_stop_token_and_recovery'] = dict(event=event, pre_roll_count=len(preroll), clear_count=len(cleared),
+            clear_release_sequence=release['data']['sequence'], clear_release_clock_ns=clear_end,
+            aligned_resume_sim_ns=resume)
         _require(trigger['received_sim_ns'] <= event['clock_ns'] <= clear[0]['data']['request_sim_ns'],
                  'Bound guard stop is outside actual actor motion/occupancy cycle')
         poses = []

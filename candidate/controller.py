@@ -23,7 +23,7 @@ from teacher_wrapper import TeacherNavigation
 from pid_core import slew
 from parking_zero_contract import make_event
 from parking_contract import enabled as ordinary_parking_enabled
-from known_scene_hold_guard import retain_native_context, remember_native_guard, arm_teacher_recovery
+from known_scene_hold_guard import retain_native_context, remember_native_guard, arm_teacher_recovery, pin_native_clear_release
 from cascade_core import Controller
 from minimal_simulation_baseline import (enabled as minimal_baseline_enabled,
     pose_cloud_fresh as minimal_pose_cloud_fresh, raw_imu_fresh as minimal_raw_imu_fresh,
@@ -2476,6 +2476,7 @@ class PIDNavigation(TeacherNavigation):
                         zero_requested_after_control=True,state_after_control=self.state,
                         admission_hold_observation_only=True,path_admission_hold_after=self.path_admission_hold,
                         obstacle_resumes_after=self.obstacle_resumes,evidence_queue_error=self.evidence.error)
+                    pin_native_clear_release(self,row)
                     self.evidence.append(self.run/'navigation_guard_history.jsonl',row);self.pending_guard_row=None
         self.publish_command()
     def control_parking(self,now):

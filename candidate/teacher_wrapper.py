@@ -5,6 +5,7 @@ The shared controller consumes SLAM, actual registered clouds and checked SCAN
 trajectories. This wrapper narrows scope, fixes duplicate-stamp acceptance and
 requires measured stopping before obstacle recovery. It owns no joint actuator.
 """
+from known_scene_hold_guard import pin_native_clear_release
 import package_paths as _package_paths
 import argparse
 import copy
@@ -374,6 +375,7 @@ class TeacherNavigation(base.Navigation):
                     state_after_control=self.state,obstacle_resumes_after=self.obstacle_resumes,
                     command_source='actual sensor SLAM/SCAN controller; no mover or simulator pose navigation input',
                     evidence_queue_error=self.evidence.error)
+                pin_native_clear_release(self,row)
                 self.evidence.append(self.run/'navigation_guard_history.jsonl',row)
                 self.pending_guard_row=None
         if (self.state=='running' and not getattr(self,'reference_consistency_hold',False)

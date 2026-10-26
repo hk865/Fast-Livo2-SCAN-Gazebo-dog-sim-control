@@ -110,16 +110,17 @@ class GuardReplayBuffer:
     Insufficient allowance fails explicitly; no required window is truncated.
     """
     def __init__(self,node):
-        self.node=node;self.rows=deque();self.first=None;self.deadline=None;self.sealed=False
+        self.node=node;self.rows=deque();self.release_rows=();self.first=None;self.deadline=None;self.sealed=False
     def retained(self):
-        items=list(self.rows)+([] if self.first is None else [self.first])
+        items=[*self.rows,*self.release_rows,*([] if self.first is None else [self.first])]
         return {_array_key(b):cloud for b,cloud in items}
     def remember(self,row):
         if self.sealed:return
         now=row['compute_ros_clock_ns']
         while self.rows and self.rows[0][0]['compute_ros_clock_ns']<now-WINDOW_NS:
             self.rows.popleft()
-        if len(self.rows)>=512:raise ValueError('Complete native replay binding window exceeds allowance')
+        if len({b['sequence'] for b,_ in (*self.release_rows,*self.rows)} | {row['sequence']})>512:
+            raise ValueError('Complete native replay binding window exceeds allowance')
         binding=_binding(row);key=_array_key(binding);arrays=self.retained()
         source=np.asarray(self.node.guard_cloud)
         if source.dtype not in (np.dtype('<f4'),np.dtype('<f8')) or source.ndim!=2 or source.shape[1]!=3:
@@ -146,9 +147,26 @@ class GuardReplayBuffer:
             self.first=item
         if self.deadline is not None and now>=self.deadline:
             self.persist();self.sealed=True
+    def pin_release(self,row):
+        # Called only after the actual controller's before/after fields exist.
+        # Keep existing read-only references; no additional cloud copy or budget.
+        if self.sealed or row.get('obstacle_hold_before') is not True or row.get('obstacle_hold_after') is not False:return
+        token=getattr(self.node,'_r57_blocked_guard_token',None)
+        if (self.release_rows or self.first is None or not isinstance(token,dict)
+                or token['sequence']!=self.first[0]['sequence']
+                or row['request_id']!=token['request_id']
+                or row['waypoint_index']!=token['waypoint_index']
+                or type(row.get('obstacle_stops_before')) is not int
+                or row['obstacle_stops_before']!=token['stop_count']
+                or not self.rows or self.rows[-1][0]['sequence']!=row['sequence']):
+            raise ValueError('Native replay clear release does not match first stop/window')
+        self.release_rows=tuple(self.rows)
+        if sum(x.nbytes for x in self.retained().values())>BUFFER_LIMIT_B:
+            raise ValueError('Complete native replay array window exceeds allowance; no truncation')
+
     def persist(self):
         if self.first is None:raise ValueError('Recovery lacks actual native blocked cloud')
-        items=[self.first,*[x for x in self.rows if x[0]['request_id']==self.first[0]['request_id']]]
+        items=[self.first,*[x for x in (*self.release_rows,*self.rows) if x[0]['request_id']==self.first[0]['request_id']]]
         arrays={};bindings={}
         for b,cloud in items:
             key=_array_key(b);arrays.setdefault(key,cloud)
@@ -199,6 +217,13 @@ def remember_native_guard(node):
     if not legacy_capture and not r85_capture_enabled(node):return
     if not hasattr(node,'_r57_guard_buffer'):node._r57_guard_buffer=GuardReplayBuffer(node)
     node._r57_guard_buffer.remember(row)
+
+
+def pin_native_clear_release(node,row):
+    from r85_native_guard_replay_capture import enabled as r85_capture_enabled
+    if not r85_capture_enabled(node):return
+    buffer=getattr(node,'_r57_guard_buffer',None)
+    if buffer is not None:buffer.pin_release(row)
 
 
 def _current_event(node,token):

@@ -176,26 +176,41 @@ class ExactSourceJoin:
         return True
 
     def pop_latest(self, clock_ns, wall_ns=None):
-        wall_ns = time.monotonic_ns() if wall_ns is None else wall_ns
         with self.lock:
+            wall_ns = time.monotonic_ns() if wall_ns is None else wall_ns
             complete = [ns for ns, slot in self.slots.items()
                         if all(role in slot for role in (*self.ROLES,*self.META_ROLES,*self.AUX_ROLES))]
             if not complete:
                 return None
-            ns = max(complete)
+            # The queued request owns its captured ROS clock. Newer messages
+            # may arrive before this worker runs; retain them for a later
+            # causal request instead of consuming/rejecting them as future.
+            causal = [ns for ns in complete if ns <= clock_ns]
+            if not causal:
+                return None
+            ns = max(causal)
             if self.last_completed_ns is not None and ns - self.last_completed_ns < self.interval_ns:
                 return None
             slot = self.slots[ns]
+            selection = dict(schema='exact_join_causal_selection/v1', captured_clock_ns=clock_ns,
+                guard_wall_ns=wall_ns, selected_source_ns=ns, maximum_complete_source_ns=max(complete),
+                excluded_future_complete_count=len(complete)-len(causal), signed_source_age_ns=clock_ns-ns,
+                maximum_source_age_ns=self.maximum_age)
             for key in list(self.slots):
                 if key <= ns:
                     del self.slots[key]
             self.last_completed_ns = ns
         if not 0 <= clock_ns - ns <= self.maximum_age:
-            return dict(source_ns=ns, rejected='source_age')
+            return dict(source_ns=ns, rejected='source_age', join_rejection_detail=dict(
+                guard_clock_ns=clock_ns, guard_wall_ns=wall_ns,
+                signed_source_age_ns=clock_ns-ns, maximum_source_age_ns=self.maximum_age,
+                original_received_wall_ns={role:pair[1] for role,pair in slot.items()}))
         if any(not 0 <= wall_ns - pair[1] <= self.maximum_age for pair in slot.values()):
             return dict(source_ns=ns, rejected='wall_age')
         try:
-            return self._check(ns, slot)
+            checked = self._check(ns, slot)
+            checked['join_selection'] = selection
+            return checked
         except (ValueError, KeyError, TypeError, AssertionError) as error:
             # Keep the legacy reason stable; a stage-labelled error alone does
             # not distinguish nearest-neighbour collisions from residuals.
@@ -361,7 +376,8 @@ class MatcherWorker:
             if self.closed:
                 return False
             self.job = (dict(join_request=join, clock_ns=clock_ns,
-                             parent_generation=parent_generation), checked_transform(current_c))
+                             parent_generation=parent_generation,
+                             submitted_monotonic_ns=time.monotonic_ns()), checked_transform(current_c))
             self.condition.notify()
         return True
 
@@ -385,7 +401,12 @@ class MatcherWorker:
                 if 'join_request' in job:
                     join = job['join_request']
                     join.diagnostic_pin_enabled = bool(self.diagnostic_capture is not None and (getattr(self.diagnostic_capture, 'capture_needed', False) or getattr(self.diagnostic_capture, 'first_collision_evidence_needed', False)))
-                    job = join.pop_latest(job['clock_ns'])
+                    request = job
+                    job = join.pop_latest(request['clock_ns'])
+                    if job is not None and 'join_selection' in job:
+                        job['join_selection']['submitted_monotonic_ns'] = request['submitted_monotonic_ns']
+                    if job is not None and job.get('rejected') == 'source_age':
+                        job['join_rejection_detail']['submitted_monotonic_ns'] = request['submitted_monotonic_ns']
                 if job is None:
                     with self.condition:
                         self.in_flight = False
@@ -425,6 +446,8 @@ class MatcherWorker:
                 except Exception:pass  # No observer exception replaces original result.
             result['worker_started_wall_ns'] = started
             result['worker_completed_wall_ns'] = time.monotonic_ns()
+            if job is not None and 'join_selection' in job:
+                result['join_selection'] = job['join_selection']
             result['parent_generation'] = parent_generation
             with self.condition:
                 self.result = result
