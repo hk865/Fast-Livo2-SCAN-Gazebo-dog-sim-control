@@ -49,16 +49,14 @@ def library():
 
 
 def validated_transport_baseline(run,references=None):
-    """Validate actual DDS settings and XML interface, without source pins."""
-    run=Path(run).resolve();path=run/'cloud_transport_manifest.json';transport=json.loads(path.read_bytes())
-    if transport.get('run')!=str(run):raise RuntimeError('Foreign DDS runtime settings')
-    environment=transport.get('environment')
-    if (type(environment)is not dict or environment.get('RMW_FASTRTPS_PUBLICATION_MODE')!='SYNCHRONOUS'
-            or environment.get('RMW_IMPLEMENTATION')!='rmw_fastrtps_cpp' or environment.get('RMW_FASTRTPS_USE_QOS_FROM_XML')!='0'):raise RuntimeError('DDS publication settings invalid')
-    if any(os.environ.get(k)!=v for k,v in environment.items()):raise RuntimeError('Actual DDS environment differs from configuration')
-    xml=Path(transport['xml_path'])
-    if not xml.is_file()or environment.get('FASTRTPS_DEFAULT_PROFILES_FILE')!=str(xml):raise RuntimeError('DDS XML setting missing')
-    return dict(path=str(path),xml_path=str(xml),environment=environment,source_hashes={},actual_environment_verified=True)
+    """Check current middleware settings, not a manifest or source digest."""
+    keys=('RMW_IMPLEMENTATION','RMW_FASTRTPS_USE_QOS_FROM_XML','RMW_FASTRTPS_PUBLICATION_MODE')
+    expected=('rmw_fastrtps_cpp','0','SYNCHRONOUS')
+    if any(os.environ.get(key)!=value for key,value in zip(keys,expected)):
+        raise RuntimeError('DDS middleware/publication settings invalid')
+    xml=Path(os.environ.get('FASTRTPS_DEFAULT_PROFILES_FILE',''))
+    if not xml.is_file():raise FileNotFoundError('DDS transport XML missing')
+    return dict(xml_path=str(xml),environment={key:os.environ[key]for key in keys})
 
 
 def configure(run):
@@ -66,8 +64,7 @@ def configure(run):
     global _PREPARED
     if not ENABLED:return None
     if _PREPARED is not None:raise RuntimeError('R119 process already configured')
-    run=Path(run).resolve();scope=run/'navigation_scope.json'
-    references=json.loads(scope.read_bytes())['references']
+    run=Path(run).resolve();scope=run/'runtime_context.json'
     paths=[HERE/name for name in ('r119_metadata_async.py','r119_metadata_async.xml',
         'r119_writer_qos.so')]
     if BODY_ENABLED:paths.append(HERE/'r119_body_async.xml')
@@ -80,7 +77,7 @@ def configure(run):
     mode_before=os.environ.get('RMW_FASTRTPS_PUBLICATION_MODE')
     if mode_before!='SYNCHRONOUS':
         raise RuntimeError('R119 conflicting explicit process publication mode')
-    baseline=validated_transport_baseline(run,references)
+    baseline=validated_transport_baseline(run)
     xml=HERE/'r119_metadata_async.xml'
     inherited={}
     for key in ('FASTRTPS_DEFAULT_PROFILES_FILE','FASTDDS_DEFAULT_PROFILES_FILE'):
@@ -88,7 +85,7 @@ def configure(run):
         if value:
             path=Path(value).resolve()
             if not path.is_file():raise FileNotFoundError(path)
-            inherited[key]=dict(path=str(path),sha256=digest(path))
+            inherited[key]=dict(path=str(path))
     # Parse with the actual installed FastDDS library, without creating entities.
     if library().r119_parse_profile(str(xml).encode(),TOPIC.encode())!=1:
         raise RuntimeError('R119 XML did not parse as target ASYNCHRONOUS')
@@ -99,7 +96,7 @@ def configure(run):
     # XML at participant creation; neither path nor bytes are replaced.
     os.environ['RMW_FASTRTPS_PUBLICATION_MODE']='AUTO'
     _PREPARED=dict(schema='r119_metadata_async_setup/v1',run=str(run),pid=os.getpid(),
-        requested=True,scope_sha256=digest(scope),sources={str(p):digest(p)for p in paths},
+        requested=True,
         target_topic=TOPIC,xml=str(xml),before_rclpy_init=True,
         named_profile_preloaded=True,inherited_transport_xml=inherited,
         transport_xml_environment_unchanged=True,transport_baseline=baseline,

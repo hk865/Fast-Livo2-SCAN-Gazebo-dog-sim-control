@@ -1,173 +1,48 @@
-"""Scoped R85 terminal-heading input evidence; no route or motion authority.
+"""Terminal heading calculated from the current route's approach geometry.
 
-The goal support connector remains a planned segment. Only its bearing is
-excluded from terminal-heading evidence, which comes from the original PCT
-approach in the same camera_init coordinates and the existing direction window.
+Endpoint support connectors remain in the planned route; their short artificial
+bearing is excluded when a named goal connector is present. No source archive,
+version, hash, registration, or evidence file is consulted.
 """
-from project_config import loads as _project_loads
-import copy
-import hashlib
-import json
-import math
-from pathlib import Path
+import copy,math
 
-FLAG = 'terminal_heading_from_pct_approach'
-PROOF = 'task_terminal_heading_provenance'
-SCHEMA = 'r85_raw_pct_terminal_heading/v1'
-
+FLAG='terminal_heading_from_pct_approach'
 
 def enabled(profile):
-    config = profile.get('r85_auto_reference_contract', {})
-    if not isinstance(config, dict):
-        raise ValueError('terminal_heading_auto_contract_must_be_object')
-    value = config.get(FLAG, False)
-    if type(value) is not bool:
-        raise ValueError('terminal_heading_contract_requires_boolean')
-    if not value:
-        return False
-    if config.get('enabled') is not True:
-        raise ValueError('terminal_heading_requires_automatic_route')
-    direction = profile.get('global_route_reference_contract', {})
-    arc = direction.get('direction_audit_arc_m') if isinstance(direction, dict) else None
-    if (not isinstance(direction, dict) or direction.get('enabled') is not True
-            or type(arc) not in (int, float) or not math.isfinite(arc)
-            or not .2 <= arc <= 1.2):
-        raise ValueError('terminal_heading_requires_existing_direction_audit_window')
-    return True
-
-
-def _digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def _canonical(value):
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
-                                     allow_nan=False).encode()).hexdigest()
-
-
-def _points(value):
-    if not isinstance(value, list) or not 2 <= len(value) <= 4096:
-        raise ValueError('terminal_heading_source_point_budget')
-    for point in value:
-        if (not isinstance(point, list) or len(point) != 3
-                or any(type(x) not in (int, float) or not math.isfinite(x) for x in point)):
-            raise ValueError('terminal_heading_requires_finite_xyz')
+    config=profile.get('r85_auto_reference_contract',{})
+    value=config.get(FLAG,False)
+    if type(value)is not bool:raise ValueError('Terminal heading option must be boolean')
     return value
 
+def derive(profile,doc):
+    points=doc.get('ground_points')
+    if not isinstance(points,list)or not 2<=len(points)<=4096:raise ValueError('Route point count invalid')
+    for p in points:
+        if not isinstance(p,list)or len(p)!=3 or not all(type(x)in(int,float)and math.isfinite(x)for x in p):raise ValueError('Route XYZ must be finite')
+    connectors=doc.get('endpoint_support_connectors',[])
+    named={x.get('role'):x for x in connectors if isinstance(x,dict)}
+    approach=points[1:-1]if set(named)=={'start','goal'}else points
+    if len(approach)<2:raise ValueError('Route approach is too short')
+    arc=float(profile.get('global_route_reference_contract',{}).get('direction_audit_arc_m',.8))
+    if not math.isfinite(arc)or not .2<=arc<=1.2:raise ValueError('Terminal approach window invalid')
+    remaining=arc
+    for i in range(len(approach)-2,-1,-1):
+        length=math.dist(approach[i],approach[i+1])
+        if length<1e-6:continue
+        if remaining<=length:
+            fraction=1.-remaining/length;anchor=[approach[i][j]+fraction*(approach[i+1][j]-approach[i][j])for j in range(3)];break
+        remaining-=length
+    else:raise ValueError('Route approach shorter than direction window')
+    dx,dy=approach[-1][0]-anchor[0],approach[-1][1]-anchor[1]
+    if math.hypot(dx,dy)<1e-6:raise ValueError('Route approach has no planar direction')
+    heading=math.atan2(dy,dx)
+    return heading,dict(method='current_route_approach',window_m=arc,anchor=anchor,end=approach[-1])
 
-def _offset(body, ground, height):
-    if len(body) != len(ground) or any(
-            max(abs(b[i] - g[i] - (height if i == 2 else 0.)) for i in range(3)) > 1e-8
-            for b, g in zip(body, ground)):
-        raise ValueError('terminal_heading_source_body_ground_contract')
+def attach_reference_heading(profile,doc):
+    if not enabled(profile):return doc
+    result=copy.deepcopy(doc);result['task_terminal_heading_rad']=derive(profile,doc)[0];return result
 
-
-def derive(profile, doc):
-    """Derive heading from the current typed route geometry for each generation."""
-    if not enabled(profile):
-        raise ValueError('terminal_heading_contract_disabled')
-    typed_path = Path(doc.get('source_route_file', '')).resolve()
-    if not typed_path.is_file():
-        raise ValueError('terminal_heading_typed_source_missing')
-    typed=_project_loads(typed_path.read_text())
-    if (doc.get('schema') != 'r85_pct_scan_global_reference/v1'
-            or typed.get('schema') != 'r85_prepared_typed_global_reference/v1'
-            or doc.get('frame_id') != 'camera_init'
-            or typed.get('coordinate_frame') != 'camera_init'
-            or typed.get('frame_id') != 'camera_init'
-            or doc.get('reference_scope') != 'full_route'
-            or doc.get('navigation_ground_truth_used') is not False):
-        raise ValueError('terminal_heading_source_schema_frame_or_scope_mismatch')
-    transform = doc.get('T_navigation_world')
-    if (transform != typed.get('T_navigation_world')
-            or transform != [[1., 0., 0., 0.], [0., 1., 0., 0.],
-                              [0., 0., 1., -.3], [0., 0., 0., 1.]]):
-        raise ValueError('terminal_heading_requires_original_camera_init_transform')
-    physical=typed.get('physical_sources')
-    if not isinstance(physical,dict)or doc.get('physical_sources')!=physical:
-        raise ValueError('terminal_heading_geometry_configuration_mismatch')
-    tg,tb=_points(typed.get('ground_points')),_points(typed.get('body_points'))
-    # These are the actual PCT approach points already carried by the sole
-    # typed route, excluding its named endpoint support connectors. No older
-    # raw-file identity, profile SHA registration or source report is needed.
-    rg=_points(tg[1:-1])
-    if (len(tg) != len(rg) + 2 or tg[1:-1] != rg
-            or typed.get('ground_xyz') != tg or typed.get('body_xyz') != tb
-            or doc.get('ground_points') != tg or doc.get('body_points') != tb
-            or doc.get('physical_body_ground_offset_m') != .32
-            or typed.get('physical_body_ground_offset_m') != .32):
-        raise ValueError('terminal_heading_requires_unmodified_raw_PCT_and_typed_geometry')
-    _offset(tb, tg, .32)
-    correction = typed.get('representation_correction', {})
-    if (correction.get('original_grid_ground_points_changed') is not False
-            or correction.get('original_grid_body_offset_m') != .3
-            or correction.get('new_physical_body_offset_m') != .32):
-        raise ValueError('terminal_heading_requires_original_representation_contract')
-    connectors = typed.get('endpoint_support_connectors')
-    if (not isinstance(connectors, list) or len(connectors) != 2
-            or sorted(x.get('role', '') for x in connectors if isinstance(x, dict)) != ['goal', 'start']):
-        raise ValueError('terminal_heading_requires_named_endpoint_support_connectors')
-    by_role = {x['role']: x for x in connectors}
-    for role, index in (('start', 0), ('goal', -1)):
-        c = by_role[role]
-        if (c.get('ground_nav_xyz') != tg[index] or c.get('planned_body_nav_xyz') != tb[index]
-                or c.get('task_body_and_goal_tolerances_changed') is not False):
-            raise ValueError('terminal_heading_connector_endpoint_contract_mismatch')
-    arc = float(profile['global_route_reference_contract']['direction_audit_arc_m'])
-    remaining = arc
-    for i in range(len(rg) - 2, -1, -1):
-        length = math.dist(rg[i], rg[i + 1])
-        if length <= 1e-6:
-            raise ValueError('terminal_heading_duplicate_raw_segment')
-        if remaining <= length:
-            fraction = 1. - remaining / length
-            anchor = [rg[i][j] + fraction * (rg[i + 1][j] - rg[i][j]) for j in range(3)]
-            break
-        remaining -= length
-    else:
-        raise ValueError('terminal_heading_raw_approach_shorter_than_existing_window')
-    end = rg[-1]
-    dx, dy = end[0] - anchor[0], end[1] - anchor[1]
-    if math.hypot(dx, dy) < 1e-6:
-        raise ValueError('terminal_heading_raw_approach_has_no_horizontal_direction')
-    heading = math.atan2(dy, dx)
-    proof = dict(schema=SCHEMA, method='typed_PCT_approach_excluding_named_support_connectors',
-                 frame_id='camera_init', T_navigation_world=transform,
-                 direction_window_profile_key='global_route_reference_contract.direction_audit_arc_m',
-                 direction_window_arc_m=arc, arc_metric='3D_ground_polyline',
-                 typed_source_file=str(typed_path),
-                 approach_source='current typed ground points excluding endpoint support connectors',
-                 typed_point_count=len(tg), raw_point_count=len(rg),
-                 raw_points_equal_typed_ground_slice=[1, len(tg) - 1],
-                 raw_anchor_edge_indices=[i, i + 1], raw_anchor_edge_fraction=fraction,
-                 raw_approach_anchor_xyz=anchor, raw_terminal_ground_xyz=end,
-                 raw_approach_horizontal_chord=[dx, dy], task_terminal_heading_rad=heading,
-                 excluded_heading_segment=dict(role='goal', typed_indices=[len(tg)-2, len(tg)-1],
-                     ground_points=tg[-2:], body_points=tb[-2:],
-                     connector_sha256=_canonical(by_role['goal']), retained_in_planned_route=True),
-                 unchanged_reference_geometry_sha256=_canonical(dict(body_points=tb, ground_points=tg)),
-                 unchanged_goal_binding_sha256=_canonical({k: doc.get(k) for k in
-                     ('task_goal_body_xyz', 'original_F3_goal_body_xyz', 'task_goal_binding')}),
-                 navigation_ground_truth_used=False)
-    return heading, proof
-
-
-def attach_reference_heading(profile, doc):
-    if not enabled(profile):
-        return doc
-    if 'task_terminal_heading_rad' in doc or PROOF in doc:
-        raise ValueError('terminal_heading_producer_must_not_overwrite_existing_heading')
-    heading, proof = derive(profile, doc)
-    result = copy.deepcopy(doc)
-    result['task_terminal_heading_rad'], result[PROOF] = heading, proof
-    return result
-
-
-def validate_reference_heading(profile, doc):
-    if not enabled(profile):
-        return
-    heading, proof = derive(profile, doc)
-    value = doc.get('task_terminal_heading_rad')
-    if (type(value) not in (int, float) or not math.isfinite(value)
-            or abs(math.atan2(math.sin(value-heading), math.cos(value-heading))) > 1e-9):
-        raise ValueError('terminal_heading_missing_or_changed_raw_PCT_provenance')
+def validate_reference_heading(profile,doc):
+    if not enabled(profile):return
+    value=doc.get('task_terminal_heading_rad');expected=derive(profile,doc)[0]
+    if type(value)not in(int,float)or not math.isfinite(value)or abs(math.atan2(math.sin(value-expected),math.cos(value-expected)))>1e-9:raise ValueError('Terminal heading does not match current route')

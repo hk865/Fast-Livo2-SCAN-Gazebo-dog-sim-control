@@ -3643,7 +3643,6 @@
     "waypoint_semantics": "world-axis displacement anchored at first healthy SLAM body pose after fixed heading conversion; z is body elevation change, not absolute ground",
     "world": "multifloor_demo"
   },
-  "original_scenario_sha256": "6111db95f08adba2a16c086d74e85c5135823ac1e2b7380f8c882538fd441804",
   "overview_pose": [
     8.0,
     -1.0,
@@ -3652,21 +3651,6 @@
     0.45,
     1.5707963267948966
   ],
-  "path_admission_contract": {
-    "actual_navigation_verified": false,
-    "algorithm_change": "Only capture/exhaustion handoff after original continuous proof and existing acceptance gates",
-    "backend_connected": false,
-    "cutoff_is_success": false,
-    "full46_verified": false,
-    "historical_pass_inherited": false,
-    "original_46_region_definitions_and_arrival_gates_unchanged": true,
-    "original_mission_global_cap_s": 1500.0,
-    "prefix_only": false,
-    "profile_name": "repair_original46.json",
-    "runtime_cutoff_sim_elapsed_s": 1500.0,
-    "schema": "path_admission_v28_capture_launch/v1",
-    "simulation_only": true
-  },
   "pid": {
     "derivative_filter_tau_s": 0.2,
     "header_gap_max_s": 0.3,
@@ -3686,7 +3670,6 @@
     "yaw_ki": 0.04,
     "yaw_kp": 1.1
   },
-  "pid_runtime_revision": "legacy PID fields preserved only for input compatibility; unused by cascade mathematics",
   "pipeline": {
     "image_copy_opt": 0,
     "max_items": 512,
@@ -3696,8 +3679,6 @@
   },
   "policy_observations": "Exact Student45 native sensor proxy; privileged native velocity inner PID; actual corrected SLAM/IMU/cloud/SCAN only for navigation",
   "pose_cloud_timeout_s": 0.3,
-  "profile_version": "r85_pct_scan_student_v1",
-  "prospective_change": "New PCT automatic single global task plus persistent SCAN and fixed pretrained Student; explicit task timing change; historical R83 and 46 region PASS not inherited",
   "protocol_case_id": "ramp12_up_full",
   "r73_minimal_diagnostic_baseline": {
     "enabled": false
@@ -3718,10 +3699,6 @@
     "enabled": true,
     "schema": "r74_independent_clock_callback_group/v1"
   },
-  "r74_protocol_wait_policy": {
-    "enabled": true,
-    "schema": "r74_continuous_unresolved_episode_watchdog/v1"
-  },
   "r85_active_turn_braking": {
     "enabled": false
   },
@@ -3740,33 +3717,8 @@
   "r85_completed_history_async_qualification": {
     "enabled": false
   },
-  "r85_dynamic_event_contract": {
-    "schema": "single_world_event_coordinate_handoffs/v3",
-    "completed_event_window": true,
-    "whole_task_single_scope": false,
-    "completed_same_geometry_preservation": false,
-    "maximum_coordinate_handoffs": 2
-  },
-  "r85_formal_regression": {
-    "schema": "r85_strict_formal_f1_f3/v4",
-    "enabled": true,
-    "kind": "f1_to_f3",
-    "dynamic_event_lifetime": "single_world_event_coordinate_handoffs/v3",
-    "business_rejections_must_stop": true
-  },
   "r85_imu_source_buffer": {
     "enabled": true
-  },
-  "r85_native_guard_replay_capture": {
-    "complete_window_ns": 2000000000,
-    "enabled": true,
-    "observation_only": true,
-    "persisted_logical_and_allocated_limit_B": 50331648,
-    "retained_array_payload_limit_B": 67108864,
-    "schema": "r85_native_guard_replay_capture/v1"
-  },
-  "r85_native_observation_spool": {
-    "enabled": false
   },
   "r85_neutral_rate_brake_capture": {
     "enabled": false
@@ -3776,13 +3728,6 @@
   },
   "r85_pre_zero_integral_unload": {
     "enabled": false
-  },
-  "r85_protocol_intake_trace": {
-    "enabled": true
-  },
-  "r85_protocol_liveness": {
-    "enabled": true,
-    "schema": "r85_cumulative_unresolved_protocol_wait/v1"
   },
   "r85_quiet_handoff_target": {
     "enabled": false
@@ -3818,7 +3763,6 @@
     "schema": "r86_prepared_corrected_feedback/v1"
   },
   "raw_budget_bytes": 130000000000,
-  "raw_budget_is_limit_not_permission_to_drop_evidence": false,
   "raw_storage_budget": {
     "max_run_bytes": 170000000000,
     "minimum_runtime_available_bytes": 107374182400,
@@ -3834,11 +3778,7 @@
   "request_startup_timeout_sim_s": 90.0,
   "request_startup_timeout_wall_s": 600.0,
   "requires_bidirectional_layer_switches": true,
-  "requires_current_run_rgb_save": true,
-  "requires_original_dynamic_obstacle": true,
-  "requires_original_origin_initialization_receipt": true,
   "return_to_origin": false,
-  "review_basis": "explicit_user_R85_PCT_SCAN_Student_bounded_simulation_session",
   "route_height_delta_m": 2.4,
   "route_prior_source": "Given original scene43box geometry; axes of actual matched canonical map/world\u2192navigation frame, measured initial SLAM origin; no IMU world orientation",
   "route_world_points": null,
@@ -3846,7 +3786,6 @@
   "scene_initial_support_z": 0.0,
   "scene_xy_anchor_uncertainty_m": 0.15,
   "schema_version": 1,
-  "scope": "Explicit isolated PCT global route / persistent SCAN / fixed distilled Student experiment; simulation only",
   "selector": "f1_to_f3",
   "sensor_sampling": {
     "baseline_run": "20261005_175143_closed_loop_cascade_height_diag_baseline_r1_6fdf",
@@ -3883,7 +3822,6 @@
     0.3,
     0.0
   ],
-  "status": "SOURCE_PREPARED_UNVERIFIED",
   "teacher_transition": {
     "drive_heading_max_rad": 0.2,
     "gyro_pose_pair_max_s": 0.15,
@@ -3895,7 +3833,7 @@
     "stop_window_sim_s": 0.3,
     "turn_complete_rad": 0.1
   },
-  "terrain_target_manifest": "tests/terrain_targets/lower12.json",
+  "terrain_target_manifest": "config/terrain_targets/lower12.json",
   "vio_patch_parallel": {
     "offline_preflight_required": true,
     "reduction": "original_index_order_float_error_and_int_count",
@@ -3949,7 +3887,6 @@
     "schema": "ordinary_turn_continuous_control/v1"
   },
   "known_scene_ray_quality_population": "nonforeground",
-  "r85_actor_choreography": "independent_posttrigger_world_motion/v2",
   "known_scene_quality_model": "static_support_nonforeground/v1",
   "sensor_relay_publish_mode": "async",
   "runtime_paths": {
@@ -4140,55 +4077,18 @@
     "speed_mps": 0.25,
     "blocking_s": 20.0
   },
-  "source_capture_settings": {
-    "schema": "go2_P95_quality_source_capture_contract/v2",
-    "caps": {
-      "groups": 3,
-      "group_bytes": 5242880,
-      "raw_bytes": 1048576,
-      "adapted_bytes": 1048576,
-      "registered_bytes": 1572864,
-      "identity_bytes": 1048576,
-      "auxiliary_bytes": 524288,
-      "shared_bytes": 1048576,
-      "total_bytes": 16777216,
-      "event_window_ns": 15000000000,
-      "maximum_query_points": 30720
-    },
-    "unchanged_gates": {
-      "native_response_ns": 200000000,
-      "source_and_SCAN_freshness_ns": 300000000,
-      "correction_age_ns": 3000000000,
-      "allray_abs_p95_m": 0.35,
-      "foreground_fraction": 0.05,
-      "surface_p95_m": 0.12,
-      "stage_geometry_RMS_m": 0.006,
-      "stage_geometry_maximum_m": 0.03,
-      "stage_nearest_index_bijection": true,
-      "require_complete_imu": false
-    },
-    "topics": {
-      "imu_source": "/livox/imu",
-      "imu_relay": "/demo/teacher/slam/imu",
-      "clock": "/clock"
-    },
-    "diagnostic_only": true,
-    "fixture": false,
-    "diagnostic_trigger": {
-      "original_predicate": "top_candidate_only_ray_p95_failed",
-      "first_sustained_failure": true,
-      "active_mission_phases": {
-        "exploring": "exploration",
-        "returning": "return_origin",
-        "navigating": "navigation_f1_f3"
-      },
-      "request_suffix": "positive_canonical_decimal_route_counter",
-      "consecutive_distinct_checked_jobs": 2,
-      "same_scope_and_parent_generation": true,
-      "complete_previous_jobs": 1,
-      "pre_relation": "last_checked_job_before_first_rejection",
-      "fail_relation": "second_consecutive_distinct_rejection",
-      "post_original_checked_job": true
-    }
+  "mission": {
+    "goal_id": "F3",
+    "relative_offset_xyz": [
+      0.0,
+      7.0,
+      2.4
+    ],
+    "timeout_sim_s": 770.0,
+    "arrival_radius_m": 0.35,
+    "arrival_height_half_span_m": 0.1,
+    "control_radius_m": 0.25,
+    "dwell_sim_s": 0.4,
+    "surface_id": "floor_3"
   }
 }

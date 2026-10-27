@@ -39,7 +39,6 @@ from control_core import (rotation_xyzw, validate_request, follow_trajectory, ob
                           TrackingPositionFilter, trajectory_has_progress, RawImuTilt)
 from control_core import steering_obstacle_ahead
 from trajectory_contract import TrajectoryAssociation
-from event_archive import EventArchive
 from goal_regions import (parse_request as parse_goal_request, definitions_sha256,
                           contains as goal_contains, contains_control as goal_contains_control, ArrivalWindow)
 import control_core
@@ -116,7 +115,8 @@ class Navigation(Node):
         self.pending_obstacle_event = None
         self.last_obstacle_event_id = None
         self.obstacle_event_capture_error = None
-        self.event_archive = EventArchive()
+        from runtime_telemetry import RuntimeEvents
+        self.event_archive = RuntimeEvents()
         self.samples = None
         self.execution_path_exhaustion = None
         from automatic_reference_runtime import enabled as r85_enabled

@@ -11,19 +11,12 @@ CONFIG = {'enabled': True, 'schema': 'r74_independent_clock_callback_group/v1'}
 
 
 def enabled(profile):
-    if not isinstance(profile, dict) or KEY not in profile:
-        return False
-    option = profile[KEY]
-    if (type(option) is not dict or set(option) != set(CONFIG)
-            or type(option.get('enabled')) is not bool
-            or type(option.get('schema')) is not str or option != CONFIG):
-        raise ValueError('Exact typed R74 independent ROS clock option required')
-    from diagnostic_observation import strict_formal_enabled
-    if strict_formal_enabled(profile):
-        return True
-    if not minimal_baseline_enabled(profile):
-        raise ValueError('Independent ROS clock requires existing minimal simulation opt-in')
-    return True
+    if not isinstance(profile,dict):raise ValueError('Controller settings must be an object')
+    option=profile.get(KEY)
+    if option is None:return False
+    if not isinstance(option,dict)or type(option.get('enabled'))is not bool:
+        raise ValueError('Controller feature enabled flag must be boolean')
+    return option['enabled']
 
 
 def subscription_options(node, topic, options):

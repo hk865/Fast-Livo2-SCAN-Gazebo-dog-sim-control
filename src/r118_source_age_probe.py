@@ -108,7 +108,7 @@ def bind(role, run):
         raise RuntimeError('R118 source-age probe has invalid/duplicate process owner')
     run = Path(run).resolve()
     path = Path(__file__).resolve()
-    scope = run/'navigation_scope.json'
+    scope = run/'runtime_context.json'
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     binding = dict(role=role, pid=os.getpid(), run=str(run), source=str(path), sha256=digest,
         scope_sha256=hashlib.sha256(scope.read_bytes()).hexdigest(),

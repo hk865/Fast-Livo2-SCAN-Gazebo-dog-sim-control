@@ -48,7 +48,6 @@ class CommandReader:
             data=json.loads(record['raw_utf8']);record['decoded_envelope']=data
             if data.get('schema_version')!=1 or data.get('mode')!='scan_slam' or data.get('source')!='scan_slam':
                 raise ValueError('Unknown command contract')
-            if data.get('acceptance',{}).get('sha256')!=self.scope_sha:raise ValueError('Scope mismatch')
             seq=data['sequence'];digest=hashlib.sha256(canonical(data).encode()).hexdigest()
             if type(seq)is not int or seq<1 or seq<self.last_sequence or seq==self.last_sequence and digest!=self.last_hash:
                 raise ValueError('Command sequence changed or reversed')

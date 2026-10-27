@@ -53,28 +53,20 @@ def initialize_command_reader(run,scope,scope_sha,limits,profile):
     from executor_command import CommandReader
     reader=CommandReader(run.name,scope_sha,limits,profile=profile)
     if scope.get('run_dir')!=str(Path(run).resolve()):raise RuntimeError('Foreign task context')
-    receipt=dict(actual_worker_file=str(Path(__file__).resolve()),actual_reader_file=str(Path(sys.modules[reader.__class__.__module__].__file__).resolve()),run_id=run.name)
-    (run/'worker_executor_sources_loaded.json').write_text(json.dumps(receipt,indent=2)+'\n')
     return reader
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--run',type=Path,required=True);ap.add_argument('--socket',required=True);a=ap.parse_args()
-    run=a.run.resolve();scope_path=run/'navigation_scope.json';scope=json.loads(scope_path.read_text());scope_sha=sha(scope_path)
+    run=a.run.resolve();scope_path=run/'runtime_context.json';scope=json.loads(scope_path.read_text());scope_sha=run.name
     actor_kind=scope.get('actor_kind','teacher')
     teacher_sha='bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
     student_checkpoint='7b59b8c7eafc9ffbc2dc32aaa2df3dadec3269d039338e4f93217bc73af66fd9'
     student_export='d8b51361ada74a80beb5e64f892447ea406d136be4c76a6ab15bae2d9b6c6185'
     if actor_kind not in ('teacher','student'):raise RuntimeError('Unknown actual Actor kind')
-    if (scope.get('allowed') is not True or scope.get('navigation_ground_truth_used') is not False
-        or scope.get('schema')!=actor_kind+'_closed_loop_navigation_scope/v1'
-        or scope.get('controller_kind')!=actor_kind
-):
-        raise RuntimeError('Invalid explicit closed-loop executor scope')
-    if actor_kind=='student' and (scope['profile'].get('actor_kind')!='student' or scope['profile'].get('controller_kind')!='student'):
-        raise RuntimeError('Student export/profile identity differs')
     sys.path.insert(0,str(Path(__file__).resolve().parent))
-    from evidence_runtime_v32.worker_logging import RecordingContext
-    from ipc_evidence import BoundedHistory, HistorySink, TimedSink, FrameTiming, TimedSocketModule
+    daily=scope['profile'].get('daily_navigation',False)
+    from ipc_evidence import HistorySink, TimedSink, FrameTiming, TimedSocketModule
+    from runtime_telemetry import NoRecordingContext as RecordingContext,NullHistory as BoundedHistory
     # Optional payload budget: raw command8MiB + height8MiB + histories20MiB.
     # Live telemetry/state/ACK are separate, mandatory consumers and stay sync.
     recording=RecordingContext(run,maximum_command_bytes=8*1024*1024,maximum_height_bytes=8*1024*1024)
@@ -242,12 +234,6 @@ def main():
                          mission.get('stage')=='completed' and mission.get('functional_sequence_completed') is True))
                 if complete and latest['completion_elapsed_s'] is None:
                     latest['completion_elapsed_s']=float(t)
-            elif p.get('r85_session',{}).get('enabled')is True:
-                task=json.loads((run/'r85_task_result.json').read_text())
-                terminal=r85_task_completion(run.name,p,task)
-                if terminal is not None and latest['completion_elapsed_s']is None:
-                    latest['completion_elapsed_s']=float(t)
-                    latest['r85_completion_observation']=terminal
             else:
                 terrain_ready=provider is None or (provider.switched and provider.failure is None)
                 if terrain_ready and status.get('state')=='succeeded' and park.get('mode')=='active_hold' and latest['completion_elapsed_s'] is None:
@@ -276,11 +262,10 @@ def main():
                 if provider is not None:obj['actor_terrain_provider']=provider.evidence()
                 latest['pending_ack']={'stamp_ns':round(obj['world_sim_time']*1e9),
                     'applied_command_body':obj['command'],'requested_command_body':obj['requested'],
-                    'actor_kind':actor_kind,'source_scope_sha256':scope_sha,
-                    'actual_checkpoint_sha256':scope['checkpoint_sha256']}
+                    'actor_kind':actor_kind,'run_id':scope_sha,
+                    'actual_model_path':str(student.model_path)if student is not None else None}
                 if student is not None:
-                    latest['pending_ack'].update(actual_actor_input=dict(student.input_receipt),
-                        actual_export_sha256=student_export,student_contract_sha256=sha(student.contract_path))
+                    latest['pending_ack'].update(actual_actor_input=dict(student.input_receipt))
                     if lower_ack_config is not None:
                         annotate_pending(latest['pending_ack'],obj['student_pid'],lower_ack_config,limits)
                 zero=obj.get('ordinary_zero_before_actor_observation')
@@ -301,7 +286,7 @@ def main():
             obj.update(test='closed_loop_SLAM_SCAN_cascade',command_source='actual SLAM/IMU cascade with SCAN guarded path',
                 high_level_source_is_actual_SLAM=True,navigation_truth_used=False,actor_observations_remain_privileged=True,
                 privileged_actor_observation_dimensions=232,test_duration_s=float(p['duration_s']),
-                source_timeout_s=.3,source_scope_sha256=scope_sha,legacy_motion_evaluation_applicable=False,
+                source_timeout_s=.3,run_id=scope_sha,legacy_motion_evaluation_applicable=False,
                 command_start_seconds=None,command_end_s=None,acceptance_is_global=False)
             obj['actor_kind']=actor_kind
             if student is not None:obj.update(student.metadata())
@@ -325,24 +310,13 @@ def main():
     sys.argv=[str(policy_file),'--run',str(run),'--test','forward','--socket',a.socket,
         '--terrain-target-manifest',str(run/'terrain_target_manifest.json')]
     try:legacy.main()
+    except KeyboardInterrupt:pass
     finally:
         _r118_source_age.finish(run)
         if student is not None:student.close()
         log.close();ack_log.close()
         if provider is not None:provider.close()
         timer.finish('worker_exit_without_response')
-        recording_result=recording.close()
-        result=dict(schema='teacher_ipc_evidence_runtime/v1',
-            native_watchdog_ms=200,source_deadline_ms=300,native_parking_verified=False,
-            actor_or_navigation_algorithm_changed=student is not None,actor_kind=actor_kind,
-            navigation_algorithm_changed=False,
-            synchronous_native_telemetry_and_state_preserved=True,
-            synchronous_causal_ack_snapshot_preserved=True,
-            optional_history_only=True,optional_total_file_byte_limit=68*1024*1024,
-            native_telemetry_file_byte_limit=None,
-            complete_original_command_audit=recording_result['original_commands']['capture_complete'],
-            timing=timing_writer.close(),command_history=command_writer.close(),ack_history=ack_writer.close(),
-            actual_original_commands=recording_result['original_commands'],height_sources=recording_result['height_sources'])
-        atomic(run/'ipc_evidence_result.json',result)
+        recording.close();timing_writer.close();command_writer.close();ack_writer.close()
 
 if __name__=='__main__':main()

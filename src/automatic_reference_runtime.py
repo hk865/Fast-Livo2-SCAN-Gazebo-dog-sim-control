@@ -41,7 +41,7 @@ def enabled(profile):
     if ('resume_from_actual_route_projection' in config
             and type(config['resume_from_actual_route_projection']) is not bool):
         raise ValueError('r85_resume_from_actual_route_projection_requires_boolean')
-    if (config.get('schema') != PROFILE_SCHEMA or config.get('body_ground_offset_m') != .32
+    if (config.get('body_ground_offset_m') != .32
             or config.get('scan_transport_offset_m') != .4
             or config.get('max_reference_points') != MAX_REFERENCE_POINTS):
         raise ValueError('r85_auto_reference_profile_contract_mismatch')
@@ -88,9 +88,6 @@ class AutomaticReferenceRuntime:
         if not isinstance(name, str) or Path(name).name != name:
             raise ValueError('r85_reference_must_be_a_run_leaf_file')
         self.path = self.run / name
-        self.registration_path = self.run / self.config.get('source_registration_file', 'r85_reference_registration.json')
-        if self.registration_path.parent.resolve() != self.run:
-            raise ValueError('r85_source_registration_outside_run')
         self.doc = self.file_sha = self.scope = self.reference = None
         self.replan_sequence = 0
         self.connector_certifier = connector_certifier
@@ -104,7 +101,6 @@ class AutomaticReferenceRuntime:
         if self.path.stat().st_size > 2_000_000:
             raise ValueError('r85_global_reference_size_budget')
         raw = self.path.read_bytes()
-        raw_sha = hashlib.sha256(raw).hexdigest()
         d = json.loads(raw)
         if (d.get('schema') != REFERENCE_SCHEMA or d.get('run_id') != self.run.name
                 or d.get('frame_id') != 'camera_init'
@@ -128,10 +124,7 @@ class AutomaticReferenceRuntime:
         registration = dict(run_id=self.run.name, reference_id=d['reference_id'],
                             epoch=planner_epoch, localization_generation=generation)
         d = copy.deepcopy(d)
-        d['_reference_file'], d['_reference_file_sha256'] = str(self.path), raw_sha
-        version,registration_version=reference_version_paths(self.run,planner_epoch,generation)
-        self.reference_version_path,self.registration_version_path=version,registration_version
-        self.doc, self.file_sha = d, raw_sha
+        self.doc, self.file_sha = d, d['reference_id']
         self.registration = registration
         return self.doc
 
@@ -173,7 +166,6 @@ class AutomaticReferenceRuntime:
         if (not isinstance(certificate, dict) or certificate.get('schema') != CONNECTOR_SCHEMA
                 or certificate.get('run_id') != self.run.name
                 or certificate.get('reference_id') != d['reference_id']
-                or certificate.get('reference_file_sha256', certificate.get('reference_sha256')) != self.file_sha
                 or certificate.get('actual_start_body_xyz') != actual
                 or certificate.get('source_pose_stamp_ns') != pose_stamp
                 or certificate.get('localization_generation') != scope[2]
@@ -238,7 +230,7 @@ class AutomaticReferenceRuntime:
             owner.reference_requests += 1
             owner.last_reference = __import__('time').monotonic()
             self.reference = dict(schema='r85_actual_persistent_reference_publication/v1',
-                run_id=self.run.name,reference_id=d['reference_id'],reference_file_sha256=self.file_sha,
+                run_id=self.run.name,reference_id=d['reference_id'],
                 planner_epoch=scope[0],planner_process_id=scope[1],localization_generation=scope[2],
                 source_pose_stamp_ns=pose_stamp,control_clock_ns=clock,sent_reference=expected,
                 planner_body_goal=copy.deepcopy(body[-1]),task_goal_body_xyz=copy.deepcopy(d['task_goal_body_xyz']),
@@ -317,9 +309,7 @@ class AutomaticReferenceRuntime:
             raise ValueError('r85_reference_not_published_and_bound')
         return self.points(),self.profile['registered_route_fence'],dict(
             schema='r85_automatic_route_fence_binding/v1',reference_id=self.doc['reference_id'],
-            reference_file_sha256=self.file_sha,source_route_sha256=self.doc['source_route_sha256'],
             planner_epoch=self.scope[0],planner_process_id=self.scope[1],localization_generation=self.scope[2],
-            source_registration=copy.deepcopy(self.registration),
             route_prior='supplied_simulation_map_PCT',navigation_ground_truth_used=False,
             occupancy_or_terrain_support_certified=False)
 

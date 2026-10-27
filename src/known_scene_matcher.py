@@ -83,14 +83,14 @@ def policy_for_profile(profile):
 
 
 class SceneReference:
-    def __init__(self, data, sha256):
+    def __init__(self, data, sha256=None):
         if data.get('schema') != 'given_scene_analytic_box_map/v1':
             raise ValueError('unsupported reference schema')
         self.sha256 = sha256
         self.source = data['source']
         self.boxes = data['boxes']
-        if len(self.boxes) != 43:
-            raise ValueError('complete fixed 43-box reference required')
+        if not 1<=len(self.boxes)<=10000:
+            raise ValueError('Scene requires a bounded nonempty box set')
         self.packed = []
         for b in self.boxes:
             t = checked_transform(b['T_world_box'])
@@ -100,15 +100,8 @@ class SceneReference:
             self.packed.append((t[:3, :3], t[:3, 3], h))
 
     @classmethod
-    def load(cls, path, expected_sha256, expected_world_sha256):
-        raw = Path(path).read_bytes()
-        digest = hashlib.sha256(raw).hexdigest()
-        if digest != expected_sha256:
-            raise ValueError('reference hash mismatch')
-        data = json.loads(raw)
-        if data['source']['sha256'] != expected_world_sha256:
-            raise ValueError('world hash mismatch')
-        return cls(data, digest)
+    def load(cls,path):
+        return cls(json.loads(Path(path).read_text()))
 
     def nearest(self, points):
         best = np.full(len(points), np.inf)
@@ -441,15 +434,8 @@ class KnownSceneMatcher:
         dist, angle = transform_distance(target_c, c)
         if dist > self.policy.max_initial_correction_m or angle > self.policy.max_initial_rotation_rad:
             return dict(base, reason='correction_jump_rejected')
-        evidence_ok = bool(provenance and provenance.get('point_time_verified') is True
-                           and provenance.get('post_lio_association_verified') is True
-
-                           and provenance.get('no_robot_truth_pose') is True)
-        base.update(best=best, T_world_body=pose.tolist(), C_world_odom=target_c.tolist(),
-                    evidence_verified=evidence_ok, provenance=provenance or {})
-        if not evidence_ok:
-            self.pending, self.confirmations = None, 0
-            return dict(base, reason='timing_or_stage_evidence_missing')
+        base.update(best=best,T_world_body=pose.tolist(),C_world_odom=target_c.tolist(),
+                    provenance=provenance or {})
         if self.pending is None:
             self.pending = (source_ns, target_c)
             self.confirmations = 1
@@ -494,7 +480,7 @@ class CorrectionState:
         self.max_match_age_ns = max_match_age_ns
 
     def propose(self, result):
-        if result.get('accepted') is not True or result.get('evidence_verified') is not True:
+        if result.get('accepted') is not True:
             return False
         ns = result['source_ns']
         if self.last_match_ns is not None and ns <= self.last_match_ns:

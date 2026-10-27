@@ -204,7 +204,7 @@ class TeacherHeadingGate:
             native=ack.get('pre_zero_integral_unload')
             if isinstance(native,dict)and native.get('kind')=='original_exact_zero_I_observation':
                 from pre_zero_integral_unload import validate_native_extension
-                validate_native_extension(native,ack['source_scope_sha256'],ack['input_clock_ns'],ack['input_frame_serial'])
+                validate_native_extension(native,ack['run_id'],ack['input_clock_ns'],ack['input_frame_serial'])
                 # This observes actual original reset state; it does not itself
                 # authorize an event. Current published Teacher event and all
                 # original causal/quiet source predicates still bind this pair.
@@ -212,7 +212,7 @@ class TeacherHeadingGate:
                     and ack['input_clock_ns']>e['brake_entry_clock_ns']
                     and teacher['path_sha256']==publication['path_sha256']
                     and teacher['goal_sha256']==publication['goal_sha256'])
-            native=validate_receipt(native,event=e,side='student',scope=ack['source_scope_sha256'],clock_ns=ack['input_clock_ns'],frame=ack['input_frame_serial'])
+            native=validate_receipt(native,event=e,side='student',scope=ack['run_id'],clock_ns=ack['input_clock_ns'],frame=ack['input_frame_serial'])
             return bool(teacher['yaw_integral_after']==0. and native['yaw_integral_after']==0.
                 and teacher['path_sha256']==publication['path_sha256']==native['path_sha256']
                 and teacher['goal_sha256']==publication['goal_sha256']==native['goal_sha256'])
@@ -304,7 +304,7 @@ class TeacherHeadingGate:
             if not (self._quiet_publication_fresh(p,obs['clock_ns'],round(wall_s*1e9))
                     and 0<=stamp_ns-ack['input_clock_ns']<300_000_000
                     and 0<=round(wall_s*1e9)-ack['received_wall_ns']<300_000_000
-                    and ack['source_scope_sha256']==p['scope']
+                    and ack['run_id']==p['scope']
                     and (ack['request_id'],ack['waypoint_index'])==(self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))
                     and ack['input_clock_ns']>round(self.handoff_event['brake_entry_control_s']*1e9)
                     and self._low_total_command(ack['requested_command_body']) and self._low_total_command(ack['applied_command_body'])):
@@ -360,7 +360,7 @@ class TeacherHeadingGate:
                 and ack['ack_native_clock_ns']<=clock_ns
                 and ack['input_clock_ns']<=round(self.latest_motion['stamp_s']*1e9)
                 and [ack[k]for k in ('sequence','input_clock_ns','input_frame_serial','inference_sequence')]==h[-1]['ack_watermark']
-                and ack['source_scope_sha256']==p['scope']
+                and ack['run_id']==p['scope']
                 and (ack['request_id'],ack['waypoint_index'])==(self.transition_context.get('request_id'),self.transition_context.get('waypoint_index'))
                 and p['context']==self.transition_context and p['purpose']==self.transition_purpose
                 and self._low_total_command(p['command_body'])
@@ -457,7 +457,7 @@ class TeacherHeadingGate:
                 if watermark['sequence']==old['sequence'] and watermark!=old:
                     raise ValueError('Repeated ACK sequence changed its actual frame')
             self.zero_ack_highwater=copy.deepcopy(watermark)
-            self.zero_ack_candidate=dict(**watermark,source_scope_sha256=scope,
+            self.zero_ack_candidate=dict(**watermark,run_id=scope,
                 request_id=request_id,waypoint_index=waypoint_index,
                 received_wall_ns=ack['received_wall_ns'],ack_native_clock_ns=ack['ack_native_clock_ns'],
                 requested_command_body=request,applied_command_body=list(applied),
@@ -490,7 +490,7 @@ class TeacherHeadingGate:
         if (publication is None or old is None or ack['input_clock_ns']<=publication
                 or ack['input_clock_ns']>round(stamp_s*1e9)
                 or not 0<=wall_s-ack['received_wall_ns']/1e9<.3
-                or ack['source_scope_sha256']!=edge.get('source_scope_sha256')
+                or ack['run_id']!=edge.get('run_id')
                 or ack['request_id']!=context.get('request_id')
                 or ack['waypoint_index']!=context.get('waypoint_index')
                 or any(ack[k]<=old[k] for k in ('sequence','input_clock_ns','input_frame_serial','inference_sequence'))):return False
@@ -750,7 +750,7 @@ class TeacherHeadingGate:
                     locked_heading_error_rad=error,center_target_band_rad=center_band,
                     fresh_motion=dict(self.latest_motion),zero_command_dwell_begins_after_this_edge=True,
                     zero_publication_clock_ns=None,ack_watermark=copy.deepcopy(self.zero_ack_highwater),
-                    source_scope_sha256=self.zero_ack_candidate['source_scope_sha256'],
+                    run_id=self.zero_ack_candidate['run_id'],
                     context=copy.deepcopy(self.transition_context),deadline_s=self.handoff_deadline_s)
                 self.handoff_event.update(final_zero_control_s=sim_time)
                 return False,0.

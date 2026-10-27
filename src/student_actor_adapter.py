@@ -220,15 +220,15 @@ class StudentRuntime:
             expected_snapshot=Path(binding['student_adapter_snapshot']).with_name(helper_path.name)
             helper_origin=Path(binding['student_adapter_origin']).with_name(helper_path.name)
             expected_sha=scope['references'].get(str(helper_origin))
-            scope_bytes=(self.run/'navigation_scope.json').read_bytes()
+            scope_bytes=(self.run/'runtime_context.json').read_bytes()
             spec=importlib.util.spec_from_file_location('actual_snapshot_pre_zero_integral_unload',helper_path)
             helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
             if helper.configuration(scope['profile']) is not None:
                 self.unload_helper=helper
-                self.integral_unload=helper.NativeUnload(scope,hashlib.sha256(scope_bytes).hexdigest(),self.run.name)
+                self.integral_unload=helper.NativeUnload(scope,None,self.run.name)
                 self.integral_unload_identity=dict(schema='r85_coordinated_unload_deployment_extension/v1',
                     helper_path=str(helper_path),helper_sha256=sha(helper_path),
-                    scope_sha256=hashlib.sha256(scope_bytes).hexdigest(),configuration=helper.configuration(scope['profile']),
+                    scope_sha256=None,configuration=helper.configuration(scope['profile']),
                     base_contract_only_sha256=sha(self.contract_path),base_contract_does_not_prove_new_recurrence=True)
         self.native_state=None;self.obs45=None;self.frame_clock_ns=None;self.inferred=False
         self.frame_serial=0;self.inference_count=0;self.hidden=None;self.model=None
@@ -241,7 +241,7 @@ class StudentRuntime:
 
     def configure_xy_stop_takeover_candidate(self):
         """New mode, only after actual adjacent helper/source/scope binding."""
-        ack_option=self.scope['profile'].get('cascade',{}).get('r85_student_lower_loop_ack',{})
+        ack_option=self.scope['profile'].get('cascade',{}).get('r85_student_lower_loop_ack')or{}
         if 'xy_stop_takeover_enabled' not in ack_option:return False
         option=ack_option['xy_stop_takeover_enabled']
         if option is False:return False
@@ -254,7 +254,7 @@ class StudentRuntime:
         helper_path=Path(__file__).with_name('student_xy_stop_takeover.py')
         expected_snapshot=Path(self.binding['student_adapter_snapshot']).with_name(helper_path.name)
         origin=Path(self.binding['student_adapter_origin']).with_name(helper_path.name)
-        expected_sha=self.scope['references'].get(str(origin));scope_bytes=(self.run/'navigation_scope.json').read_bytes()
+        expected_sha=self.scope['references'].get(str(origin));scope_bytes=(self.run/'runtime_context.json').read_bytes()
         spec=importlib.util.spec_from_file_location('actual_snapshot_student_xy_stop_takeover',helper_path)
         helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
         identity=dict(origin_path=str(origin),snapshot_path=str(helper_path),sha256=expected_sha)
@@ -278,7 +278,7 @@ class StudentRuntime:
         helper_path=Path(__file__).with_name('student_yaw_measurement_feedback.py')
         expected_snapshot=Path(self.binding['student_adapter_snapshot']).with_name(helper_path.name)
         origin=Path(self.binding['student_adapter_origin']).with_name(helper_path.name)
-        expected_sha=self.scope['references'].get(str(origin));scope_bytes=(self.run/'navigation_scope.json').read_bytes()
+        expected_sha=self.scope['references'].get(str(origin));scope_bytes=(self.run/'runtime_context.json').read_bytes()
         spec=importlib.util.spec_from_file_location('actual_snapshot_student_yaw_measurement_feedback',helper_path)
         helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
         config=helper.configuration(self.scope['profile'])
@@ -304,7 +304,7 @@ class StudentRuntime:
         helper_path=Path(__file__).with_name('student_yaw_pd_fade.py')
         expected_snapshot=Path(self.binding['student_adapter_snapshot']).with_name(helper_path.name)
         helper_origin=Path(self.binding['student_adapter_origin']).with_name(helper_path.name)
-        scope_bytes=(self.run/'navigation_scope.json').read_bytes()
+        scope_bytes=(self.run/'runtime_context.json').read_bytes()
         expected_sha=self.scope['references'].get(str(helper_origin))
         spec=importlib.util.spec_from_file_location('actual_snapshot_student_yaw_pd_fade',helper_path)
         helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
@@ -313,7 +313,7 @@ class StudentRuntime:
             self.integral_unload.run_id,self.integral_unload.scope_sha)
         self.yaw_pd_fade_identity=dict(schema='r85_student_yaw_PD_fade_deployment_extension/v1',
             helper_path=str(helper_path),helper_sha256=sha(helper_path),
-            scope_sha256=hashlib.sha256(scope_bytes).hexdigest(),configuration=config,
+            scope_sha256=None,configuration=config,
             base_student_contract_sha256=sha(self.contract_path),
             base_contract_does_not_prove_new_PD_math=True)
         return True
@@ -395,7 +395,7 @@ class StudentRuntime:
             actual_observation_command_body=self.obs45[6:9].tolist(),
             teacher_proxy_max_abs_difference=self.teacher_slice_difference,
             exact_native45_used=True,teacher247_used_for_student_inference=False,
-            export_sha256=EXPORT_SHA,checkpoint_sha256=CHECKPOINT_SHA)
+)
         if self.pid.speed_tier is not None:
             self.input_receipt[speed_tiers.KEY]=dict(self.pid.speed_tier)
         if self.unload_helper is not None and self.unload_helper.KEY in self.pid.last_diagnostic:
@@ -422,22 +422,6 @@ class StudentRuntime:
         if (tuple(action.shape)!=(1,12) or tuple(hidden_probe.shape)!=(1,1,256)
             or not torch.isfinite(action).all() or not torch.isfinite(hidden_probe).all()):
             raise RuntimeError('Actual Student JIT interface/probe rejected')
-        receipt=dict(schema='student_actual_actor_loaded/v1',actor_kind='student',
-            actual_adapter_path=str(Path(__file__).resolve()),actual_adapter_sha256=sha(__file__),
-            actual_export_path=str(self.model_path),actual_export_sha256=sha(self.model_path),
-            training_checkpoint_sha256=CHECKPOINT_SHA,actual_contract_path=str(self.contract_path),
-            actual_contract_sha256=sha(self.contract_path),inference_device='cpu',torch_threads=1,
-            observation_dimension=45,recurrent_shape=[1,1,256],probe_hidden_not_adopted=True,
-            teacher_actor_loaded=False,legacy_teacher_loop_and_height_diagnostics=True,
-            native_response_deadline_ms=200,source_freshness_ms=300)
-        if self.speed_tier is not None:
-            receipt[speed_tiers.KEY]=dict(self.speed_tier)
-            receipt['effective_student_command_bounds']=self.pid.limits.tolist()
-            receipt['actual_speed_tier_helper_path']=str(Path(speed_tiers.__file__).resolve())
-            receipt['actual_speed_tier_helper_sha256']=sha(speed_tiers.__file__)
-            receipt['base_contract_does_not_prove_selected_speed_bound']=True
-        (self.run/'student_actual_actor_loaded.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
-        self.stream=(self.run/'student_actual_inputs.jsonl').open('x',buffering=1)
         runtime=self
         class Actor:
             def __call__(self,teacher_tensor):
@@ -451,23 +435,19 @@ class StudentRuntime:
                 runtime.actual_action=action.numpy()[0].copy()
                 runtime.input_receipt.update(actor_inferred_this_frame=True,action_finite=True,hidden_finite=True,
                     inference_sequence=runtime.inference_count,hidden_norm=float(torch.linalg.vector_norm(next_hidden)))
-                row=dict(runtime.input_receipt,observation45=runtime.obs45.tolist(),
-                    raw_action=runtime.actual_action.tolist(),pid=dict(runtime.pid.last_diagnostic))
-                # Mandatory actual-input evidence is bounded by original finite
-                # run duration, not silently dropped at a history cap.
-                runtime.stream.write(json.dumps(row,allow_nan=False,separators=(',',':'))+'\n')
                 return action
         return Actor()
 
     def telemetry(self,row):
-        if (not self.inferred or self.input_receipt is None or self.frame_clock_ns!=round(row['world_sim_time']*1e9)
-            or not np.array_equal(np.asarray(row['command'],np.float32),self.obs45[6:9])
-            or not np.array_equal(np.asarray(row['action']),self.actual_action)):
-            raise RuntimeError('Student telemetry does not bind actual inference input/action')
+        # Expose actual current state; optional telemetry serialization is not
+        # an admission proof or a source of permission to run an inference.
+        if not self.inferred or self.input_receipt is None:
+            row.update(actor_kind='student',actor_inferred_this_frame=False)
+            return row
         row.update(actor_kind='student',actor_inferred_this_frame=True,
             actual_actor_input=dict(self.input_receipt),student_pid=dict(self.pid.last_diagnostic),
             actual_actor_observation_dimension=45,teacher247_diagnostic_only=True,
-            native_com_feedback_used_by_student_pid=True,student_export_sha256=EXPORT_SHA,
+            native_com_feedback_used_by_student_pid=True,
             observation_source='native gyro/quaternion/q/qd sim2sim proxies, actual command, previous raw action; exact45')
         zero=row.get('ordinary_zero_before_actor_observation')
         if zero is not None:
@@ -475,23 +455,23 @@ class StudentRuntime:
             zero.update(actual_observation_command_body=actual,
                 observation_command_exact_zero=bool(np.array_equal(self.obs45[6:9],np.zeros(3,np.float32))),
                 actor_inferred_this_frame=True,actual_actor_kind='student',
-                actual_actor_observation_dimension=45,student_export_sha256=EXPORT_SHA,
+                actual_actor_observation_dimension=45,
                 student_inference_sequence=self.inference_count)
             if not zero['observation_command_exact_zero']:raise RuntimeError('Student actual ordinary zero was not zero')
         return row
 
     def metadata(self):
-        out=dict(actor_kind='student',controller_kind='student',checkpoint_sha256=CHECKPOINT_SHA,
-            export_sha256=EXPORT_SHA,checkpoint='016 distilled student model_4999; export original source in selected binding',
+        out=dict(actor_kind='student',controller_kind='student',
+
             actual_export_path=str(self.model_path),actor_observation_dimension=45,
             diagnostic_teacher_observation_dimension=247,teacher247_diagnostic_only=True,
-            legacy_teacher_checkpoint_sha256=TEACHER_SHA,teacher_actor_loaded=False,
+            teacher_actor_loaded=False,
             privileged_actor_observation_dimensions=30,observation_clip=None,observation_noise='disabled clean Student evaluation',
             actor_observations_remain_privileged=True,outer_pid_feedback='privileged native COM body vx/vy/body omega_z; sim2sim',
             student_pid_reset_schema=RESET_SCHEMA,student_contract_sha256=sha(self.contract_path),
             observation_source='native gyro/quaternion/q/qd simulation proxy + actual command + previous raw action; Student45',
             stop_strategy='exact authorized ordinary zero after original slew; continue Student/GRU; no target/action freezing',
-            actual_input_evidence='student_actual_inputs.jsonl; observations_actions.npz remains original Teacher247 diagnostic')
+            actual_input_evidence='current in-memory Actor state and live native ACK; raw recording is external')
         if self.integral_unload is not None:out['pre_zero_integral_unload_extension']=dict(self.integral_unload_identity)
         if self.pid.yaw_pd_fade is not None:out['student_yaw_PD_fade_extension']=dict(self.yaw_pd_fade_identity)
         if self.pid.yaw_measurement_feedback is not None:

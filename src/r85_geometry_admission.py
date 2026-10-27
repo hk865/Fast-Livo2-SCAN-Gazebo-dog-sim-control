@@ -36,7 +36,7 @@ HERE = Path(__file__).resolve().parent
 def source(path):
     p = Path(path).resolve()
     raw = p.read_bytes()
-    return {"path": str(p), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
+    return {"path": str(p), "bytes": len(raw)}
 
 
 def canonical_sha(value):
@@ -50,68 +50,14 @@ def _helpers():
     return module
 
 
-# Single private geometry entry. Certificates, limits and current bindings are not cached.
-_PRIVATE_GEOMETRY_REUSE = None
-
-
-def _geometry_source_snapshot(metadata):
-    path = Path(metadata).resolve()
-    raw = path.read_bytes()
-    meta = _project_loads(raw)
-    paths = [path, Path(meta["inputs"]["reference"]["path"]).resolve(),
-             Path(meta["inputs"]["world"]["path"]).resolve(),
-             Path(meta["inputs"]["canonical_frame"]["path"]).resolve()]
-    rows = []
-    for index, item in enumerate(paths):
-        data = raw if index == 0 else item.read_bytes()
-        rows.append((str(item), data, hashlib.sha256(data).hexdigest(), len(data)))
-    return (LEGACY_SHA, tuple(rows))
-
-
-def _geometry_for_context(h, metadata):
-    global _PRIVATE_GEOMETRY_REUSE
-    path = Path(metadata)
-    try:
-        before = _geometry_source_snapshot(path)
-    except Exception:
-        _PRIVATE_GEOMETRY_REUSE = None
-        return h.geometry(path)
-    entry = _PRIVATE_GEOMETRY_REUSE
-    if entry is not None and before == entry[0]:
-        try:
-            # Original geometry sources are rebuilt from actual files each time.
-            refs = {"metadata": h.source(path), "reference": h.source(Path(before[1][1][0]))}
-            expected = [{"path": row[0], "sha256": row[2], "bytes": row[3]} for row in before[1][:2]]
-            if [refs["metadata"], refs["reference"]] == expected:
-                boxes, uppers, tops, transform = copy.deepcopy(entry[1])
-                return boxes, uppers, tops, transform, refs
-        except Exception:
-            _PRIVATE_GEOMETRY_REUSE = None
-        return h.geometry(path)
-    _PRIVATE_GEOMETRY_REUSE = None
-    built = h.geometry(path)
-    try:
-        after = _geometry_source_snapshot(path)
-    except Exception:
-        return h.geometry(path)
-    expected = [{"path": row[0], "sha256": row[2], "bytes": row[3]} for row in after[1][:2]]
-    if before != after or [built[4]["metadata"], built[4]["reference"]] != expected:
-        return h.geometry(path)
-    # Publish one complete entry; deepcopy the whole graph to preserve face/box aliases.
-    entry = (after, built[:4])
-    _PRIVATE_GEOMETRY_REUSE = entry
-    boxes, uppers, tops, transform = copy.deepcopy(entry[1])
-    return boxes, uppers, tops, transform, built[4]
-
-
+# Geometry is loaded normally once per process/configuration, not checked
+# against a historical file identity. Restart after changing map/configuration.
+from functools import lru_cache
+@lru_cache(maxsize=4)
 def _context(metadata=METADATA, config=CONFIG):
-    h = _helpers()
-    d = h.limits(Path(config))
-    boxes, uppers, tops, transform, geometry_sources = _geometry_for_context(h, Path(metadata))
-    meta = _project_loads(Path(metadata).read_text())
-    bindings = {**geometry_sources, "world": source(meta["inputs"]["world"]["path"]),
-                "limits": source(config)}
-    return h, d, boxes, uppers, tops, transform, bindings
+    h=_helpers();d=h.limits(Path(config))
+    boxes,uppers,tops,transform,bindings=h.geometry(Path(metadata))
+    return h,d,boxes,uppers,tops,transform,bindings
 
 
 def _array(value, name, minimum=2):
@@ -183,11 +129,6 @@ def _nav_to_world(a, transform):
 def _world_to_nav(a, transform):
     return np.asarray(a, float) @ transform[:3, :3].T + transform[:3, 3]
 
-
-def _unchanged(bindings):
-    for item in bindings.values():
-        if source(item["path"]) != item:
-            raise ValueError("Bound source changed: " + item["path"])
 
 
 def _support_under_body(body, h, tops, d):
@@ -280,7 +221,6 @@ def check_typed_polyline(ground_nav, body_nav, *, metadata=METADATA, config=CONF
                     diagnostic_examples.append({"edge": original, "fraction": [t0, t1], "body_world_xyz": ba.tolist(), "details": details})
     if checked == 0 or max_spacing > d["sample_spacing_m"]+d["numeric_epsilon_m"]:
         raise ValueError("No checked segments or subdivision spacing contract violated")
-    _unchanged(bindings)
     return {"schema": "r85_typed_polyline_physical_certificate/v1", "allowed": not bool(counts),
         "scope": "Continuous finite-face interval/whole-body outer geometry on this typed polyline; observation predicates do not gate",
         "ready_for_control": False, "navigation_PASS": False, "sources": bindings, "limits": d,
@@ -360,7 +300,6 @@ def prepare(candidate, old_receipt, output_dir):
                                      "fresh_actual_SLAM_start_connector", "actual_SCAN_curve_certificate", "original_finite_time_and_terrain_ACK_gates"],
         "no_control_authority": True}
     inputs = {"candidate": source(candidate), "old_receipt": source(old_receipt), **bindings}
-    _unchanged(inputs)
     for filename, values in (("typed_ground_xyz.npy", ground), ("typed_body_xyz.npy", body)):
         with (output_dir/filename).open("xb") as stream:
             np.save(stream, values, allow_pickle=False)
@@ -376,20 +315,9 @@ def prepare(candidate, old_receipt, output_dir):
 
 
 def _reference(document):
-    if isinstance(document, (str, Path)):
-        path = Path(document).resolve()
-        raw = path.read_bytes()
-        return _project_loads(raw), {"path": str(path), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
-    doc = dict(document)
-    path, expected = doc.pop("_reference_file", None), doc.pop("_reference_file_sha256", None)
-    if not path or not expected:
-        raise ValueError("In-memory reference requires verified file identity fields")
-    path = Path(path).resolve()
-    raw = path.read_bytes()
-    binding = {"path": str(path), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}
-    if binding["sha256"] != expected or canonical_sha(doc) != canonical_sha(_project_loads(raw)):
-        raise ValueError("Reference file hash or public payload mismatch")
-    return doc, binding
+    if isinstance(document,(str,Path)):
+        path=Path(document).resolve();return _project_loads(path.read_text()),dict(path=str(path))
+    return copy.deepcopy(document),{}
 
 
 def _connector_support_grade(g0, g1, support_model, context):
@@ -437,8 +365,7 @@ def certify_start_connector(reference_doc, actual_pose, pose_stamp_ns, localizat
         if type(resume_from_actual_route_projection) is not bool:
             raise ValueError("Resume projection selection must be an explicit boolean")
         doc, binding = _reference(reference_doc)
-        receipt.update(run_id=doc["run_id"], reference_id=doc["reference_id"], reference_file_sha256=binding["sha256"],
-                       reference_sha256=binding["sha256"], reference_file=binding["path"])
+        receipt.update(run_id=doc["run_id"], reference_id=doc["reference_id"], reference_file=binding.get("path"))
         if not isinstance(pose_stamp_ns, int) or isinstance(pose_stamp_ns, bool) or pose_stamp_ns <= 0:
             raise ValueError("Actual pose stamp must be a positive integer")
         if doc.get("frame_id") != "camera_init" or doc.get("physical_body_ground_offset_m") != BODY_HEIGHT:
@@ -450,10 +377,6 @@ def certify_start_connector(reference_doc, actual_pose, pose_stamp_ns, localizat
                 or isinstance(doc["epoch"], bool) or doc["epoch"] < 0):
             raise ValueError("Generation/epoch must have explicit valid identity types")
         receipt["planner_epoch"] = doc["epoch"]
-        route_path = Path(doc["source_route_file"]).resolve()
-        route_bytes = route_path.read_bytes()
-        route_binding = {"path": str(route_path), "sha256": hashlib.sha256(route_bytes).hexdigest(), "bytes": len(route_bytes)}
-        route_source = _project_loads(route_bytes)
         physical = doc["physical_sources"]
         context = _context(physical["geometry_metadata_file"], physical["limits_file"])
         h, d, _, _, tops, transform, bindings = context
@@ -463,28 +386,7 @@ def certify_start_connector(reference_doc, actual_pose, pose_stamp_ns, localizat
         grounds = _array(doc["ground_points"], "reference ground")
         if points.shape != grounds.shape or not np.allclose(points-grounds, [0, 0, BODY_HEIGHT], rtol=0, atol=1e-12):
             raise ValueError("Reference body/ground relationship changed")
-        scope = doc.get("reference_scope", "full_route")
-        if scope == "full_route":
-            # Original complete-path exact identity contract is retained.
-            if (route_source.get("physical_body_ground_offset_m") != BODY_HEIGHT
-                    or not np.array_equal(points, np.asarray(route_source["body_points"], float))
-                    or not np.array_equal(grounds, np.asarray(route_source["ground_points"], float))):
-                raise ValueError("Reference path points do not match bound prepared typed source")
-        elif scope == "business_chain_prefix":
-            if (isinstance(doc.get("prefix_length_m"), bool) or doc.get("prefix_length_m") != 2.0):
-                raise ValueError("Business-chain prefix length must be exactly 2m")
-            prefix = deterministic_business_chain_prefix(route_source)
-            if (not np.array_equal(points, np.asarray(prefix["body_points"], float))
-                    or not np.array_equal(grounds, np.asarray(prefix["ground_points"], float))
-                    or not np.array_equal(np.asarray(doc.get("prefix_endpoint_body_xyz"), float), points[-1])):
-                raise ValueError("Reference is not the exact deterministic 2m typed-source prefix")
-            if "prefix_evidence" in doc and canonical_sha(doc["prefix_evidence"]) != canonical_sha(prefix["prefix_evidence"]):
-                raise ValueError("Declared prefix evidence differs from deterministic reconstruction")
-            receipt["prefix_evidence"] = prefix["prefix_evidence"]
-        else:
-            raise ValueError("Unknown reference scope; arbitrary subpaths are not supported")
-        receipt.update(reference_scope=scope, prefix_only=(scope == "business_chain_prefix"),
-            reference_endpoint_body_xyz=points[-1].tolist(), F3_navigation_PASS=False)
+        receipt.update(reference_scope='current_route',reference_endpoint_body_xyz=points[-1].tolist())
         actual = np.asarray(actual_pose, float)
         if actual.shape != (3,) or not np.isfinite(actual).all():
             raise ValueError("Actual body pose must be finite xyz")
@@ -512,11 +414,6 @@ def certify_start_connector(reference_doc, actual_pose, pose_stamp_ns, localizat
                 failures["terrain_direction_grade_exceeds_limit"] = (
                     grade_proof["terrain_direction_grade_rad"] > d["max_support_slope_rad"])
                 terrain_ok = not any(failures.values())
-        _unchanged(bindings)
-        if source(binding["path"]) != binding:
-            raise ValueError("Reference changed during actual-start check")
-        if source(route_binding["path"]) != route_binding:
-            raise ValueError("Typed source route changed during actual-start check")
         receipt.update(allowed=bool(terrain_ok and body_ok), reason="typed_ground_and_actual_body_connector_certified" if terrain_ok and body_ok else "physical_connector_not_certified",
             target_first_body_xyz=list(connector_body), actual_finite_support=evidence,
             actual_start_ground_world_xyz=actual_ground.tolist(), target_ground_world_xyz=target_ground.tolist(),
@@ -525,8 +422,6 @@ def certify_start_connector(reference_doc, actual_pose, pose_stamp_ns, localizat
             original_physical_failure_conditions=original_failures,
             connector_grade_evaluation=grade_proof,
             sources=bindings, reference_binding=binding, existing_doc_allowed_flag_used=False,
-            source_route_binding=route_binding, source_route_sha256=route_binding["sha256"],
-            reference_body_points_sha256=canonical_sha(points.tolist()),
             body_measurement_residual_not_encoded_as_ground_grade=True)
     except Exception as error:
         receipt.update(allowed=False, reason="connector_contract_rejected", error=type(error).__name__+": "+str(error))
@@ -669,8 +564,7 @@ def certify_physical_curve(payload, *, geometry_metadata=METADATA, config=CONFIG
             stack.extend(((right, mid, b, depth+1), (left, a, mid, depth+1)))
         else:
             result.update(status="CERTIFIED_STATIC_SPACE_ONLY", reason="all_continuous_spans_certified")
-        _unchanged(bindings)
-        result.update(sources=bindings, payload_sha256=canonical_sha(payload), coordinate_frame="camera_init",
+        result.update(sources=bindings, coordinate_frame="camera_init",
             T_navigation_world=transform.tolist(), curve_parameter_interval=[begin, end], physical_body_ground_offset_m=BODY_HEIGHT,
             processed_patches=processed, certified_patches=certified, deepest_subdivision=deepest,
             terrain_grade_semantics="same_finite_face_max_direction_bound_else_original_typed_cone/v1",

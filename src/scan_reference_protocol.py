@@ -10,24 +10,11 @@ FLAG = 'require_reference_protocol_ack'
 
 
 def enabled(profile):
-    from diagnostic_observation import strict_formal_enabled
-    formal_scope = strict_formal_enabled(profile)
-    config = profile.get('r85_auto_reference_contract', {})
-    if not isinstance(config, dict):
-        raise ValueError('Reference commit ACK config must be an object')
-    value = config.get(FLAG, False)
-    if type(value) is not bool:
-        raise ValueError('Reference commit ACK flag must be a strict boolean')
-    if not value:
-        return False
-    session, diagnostic = profile.get('r85_session'), profile.get('diagnostic_observe_only')
-    if (not isinstance(session, dict) or session.get('enabled') is not True
-            or session.get('schema') != 'r85_pct_scan_student_session/v1'
-            or not isinstance(diagnostic, dict) or (diagnostic.get('enabled') is not True and not formal_scope)
-            or config.get('schema') != 'r85_persistent_auto_reference/v1'
-            or config.get('enabled') is not True or not consumption_enabled(profile)):
-        raise ValueError('Reference commit ACK requires strict diagnostic or formal R85 child-consumption scope')
-    return True
+    config=profile.get('r85_auto_reference_contract',{})
+    if not isinstance(config,dict):raise ValueError('Planner options must be an object')
+    value=config.get(FLAG,False)
+    if type(value)is not bool:raise ValueError('Planner ACK option must be boolean')
+    return value
 
 
 def _integer(value, minimum=0):

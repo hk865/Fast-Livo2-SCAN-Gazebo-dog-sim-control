@@ -38,7 +38,7 @@ def main():
     ap.add_argument('--params',type=Path,required=True);a,ros=ap.parse_known_args()
     run=a.run.resolve();binary=a.planner.resolve();digest=hashlib.sha256(binary.read_bytes()).hexdigest()
     from automatic_reference_runtime import enabled as r85_enabled
-    profile=json.loads((run/'navigation_scope.json').read_text())['profile']
+    profile=json.loads((run/'runtime_context.json').read_text())['profile']
     minimal=minimal_baseline_enabled(profile)
     external_reference_protocol = r85_enabled(json.loads((run/'navigation_profile.json').read_text()))
     from scan_child_consumption import enabled as consumption_enabled

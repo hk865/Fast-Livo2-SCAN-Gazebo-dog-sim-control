@@ -1,12 +1,12 @@
 # Runtime and restoration
 
-The local project has a complete working installation. Its sole entry is `start.py`, its editable configuration is `config/navigation.json`, and generated data is under `runs/`. Runtime does not need an old checkout, an approved commit, a source/binary hash list, or a historical successful-run directory.
+The current local directory contains the operational installation tested on this host. It is not a portable, self-contained binary package. Its sole entry is `start.py`, its editable configuration is `config/navigation.json`, and generated data is under `runs/`. Runtime does not need an old checkout, an approved commit, a source/binary hash list, or a historical successful-run directory.
 
 ## Retained local layout
 
 | Material | Project location |
 | --- | --- |
-| Python navigation, control, Actor, parking and observation code | `src/` |
+| Python navigation, control, Actor and parking code | `src/` |
 | Current Student45/GRU model | `models/student_model_4999_deterministic_jit.pt` |
 | Route, scene geometry, robot and sensor meshes | `assets/` |
 | FAST-LIVO2 application source | `native/slam/src/` |
@@ -19,7 +19,9 @@ The local project has a complete working installation. Its sole entry is `start.
 | Native actuator source / existing library | `simulation/teacher_actuator.cpp` / `simulation/build/libteacher_actuator.so` |
 | Actual DDS writer inspector source / existing helper | `src/r119_writer_qos.cpp` / `src/r119_writer_qos.so` |
 
-The migrated native binaries are the existing working programs. They were not rebuilt or replaced by a different algorithm. Old build-directory names may remain in diagnostic strings inside a binary; those strings are not library lookup paths or files loaded at runtime. Four live process-map snapshots during the complete regression found project code/libraries only inside this project.
+The migrated native binaries are the existing working programs. They were not rebuilt or replaced by a different algorithm. Old build-directory names may remain in diagnostic strings inside a binary; those strings are not library lookup paths or files loaded at runtime. Live process-map observations are saved separately from the runtime and check actual project-local resolution.
+
+The earlier 348,540,928-byte allocated protection set included 222,904,320 bytes of normal Git storage and some receipts. It was a retention accounting set, not the size of a standalone runtime package. Operational source/model/map and libraries are distributed across `src/`, `native/`, `models/`, `assets/`, `.local/runtime/`, `.local/private_dds/` and `simulation/build/`.
 
 ## Shared machine dependencies
 
@@ -47,9 +49,9 @@ Use `colcon build --base-paths <source>` with explicit `--build-base` and `--ins
 
 Unitree body/leg meshes match the official Unitree ROS mesh files, including the upstream `base.dae` saved here as `trunk.dae`. VLP16 meshes match Toyota Research Institute's velodyne_simulator; `d455.stl` matches Intel RealSense. Their notices are retained in `LICENSES/`.
 
-The local `assets/meshes/L1_4D_Lidar.dae` (1,925,390 bytes) has no established public redistribution source/license in this review. It is protected locally and excluded from this new public snapshot. A fresh clone requires that retained local asset as well as compiled dependencies. No geometry placeholder is substituted for the validated local asset.
+The local `assets/meshes/L1_4D_Lidar.dae` (1,925,390 bytes) has no established public redistribution source/license in this review. It is protected locally and excluded from this new public snapshot. A fresh clone requires that retained local asset as well as compiled dependencies. No geometry placeholder is substituted for the validated local asset. The Student model is separately withheld pending rights confirmation.
 
-The current exported model has identical tensor/archive content after removing path-bearing debug metadata. A 128-frame recurrent replay produced bitwise-identical actions and hidden state; the complete regression used that export.
+The current exported model has identical tensor/archive content after removing path-bearing debug metadata. A 128-frame recurrent replay produced bitwise-identical actions and hidden state; the runtime uses that export. No explicit redistribution right for the weights or applicable teacher-weight terms has been established. The model binary remains local and is excluded from the proposed public content; see `models/MODEL_NOTICE.md`.
 
 ## Evidence and rollback
 

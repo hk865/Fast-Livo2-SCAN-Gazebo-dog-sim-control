@@ -186,6 +186,7 @@ def main():
         available={shape.name.split('/')[0]for shape in safety_terrain.shapes}
         if set(selected)-available:raise ValueError('Requested terrain model absent from actual static collisions')
         terrain=TerrainHeightMap.from_sdf(args.run/'world.sdf',include_models=selected)
+    recording=os.environ.get('NAVIGATION_RECORD_RAW','0')=='1'
     rng=np.random.default_rng(args.seed)
     last_action=np.zeros(12);cmd=np.zeros(3);fault=None;first_t=None;settled_frames=0
     last_command_t=0.;last_request=np.zeros(3);navigation_sequence={};completion_time=None
@@ -222,7 +223,7 @@ def main():
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
     (args.run/'worker_ready').write_text(str(os.getpid()))
-    stream=(args.run/'telemetry.jsonl').open('w',buffering=1);scan_stream=(args.run/'height_scan_sources.jsonl').open('w',buffering=1)if terrain_manifest else None;observations=[];actions=[];latencies=[];sample_count=0;last_row=None
+    stream=((args.run/'telemetry.jsonl')if recording else Path('/dev/null')).open('w',buffering=1);scan_stream=(args.run/'height_scan_sources.jsonl').open('w',buffering=1)if terrain_manifest and recording else None;observations=[];actions=[];latencies=[];sample_count=0;last_row=None
     try:
         conn,_=sock.accept();conn.settimeout(10)
         with conn,torch.inference_mode():
@@ -306,7 +307,7 @@ def main():
                     row['ordinary_zero_before_actor_observation']=ordinary_zero_receipt
                 sample_count+=1;last_row=row;stream.write(json.dumps(row,allow_nan=False)+'\n')
                 if sample_count%10==0 or done:atomic_json(args.run/'state.json',row)
-                observations.append(obs);actions.append(action)
+                if recording:observations.append(obs);actions.append(action)
                 conn.sendall(response.tobytes())
                 if args.test=='worker_disconnect' and t>=7:break
                 if done:break
@@ -317,7 +318,7 @@ def main():
         if scan_stream:scan_stream.close()
         try:Path(args.socket).unlink()
         except FileNotFoundError:pass
-        np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
+        if recording:np.savez_compressed(args.run/'observations_actions.npz',observations=np.asarray(observations),actions=np.asarray(actions))
         atomic_json(args.run/'worker_result.json',{'completed':bool(sample_count),'fault':fault,'samples':sample_count,
             'physical_test_completion_time_s':completion_time,
             'last_sim_time':last_row['sim_time']if sample_count else None,'cpu_forward_ms':{'p50':float(np.median(latencies)),'p95':float(np.percentile(latencies,95)),'max':float(max(latencies))}if latencies else {}})

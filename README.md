@@ -1,6 +1,6 @@
 # Fast-LIVO2 / SCAN / Go2 navigation
 
-This is the single current simulation project. Start from this directory:
+One simulation project, one configuration, one normal entry:
 
 ```bash
 python3 -B start.py --check
@@ -8,14 +8,21 @@ python3 -B start.py --prepare-only
 python3 -B start.py
 ```
 
-Edit `config/navigation.json`. `--check` checks files and basic configuration; it does not certify a complete navigation run. `--prepare-only` creates fresh inputs without starting ROS, Gazebo, or an Actor.
+Edit `config/navigation.json`, including its `mission` goal settings. Generated files and logs go under `runs/`. Ctrl+C stops this entry's own processes and releases its three exclusive simulation locks.
 
-The runtime uses project-local `src/`, `models/`, `assets/`, and `.local/` native installations. Application C++ and SDK source is under `native/`; the DDS fix and rebuild tooling are under `third_party/fastdds/` and `build_support/private_dds/`. Runs are created only under `runs/`. Historical workspaces, successful-run directories, source/binary SHA lists, and historical approval contracts are not launch inputs.
+The daily chain is configuration → current world/sensors → SLAM and map localization → SCAN → velocity controller → CPU Student Actor → Gazebo actuator. It does not import the experiment launcher, acceptance owner or verifier. Historical runs, approved versions, source/model/binary hash lists, frozen contracts, source-audit journals and test PASS files are not startup inputs. Ordinary command and status files exchange current control state; they are not historical approvals.
 
-The shared environment supplies Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic, system C++/ROS libraries, and a Python installation containing PyTorch. The existing simulator Python is located using `ISAAC_SIM_PATH` (or the conventional `~/isaacsim` installation); Actor inference runs on CPU. These shared packages are not project cleanup targets.
+Actual protections remain: finite inputs and valid frames, causal IMU pairing, fresh SLAM/cloud/IMU and planner generations, obstacle and tilt stops, command limits, native response deadlines, and owned-process cleanup. `--resource-check` enables a developer CPU/RAM precheck.
 
-Real protections remain: actual SLAM/cloud/IMU freshness, native response deadlines, resource limits and exclusive process locks, physical route geometry, dynamic stop/recovery, actual zero Actor input ACK, and immutable five-second parking using causal 10Hz position/yaw samples. See `docs/phase_summary.md` for scope and verification status.
+Development tests are explicit and separate:
 
-The complete F1→F3 simulation regression passed on 2026-10-27, including dynamic stop/recovery, RGB saving, fixed five-second parking, CRC and process cleanup. See [the phase record](docs/phase_summary.md) and [measured results](docs/validation_summary.json).
+```bash
+python3 -B -m unittest discover -s tests -v
+python3 -B tools/validation/run_navigation_check.py --output /tmp/navigation-development-check
+```
 
-Compiled installations and raw runs are local artifacts. [Restoration and dependencies](docs/restoration.md) describe the required layout and the boundary of what was tested. Third-party notices are in `LICENSES/`. One local visual asset, `L1_4D_Lidar.dae`, is retained locally and excluded from this new public snapshot because its redistribution source/license has not been established. A fresh clone needs that retained asset and compiled dependencies before running. The current local project is complete; Git source publication is not a tested binary distribution.
+The second command explicitly runs the normal entry, moves the test obstacle, observes SLAM/control, and sends SIGINT to its own entry after measurement. It changes the test scene and lifecycle; normal startup does not depend on it. Its fixed five-second parking measurement uses the existing 10Hz position/yaw rule and the first actual zero-input qualification time; it is never called by normal startup. Use a new output directory for each test. See [phase results](docs/phase_summary.md).
+
+Application and SDK sources are in `native/`, actuator sources in `simulation/`, and the two-sided DDS heartbeat fix in `third_party/fastdds/`. Current compiled installations are project-local under `.local/`; ROS 2 Jazzy, Gazebo Harmonic and the CPU-capable PyTorch environment are shared machine dependencies. They are not historical project directories. [Restoration details](docs/restoration.md) describe the build and distribution boundary.
+
+This local installation includes the required model and meshes. The proposed public content excludes the Student weight binary and one retained local mesh, `L1_4D_Lidar.dae`, because redistribution rights have not been established. Compiled installations and raw runs are also excluded. A fresh source clone therefore needs those locally retained assets and a build; it is not a tested binary distribution. See [the model notice](models/MODEL_NOTICE.md). Third-party notices are in `LICENSES/`.

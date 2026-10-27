@@ -31,7 +31,7 @@ def build(world):
                 boxes.append(dict(id=name+'/'+c.get('name'),model=name,T_world_box=t.tolist(),
                     size_m=size.tolist(),world_min=points.min(0).tolist(),world_max=points.max(0).tolist(),
                     surface_ids=[name+':'+axis+sign for axis in 'xyz' for sign in ('-','+')]))
-    if len(boxes)!=43:raise ValueError('Exact supplied43-box scene required')
+    if not boxes:raise ValueError('Scene contains no supported static boxes')
     return dict(schema='given_scene_analytic_box_map/v1',source=dict(path=str(world),bytes=len(raw),
         sha256=hashlib.sha256(raw).hexdigest()),boxes=boxes,excluded_models=excluded,
         reference_kind='provided_simulation_scene_geometry',independent_sensor_map=False,robot_truth_pose_used=False)

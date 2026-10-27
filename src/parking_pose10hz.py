@@ -37,55 +37,6 @@ def from_feedback(feedback):
     pose(row)
     return row
 
-def committed_poses(run,original_rows,first_ns,last_ns,*,window_end_ns):
-    """Join only the real commit prefix needed to close the immutable grid.
-
-    The auditor freezes its callback rows before reading these growing journals.
-    Commits after the first source at/after window_end_ns cannot change any grid
-    sample and must not manufacture missing-callback failures after that snapshot.
-    The closing source itself still requires the same three-way exact join.
-    """
-    import json
-    from pathlib import Path
-    if not first_ns<=window_end_ns<=last_ns:
-        raise ValueError('Parking 10Hz fixed window bounds differ')
-    actual={r['stamp_ns']:r for r in original_rows}
-    commits=[];previous=None;closing=None
-    with (Path(run)/'known_scene_controller_inputs.jsonl').open()as stream:
-        for line_number,line in enumerate(stream,1):
-            commit=json.loads(line);stamp=commit['source_ns']
-            if not first_ns<=stamp<=last_ns:continue
-            if commit.get('parking_pose10hz_source_intake')is not True:continue
-            if (commit.get('control_allowed')is not True
-                    or commit.get('accepted_pose_stamp_ns')!=stamp or commit.get('accepted_cloud_stamp_ns')!=stamp
-                    or commit.get('navigation_ground_truth_used')is not False
-                    or commit.get('source_receipts_refreshed')is not False
-                    or previous is not None and stamp<=previous):
-                raise ValueError('Parking 10Hz committed source identity/order unavailable')
-            commits.append((commit,line_number));previous=stamp
-            if stamp>=window_end_ns:
-                closing=stamp
-                break
-    if closing is None:raise ValueError('Parking 10Hz committed closing source unavailable')
-    needed={commit['source_ns']for commit,_ in commits};feedback={}
-    with (Path(run)/'navigation_feedback_history.jsonl').open()as stream:
-        for line_number,line in enumerate(stream,1):
-            value=json.loads(line);stamp=value['stamp_ns']
-            if stamp in needed:
-                if stamp in feedback:raise ValueError('Parking 10Hz controller feedback header repeated')
-                feedback[stamp]=(from_feedback(value),line_number)
-    selected=[];lines=[];feedback_lines=[]
-    for commit,line_number in commits:
-        stamp=commit['source_ns']
-        if stamp not in actual:raise ValueError('Parking 10Hz committed source absent from original SLAM callbacks')
-        if stamp not in feedback:raise ValueError('Parking 10Hz committed controller feedback unavailable')
-        source,feedback_line=feedback[stamp];pose(actual[stamp])
-        if any(actual[stamp].get(k)!=source.get(k)for k in ('position','quaternion_xyzw','source_topic','navigation_ground_truth_used')):
-            raise ValueError('Parking 10Hz committed controller pose differs from original SLAM callback')
-        selected.append(source);lines.append(line_number);feedback_lines.append(feedback_line)
-    return selected,dict(commit_lines=lines,feedback_lines=feedback_lines,
-        required_grid_end_ns=window_end_ns,closing_source_ns=closing,
-        retention='exact committed prefix through first real source at or after fixed grid end')
 
 def pose(row):
     stamp=row['stamp_ns'];p=list(row['position']);q=list(row['quaternion_xyzw'])

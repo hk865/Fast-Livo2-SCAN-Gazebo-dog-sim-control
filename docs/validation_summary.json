@@ -1,57 +1,73 @@
 {
-  "run_id": "20261027T123739Z_closed_loop_R85_direct_validation_14_full_F1_F3_f577",
-  "business_code_git_commit": "86aabae",
-  "run_start_UTC": "2026-10-27T12:37:37Z",
-  "run_end_UTC": "2026-10-27T12:44:53Z",
-  "exit_code": 0,
-  "wall_seconds": 436.17215,
-  "full_F1_to_F3_PASS": true,
-  "forward_progress_m": 34.90956183126995,
+  "UTC": "2026-10-27T15:56:01.231077+00:00",
+  "run": "20261027T154655Z_final_default_validation_26_b0f7",
+  "tested_commit": "baa5d06714402f9776fedd4602bce5b4c7a50828",
+  "source_snapshot_receipt": "FINAL_TESTED_SOURCE_26.json",
+  "passed": true,
+  "T0": 441.645,
+  "T1": 446.645,
+  "grid_samples": 51,
+  "max_xy_drift_m": 0.03052664975624096,
+  "max_yaw_drift_rad": 0.012019285350223896,
+  "max_pose_source_age_s": 0.0999999999999659,
+  "control_coverage": {
+    "passed": true,
+    "errors": [],
+    "samples": 44,
+    "first_received_ns": 441785000000,
+    "last_received_ns": 446620000000,
+    "max_gap_ns": 165000000
+  },
   "dynamic": {
-    "passed": true,
-    "actual_stop_release_cycles": 1,
-    "clear_observations": 12,
-    "recovery_pose_count": 35,
-    "recovery_progress_m": 0.08827172061105042,
-    "measured_stationary_pose_samples": 11
+    "trigger": 195.665,
+    "phase": "finished",
+    "cycles": [
+      {
+        "token": 1,
+        "hold_statuses": 89,
+        "release": {
+          "stop_count": 1,
+          "guard_sequence": 3171,
+          "clock_ns": 228755000000,
+          "clear_count": 12,
+          "clear_span_ns": 1000000000
+        },
+        "recovery_m": 0.9380429929553864,
+        "measured_stop": true,
+        "zero_held_commands": true,
+        "passed": true
+      }
+    ],
+    "native_obstacle_observations": 22336,
+    "blocked_observations": 999,
+    "observer_error": null,
+    "passed": true
   },
-  "parking": {
-    "passed": true,
-    "first_T0_sim_ns": 387705000000,
-    "fixed_end_sim_ns": 392705000000,
-    "slam_pose10hz_xy_drift_max_m": 0.02777824945923796,
-    "slam_pose10hz_yaw_drift_max_rad": 0.012714839018122426,
-    "adjacent_xy_max_m": 0.004938416011405124,
-    "adjacent_yaw_abs_max_rad": 0.0013643561629841372
+  "observed_route_progress_m": 34.882590394526545,
+  "robot_truth_navigation_used": false,
+  "unit_tests_passed": 15,
+  "application_source_frozen_during_full_run": true,
+  "push_performed": false,
+  "new_permanent_deletions": 0,
+  "entry_started_UTC": "2026-10-27T15:46:55.328549+00:00",
+  "entry_finished_UTC": "2026-10-27T15:54:28.240789+00:00",
+  "entry_exit_code": 0,
+  "historical_run21_z_observation": {
+    "max_z_target_offset_m": 0.11563,
+    "interpretation": "Observed corrected body-position variation; not evidence of a new localization fault. Target is a startup-relative goal, not ground truth. Same-window same-reference-point GT is unavailable.",
+    "max_z_change_from_anchor_m": 0.085899,
+    "correction_matrix_constant_within_window": true,
+    "generation": 138,
+    "planner_epoch": 9,
+    "transaction_count": 8,
+    "first_to_last_z_change_m": 0.082297,
+    "z_peak_to_peak_m": 0.169341,
+    "ground_truth_ATE_computed": false
   },
-  "rgb_map": {
-    "passed": true,
-    "points": 229861
-  },
-  "closure": {
-    "all_owned_and_children_clean": true,
-    "guardian_all_owned_groups_absent": true,
-    "CRC_verified": true,
-    "samples": 20415,
-    "locks_released": true
-  },
-  "actual_loading": {
-    "all_snapshots_passed": true,
-    "snapshots": 4,
-    "foreign_project_paths": []
-  },
-  "limitations": [
-    "One successful complete simulation regression; not a real-robot or 46-region-mission result.",
-    "Known-map assistance retained; no simulator robot pose used as navigation input.",
-    "Earlier failures remain failures. Two prior CPU-resource aborts remain unresolved.",
-    "Raw runs are proposed for deletion after explicit exact-scope confirmation; retained report metrics do not provide raw replay."
-  ],
-  "post_run_component_check": {
-    "generated_physics_world_byte_equal": true,
-    "frame_joints_and_geometry_equal_except_project_mesh_paths": true,
-    "mesh_count": 19,
-    "new_native_build": false,
-    "full_business_run": "direct_validation_14",
-    "component_only_changes_after_run": "Portable mesh references and removal of actuation extensions already stripped by the generator"
-  }
+  "earlier_CPU_resource_aborts_closed": false,
+  "publication_paused": false,
+  "unconfirmed_model_and_L1_mesh_excluded": true,
+  "max_z_target_offset_m": 0.014660891029787848,
+  "publication_authorized_after_pass": true,
+  "max_z_change_from_anchor_m": 0.02712540539838626
 }

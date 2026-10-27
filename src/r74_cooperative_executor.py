@@ -12,25 +12,12 @@ SCHEMA = 'r74_spin_once_zero_yield/v1'
 
 
 def enabled(profile):
-    if type(profile) is not dict:
-        raise ValueError('Cooperative executor profile must be a JSON object')
-    if KEY not in profile:
-        return False
-    value = profile[KEY]
-    if (type(value) is not dict or set(value) != {'enabled', 'schema'}
-            or type(value['enabled']) is not bool
-            or type(value['schema']) is not str or value['schema'] != SCHEMA):
-        raise ValueError('Exact typed R74 cooperative executor option required')
-    if not value['enabled']:
-        return False
-    from diagnostic_observation import strict_formal_enabled
-    if strict_formal_enabled(profile):
-        return True
-    from minimal_simulation_baseline import enabled as minimal_enabled
-    from r74_teacher_substage_timing import enabled as timing_enabled
-    if not minimal_enabled(profile) or not timing_enabled(profile):
-        raise ValueError('Cooperative executor requires minimal simulation and selected R74 timing')
-    return True
+    if not isinstance(profile,dict):raise ValueError('Controller settings must be an object')
+    option=profile.get(KEY)
+    if option is None:return False
+    if not isinstance(option,dict)or type(option.get('enabled'))is not bool:
+        raise ValueError('Controller feature enabled flag must be boolean')
+    return option['enabled']
 
 
 def make_executor(base, profile, num_threads=2):

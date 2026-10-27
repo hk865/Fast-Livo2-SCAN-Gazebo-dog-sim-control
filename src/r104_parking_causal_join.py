@@ -2,7 +2,6 @@
 
 No new command/source/ACK, no clock disguise, and no second payload queue.
 """
-from parking_contract import qualification
 import math
 import os
 import time
@@ -142,12 +141,12 @@ class ParkingCausalJoin:
         if proof is None:return False
         if self.window is None:
             proof=scalar_snapshot(proof,limit=1024)
-            row=dict(core.row,ordinary_parking=ordinary.evidence(),
-                ordinary_terminal_zero_event=core.ordinary_zero_event)
-            result=qualification(dict(cascade_parking=row,known_scene_localization=node.known_scene_inputs),node.run.name,node.request_id,
-                proof['qualification_clock_ns'])
-            if result is None:return False
-            self.window=dict(proof=proof,end_ns=result['end_stamp_ns'],event=scalar_snapshot(core.ordinary_zero_event))
+            start=proof.get('qualification_clock_ns')
+            native=proof.get('ack_native_clock_ns')
+            if (type(start)is not int or type(native)is not int or not 0<=native<=start
+                    or proof.get('observation_command_exact_zero')is not True
+                    or not exact_zero(proof.get('actual_observation_command_body',[]))):return False
+            self.window=dict(proof=proof,end_ns=start+5_000_000_000,event=scalar_snapshot(core.ordinary_zero_event))
         if proof!=self.window['proof'] or core.ordinary_zero_event!=self.window['event']:
             raise ValueError('first_fixed_window_identity_changed')
         return bundle.source_ns>self.window['end_ns']

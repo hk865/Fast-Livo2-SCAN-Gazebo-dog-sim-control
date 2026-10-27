@@ -23,7 +23,7 @@ from teacher_wrapper import TeacherNavigation
 from pid_core import slew
 from parking_zero_contract import make_event
 from parking_contract import enabled as ordinary_parking_enabled
-from known_scene_hold_guard import retain_native_context, remember_native_guard, arm_teacher_recovery, pin_native_clear_release
+from known_scene_hold_guard import retain_native_context, remember_native_guard, arm_teacher_recovery, record_clear_release
 from cascade_core import Controller
 from minimal_simulation_baseline import (enabled as minimal_baseline_enabled,
     pose_cloud_fresh as minimal_pose_cloud_fresh, raw_imu_fresh as minimal_raw_imu_fresh,
@@ -32,7 +32,6 @@ from control_core import follow_trajectory, trajectory_has_progress, RawImuTilt
 from imu_causal_buffer import enabled as imu_buffer_enabled, CausalImuBuffer
 from scipy.interpolate import BSpline
 from path_admission import FrozenFence, candidate, payload, replayable, certify_curve, remaining_certificate
-from known_scene_route_registration import KnownSceneFrozenFence
 from clock_hold import ControlClockHold
 from r74_sensor_hold_witness import begin as _sensor_hold_begin, end as _sensor_hold_end, flush_once as _sensor_hold_flush, odom_callback as _sensor_callback_odom, cloud_callback as _sensor_callback_cloud, parking_protection as _sensor_parking_protection
 from r74_corrected_delivery_witness import flush as _corrected_delivery_flush
@@ -701,128 +700,6 @@ def _receipt_json_with_metadata_fragment(receipt, fragment):
         fragment if k=='metadata' else json.dumps(v,allow_nan=False,ensure_ascii=False))
         for k,v in receipt.items())+'}'
 
-class PreparedAdmissionBatch:
-    """One existing-writer operation; no accepted record precedes its outcome.
-
-    Large trees are copied and encoded by the callback before its final source
-    check. The existing writer joins immutable fragments after one bounded
-    completion barrier. It never reads node state or enqueues another operation.
-    """
-    TOKENS={name:'__R85_TX_481F_'+name+'__' for name in
-        ('admitted','reason','error','active_id','active_stamp','replan','restored','zero','capture_clear',
-         'source_gate','completion','callback_ms')}
-    def __init__(self,node,value,metadata,decision,started,receipt,staged_row,binding_execution):
-        self.started=started;self.ready=threading.Event();self.lock=threading.Lock()
-        self.diagnostic_run=node.run;self.diagnostic_profile=diagnostic_profile_view(node.profile)
-        self.outcome=None;self.aborted=False;self.enqueued=False;self.enqueue_attempted=False
-        self.sequence=node.path_admission_sequence+1
-        self.relative=Path('path_admission_candidates')/(str(self.sequence).zfill(6)+'_trajectory_'+str(value.get('traj_id'))+'.json')
-        self.target=node.run/self.relative;self.ledger=node.run/'path_admission_decisions.jsonl'
-        proof=copy.deepcopy(decision['proof'])
-        proof['r85_final_execution_source_gate']=self.TOKENS['source_gate']
-        proof['r85_execution_transaction_completion']=self.TOKENS['completion']
-        base=dict(decision,proof=proof,schema='SCAN_path_execution_admission/v1',sequence=self.sequence,
-            request_id=node.request_id,waypoint_index=node.waypoint_index,
-            association_payload_id=value.get('traj_id'),active_trajectory_id=self.TOKENS['active_id'],
-            active_reference_stamp=self.TOKENS['active_stamp'],admission_replan_pending=self.TOKENS['replan'],
-            pending_reference_stamp=node.trajectory_association.reference_stamp,
-            control_stamp_ns=node.get_clock().now().nanoseconds,source_pose_stamp_ns=int(node.pose_stamp),
-            callback_elapsed_wall_ms=self.TOKENS['callback_ms'],navigation_ground_truth_used=False,
-            occupancy_or_terrain_support_certified=False,admitted=self.TOKENS['admitted'],
-            reason=self.TOKENS['reason'],binding_error=self.TOKENS['error'],
-            exact_zero_requested=self.TOKENS['zero'],
-            capture_clear=self.TOKENS['capture_clear'],lower_gate_samples_accepted=True,
-            lower_gate_execution_identity_restored=self.TOKENS['restored'],
-            unique_lower_archive_counter_retained=True)
-        self.decision=replayable(copy.deepcopy(base))
-        encoded=json.dumps(replayable(base),allow_nan=False,ensure_ascii=False)
-        for token in self.TOKENS.values():
-            if encoded.count(json.dumps(token))!=1:raise ValueError('admission_transaction_placeholder_collision')
-        receipt_plain=_plain_json_evidence_graph(receipt)
-        metadata_fragment=_admission_metadata_fragment(metadata,receipt,receipt_plain)
-        self.candidate=('{'+'"decision":'+encoded+',"payload":'+json.dumps(replayable(value),allow_nan=False,ensure_ascii=False)
-            +',"metadata":'+(json.dumps(replayable(metadata),allow_nan=False,ensure_ascii=False) if metadata_fragment is None else metadata_fragment)+'}\n')
-        self.record=encoded[:-1]+',"candidate_file":'+json.dumps(str(self.relative))+'}\n'
-        self.quoted_tokens={json.dumps(token):key for key,token in self.TOKENS.items()}
-        for token in self.quoted_tokens:
-            if self.candidate.count(token)!=1 or self.record.count(token)!=1:
-                raise ValueError('admission_transaction_placeholder_collision')
-        self.token_pattern=re.compile('|'.join(re.escape(token) for token in self.quoted_tokens))
-        self.path_lines=[]
-        if staged_row is not None:
-            self.path_lines.append((node.run/'navigation_cascade_paths.jsonl',json.dumps(staged_row,allow_nan=False,ensure_ascii=False)+'\n'))
-        receipt_for_json=receipt if receipt_plain else copy.deepcopy(receipt)
-        receipt_raw=(json.dumps(receipt_for_json,allow_nan=False,ensure_ascii=False) if metadata_fragment is None
-            else _receipt_json_with_metadata_fragment(receipt_for_json,metadata_fragment))
-        self.path_lines.append((node.run/'cascade_path_history.jsonl',receipt_raw+'\n'))
-        context=decision['proof']['r85_physical']['source_binding']
-        self.source_binding=copy.deepcopy(context)
-        self.binding_raw=json.dumps(self.source_binding,allow_nan=False,ensure_ascii=False)
-        self.success_identity=(node.active_trajectory_id,copy.deepcopy(node.active_reference_stamp))
-        self.old_identity=(binding_execution['active_trajectory_id'],copy.deepcopy(binding_execution['active_reference_stamp']))
-        self.capture_raw=json.dumps(replayable(decision.get('capture_clear')),allow_nan=False,ensure_ascii=False)
-        self.success_reason=decision['reason']
-        node.path_admission_sequence=self.sequence
-    def enqueue(self,writer):
-        if self.enqueue_attempted:raise RuntimeError('admission_transaction_enqueue_already_attempted')
-        self.enqueue_attempted=True;writer.enqueue(self.write);self.enqueued=True
-    def settle(self,accepted,source_gate,source_small_raw,completion,error,elapsed_ms):
-        # Only a fixed-size outcome is finalized here; large templates remain
-        # unchanged. A writer timeout is an irreversible abort, never late PASS.
-        with self.lock:
-            if self.aborted or self.outcome is not None:raise RuntimeError('admission_transaction_outcome_unavailable')
-            identity=self.success_identity if accepted else self.old_identity
-            self.decision.update(admitted=accepted,reason=self.success_reason if accepted else 'admitted_path_binding_rejected',
-                binding_error=error,active_trajectory_id=identity[0],active_reference_stamp=identity[1],
-                admission_replan_pending=not accepted,callback_elapsed_wall_ms=elapsed_ms,
-                lower_gate_execution_identity_restored=not accepted,
-                exact_zero_requested=not accepted,
-                capture_clear=completion.get('capture_clear') if accepted else None)
-            self.decision['proof']['r85_final_execution_source_gate']=source_gate
-            self.decision['proof']['r85_execution_transaction_completion']=completion
-            if accepted:
-                checkpoint=time.monotonic();elapsed_ms=(checkpoint-self.started)*1000
-                if admission_callback_rejected(self.diagnostic_run,self.diagnostic_profile,elapsed_ms/1000.,
-                        'admission_callback_budget_exhausted_at_terminal_outcome'):
-                    raise ValueError('admission_callback_budget_exhausted_at_terminal_outcome')
-                completion.update(callback_completion_checkpoint_monotonic_wall=checkpoint,
-                    callback_completion_checkpoint_elapsed_wall_ms=elapsed_ms,
-                    terminal_outcome_selected_monotonic_wall=checkpoint,
-                    terminal_outcome_elapsed_wall_ms=elapsed_ms)
-                self.decision['callback_elapsed_wall_ms']=elapsed_ms
-            small_completion={key:value for key,value in completion.items() if key!='capture_clear'}
-            if any(isinstance(value,(dict,list,set)) for value in small_completion.values()):
-                raise ValueError('admission_transaction_completion_is_not_scalar')
-            self.outcome=(accepted,source_small_raw,accepted and 'source_binding' in source_gate,
-                tuple(small_completion.items()),error,elapsed_ms)
-            self.ready.set()
-    def write(self):
-        if not self.ready.wait(1.):
-            with self.lock:self.aborted=True
-            raise RuntimeError('admission_transaction_completion_barrier_timeout_no_PASS')
-        with self.lock:outcome=self.outcome
-        if outcome is None:raise RuntimeError('admission_transaction_missing_outcome_no_PASS')
-        self._write_outcome(outcome)
-    def _write_outcome(self,outcome):
-        accepted,source_raw,has_binding,completion_items,error,elapsed_ms=outcome
-        identity=self.success_identity if accepted else self.old_identity
-        completion=dict(completion_items)
-        source_fragment=(source_raw[:-1]+',"source_binding":'+self.binding_raw+'}') if has_binding else source_raw
-        completion_raw=json.dumps(completion,allow_nan=False,ensure_ascii=False)
-        completion_raw=completion_raw[:-1]+',"capture_clear":'+(self.capture_raw if accepted else 'null')+'}'
-        replacements=dict(admitted=json.dumps(accepted),reason=json.dumps(self.success_reason if accepted else 'admitted_path_binding_rejected'),
-            error=json.dumps(error),active_id=json.dumps(identity[0]),active_stamp=json.dumps(identity[1]),
-            replan=json.dumps(not accepted),restored=json.dumps(not accepted),zero=json.dumps(not accepted),
-            capture_clear=self.capture_raw if accepted else 'null',
-            source_gate=source_fragment,completion=completion_raw,callback_ms=json.dumps(elapsed_ms,allow_nan=False))
-        def finish(template):
-            return self.token_pattern.sub(lambda match:replacements[self.quoted_tokens[match.group(0)]],template)
-        if accepted:
-            for path,line in self.path_lines:
-                with path.open('a')as stream:stream.write(line)
-        self.target.parent.mkdir(exist_ok=True)
-        with self.target.open('x')as stream:stream.write(finish(self.candidate))
-        with self.ledger.open('a')as stream:stream.write(finish(self.record))
 
 class ResetBookkeeping:
     """Legacy archive reset counter only; cascade_core owns all control maths."""
@@ -847,11 +724,6 @@ from navigation_stop_window import reset_transition, bind_transition_context
 class PIDNavigation(TeacherNavigation):
     def __init__(self,run):
         super().__init__(run);self.pid=ResetBookkeeping()  # no legacy controller mathematics
-        # The parent has already verified this frozen run scope. Reuse the
-        # existing scalar for causal ACK selection, including non-braking mode.
-        if (self.handoff_scope_sha256 is None and
-                self.profile['cascade'].get('r85_student_lower_loop_ack') is not None):
-            self.handoff_scope_sha256=hashlib.sha256((self.run/'navigation_scope.json').read_bytes()).hexdigest()
         self._r105_terminal_owner_enabled=TERMINAL_PARKING_OWNER_ENABLED
         self._r105_terminal_context=None
         _r47_initialize(self, run)
@@ -886,7 +758,7 @@ class PIDNavigation(TeacherNavigation):
             # Original46 observation must be separate; it cannot drive this task.
             self.continuous_settings = dict(self.continuous_settings, enabled=False)
         self.path_admission_fence=(AutomaticRouteFence(self.automatic_reference) if self.automatic_reference is not None
-                                   else KnownSceneFrozenFence(self.run,self.profile))
+                                   else FrozenFence(self.run,self.profile))
         self.r85_physical_gate=None
         if self.automatic_reference is not None:
             from r85_physical_path_gate import R85PhysicalPathGate
@@ -895,9 +767,6 @@ class PIDNavigation(TeacherNavigation):
         self.path_admission_active=None;self.path_admission_hold=False;self.path_admission_replan_pending=False
         self.path_admission_sequence=0;self.path_admission_last_decision=None
         self.control_clock_hold=ControlClockHold()
-        from r85_protocol_liveness import enabled as protocol_liveness_enabled
-        self._r85_protocol_liveness_enabled=protocol_liveness_enabled(self.profile)
-        self._r85_protocol_liveness=None
         self.corridor_observer=None
         self.corridor_last_certificate=None
         self.corridor_last_request_wall=-math.inf
@@ -925,7 +794,6 @@ class PIDNavigation(TeacherNavigation):
         # PUBLICATION_OBSERVER_END init_counter
     def on_request(self,msg):
         previous=self.request_id
-        protocol_request_start=(self.get_clock().now().nanoseconds,time.monotonic_ns()) if self._r85_protocol_liveness_enabled else None
         super().on_request(msg)
         if self.request_id!=previous and hasattr(self,'cascade'):
             self._r105_terminal_context=None
@@ -946,9 +814,6 @@ class PIDNavigation(TeacherNavigation):
                 self.goals_definition_sha256,self.continuous_settings)
                 if self.continuous_settings["enabled"] else None)
             self.coverage_replan_index=None
-            if protocol_request_start is not None:
-                from r85_protocol_liveness import start_controller_request
-                start_controller_request(self,*protocol_request_start)
     def on_corridor_snapshot(self,msg):
         from corridor_runtime import decode_snapshot,sha_text
         wall=time.monotonic_ns();clock=self.get_clock().now().nanoseconds
@@ -1306,14 +1171,6 @@ class PIDNavigation(TeacherNavigation):
         # One ordinary program representation of the same native guard input.
         self._program_guard_route=np.asarray(points,dtype=float)
         self._program_guard_route_reference=None
-        version=getattr(runtime,'reference_version_path',None)
-        if version is not None:
-            self._program_guard_route_reference=dict(schema='program_global_guard_route/v1',
-                reference_file=Path(version).name,reference_file_sha256=runtime.file_sha,
-                reference_id=runtime.doc['reference_id'],
-                source_route_sha256=runtime.doc['source_route_sha256'],frame_id='camera_init',
-                point_count=len(points),route_id=key[0],route_version=key[1],
-                route_float64_sha256=hashlib.sha256(np.asarray(self._program_guard_route,dtype='<f8').tobytes()).hexdigest())
 
     def _program_route_key(self):
         runtime=self.automatic_reference
@@ -1358,9 +1215,6 @@ class PIDNavigation(TeacherNavigation):
     def accept_spline(self,msg,metadata):
         self.pending_path_commit=None
         result=self._admit_matched_spline(msg,metadata)
-        if self._r85_protocol_liveness_enabled:
-            from r85_protocol_liveness import observe_controller
-            observe_controller(self,self.get_clock().now().nanoseconds,time.monotonic_ns())
         return result
     @_callback_cost_observe('admission')
     @_r87_diag.observe('scan.admission')
@@ -1424,7 +1278,6 @@ class PIDNavigation(TeacherNavigation):
                 # use its explicit reference capacity. Legacy fences keep 256.
                 from automatic_reference_runtime import MAX_REFERENCE_POINTS
                 if (binding.get('schema')!='r85_automatic_route_fence_binding/v1'
-                        or binding.get('reference_file_sha256')!=self.automatic_reference.file_sha
                         or self.automatic_reference.config.get('max_reference_points')!=MAX_REFERENCE_POINTS):
                     raise ValueError('r85_fence_route_capacity_binding_mismatch')
                 route_point_budget=MAX_REFERENCE_POINTS
@@ -1742,38 +1595,11 @@ class PIDNavigation(TeacherNavigation):
                 synchronous_original_path_binding=staged is not None)
             if self.r85_physical_gate is None:
                 raise ValueError('prepared_transaction_requires_R85_physical_gate')
-            with _r87_diag.span('scan.records_prepare',source_ns=self.pose_stamp):
-                batch=PreparedAdmissionBatch(self,value,metadata,decision,started,receipt,
-                    staged[1] if staged is not None else None,binding_execution)
-            prepared_wall=time.monotonic()
-            completion.update(admission_started_monotonic_wall=started,
-                prepared_records_monotonic_wall=prepared_wall)
-            if admission_callback_rejected(self.run,self.profile,prepared_wall-started,
-                    'admission_callback_budget_exhausted_during_record_preparation'):
-                raise ValueError('admission_callback_budget_exhausted_during_record_preparation')
-            with _r87_diag.span('scan.records_enqueue',source_ns=self.pose_stamp):
-                batch.enqueue(self.evidence)
-            enqueued_wall=time.monotonic()
-            completion['existing_writer_enqueue_completed_monotonic_wall']=enqueued_wall
-            if admission_callback_rejected(self.run,self.profile,enqueued_wall-started,
-                    'admission_callback_budget_exhausted_during_enqueue'):
-                raise ValueError('admission_callback_budget_exhausted_during_enqueue')
-            with _r87_diag.span('scan.final_source',source_ns=self.pose_stamp):
-                final_source=self.r85_physical_gate.fresh(self,binding,binding_generation)
-            completion['final_source_checked_monotonic_wall']=final_source.get('checked_monotonic_wall')
-            if final_source.get('source_binding')!=batch.source_binding:
-                raise ValueError('admitted_path_final_source_binding_changed')
-            final_elapsed=time.monotonic()-started
-            final_source.update(admission_started_monotonic_wall=started,
-                final_checked_callback_elapsed_wall_ms=final_elapsed*1000,callback_budget_s=.100)
-            proof=dict(proof,r85_final_execution_source_gate=final_source)
-            active['proof']['r85_final_execution_source_gate']=final_source
-            source_small={key:value for key,value in final_source.items() if key!='source_binding'}
-            source_small_raw=json.dumps(source_small,allow_nan=False,ensure_ascii=False)
-            if not final_source['allowed']:raise ValueError('r85_admitted_path_final_source_not_fresh_or_bound')
-            if admission_callback_rejected(self.run,self.profile,time.monotonic()-started,
-                    'admission_callback_budget_exhausted_before_promotion'):
-                raise ValueError('admission_callback_budget_exhausted_before_promotion')
+            # Commit current in-memory control state after a fresh sensor check.
+            # Optional recording and audit serialization never authorize motion.
+            final_source=self.r85_physical_gate.fresh(self,binding,binding_generation)
+            if not final_source['allowed']:
+                raise ValueError('Current pose/cloud/planner generation is not fresh')
             self.cascade=prepared_cascade
             if staged is not None:self.cascade_path_id=receipt['path_id']
             self.path_receipt=receipt;self.path_admission_active=active
@@ -1781,75 +1607,20 @@ class PIDNavigation(TeacherNavigation):
             self.heading_gate=prepared_heading
             self.path_admission_replan_pending=False;self.reference_replan_pending=False
             self.reference_consistency_hold=False;self.reference_consistency_check=None
-            state_commit_wall=time.monotonic()
-            completion.update(state_commit_completed_monotonic_wall=state_commit_wall,
-                state_commit_elapsed_wall_ms=(state_commit_wall-started)*1000)
-            if admission_callback_rejected(self.run,self.profile,state_commit_wall-started,
-                    'admission_callback_budget_exhausted_after_state_commit'):
-                raise ValueError('admission_callback_budget_exhausted_after_state_commit')
-            if self.evidence.error:raise RuntimeError(self.evidence.error)
-            self.path_admission_hold=False
-            release_wall=time.monotonic()
-            completion.update(executable_release_completed_monotonic_wall=release_wall,
-                executable_release_elapsed_wall_ms=(release_wall-started)*1000)
-            if admission_callback_rejected(self.run,self.profile,release_wall-started,
-                    'admission_callback_budget_exhausted_at_execution_release'):
-                raise ValueError('admission_callback_budget_exhausted_at_execution_release')
-            completion=dict(schema='r85_strict_admission_transaction_completion/v1',run_id=self.run.name,
-                request_id=self.request_id,sequence=batch.sequence,admitted=True,callback_budget_s=.100,
-                admission_started_monotonic_wall=started,prepared_records_monotonic_wall=prepared_wall,
-                existing_writer_enqueue_completed_monotonic_wall=enqueued_wall,
-                final_source_checked_monotonic_wall=final_source['checked_monotonic_wall'],
-                state_commit_completed_monotonic_wall=state_commit_wall,
-                executable_release_completed_monotonic_wall=release_wall,
-                state_commit_elapsed_wall_ms=(state_commit_wall-started)*1000,
-                executable_release_elapsed_wall_ms=(release_wall-started)*1000,
-                all_large_copies_and_record_serialization_prepared=True,
-                accepted_records_waited_for_terminal_outcome=True,capture_clear=capture_clear,
-                exact_python_return_time_recorded=False)
-            # This is the last observable callback checkpoint, not a fabricated
-            # Python return timestamp. No large work follows the terminal choice.
-            callback_checkpoint=time.monotonic();callback_elapsed=(callback_checkpoint-started)*1000
-            completion.update(callback_completion_checkpoint_monotonic_wall=callback_checkpoint,
-                callback_completion_checkpoint_elapsed_wall_ms=callback_elapsed)
-            if admission_callback_rejected(self.run,self.profile,callback_elapsed/1000.,
-                    'admission_callback_budget_exhausted_at_completion_checkpoint'):
-                raise ValueError('admission_callback_budget_exhausted_at_completion_checkpoint')
-            self.path_admission_last_decision=batch.decision
-            if self.evidence.error:raise RuntimeError(self.evidence.error)
-            with _r87_diag.span('scan.records_settle',source_ns=self.pose_stamp):
-                batch.settle(True,final_source,source_small_raw,completion,None,callback_elapsed)
-            _r85_intake_outer(self, value, metadata, batch.decision, 'original_strict_batch_settled_true')
+            self.path_admission_hold=False;self.path_admission_sequence+=1
+            self.path_admission_last_decision=dict(decision,sequence=self.path_admission_sequence,
+                source_fresh=final_source['allowed'],callback_elapsed_wall_ms=(time.monotonic()-started)*1000)
             return
         except (ValueError,TypeError,KeyError,AttributeError,OverflowError,FloatingPointError,RuntimeError,OSError) as error:
             for key,old in binding_execution.items():setattr(self,key,old)
             for key,old in promotion_snapshot.items():setattr(self,key,old)
             self.path_admission_hold=True;self.path_admission_replan_pending=True
-            self.last_spline_rejected='V33 admitted path binding rejected: '+str(error)
-            self.message=self.last_spline_rejected+'; wait for a fully bound path'
+            self.last_spline_rejected='Current path rejected: '+str(error)
+            self.message=self.last_spline_rejected+'; waiting for replan'
+            self.path_admission_last_decision=dict(admitted=False,reason=str(error))
             self.publish_command()
-            if batch is None:
-                self.archive_admission(value,metadata,dict(admitted=False,reason='admitted_path_binding_rejected',
-                    proof=proof,handoff=handoff,anchor_binding=binding,binding_error=str(error),
-                    lower_gate_samples_accepted=self.replans>before,lower_gate_execution_identity_restored=True,
-                    unique_lower_archive_counter_retained=True,exact_zero_requested=True),started)
-            else:
-                completion.update(schema='r85_strict_admission_transaction_completion/v1',run_id=self.run.name,
-                    request_id=self.request_id,sequence=batch.sequence,admitted=False,callback_budget_s=.100,
-                    admission_started_monotonic_wall=started,execution_identity_restored=True,
-                    exact_zero_requested=True,failure=str(error),exact_python_return_time_recorded=False)
-                rejected_wall=time.monotonic();rejected_ms=(rejected_wall-started)*1000
-                completion.update(callback_completion_checkpoint_monotonic_wall=rejected_wall,
-                    callback_completion_checkpoint_elapsed_wall_ms=rejected_ms)
-                if final_source is None:final_source=dict(allowed=False,reason='transaction_rejected_before_final_source_check')
-                # A rejected final binding is archived verbatim. Never append
-                # the earlier baseline over a changed/rejected source receipt.
-                source_small_raw=json.dumps(final_source,allow_nan=False,ensure_ascii=False)
-                batch.settle(False,final_source,source_small_raw,completion,str(error),rejected_ms)
-                self.path_admission_last_decision=batch.decision
-                if not batch.enqueue_attempted:batch.enqueue(self.evidence)
-                _r85_intake_outer(self, value, metadata, batch.decision, 'original_strict_batch_settled_false')
             return
+
     def follow_checked_trajectory(self,*args,**kwargs):
         kwargs['tracking_pose']=self.pose
         result=follow_trajectory(*args,**kwargs)
@@ -2099,7 +1870,7 @@ class PIDNavigation(TeacherNavigation):
             if lower_ack_configuration(self.profile['cascade'].get('r85_student_lower_loop_ack')) is not None:
                 expected_scope=self.handoff_scope_sha256
                 selected=next((r for r in reversed(entries)if r['stamp_ns']<=pose_stamp_ns
-                    and r.get('source_scope_sha256')==expected_scope),None)
+                    and r.get('run_id')==expected_scope),None)
             else:selected=next((r for r in reversed(entries)if r['stamp_ns']<=pose_stamp_ns),None)
             # Cached parse trees remain private; callers own only this small ACK.
             return copy.deepcopy(selected)
@@ -2325,9 +2096,6 @@ class PIDNavigation(TeacherNavigation):
             self.state='failed';self.message='主动转向交接失败：'+str(gate.handoff_failure)
             self.publish_command();return
         try:
-            if self._r85_protocol_liveness_enabled:
-                from r85_protocol_liveness import observe_controller
-                if observe_controller(self,self.get_clock().now().nanoseconds,time.monotonic_ns()):return
             return self._control_candidate(now)
         except Exception as error:
             # A reference/handoff error must stop this tick, not escape the
@@ -2476,7 +2244,7 @@ class PIDNavigation(TeacherNavigation):
                         zero_requested_after_control=True,state_after_control=self.state,
                         admission_hold_observation_only=True,path_admission_hold_after=self.path_admission_hold,
                         obstacle_resumes_after=self.obstacle_resumes,evidence_queue_error=self.evidence.error)
-                    pin_native_clear_release(self,row)
+                    record_clear_release(self,row)
                     self.evidence.append(self.run/'navigation_guard_history.jsonl',row);self.pending_guard_row=None
         self.publish_command()
     def control_parking(self,now):
@@ -2489,22 +2257,6 @@ class PIDNavigation(TeacherNavigation):
         if ordinary_parking_enabled(self.profile):
             self.cascade.begin_ordinary_terminal(int(ns),round(float(self.goals[self.waypoint_index].timeout_sim_s)*1e9))
             self.terminal_parking_owner=self.cascade.ordinary_parking;self.terminal_parking_request=self.request_id
-            if self.terminal_parking_owner.pose10hz and not getattr(self,'_parking_pose10hz_loaded',False):
-                import parking_pose10hz as pose_rule
-                import ordinary_parking as pose_owner
-                import cascade_core as pose_core
-                from pathlib import Path as SourcePath
-                import hashlib as source_hashlib
-                modules={m.__name__:dict(path=str(SourcePath(m.__file__).resolve()),
-                    sha256=source_hashlib.sha256(SourcePath(m.__file__).read_bytes()).hexdigest())
-                    for m in (pose_rule,pose_owner,pose_core)}
-                with (self.run/'parking_pose10hz_controller_loaded.json').open('x')as record:
-                    json.dump(dict(schema='actual_parking_pose10hz_controller_loaded/v1',
-                        run_id=self.run.name,request_id=self.request_id,control_clock_ns=int(ns),
-                        configuration=pose_rule.CONFIG,actual_instance_enabled=True,modules=modules,
-                        actual_owner_class=type(self.terminal_parking_owner).__name__,
-                        high_frequency_motion_gate=False,formal_parking_PASS=False),record,sort_keys=True)
-                self._parking_pose10hz_loaded=True
         self.steering=dict(direction=(goal-self.pose)[:2].tolist(),heading=self.cascade.goal_yaw,
             heading_error=0.,exhausted=False)
         _parking_sensor_row=None
@@ -2757,10 +2509,7 @@ def main():
         node._r91_executor_receipt=dict(environment_key='R91_EMPTY_RETRY_YIELD',
             environment_value=r91_selection,candidate_commit=os.environ.get('R87_CANDIDATE_COMMIT'),
             candidate=None if node._r91_empty_retry_yield is None else node._r91_empty_retry_yield.snapshot())
-        from r86_runtime_binding import (write_binding as write_r86_runtime_binding,
-                                        finish_empty_retry_yield)
         node._r118_source_age_binding=_r118_source_age.bind('controller',run)
-        write_r86_runtime_binding(node)
         executor.add_node(node)
     except BaseException:
         try:
@@ -2840,7 +2589,7 @@ def main():
         finally:
             try:
                 try:
-                    try:finish_empty_retry_yield(node,executor)
+                    try:None
                     finally:r90_executor_finish(node,executor)
                 finally:
                     from r89_runtime_trace import finish as finish_r89_runtime_trace

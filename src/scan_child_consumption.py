@@ -16,20 +16,11 @@ GID_BYTES = 16  # Source-bound installed Jazzy rmw/types.h RMW_GID_STORAGE_SIZE.
 
 
 def enabled(profile):
-    from diagnostic_observation import strict_formal_enabled
-    formal_scope = strict_formal_enabled(profile)
-    config = profile.get('r85_auto_reference_contract', {})
-    if not isinstance(config, dict):
-        raise ValueError('Child consumption reference config must be an object')
-    if FLAG in config and type(config[FLAG]) is not bool:
-        raise ValueError('Child consumption flag must be a strict boolean')
-    if config.get(FLAG) is not True:
-        return False
-    if ((profile.get('diagnostic_observe_only', {}).get('enabled') is not True and not formal_scope)
-            or profile.get('r85_session', {}).get('enabled') is not True
-            or config.get('enabled') is not True):
-        raise ValueError('Child consumption ACK requires explicit isolated diagnostic or strict formal R85 scope')
-    return True
+    config=profile.get('r85_auto_reference_contract',{})
+    if not isinstance(config,dict):raise ValueError('Planner options must be an object')
+    value=config.get(FLAG,False)
+    if type(value)is not bool:raise ValueError('Planner ACK option must be boolean')
+    return value
 
 
 def gid_hex(value):

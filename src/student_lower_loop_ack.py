@@ -221,8 +221,7 @@ def annotate_pending(pending, pid, config, navigation_limits):
         if not zero or np.any(applied):
             raise ValueError('Ordinary zero takeover did not produce exact zero')
     annotation = dict(schema=SCHEMA, actor_kind='student', input_clock_ns=stamp,
-        input_frame_serial=frame, inference_sequence=inference, source_scope_sha256=scope,
-         actual_export_sha256=EXPORT_SHA,
+        input_frame_serial=frame, inference_sequence=inference, run_id=scope,
         requested_command_body=request.tolist(), intentional_bounded_pid_correction_body=correction.tolist(),
         policy_input_before_command_limit_body=before_limit.tolist(),
         corrected_before_worker_slew_body=corrected.tolist(), actual_applied_policy_input_body=applied.tolist(),
@@ -297,8 +296,7 @@ def residual(ack, config, navigation_limits):
     require_measurement_proof(config,note,receipt)
     speed_tier=speed_tiers.validate_copies(selected,note,receipt)
     bindings = dict(schema=SCHEMA, actor_kind='student', input_clock_ns=stamp,
-        input_frame_serial=frame, inference_sequence=inference, source_scope_sha256=scope,
-         actual_export_sha256=EXPORT_SHA,
+        input_frame_serial=frame, inference_sequence=inference, run_id=scope,
         ack_sequence=integer(ack['sequence'], True), ack_native_clock_ns=integer(ack['ack_native_clock_ns']))
     if any(note.get(k) != v or type(note.get(k)) is not type(v) for k, v in bindings.items()):
         raise ValueError('Student lower-loop ACK frame/sequence/source binding differs')

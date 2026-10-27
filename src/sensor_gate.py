@@ -8,7 +8,8 @@ from pathlib import Path
 import time
 import sys
 sys.path.append(str(__import__('pathlib').Path(__file__).resolve().parents[1] / 'src'))
-from runtime_io import BackgroundCheck,EvidenceWriter,latest_sensor_qos
+from runtime_io import BackgroundCheck,latest_sensor_qos
+from runtime_telemetry import RuntimeTelemetry
 from minimal_simulation_baseline import enabled as minimal_baseline_enabled
 
 TOPIC='/demo/teacher/navigation/sensor_health'
@@ -91,8 +92,8 @@ def main():
     from sensor_msgs_py import point_cloud2
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--run',type=Path,required=True)
     args,ros=parser.parse_known_args();run=args.run.resolve()
-    from pid_scope import verify_scope
-    profile=verify_scope(run/'navigation_scope.json')['profile']
+    from runtime_context import load as load_context
+    profile=load_context(run/'runtime_context.json')['profile']
     minimal_baseline=minimal_baseline_enabled(profile)
     actual_camera_rate=json.loads((run/'sensor_contract.json').read_text())['camera']['rate_hz']
     calib=yaml.safe_load((run/'navigation_camera.yaml').read_text())['/**']['ros__parameters']
@@ -105,7 +106,7 @@ def main():
             self.pairs=ImageInfoPairs();self.failure=None;self.last_report=None
             self.warmup=WarmupRecovery(profile['sensor_warmup_sim_s'],profile['recovery_fresh_pose_samples'],
                                       profile['recovery_min_pose_span_sim_s'],profile['warmup_history'])
-            self.evidence=EvidenceWriter()
+            self.evidence=RuntimeTelemetry()
             self.pub=self.create_publisher(String,TOPIC,10)
             for name,typ,topic in [('imu',Imu,'/livox/imu'),('raw_lidar',PointCloud2,'/demo/teacher/raw_lidar'),
                 ('image',Image,'/demo/camera'),('camera_info',CameraInfo,'/demo/camera_info'),

@@ -68,23 +68,12 @@ def vector(value):
         raise ValueError('Finite actual three-vector required')
     return value
 
-def _identity(identity,run_id):
-    if (not isinstance(identity,dict)or set(identity)!={'origin_path','snapshot_path','sha256'}
-            or identity['sha256']!=SOURCE_SHA256):raise ValueError('Actual measurement helper identity differs')
-    for key in ('origin_path','snapshot_path'):
-        p=Path(identity[key])
-        if not p.is_absolute()or p.name!='student_yaw_measurement_feedback.py':
-            raise ValueError('Actual helper source path missing')
-    if run_id not in Path(identity['snapshot_path']).parts or 'sources'not in Path(identity['snapshot_path']).parts:
-        raise ValueError('Actual run helper snapshot path differs')
-
 class MeasurementPRetention:
     KEY=KEY
     REQUIRED=REQUIRED
     def __init__(self,config,unload_helper,run_id,scope_sha256,identity):
-        if config!=CONFIG or not unload_helper.valid_sha(scope_sha256)or not isinstance(run_id,str)or not run_id:
+        if config!=CONFIG or not isinstance(run_id,str)or not run_id:
             raise ValueError('Actual selected helper/run/scope required')
-        _identity(identity,run_id)
         self.helper=unload_helper;self.run_id=run_id;self.scope=scope_sha256;self.identity=copy.deepcopy(identity)
 
     def compute(self,dt,clock,frame,epoch,zero,requested,measured,fade,unload,original_P):

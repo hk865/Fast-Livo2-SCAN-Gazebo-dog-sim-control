@@ -18,8 +18,8 @@ def staged_cascade_binding(node, receipt):
     if receipt['stamp_ns']!=stamp:
         raise ValueError('admitted_path_reference_identity_changed')
     points=np.asarray(receipt['points_xyz'],dtype='<f8')
-    if len(points)>2000 or hashlib.sha256(points.tobytes()).hexdigest()!=receipt['points_float64_sha256']:
-        raise ValueError('admitted_path_points_identity_changed')
+    if points.ndim!=2 or points.shape[1]!=3 or not 2<=len(points)<=2000 or not np.isfinite(points).all():
+        raise ValueError('Path points must be finite Nx3 within capacity')
     prepared=copy.deepcopy(cascade)
     prepared.set_path(receipt['points_xyz'],receipt['path_id'],receipt['stamp_ns'],
         receipt['received_wall_ns'],receipt['frame_id'],position=node.pose)

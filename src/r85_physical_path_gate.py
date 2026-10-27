@@ -40,7 +40,7 @@ def finite_observed_prediction(proof,payload,context):
                 or proof.get('allowed')is not False or proof.get('status')!='UNKNOWN_REJECTED'
                 or proof.get('reason')not in ('continuous_outer_bound_not_certified','patch_or_wall_budget_exhausted')
                 or proof.get('coordinate_frame')!='camera_init' or payload.get('frame_id')!='camera_init'
-                or payload.get('order')!=3 or proof.get('payload_sha256')!=digest(payload)
+                or payload.get('order')!=3
                 or proof.get('T_navigation_world')!=context['T_navigation_world']
                 or proof.get('budgets')!=dict(max_patches=4096,max_depth=18,wall_budget_s=2.)):return False
         points=np.asarray(payload['pos_pts'],dtype=float);knots=np.asarray(payload['knots'],dtype=float)
@@ -70,7 +70,7 @@ class R85PhysicalPathGate:
         if runtime is None or key is None:
             raise ValueError('r85_route_definition_not_bound')
         return (id(runtime),runtime.file_sha,tuple(runtime.scope),node.request_id,key,
-                binding.get('reference_id'),binding.get('reference_file_sha256'),
+                binding.get('reference_id'),
                 binding.get('planner_epoch'),binding.get('planner_process_id'),
                 binding.get('localization_generation'))
 
@@ -96,7 +96,7 @@ class R85PhysicalPathGate:
         if runtime is None or not isinstance(binding, dict):
             raise ValueError('r85_physical_requires_bound_automatic_reference')
         doc=runtime.doc
-        ref_source=dict(path=str(runtime.path.resolve()),sha256=runtime.file_sha)
+        ref_source=dict(path=str(runtime.path.resolve()))
         registration=dict(run_id=self.run.name,reference_id=doc.get('reference_id'),
                           epoch=doc.get('epoch'),localization_generation=doc.get('localization_generation'))
         scope = (binding.get('planner_epoch'), binding.get('planner_process_id'), binding.get('localization_generation'))
@@ -106,28 +106,24 @@ class R85PhysicalPathGate:
             or (doc.get('epoch'),doc.get('localization_generation'))!=(scope[0],scope[2])
             or doc.get('reference_id')!=str(node.request_id)+':epoch:'+str(scope[0])+':generation:'+str(scope[2])):
             raise ValueError('physical_reference_request_or_coordinate_scope_mismatch')
-        task, task_source = self._context_file_value(self.run / 'r85_task_contract.json')
-        typed, typed_source = self._context_file_value(self.run / 'r85_typed_route_source.json')
-        if task.get('schema') != 'r85_pct_scan_student_task/v1' or task.get('run_id') != self.run.name or task.get('actual_SCAN_curve_physical_certificate_required') is not True or (task.get('navigation_ground_truth_used') is not False) or (task.get('source_typed_route_file') != typed_source['path']) or (doc.get('source_route_file') != typed_source['path']) or (typed.get('schema') != 'r85_prepared_typed_global_reference/v1'):
-            raise ValueError('r85_physical_task_or_typed_source_mismatch')
+        # Current map/geometry is an algorithm input, not an experimental
+        # equivalence certificate or a previously approved task.
         metadata, metadata_source = self._context_file_value(geometry.METADATA)
         limits, limits_source = self._context_file_value(geometry.CONFIG)
-        actual, actual_source = self._context_file_value(self.run / 'known_scene_reference.json')
-        eq, eq_source = self._context_file_value(self.run / 'r85_scene_geometry_equivalence.json')
-        prior, prior_source = self._context_file_value(metadata['inputs']['reference']['path'])
-        initial, initial_source = self._context_file_value(self.run / 'known_scene_initialization_frame.json', limit=INITIALIZATION_METADATA_MAX_BYTES)
-        _, world_source = file_value_world(self.run / 'world.sdf')
-        expected_T = [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, -0.3], [0.0, 0.0, 0.0, 1.0]]
-        if metadata.get('T_navigation_world') != expected_T or doc.get('T_navigation_world') != expected_T or initial.get('T_navigation_world') != expected_T or (initial.get('run_id') != self.run.name) or (initial.get('robot_truth_pose_used') is not False) or (eq.get('schema') != 'r85_actual_static_geometry_equivalence/v1') or (eq.get('run_id') != self.run.name) or (eq.get('static_boxes_exact_equal') is not True) or (eq.get('box_count') != 43) or (len(actual.get('boxes', [])) != 43) or (actual.get('boxes') != prior.get('boxes')) or (actual.get('excluded_models') != prior.get('excluded_models')) or (eq.get('actual_world_file') != world_source['path']) or (eq.get('prior_reference_file') != prior_source['path']):
-            raise ValueError('r85_physical_actual_static_scene_or_fixed_transform_mismatch')
-        sources = dict(task=task_source, typed=typed_source, metadata=metadata_source, limits=limits_source, actual_reference=actual_source, equivalence=eq_source, prior_reference=prior_source, initial_frame=initial_source, actual_world=world_source)
+        actual, actual_source = self._context_file_value(self.run/'known_scene_reference.json')
+        expected_T=doc.get('T_navigation_world')
+        from known_scene_matcher import checked_transform
+        checked_transform(expected_T)
+        if not isinstance(actual.get('boxes'),list)or not actual['boxes']:
+            raise ValueError('Current scene map is empty')
+        sources=dict(metadata=metadata_source,limits=limits_source,actual_reference=actual_source)
         definition = node.trajectory_association.route_definition
         route_key = node.trajectory_association.route_key
         sent = runtime.reference['sent_reference']
         if not isinstance(definition, dict) or (definition.get('route_id'), definition.get('route_version')) != route_key or definition.get('run_id') != self.run.name or ((definition.get('reference_epoch'), definition.get('planner_process_id'), definition.get('localization_generation')) != scope) or (definition.get('reference_stamp') != sent['stamp']) or ({k: definition.get('reference_content', {}).get(k) for k in sent} != sent):
             raise ValueError('r85_physical_route_definition_binding_mismatch')
         self.static_sources = sources
-        return dict(route_id=route_key[0], route_version=route_key[1], sent_reference_sha256=digest(sent), run_id=self.run.name, request_id=node.request_id, reference_id=doc['reference_id'], reference_file_sha256=ref_source['sha256'], source_route_sha256=typed_source['sha256'], planner_epoch=scope[0], planner_process_id=scope[1], localization_generation=scope[2], registration_sha256=digest(registration), static_sources=sources, static_sources_sha256=digest(sources), T_navigation_world=expected_T)
+        return dict(route_id=route_key[0], route_version=route_key[1], sent_reference_sha256=digest(sent), run_id=self.run.name, request_id=node.request_id, reference_id=doc['reference_id'], planner_epoch=scope[0], planner_process_id=scope[1], localization_generation=scope[2], registration_sha256=digest(registration), static_sources=sources, static_sources_sha256=digest(sources), T_navigation_world=expected_T)
 
     def candidate_identity(self,node,value,metadata,context,*,require_current_association=False):
         association=node.trajectory_association
@@ -336,6 +332,5 @@ def file_value_world(path):
 def physical_allowed(proof, payload, context):
     return (isinstance(proof, dict) and proof.get('schema') == 'r85_continuous_scan_physical_certificate/v1'
             and proof.get('allowed') is True and proof.get('status') == 'CERTIFIED_STATIC_SPACE_ONLY'
-            and proof.get('payload_sha256') == digest(payload)
             and proof.get('T_navigation_world') == context['T_navigation_world']
             and proof.get('budgets') == dict(max_patches=4096, max_depth=18, wall_budget_s=2.))

@@ -117,3 +117,15 @@ class BackgroundCheck:
 def latest_sensor_qos():
     from rclpy.qos import QoSProfile,ReliabilityPolicy
     return QoSProfile(depth=1,reliability=ReliabilityPolicy.BEST_EFFORT)
+
+
+from contextlib import contextmanager
+@contextmanager
+def bounded_shutdown_signals():
+    import signal
+    previous={}
+    if threading.current_thread()is threading.main_thread():
+        previous={sig:signal.signal(sig,signal.SIG_IGN)for sig in (signal.SIGINT,signal.SIGTERM)}
+    try:yield
+    finally:
+        for sig,handler in previous.items():signal.signal(sig,handler)

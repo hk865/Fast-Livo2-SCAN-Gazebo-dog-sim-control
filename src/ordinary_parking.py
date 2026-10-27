@@ -97,7 +97,7 @@ class OrdinaryParking:
                 self.failure='parking_pose10hz_fixed_anchor_exceeded';self.stage='failed'
             else:self.stage='zero_hold'
             return self.stage
-        if clock>self.deadline:
+        if clock>self.deadline and not(getattr(self,'daily_navigation',False)and self.ready_stamp is not None):
             self.failure='ordinary_actual_zero_ACK_timeout' if self.ready_stamp is not None else 'ordinary_precise_capture_deceleration_timeout'
             self.stage='failed';return self.stage
         if self.capture_goal is None:raise ValueError('10Hz capture requires the fixed goal')

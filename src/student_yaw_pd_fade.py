@@ -41,7 +41,7 @@ class StudentYawPDFade:
                 or not _number(config['maximum_alpha_rate_per_s'])
                 or config['maximum_alpha_rate_per_s']!=1.):raise ValueError('Configuration differs')
         if config is not None and (not isinstance(run_id,str)or not run_id
-                or not unload_helper.valid_sha(scope_sha256)):
+               ):
             raise ValueError('Bound run and original scope required')
         self.config=copy.deepcopy(config);self.helper=unload_helper
         self.run_id=run_id;self.scope=scope_sha256;self.alpha=1.

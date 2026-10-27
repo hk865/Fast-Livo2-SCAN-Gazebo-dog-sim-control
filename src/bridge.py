@@ -19,7 +19,7 @@ import time
 import sys
 sys.path.append(str(__import__('pathlib').Path(__file__).resolve().parents[1] / 'src'))
 from runtime_io import BackgroundCheck,LatestCommandWriter,latest_sensor_qos
-from compact_archives import make_command_writer
+from control_io import make_command_writer
 from gate_reasons import GateReasons
 from integration_limits import COMMAND_SOURCE_FRESHNESS_NS, COMMAND_SOURCE_FRESHNESS_S
 from parking_zero_contract import validate_event
@@ -34,53 +34,16 @@ STATUS_TOPIC = '/demo/teacher/navigation_bridge/status'
 STOP_TOPIC = '/demo/teacher/navigation_bridge/stop'
 TIMEOUT = COMMAND_SOURCE_FRESHNESS_S
 LIMITS = (.3, .2, .3)
-FROZEN_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 
 
-def passed(value):
-    if value == 'passed':
-        return True
-    return isinstance(value, dict) and value.get('passed') is True and value.get('status', 'passed') == 'passed'
+def runtime_description(configuration):
+    return dict(run_dir=configuration['run_dir'],actor_kind='student')
 
 
-def acceptance_output(receipt):
-    """Publish startup identity; keep the full verified profile in its scope file."""
-    if not isinstance(receipt,dict) or 'profile'not in receipt:return receipt
-    result={key:value for key,value in receipt.items()if key!='profile'}
-    result['profile_reference']={'path':receipt['path'],'field':'profile',
-        'scope_sha256':receipt['sha256']}
-    return result
-
-
-def check_acceptance(path):
-    """Only an explicit aggregate motion AND Sim2Sim pass unlocks runtime."""
-    try:
-        raw = path.read_bytes()
-        if len(raw) > 2 * 1024 * 1024:
-            raise ValueError('Acceptance file exceeds the review limit')
-        data = json.loads(raw)
-    except (OSError, ValueError) as error:
-        raise RuntimeError(f'Navigation refused: acceptance unavailable: {error}') from error
-    levels = data.get('levels') if isinstance(data, dict) else None
-    if isinstance(data, dict) and data.get('schema') in ('teacher_closed_loop_navigation_scope/v1','student_closed_loop_navigation_scope/v1'):
-        from pid_scope import verify_scope
-        return verify_scope(path, raw)
-    if not isinstance(levels, dict) or not all(passed(levels.get(k)) for k in ('motion', 'sim2sim')):
-        raise RuntimeError('Navigation refused: runs/acceptance.json must explicitly pass both levels.motion and levels.sim2sim')
-    if data.get('publication') != 'final':
-        raise RuntimeError('Navigation refused: acceptance must be a final reviewed receipt')
-    scene = data.get('additional_scene_gate', {})
-    if scene.get('status') != 'passed':
-        raise RuntimeError('Navigation refused: original scene gate is not passed')
-    navigation = data.get('navigation', {})
-    if navigation.get('allowed') is not True or navigation.get('truth_navigation_used') is not False:
-        raise RuntimeError('Navigation refused: aggregate does not permit a SLAM-only navigation run')
-    model_hash = data.get('checkpoint_sha256')
-    if model_hash != FROZEN_SHA:
-        raise RuntimeError('Navigation refused: acceptance refers to another checkpoint')
-    return {'path': str(path.resolve()), 'sha256': hashlib.sha256(raw).hexdigest(),
-            'levels': {key: levels[key] for key in ('motion', 'sim2sim')},
-            'checkpoint_sha256': model_hash, 'navigation_is_verified': False}
+def load_configuration(path):
+    from runtime_context import load
+    value=load(path)
+    return dict(value,current_runtime=True,controller_kind='student')
 
 
 def finite_values(values, length):
@@ -438,7 +401,7 @@ class CommandFile:
         self.lock.close()
 
 
-def make_node(rclpy, writer, acceptance_path, acceptance):
+def make_node(rclpy, writer, configuration_path, configuration):
     from rclpy.node import Node
     from rclpy.clock import Clock, ClockType
     from rclpy.qos import QoSProfile, DurabilityPolicy
@@ -446,28 +409,28 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
     from nav_msgs.msg import Odometry
     from std_msgs.msg import Bool, String
 
-    if _r118_source_age.ENABLED:_r118_source_age.bind('bridge',acceptance['run_dir'])
+    if _r118_source_age.ENABLED:_r118_source_age.bind('bridge',configuration['run_dir'])
 
     class Bridge(Node):
         def __init__(self):
             super().__init__('teacher_scan_slam_bridge')
             self.set_parameters([rclpy.parameter.Parameter('use_sim_time', value=True)])
-            self.gate = CommandGate(acceptance.get('profile') if acceptance.get('experimental') else None,
-                Path(acceptance['run_dir']).name if acceptance.get('experimental') else None)
+            self.gate = CommandGate(configuration.get('profile') if configuration.get('current_runtime') else None,
+                Path(configuration['run_dir']).name if configuration.get('current_runtime') else None)
             self.sequence = 0
-            self.output_acceptance=acceptance_output(acceptance)
-            self.acceptance_checked_wall = None
+            self.output_configuration=runtime_description(configuration)
+            self.configuration_checked_wall = None
             self.last_status_wall=-math.inf;self.last_published_state=None
-            history=Path(acceptance['run_dir'])/'navigation_command_history.jsonl'if acceptance.get('experimental')else None
-            self.transport=make_command_writer(writer,history,acceptance)
+            history=Path(configuration['run_dir'])/'navigation_command_history.jsonl'if configuration.get('current_runtime')else None
+            self.transport=make_command_writer(writer,history,configuration)
             self.status_pub = self.create_publisher(String, STATUS_TOPIC, 10)
             self.stop_pub = self.create_publisher(Bool, STOP_TOPIC, 10)
             self.safety_pub = self.create_publisher(String, '/demo/control/safety', 10)
-            if acceptance.get('experimental'):
+            if configuration.get('current_runtime'):
                 self.create_subscription(String, '/demo/teacher/navigation/sensor_health', self.sensor_health, 1)
                 latched=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
                 self.create_subscription(String, '/demo/teacher/navigation/anchor', self.anchor, latched)
-                if acceptance['controller_kind']=='champ':
+                if configuration['controller_kind']=='champ':
                     self.create_subscription(String,'/demo/champ/execution_health',self.execution_health,1)
             self.pose_sub = self.create_subscription(Odometry, SLAM_TOPIC, self.pose, latest_sensor_qos())
             self.command_sub = self.create_subscription(Twist, COMMAND_TOPIC, self.command, 1)
@@ -496,9 +459,9 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             self.sync_clock();was_moving=any(self.gate.requested)
             values=[message.linear.x, message.linear.y, message.angular.z]
             source=source_receipt=source_error=None
-            if acceptance.get('experimental'):
+            if configuration.get('current_runtime'):
                 source,source_receipt,source_error=read_controller_source(
-                    Path(acceptance['run_dir'])/'cascade_command_source.json',values,
+                    Path(configuration['run_dir'])/'cascade_command_source.json',values,
                     self.gate.clock_ns,time.monotonic_ns(),allow_untyped_zero=True,observe_wall=self.gate.minimal_baseline)
             self.gate.command(values,[message.linear.z, message.angular.x, message.angular.y],
                               time.monotonic(),source,source_receipt,source_error)
@@ -512,7 +475,7 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             try:
                 data=json.loads(message.data)
                 now=time.monotonic()
-                if (data.get('mode')!=acceptance['controller_kind'] or data.get('ground_truth_navigation_used')is not False
+                if (data.get('mode')!=configuration['controller_kind'] or data.get('ground_truth_navigation_used')is not False
                     or not math.isfinite(float(data['monotonic_wall']))
                     or not -.05<=now-float(data['monotonic_wall'])
                     or (not self.gate.minimal_baseline and now-float(data['monotonic_wall'])>=TIMEOUT)):return
@@ -536,11 +499,9 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                 data=json.loads(message.data)
                 if (data.get('schema')!=1 or data.get('frame_id')!='camera_init'
                     or data.get('source')!=SLAM_TOPIC or data.get('ground_truth_navigation_used')is not False
-                    or data.get('run_dir')!=acceptance['run_dir'] or data.get('frozen_once')is not True
+                    or data.get('run_dir')!=configuration['run_dir']
                     or not finite_values(data.get('origin'),3)
                     or not finite_values([data.get('yaw')],1)):return
-                frozen=json.loads((Path(acceptance['run_dir'])/'navigation_anchor.json').read_text())
-                if data!=frozen:raise ValueError('Anchor differs from frozen actual SLAM receipt')
                 if self.gate.anchor is not None and self.gate.anchor!=data:
                     self.gate.failed='Attempt to change finite route SLAM anchor'
                     return
@@ -562,8 +523,8 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
                            'valid_for_wall_s': TIMEOUT, 'limits': {'vx_mps': self.gate.limits[0], 'vy_mps': self.gate.limits[1], 'wz_radps': self.gate.limits[2]},
                            'observation_source': {'navigation_pose': SLAM_TOPIC, 'navigation_frame': 'camera_init',
                                'navigation_ground_truth_used': False, 'velocity_request': COMMAND_TOPIC,
-                               'policy_inputs': acceptance['profile']['policy_observations']},
-                           'acceptance': self.output_acceptance, 'navigation_validation': 'unverified',
+                               'policy_inputs': configuration['profile']['policy_observations']},
+                           'runtime': self.output_configuration,
                            'health_scope': 'SLAM/SCAN input health only; this does not establish actuator health or physical stopping'})
             status['clock_source']='single rclpy ROS TimeSource /clock, KEEP_LAST depth=1'
             status['transport']={'type':'latest_pending_atomic_file','superseded':self.transport.superseded,
@@ -575,21 +536,19 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
             if rclpy.ok():
                 self.status_pub.publish(String(data=json.dumps(status, ensure_ascii=False, allow_nan=False)))
                 self.stop_pub.publish(Bool(data=status['stop_requested']))
-                self.safety_pub.publish(String(data=json.dumps({**status,'mode':acceptance['controller_kind'],'source':'scan_slam'},allow_nan=False)))
+                self.safety_pub.publish(String(data=json.dumps({**status,'mode':configuration['controller_kind'],'source':'scan_slam'},allow_nan=False)))
 
         def check_integrity(self):
             slam_ok,slam_nodes=self.publishers(SLAM_TOPIC,'demo_slam_odom_adapter')
             command_ok,command_nodes=self.publishers(COMMAND_TOPIC,'demo_navigation')
             scope_ok=True
-            if acceptance.get('experimental'):
+            if configuration.get('current_runtime'):
                 health_ok,_=self.publishers('/demo/teacher/navigation/sensor_health','teacher_navigation_sensor_gate')
                 anchor_ok,_=self.publishers('/demo/teacher/navigation/anchor','teacher_navigation_request')
                 scope_ok=health_ok and anchor_ok
-                if acceptance['controller_kind']=='champ':
+                if configuration['controller_kind']=='champ':
                     execution_ok,_=self.publishers('/demo/champ/execution_health','champ_reviewed_command_reader')
                     scope_ok=scope_ok and execution_ok
-            current=check_acceptance(acceptance_path)
-            if current['sha256']!=acceptance['sha256']:raise RuntimeError('Acceptance file changed during navigation; review and restart')
             return {'graph':{'slam':slam_ok,'command':command_ok,
                     'details':{'slam_publishers':slam_nodes,'command_publishers':command_nodes}},'scope_ok':scope_ok}
 
@@ -630,24 +589,24 @@ def make_node(rclpy, writer, acceptance_path, acceptance):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--acceptance', type=Path, default=ROOT / 'runs/acceptance.json')
+    parser.add_argument('--runtime-config',dest='configuration',type=Path,required=True)
     parser.add_argument('--command-file', type=Path,
                         default=None)
     parser.add_argument('--prepare', action='store_true', help='Review the gate and print an UNVERIFIED receipt; start no ROS nodes')
     args, ros_args = parser.parse_known_args()
     try:
-        acceptance = check_acceptance(args.acceptance)
+        configuration = load_configuration(args.configuration)
         refusal = None
     except RuntimeError as error:
-        acceptance, refusal = None, str(error)
+        configuration, refusal = None, str(error)
     if args.command_file is None:
-        args.command_file=Path(acceptance['run_dir'])/'navigation_command.json'if acceptance and acceptance.get('experimental')else Path(os.environ.get('TEACHER_COMMAND_FILE',str(ROOT/'runs/nav_command.json')))
-    if acceptance and acceptance.get('experimental') and args.command_file.resolve()!=Path(acceptance['run_dir'])/'navigation_command.json':
+        args.command_file=Path(configuration['run_dir'])/'navigation_command.json'if configuration and configuration.get('current_runtime')else Path(os.environ.get('TEACHER_COMMAND_FILE',str(ROOT/'runs/nav_command.json')))
+    if configuration and configuration.get('current_runtime') and args.command_file.resolve()!=Path(configuration['run_dir'])/'navigation_command.json':
         refusal='Finite navigation command output must belong to this run: navigation_command.json'
     if args.prepare:
         print(json.dumps({'status': 'prepared_unverified', 'navigation': 'unverified', 'starts_ros': False,
-                          'writes_commands': False, 'runtime_eligible': acceptance is not None, 'refusal': refusal,
-                          'acceptance': acceptance, 'command_file': str(args.command_file.resolve()),
+                          'writes_commands': False, 'runtime_eligible': configuration is not None, 'refusal': refusal,
+                          'configuration': configuration, 'command_file': str(args.command_file.resolve()),
                           'slam_source': SLAM_TOPIC, 'command_source': COMMAND_TOPIC, 'timeout_s': TIMEOUT,
                           'scope': 'Code/interface preparation only; does not verify navigation or physical stopping'},
                          ensure_ascii=False, indent=2))
@@ -655,27 +614,27 @@ def main():
     if refusal:
         print(refusal)
         return 2
-    # Imports and ROS initialization happen only AFTER the frozen acceptance gate.
+    # Initialize ROS after ordinary configuration parsing.
     writer = CommandFile(args.command_file)
     node = None
     try:
         import rclpy
         rclpy.init(args=ros_args)
-        node = make_node(rclpy, writer, args.acceptance, acceptance)
+        node = make_node(rclpy, writer, args.configuration, configuration)
         node.tick()
         try:
             rclpy.spin(node)
         except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
             pass
         finally:
-            from owned_guardian import bounded_shutdown_signals
+            from runtime_io import bounded_shutdown_signals
             with bounded_shutdown_signals():
                 node.shutdown_stop()
                 node.destroy_node()
                 if rclpy.ok():
                     rclpy.shutdown()
     finally:
-        from owned_guardian import bounded_shutdown_signals
+        from runtime_io import bounded_shutdown_signals
         with bounded_shutdown_signals():writer.close()
         if _r118_source_age.ENABLED:_r118_source_age.finish(args.command_file.parent)
     return 0

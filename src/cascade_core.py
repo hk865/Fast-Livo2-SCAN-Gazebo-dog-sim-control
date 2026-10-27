@@ -236,6 +236,7 @@ class Controller:
         self.parking_interrupted = False
         self.row = {}
         self.ordinary_parking=OrdinaryParking()
+        self.ordinary_parking.daily_navigation=config.get('daily_navigation',False)
         self.ordinary_parking.configure_pose10hz(config.get('parking_pose10hz'))
         self.ordinary_parking.capture_goal=self.goal.tolist()
         self.ordinary_parking.capture_heading=self.goal_yaw
@@ -802,7 +803,6 @@ class Controller:
                         actual_zero_ACK=dict(sequence=ack_sequence,stamp_ns=ack_stamp,
                             ack_native_clock_ns=ack['ack_native_clock_ns'],
                             producer_sequence=qualified['producer_sequence'],
-                            producer_raw_bytes_sha256=qualified['producer_raw_bytes_sha256'],
                             event_id=qualified['event_id'],original_validation_passed=True),
                         capture_measurement_eligible=self.row['capture_measurement_eligible'],
                         goal_distance_xy_m=goal_distance,goal_yaw_error_rad=wrap(self.goal_yaw-yaw),

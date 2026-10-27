@@ -123,8 +123,6 @@ def verify_corrected(body,cloud,metadata):
     epoch(parent['producer_epoch']);integer(parent['commit'],'corrected parent commit')
     if parent.get('stamp_ns')!=metadata['source_ns'] or stamp(body)!=metadata['source_ns'] or stamp(cloud)!=metadata['source_ns']:
         raise ValueError('corrected bundle source stamp differs')
-    if message_sha(body)!=metadata.get('corrected_body_message_sha256') or message_sha(cloud)!=metadata.get('corrected_cloud_message_sha256'):
-        raise ValueError('corrected body/cloud complete semantic message hash differs')
     if metadata.get('robot_truth_pose_used')is not False:raise ValueError('corrected bundle truth authority')
     return (parent['producer_epoch'],parent['commit'])
 

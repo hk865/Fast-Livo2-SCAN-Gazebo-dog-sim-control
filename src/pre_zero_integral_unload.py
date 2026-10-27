@@ -140,17 +140,17 @@ def validate_receipt(r,event=None,side=None,scope=None,clock_ns=None,frame=None)
 
 def zero_observation(scope,clock,frame,dt,actual_I):
     r=dict(schema='r85_pre_zero_yaw_integral_observation/v1',kind='original_exact_zero_I_observation',
-        unload_applied=False,native_event_authority=False,source_scope_sha256=scope,
+        unload_applied=False,native_event_authority=False,run_id=scope,
         input_clock_ns=clock,input_frame_serial=frame,dt_s=dt,actual_yaw_integral=float(actual_I))
     validate_native_extension(r,scope,clock,frame);return r
 
 def validate_native_extension(r,scope,clock,frame):
     if isinstance(r,dict)and r.get('kind')=='original_exact_zero_I_observation':
-        keys={'schema','kind','unload_applied','native_event_authority','source_scope_sha256',
+        keys={'schema','kind','unload_applied','native_event_authority','run_id',
             'input_clock_ns','input_frame_serial','dt_s','actual_yaw_integral'}
         if (set(r)!=keys or r['schema']!='r85_pre_zero_yaw_integral_observation/v1'
                 or r['unload_applied']is not False or r['native_event_authority']is not False
-                or not valid_sha(scope)or r['source_scope_sha256']!=scope
+                or not valid_sha(scope)or r['run_id']!=scope
                 or type(r['input_clock_ns'])is not int or r['input_clock_ns']!=clock
                 or type(r['input_frame_serial'])is not int or frame<=0 or r['input_frame_serial']!=frame
                 or type(r['dt_s'])not in (int,float)or not .019999<=r['dt_s']<=.020001

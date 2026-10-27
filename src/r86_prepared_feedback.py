@@ -41,12 +41,11 @@ def _bundle_mark(stage, bundle, **fields):
 
 
 def enabled(profile):
-    if KEY not in profile:
-        return False
-    option = profile[KEY]
-    if (type(option) is not dict or set(option) != {'enabled', 'schema'} or
-            type(option['enabled']) is not bool or option['schema'] != SCHEMA):
-        raise ValueError('Exact typed R86 prepared-feedback option required')
+    if not isinstance(profile,dict):raise ValueError('Controller settings must be an object')
+    option=profile.get(KEY)
+    if option is None:return False
+    if not isinstance(option,dict)or type(option.get('enabled'))is not bool:
+        raise ValueError('Controller feature enabled flag must be boolean')
     return option['enabled']
 
 

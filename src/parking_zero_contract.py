@@ -10,8 +10,8 @@ TERMINAL_IDENTITY=('event_domain','reference_kind','reference_sha256')
 IDENTITY = ('run_id','request_id','goal_sha256','path_sha256','event_sequence',
             'ready_pose_stamp_ns','handoff_clock_ns','created_cascade_sequence')
 FRAME_SCHEMA = 'ordinary_zero_validated_input_frame/v1'
-FRAME_IDENTITY = ('frame_serial','input_clock_ns','producer_sequence',
-                  'producer_raw_bytes_sha256')
+FRAME_IDENTITY = ('frame_serial','input_clock_ns','producer_sequence')
+CONTROL_IDENTITY=('run_id','request_id','event_sequence','ready_pose_stamp_ns','handoff_clock_ns','created_cascade_sequence')
 
 def integer(value):
     if type(value) is not int or value < 0:
@@ -23,18 +23,17 @@ def exact_zero(values):
         and math.isfinite(x) and x == 0 for x in values)
 
 def event_id(identity):
-    return hashlib.sha256(json.dumps(identity,sort_keys=True,separators=(',',':'),
-        allow_nan=False).encode()).hexdigest()
+    return str(identity['run_id'])+':'+str(identity['request_id'])+':zero:'+str(identity['event_sequence'])+':'+str(identity['created_cascade_sequence'])
 
 def identity_keys(marker):
     if marker.get('schema')==SCHEMA:
         if any(k in marker for k in TERMINAL_IDENTITY):raise ValueError('v1 cannot carry terminal reference identity')
-        return IDENTITY
+        return CONTROL_IDENTITY
     if marker.get('schema')==TERMINAL_SCHEMA:
         from r105_terminal_reference import KIND
         if marker.get('event_domain')!=TERMINAL_SCHEMA or marker.get('reference_kind')!=KIND or marker.get('path_sha256') is not None:
             raise ValueError('Invalid v2 terminal event domain or fake path')
-        return IDENTITY+TERMINAL_IDENTITY
+        return CONTROL_IDENTITY
     raise ValueError('Unknown ordinary zero event schema')
 
 def make_event(run_id, request_id, goal_sha256, path_sha256, event_sequence,
@@ -66,7 +65,7 @@ def validate_event(marker, lineage, run_id, command, native_clock_ns, *, source_
         raise ValueError('Zero event is not the current controller event')
     if marker['run_id'] != run_id or not isinstance(marker['request_id'],str) or not marker['request_id'].startswith(run_id+':'):
         raise ValueError('Wrong zero event run/request')
-    for key in ('request_id','goal_sha256','path_sha256'):
+    for key in ('request_id',):
         if marker[key] != lineage.get(key):
             raise ValueError('Zero event lost current controller identity: '+key)
     if marker['schema']==TERMINAL_SCHEMA:
@@ -76,10 +75,6 @@ def validate_event(marker, lineage, run_id, command, native_clock_ns, *, source_
             raise ValueError('v2 zero event lost typed terminal lineage')
     elif any(k in lineage for k in ('reference_kind','terminal_reference','reference_sha256')):
         raise ValueError('v1 zero event cannot impersonate a terminal reference')
-    for key in (('goal_sha256','reference_sha256') if marker['schema']==TERMINAL_SCHEMA else ('goal_sha256','path_sha256')):
-        value = marker[key]
-        if not isinstance(value,str) or len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
-            raise ValueError('Malformed zero event geometry hash')
     seq,ready,handoff,created = (integer(marker[k]) for k in
         ('event_sequence','ready_pose_stamp_ns','handoff_clock_ns','created_cascade_sequence'))
     pose = integer(lineage['source_pose_stamp_ns'])
@@ -104,9 +99,6 @@ def frame_identity(frame):
         integer(result[key])
     if result['frame_serial']<1 or result['producer_sequence']<1:
         raise ValueError('Input frame/producer sequence must be positive')
-    value = result['producer_raw_bytes_sha256']
-    if not isinstance(value,str) or len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
-        raise ValueError('No exact accepted producer-byte hash')
     return result
 
 def authorize_frame(marker, lineage, run_id, command, frame, *, source_max_age_ns):
@@ -156,7 +148,6 @@ def before_actor_observation(cmd, request, authorized_frame, clock_ns, *, frame)
         event_sequence=authorized_event['event_sequence'],input_clock_ns=clock,
         frame_serial=authorized_frame['frame']['frame_serial'],
         producer_sequence=authorized_frame['frame']['producer_sequence'],
-        producer_raw_bytes_sha256=authorized_frame['frame']['producer_raw_bytes_sha256'],
         source_pose_stamp_ns=authorized_frame['source_pose_stamp_ns'],
         paired_imu_stamp_ns=authorized_frame['paired_imu_stamp_ns'],
         control_stamp_ns=authorized_frame['control_stamp_ns'],

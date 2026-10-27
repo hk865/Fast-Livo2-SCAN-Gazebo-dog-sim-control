@@ -5,7 +5,7 @@ The shared controller consumes SLAM, actual registered clouds and checked SCAN
 trajectories. This wrapper narrows scope, fixes duplicate-stamp acceptance and
 requires measured stopping before obstacle recovery. It owns no joint actuator.
 """
-from known_scene_hold_guard import pin_native_clear_release
+from known_scene_hold_guard import record_clear_release
 import package_paths as _package_paths
 import argparse
 import copy
@@ -26,13 +26,12 @@ sys.path.append(str(NAV))
 sys.path.append(str(DEMO/'navigation'))
 spec=importlib.util.spec_from_file_location('teacher_measured_scan_base',HERE/'shared_controller.py')
 base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
-from pid_scope import verify_scope
-from status_acceptance_receipt import StatusAcceptanceReceipt
+from runtime_context import load as load_context
 from minimal_simulation_baseline import (enabled as minimal_baseline_enabled,
     raw_imu_fresh, control_sources_stale, pose_cloud_fresh, wall_stale)
 from control_core import rotation_xyzw,body_tilt
 from runtime_io import EvidenceWriter,latest_sensor_qos
-from compact_archives import make_evidence_writer
+from control_io import make_evidence_writer
 from transition_gate import TeacherHeadingGate
 from guard_audit import NativeGuardAudit,result_json
 from std_msgs.msg import String
@@ -50,14 +49,14 @@ class RecordedPublisher:
     def publish(self,msg):
         data=json.loads(msg.data)
         data.update(mode=self.node.profile['controller_kind'],scope=self.node.profile['experiment'],navigation_ground_truth_used=False,
-            policy_observations=self.node.profile['policy_observations'],
-            navigation_validation='unverified',acceptance_is_global=False)
+            policy_observations=self.node.profile['policy_observations'])
         data['known_scene_localization']=copy.deepcopy(getattr(self.node,'known_scene_inputs',None))
         data['known_scene_runtime_status']=copy.deepcopy(getattr(self.node,'known_scene_status',None))
         data['known_scene_scan_epoch']=copy.deepcopy(getattr(self.node,'known_scene_scan_epoch',None))
         bridge_receipt=getattr(self.node,'bridge_updated',None)
         data['bridge_callback_received_monotonic_wall']=(bridge_receipt if type(bridge_receipt) in (int,float) and math.isfinite(bridge_receipt) else None)
         data['dynamic_stop_event']=published_stop_event(self.node,data)
+        data['last_obstacle_clear_release']=getattr(self.node,'last_clear_release',None)
         data['controller_kind']=self.node.profile['controller_kind']
         data['outer_velocity_controller']='Actual SLAM header-event geometric path/yaw PD and COM speed PI; causal IMU and actual Teacher input ACK; native SCAN collision guard'
         data['cascade_parking']=copy.deepcopy(getattr(self.node,'cascade_last_row',None))
@@ -74,7 +73,6 @@ class RecordedPublisher:
             data['motion_limits']['pure_turn_rate_rad_s']=self.node.heading_gate.max_turn_rate
             data['arrival_stop_policy']='after_measured_dwell'
             data['arrival_stop_policy_source']='Actual raw SLAM original control-region ArrivalWindow; no tracking-pose arrival'
-        data=self.node.status_acceptance_receipt.project(data)
         self.publisher.publish(String(data=json.dumps(data,ensure_ascii=False,allow_nan=False)))
         self.node.evidence.append(self.run/'navigation_status.jsonl',{**data,'monotonic_wall':time.monotonic(),
             'ros_sim_time':self.node.get_clock().now().nanoseconds/1e9})
@@ -84,15 +82,11 @@ class RecordedPublisher:
 class TeacherNavigation(base.Navigation):
     def __init__(self,run):
         self._bridge_safety_handoff=None
-        self.run=run;receipt=verify_scope(run/'navigation_scope.json');self.profile=receipt['profile']
-        self.status_acceptance_receipt=StatusAcceptanceReceipt(run,receipt,enabled=(
-            self.profile.get('mission46_required') is True
-            and self.profile.get('continuous_route_contract',{}).get('enabled') is True))
+        self.run=run;receipt=load_context(run/'runtime_context.json');self.profile=receipt['profile']
         super().__init__()
         self.evidence=make_evidence_writer(self.run,self.profile);self.gyro_body=None;self.gyro_stamp=None;self.gyro_wall=None
         self.heading_gate=TeacherHeadingGate(self.profile)
-        self.handoff_scope_sha256=(hashlib.sha256((self.run/'navigation_scope.json').read_bytes()).hexdigest()
-            if getattr(self.heading_gate,'active_braking_enabled',False) else None)
+        self.handoff_scope_sha256=self.run.name  # Live instance identity; never settings/source bytes.
         self.status_pub=RecordedPublisher(self.status_pub,run,self)
         self.bridge_updated=-math.inf
         self.guard_cloud=None;self.guard_cloud_receipt=None;self.pose_quaternion=None
@@ -375,7 +369,7 @@ class TeacherNavigation(base.Navigation):
                     state_after_control=self.state,obstacle_resumes_after=self.obstacle_resumes,
                     command_source='actual sensor SLAM/SCAN controller; no mover or simulator pose navigation input',
                     evidence_queue_error=self.evidence.error)
-                pin_native_clear_release(self,row)
+                record_clear_release(self,row)
                 self.evidence.append(self.run/'navigation_guard_history.jsonl',row)
                 self.pending_guard_row=None
         if (self.state=='running' and not getattr(self,'reference_consistency_hold',False)
