@@ -39,4 +39,4 @@ own complete notices. The project-authored integration/probe code is separate
 from these upstream licenses; this directory does not relicense other project
 files.
 
-See [the build and binding instructions](../../docs/PRIVATE_DDS.md).
+See [restoration and build layout](../../docs/restoration.md). Build-source archive checks establish ordinary reproducible inputs; they are not startup or business acceptance gates. Runtime uses the project-local patched library and verifies its actual loaded location without historical BuildID/SHA approval binding.

@@ -1,0 +1,207 @@
+{
+  "schema": "r85_typed_polyline_physical_certificate/v1",
+  "allowed": true,
+  "scope": "Continuous finite-face interval/whole-body outer geometry on this typed polyline; observation predicates do not gate",
+  "ready_for_control": false,
+  "navigation_PASS": false,
+  "sources": {
+    "metadata": {
+      "path": "${PROJECT_ROOT}/assets/geometry/metadata.json",
+      "sha256": "7e395adb19d7c426754298e4a441c2d98df6f27d5990a94618108cac415d3a1d",
+      "bytes": 216356
+    },
+    "reference": {
+      "path": "${PROJECT_ROOT}/assets/geometry/reference.json",
+      "sha256": "f37a0693f6ad463a5ba2edbb8415b035d0dfef115470319dae92885257de4914",
+      "bytes": 35996
+    },
+    "world": {
+      "path": "${PROJECT_ROOT}/assets/geometry/world.sdf",
+      "sha256": "2fc30d115bc00e8897424c9d608b23f35f86abb9096c452ad5b00582ae9e79e3",
+      "bytes": 100820
+    },
+    "limits": {
+      "path": "${PROJECT_ROOT}/assets/geometry/limits.json",
+      "sha256": "b07c1ca356fd5dbe8071a9c2db7a02d885da3e479ce2d0ba3f995cca04ff54fe",
+      "bytes": 764
+    },
+    "frozen_helpers": {
+      "path": "${PROJECT_ROOT}/src/validate_route_support.py",
+      "sha256": "0dd5d3025fde1c0510e8bfa1ca9aa56c13be51bad2d5166a8b804791784638fd",
+      "bytes": 37231
+    },
+    "leaf": {
+      "path": "${PROJECT_ROOT}/src/r85_geometry_admission.py",
+      "sha256": "197034a84239fdfa42ef9c08cae55c866db710c2b62664920f918704efee88cc",
+      "bytes": 46323
+    }
+  },
+  "limits": {
+    "schema": "pct_static_support_validation_limits/v1",
+    "authorization": "Parent supplied C64 controller.py runtime values; no automatic relaxation",
+    "sample_spacing_m": 0.025,
+    "body_radius_m": 0.25,
+    "body_offset_m": 0.18,
+    "body_below_m": 0.12,
+    "body_above_m": 0.12,
+    "position_uncertainty_m": 0.08,
+    "yaw_half_range_rad": 3.141592653589793,
+    "body_ground_height_m": 0.32,
+    "nominal_route_body_ground_offset_m": 0.3,
+    "support_height_tolerance_m": 0.1,
+    "max_support_slope_rad": 0.35,
+    "actor_grid_half_x_m": 0.8,
+    "actor_grid_half_y_m": 0.5,
+    "actor_grid_spacing_m": 0.1,
+    "actor_ray_start_above_body_m": 20.0,
+    "switch_height_equality_m": 1e-09,
+    "initial_provider": "lower12",
+    "numeric_epsilon_m": 1e-10,
+    "max_report_examples": 40
+  },
+  "physical_body_ground_offset_m": 0.32,
+  "coordinate_frame": "camera_init",
+  "T_navigation_world": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      -0.3
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "checked_subsegments": 1672,
+  "maximum_spacing_m": 0.025000000000000355,
+  "physical_failure_counts": {},
+  "first_examples": [],
+  "actual_support_plane_slope_max_rad": 0.09966865249116297,
+  "observation_source_diagnostics": {
+    "hard_gate": false,
+    "counts": {
+      "lower12": {
+        "coverage187_failure": 0,
+        "center_provider_band_failure": 690,
+        "provider_upper_band_failure": 0,
+        "provider_local_chassis_support_failure": 717,
+        "actor_full_yaw_outer_domain_failure": 0
+      },
+      "upper23": {
+        "coverage187_failure": 762,
+        "center_provider_band_failure": 718,
+        "provider_upper_band_failure": 161,
+        "provider_local_chassis_support_failure": 745,
+        "actor_full_yaw_outer_domain_failure": 1629
+      }
+    },
+    "examples": [
+      {
+        "edge": 224,
+        "fraction": [
+          0.0,
+          0.16666666666666666
+        ],
+        "body_world_xyz": [
+          11.1,
+          6.9,
+          1.8115422677993775
+        ],
+        "details": {
+          "lower12": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": true,
+              "uncovered_ray_count": 0,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": false
+            },
+            "provider_local_support": false,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": true,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          },
+          "upper23": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": false,
+              "uncovered_ray_count": 1,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": true
+            },
+            "provider_local_support": true,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": false,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          }
+        }
+      },
+      {
+        "edge": 224,
+        "fraction": [
+          0.16666666666666666,
+          0.3333333333333333
+        ],
+        "body_world_xyz": [
+          11.083333333333332,
+          6.916666666666667,
+          1.8132006478309632
+        ],
+        "details": {
+          "lower12": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": true,
+              "uncovered_ray_count": 0,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": false
+            },
+            "provider_local_support": false,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": true,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          },
+          "upper23": {
+            "provider_segment": {
+              "continuous_187_ray_coverage": false,
+              "uncovered_ray_count": 1,
+              "potential_highest_hit_above_body_band": false,
+              "center_highest_hit_matches_support_band": true
+            },
+            "provider_local_support": true,
+            "actor_full_yaw": {
+              "enclosing_xy_radius_m": 1.0233981132056604,
+              "continuous_filled_outer_bound_coverage": false,
+              "outer_bound_overhead": false
+            },
+            "would_pass_old_nominal_predicate": false
+          }
+        }
+      }
+    ],
+    "not_actor_behavior_or_training_proof": true
+  },
+  "runtime_finite_time_freshness_dynamic_obstacle_and_ack": "NOT_EVALUATED",
+  "source_bindings_unchanged": true
+}

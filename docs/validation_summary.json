@@ -1,0 +1,57 @@
+{
+  "run_id": "20261027T123739Z_closed_loop_R85_direct_validation_14_full_F1_F3_f577",
+  "business_code_git_commit": "86aabae",
+  "run_start_UTC": "2026-10-27T12:37:37Z",
+  "run_end_UTC": "2026-10-27T12:44:53Z",
+  "exit_code": 0,
+  "wall_seconds": 436.17215,
+  "full_F1_to_F3_PASS": true,
+  "forward_progress_m": 34.90956183126995,
+  "dynamic": {
+    "passed": true,
+    "actual_stop_release_cycles": 1,
+    "clear_observations": 12,
+    "recovery_pose_count": 35,
+    "recovery_progress_m": 0.08827172061105042,
+    "measured_stationary_pose_samples": 11
+  },
+  "parking": {
+    "passed": true,
+    "first_T0_sim_ns": 387705000000,
+    "fixed_end_sim_ns": 392705000000,
+    "slam_pose10hz_xy_drift_max_m": 0.02777824945923796,
+    "slam_pose10hz_yaw_drift_max_rad": 0.012714839018122426,
+    "adjacent_xy_max_m": 0.004938416011405124,
+    "adjacent_yaw_abs_max_rad": 0.0013643561629841372
+  },
+  "rgb_map": {
+    "passed": true,
+    "points": 229861
+  },
+  "closure": {
+    "all_owned_and_children_clean": true,
+    "guardian_all_owned_groups_absent": true,
+    "CRC_verified": true,
+    "samples": 20415,
+    "locks_released": true
+  },
+  "actual_loading": {
+    "all_snapshots_passed": true,
+    "snapshots": 4,
+    "foreign_project_paths": []
+  },
+  "limitations": [
+    "One successful complete simulation regression; not a real-robot or 46-region-mission result.",
+    "Known-map assistance retained; no simulator robot pose used as navigation input.",
+    "Earlier failures remain failures. Two prior CPU-resource aborts remain unresolved.",
+    "Raw runs are proposed for deletion after explicit exact-scope confirmation; retained report metrics do not provide raw replay."
+  ],
+  "post_run_component_check": {
+    "generated_physics_world_byte_equal": true,
+    "frame_joints_and_geometry_equal_except_project_mesh_paths": true,
+    "mesh_count": 19,
+    "new_native_build": false,
+    "full_business_run": "direct_validation_14",
+    "component_only_changes_after_run": "Portable mesh references and removal of actuation extensions already stripped by the generator"
+  }
+}

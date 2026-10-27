@@ -27,6 +27,11 @@ logs/
 
 /tools_build_local.log
 
+# Local originals used to audit path-only relocation; private runtime payloads
+# and the original provenance receipt remain in this checkout, outside Git.
+/provenance/runtime_relocation/originals/
+/provenance/runtime_inputs/R105_runtime_manifest.json
+
 # Published-directory reproduction: private ledger/vendor/build artifacts
 .local_install/
 private_build_receipts/
@@ -35,3 +40,6 @@ private_build_receipts/
 .local_dependencies/storage_guard/*
 !.local_dependencies/storage_guard/storage_guard.py
 !.local_dependencies/storage_guard/retained_usage.py
+
+# Local asset pending redistribution-license verification; preserve locally.
+/assets/meshes/L1_4D_Lidar.dae

@@ -1,0 +1,91 @@
+"""Actual Teacher sensors to isolated FAST-LIVO2 only; no velocity publisher."""
+import hashlib
+import json
+import os
+import sys
+from pathlib import Path
+from ament_index_python.packages import get_package_prefix
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, RegisterEventHandler, EmitEvent
+from launch.event_handlers import OnProcessExit
+from launch.events import Shutdown
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+    here=Path(__file__).resolve().parent
+    sys.path.insert(0,str(here))
+    import package_paths as _package_paths
+    teacher=_package_paths.TEACHER_ROOT;demo=_package_paths.DEMO_ROOT
+    run_dir=LaunchConfiguration('run_dir')
+    def start(context):
+        run=Path(run_dir.perform(context)).resolve()
+        if not (run/'navigation_slam_contract.json').is_file():
+            raise RuntimeError('Run scoped_profile.py --run <run> --slam-only before launching SLAM')
+        if (run/'map_metadata.json').exists():
+            raise RuntimeError('Reuse of an old SLAM map directory is forbidden')
+        sys.path.insert(0,str(here))
+        profile=json.loads((run/'navigation_profile.json').read_text())
+        if profile.get('r85_session',{}).get('enabled') is True:
+            from r85_launch_admission import verify_launch
+            proof=verify_launch(run,here,profile)
+            with (run/'r85_launch_admission.json').open('x') as stream:
+                json.dump(proof,stream,indent=2,allow_nan=False);stream.write('\n')
+        else:
+            from corridor_preflight import verify_preflight
+            verify_preflight(here,profile)
+        for key,value in [('FASTLIVO_LIO_JACOBIAN_THREADS','4'),('FASTLIVO_VIO_PATCH_THREADS','1')]:
+            if os.environ.get(key)!=value:raise RuntimeError('V18 navigation env differs from compiled/frozen profile '+key)
+        for key,value in [('FASTLIVO_PIPELINE_MODE',profile['pipeline']['mode']),('FASTLIVO_IMAGE_COPY_OPT',str(profile['pipeline']['image_copy_opt']))]:
+            if os.environ.get(key)!=value:raise RuntimeError('V19 pipeline environment differs from frozen profile '+key)
+        from slam_workspace import PRIVATE as private_slam
+        priority='1'if private_slam else '0'
+        if os.environ.get('FASTLIVO_SERIAL_IMU_PRIORITY')!=priority or priority=='1'and profile['pipeline']['mode']!='serial':
+            raise RuntimeError('Private IMU priority environment differs from explicit workspace selection')
+        contract=json.loads((run/'navigation_slam_contract.json').read_text())
+        for name,expected in contract['references'].items():
+            if hashlib.sha256(Path(name).read_bytes()).hexdigest()!=expected:
+                raise RuntimeError('Actual SLAM source/configuration hash changed: '+name)
+        for package in ('fast_livo2_core','fast_livo2_ros'):
+            from slam_workspace import SLAM_WORKSPACE
+            expected=(SLAM_WORKSPACE/'install'/package).resolve()
+            if Path(get_package_prefix(package)).resolve()!=expected:
+                raise RuntimeError('Source the declared frozen V19 inherited SLAM overlay; package mismatch '+package)
+        plan=json.loads((run/'runtime_plan.json').read_text())
+        for key in ('FASTLIVO_SURFACE_VALIDITY','FASTLIVO_SURFACE_DIAG_WINDOWS','FASTLIVO_SURFACE_DIAG_BOUNDS','FASTLIVO_SURFACE_DIAG_MAX_BYTES'):
+            if os.environ.get(key)!=plan['navigation_stack_diagnostic_environment'][key]:
+                raise RuntimeError('V32 diagnostic/algorithm environment differs from frozen runtime plan: '+key)
+        ros=['--ros-args','-p','use_sim_time:=true']
+        relay_mode=profile.get('sensor_relay_publish_mode','legacy')
+        if relay_mode not in ('legacy','sync','async'):
+            raise ValueError('Unknown sensor relay publication mode')
+        relay_cmd=([str(here/'sensor_relay.py')] if relay_mode=='legacy' else
+            [str(here/'sensor_relay.py'),'--run-dir',str(run),'--mode',relay_mode])
+        from dds_environment import native_environment
+        native_env=native_environment(run,os.environ)
+        processes=[
+            ExecuteProcess(cmd=['python3',*relay_cmd,*ros],output='screen'),
+            ExecuteProcess(cmd=['python3',str(here/'self_echo_filter.py'),'--scenario',str(run/'navigation_scenario.json'),
+                                *ros,'-r','/livox/lidar:=/demo/teacher/raw_lidar'],output='screen'),
+            Node(package='demo_nodes_cpp',executable='parameter_blackboard',name='parameter_blackboard',
+                 output='screen',parameters=[str(run/'navigation_camera.yaml'),{'use_sim_time':True}]),
+            Node(package='fast_livo2_ros',executable='fastlivo_mapping',name='laserMapping',output='screen',
+                 additional_env=native_env,parameters=[str(run/'navigation_fastlivo.yaml'),
+                    str(run/'navigation_camera.yaml'),{'use_sim_time':True}],
+                 remappings=[('/cloud_registered_full','/demo/slam/raw_registered_full')]),
+            ExecuteProcess(cmd=['python3',str(here/'odom_adapter.py'),'--scenario',str(run/'navigation_scenario.json'),*ros,
+                '-r','__node:=demo_slam_raw_odom_adapter',
+                '-r','/demo/slam/body_odom:=/demo/slam/raw_body_odom',
+                '-r','/demo/slam/lidar_odom:=/demo/slam/raw_lidar_odom'],output='screen'),
+            ExecuteProcess(cmd=['python3',str(here/'map_archive.py'),'--run-dir',str(run),*ros,
+                                '-r','/livox/lidar:=/demo/teacher/raw_lidar','-r','/camera/image_color:=/demo/camera',
+                '-r','/demo/slam/body_odom:=/demo/slam/raw_body_odom',
+                '-r','/cloud_registered_full:=/demo/slam/raw_registered_full'],output='screen'),
+        ]
+        if profile['engineering_recording']['raw_source_capture']:
+            raise RuntimeError('V33 initial profiles forbid another raw point-cloud collector')
+        required=[RegisterEventHandler(OnProcessExit(target_action=p,on_exit=[EmitEvent(event=Shutdown(reason='Teacher sensor SLAM child ended'))]))for p in processes]
+        return processes+required
+    return LaunchDescription([DeclareLaunchArgument('run_dir',default_value=os.environ.get('DEMO_RUN_DIR','')),
+                              OpaqueFunction(function=start)])

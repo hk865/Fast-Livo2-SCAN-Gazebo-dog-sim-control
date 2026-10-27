@@ -1,5 +1,0 @@
-本次仅补齐整理遗漏的3个模型生成输入、10个实际引用mesh和2个上游package.xml。两个SDF源SHA由formal22 asset_manifest直接绑定；URDF为当前原件显式pin，生成frames与原22保留frames经URI归一后XML完全一致，不冒称旧轮直接源SHA。仅URI迁到新依赖目录，模型数字、惯量、关节、传感器输入未改。
-
-实际仅运行一次simulation/prepare.py纯离线生成，rc0，约0.0373s；未运行run.py prepare、ROS、Gazebo或Actor。生成阶段与正式prepare后续spawn/plugin/sampling覆盖不同，不能把初始world SHA冒称最终22 world。known-scene原builder可直接从新world提取43box，不依赖已删除云或旧worktree。所选shm64 XML和5个ROS库固定SHA存在且一致；未选shm512 XML缺件、历史source_evidence脱敏路径不作为当前prepare输入。
-
-Unitree上游package.xml原有TODO许可声明保留，不推定或重新许可；Realsense原package.xml声明Apache 2.0。原始资源SHA与URI重写后SHA分别见ASSET_COPY_RECEIPT.json。生成输出位于/tmp/published_formal22_assets_20261025_0630，只是静态资产检查，不是导航通过。

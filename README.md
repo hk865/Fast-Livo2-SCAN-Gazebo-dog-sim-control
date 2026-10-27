@@ -1,62 +1,21 @@
-# FAST-LIVO2 / SCAN / Gazebo Go2 — 导航修复验证
+# Fast-LIVO2 / SCAN / Go2 navigation
 
-2026-10-26：DDS 私有健康检查修复、10Hz 位姿停车 V1 和动态参考状态修复已完成。原机同一冻结业务候选连续两轮 F1→F3 全路线、动态停走和固定 5 秒停车通过，Actor CRC 与进程/域/锁收尾通过。动态期间两次参考切换另有受控业务重放，不能计作第三轮自然导航。
-
-- [修复结果、两轮数字与覆盖边界](reproduction/results/navigation_repair_v1/RESULT.zh-CN.md)
-- [当前修复配置与部署边界](docs/NAVIGATION_REPAIR_V1.md)
-- [私有 DDS 固定来源、补丁与构建加载](docs/PRIVATE_DDS.md)
-- 根 `candidate/` 为当前修复入口；`releases/formal22/` 保留原成功快照。
-
-以下保留原基线及整理目录失败的历史说明。公开路径适配和录像负载的验证单独记录，异机安装未测试。
-
----
-
-# 原 formal22 阶段基线
-
-2026-10-25：**原成功部署在当前选定策略下，R85单次F1→F3完整仿真任务通过**。实际部署`536c9d3f4773ef43edef48992c598ccf2fc3f021`，业务候选`0f35662822925a68de9a659558cc5073845b5b87`。真实动态停止/恢复、首次T0起固定5秒停车、当前RGB地图检查通过，独立复核19/19。任务在350.930仿真秒完成，路线高水位34.9079m（不是累计行走里程）。
-
-这是新质量/地形策略下的一次完整任务通过；**原46区域任务未声明通过，间歇时序故障未证明全部根治，也不是实机或所有场景安全证明**。原质量5%限制和车体导数保证并不等价。真实协方差导出候选没有加载；不新增回环、位姿图或全局重定位。
-
-- [正式结果与边界](releases/formal22/evidence/RESULT.zh-CN.md) · [独立19项复核](releases/formal22/evidence/FORMAL22_ACCEPTANCE_INDEPENDENT_REVIEW_FINAL.zh-CN.md)
-- [目录和模块职责](docs/FORMAL22_MODULES.md) · [数据流与进程图](docs/FORMAL22_DATAFLOW.md)
-- [实际入口、构建和复现边界](docs/REPRODUCE_FORMAL22.md) · [发布来源与许可](releases/formal22/README.md)
-- [历史记录入口](docs/EXPERIMENT_HISTORY.md) · [原2026-10-06报告](docs/EXPERIMENT_REPORT_20261006.md)
-
-## 原成功部署的版本范围
-
-|项目|本轮真实结果|
-|---|---|
-|任务|R85单次自动F1→F3，启动、真实感知定位、SCAN规划、跟踪、动态停走、终点、固定5秒停车及本轮RGB保存通过|
-|动态事件|stop177.565s → resume203.625s；恢复0.593909m；最终独立物理核验通过|
-|停车|首次T0=344.880s，固定结束349.880s，不重置窗口；原6项停车判据通过|
-|定位质量|沿用既有robust fit/残差/覆盖/退化/歧义/两帧确认；取消独立5%前景整帧否决，以非前景总体计算表面误差；非旧策略等价|
-|连续地形判定|同一有限地面完整支撑曲线及脚印时以真实地形坡度判定，保留原0.35rad、残差/净空/碰撞；非旧bodyZ/XY导数间接界等价|
-|结束|自然返回0，6项进程/锁/ROS域退出检查、Actor18295样本CRC及pipeline提交闭合通过|
-
-## 整理目录的实际复验
-
-新目录部署`ecb62adb4e55513e6a11f23f23803838b19e09f6`已从本目录源码/配置及新native/SCAN构建完整实跑：到达F3终点区域，路线高水位34.913044m，但在389.015 SIM因停车速度越界失败，**新目录完整验收未通过**。首次T0=388.790，固定5秒窗口未完成、未重置；动态有停止/恢复片段而无最终验收。加载91项、六项退出及Actor CRC通过，worker EOF fault仍保留。详见[本轮结果](reproduction/results/published_repro_11/RESULT.zh-CN.md)、[触发量](reproduction/results/published_repro_11/PARKING_LEAF_READBACK.json)与[独立复核](reproduction/results/published_repro_11/INDEPENDENT_REVIEW.zh-CN.md)。
-
-## 目录
-
-根`candidate/`是新目录实际复验入口；`releases/formal22/`保留原成功版本公开快照及native/SCAN源码、依赖和小型证据；`multifloor_demo/`、`scan_multifloor/`、`slam5_navigation/`、`go2_sim_control/`、`tools/`等原目录保留2026-10-06 main历史，不自动代表formal22入口。不要把旧网页/CHAMP/Teacher命令当成本轮Student入口。
-
-导出包含实际runtime checkout、native571源码以及真实scope中的文本依赖；兼容/历史绑定文件随冻结包保留，不意味着每个模块启用。实际加载和触发以本轮回执为准。权重、ELF、构建输出、点云/bag/大原始流未上传，模型/二进制保留SHA和依赖引用。公开导出规范化了本机路径等私人信息，原部署SHA与公开文件SHA分别登记；**已在原机从整理目录重建并实跑，但严格停车未通过；没有异机安装或Docker实测，不继承原成功PASS**。
-
-不启动ROS或仿真即可核查导出文件：
+This is the single current simulation project. Start from this directory:
 
 ```bash
-python3 -B tools/formal22_manifest_check.py
+python3 -B start.py --check
+python3 -B start.py --prepare-only
+python3 -B start.py
 ```
 
-真实运行仍需冻结模型、本机依赖构建、来源/配置重绑定和当次资源/时间证明；本轮旧行政窗口不能复用。详见复现说明。模型是冻结Student45推理，外层导航不用机器人真值；native传感代理与内层PID仍含特权仿真反馈，不声称全链非特权或Sim2Sim通过。仅仿真，不连接实机、不训练。
+Edit `config/navigation.json`. `--check` checks files and basic configuration; it does not certify a complete navigation run. `--prepare-only` creates fresh inputs without starting ROS, Gazebo, or an Actor.
 
-原main历史保留。源自上游的代码/资产沿用各自许可，本仓库不重新许可模型或第三方内容；[旧README](https://github.com/hk865/Fast-Livo2-SCAN-Gazebo-dog-sim-control/blob/5237b8865d1f788b88f86fe21b72852db3bedb03/README.md)及历史失败不改写。
+The runtime uses project-local `src/`, `models/`, `assets/`, and `.local/` native installations. Application C++ and SDK source is under `native/`; the DDS fix and rebuild tooling are under `third_party/fastdds/` and `build_support/private_dds/`. Runs are created only under `runs/`. Historical workspaces, successful-run directories, source/binary SHA lists, and historical approval contracts are not launch inputs.
 
-## 公开导出更正与整理目录复验
+The shared environment supplies Ubuntu 24.04, ROS 2 Jazzy, Gazebo Harmonic, system C++/ROS libraries, and a Python installation containing PyTorch. The existing simulator Python is located using `ISAAC_SIM_PATH` (or the conventional `~/isaacsim` installation); Actor inference runs on CPU. These shared packages are not project cleanup targets.
 
-最初公开main `63e6b82225c7b3718c4e170e5005bfd6a387b69f` 的通用邮箱脱敏错误改写了Python的`@`表达式。原formal22部署与成功不受影响，但公开目录当时尚未运行，不能继承原结果。现已从原冻结文件重新进行token级导出，全部1068个Python文件核对，36份受损文件（含重复依赖）修复；代码常规字符串除明确路径前缀外保留原值，不再对源码整体做邮箱/UUID/IP替换。
+Real protections remain: actual SLAM/cloud/IMU freshness, native response deadlines, resource limits and exclusive process locks, physical route geometry, dynamic stop/recovery, actual zero Actor input ACK, and immutable five-second parking using causal 10Hz position/yaw samples. See `docs/phase_summary.md` for scope and verification status.
 
-此前“文本绑定一致”比的是**导出前原文件SHA与原scope**，并非导出后语义；公开SHA清单和可解析性也不能代替这个核对。[更正谱系](provenance/FORMAL22_PUBLICATION_CORRECTION.json)和[全量差异审查](provenance/FORMAL22_ALL_EXPORT_DIFFERENCES.json)分别记录。新整理目录已补齐依赖并重新构建native/SCAN；完整实跑结果为路线到达而停车失败，原/新目录结果分开记录。
+The complete F1→F3 simulation regression passed on 2026-10-27, including dynamic stop/recovery, RGB saving, fixed five-second parking, CRC and process cleanup. See [the phase record](docs/phase_summary.md) and [measured results](docs/validation_summary.json).
 
-整理目录另有根 `candidate/` 的路径适配入口、新 native/SCAN 构建和显式 SDK 配置；与保留的公开快照分开，见[整理目录依赖与复现边界](docs/PUBLISHED_DIRECTORY_REPRODUCTION.md)。本目录的新实跑结果单独记录，不沿用旧通过。
+Compiled installations and raw runs are local artifacts. [Restoration and dependencies](docs/restoration.md) describe the required layout and the boundary of what was tested. Third-party notices are in `LICENSES/`. One local visual asset, `L1_4D_Lidar.dae`, is retained locally and excluded from this new public snapshot because its redistribution source/license has not been established. A fresh clone needs that retained asset and compiled dependencies before running. The current local project is complete; Git source publication is not a tested binary distribution.

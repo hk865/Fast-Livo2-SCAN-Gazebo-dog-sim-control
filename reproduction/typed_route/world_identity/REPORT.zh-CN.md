@@ -1,5 +1,0 @@
-固定prior world 066022与实际10 world 7da821逐XML比较仅19处mesh URI与1处TeacherActuator插件文件路径变化；节点、其它属性与文本（全部几何/物理/采样/spawn数字）相同，实际world不含run_id。新模板保存该固定文件和SHA，不接受任意runtime world。
-
-保留原066、metadata366、证书8608及旧raw/typed；新metadata仅替换inputs.world descriptor。candidate/r85_geometry_admission.py仅METADATA路径literal迁移，所有函数/类AST、helper 0dd5、limits b07及43boxes/四组337点/body.32/T保持不变。derived raw仅更新metadata SHA；typed更新对应来源和新静态证书。原check_typed_polyline仅再调用一次，allowed=true，1672子段，wall6.669138461s/CPU6.668950730s，无失败；ready_for_control/navigation_PASS仍false。
-
-复用10真实reference/registration/initial/eq/publication至/tmp独立离线同名run，重写的仅本次身份路径/摘要，不改原run或实测位姿、C/T矩阵。原AutomaticReferenceRuntime.load、R85PhysicalPathGate.context与terminal attach/validate实际通过；heading仍π，二次context复用一次绑定；全40个R85和1085个runtime输入存在，缺件0。route_definition由实际sent_reference组成的小结构，版本1为离线harness值，不冒真实DDS回调或控制通过。全部验证约0.1293s；无ROS/Node/Gazebo/Actor。
