@@ -1,7 +1,5 @@
-# Local Student model: publication on hold
+# Student权重来源与使用说明
 
-The operational file is `student_model_4999_deterministic_jit.pt` (1,342,573 bytes). Project configuration describes it as the Student model from stage 016 online action distillation, 5,000 updates, followed by stage 017 export. This description establishes the recorded project lineage, not ownership or permission to redistribute the weights.
+本发行包含`student_model_4999_deterministic_jit.pt`，1,342,573字节，用于当前45维观测/GRU256/12动作的CPU推理。来源为stage016动作蒸馏5000次更新后的4999 checkpoint，经stage017导出；具体来源和可验证边界见[资产说明](../docs/资产与来源.md)。
 
-A local preparation receipt records removal of ten path-bearing debug archive entries from a 1,354,578-byte export; tensor/code entries were retained and a 128-frame recurrent comparison was bitwise equal. That check establishes numerical equivalence, not a license.
-
-No explicit weight license, ownership declaration or upstream teacher-weight redistribution permission has been established in this review. Existing Git tracking is not permission. Keep the operational model locally protected, and exclude its binary from the proposed public content until the owner and applicable upstream terms are confirmed. A source clone without that local asset cannot run the Actor.
+本次按仓库所有者明确指示随运行源码发布该权重。权重所有者声明、Teacher更早父链与适用再分发条款仍需具体确认；此发布不构成对第三方权利的重新许可。调试debug条目去除与数值一致性检查不构成授权证明。

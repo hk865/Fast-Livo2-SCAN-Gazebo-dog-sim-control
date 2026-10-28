@@ -1,12 +1,12 @@
 from pathlib import Path
 import copy,math,sys,unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src'))
-from clear_guard_window import ClearGuardWindow
-from parking_pose10hz import PoseGrid
-from parking_zero_contract import make_event,validate_event,authorize_frame,before_actor_observation
-from terminal_heading_contract import attach_reference_heading,validate_reference_heading
-from project_config import read,ROOT,loads
-from r85_geometry_admission import certify_physical_curve,certify_start_connector
+from control.safety.clear_guard_window import ClearGuardWindow
+from control.parking.parking_pose10hz import PoseGrid
+from control.parking.parking_zero_contract import make_event,validate_event,authorize_frame,before_actor_observation
+from control.parking.terminal_heading_contract import attach_reference_heading,validate_reference_heading
+from common.config import read,ROOT,loads
+from planning.admission.static_geometry import certify_physical_curve,certify_start_connector
 
 class NavigationSafety(unittest.TestCase):
     def test_real_clear_samples_and_gap(self):

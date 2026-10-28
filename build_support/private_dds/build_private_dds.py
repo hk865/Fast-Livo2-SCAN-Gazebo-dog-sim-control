@@ -28,8 +28,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--fastdds-archive', type=Path, required=True)
     parser.add_argument('--asio-archive', type=Path, required=True)
-    parser.add_argument('--work-dir', type=Path, default=ROOT/'.local_build/private_dds')
-    parser.add_argument('--prefix', type=Path, default=ROOT/'.local/private_dds/install')
+    parser.add_argument('--work-dir', type=Path, default=ROOT/'build/dds')
+    parser.add_argument('--prefix', type=Path, default=ROOT/'install/dds')
     parser.add_argument('--ros-prefix', type=Path, default=Path('/opt/ros/jazzy'))
     parser.add_argument('--gtest-source', type=Path, default=Path('/usr/src/googletest'))
     parser.add_argument('--gtest-dir', type=Path, help='Existing private/system GTest CMake directory instead of building the local source')
@@ -89,6 +89,18 @@ def main():
     write_new(work/'BUILD_PLAN.json', plan)
     extract(args.fastdds_archive, work, pins['fastdds']['archive_root'])
     extract(args.asio_archive, work, pins['asio']['archive_root'])
+    # Upstream enables Docker-network integration test configuration together
+    # with unit tests. The image deliberately has no Docker daemon/socket.
+    # Disable only those unrelated integration fixtures; SharedMemTests remains
+    # configured, compiled and executed by the parent build command.
+    test_cmake=source/'test/dds/communication/CMakeLists.txt'
+    text=test_cmake.read_text()
+    old='if(UNIX AND NOT(APPLE) AND NOT(QNXNTO) AND NOT(ANDROID))\n    add_subdirectory(dyn_network)'
+    if text.count(old)!=1:raise ValueError('Unexpected upstream Docker test selector')
+    test_cmake.write_text(text.replace(old,
+        'option(NAVIGATION_DOCKER_NETWORK_TESTS "Build unrelated nested-Docker network fixtures" OFF)\n'
+        'if(NAVIGATION_DOCKER_NETWORK_TESTS AND UNIX AND NOT(APPLE) AND NOT(QNXNTO) AND NOT(ANDROID))\n'
+        '    add_subdirectory(dyn_network)'))
     for index, command in enumerate(steps):
         with (work/('step_%02d.log' % index)).open('x') as log:
             subprocess.run(command, check=True, stdout=log, stderr=subprocess.STDOUT)

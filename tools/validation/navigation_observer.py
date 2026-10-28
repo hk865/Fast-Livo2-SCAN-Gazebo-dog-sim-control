@@ -17,6 +17,7 @@ from ros_gz_interfaces.srv import SetEntityPose
 from ros_gz_interfaces.msg import Entity
 from obstacle_observer import NativeObstacleObserver
 from parking_status import check_window
+from parking_grid import causal_grid
 import queue
 
 
@@ -26,6 +27,7 @@ def delta(a,b):return (a-b+math.pi)%(2*math.pi)-math.pi
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--wall-timeout',type=float,default=800.,help='Wall-clock observation budget; simulation and parking thresholds are unchanged')
     args=parser.parse_args();run=args.run.resolve();output=args.output;output.mkdir(parents=True,exist_ok=True)
     rclpy.init();node=Node('development_navigation_observer')
     qos=QoSProfile(depth=30,reliability=ReliabilityPolicy.BEST_EFFORT)
@@ -69,7 +71,7 @@ def main():
         candidates=[x for x in rows if x['t']<=target+1e-9]
         return candidates[-1]if candidates else None
     try:
-        while time.monotonic()-started<800:
+        while time.monotonic()-started<args.wall_timeout:
             rclpy.spin_once(node,timeout_sec=.02);clock=state['clock'];now=time.monotonic();p=state['pose'];s=state['status']
             while True:
                 try:value,received=native.queue.get_nowait();observed.append(dict(t=value['stamp_ns']/1e9,p=value['position_world_xyz']))
@@ -103,9 +105,10 @@ def main():
                     samples=[];problems=[];origin=state['parking']['origin']
                     initial=dict(t=origin['stamp_ns']/1e9,p=origin['position'],q=origin['quaternion_xyzw'])
                     if not any(round(x['t']*1e9)==origin['stamp_ns']for x in poses):problems.append('qualification_origin_not_observed')
-                    for index in range(51):
-                        target_ns=round(t0*1e9)+index*100_000_000;target=target_ns/1e9
-                        row=initial if index==0 else next((x for x in reversed(poses)if round(x['t']*1e9)<=target_ns),None)
+                    grid,grid_errors=causal_grid(poses,round(t0*1e9),origin)
+                    problems.extend(grid_errors)
+                    for target_ns,row in grid:
+                        target=target_ns/1e9
                         im=next((x for x in reversed(imus)if round(x['t']*1e9)<=target_ns),None)
                         if any(x is None for x in [row,im]):problems.append('missing_causal_sample');continue
                         drift=float(np.linalg.norm(np.array(row['p'][:2])-initial['p'][:2]));yaw=abs(delta(angle(row['q']),angle(initial['q'])))

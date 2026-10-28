@@ -1,0 +1,134 @@
+{
+  "scope": "original Go2 three-floor F1-to-F3, software rendering in fresh public dependency container, newly compiled project install",
+  "overall_passed": true,
+  "parking": {
+    "passed": true,
+    "T0_sim_s": 487.965,
+    "T1_sim_s": 492.965,
+    "pose_samples": 51,
+    "xy_max_m": 0.024070350021601686,
+    "yaw_max_rad": 0.015429674152956707,
+    "status_samples": 57,
+    "max_status_gap_ns": 140000000,
+    "strictly_distinct_causal_pose_headers": true,
+    "high_frequency_velocity_veto": false
+  },
+  "dynamic": {
+    "passed": true,
+    "cycles": 1,
+    "native_blocked_observations": 1071,
+    "clear_count": 16,
+    "clear_span_ns": 1045000000,
+    "recovery_m": 0.7399217294786994,
+    "measured_stop": true,
+    "zero_hold": true
+  },
+  "shutdown": {
+    "entry": 0,
+    "observer": 0,
+    "launch_components": 15,
+    "component_exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "geometry_worker_exit": 0,
+    "geometry_worker_terminated": false,
+    "geometry_worker_killed": false,
+    "scan_child_shutdown_exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "resources": {
+    "container_cpus": 6,
+    "container_memory_gib": 12,
+    "shared_memory_gib": 2,
+    "software_rendering": true,
+    "observed_memory_gib": 3.423,
+    "parallel_build_jobs": 2
+  },
+  "queue": {
+    "original_event_limit": 32,
+    "original_bytes": 2097152,
+    "received": 853,
+    "consumed": 853,
+    "faults": 0,
+    "geometry_completed": 279
+  },
+  "tests": {
+    "unit_tests": 20,
+    "application_imports": 115,
+    "experiment_modules_loaded": 0,
+    "dds_heartbeat_tests": 5,
+    "actor_component": {
+      "synthetic_native_requests": 8,
+      "responses": 8,
+      "next_request_acks": 7,
+      "navigation_pass_claimed": false
+    }
+  },
+  "evidence_limits": [
+    "One complete original scenario run, not repeatability statistics",
+    "Parking drift is not global localization absolute accuracy",
+    "Native Actor feedback remains privileged; no real-robot deployment claim",
+    "Final Dockerfile isolated image build recorded separately"
+  ],
+  "final_image": {
+    "clean_dockerfile_build": true,
+    "image_size_bytes": 1586068698,
+    "preflight_ready": true,
+    "actor_component_passed": true,
+    "matched_elf_files": 33,
+    "compared_present_sections": [
+      ".text",
+      ".rodata",
+      ".data",
+      ".eh_frame"
+    ],
+    "all_compared_sections_equal": true,
+    "full_navigation_repeated_in_final_image": false,
+    "startup": {
+      "wall_duration_limit_s": 120,
+      "last_localization_clock_s": 100.545,
+      "entry_exit": 0,
+      "launch_exit": 0,
+      "launch_component_exits": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "queue_protection_triggered": false,
+      "unit_tests": 20,
+      "full_navigation_claimed": false,
+      "shutdown_warning": "controller publish after ROS context invalidation; process exited 0"
+    }
+  }
+}
