@@ -22,4 +22,4 @@
 
 无地图时的历史图修正提案与已知地图使用同一结果通道，但无地图真实导航尚未验收。一般地图失跟后撤销localized/停行并重获定位的仲裁未完成；传感器300ms断流保护不等于一般失跟恢复。
 
-Dockerfile/build_support提供公开依赖编译路径。build/install不进Git；runs、原始逐帧日志和录像不进Git。Student/L1本地资产许可边界见根README；不得修改碰撞几何后继承原PASS。
+Dockerfile/build_support提供公开依赖编译路径。build/install不进Git；runs、原始逐帧日志和录像不进Git。Student自训部署权重已提供，L1仍为本地补充资产，许可边界见根README；不得修改碰撞几何后继承原PASS。

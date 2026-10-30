@@ -6,4 +6,4 @@
 
 本地派生修改：Building.dae提取世界三角面为building_triangles.npz；tomogram转为无pickle依赖的building_tomogram_safe.npz；以原生PCT A*生成路线，并按物理支持面修正Z。A*兼容合法零代价与高度连续候选层，未调用GTSAM高度平滑器。routes/multi_floor2.json长85.69597066074994m。
 
-world.sdf.in引用项目内Go2/L1模型，L1与Student资产许可未补齐，当前公开分支不携带这两项；不改变碰撞几何替代缺项。已知出生先验下的完整真实SLAM通过及边界见根README和验收摘要。
+world.sdf.in引用项目内Go2/L1模型，Student自训部署权重已提供；L1许可说明仍未补齐，当前公开分支不携带L1网格；不改变碰撞几何替代缺项。已知出生先验下的完整真实SLAM通过及边界见根README和验收摘要。

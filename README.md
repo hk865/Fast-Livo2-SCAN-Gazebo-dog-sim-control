@@ -10,7 +10,7 @@
 
 ```bash
 docker build --build-arg BUILD_JOBS=2 -t fastlivo2-building:local .
-# 在有使用授权的前提下，本地补齐下文两项资产后：
+# 本地补齐下文L1网格后（Student部署权重已包含）：
 NAVIGATION_IMAGE=fastlivo2-building:local ./build_building.sh
 NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --check
 NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --mode slam --case stairs_short
@@ -19,11 +19,10 @@ NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --mode slam --case m
 
 本机也可复用已经配置的`go2-navigation:local`依赖镜像。`build_building.sh`只从镜像复制可重定位安装前缀，再编译本工程源码；不读取旧工程路径。Dockerfile新增PCT CLI及原生后端图优化器构建步骤。完整Docker冷构建与导航验收是不同检查，不能把构建成功当作导航通过。
 
-公开分支**不含以下再分发条款尚未明确的文件**，它们仍保留在开发者本机：
+本分支已提供发布者项目自训的去debug Student部署权重，来源及当前对外许可状态见[模型卡](models/README.md)。公开分支仍**不含L1网格**，该原件保留在开发者本机：
 
 | 本地补充路径 | 当前接口与影响 |
 | --- | --- |
-| `models/student_model_4999_deterministic_jit.pt` | Student45、GRU256、12动作；缺失时不能运行控制链 |
 | `assets/meshes/L1_4D_Lidar.dae` | 实测SDF同时引用其视觉与碰撞几何；不以替代网格冒充原验收条件 |
 
 取得相应授权后放入以上路径。`--check`会列出缺项，不能将公开源码检出直接称为开箱运行。模型接口见[models](models/README.md)，资产与适用许可见[来源说明](docs/资产与来源.md)。Building网格、PCD、派生几何/高程和路线已随源码提供并保留对应上游许可。

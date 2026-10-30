@@ -24,4 +24,4 @@ world平台高度0/1.2/2.4m。静态几何路径检查使用metadata中的`T_nav
 
 根`start.py`的prepare复制/转换资产到新run，不应手改历史生成world代替正式源。修改几何后须检查碰撞/visual一致、参考/路线同坐标、支撑与机身空间限制；当前没有验证任意替换场景。
 
-Unitree、VLP16、RealSense等来源许可保留在根`LICENSES/`。`L1_4D_Lidar.dae`的再分发条款尚未补足，当前分支树排除而本机保留；它同时用于碰撞，不以替代几何继承验收。Student权重同样未随本分支公开，见[models](../models/README.md)。从源码获取资产后仍需构建公共依赖，不能把下载完成当作导航验证完成。详细数据流见[技术报告第2章](../docs/technical_report.zh-CN.md)。
+Unitree、VLP16、RealSense等来源许可保留在根`LICENSES/`。`L1_4D_Lidar.dae`的再分发条款尚未补足，当前分支树排除而本机保留；它同时用于碰撞，不以替代几何继承验收。Student自训部署权重已随本分支提供，其来源与当前对外许可状态见[models](../models/README.md)。从源码获取资产后仍需构建公共依赖，不能把下载完成当作导航验证完成。详细数据流见[技术报告第2章](../docs/technical_report.zh-CN.md)。
