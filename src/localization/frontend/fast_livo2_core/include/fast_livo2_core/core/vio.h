@@ -153,6 +153,8 @@ public:
   ~VIOManager();
   void updateStateInverse(cv::Mat img, int level);
   void updateState(cv::Mat img, int level);
+  // True only for a retained, non-empty numerical EKF update in this frame.
+  bool last_frame_ekf_updated=false;
   void processFrame(cv::Mat &img, vector<pointWithVar> &pg, const unordered_map<VOXEL_LOCATION, VoxelOctoTree *> &feat_map, double img_time);
   void retrieveFromVisualSparseMap(cv::Mat img, vector<pointWithVar> &pg, const unordered_map<VOXEL_LOCATION, VoxelOctoTree *> &plane_map);
   void generateVisualMapPoints(cv::Mat img, vector<pointWithVar> &pg);

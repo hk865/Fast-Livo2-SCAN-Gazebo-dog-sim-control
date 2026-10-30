@@ -3,7 +3,6 @@
 Importing this module does not load torch or a model. The legacy loop retains
 joint targets, bootstrap, previous raw action, all-static safety and IPC.
 """
-import hashlib
 import json
 from pathlib import Path
 
@@ -11,18 +10,11 @@ import numpy as np
 import control.policy.speed_tiers as speed_tiers
 from common.input_freshness import enabled as minimal_baseline_enabled
 
-EXPORT_SHA = 'd8b51361ada74a80beb5e64f892447ea406d136be4c76a6ab15bae2d9b6c6185'
-CHECKPOINT_SHA = '7b59b8c7eafc9ffbc2dc32aaa2df3dadec3269d039338e4f93217bc73af66fd9'
-TEACHER_SHA = 'bfe7fbbffe85fdb60cac590f1a6080a10609011ab6a538a078381261e98fbd34'
 QDEFAULT = np.array([-.1,.8,-1.5,.1,.8,-1.5,-.1,1.,-1.5,.1,1.,-1.5])
 PID_SPEC = dict(kp=[.5,.5,.5],ki=[.2,.2,.15],kd=[.02,.02,.015],
     integral_bounds=[.15,.4,.2],derivative_filter_tau_s=.08,
     correction_bounds=[.08,.1,.08])
 RESET_SCHEMA = 'student_velocity_pid_motion_epoch_zero_reset/v2'
-
-
-def sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def exact_student45(state, command, previous_action):
@@ -228,9 +220,9 @@ class StudentRuntime:
                 self.unload_helper=helper
                 self.integral_unload=helper.NativeUnload(scope,None,self.run.name)
                 self.integral_unload_identity=dict(schema='r85_coordinated_unload_deployment_extension/v1',
-                    helper_path=str(helper_path),helper_sha256=sha(helper_path),
+                    helper_path=str(helper_path),helper_source=str(helper_path),
                     scope_sha256=None,configuration=helper.configuration(scope['profile']),
-                    base_contract_only_sha256=sha(self.contract_path),base_contract_does_not_prove_new_recurrence=True)
+                    base_contract_path=str(self.contract_path),base_contract_does_not_prove_new_recurrence=True)
         self.native_state=None;self.obs45=None;self.frame_clock_ns=None;self.inferred=False
         self.frame_serial=0;self.inference_count=0;self.hidden=None;self.model=None
         self.teacher_slice_difference=None;self.input_receipt=None;self.actual_action=None
@@ -263,7 +255,7 @@ class StudentRuntime:
             self.integral_unload.run_id,self.integral_unload.scope_sha,identity)
         self.xy_stop_takeover_identity=dict(schema='r49_actual_student_XY_stop_mode_extension/v1',
             **identity,scope_sha256=self.integral_unload.scope_sha,configuration=helper.configuration(self.scope['profile']),
-            new_control_mode=True,base_contract_only_sha256=sha(self.contract_path),
+            new_control_mode=True,base_contract_path=str(self.contract_path),
             base_contract_does_not_prove_new_mode=True,stop_or_ACK_credit=False)
         return True
 
@@ -288,7 +280,7 @@ class StudentRuntime:
             self.integral_unload.run_id,self.integral_unload.scope_sha,identity)
         self.yaw_measurement_feedback_identity=dict(schema='r85_actual_yaw_measurement_P_extension/v1',
             **identity,scope_sha256=self.integral_unload.scope_sha,configuration=config,
-            new_two_degree_of_freedom_P=True,base_contract_only_sha256=sha(self.contract_path),
+            new_two_degree_of_freedom_P=True,base_contract_path=str(self.contract_path),
             base_contract_does_not_prove_new_P=True,stop_or_ACK_credit=False)
         return True
 
@@ -313,9 +305,9 @@ class StudentRuntime:
         self.pid.yaw_pd_fade=helper.StudentYawPDFade(config,self.unload_helper,
             self.integral_unload.run_id,self.integral_unload.scope_sha)
         self.yaw_pd_fade_identity=dict(schema='r85_student_yaw_PD_fade_deployment_extension/v1',
-            helper_path=str(helper_path),helper_sha256=sha(helper_path),
+            helper_path=str(helper_path),helper_source=str(helper_path),
             scope_sha256=None,configuration=config,
-            base_student_contract_sha256=sha(self.contract_path),
+            base_student_contract_path=str(self.contract_path),
             base_contract_does_not_prove_new_PD_math=True)
         return True
 
@@ -469,7 +461,7 @@ class StudentRuntime:
             teacher_actor_loaded=False,
             privileged_actor_observation_dimensions=30,observation_clip=None,observation_noise='disabled clean Student evaluation',
             actor_observations_remain_privileged=True,outer_pid_feedback='privileged native COM body vx/vy/body omega_z; sim2sim',
-            student_pid_reset_schema=RESET_SCHEMA,student_contract_sha256=sha(self.contract_path),
+            student_pid_reset_schema=RESET_SCHEMA,student_contract_path=str(self.contract_path),
             observation_source='native gyro/quaternion/q/qd simulation proxy + actual command + previous raw action; Student45',
             stop_strategy='exact authorized ordinary zero after original slew; continue Student/GRU; no target/action freezing',
             actual_input_evidence='current in-memory Actor state and live native ACK; raw recording is external')

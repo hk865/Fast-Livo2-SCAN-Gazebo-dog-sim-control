@@ -1,45 +1,49 @@
-# Go2 三层场景闭环导航
+# FAST-LIVO2 / Building / SCAN / Go2
 
-这是一个由仿真传感器驱动的四足导航工程：FAST-LIVO2估计局部状态，已知场景匹配提供全局导航纠偏，SCAN规划B样条路径，分层PID与Student45/GRU策略把路径变成关节目标，Gazebo执行关节力矩并反馈。默认任务是原三层平台与坡道上的F1→F3。
+本分支包含真实FAST-LIVO2前端、异步CPU后端、多楼层Building地图、PCT/SCAN规划、Student控制与Gazebo执行模块的完整源码。基于原仓库main的`6401e5fe`继续开发；只发布到本功能分支。
 
-源码按职责放在`src/`子模块中，只有一个普通启动入口。必要的Student权重、Go2/L1网格和原导航世界/路线已包含在本发行；公开再分发状态见[资产说明](docs/资产与来源.md)。本包不含GrandTour资产。Student和L1随仓库所有者明确指示发布，上游权利说明及尚待确认项继续保留，未另行许可第三方资产。
+**已知配置出生先验下，85.70m真实SLAM多楼层导航完成一轮完整验收。** 实际回环、运动中短LiDAR断流恢复及原10Hz/5秒/51点停车也有独立通过轮。它不证明粗范围初始化或多轮稳定性；历史失败不计为通过。摘要与指标口径见[验收摘要](docs/Building后端验收摘要.md)，模块关系见[Building模块说明](docs/Building模块说明.md)。
 
-源码模块：[总编排](src/bringup/README.md) · [通信](src/common/README.md) · [定位](src/localization/README.md) · [规划](src/planning/README.md) · [控制](src/control/README.md) · [仿真](src/simulation/README.md) · [SDK](src/sdk/README.md)。
+## 构建与运行
 
-## 快速开始
-
-需要Linux x86-64与可运行的Docker。Dockerfile默认从官方ROS镜像、Ubuntu/ROS/Gazebo软件源和官方PyTorch CPU源安装环境，再从源码构建全部原生组件。本次验收使用6个CPU额度与12GiB内存上限，构建默认两线程；具体资源与性能仍以本次验收记录为准。
+环境：Ubuntu 24.04、ROS2 Jazzy、Gazebo Harmonic、Docker与NVIDIA Container Toolkit。数值后端及Student推理使用CPU；GPU用于仿真传感器渲染。完整依赖构建路径保留于Dockerfile，只从官方上游获取源码并构建到项目私有安装前缀。
 
 ```bash
-mkdir -p runs
-docker build --build-arg BUILD_JOBS=2 -t go2-navigation:local .
-docker run --rm --cpus=6 --memory=12g --shm-size=2g go2-navigation:local --check
-docker run --rm --cpus=6 --memory=12g --shm-size=2g \
-  -e LIBGL_ALWAYS_SOFTWARE=1 -e EGL_PLATFORM=surfaceless \
-  --mount type=bind,src="$(pwd)/runs",dst=/workspace/navigation/runs \
-  go2-navigation:local --resource-check
+docker build --build-arg BUILD_JOBS=2 -t fastlivo2-building:local .
+# 在有使用授权的前提下，本地补齐下文两项资产后：
+NAVIGATION_IMAGE=fastlivo2-building:local ./build_building.sh
+NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --check
+NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --mode slam --case stairs_short
+NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --mode slam --case multi_floor2
 ```
 
-启动前先创建本地`runs`目录。`--check`只报告完整依赖缺项，不启动仿真；`--prepare-only`只生成原世界与参数；`--duration 60`限制墙钟运行时间，截断本身不表示任务成功。构建源连接问题与原生Linux构建步骤见[移植、构建与运行](docs/移植构建运行.md)。
+本机也可复用已经配置的`go2-navigation:local`依赖镜像。`build_building.sh`只从镜像复制可重定位安装前缀，再编译本工程源码；不读取旧工程路径。Dockerfile新增PCT CLI及原生后端图优化器构建步骤。完整Docker冷构建与导航验收是不同检查，不能把构建成功当作导航通过。
 
-动态障碍停走属于独立验收工具：普通入口不导入测试调度器。一次完整检查使用`tools/validation/run_navigation_check.py`，会移动唯一测试障碍、观察原停车规则，再关闭自己启动的任务。不要同时启动两套导航。
+公开分支**不含以下再分发条款尚未明确的文件**，它们仍保留在开发者本机：
 
-## 模块导航
-
-| 模块 | 核心职责 |
+| 本地补充路径 | 当前接口与影响 |
 | --- | --- |
-| [bringup](src/bringup/README.md) | 总配置、唯一生命周期与总launch |
-| [common](src/common/README.md) | 公共通信、时钟、协议及状态传输 |
-| [localization](src/localization/README.md) | 传感器、FAST-LIVO2、场景匹配/纠偏 |
-| [planning](src/planning/README.md) | SCAN、坐标代次、参考与曲线准入 |
-| [control](src/control/README.md) | 跟踪、安全、停车、命令门控和Student |
-| [simulation](src/simulation/README.md) | 原Go2世界、传感器桥与唯一关节力执行器 |
-| [sdk](src/sdk/README.md) | Vikit、Livox和ROS消息包 |
+| `models/student_model_4999_deterministic_jit.pt` | Student45、GRU256、12动作；缺失时不能运行控制链 |
+| `assets/meshes/L1_4D_Lidar.dae` | 实测SDF同时引用其视觉与碰撞几何；不以替代网格冒充原验收条件 |
 
-第一次读实现可先看[模块数据流](docs/模块数据流.md)，再看[源码结构与阅读路线](docs/source_architecture.zh-CN.md)；原理、公式与PID历史详见[技术报告](docs/technical_report.zh-CN.md)，也可[下载PDF](docs/pdf/navigation_technical_report.zh-CN.pdf)。实验与诊断留在`experiments/`，不作为正常运行的必需导入。
+取得相应授权后放入以上路径。`--check`会列出缺项，不能将公开源码检出直接称为开箱运行。模型接口见[models](models/README.md)，资产与适用许可见[来源说明](docs/资产与来源.md)。Building网格、PCD、派生几何/高程和路线已随源码提供并保留对应上游许可。
 
-## 验证范围
+`start.py`是当前Building唯一入口，必须显式指定`--mode slam`或`--mode truth`。truth模式采用真值定位，专供对照。每轮写入新的`runs/<label>`目录，同名拒绝覆盖。源码分支排除原始实验日志、构建产物、录像和个人环境数据；不删除开发者本地记录。
 
-本轮新编译源码已完成一次F1→F3、动态停走和固定5s停车PASS，XY最大漂移2.407cm、yaw 0.01543rad；入口、观察器及15个launch组件均正常退出。最终Dockerfile也完成独立全新构建及镜像组件检查，范围见[验证状态](docs/验证状态.md)。原工程第26轮曾完成34.8826m的F1→F3、动态停走与固定5s停车，停车XY最大漂移3.0527cm、yaw 0.01202rad；这些是旧构建的历史证据，不能为本次新构建代证。停车漂移也不是全局定位绝对误差。
+```bash
+python3 -B tools/validation/score_building_run.py runs/<label>
+python3 -B tools/validation/score_slam_backend.py runs/<label>
+# 已完成轮的明确标注回放，需numpy/scipy/Pillow/VTK/ffmpeg及OpenGL：
+python3 -B tools/demo/render_navigation_demo.py --project . --run runs/<label> --output runs/demo.mp4
+```
 
-该工程面向Gazebo仿真，Actor仍使用明确列出的特权仿真反馈；未验证真机、未知环境、台阶、任意硬件或跨ABI二进制便携性。原FAST-LIVO2等组件保留各自许可证与来源，不能用一个总license覆盖全部资产。
+## 实现与边界
+
+- 外部XYZ/RGB PCD无需采集位姿链。Building当前采用配置出生位置/朝向先验的局部地图匹配；未完成粗范围多候选时序初始化、一般失跟/绑架恢复及无初值全图重定位。
+- 前端成功LIO/VIO更新后提交同源时间戳的自有LiDAR快照，预分配有界队列。重配准、历史子图保存与图优化异步运行；单一`building_runtime`应用修正，局部odom连续，不回写ESIKF。
+- 已接入历史SE3位姿图及历史点云几何回环。已知地图模式下图优化更新历史位姿与子图，在线`map→odom`仍来自外部地图配准，不叠第二套图修正。真正紧耦合滑窗/fixed-lag、IMU联合因子和边缘化未实现。
+- 200Hz物理、50Hz策略、300ms来源/命令新鲜度停车、200ms原生响应截止及原停车判据保留。复制、后台处理、源龄和应用延迟分别统计，现有实测不构成通用硬实时保证。
+- 在线定位不读取GT；误差按固定坐标与原时间戳离线评分，无事后轨迹拟合。仿真原有特权COM速度内环仍保留并披露。
+- 当前Building运行和构建入口不做内容哈希校验，不添加源码/模型版本运行绑定。保留的旧三层兼容模块不属于本分支验收入口。
+
+[后端说明](src/localization/backend/README.md) · [源码模块](src/README.md) · [第三方声明](THIRD_PARTY_NOTICES.md)

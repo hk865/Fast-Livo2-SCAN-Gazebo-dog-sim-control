@@ -17,6 +17,7 @@ which is included as part of this source code package.
 #include "vio.h"
 #include "preprocess.h"
 #include "ordered_ingress.h"
+#include "fast_livo2_core/backend/snapshot_bridge.hpp"
 #include <thread>
 #if __has_include(<cv_bridge/cv_bridge.hpp>)
 #include <cv_bridge/cv_bridge.hpp>
@@ -48,7 +49,6 @@ public:
     sensor_msgs::msg::Image::ConstSharedPtr image_message;
     sensor_msgs::msg::Imu::ConstSharedPtr imu_message;
     PointCloudXYZI::Ptr cloud;
-    std::vector<fastlivo_identity::Ref> identity;
     cv::Mat image;
   };
   bool ingress_enabled=true,image_copy_opt=false,ingress_started=false,ingress_stopped=false;
@@ -81,6 +81,10 @@ public:
   void stateEstimationAndMapping();
   void handleVIO();
   void handleLIO();
+  void initializeBackendSnapshots();
+  void backendLioSnapshot();
+  void backendVioSnapshot(bool updated);
+  std::unique_ptr<fastlivo_backend::SnapshotBridge> backend_snapshots;
   void savePCD();
   void processImu();
   
@@ -118,6 +122,7 @@ public:
   const std::filesystem::path log_directory = fastlivo_diagnostics::directory();
   string lid_topic, imu_topic, seq_name, img_topic;
   string base_frame = "base_footprint";
+  std::string odom_frame="camera_init",raw_body_frame="aft_mapped";
   V3D extT;
   M3D extR;
 
@@ -180,12 +185,8 @@ public:
   double plot_time;
   int frame_cnt;
   double img_time_offset = 0.0;
-  struct PairedCloud { PointCloudXYZI::Ptr cloud; std::vector<fastlivo_identity::Ref> identity; };
+  struct PairedCloud { PointCloudXYZI::Ptr cloud; };
   deque<PairedCloud> lid_raw_data_buffer;
-  std::vector<fastlivo_identity::Ref> feats_identity;
-  const std::string identity_epoch;
-  uint64_t identity_commit=0;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pubPointIdentity;
   deque<double> lid_header_time_buffer;
   deque<sensor_msgs::msg::Imu::ConstSharedPtr> imu_buffer;
   deque<cv::Mat> img_buffer;

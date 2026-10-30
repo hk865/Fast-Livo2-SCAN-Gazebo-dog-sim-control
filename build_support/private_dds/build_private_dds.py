@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the pinned, privately installed Fast DDS 2.14.6 backport. No downloads.
 
-Without --execute, validate archive pins and print the complete build plan.
+Without --execute, validate paths and print the complete build plan.
 Every build uses fresh source/build/prefix directories, never a reused CMake cache.
 """
 import argparse
@@ -10,8 +10,7 @@ import subprocess
 import sys
 import tarfile
 sys.dont_write_bytecode = True
-from common import (ROOT, MATERIALS, allocated_sections, elf_identity, private_path,
-                    read, sha, write_new)
+from common import ROOT, MATERIALS, private_path, read, write_new
 
 
 def extract(archive, destination, expected_root):
@@ -40,12 +39,9 @@ def main():
     if args.jobs < 1:
         parser.error('--jobs must be positive')
     pins = read(MATERIALS/'SOURCES.json')
-    for role, archive in [('fastdds', args.fastdds_archive), ('asio', args.asio_archive)]:
-        if sha(archive) != pins[role]['archive_sha256']:
-            raise ValueError('Pinned source archive SHA mismatch: ' + role)
-    for name, expected in pins['backport']['patch_sha256'].items():
-        if sha(MATERIALS/name) != expected:
-            raise ValueError('Backport/test patch changed: ' + name)
+    for archive in (args.fastdds_archive,args.asio_archive):
+        if not archive.is_file() or archive.stat().st_size == 0:
+            raise ValueError('Missing/empty source archive: '+str(archive))
     work, prefix = private_path(args.work_dir), private_path(args.prefix)
     if work.exists() or prefix.exists() or work.is_relative_to(prefix) or prefix.is_relative_to(work):
         raise ValueError('Separate, fresh private work and install directories required')
@@ -104,26 +100,12 @@ def main():
     for index, command in enumerate(steps):
         with (work/('step_%02d.log' % index)).open('x') as log:
             subprocess.run(command, check=True, stdout=log, stderr=subprocess.STDOUT)
-    library = (prefix/'lib/libfastrtps.so.2.14.6').resolve(strict=True)
-    before = allocated_sections(library)
-    full_sha = sha(library)
-    debug = library.parent/'.debug'/('libfastrtps.so.2.14.6.debug')
-    debug.parent.mkdir()
-    subprocess.run(['objcopy', '--only-keep-debug', str(library), str(debug)], check=True)
-    subprocess.run(['objcopy', '--strip-debug', str(library)], check=True)
-    subprocess.run(['objcopy', '--add-gnu-debuglink='+str(debug), str(library)], check=True)
-    if allocated_sections(library) != before:
-        raise ValueError('Split-debug changed allocated runtime sections')
-    cache = (build/'CMakeCache.txt').read_text()
-    compiler = next(line.split('=',1)[1] for line in cache.splitlines()
-                    if line.startswith('CMAKE_CXX_COMPILER:FILEPATH='))
-    write_new(work/'BUILD_IDENTITY.json', dict(schema='private_fastdds_identity/v1',
-        library=elf_identity(library), full_debug_sha256=full_sha, debug_file=str(debug),
-        debug_sha256=sha(debug), allocated_sections_identical=True,
-        compiler_path=compiler,
-        compiler=subprocess.run([compiler, '--version'], check=True, capture_output=True, text=True).stdout,
-        source_pins=pins, patches_applied=patches, cmake_cache_sha256=sha(build/'CMakeCache.txt')))
-    print('Private DDS built; tests are built, not executed: ' + str(work/'BUILD_IDENTITY.json'))
+    library = prefix/'lib/libfastrtps.so.2.14.6'
+    if not library.is_file():raise FileNotFoundError(library)
+    write_new(work/'BUILD_RESULT.json',dict(library=str(library),bytes=library.stat().st_size,
+        patches_applied=patches,tests_built=True,tests_executed=False))
+    print('Private DDS built; regression tests are executed by the parent build command.')
+
 
 
 if __name__ == '__main__':

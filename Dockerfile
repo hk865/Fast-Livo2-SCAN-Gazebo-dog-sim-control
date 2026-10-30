@@ -40,6 +40,8 @@ COPY third_party /workspace/navigation/third_party
 COPY src/sdk /workspace/navigation/src/sdk
 COPY src/localization/frontend /workspace/navigation/src/localization/frontend
 COPY src/planning/scan /workspace/navigation/src/planning/scan
+COPY src/planning/pct /workspace/navigation/src/planning/pct
+COPY src/localization/backend/native /workspace/navigation/src/localization/backend/native
 COPY src/simulation/actuators /workspace/navigation/src/simulation/actuators
 COPY src/common/communication /workspace/navigation/src/common/communication
 ARG BUILD_JOBS=2

@@ -1,6 +1,7 @@
 
 #include <plan_manage/scan_replan_fsm.h>
 #include <plan_manage/r107_transport_probe.h>
+#include <plan_manage/reference_progress.h>
 #include <cmath>
 #include <stdexcept>
 #include <iomanip>
@@ -19,15 +20,16 @@ namespace
 
   bool valid_reference_input(const nav_msgs::msg::Path &path, double body_height,
                              const Eigen::Vector3d &odom_position,
-                             const Eigen::Vector3d &used_velocity)
+                             const Eigen::Vector3d &used_velocity,
+                             const std::string &expected_frame)
   {
-    if (path.header.frame_id != "camera_init" || path.poses.empty() ||
+    if (path.header.frame_id != expected_frame || path.poses.empty() ||
         !std::isfinite(body_height) || !odom_position.allFinite() || !used_velocity.allFinite())
       return false;
     Eigen::Vector3d previous = odom_position;
     for (const auto &pose : path.poses)
     {
-      if (!pose.header.frame_id.empty() && pose.header.frame_id != "camera_init") return false;
+      if (!pose.header.frame_id.empty() && pose.header.frame_id != expected_frame) return false;
       const auto &p = pose.pose.position;
       const auto &q = pose.pose.orientation;
       Eigen::Vector3d body_point(p.x, p.y, p.z + body_height);
@@ -95,7 +97,7 @@ namespace
                                      PolynomialTraj &curve)
   {
     std::ostringstream out;
-    out << std::setprecision(17) << "{\"frame_id\":\"camera_init\",\"stamp\":["
+    out << std::setprecision(17) << "{\"frame_id\":\"" << path.header.frame_id << "\",\"stamp\":["
         << path.header.stamp.sec << ',' << path.header.stamp.nanosec
         << "],\"body_height_offset\":" << body_height << ",\"input_poses\":[";
     for (size_t i = 0; i < path.poses.size(); ++i)
@@ -471,17 +473,10 @@ namespace scan_planner
     if (navi_mode_ == NAVI_MODE::REFERENCE_PATH)
     {
       global_endpoint_local_occupancy_ = final_occ;
-      if (external_reference_protocol_)
-      {
-        // The supplied-map reference may extend beyond this sliding LOCAL map.
-        // Keep its full endpoint; actual motion still requires a free local target
-        // and the unchanged optimizer/local-curve/outer safety checks.
-        return true;
-      }
-      if (final_occ == 0) return true;
-      RCLCPP_WARN(node_->get_logger(),
-                  "Reference endpoint is occupied/unknown; deny candidate without shortening global reference");
-      return false;
+      // A supplied PCT global reference is not limited by visibility in the sliding LOCAL map.
+      // Occupancy here remains diagnostic; every actual local target/curve is still checked.
+      // This matches the existing external-reference protocol semantics in all mode3 clients.
+      return true;
     }
     if (final_occ <= 0)
       return true;
@@ -537,7 +532,7 @@ namespace scan_planner
     if (!msg || !have_odom_ ||
         (external_reference_protocol_ && msg->poses.size() > 4096) || // Explicit R85 input budget; no simplification.
         !valid_reference_input(*msg, body_height_, odom_pos_,
-                               measured_start_.velocity(go2_execution_frozen_)))
+                               measured_start_.velocity(go2_execution_frozen_), self_inflation_frame_id_))
     {
       RCLCPP_WARN(node_->get_logger(), "Rejected reference: frame/finite/odometry/nonzero-segment validation failed");
       return;
@@ -673,7 +668,7 @@ namespace scan_planner
   void SCANReplanFSM::publishChildOdometryAck(const nav_msgs::msg::Odometry &message)
   {
     if (!child_odometry_ack_enabled_ || !have_odom_ || last_odom_stamp_ns_ <= 0 ||
-        message.header.frame_id != "camera_init") return;
+        message.header.frame_id != self_inflation_frame_id_) return;
     // Source header is the odometry actually consumed above, never node.now().
     std::ostringstream out;
     out << "{\"schema\":\"r85_scan_child_odometry_consumed/v1\",\"run_id\":\"" << reference_run_id_
@@ -934,6 +929,14 @@ namespace scan_planner
       /* && (end_pt_ - pos).norm() < 0.5 */
       if (t_cur > info->duration_ - 1e-2)
       {
+        // A completed LOCAL segment is not completion of the full supplied PCT route.
+        // Keep its endpoint and replan from measured pose until near the global endpoint.
+        if (navi_mode_ == NAVI_MODE::REFERENCE_PATH && reference_ready_ &&
+            (end_pt_ - odom_pos_).norm() > 0.25)
+        {
+          changeFSMExecState(REPLAN_TRAJ, "PCT_LOCAL_SEGMENT_COMPLETE");
+          return;
+        }
         if (isWaypointSequenceMode() && current_wp_ + 1 < (int)active_waypoints_.size())
         {
           current_wp_++;
@@ -1142,7 +1145,13 @@ namespace scan_planner
     attempt_use_poly_init_ = flag_use_poly_init;
     attempt_random_poly_ = flag_randomPolyTraj;
     attempt_progress_before_ = planner_manager_->global_data_.last_progress_time_;
-    getLocalTarget();
+    if(!getLocalTarget()) {
+      attempt_progress_after_=planner_manager_->global_data_.last_progress_time_;
+      local_target_occupancy_=-1;
+      publishReferenceAttempt(false,"connected_reference_recovery_unavailable");
+      if(reference_protocol_ack_enabled_)reference_protocol_publication_.complete_attempt(false,"connected_reference_recovery_unavailable");
+      return false;
+    }
     attempt_progress_after_ = planner_manager_->global_data_.last_progress_time_;
     local_target_occupancy_ = planner_manager_->grid_map_->getInflateOccupancy(
         local_target_pt_, estimateYawFromSegment(odom_pos_, local_target_pt_));
@@ -1569,11 +1578,21 @@ namespace scan_planner
       r74ObserveString(trajectory_metadata_pub_->get_topic_name(), metadata.data);
   }
 
-  void SCANReplanFSM::getLocalTarget()
+  bool SCANReplanFSM::getLocalTarget()
   {
     double t;
 
     double t_step = planning_horizon_ / 20 / planner_manager_->pp_.max_vel_;
+    if(navi_mode_==NAVI_MODE::REFERENCE_PATH){
+      auto& global=planner_manager_->global_data_;
+      if((global.getPosition(global.last_progress_time_)-start_pt_).norm()>planning_horizon_){
+        const double recovered=recover_connected_reference_progress(global.last_progress_time_,
+            global.global_duration_,t_step,start_pt_,planning_horizon_,[&](double time){return global.getPosition(time);});
+        if(recovered<=global.last_progress_time_)return false;
+        RCLCPP_INFO(node_->get_logger(),"Recovered connected reference progress %.3f -> %.3f",global.last_progress_time_,recovered);
+        global.last_progress_time_=recovered;
+      }
+    }
     double dist_min = 9999, dist_min_t = 0.0;
     double target_t = planner_manager_->global_data_.global_duration_;
     for (t = planner_manager_->global_data_.last_progress_time_; t < planner_manager_->global_data_.global_duration_; t += t_step)
@@ -1620,34 +1639,12 @@ namespace scan_planner
       bool found_free_target = false;
       double adjusted_t = target_t;
 
-      for (double dt = 0.0; dt <= planner_manager_->global_data_.global_duration_; dt += t_step)
-      {
-        double t_forward = target_t + dt;
-        if (t_forward <= planner_manager_->global_data_.global_duration_)
-        {
-          Eigen::Vector3d pt = planner_manager_->global_data_.getPosition(t_forward);
-          if (targetOccupancy(pt) == 0)
-          {
-            local_target_pt_ = pt;
-            adjusted_t = t_forward;
-            found_free_target = true;
-            break;
-          }
-        }
-
-        double t_backward = target_t - dt;
-        if (t_backward >= std::max(0.0, dist_min_t))
-        {
-          Eigen::Vector3d pt = planner_manager_->global_data_.getPosition(t_backward);
-          if (targetOccupancy(pt) == 0)
-          {
-            local_target_pt_ = pt;
-            adjusted_t = t_backward;
-            found_free_target = true;
-            break;
-          }
-        }
-      }
+      adjusted_t=connected_free_reference_target(target_t,
+          std::max(0.0,dist_min_t),planner_manager_->global_data_.global_duration_,
+          t_step,planning_horizon_,[&](double time){return planner_manager_->global_data_.getPosition(time);},
+          [&](const Eigen::Vector3d&point){return targetOccupancy(point)==0;});
+      found_free_target=adjusted_t>=0.;
+      if(found_free_target)local_target_pt_=planner_manager_->global_data_.getPosition(adjusted_t);
 
       if (found_free_target)
       {
@@ -1658,7 +1655,8 @@ namespace scan_planner
       else
       {
         RCLCPP_WARN_THROTTLE(node_->get_logger(), *node_->get_clock(), 1000,
-                             "Local target is in collision and no nearby free target was found");
+                             "No collision-free target on bounded connected reference prefix");
+        return false;
       }
     }
 
@@ -1680,6 +1678,7 @@ namespace scan_planner
       local_target_vel_ = planner_manager_->global_data_.getVelocity(target_t);
       // cout << "AA" << endl;
     }
+    return true;
   }
 
 } // namespace scan_planner

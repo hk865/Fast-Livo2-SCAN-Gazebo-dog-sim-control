@@ -341,6 +341,11 @@ namespace scan_planner
 
     for (size_t wp_i = 0; wp_i < waypoints.size(); wp_i++)
     {
+      // Initial reference point is often the measured start (within sensor/body-height residual).
+      // A near-zero first interval makes minSnap ill-conditioned, especially on stair Z.
+      // Coalesce only leading duplicate helpers; the exact final goal is always retained.
+      if (points.size() == 1 && wp_i + 1 < waypoints.size() &&
+          (waypoints[wp_i] - start_pos).norm() < 0.10) continue;
       points.push_back(waypoints[wp_i]);
     }
 

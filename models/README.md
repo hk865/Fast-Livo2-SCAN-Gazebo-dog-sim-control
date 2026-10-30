@@ -1,5 +1,5 @@
-# Student模型
+# 本地Student模型接口
 
-`student_model_4999_deterministic_jit.pt`为当前必要资产，本发行已包含。输入为45维观测及`[1,1,256]`隐状态，输出12动作及新隐状态；动作缩放0.25后叠加默认关节角。模型由`src/control/policy/student.py`加载。
+当前控制源码需要本地文件`student_model_4999_deterministic_jit.pt`，输入45维观测及`[1,1,256]`隐状态，输出12动作及新隐状态。动作缩放.25后叠加默认关节角；由`src/control/policy/student.py`进行CPU推理。
 
-接口与来源见[通知](MODEL_NOTICE.md)、[控制模块](../src/control/README.md)和[技术报告](../docs/technical_report.zh-CN.md)。不会用模型hash作为历史启动批准。
+公开分支不包含该文件：具体权属、Teacher父链与再分发条款尚未确认。历史导航使用的本机文件保留不动；取得使用授权后自行放入同名路径。它不是可用任意同维模型替换后继承验收的接口。更多边界见MODEL_NOTICE.md。
