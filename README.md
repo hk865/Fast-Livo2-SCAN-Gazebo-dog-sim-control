@@ -25,7 +25,22 @@ NAVIGATION_IMAGE=fastlivo2-building:local ./run_building.sh --mode slam --case m
 | --- | --- |
 | `assets/meshes/L1_4D_Lidar.dae` | 实测SDF同时引用其视觉与碰撞几何；不以替代网格冒充原验收条件 |
 
-取得相应授权后放入以上路径。`--check`会列出缺项，不能将公开源码检出直接称为开箱运行。模型接口见[models](models/README.md)，资产与适用许可见[来源说明](docs/资产与来源.md)。Building网格、PCD、派生几何/高程和路线已随源码提供并保留对应上游许可。
+L1是本场景的必需网格，SDF同时用于视觉和碰撞。可从已核实的[第三方上游固定提交文件](https://github.com/khaledgabr77/unitree_go2_ros2/blob/0563d113870dde08a2a60a594130278559cd48b0/unitree_go2_description/meshes/L1_4D_Lidar.dae)自行取得，本分支不重新分发该DAE：
+
+```bash
+# 在本项目根目录执行；已有同名网格时保留，不覆盖。
+mkdir -p assets/meshes
+if [ ! -f assets/meshes/L1_4D_Lidar.dae ]; then
+  curl --fail --location \
+    'https://raw.githubusercontent.com/khaledgabr77/unitree_go2_ros2/0563d113870dde08a2a60a594130278559cd48b0/unitree_go2_description/meshes/L1_4D_Lidar.dae' \
+    --output assets/meshes/L1_4D_Lidar.dae.download &&
+  mv assets/meshes/L1_4D_Lidar.dae.download assets/meshes/L1_4D_Lidar.dae
+fi
+```
+
+也可打开上述文件页面，下载原始文件后手动放到项目根目录下的`assets/meshes/L1_4D_Lidar.dae`。不要使用网页HTML另存文件，不以官方STEP或简化网格直接替代。
+
+上游公开可下载，但其许可声明尚未明确，不能据此称已确认开源许可；来源证据与边界见[资产说明](docs/资产与来源.md#l1网格的下载与来源边界)。`--check`会列出缺项；补齐网格和构建依赖后再运行，不将仅检出源码当作完整运行通过。Student部署权重已提供，见[模型卡](models/README.md)。Building网格、PCD、派生几何/高程和路线已随源码提供并保留对应上游许可。
 
 `start.py`是当前Building唯一入口，必须显式指定`--mode slam`或`--mode truth`。truth模式采用真值定位，专供对照。每轮写入新的`runs/<label>`目录，同名拒绝覆盖。源码分支排除原始实验日志、构建产物、录像和个人环境数据；不删除开发者本地记录。
 
