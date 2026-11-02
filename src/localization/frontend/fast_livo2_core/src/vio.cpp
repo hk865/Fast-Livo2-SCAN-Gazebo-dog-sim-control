@@ -1577,6 +1577,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 
   if (total_points == 0) return;
   StatesGroup old_state = (*state);
+  bool retained_level_update=false, old_state_had_update=false;
   MD(1, 2) Jimg;
   MD(2, 3) Jdpi;
   VectorXd z;
@@ -1695,6 +1696,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
     if (error <= last_error)
     {
       old_state = (*state);
+      old_state_had_update=retained_level_update;
       last_error = error;
 
       auto &&H_sub_T = H_sub.transpose();
@@ -1707,6 +1709,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
       G.block<DIM_STATE, 6>(0, 0) = K_1.block<DIM_STATE, 6>(0, 0) * H_T_H.block<6, 6>(0, 0);
       auto solution = -K_1.block<DIM_STATE, 6>(0, 0) * HTz + vec - G.block<DIM_STATE, 6>(0, 0) * vec.block<6, 1>(0, 0);
       (*state) += solution;
+      retained_level_update = n_meas>0 && std::isfinite(error) && solution.allFinite();
 // FASTLIVO_DIAG_BEGIN iteration_accepted_updateStateInverse
       if (diag_enabled) {
         diag_record[9] = 1.0;
@@ -1724,6 +1727,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
     else
     {
       (*state) = old_state;
+      retained_level_update=old_state_had_update;
 // FASTLIVO_DIAG_BEGIN iteration_rollback_updateStateInverse
       if (diag_enabled) {
         diag_record[9] = 0.0;
@@ -1758,6 +1762,7 @@ void VIOManager::updateStateInverse(cv::Mat img, int level)
 
     if (iteration == max_iterations || EKF_end) break; 
   }
+  last_frame_ekf_updated = last_frame_ekf_updated || retained_level_update;
 }
 
 void VIOManager::updateState(cv::Mat img, int level)
@@ -1771,6 +1776,7 @@ void VIOManager::updateState(cv::Mat img, int level)
 
   if (total_points == 0) return;
   StatesGroup old_state = (*state);
+  bool retained_level_update=false, old_state_had_update=false;
 
   VectorXd z;
   MatrixXd H_sub;
@@ -1919,6 +1925,7 @@ void VIOManager::updateState(cv::Mat img, int level)
     if (error <= last_error)
     {
       old_state = (*state);
+      old_state_had_update=retained_level_update;
       last_error = error;
 
       // K = (H.transpose() / img_point_cov * H + state->cov.inverse()).inverse() * H.transpose() / img_point_cov; auto
@@ -1938,6 +1945,7 @@ void VIOManager::updateState(cv::Mat img, int level)
       solution = -K_1.block<DIM_STATE, 7>(0, 0) * HTz + vec - G.block<DIM_STATE, 7>(0, 0) * vec.block<7, 1>(0, 0);
 
       (*state) += solution;
+      retained_level_update = n_meas>0 && std::isfinite(error) && solution.allFinite();
 // FASTLIVO_DIAG_BEGIN iteration_accepted_updateState
       if (diag_enabled) {
         diag_record[9] = 1.0;
@@ -1957,6 +1965,7 @@ void VIOManager::updateState(cv::Mat img, int level)
     else
     {
       (*state) = old_state;
+      retained_level_update=old_state_had_update;
 // FASTLIVO_DIAG_BEGIN iteration_rollback_updateState
       if (diag_enabled) {
         diag_record[9] = 0.0;
@@ -1992,6 +2001,7 @@ void VIOManager::updateState(cv::Mat img, int level)
     if (iteration == max_iterations || EKF_end) break;
   }
   // if (state->inv_expo_time < 0.0)  {ROS_ERROR("reset expo time!!!!!!!!!!\n"); state->inv_expo_time = 0.0;}
+  last_frame_ekf_updated = last_frame_ekf_updated || retained_level_update;
 }
 
 void VIOManager::updateFrameState(StatesGroup state)
@@ -2093,6 +2103,7 @@ void VIOManager::dumpDataForColmap()
 
 void VIOManager::processFrame(cv::Mat &img, vector<pointWithVar> &pg, const unordered_map<VOXEL_LOCATION, VoxelOctoTree *> &feat_map, double img_time)
 {
+  last_frame_ekf_updated=false;
 
 // FASTLIVO_DIAG_BEGIN empty_image
   if (fastlivo_diag::Logger::instance().enabled() && img.empty())

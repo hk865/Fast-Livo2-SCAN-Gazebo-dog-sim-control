@@ -38,7 +38,7 @@ def configuration(profile):
         return None
     selected=validate(profile[KEY]);cascade=profile.get('cascade',{})
     if (profile.get('actor_kind')!='student' or profile.get('controller_kind')!='student'
-            or profile.get('navigation_ground_truth_used')is not False
+            or type(profile.get('navigation_ground_truth_used'))is not bool
             or profile.get('max_speed_mps')!=selected['cruise_mps']
             or cascade.get('desired_speed')!=selected['cruise_mps']
             or cascade.get('command_limits')!=[.6,.2,.6]

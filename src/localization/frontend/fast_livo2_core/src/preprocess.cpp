@@ -61,7 +61,6 @@ void Preprocess::process(const livox_ros_driver2::msg::CustomMsg::SharedPtr &msg
 
 void Preprocess::process(const sensor_msgs::msg::PointCloud2::ConstSharedPtr &msg, PointCloudXYZI::Ptr &pcl_out)
 {
-  identity_input_ordinals.clear();
   switch (lidar_type)
   {
   case OUST64:
@@ -115,7 +114,6 @@ void Preprocess::process(const sensor_msgs::msg::PointCloud2::ConstSharedPtr &ms
             added_pt.intensity = src.intensity;
             added_pt.curvature = 0.0;
             pl_surf.push_back(added_pt);
-            identity_input_ordinals.push_back(uint32_t(i));
           }
         }
       }

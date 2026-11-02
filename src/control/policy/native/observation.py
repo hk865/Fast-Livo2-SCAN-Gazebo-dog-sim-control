@@ -7,7 +7,6 @@ observation reference remains the base frame position, so a flat scan is
 from __future__ import annotations
 
 from dataclasses import dataclass
-import hashlib
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -161,6 +160,10 @@ class TerrainHeightMap:
                             if size.shape != (2,) or normal.shape != (3,) or np.linalg.norm(normal) < 1e-8:
                                 raise ValueError(f"Invalid plane {collision_name}")
                             shapes.append(_Plane(collision_name, pos, rot, size / 2., normal / np.linalg.norm(normal)))
+                        elif geometry is not None and geometry.find("mesh") is not None:
+                            if full_name!='Building':raise ValueError('Unsupported experiment mesh '+full_name)
+                            from simulation.mesh_terrain import MeshSurface
+                            shapes.append(MeshSurface(collision_name,geometry.findtext('mesh/uri')))
                         else:
                             raise ValueError(f"Unsupported static collision shape: {collision_name}")
             for nested in model.findall("model"):
@@ -170,7 +173,7 @@ class TerrainHeightMap:
         for container in containers:
             for model in container.findall("model"):
                 visit(model, (np.zeros(3), np.eye(3)))
-        return cls(shapes, path, hashlib.sha256(content).hexdigest(), excluded_models)
+        return cls(shapes, path, None, excluded_models)
 
     load = from_sdf
 

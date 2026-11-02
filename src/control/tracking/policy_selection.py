@@ -1,9 +1,8 @@
 """Current project policy and model locations; actual interfaces are validated by the actor."""
 from pathlib import Path
-import hashlib,json,sys
+import json,sys
 from common.config import ROOT, CONFIG, path
 HERE=Path(__file__).resolve().parent
-def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def selection():
     worker=HERE.parent/'policy/native/worker.py'
     if not worker.is_file():raise FileNotFoundError(worker)

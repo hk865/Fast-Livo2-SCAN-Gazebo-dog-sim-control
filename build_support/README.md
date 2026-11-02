@@ -1,12 +1,5 @@
-# 从公共源码构建
+# 源码依赖构建
 
-`build.py`是唯一全量构建入口，默认两线程。它下载固定官方Fast DDS/Asio/Livox SDK2源，应用现有双端heartbeat补丁与构建兼容修正，编译SDK、FAST-LIVO2、SCAN、actuator和writer helper，输出本树`build/`、`install/`。不会读取原机器`.local`或旧run。
+Dockerfile从官方ROS/Ubuntu/Gazebo源安装系统依赖，build.py从官方Fast-DDS/Asio/Livox源URL获取源包并编译到install/私有前缀；保留DDS生产补丁和回归测试。不会写系统ROS库，不读取旧工程路径，不进行内容哈希校验或版本运行合同。
 
-```bash
-source /opt/ros/jazzy/setup.bash
-python3 -B build_support/build.py --jobs 2
-```
-
-公共开发依赖由根Dockerfile安装，具体见[移植说明](../docs/移植构建运行.md)。`--skip-dds`只用于继续本副本已完成的DDS构建，不是复用系统库。DDS fresh工作目录保护、下载来源/hash和环境清单是构建记录，不是运行批准门禁。
-
-Fast DDS的5项SHM组件测试会实际执行；没有嵌套Docker网络测试或Docker socket依赖。正常启动不调用本构建工具。
+该路径编译SDK/FAST-LIVO2/SCAN/关节插件/通信/PCT CLI及原生SE3图求解器。build_building.sh则可复用已有镜像安装前缀并重编本工程修改模块、生成PCT路线。源码构建不等于完整ROS/Gazebo导航验收；当前已验收轮使用本机既有依赖镜像。

@@ -168,7 +168,7 @@ namespace scan_planner
     bool planNextWaypoint();
     bool isWaypointSequenceMode() const;
     bool adjustGlobalTargetIfOccupied();
-    void getLocalTarget();
+    bool getLocalTarget();
     void finishProcess();
     void publishSelfInflationMarker();
     double getOdomYaw() const;

@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 """Build all project-native dependencies in fresh project-local directories.
 
-Downloads use official upstream commit URLs. Hashes authenticate source archives
-at build time; no source/model/binary identity is consulted during navigation.
+Downloads use official upstream source URLs. Content hashes and runtime
+source/model/binary identity contracts are not used.
 """
 from pathlib import Path
-import argparse,hashlib,json,os,subprocess,sys,tarfile,urllib.request
+import argparse,json,os,subprocess,sys,tarfile,urllib.request
 ROOT=Path(__file__).resolve().parents[1]
 def run(command,**kw):
     print('+',' '.join(map(str,command)),flush=True)
     subprocess.run(list(map(str,command)),check=True,**kw)
-def download(url,target,expected=None):
+def download(url,target):
     target.parent.mkdir(parents=True,exist_ok=True)
     if not target.exists():
         with urllib.request.urlopen(url,timeout=90) as src,target.with_suffix('.part').open('wb') as out:
             while data:=src.read(1024*1024):out.write(data)
         target.with_suffix('.part').replace(target)
-    actual=hashlib.file_digest(target.open('rb'),'sha256').hexdigest()
-    if expected and actual!=expected:raise ValueError('Source archive digest differs: '+str(target))
-    return dict(url=url,sha256=actual)
+    return dict(url=url,bytes=target.stat().st_size)
+
 def unpack(archive,directory):
     directory.mkdir(parents=True,exist_ok=True)
     with tarfile.open(archive) as t:t.extractall(directory,filter='data')
@@ -34,7 +33,7 @@ def main():
     receipts={};pins=json.loads((ROOT/'third_party/fastdds/SOURCES.json').read_text())
     for name in ('fastdds','asio'):
         pin=pins[name];archive=sources/(name+'.tar.gz')
-        receipts[name]=download(pin['archive_url'],archive,pin['archive_sha256'])
+        receipts[name]=download(pin['archive_url'],archive)
     dds=install/'dds'
     if not a.skip_dds:
         run([sys.executable,ROOT/'build_support/private_dds/build_private_dds.py',
@@ -47,7 +46,7 @@ def main():
     commit='f5d9375f84efe2b15bc0a052d3e18482ed13adf4'
     url='https://codeload.github.com/Livox-SDK/Livox-SDK2/tar.gz/'+commit
     archive=sources/('livox-sdk2-'+commit+'.tar.gz')
-    receipts['livox_sdk2']=download(url,archive,'f469dc57b38cd64c71381eb54d9525bfc3574feb0152c2b65239283107c4fa29')
+    receipts['livox_sdk2']=download(url,archive)
     sdk=sources/('Livox-SDK2-'+commit)
     if not sdk.exists():unpack(archive,sources)
     # v1.2.5 uses std::uint*_t without including its declaring standard header.
@@ -69,6 +68,11 @@ def main():
     cmake(ROOT/'src/simulation/actuators',work/'actuators',install/'actuators',a.jobs)
     cmake(ROOT/'src/common/communication',work/'communication',install/'communication',a.jobs,
           ['-DCMAKE_PREFIX_PATH='+str(dds)+';'+os.environ.get('CMAKE_PREFIX_PATH','').replace(':',';')])
+    cmake(ROOT/'src/localization/backend/native',work/'backend_graph',install/'backend',a.jobs)
+    (install/'pct').mkdir(parents=True,exist_ok=True)
+    run(['g++','-std=c++17','-O2','-I/usr/include/eigen3','-I'+str(ROOT/'src/planning/pct/native'),
+        ROOT/'src/planning/pct/pct_cli.cpp',ROOT/'src/planning/pct/native/a_star/a_star_search.cc',
+        '-o',install/'pct/pct_astar'])
     packages=subprocess.run(['dpkg-query','-W','-f=${Package}\t${Version}\n'],capture_output=True,text=True,check=True).stdout
     (install/'system_packages.tsv').write_text(packages)
     (install/'build_sources.json').write_text(json.dumps(receipts,indent=2)+'\n')

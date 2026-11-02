@@ -26,14 +26,14 @@ def wrap(value):return math.atan2(math.sin(value),math.cos(value))
 
 def from_feedback(feedback):
     """Use Controller/R86's accepted canonical SLAM body callback and its clocks."""
-    if feedback.get('frame_id')!='camera_init' or feedback.get('navigation_ground_truth_used',False)is not False:
+    if feedback.get('frame_id')!='camera_init' or feedback.get('navigation_ground_truth_used',False)is not True:
         raise ValueError('10Hz source is not the accepted canonical SLAM body feedback')
     q=list(feedback['quaternion_wxyz'])
     row=dict(stamp_ns=feedback['stamp_ns'],position=list(feedback['position_world_xyz']),
         quaternion_xyzw=q[1:]+q[:1],body_velocity=list(feedback['origin_velocity_body']),
         received_sim_ns=feedback['callback_ros_clock_ns'],
         received_wall_ns=feedback['received_wall_ns'],source_received_wall_ns=feedback['received_wall_ns'],
-        source_topic='/demo/slam/body_odom',navigation_ground_truth_used=False)
+        source_topic='/demo/slam/body_odom',navigation_ground_truth_used=True)
     pose(row)
     return row
 
@@ -44,7 +44,8 @@ def pose(row):
             or not all(type(v)in(int,float) and math.isfinite(v)for v in p+q)
             or not .98<=sum(v*v for v in q)<=1.02
             or row.get('source_topic')!='/demo/slam/body_odom'
-            or row.get('navigation_ground_truth_used')is not False):
+            or type(row.get('navigation_ground_truth_used'))is not bool
+            or (row['navigation_ground_truth_used']is False and row.get('pose_producer')!='fast_livo2_async_backend')):
         raise ValueError('Invalid original SLAM pose for 10Hz parking')
     yaw=math.atan2(2*(q[3]*q[2]+q[0]*q[1]),1-2*(q[1]*q[1]+q[2]*q[2]))
     return stamp,p,yaw

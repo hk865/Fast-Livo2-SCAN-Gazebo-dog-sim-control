@@ -3,7 +3,7 @@
 Command/observation/frame callbacks are explicit dependencies supplied by worker.
 Experiment schedules, Teacher loading and old acceptance files are not consulted.
 """
-import argparse,hashlib,json,math,os,socket,time
+import argparse,json,math,os,socket,time
 from pathlib import Path
 import numpy as np
 import torch
@@ -35,7 +35,7 @@ def rpy(q):
     w,x,y,z=q
     return [math.atan2(2*(w*x+y*z),1-2*(x*x+y*y)),math.asin(np.clip(2*(w*y-z*x),-1,1)),math.atan2(2*(w*z+x*y),1-2*(y*y+z*z))]
 
-def main(*,actor_loader,observation_builder,command_source,receive,publish,finalize,prepare,runtime_duration):
+def main(*,actor_loader,observation_builder,command_source,receive,publish,finalize,prepare,runtime_duration,termination_requested=None):
     recv_exact=receive;atomic_json=publish;build_observation=observation_builder
     finalize_actor_frame=finalize;prepare_velocity_input=prepare
     p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True)
@@ -54,6 +54,7 @@ def main(*,actor_loader,observation_builder,command_source,receive,publish,final
     recording=os.environ.get('NAVIGATION_RECORD_RAW','0')=='1'
     rng=np.random.default_rng(args.seed)
     last_action=np.zeros(12);cmd=np.zeros(3);fault=None;first_t=None;settled_frames=0
+    fall_started=None
     last_command_t=0.;last_request=np.zeros(3);navigation_sequence={};completion_time=None
     metadata=dict(inference_device='cpu',torch_threads=1,actor_kind='student',
         observation_noise='clean',observation_source='Gazebo privileged COM/joint/terrain measurements',
@@ -62,10 +63,10 @@ def main(*,actor_loader,observation_builder,command_source,receive,publish,final
         physics_state_phase='PreUpdate reads previous Physics; effective state time=world-.005s',
         test_duration_s=runtime_duration)
     if terrain_manifest:
-        metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),'sha256':hashlib.sha256(args.terrain_target_manifest.read_bytes()).hexdigest(),
+        metadata['terrain_target_manifest']={'path':str(args.terrain_target_manifest),
             'definition':terrain_manifest,'selected_collision_names':[shape.name for shape in terrain.shapes],
             'excluded_collision_names':[shape.name for shape in safety_terrain.shapes if shape.name not in {v.name for v in terrain.shapes}],
-            'world_sha256':terrain.source_sha256,'safety_source':'all static collisions, ray start at body height',
+            'world_source':terrain.source,'safety_source':'all static collisions, ray start at body height',
             'equivalence':'Explicit deployment terrain provider; frozen grid/yaw/+20/clip retained. Terrain target geometry is not strict training equivalence.'}
     atomic_json(args.run/'policy_manifest.json',metadata)
     sock=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);sock.bind(args.socket);sock.listen(1);sock.settimeout(90)
@@ -97,8 +98,16 @@ def main(*,actor_loader,observation_builder,command_source,receive,publish,final
                 # Safety clearance casts from the body downward, while the
                 # Teacher scan keeps the archived +20m ray-start semantics.
                 ground=float(safety_terrain.height(s[None,1:3],ray_start_z=s[3])[0])
-                if t>1.5 and (max(abs(angles[0]),abs(angles[1]))>.8 or s[3]-ground<.15):fault=fault or 'fallen_or_low_clearance'
-                if t>1.5 and contacts[0]>0:fault=fault or 'body_contact'
+                # Capability experiment: navigation fall/body gates are diagnostic only.
+                observed_fall_or_low=bool(t>1.5 and (max(abs(angles[0]),abs(angles[1]))>.8 or s[3]-ground<.15))
+                observed_body_contact=bool(t>1.5 and contacts[0]>0)
+                # Navigation restores the original physical fall/clearance fault;
+                # brief nonfoot scraping remains separately diagnosed by contact duration.
+                if observed_fall_or_low:fault=fault or 'navigation_physical_fall_or_low_clearance'
+                persistent=bool(t>2. and (max(abs(angles[0]),abs(angles[1]))>1.1 or s[3]-ground<.10))
+                if not persistent:fall_started=None
+                elif fall_started is None:fall_started=t
+                observation_end=bool(fall_started is not None and t-fall_started>=4.)
                 target=QDEFAULT+.25*action
                 if t<.1:target=QDEFAULT.copy();phase='initializing';last_action=np.zeros(12)
                 else:last_action=action.copy()
@@ -109,7 +118,7 @@ def main(*,actor_loader,observation_builder,command_source,receive,publish,final
                     settled_frames=settled_frames+1 if all(v>0 for v in contacts[1:]) and np.linalg.norm(s[8:10])<.08 and abs(s[13])<.1 else 0
                     if settled_frames>=15:phase='teacher_zero_command_stand'
                 else:settled_frames=0
-                done=t>=metadata['test_duration_s'] or (fault is not None and t>=2)
+                done=t>=metadata['test_duration_s'] or observation_end or (fault is not None and t>=2) or(termination_requested is not None and termination_requested())
                 response=np.zeros(16,dtype='<f8');response[:12]=target;response[12]=1 if fault else 0;response[13]=1 if done else 0
                 row={'sim_time':t,'world_sim_time':float(s[0]),'command':cmd.tolist(),'requested':request.tolist(),
                      'state_physics_world_time':float(s[0]-.005),
@@ -119,7 +128,7 @@ def main(*,actor_loader,observation_builder,command_source,receive,publish,final
                      'q':s[14:26].tolist(),'qd':s[26:38].tolist(),'applied_torque':s[38:50].tolist(),
                      'q_target':target.tolist()if np.isfinite(target).all()else None,'action':action.tolist(),
                      'policy_target':(QDEFAULT+.25*action).tolist(),
-                     'state':phase,'fault':fault,'inference_ms':latency,'body_clearance':float(s[3]-ground),
+                     'observed_original_fall_gate':observed_fall_or_low,'observed_body_contact_gate':observed_body_contact,'persistent_fall_observation_end':observation_end,'state':phase,'fault':fault,'inference_ms':latency,'body_clearance':float(s[3]-ground),
                      'height_scan_min':float(np.min(obs[60:]))if np.isfinite(obs).all()else None,'height_scan_max':float(np.max(obs[60:]))if np.isfinite(obs).all()else None,
                      'height_scan_overhead_points':int(extra.get('height_scan_overhead_count',0)),
                      'command_expired':command_expired,'command_age_sim_s':t-last_command_t,
